@@ -12,14 +12,18 @@ Un jeu de gestion de pâtisserie : achète tes ingrédients, prépare tes gâtea
 
 - **Ingrédients :** 47 ingrédients à acheter, revendre et parfois fabriquer.
 - **Recettes :** 60 pâtisseries à préparer, du cookie au gâteau infini.
-- **Ventes :** les prix bougent selon ce que tu vends.
-- **Bâtiments :** 29 bâtiments qui produisent des ingrédients tout seuls.
+- **Ventes :** les prix bougent selon ce que tu vends, et la demande revient avec le temps.
+- **Bâtiments :** 59 bâtiments qui produisent des ingrédients tout seuls, et des fours à ajouter.
 - **Employés :** cueilleurs, boulangers, vendeurs, managers et chefs, avec leur moral et leur salaire.
 - **Espace et loyer :** agrandis ta boutique, mais gare aux dettes.
+- **Banque :** à ta première dette, Bob t'ouvre un compte et t'explique les prêts, de 10 € à 10 000 €.
 - **Rebirth :** ouvre une nouvelle pâtisserie pour gagner des bonus permanents.
 - **Événements :** rush, soldes, passage à la télé, contrôle sanitaire…
-- **Succès et statistiques :** 43 succès à débloquer.
-- **Thèmes :** clair, sombre et thèmes de saison.
+- **Succès et statistiques :** des centaines de succès, dont 5 secrets. Chacun augmente tes prix de vente.
+- **Plusieurs pâtisseries :** dès la deuxième, des graphiques et les totaux de toutes tes boutiques.
+- **Thèmes :** clair, sombre, un par saison avec ses décors (fleurs, plage, neige, feuilles), et un pour ton anniversaire.
+- **Musique :** des morceaux composés pour le jeu, joués en direct par le navigateur.
+- **Bob :** ton chef pâtissier t'explique le jeu. Évite de trop l'embêter.
 - **Sauvegarde :** automatique, avec export et import d'un code, et gains pendant ton absence.
 
 ## Lancer le jeu sur ton ordi
@@ -32,9 +36,13 @@ python -m http.server 8090
 
 Le jeu est alors sur http://localhost:8090.
 
+## Vérifier le jeu
+
+Le serveur lancé, ouvre http://localhost:8090/tests/ : la page vérifie l'économie et les données du jeu (recettes rentables, ordre de déblocage, argent infini...).
+
 ## Crédits
 
-- Style : [Style Turbonix](STYLE-TURBONIX.md), police [Outfit](https://fonts.google.com/specimen/Outfit).
+- Police : [Outfit](https://fonts.google.com/specimen/Outfit). Bob vient des sites Turbonix.
 - Icônes : [Twemoji](https://github.com/jdecked/twemoji), sous licence [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/), plus quelques dessins maison dans `assets/icons/custom`.
 
 Turbonix Entertainment. Tous droits réservés.

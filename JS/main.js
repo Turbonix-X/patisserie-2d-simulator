@@ -1,134 +1,117 @@
 /* ============================================
-   PATISSERIE 2D SIMULATOR - MAIN LOOP
-   Initialization, game loop, offline, events,
-   applicants, crypto, pause, game over
+   PATISSERIE 2D SIMULATOR - BOUCLE PRINCIPALE
+   Demarrage, boucle de jeu, sauvegarde auto
    ============================================ */
 
 document.addEventListener('DOMContentLoaded', function() {
 
-  // 1. Load saved game
   load();
+  checkDesktopSync();
 
-  // 1b. Check if desktop app is running for save sync
-  if (typeof checkDesktopSync === 'function') checkDesktopSync();
+  currentLang = LANGS[G.settings.lang] ? G.settings.lang : 'fr';
+  document.documentElement.lang = currentLang;
 
-  // 2. Apply saved settings
-  if (G.settings && G.settings.lang) setLanguage(G.settings.lang);
+  // Un theme de saison s'arrete avec la saison, sauf s'il est debloque pour toujours
+  var activeTheme = findTheme(G.settings.theme);
+  if (!activeTheme || themeLockReason(activeTheme)) G.settings.theme = 'light';
   applyTheme();
 
-  // 3. Check offline progression BEFORE first render
-  if (G.lastTick) {
+  // Gains d'absence
+  if (G.paused) {
+    // Partie sauvegardee en pause : pas de gains, et la fenetre de pause revient
+    if (!G.pausedAt) G.pausedAt = G.lastTick || Date.now();
+    setTimeout(function() { showPauseModal(); }, 300);
+  } else if (G.introDone && G.lastTick) {
     var elapsed = (Date.now() - G.lastTick) / 1000;
     if (elapsed > 60) {
       var result = calcOfflineProgress(elapsed);
-      // Show offline modal after render
-      setTimeout(function() {
-        showOfflineModal(result);
-      }, 500);
+      setTimeout(function() { showOfflineModal(result); }, 500);
     }
   }
 
-  // 4. Initial full render
   fullRender();
 
-  // 5. Tutorial check: first launch
-  if (G.level <= 1 && G.stats.totalClicks === 0 && !G.tutorialDone) {
-    G.tutorialStep = 0;
-    setTimeout(function() { renderTutorial(); }, 800);
+  if (loadNotice) setTimeout(function() { toast(t('offline.' + loadNotice)); }, 800);
+
+  // Premiere partie : Bob t'accueille
+  if (!G.introDone) {
+    showIntro();
+  } else if (!G.tutorialDone) {
+    renderTutorial();
   }
 
-  // 5b. Birthday check
-  if (!G.birthday) {
-    setTimeout(function() { showBirthdayModal(); }, 1200);
-  } else if (isBirthdayToday()) {
-    if (!G.birthdayBoostUntil || Date.now() >= G.birthdayBoostUntil) {
-      activateBirthdayBoost();
-      setTheme('anniversaire');
-      setTimeout(function() { toast(t('birthday.boost')); }, 1000);
-    }
-  }
+  if (tryBirthdayBoost()) setTimeout(function() { toast(t('birthday.boost')); }, 1000);
 
-  // 6. Game over check on load
-  if (G.gameOver) {
-    setTimeout(function() { showGameOverModal(); }, 300);
-  }
+  if (G.gameOver) setTimeout(function() { showGameOverModal(); }, 300);
 
-  // 7. Track play time
+  armMusicAutostart();
+
   var lastTick = Date.now();
+  var totalsCounter = 0;
 
-  // 8. Main game loop (every 1 second)
+  // Boucle de jeu (chaque seconde)
   setInterval(function() {
-    if (G.paused) return;
+    // En pause ou pendant l'intro, le temps ne s'accumule pas
+    if (G.paused || introActive) { lastTick = Date.now(); return; }
     if (G.gameOver) return;
 
     var now = Date.now();
-    var dtMs = now - lastTick;
+    var speed = G.timeSpeed || 1;
+    var dtMs = (now - lastTick) * speed;
     var dtSec = dtMs / 1000;
+    if (speed !== 1) shiftGameTimers(-(now - lastTick) * (speed - 1)); // /time accelere aussi les fours
     lastTick = now;
 
-    // Update play time
     G.playTimeMs += dtMs;
 
-    // Tick all systems
     tickAutoCollect(dtSec);
     tickEmployees(dtSec);
     tickRent(dtSec);
-    var craftFinished = tickCrafting();
+    tickLoans(dtSec);
+    recoverDemand(dtSec);
+    tickCrafting();
+    recordHistory();
     checkAchievements();
+    // Les totaux de toutes les patisseries comptent aussi pour les succes
+    if (G.bakeries.length >= 2 && ++totalsCounter % 10 === 0) checkAchievements(allBakeriesState());
     tickEvents();
-
-    // Cap money at Centillion
     capMoney();
-
-    // Check space overflow
-    checkSpaceOverflow();
-
-    // Remove expired applicants
     removeExpiredApplicants();
 
-    // Game over check
     if (checkGameOver()) {
+      checkAchievements();
       showGameOverModal();
       return;
     }
 
-    // Refresh display
-    renderIngredients();
-    renderCraftingBar();
+    checkFirstDebt();
     renderHeader();
     renderSpaceBar();
-
-    // If crafting finished or sell tab, refresh panel
-    if (craftFinished || currentTab === 'sell' || currentTab === 'emp') {
-      renderMainPanel();
-    }
+    renderTabs();
+    tutorialCheck();
   }, 1000);
 
-  // 9. Auto-save every 30 seconds
-  setInterval(function() {
-    save();
-  }, 30000);
+  // Sauvegarde automatique
+  setInterval(save, 30000);
 
-  // 10. Fast UI refresh (250ms for smooth auto-collection)
+  // Affichage fluide
   setInterval(function() {
-    if (G.paused || G.gameOver) return;
+    if (G.paused || G.gameOver || introActive) return;
     renderIngredients();
     renderCraftingBar();
+    renderMainPanel();
   }, 250);
 
-  // 11. Applicant generation (every 30-60 seconds)
+  // Candidatures (une toutes les minutes environ)
   setInterval(function() {
-    if (G.paused || G.gameOver) return;
-    if (G.level >= 5 && Math.random() < 0.4) {
+    if (G.paused || G.gameOver || introActive) return;
+    if (G.level >= 5 && Math.random() < 0.5) {
       generateApplicant();
-      if (currentTab === 'emp') renderEmployees();
       renderTabs();
     }
   }, 30000);
 
-  // 12. Save on page unload
   window.addEventListener('beforeunload', function() {
-    save();
+    if (!skipSaveOnUnload) save();
   });
-
 });

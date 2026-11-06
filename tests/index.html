@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Tests P2DS</title>
+<style>
+  body { font: 15px/1.5 system-ui, sans-serif; margin: 24px; background: #FFF8F0; color: #2D1B10; }
+  li.ok { color: #2E7D32; } li.ko { color: #C62828; font-weight: 700; }
+  #total { font-size: 1.3em; font-weight: 700; }
+</style>
+</head>
+<body>
+<h1>Tests de P2DS</h1>
+<p id="total"></p>
+<ul id="results"></ul>
+<script>document.write('<script src="../JS/GameData.js?t=' + Date.now() + '"><\/script>');</script>
+<script>document.write('<script src="../JS/Icons.js?t=' + Date.now() + '"><\/script>');</script>
+<script>document.write('<script src="../JS/Languages.js?t=' + Date.now() + '"><\/script>');</script>
+<script>document.write('<script src="../JS/PlayerData.js?t=' + Date.now() + '"><\/script>');</script>
+<script>document.write('<script src="../JS/Logic.js?t=' + Date.now() + '"><\/script>');</script>
+<script>document.write('<script src="../JS/Achievements.js?t=' + Date.now() + '"><\/script>');</script>
+<script>
+var results = [];
+function check(name, ok, detail) { results.push({ name: name, ok: !!ok, detail: detail || '' }); }
+
+var ingBy = {};
+ING.forEach(function(i) { ingBy[i.id] = i; });
+function cost(r) { var c = 0; for (var k in r.req) c += ingBy[k].cost * r.req[k]; return c; }
+
+// --- Economie ---
+var lossy = REC.filter(function(r) { return r.val * r.qty <= cost(r); }).map(function(r) { return r.id; });
+check('Toutes les recettes sont rentables', lossy.length === 0, lossy.join(', '));
+var resale = REC.filter(function(r) { return r.val * r.qty <= cost(r) * 0.5; }).map(function(r) { return r.id; });
+check('Cuisiner rapporte plus que revendre les ingredients', resale.length === 0, resale.join(', '));
+var late = [];
+REC.forEach(function(r) { for (var k in r.req) { if (ingBy[k].unlockLvl > r.unlockLvl) late.push(r.id + ':' + k); } });
+check('Aucune recette ne demande un ingredient encore verrouille', late.length === 0, late.join(', '));
+var unused = ING.filter(function(i) { return !REC.some(function(r) { return r.req[i.id]; }) && !ING.some(function(o) { return o.craftReq && o.craftReq[i.id]; }); }).map(function(i) { return i.id; });
+check('Chaque ingredient sert a quelque chose', unused.length === 0, unused.join(', '));
+var noBld = ING.filter(function(i) { return !BUILDINGS.some(function(b) { return b.produces === i.id; }); }).map(function(i) { return i.id; });
+check('Chaque ingredient a un batiment', noBld.length === 0, noBld.join(', '));
+var early = BUILDINGS.filter(function(b) { return b.unlockLvl < ingBy[b.produces].unlockLvl; }).map(function(b) { return b.id; });
+check('Aucun batiment avant son ingredient', early.length === 0, early.join(', '));
+var badCraft = ING.filter(function(i) { if (!i.craftable) return false; var c = 0; for (var k in i.craftReq) c += ingBy[k].cost * i.craftReq[k]; return c / i.craftQty >= i.cost; }).map(function(i) { return i.id; });
+check('Fabriquer coute moins cher qu acheter', badCraft.length === 0, badCraft.join(', '));
+
+// --- Progression ---
+var total = 0;
+var slow = [];
+for (var l = 1; l < 1000; l++) {
+  var need = xpForLevel(l);
+  total += need;
+  // La meilleure recette disponible : combien de fournees pour un niveau ?
+  var best = 0;
+  REC.forEach(function(r) { if (r.unlockLvl <= l) best = Math.max(best, r.xp + 0.3 * r.val * r.qty); });
+  if (need / best > 60) slow.push(l + ':' + Math.round(need / best));
+}
+check('Un niveau ne demande jamais plus de 60 fournees', slow.length === 0, slow.slice(0, 8).join(', '));
+check('La courbe d XP monte toujours', (function() { for (var l = 1; l < 1000; l++) { if (xpForLevel(l + 1) < xpForLevel(l)) return false; } return true; })());
+
+// --- Argent infini ---
+function roundTrip(setup, ingId) {
+  G = createFreshState();
+  G.money = 100000;
+  setup();
+  var start = G.money, ing = findIng(ingId);
+  for (var i = 0; i < 100; i++) { buyIngredient(ing, '1'); resellIngredient(ing, G.ing[ingId]); }
+  return G.money - start;
+}
+check('Acheter puis revendre perd de l argent', roundTrip(function() {}, 'farine') < 0);
+check('... pendant le Rush sucre aussi', roundTrip(function() { G.eventClickBonus = 2; }, 'farine') < 0);
+check('... au rebirth 7 avec l anniversaire aussi', roundTrip(function() { G.rebirth = 7; G.birthdayBoostUntil = Date.now() + 1e6; }, 'oeuf') < 0);
+check('... pendant les soldes aussi', roundTrip(function() { G.eventIngBonus = -0.3; }, 'farine') < 0);
+G = createFreshState(); G.money = 1e7; G.level = 200;
+var m0 = G.money;
+for (var b = 0; b < 5; b++) { openNewBakery(); sellBakery(G.bakeries.length - 1); }
+check('Acheter puis revendre une patisserie perd de l argent', G.money < m0);
+
+// --- Prix ---
+G = createFreshState();
+G.soldCount.cookie = 100000; G.totalAllSold = 100000;
+check('Un prix ne tombe jamais a 0', inflatedPrice(findRec('cookie')) > 0, inflatedPrice(findRec('cookie')));
+G = createFreshState();
+var one = batchPrice(findRec('cookie'), 1), many = batchPrice(findRec('cookie'), 1000);
+check('Vendre en gros fait baisser le prix', many < one * 1000);
+G = createFreshState();
+G.soldCount.cookie = 100; G.totalAllSold = 100;
+recoverDemand(3600);
+check('La demande revient avec le temps', G.soldCount.cookie < 10, G.soldCount.cookie);
+
+// --- Affichage de l argent et du temps ---
+G = createFreshState();
+check('0,80 EUR s affiche', fmtMoney(0.8) === '0,80\u20ac', fmtMoney(0.8));
+check('50 EUR s affiche sans centimes', fmtMoney(50) === '50\u20ac', fmtMoney(50));
+check('Le temps n affiche jamais 60s', fmtTime(119.6) === '2m0s' && fmtTime(59.5) === '1m0s' && fmtTime(3599.7) === '1h0m', [fmtTime(119.6), fmtTime(59.5), fmtTime(3599.7)].join(' '));
+
+// --- Espace et fours ---
+G = createFreshState();
+G.ing.farine = 100; G.ing.sucre = 100; G.ing.oeuf = 100;
+var c1 = startCraft(findRec('cookie')), c2 = startCraft(findRec('cookie'));
+check('Une 2e fournee qui ne rentre pas est refusee', c1 && !c2);
+G = createFreshState(); G.maxSpace = 1000; G.ovens = 2;
+G.ing.farine = 100; G.ing.sucre = 100; G.ing.oeuf = 100;
+for (var c = 0; c < 4; c++) startCraft(findRec('cookie'));
+check('Les fours limitent les preparations', activeCrafts() === 2 && G.crafting.length === 4, activeCrafts());
+
+// --- Moral ---
+G = createFreshState(); G.money = 1e9; G.level = 50;
+hireEmployee('collector');
+G.employees[0].morale = 30;
+for (var s = 0; s < 3000; s++) tickEmployees(1);
+check('Un employe paye ne demissionne jamais', G.employees.length === 1 && G.employees[0].morale >= 59, G.employees[0] && G.employees[0].morale);
+
+// --- Rebirth ---
+G = createFreshState(); G.level = 40; G.money = 6000; G.rentDebt = 50; G.totalEarned = 999; G.playTimeMs = 1234; G.cheatUnlocked = true;
+doRebirth();
+check('Le rebirth garde la dette, le total gagne, le temps et la console', G.rentDebt === 50 && G.totalEarned === 999 && G.playTimeMs === 1234 && G.cheatUnlocked);
+check('Le rebirth donne plus d espace', G.maxSpace > 5, G.maxSpace);
+
+// --- Succes ---
+var ids = {}, dup = [];
+ACHIEVEMENTS.forEach(function(a) { if (ids[a.id]) dup.push(a.id); ids[a.id] = 1; });
+check('Aucun succes en double', dup.length === 0, dup.join(', '));
+check('Des centaines de succes', ACHIEVEMENTS.length >= 500, ACHIEVEMENTS.length);
+check('Exactement 5 succes secrets', ACHIEVEMENTS.filter(function(a) { return a.hidden; }).length === 5);
+G = createFreshState();
+var noName = ACHIEVEMENTS.filter(function(a) { return !achName(a) || !achDesc(a) || achName(a).indexOf('r.') === 0; }).map(function(a) { return a.id; });
+check('Chaque succes a un nom et une description', noName.length === 0, noName.slice(0, 8).join(', '));
+var badCat = ACHIEVEMENTS.filter(function(a) { return ACH_CATEGORIES.indexOf(a.cat) < 0; }).map(function(a) { return a.id; });
+check('Chaque succes a une categorie', badCat.length === 0, badCat.join(', '));
+
+// --- Textes ---
+var missing = [];
+['fr', 'en'].forEach(function(lang) {
+  ING.forEach(function(i) { if (!LANGS[lang]['i.' + i.id]) missing.push(lang + ':i.' + i.id); });
+  REC.forEach(function(r) { if (!LANGS[lang]['r.' + r.id]) missing.push(lang + ':r.' + r.id); });
+  BUILDINGS.forEach(function(b) { if (!LANGS[lang]['b.' + b.id]) missing.push(lang + ':b.' + b.id); });
+  EVENT_TYPES.forEach(function(e) { if (!LANGS[lang]['event.' + e.id]) missing.push(lang + ':event.' + e.id); });
+  INVISIBLE_EVENTS.forEach(function(e) { if (!LANGS[lang]['inv.' + e.id]) missing.push(lang + ':inv.' + e.id); });
+  THEME_LIST.forEach(function(th) { if (!LANGS[lang][th.langKey]) missing.push(lang + ':' + th.langKey); });
+});
+var onlyOne = Object.keys(LANGS.fr).filter(function(k) { return !LANGS.en[k]; }).concat(Object.keys(LANGS.en).filter(function(k) { return !LANGS.fr[k]; }));
+check('Tous les noms sont traduits', missing.length === 0, missing.slice(0, 8).join(', '));
+check('Le francais et l anglais ont les memes textes', onlyOne.length === 0, onlyOne.slice(0, 8).join(', '));
+
+// --- Banque ---
+G = createFreshState(); G.money = 0;
+check('Pas de pret sans compte', takeLoan(100) === false);
+G.bankUnlocked = true;
+check('Les 9 prets existent', LOANS.map(function(l) { return l.amount; }).join() === '10,20,50,100,200,500,1000,5000,10000');
+var earned0 = G.totalEarned;
+check('Un pret donne l argent sans compter comme un gain', takeLoan(100) && G.money === 100 && G.totalEarned === earned0);
+check('Un seul pret de chaque montant', takeLoan(100) === false);
+G = createFreshState(); G.bankUnlocked = true; G.money = 1000; takeLoan(100);
+for (var ls2 = 0; ls2 < 400; ls2++) tickLoans(1);
+check('... et il coute le montant plus les interets', G.loans.length === 0 && Math.abs(G.money - (1100 - 110)) < 0.05, G.money);
+G = createFreshState(); G.bankUnlocked = true; takeLoan(100); G.money = 0;
+var before = G.loans[0].remaining; tickLoans(60);
+check('Sans argent, un pret coute plus cher', G.loans[0].late && G.loans[0].remaining > before);
+LOANS.forEach(function(l) { if (!hasLoan(l.amount)) takeLoan(l.amount); });
+G.money = 0; G.rentDebt = 5;
+check('La faillite n arrive que si la banque ne peut plus preter', checkGameOver() === true);
+G.loans.pop(); G.gameOver = false;
+check('... sinon tu peux encore emprunter', checkGameOver() === false);
+G = createFreshState(); G.bankUnlocked = true; G.level = 40; G.money = 6000; takeLoan(10);
+doRebirth();
+check('Le rebirth garde les prets et le compte', G.loans.length === 1 && G.bankUnlocked);
+
+// --- Renommer ---
+G = createFreshState(); G.bakeryName = 'A'; G.money = 99;
+check('Renommer sans 100 EUR est refuse', renameBakery('B') === 'money' && G.bakeryName === 'A' && G.money === 99);
+G.money = 150;
+check('Renommer coute 100 EUR', renameBakery('B') === 'ok' && G.bakeryName === 'B' && G.money === 50);
+check('Garder le meme nom est gratuit', renameBakery('B') === 'same' && G.money === 50);
+
+// --- Plusieurs patisseries ---
+G = createFreshState(); G.bakeryName = 'Une'; G.totalEarned = 100; G.stats.totalSold = 7; G.money = 1e6;
+check('La 2e patisserie debloque les graphiques', !G.secondBakery && openNewBakery() && G.secondBakery);
+var keep2 = G.bakeries[1].name;
+G.bakeries[1].state.totalEarned = 50; G.bakeries[1].state.stats.totalSold = 3;
+var totals = allBakeriesState();
+check('Les totaux additionnent les patisseries', totals.totalEarned === 150 && totals.stats.totalSold === 10, totals.totalEarned);
+check('/bakery create est gratuit et garde le nom', openNewBakery(true, 'Chez Bob') && G.bakeries[2].name === 'Chez Bob');
+check('Supprimer une autre patisserie', deleteBakery(2) && G.bakeries.length === 2 && G.bakeryName === 'Une');
+check('Supprimer celle ou on est fait changer de boutique', deleteBakery(0) && G.bakeries.length === 1 && G.bakeryName === keep2 && G.currentBakeryIndex === 0);
+check('La derniere ne peut pas partir', deleteBakery(0) === false && G.bakeries.length === 1);
+
+// --- Historique ---
+G = createFreshState();
+for (var hs = 0; hs < 1000; hs++) { G.playTimeMs = hs * 30000; G.money = hs; recordHistory(); }
+check('L historique reste de taille raisonnable', G.history.t.length <= HISTORY_MAX + 1 && G.history.t.length > 50, G.history.t.length);
+
+// --- Sauvegarde ---
+G = createFreshState();
+var oldV8 = JSON.parse(JSON.stringify(G));
+oldV8.saveVersion = 8; oldV8.gameOver = true; oldV8.rentDebt = 2524; delete oldV8.history; delete oldV8.loans;
+oldV8.bakeries = [{ name: 'X', state: null, cost: 0 }, { name: 'Y', state: JSON.parse(JSON.stringify(oldV8)), cost: 10 }];
+var migrated9 = migrateSave(oldV8);
+check('Une faillite de la 1.0 peut encore s arranger', migrated9.gameOver === false && migrated9.secondBakery && migrated9.loans.length === 0 && migrated9.history.t.length === 0 && migrated9.bakeries[1].state.history.t.length === 0);
+G = createFreshState();
+var oldSave = JSON.parse(JSON.stringify(G));
+delete oldSave.ovens; oldSave.saveVersion = 7; oldSave.settings.musicVolume = 0.3; oldSave.settings.theme = 'nature_fleur'; oldSave.stats.totalClicks = 5;
+var migrated = migrateSave(oldSave);
+check('Une ancienne sauvegarde se met a jour', migrated.ovens === 2 && migrated.settings.musicVolume === 30 && migrated.settings.theme === 'light' && migrated.introDone && migrated.saveVersion === 9);
+check('Un code invalide est refuse', importSave('abc') === false && importSave(btoa('{"money":"x"}')) === false);
+
+var ko = results.filter(function(r) { return !r.ok; }).length;
+document.getElementById('total').textContent = (results.length - ko) + ' / ' + results.length + ' tests reussis';
+document.getElementById('results').innerHTML = results.map(function(r) {
+  return '<li class="' + (r.ok ? 'ok' : 'ko') + '">' + (r.ok ? 'OK' : 'ECHEC') + ' : ' + r.name + (r.ok || r.detail === '' ? '' : ' (' + r.detail + ')') + '</li>';
+}).join('');
+window.testResults = results;
+</script>
+</body>
+</html>

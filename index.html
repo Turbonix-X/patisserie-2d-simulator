@@ -4,7 +4,15 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Pâtisserie 2D Simulator — Turbonix</title>
-  <link rel="icon" href="logo.svg" type="image/svg+xml">
+  <meta name="description" content="Ouvre ta pâtisserie : achète tes ingrédients, prépare 60 recettes, vends tes gâteaux, embauche ton équipe et débloque des centaines de succès, avec Bob, ton chef pâtissier. Gratuit, dans le navigateur.">
+  <meta property="og:title" content="Pâtisserie 2D Simulator">
+  <meta property="og:description" content="Ouvre ta pâtisserie, prépare 60 recettes et débloque des centaines de succès. Gratuit, dans le navigateur.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://turbonix-x.github.io/patisserie-2d-simulator/">
+  <meta name="theme-color" content="#D4956B">
+  <link rel="icon" href="logo.svg?v=2" type="image/svg+xml" sizes="any">
+  <link rel="alternate icon" href="favicon.png?v=2" type="image/png">
+  <link rel="apple-touch-icon" href="favicon.png?v=2">
   <script>
     // Applique le thème avant l'affichage pour éviter un flash
     (function () {
@@ -13,17 +21,18 @@
         var save = JSON.parse(localStorage.getItem("p2ds_save"));
         if (save && save.settings && save.settings.theme) theme = save.settings.theme;
       } catch (e) {}
-      document.documentElement.dataset.theme = (theme === "dark" || theme === "espace") ? "dark" : "light";
+      document.documentElement.dataset.theme = theme;
     })();
   </script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="turbonix.css?v=1.4.1">
-  <link rel="stylesheet" href="style.css?v=1.4.1">
+  <link rel="stylesheet" href="turbonix.css?v=2.5">
+  <link rel="stylesheet" href="style.css?v=2.5">
 </head>
 <body>
   <div class="bg-blobs" aria-hidden="true"><span></span><span></span><span></span></div>
+  <div id="decor-layer" aria-hidden="true"></div>
 
   <!-- Header -->
   <div id="header"></div>
@@ -52,8 +61,84 @@
   <!-- Toast notifications -->
   <div id="toast-area" role="status" aria-live="polite"></div>
 
-  <!-- Tutorial overlay -->
-  <div id="tutorial-overlay" style="display:none"></div>
+  <!-- Bob, chef patissier : il explique le tutoriel, et cache la console -->
+  <div id="bob-bubble" role="status" aria-live="polite" style="display:none"></div>
+  <button id="bob" type="button" data-anger="0" onclick="bobPoke()" aria-label="Bob" title="Bob">
+    <svg viewBox="0 -38 160 228" aria-hidden="true">
+      <defs>
+        <linearGradient id="bobShell" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5a5468"/><stop offset=".55" stop-color="#34303e"/><stop offset="1" stop-color="#1c1a21"/></linearGradient>
+        <linearGradient id="bobRim" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#c4a8ff"/><stop offset=".5" stop-color="#9b6dff"/><stop offset="1" stop-color="#6f45d9"/></linearGradient>
+        <linearGradient id="bobJetFill" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff6a8"/><stop offset=".45" stop-color="#ffd60a"/><stop offset="1" stop-color="#ff6a1f" stop-opacity="0"/></linearGradient>
+        <radialGradient id="bobVisor" cx=".5" cy=".35" r=".8"><stop offset="0" stop-color="#231c33"/><stop offset="1" stop-color="#07060b"/></radialGradient>
+        <linearGradient id="bobToque" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#e6e0d8"/></linearGradient>
+      </defs>
+      <ellipse class="bob-shadow" cx="80" cy="183" rx="38" ry="5"/>
+      <g class="bob-rig">
+        <path class="bob-jet" d="M67 150q13 36 26 0z"/>
+        <path class="bob-body" d="M50 114q0-12 12-12h36q12 0 12 12v20q0 24-30 24t-30-24z"/>
+        <!-- Tablier -->
+        <path class="bob-apron" d="M58 110h44v26q0 19-22 19t-22-19z"/>
+        <path class="bob-apron-pocket" d="M67 134h26v7q0 6-6 6H73q-6 0-6-6z"/>
+        <path class="bob-apron-heart" d="M80 128c-2-4-8-3-8 1 0 3 5 6 8 8 3-2 8-5 8-8 0-4-6-5-8-1z"/>
+        <!-- Foulard de chef -->
+        <path class="bob-kerchief" d="M56 102q24 11 48 0l1 7q-25 11-50 0z"/>
+        <g class="bob-head">
+          <rect class="bob-ear" x="12" y="50" width="14" height="30" rx="7"/>
+          <rect class="bob-ear" x="134" y="50" width="14" height="30" rx="7"/>
+          <rect class="bob-face" x="22" y="26" width="116" height="82" rx="28"/>
+          <path class="bob-gloss" d="M38 35q42-8 84 0-5-3-12-3H50q-7 0-12 3z"/>
+          <rect class="bob-visor" x="33" y="38" width="94" height="59" rx="19"/>
+          <circle class="bob-cheek" cx="47" cy="80" r="6.500"/>
+          <circle class="bob-cheek" cx="113" cy="80" r="6.500"/>
+          <g class="bob-eyes">
+            <g class="bob-eye-open">
+              <g class="bob-eye"><ellipse cx="60" cy="62" rx="10.500" ry="12.500"/><circle class="bob-shine" cx="64" cy="57" r="3.400"/></g>
+              <g class="bob-eye"><ellipse cx="100" cy="62" rx="10.500" ry="12.500"/><circle class="bob-shine" cx="104" cy="57" r="3.400"/></g>
+            </g>
+          </g>
+          <path class="bob-brow bob-brow-l" d="M49 47q11-5 22 0"/>
+          <path class="bob-brow bob-brow-r" d="M89 47q11-5 22 0"/>
+          <path class="m m-happy" d="M65 77h30q-1 15-15 15t-15-15z"/>
+          <path class="m m-neutral" d="M71 82q9 5 18 0"/>
+          <path class="m m-sad" d="M68 89q12-11 24 0"/>
+          <path class="m m-angry" d="M63 84l6-4 5.500 4 5.500-4 5.500 4 5.500-4 6 4"/>
+          <ellipse class="m m-talk" cx="80" cy="83" rx="9" ry="6"/>
+          <path class="m m-sour" d="M68 88q12-5 24 2"/>
+          <path class="bob-spring" d="M80 28q-7-3 0-6t0-6 0-6"/>
+          <circle class="bob-tip" cx="80" cy="7" r="6.500"/>
+          <!-- Toque -->
+          <path class="bob-toque" d="M44 30q-22-4-20-24 2-17 22-16 6-16 34-16t34 16q20-1 22 16 2 20-20 24z"/>
+          <path class="bob-toque-fold" d="M64 -6v28M80 -10v32M96 -6v28"/>
+          <rect class="bob-toque-band" x="42" y="18" width="76" height="15" rx="6"/>
+          <g class="bob-sweat">
+            <path d="M139 28c5 7 7 10 7 14a7 7 0 0 1-14 0c0-4 2-7 7-14z"/>
+            <path d="M20 40c3 5 5 7 5 10a5 5 0 0 1-10 0c0-3 2-5 5-10z"/>
+          </g>
+        </g>
+        <g class="bob-arm bob-arm-l"><path class="bob-limb" d="M52 116q-20 5-26 24"/><circle class="bob-hand" cx="25" cy="144" r="8.500"/></g>
+        <g class="bob-arm bob-arm-r">
+          <path class="bob-limb" d="M108 116q20 5 26 24"/>
+          <!-- Fouet -->
+          <g class="bob-whisk">
+            <path class="bob-whisk-handle" d="M135 144L147 104"/>
+            <path class="bob-whisk-wire" d="M147 104c-9-6-8-24 5-30 9 8 5 25-5 30zM147 104c-3-8 0-22 5-30 3 9 1 23-5 30z"/>
+          </g>
+          <circle class="bob-hand" cx="135" cy="144" r="8.500"/>
+        </g>
+        <g class="bob-flames">
+          <path d="M18 34c-8-10 0-16-2-26 8 6 10 12 8 18 3-2 4-5 4-8 5 8 2 16-4 20z"/>
+          <path d="M142 34c8-10 0-16 2-26-8 6-10 12-8 18-3-2-4-5-4-8-5 8-2 16 4 20z"/>
+          <path d="M80 -38c-6 8-8 12-4 18-4-1-6-4-6-7-4 7-2 13 6 15h8c8-2 10-8 6-15 0 3-2 6-6 7 4-6 2-10-4-18z"/>
+        </g>
+      </g>
+    </svg>
+  </button>
+
+  <!-- Premiere partie : Bob, sans sa tenue, ouvre la boutique -->
+  <div id="intro" style="display:none">
+    <div id="intro-bob" class="plain" data-anger="0"></div>
+    <div id="intro-speech"></div>
+  </div>
 
   <!-- Modal container -->
   <div id="modal-overlay" class="modal-overlay" style="display:none"></div>
@@ -61,8 +146,6 @@
   <!-- Console button (bottom-right, shown when cheat unlocked) -->
   <div id="console-btn-wrap" style="display:none"></div>
 
-  <!-- Background music -->
-  <audio id="bg-music" loop preload="none"></audio>
 
   <!-- Footer -->
   <footer id="game-footer" class="site-footer">
@@ -72,13 +155,21 @@
   <script>document.getElementById("year").textContent = new Date().getFullYear();</script>
 
   <!-- Game scripts (order matters) -->
-  <script src="JS/GameData.js?v=1.4.1"></script>
-  <script src="JS/Icons.js?v=1.4.1"></script>
-  <script src="JS/Languages.js?v=1.4.1"></script>
-  <script src="JS/PlayerData.js?v=1.4.1"></script>
-  <script src="JS/Logic.js?v=1.4.1"></script>
-  <script src="JS/Interface.js?v=1.4.1"></script>
-  <script src="JS/main.js?v=1.4.1"></script>
+  <script src="JS/GameData.js?v=2.5"></script>
+  <script src="JS/Icons.js?v=2.5"></script>
+  <script src="JS/Languages.js?v=2.5"></script>
+  <script src="JS/PlayerData.js?v=2.5"></script>
+  <script src="JS/Logic.js?v=2.5"></script>
+  <script src="JS/Achievements.js?v=2.5"></script>
+  <script src="JS/Music.js?v=2.5"></script>
+  <script src="JS/Decor.js?v=2.5"></script>
+  <script src="JS/Interface.js?v=2.5"></script>
+  <script src="JS/Menus.js?v=2.5"></script>
+  <script src="JS/Bank.js?v=2.5"></script>
+  <script src="JS/Charts.js?v=2.5"></script>
+  <script src="JS/Console.js?v=2.5"></script>
+  <script src="JS/Bob.js?v=2.5"></script>
+  <script src="JS/main.js?v=2.5"></script>
 
 </body>
 </html>
