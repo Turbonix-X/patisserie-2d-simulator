@@ -6,6 +6,8 @@ Un jeu de gestion de pâtisserie : achète tes ingrédients, prépare tes gâtea
 
 **Jouer en ligne : https://turbonix-x.github.io/patisserie-2d-simulator/**
 
+**Toutes les règles : [REGLES.md](REGLES.md)**
+
 Ça marche sur ordi, tablette et téléphone, et il n'y a rien à installer.
 
 ## Ce qu'on peut faire
