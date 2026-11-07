@@ -250,3 +250,16 @@ I18N_EXTRA.pt = {
     '/birthday':'Muda a tua data de aniversário.','c:/birthday JJ MM':'Dia e depois mês.','/bob':'Fala com o Bob.','c:/bob challenge':'Propõe-te o seu desafio já.','/help':'Abre este guia.','c:/help':'O guia abre ao lado da consola.',
   },
 };
+
+// ======================== BETA 1.6 ========================
+Object.assign(LANGS.pt, {
+  'emp.paused':'Em pausa','emp.pause':'Pôr em pausa','emp.resume':'Voltar ao trabalho','emp.pauseHelp':'Em pausa não faz nada, mas continuas a pagar-lhe.','sugar.drag':'Arrasta-me até ao Bob',
+});
+
+Object.assign(I18N_EXTRA.pt.console, {
+  'Infinite money: it stays at the maximum.':'Dinheiro infinito: fica no máximo.','Infinite money stopped.':'Dinheiro infinito parado.',': infinite!':': infinito!',': no longer infinite.':': já não é infinito.',
+});
+Object.assign(I18N_EXTRA.pt.cmd, {
+  'c:/money infinite':'O teu dinheiro fica no máximo, como no modo criativo.','c:/money infinite off':'Para o dinheiro infinito.',
+  'c:/farine infinite':'Este ingrediente nunca mais acaba. Funciona com todos os ingredientes.','c:/farine infinite off':'Volta ao normal.',
+});

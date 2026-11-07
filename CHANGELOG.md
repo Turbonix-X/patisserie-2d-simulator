@@ -2,6 +2,14 @@
 
 Tout ce qui a été ajouté à Pâtisserie 2D Simulator, de la plus récente à la plus ancienne. Pour comprendre les règles du jeu, va voir le [wiki](REGLES.md).
 
+## Bêta 1.6 (7 novembre 2026)
+
+- Le thème caché passe en vert et marron : blocs d'herbe, de terre, de bois et de pierre en pixels, des arbres, des torches et un petit pâtissier en blocs. Bob change de tenue avec lui.
+- Sur téléphone, on donne le sucre à Bob en le glissant depuis la carte du sucre, comme à la souris. Le bouton à côté de Bob disparaît.
+- 8 nouvelles icônes : plus aucune recette ne partage la sienne avec une autre (crêpes, madeleines, fraisier, tiramisu, tiramisu impérial, fondant, saint-honoré et gâteau à la cardamome).
+- Les œufs coûtent un tout petit peu moins cher : 0,28 € au lieu de 0,30 €.
+- Un employé peut être mis en pause depuis sa fiche. Il ne travaille plus, mais il est toujours payé.
+
 ## Bêta 1.5 (7 novembre 2026)
 
 **Langues**

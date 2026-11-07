@@ -278,6 +278,9 @@ function renderSugar() {
   if (!el) return;
   var want = bobWantsSugar();
   el.style.display = want ? 'grid' : 'none';
+  // Sur telephone, on glisse le sucre depuis sa carte d'ingredient
+  document.body.classList.toggle('bob-wants-sugar', want);
+  if (want) document.body.style.setProperty('--sugar-hint', JSON.stringify(t('sugar.drag')));
   if (want && !el.firstChild) el.innerHTML = iconify(findIng('sucre').e);
   if (want) el.title = t('i.sucre');
 }
@@ -319,10 +322,13 @@ function feedBob() {
   document.addEventListener('pointerdown', function(e) {
     if (!e.target.closest || !bobWantsSugar()) return;
     var token = e.target.closest('#bob-sugar');
-    // Depuis la carte du sucre : a la souris. Au doigt, on prend le morceau a cote de Bob.
-    var card = !token && e.pointerType === 'mouse' && !e.target.closest('button') && e.target.closest('.ing-card[data-ing="sucre"]');
+    // Depuis la carte du sucre, a la souris comme au doigt
+    var card = !token && !e.target.closest('button') && e.target.closest('.ing-card[data-ing="sucre"]');
     if (!token && !card) return;
     drag = { x: e.clientX, y: e.clientY, ghost: null, token: !!token };
+    if (card && e.pointerType !== 'mouse') {
+      try { card.setPointerCapture(e.pointerId); } catch (err) { /* pas grave */ }
+    }
     if (token) {
       e.preventDefault();
       // Le doigt reste accroche au sucre meme en sortant du bouton

@@ -4,7 +4,7 @@
    employes, espace, rebirths, evenements, themes
    ============================================ */
 
-var GAME_VERSION = 'B\u00eata 1.5';
+var GAME_VERSION = 'B\u00eata 1.6';
 
 // ============ CURRENCIES ============
 var CURRENCIES = [
@@ -24,7 +24,7 @@ var CURRENCIES = [
 // ============ INGREDIENTS ============
 var ING = [
   { id:'farine', e:'\u{1F33E}', unlockLvl:1, cost:0.8, resellRate:0.5 },
-  { id:'oeuf', e:'\u{1F95A}', unlockLvl:1, cost:0.3, resellRate:0.5 },
+  { id:'oeuf', e:'\u{1F95A}', unlockLvl:1, cost:0.28, resellRate:0.5 },
   { id:'sucre', e:'\u{1F36C}', unlockLvl:1, cost:0.9, resellRate:0.5 },
   { id:'beurre', e:'\u{1F9C8}', unlockLvl:2, cost:1.5, resellRate:0.5 },
   { id:'lait', e:'\u{1F95B}', unlockLvl:3, cost:1.1, resellRate:0.5 },

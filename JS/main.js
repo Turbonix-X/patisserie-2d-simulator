@@ -78,6 +78,7 @@ document.addEventListener('DOMContentLoaded', function() {
     tickLoans(dtSec);
     tickBackgroundBakeries(dtSec);
     tickCreative();
+    tickInfinite();
     tickCarriers(dtSec);
     recordHistory();
     checkAchievements();

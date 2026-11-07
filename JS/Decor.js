@@ -467,71 +467,95 @@ var Decor = (function() {
     ],
   };
 
-  // ---------- Cubes : le monde en blocs, cadeau du mode creatif ----------
-  function cube(s, top, left, right) {
-    return '<path d="M0 0L-' + s + '-' + (s / 2) + 'L0-' + s + 'L' + s + '-' + (s / 2) + 'z" fill="' + top + '"/>' +
-      '<path d="M0 0L-' + s + '-' + (s / 2) + 'V' + (s / 2) + 'L0 ' + s + 'z" fill="' + left + '"/>' +
-      '<path d="M0 0L' + s + '-' + (s / 2) + 'V' + (s / 2) + 'L0 ' + s + 'z" fill="' + right + '"/>';
+  // ---------- Cubes : herbe, terre, bois et pierre, tout en pixels ----------
+  // Des textures dessinees ici, case par case, toujours pareilles grace a une graine
+  function seeded(seed) { var x = seed * 7919 + 13; return function() { x = (x * 9301 + 49297) % 233280; return x / 233280; }; }
+  var DIRT = ['#7A5230', '#8B5E37', '#6B4423', '#93673F'];
+  var GRASS = ['#5DA130', '#6DB33C', '#4E8F27', '#79BF45'];
+  var STONE = ['#8C8C8C', '#7A7A7A', '#9E9E9E', '#6E6E6E'];
+  var LEAF = ['#3E8E2E', '#4FA33A', '#2F7322', '#5BB044'];
+  function pick(r, list) { return list[Math.floor(r() * list.length)]; }
+  var TEX = {
+    grass: function(r, x, y) { if (y < 2) return pick(r, GRASS); if (y === 2 && r() < .55) return GRASS[2]; return pick(r, DIRT); },
+    dirt: function(r) { return pick(r, DIRT); },
+    stone: function(r) { return r() < .12 ? '#E05FB8' : pick(r, STONE); },
+    log: function(r, x) { return r() < .15 ? '#5A3A1C' : (x % 3 === 0 ? '#5E3D1E' : x % 2 ? '#7A5230' : '#6B4423'); },
+    leaf: function(r) { return pick(r, LEAF); },
+    plank: function(r, x, y) { if (y % 4 === 3 || x === (y < 4 ? 2 : 6)) return '#7A5230'; return r() < .3 ? '#A8763F' : '#B5824A'; },
+  };
+  // Un bloc de 8 x 8 cases, en (x, y), chaque case faisant px pixels
+  function block(kind, x, y, px, seed) {
+    var r = seeded(seed), paths = {};
+    for (var j = 0; j < 8; j++) {
+      for (var i = 0; i < 8; i++) {
+        var c = TEX[kind](r, i, j);
+        paths[c] = (paths[c] || '') + 'M' + (x + i * px) + ' ' + (y + j * px) + 'h' + px + 'v' + px + 'h-' + px + 'z';
+      }
+    }
+    return Object.keys(paths).map(function(c) { return '<path d="' + paths[c] + '" fill="' + c + '"/>'; }).join('');
   }
-  function cakeCube(s) { return cube(s, '#FF9CC2', '#8A5A34', '#6D4527'); }
-  function mintCube(s) { return cube(s, '#7FE3C8', '#2C9C86', '#1F7F6C'); }
-  function sugarCube(s) { return cube(s, '#FFFFFF', '#DCEBF0', '#BFD5DD'); }
-  function caramelCube(s) { return cube(s, '#FFD47A', '#D9913B', '#B9742A'); }
-  // Un dessin en pixels : une lettre par case, '.' pour le vide
+  // Un dessin en pixels : une lettre par case, '.' pour le vide. Le bas du dessin est en (0, 0).
   function pixels(rows, colors, size) {
-    var h = '', w = rows[0].length;
+    var paths = {}, w = rows[0].length;
     rows.forEach(function(row, y) {
       for (var x = 0; x < row.length; x++) {
-        if (colors[row[x]]) h += '<rect x="' + ((x - w / 2) * size) + '" y="' + ((y - rows.length) * size) + '" width="' + (size + .2) + '" height="' + (size + .2) + '" fill="' + colors[row[x]] + '"/>';
+        var c = colors[row[x]];
+        if (c) paths[c] = (paths[c] || '') + 'M' + ((x - w / 2) * size) + ' ' + ((y - rows.length) * size) + 'h' + size + 'v' + size + 'h-' + size + 'z';
+      }
+    });
+    return Object.keys(paths).map(function(c) { return '<path d="' + paths[c] + '" fill="' + c + '"/>'; }).join('');
+  }
+  // Le petit patissier du monde en blocs, dessine pour le jeu
+  function cubeBaker(size) {
+    return pixels(['..WWWW..', '.WWWWWW.', '.WWWWWW.', '.HHHHHH.', '.SSSSSS.', '.SESSES.', '.SSSSSS.', '..SMMS..', '..SSSS..', '.GGAAGG.', 'GGAAAAGG', 'GGAAAAGG', 'SGAAAAGS', '.GAAAAG.', '.BB..BB.', '.BB..BB.', '.DD..DD.'],
+      { W:'#FFFFFF', H:'#6B4423', S:'#F2C29B', E:'#2B2116', M:'#C0504D', G:'#4E8F27', A:'#FFF4DE', B:'#7A5230', D:'#3B2A1A' }, size);
+  }
+  function torch(size) { return pixels(['.Y.', 'YOY', '.O.', '.B.', '.B.', '.B.', '.B.'], { Y:'#FFE066', O:'#FF9A1F', B:'#7A5230' }, size); }
+  function flower(size, c) { return pixels(['.C.', 'CYC', '.C.', '.G.', 'GG.', '.G.'], { C:c, Y:'#FFD54F', G:'#4E8F27' }, size); }
+  function pixelCake(size) { return pixels(['..R..', '.WWW.', 'PPPPP', 'BBBBB', 'PPPPP', 'BBBBB'], { R:'#E8394B', W:'#FFFFFF', P:'#FF9CC2', B:'#8B5E37' }, size); }
+  function chest(size) { return pixels(['BBBBBBBB', 'BbbbbbbB', 'BBBBBBBB', 'BbbYYbbB', 'BbbbbbbB', 'BBBBBBBB'], { B:'#5A3A1C', b:'#A8763F', Y:'#FFD54F' }, size); }
+  function squareSun(size) { return pixels(['.YYYY.', 'YyyyyY', 'YyyyyY', 'YyyyyY', 'YyyyyY', '.YYYY.'], { Y:'#FFC21F', y:'#FFE066' }, size); }
+  function blockCloud(size) { return pixels(['..WWW...', '.WWWWWW.', 'WWWWWWWW'], { W:'#FFFFFF' }, size); }
+
+  // Un bout de terrain : des colonnes de blocs, l'herbe dessus, la pierre au fond
+  function terrain(heights, x0, bottom, bs) {
+    var h = '', px = bs / 8;
+    heights.forEach(function(n, c) {
+      for (var k = 0; k < n; k++) {
+        var kind = k === n - 1 ? 'grass' : (k === 0 && n >= 4 ? 'stone' : 'dirt');
+        h += block(kind, x0 + c * bs, bottom - (k + 1) * bs, px, c * 31 + k * 7 + 3);
       }
     });
     return h;
   }
-  function pixelTree(size) {
-    return pixels(['..GGGG..', '.GGgGGG.', 'GGGGGgGG', 'GgGGGGGG', 'GGGgGGgG', '.GGGGGG.', '...BB...', '...BB...', '...Bb...'], { G:'#3FB98F', g:'#2C9C7A', B:'#8A5A34', b:'#6D4527' }, size);
-  }
-  function pixelSun(size) {
-    return pixels(['Y.Y..Y.Y', '..SSSS..', 'YSSSSSSY', '.SSESES.', '.SSSSSS.', 'YSESSESY', '..SEES..', 'Y.Y..Y.Y'], { Y:'#FFB23F', S:'#FFD54F', E:'#8A5A34' }, size);
-  }
-  function pixelCloud(size) { return pixels(['..WWW...', '.WWWWWW.', 'WWWWWWWW'], { W:'#FFFFFF' }, size); }
-  function pixelGem(size) { return pixels(['.PPPP.', 'PpPPPP', 'PPpPPP', '.PPPP.', '..PP..'], { P:'#E05FB8', p:'#FFC2EA' }, size); }
-  function pixelChest(size) { return pixels(['BBBBBBBB', 'BbbbbbbB', 'BBBBBBBB', 'BbbYYbbB', 'BbbYYbbB', 'BBBBBBBB'], { B:'#6D4527', b:'#A8703A', Y:'#FFD54F' }, size); }
-
-  function blockStrip() {
-    var c = ['#1A7F6E', '#2C9C86', '#7FE3C8', '#FFD47A', '#FF9CC2', '#2C9C86'], h = '';
-    [10, 16, 6, 12, 8, 14].forEach(function(height, i) { h += '<rect x="' + (i * 16) + '" width="16" height="' + height + '" fill="' + c[i] + '"/>'; });
-    return h;
-  }
-  function blockGround() {
-    var h = '';
-    for (var i = 0; i < 12; i++) {
-      h += '<rect x="' + (i * 16) + '" y="9" width="16" height="13" fill="' + (i % 2 ? '#8A5A34' : '#7A4E2C') + '"/>';
-      h += '<rect x="' + (i * 16) + '" y="6" width="16" height="4" fill="#FFB6D2"/><rect x="' + (i * 16 + (i % 2 ? 2 : 8)) + '" y="10" width="6" height="' + (i % 3 ? 2 : 4) + '" fill="#FFB6D2"/>';
-    }
+  function tree(x, ground, bs, seed) {
+    var h = '', px = bs / 8;
+    for (var k = 0; k < 3; k++) h += block('log', x, ground - (k + 1) * bs, px, seed + k);
+    [[-1, 3], [0, 3], [1, 3], [-1, 4], [0, 4], [1, 4], [0, 5]].forEach(function(p, i) { h += block('leaf', x + p[0] * bs, ground - (p[1] + 1) * bs, px, seed + 10 + i); });
     return h;
   }
 
   var cubes = {
-    strip: svg(96, 18, blockStrip()),
-    ground: svg(192, 22, blockGround()),
-    corner: svg(250, 190,
-      at(204, 148, 1, 0, pixelTree(7)) +
-      at(116, 174, 1, 0, cakeCube(22)) + at(72, 174, 1, 0, mintCube(22)) + at(94, 152, 1, 0, caramelCube(22)) + at(160, 174, 1, 0, sugarCube(18)) +
-      at(32, 186, 1, 0, pixelChest(5)) + at(94, 112, 1, 0, pixelGem(5))),
+    strip: svg(128, 16, [0, 1, 2, 3, 4, 5, 6, 7].map(function(i) { return block('grass', i * 16, 0, 2, i + 1); }).join('')),
+    ground: svg(128, 22, [0, 1, 2, 3, 4, 5, 6, 7].map(function(i) { return block('grass', i * 16, 6, 2, i + 40); }).join('')),
+    corner: svg(240, 190,
+      terrain([2, 2, 3, 3, 3, 4, 4, 4, 3, 3, 4, 4, 5, 5, 5], 0, 190, 16) +
+      tree(192, 110, 16, 70) +
+      at(120, 126, 1, 0, cubeBaker(2.400)) + at(72, 142, 1, 0, torch(2.400)) + at(152, 142, 1, 0, pixelCake(2.400)) +
+      at(24, 158, 1, 0, flower(2.400, '#E8394B')) + at(44, 158, 1, 0, flower(2.400, '#FFD54F')) + at(232, 110, 1, 0, chest(1.600))),
     corner2: svg(170, 90,
-      at(120, 72, 1, 0, cakeCube(15)) + at(92, 72, 1, 0, sugarCube(15)) + at(106, 56, 1, 0, mintCube(15)) + at(36, 84, 1, 0, pixelTree(4))),
-    top: svg(150, 70, at(112, 56, 1, 0, pixelSun(6)) + at(40, 34, 1, 0, pixelCloud(6))),
+      terrain([1, 2, 2, 3, 3, 2], 34, 90, 16) + at(66, 58, 1, 0, flower(2, '#E8394B')) + at(98, 42, 1, 0, torch(2)) + at(128, 42, 1, 0, pixelCake(2))),
+    top: svg(150, 70, at(112, 50, 1, 0, squareSun(6)) + at(48, 34, 1, 0, blockCloud(6))),
     tile: svg(150, 150,
-      at(30, 34, 1, 0, sugarCube(11), .5) + at(112, 62, 1, 0, cakeCube(9), .24) + at(46, 116, 1, 0, mintCube(10), .28) + at(120, 124, 1, 0, pixelGem(2.500), .32)),
-    card: svg(48, 48, at(24, 26, 1, 0, sugarCube(17), .55)),
-    mark: svg(28, 28, at(14, 15, 1, 0, cakeCube(10))),
+      '<g opacity=".16">' + block('grass', 20, 22, 2, 5) + block('dirt', 100, 54, 2, 6) + block('plank', 40, 104, 2, 7) + block('leaf', 112, 116, 2, 8) + '</g>'),
+    card: svg(48, 48, '<g opacity=".28">' + block('grass', 8, 12, 3, 9) + '</g>'),
+    mark: svg(28, 28, block('grass', 2, 2, 3, 11)),
     motion: 'fall', count: 16,
     pieces: [
-      svg(28, 28, at(14, 14, 1, 0, sugarCube(9))),
-      svg(28, 28, at(14, 14, 1, 0, cakeCube(9))),
-      svg(28, 28, at(14, 14, 1, 0, mintCube(9))),
-      svg(28, 28, at(14, 14, 1, 0, caramelCube(9))),
-      svg(24, 24, at(12, 20, 1, 0, pixelGem(3))),
+      svg(20, 20, block('grass', 2, 2, 2, 21)),
+      svg(20, 20, block('dirt', 2, 2, 2, 22)),
+      svg(20, 20, block('leaf', 2, 2, 2, 23)),
+      svg(20, 20, block('stone', 2, 2, 2, 24)),
     ],
   };
 

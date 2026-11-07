@@ -154,7 +154,13 @@ function processCommand(cmd) {
   // /money set N [currency]
   if (action === 'money') {
     var op = parts[1]; var n = parseFloat(parts[2]);
-    if (op !== 'set' || isNaN(n)) return '<span class="cmd-err">Usage: /money set N [currency]</span>';
+    if (op === 'infinite' || op === 'infini') {
+      if (parts[2] === 'off') { G.infiniteMoney = false; return '<span class="cmd-ok">' + L('Argent infini arrêté.', 'Infinite money stopped.') + '</span>'; }
+      G.infiniteMoney = true; tickInfinite(); checkAchievements();
+      return '<span class="cmd-ok">' + L('Argent infini : il reste au maximum.', 'Infinite money: it stays at the maximum.') + '</span>';
+    }
+    if (op !== 'set' || isNaN(n)) return '<span class="cmd-err">Usage: /money set N [currency] | /money infinite [off]</span>';
+    G.infiniteMoney = false;
     var currId = parts[3] || null;
     if (currId) {
       var curr = null;
@@ -526,6 +532,13 @@ function processCommand(cmd) {
   }
   if (ingMatch) {
     var op = parts[1];
+    if (op === 'infinite' || op === 'infini') {
+      if (!G.infiniteIng) G.infiniteIng = {};
+      if (parts[2] === 'off') { delete G.infiniteIng[ingMatch.id]; return '<span class="cmd-ok">' + ingMatch.id + L(' : plus à l’infini.', ': no longer infinite.') + '</span>'; }
+      G.infiniteIng[ingMatch.id] = true; tickInfinite();
+      return '<span class="cmd-ok">' + ingMatch.id + L(' : à l’infini !', ': infinite!') + '</span>';
+    }
+    if (G.infiniteIng && ['set', 'add', 'remove', 'max'].indexOf(op) >= 0) delete G.infiniteIng[ingMatch.id];
     // Check for liquid units: /lait set 53 ml
     var isLiquid = LIQUID_ING && LIQUID_ING.indexOf(ingMatch.id) >= 0;
     var rawN = parts[2]; var unit = parts[3];
@@ -535,7 +548,7 @@ function processCommand(cmd) {
     } else {
       n = parseInt(rawN);
     }
-    if (isNaN(n) && op !== 'max') return '<span class="cmd-err">Usage: /' + action + ' set|add|remove|max N' + (isLiquid ? ' [ml|cl|l]' : '') + '</span>';
+    if (isNaN(n) && op !== 'max') return '<span class="cmd-err">Usage: /' + action + ' set|add|remove|max N' + (isLiquid ? ' [ml|cl|l]' : '') + ' | /' + action + ' infinite [off]</span>';
     if (op === 'set') G.ing[ingMatch.id] = Math.max(0, n);
     else if (op === 'add') G.ing[ingMatch.id] = (G.ing[ingMatch.id] || 0) + n;
     else if (op === 'max') G.ing[ingMatch.id] = maxStockFor(ingMatch);
@@ -636,6 +649,8 @@ var COMMAND_DOCS = [
     { name:'/money', fr:'Fixe ton argent.', en:'Sets your money.', es:'Fija tu dinero.', cases:[
       cmdCase('/money set N', 'En euros.', 'In euros.', 'En euros.', '/money set 1000'),
       cmdCase('/money set N usd', 'Dans une autre monnaie : usd, gbp, jpy…', 'In another currency: usd, gbp, jpy…', 'En otra moneda: usd, gbp, jpy…', '/money set 500 usd'),
+      cmdCase('/money infinite', 'Ton argent reste au maximum, comme en mode créatif.', 'Your money stays at the maximum, like in creative mode.', 'Tu dinero se queda al máximo, como en el modo creativo.'),
+      cmdCase('/money infinite off', 'Arrête l’argent infini.', 'Stops infinite money.', 'Detiene el dinero infinito.'),
     ]},
     { name:'/stats', fr:'Change tes statistiques.', en:'Changes your statistics.', es:'Cambia tus estadísticas.', cases:[
       cmdCase('/stats max', 'Met les clics, les gâteaux préparés et vendus au maximum.', 'Maxes clicks, cakes baked and sold.', 'Pone al máximo los clics y los pasteles preparados y vendidos.'),
@@ -717,6 +732,8 @@ var COMMAND_DOCS = [
       cmdCase('/farine remove N', 'En enlève N.', 'Removes N.', 'Quita N.', '/farine remove 10'),
       cmdCase('/farine set N', 'Fixe la quantité à N.', 'Sets the amount to N.', 'Fija la cantidad en N.', '/farine set 100'),
       cmdCase('/farine max', 'Sa limite : plus c’est rare, moins tu en as.', 'Its limit: the rarer, the less you get.', 'Su límite: cuanto más raro, menos tienes.'),
+      cmdCase('/farine infinite', 'Cet ingrédient ne s’épuise plus jamais. Marche avec tous les ingrédients.', 'This ingredient never runs out. Works with every ingredient.', 'Este ingrediente ya no se acaba nunca. Funciona con todos los ingredientes.', '/chocolat infinite'),
+      cmdCase('/farine infinite off', 'Il redevient normal.', 'Back to normal.', 'Vuelve a la normalidad.'),
       cmdCase('/lait set N cl', 'Lait, crème et rhum acceptent ml, cl et l.', 'Milk, cream and rum accept ml, cl and l.', 'Leche, nata y ron aceptan ml, cl y l.', '/lait set 50 cl'),
     ]},
     { name:'/RECETTE', generic:true, fr:'Change le stock d’un gâteau.', en:'Changes the stock of a cake.', es:'Cambia el stock de un pastel.', cases:[

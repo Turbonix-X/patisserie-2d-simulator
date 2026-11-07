@@ -74,6 +74,8 @@ function createFreshState() {
     sellerSold: {},
     explained: {},
     creative: false,
+    infiniteMoney: false, // /money infinite
+    infiniteIng: {},      // /farine infinite, etc.
     orders: [],
     nextOrderId: 1,
     nextOrderAt: 0,

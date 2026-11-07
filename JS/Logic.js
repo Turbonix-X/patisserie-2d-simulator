@@ -69,7 +69,8 @@ function birthdayBonus() {
 
 function empTraining(emp) { return !!emp.trainingUntil && emp.trainingUntil > Date.now(); }
 
-function empWorking(emp) { return (emp.status === 'working' || emp.status === 'poor') && !empTraining(emp); }
+// Un employe en pause ne fait rien, mais son salaire continue de tomber
+function empWorking(emp) { return (emp.status === 'working' || emp.status === 'poor') && !empTraining(emp) && !emp.paused; }
 
 // Chaque niveau double ce que sait faire un employe
 function empLevelMult(emp) { return Math.pow(2, Math.min(EMP_MAX_LVL, emp.level || 1) - 1); }
@@ -1967,4 +1968,12 @@ function tickCreative() {
   ING.forEach(function(i) { G.ing[i.id] = 1e300; });
   REC.forEach(function(r) { G.cakes[r.id] = 1e300; });
   unlockEverything();
+}
+
+// /money infinite et /INGREDIENT infinite : la valeur reste au maximum
+function tickInfinite() {
+  if (G.infiniteMoney) { G.money = MONEY_CAP; G.rentDebt = 0; }
+  if (G.infiniteIng) {
+    for (var id in G.infiniteIng) { if (G.infiniteIng[id]) G.ing[id] = 1e300; }
+  }
 }

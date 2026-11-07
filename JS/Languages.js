@@ -458,3 +458,12 @@ Object.assign(LANGS.en, {
   'settings.themeBakery':'Bakery','settings.themeCubes':'Cubes',
   'console.creativeOn':'Creative mode: everything is infinite and all themes are unlocked, with the Cubes theme as a gift!',
 });
+
+// ======================== BETA 1.6 ========================
+Object.assign(LANGS.fr, {
+  'emp.paused':'En pause','emp.pause':'Mettre en pause','emp.resume':'Remettre au travail','emp.pauseHelp':'En pause, il ne fait rien, mais tu le paies quand même.','sugar.drag':'Glisse-moi sur Bob',
+});
+
+Object.assign(LANGS.en, {
+  'emp.paused':'On break','emp.pause':'Put on break','emp.resume':'Back to work','emp.pauseHelp':'On break, they do nothing, but you still pay them.','sugar.drag':'Drag me onto Bob',
+});

@@ -248,3 +248,16 @@ I18N_EXTRA.de = {
     '/birthday':'Ändert dein Geburtsdatum.','c:/birthday JJ MM':'Tag, dann Monat.','/bob':'Sprich mit Bob.','c:/bob challenge':'Er bietet dir sofort seine Herausforderung an.','/help':'Öffnet diese Übersicht.','c:/help':'Die Übersicht öffnet sich neben der Konsole.',
   },
 };
+
+// ======================== BETA 1.6 ========================
+Object.assign(LANGS.de, {
+  'emp.paused':'Pausiert','emp.pause':'Pausieren','emp.resume':'Weiterarbeiten','emp.pauseHelp':'In der Pause wird nicht gearbeitet, aber der Lohn läuft weiter.','sugar.drag':'Zieh mich auf Bob',
+});
+
+Object.assign(I18N_EXTRA.de.console, {
+  'Infinite money: it stays at the maximum.':'Unendliches Geld: bleibt auf Maximum.','Infinite money stopped.':'Unendliches Geld beendet.',': infinite!':': unendlich!',': no longer infinite.':': nicht mehr unendlich.',
+});
+Object.assign(I18N_EXTRA.de.cmd, {
+  'c:/money infinite':'Dein Geld bleibt auf Maximum, wie im Kreativmodus.','c:/money infinite off':'Beendet das unendliche Geld.',
+  'c:/farine infinite':'Diese Zutat geht nie mehr aus. Klappt mit allen Zutaten.','c:/farine infinite off':'Wieder normal.',
+});

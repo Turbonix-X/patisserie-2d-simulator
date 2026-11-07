@@ -82,8 +82,8 @@ function renderEmployees() {
     G.employees.forEach(function(emp) {
       var moraleColor = emp.morale > 60 ? 'morale-good' : (emp.morale > 30 ? 'morale-mid' : 'morale-bad');
       var training = empTraining(emp);
-      var status = training ? t('emp.training', { v: fmtTime((emp.trainingUntil - Date.now()) / 1000) }) : t('emp.' + emp.status);
-      var statusCls = training ? 'status-warn' : emp.status === 'working' ? 'status-good' : (emp.status === 'striking' ? 'status-bad' : 'status-warn');
+      var status = training ? t('emp.training', { v: fmtTime((emp.trainingUntil - Date.now()) / 1000) }) : emp.paused ? t('emp.paused') : t('emp.' + emp.status);
+      var statusCls = training || emp.paused ? 'status-warn' : emp.status === 'working' ? 'status-good' : (emp.status === 'striking' ? 'status-bad' : 'status-warn');
       h += '<div class="emp-card" role="button" tabindex="0" onclick="showEmpInfoModal(' + emp.id + ')" title="' + escH(t('emp.desc.' + emp.type)) + '">';
       h += '<div class="emp-header">' + empAvatar(emp.type, emp.name);
       h += '<span class="emp-name">' + escH(emp.name) + '</span>';
@@ -130,6 +130,7 @@ function showEmpInfoModal(empId) {
   h += '<p class="set-help">' + t('emp.desc.' + emp.type) + '</p>';
   h += '<div class="emp-facts"><span>' + t('emp.levelTxt', { v: emp.level || 1 }) + ' / ' + EMP_MAX_LVL + '</span><span>' + t('emp.skill', { v: emp.skill }) + '</span><span>' + t('emp.morale') + ' : ' + Math.floor(emp.morale) + ' %</span><span>' + t('emp.salary', { v: fmtMoney(getEmpSalary(emp) * 3600) }) + '</span></div>';
   if (empTraining(emp)) h += '<p class="warning">' + t('emp.training', { v: fmtTime((emp.trainingUntil - Date.now()) / 1000) }) + '</p>';
+  if (emp.paused) h += '<p class="warning">' + t('emp.pauseHelp') + '</p>';
   var config = empConfigHTML(emp);
   if (config) h += '<section class="set-card emp-config"><h3>' + t('emp.config') + '</h3>' + config + '</section>';
   h += '<div class="emp-actions">';
@@ -137,6 +138,7 @@ function showEmpInfoModal(empId) {
     if ((emp.level || 1) >= EMP_MAX_LVL) h += '<button class="btn" disabled>' + t('emp.trainMax') + '</button>';
     else h += '<button class="btn btn-primary" onclick="doTrainEmployee(' + emp.id + ')"' + (G.money < getTrainCost(emp) || empTraining(emp) ? ' disabled' : '') + '>' + t('emp.trainBtn', { v: fmtMoney(getTrainCost(emp)) }) + '</button>';
   }
+  h += '<button class="btn" title="' + escH(t('emp.pauseHelp')) + '" onclick="toggleEmpPause(' + emp.id + ')">' + t(emp.paused ? 'emp.resume' : 'emp.pause') + '</button>';
   h += '<button class="btn" onclick="doGiveBonus(' + emp.id + ')">' + t('emp.bonus', { v: fmtMoney(getBonusCost(emp)) }) + '</button>';
   h += '<button class="btn btn-danger" onclick="confirmFire(' + emp.id + ')">' + t('emp.fire') + '</button></div>';
   h += '<div class="modal-btns"><button class="btn" onclick="hideModal()">' + t('common.close') + '</button></div>';
@@ -324,4 +326,14 @@ function doFireEmployee(empId) {
   fireEmployee(empId);
   hideModal();
   renderEmployees();
+}
+
+// Mettre un employe en pause : il arrete de travailler, mais il est toujours paye
+function toggleEmpPause(empId) {
+  var emp = findEmp(empId);
+  if (!emp) return;
+  emp.paused = !emp.paused;
+  save();
+  renderEmployees();
+  showEmpInfoModal(empId);
 }

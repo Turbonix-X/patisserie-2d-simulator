@@ -1,6 +1,6 @@
 # Le wiki de Pâtisserie 2D Simulator
 
-Tout ce qu'il faut savoir pour comprendre le jeu. Ce wiki décrit la **Bêta 1.5**.
+Tout ce qu'il faut savoir pour comprendre le jeu. Ce wiki décrit la **Bêta 1.6**.
 
 > **À savoir :** les recettes du jeu sont fausses. Les quantités et les ingrédients servent juste à donner un parcours au jeu. Ne les cuisine pas chez toi !
 
@@ -132,6 +132,8 @@ Lance une **recherche** dans l'onglet Employés : elle prend du temps et ne marc
 
 **Clique sur un employé** pour ouvrir sa fiche : ses réglages, sa formation, sa prime.
 
+**La pause :** depuis sa fiche, tu peux mettre un employé en pause. Il arrête de travailler, mais tu continues de le payer.
+
 | Employé | Niveau | Ce qu'il fait | Réglages |
 |---|---|---|---|
 | Apprenti | 5 | Rien pour l'instant : paie-lui un métier, c'est moins cher qu'embaucher | Son futur métier |
@@ -196,7 +198,7 @@ Bob est ton chef pâtissier. Il t'accueille, t'apprend les bases, et t'explique 
 
 - **Ses conseils :** il te dit quand un gâteau se vend mal, quand ton stock déborde, quand ton loyer est trop cher, quand une commande va expirer ou qu'un employé va faire grève.
 - **Ne l'embête pas :** clique trop sur lui et il s'énerve. Énervé, il refuse même de t'expliquer les choses.
-- **Il adore le sucre :** quand il est triste, glisse un sucre sur lui, ou touche le morceau de sucre à côté de lui sur téléphone. Il te faut 4 sucres pour qu'il retrouve le sourire, et ses explications s'améliorent à chaque fois.
+- **Il adore le sucre :** quand il est triste, glisse un sucre sur lui, depuis la carte du sucre. Sur téléphone, c'est pareil : pose ton doigt sur la carte du sucre et glisse-le jusqu'à Bob. Il te faut 4 sucres pour qu'il retrouve le sourire, et ses explications s'améliorent à chaque fois.
 - **Son défi :** tous les 2 à 5 jours, il te propose un défi de 24 heures. Réussis, et il te donne 5 % de tout ton argent, toutes pâtisseries confondues.
 - **Si tu pars sans mettre pause**, il te rappelle que le bouton existe.
 

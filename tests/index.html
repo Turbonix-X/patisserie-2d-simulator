@@ -293,6 +293,26 @@ check('En creatif, tous les themes sont debloques', lockedInCreative.length === 
 G = createFreshState(); G.unlockedThemes.cubes = true;
 check('Le theme Cubes reste une fois gagne', themeLockReason(findTheme('cubes')) === null);
 
+// --- Beta 1.6 ---
+var recIcons = {}, dupIcons = [];
+REC.forEach(function(r) { if (recIcons[r.e]) dupIcons.push(recIcons[r.e] + '/' + r.id); recIcons[r.e] = r.id; });
+check('Chaque recette a sa propre icone', dupIcons.length === 0, dupIcons.join(', '));
+var ingIcons = {}, dupIng = [];
+ING.forEach(function(i) { if (ingIcons[i.e]) dupIng.push(ingIcons[i.e] + '/' + i.id); ingIcons[i.e] = i.id; });
+check('Chaque ingredient a sa propre icone', dupIng.length === 0, dupIng.join(', '));
+check('Les oeufs coutent un tout petit peu moins', findIng('oeuf').cost === 0.28);
+G = createFreshState(); G.money = 1000;
+var pe = { id: 1, type: 'seller', status: 'working', level: 1, skill: 50, morale: 100 };
+G.employees.push(pe);
+check('Un employe travaille', empWorking(pe));
+pe.paused = true;
+check('En pause, il ne travaille plus', !empWorking(pe) && empCount('seller') === 0);
+var m0 = G.money; tickEmployees(10);
+check('En pause, il est toujours paye', G.money < m0, m0 - G.money);
+G = createFreshState(); G.infiniteMoney = true; G.infiniteIng = { farine: true }; G.money = 5; G.ing.farine = 0;
+tickInfinite();
+check('Argent et ingredient a l infini', G.money === MONEY_CAP && G.ing.farine >= 1e300 && G.ing.sucre === createFreshState().ing.sucre);
+
 // --- Banque ---
 G = createFreshState(); G.money = 0; G.level = 50;
 check('Pas de pret sans compte', takeLoan(100) === false);

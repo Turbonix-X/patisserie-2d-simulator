@@ -10,13 +10,13 @@ var ICON_FILES = {};
   .split(',').forEach(function(n) { ICON_FILES[n] = true; });
 
 var CUSTOM_ICONS = {};
-'brownie,canele,cannelle,caramel,caramelia,chouquette,eclair,framboise,macaron,macaron_pistache,meringue,millefeuille,pistache,praline,tarte_citron,tarte_pomme,wasabi,yuzu'
+'brownie,canele,cannelle,caramel,caramelia,cardamome,chouquette,crepe,eclair,fondant,fraisier,framboise,macaron,macaron_pistache,madeleine,meringue,millefeuille,pistache,praline,saint_honore,tarte_citron,tarte_pomme,tiramisu,tiramisu_imperial,wasabi,yuzu'
   .split(',').forEach(function(n) { CUSTOM_ICONS[n] = true; });
 
 // Ces patisseries n'ont pas d'emoji : on utilise un dessin maison.
 (function() {
   var ingIcons = { caramel:'caramel', cannelle:'cannelle', pistache:'pistache', wasabi:'wasabi', framb:'framboise', yuzu:'yuzu', praline:'praline', meringue:'meringue' };
-  var recIcons = { brownie:'brownie', chouquette:'chouquette', macaron:'macaron', pistamac:'macaron_pistache', eclair:'eclair', millefeuille:'millefeuille', tarte_cit:'tarte_citron', tarte_pom:'tarte_pomme', canele:'canele', caramelia:'caramelia', meringuee:'meringue', wasabisurp:'wasabi', framboisier:'framboise', yuzutart:'yuzu', pralineroyal:'praline', cardamomecake:'caramelia' };
+  var recIcons = { brownie:'brownie', chouquette:'chouquette', macaron:'macaron', pistamac:'macaron_pistache', eclair:'eclair', millefeuille:'millefeuille', tarte_cit:'tarte_citron', tarte_pom:'tarte_pomme', canele:'canele', caramelia:'caramelia', meringuee:'meringue', wasabisurp:'wasabi', framboisier:'framboise', yuzutart:'yuzu', pralineroyal:'praline', cardamomecake:'cardamome', crepe:'crepe', madel:'madeleine', fraisier:'fraisier', tiramisu:'tiramisu', tiramigrand:'tiramisu_imperial', fondant:'fondant', saintho:'saint_honore' };
   ING.forEach(function(i) { if (ingIcons[i.id]) i.e = '[[' + ingIcons[i.id] + ']]'; });
   REC.forEach(function(r) { if (recIcons[r.id]) r.e = '[[' + recIcons[r.id] + ']]'; });
   // Un batiment porte l'icone de ce qu'il produit, s'il n'a pas la sienne

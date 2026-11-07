@@ -266,3 +266,12 @@ Object.assign(LANGS.es, {
   'settings.themeBakery':'Panadería','settings.themeCubes':'Cubos',
   'console.creativeOn':'Modo creativo: todo es infinito y todos los temas están desbloqueados, ¡con el tema Cubos de regalo!',
 });
+
+// ======================== BETA 1.6 ========================
+Object.assign(LANGS.es, {
+  'emp.paused':'En pausa','emp.pause':'Poner en pausa','emp.resume':'Volver al trabajo','emp.pauseHelp':'En pausa no hace nada, pero le sigues pagando.','sugar.drag':'Arrástrame hasta Bob',
+});
+
+Object.assign(CONSOLE_ES, {
+  'Infinite money: it stays at the maximum.':'Dinero infinito: se queda al máximo.','Infinite money stopped.':'Dinero infinito detenido.',': infinite!':': ¡infinito!',': no longer infinite.':': ya no es infinito.',
+});
