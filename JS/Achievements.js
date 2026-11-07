@@ -7,6 +7,13 @@
 var ACH_CATEGORIES = ['general', 'cakes', 'money', 'level', 'shop', 'recipes', 'buildings', 'stock', 'secret'];
 var ACHIEVEMENTS = [];
 
+// tier : [seuil, nom fr, nom en, ..., nom es a la fin]
+function tierName(tier) {
+  if (currentLang === 'en') return tier[2];
+  if (currentLang === 'es') return tier[tier.length - 1];
+  return tier[1];
+}
+
 (function() {
   function add(id, cat, icon, fr, en, descFr, descEn, check, hidden) {
     ACHIEVEMENTS.push({ id: id, cat: cat, icon: icon, fr: fr, en: en, descFr: descFr, descEn: descEn, check: check, hidden: !!hidden });
@@ -130,13 +137,13 @@ var ACHIEVEMENTS = [];
   });
 
   // ---------- Une serie pour chaque recette ----------
-  var recTiers = [[1, 'Découverte', 'Discovery', '\u{1F50D}'], [100, 'Spécialité', 'Specialty', '\u{1F3C5}'], [1000, 'Signature', 'Signature', '\u{1F947}']];
+  var recTiers = [[1, 'Découverte', 'Discovery', '\u{1F50D}', 'Descubrimiento'], [100, 'Spécialité', 'Specialty', '\u{1F3C5}', 'Especialidad'], [1000, 'Signature', 'Signature', '\u{1F947}', 'Firma'], [10000, 'Institution', 'Institution', '\u{1F3C6}', 'Institución'], [100000, 'Mythe', 'Myth', '\u{1F451}', 'Mito']];
   REC.forEach(function(r) {
     recTiers.forEach(function(tier, i) {
       var legacy = (r.id === 'goldengate' && i === 0) ? 'golden' : (r.id === 'infinicake' && i === 0) ? 'infinimade' : ('rec_' + r.id + '_' + i);
       add(legacy, 'recipes', i === 0 ? r.e : tier[3], null, null, null, null, function(g) { return (g.stats.cakesMadeById[r.id] || 0) >= tier[0]; });
       var a = ACHIEVEMENTS[ACHIEVEMENTS.length - 1];
-      a.nameFn = function() { return (currentLang === 'en' ? tier[2] : tier[1]) + ' : ' + recShortName(r); };
+      a.nameFn = function() { return tierName(tier) + ' : ' + recShortName(r); };
       a.descFn = function() { return t('ach.descRecipe', { v: fmt(tier[0]), n: recShortName(r) }); };
     });
   });
@@ -152,25 +159,52 @@ var ACHIEVEMENTS = [];
     BUILDINGS.forEach(function(b) { n += (g.buildings[b.id] || { qty: 0 }).qty; });
     return n;
   }, 'Posséder {n} bâtiments.', 'Own {n} buildings.');
-  var bldTiers = [[1, 'Inauguration', 'Grand opening'], [10, 'Quartier', 'District'], [50, 'Cité', 'City'], [100, 'Empire', 'Empire'], [200, 'Légende', 'Legend']];
+  var bldTiers = [[1, 'Inauguration', 'Grand opening', 'Inauguración'], [10, 'Quartier', 'District', 'Barrio'], [50, 'Cité', 'City', 'Ciudad'], [100, 'Empire', 'Empire', 'Imperio'], [200, 'Légende', 'Legend', 'Leyenda'], [500, 'Mégalopole', 'Megalopolis', 'Megalópolis']];
   BUILDINGS.forEach(function(b) {
     bldTiers.forEach(function(tier, i) {
       add('bt_' + b.id + '_' + i, 'buildings', b.e, null, null, null, null, function(g) { return (g.buildings[b.id] || { qty: 0 }).qty >= tier[0]; });
       var a = ACHIEVEMENTS[ACHIEVEMENTS.length - 1];
-      a.nameFn = function() { return (currentLang === 'en' ? tier[2] : tier[1]) + ' : ' + t('b.' + b.id); };
+      a.nameFn = function() { return tierName(tier) + ' : ' + t('b.' + b.id); };
       a.descFn = function() { return t('ach.descBuilding', { v: tier[0], n: t('b.' + b.id) }); };
     });
   });
 
   // ---------- Reserves d'ingredients ----------
-  var stockTiers = [[1000, 'Garde-manger', 'Pantry'], [1000000, 'Entrepôt', 'Warehouse']];
+  var stockTiers = [[1000, 'Garde-manger', 'Pantry', 'Despensa'], [1000000, 'Entrepôt', 'Warehouse', 'Almacén'], [1000000000, 'Réserve nationale', 'National reserve', 'Reserva nacional']];
   ING.forEach(function(ing) {
     stockTiers.forEach(function(tier, i) {
       add('st_' + ing.id + '_' + i, 'stock', ing.e, null, null, null, null, function(g) { return (g.ing[ing.id] || 0) >= tier[0]; });
       var a = ACHIEVEMENTS[ACHIEVEMENTS.length - 1];
-      a.nameFn = function() { return (currentLang === 'en' ? tier[2] : tier[1]) + ' : ' + t('i.' + ing.id); };
+      a.nameFn = function() { return tierName(tier) + ' : ' + t('i.' + ing.id); };
       a.descFn = function() { return t('ach.descStock', { v: fmt(tier[0]), n: t('i.' + ing.id) }); };
     });
+  });
+
+  // ---------- Commandes, prets et machines ----------
+  function counted(id, cat, icon, n, nameKey, descKey, check) {
+    add(id, cat, icon, null, null, null, null, check);
+    var a = ACHIEVEMENTS[ACHIEVEMENTS.length - 1];
+    a.nameFn = function() { return t(nameKey, { v: fmt(n) }); };
+    a.descFn = function() { return t(descKey, { v: fmt(n) }); };
+  }
+  [1, 5, 10, 25, 50, 100, 250, 500, 1000, 2500, 5000, 10000].forEach(function(n) {
+    counted('orders' + n, 'general', '\u{1F9FE}', n, 'ach.nameOrders', 'ach.descOrders', function(g) { return (g.stats.ordersDone || 0) >= n; });
+  });
+  [1, 5, 10, 25, 50, 100].forEach(function(n) {
+    counted('loans' + n, 'money', '\u{1F3E6}', n, 'ach.nameLoans', 'ach.descLoans', function(g) { return (g.stats.loansTaken || 0) >= n; });
+  });
+  [1, 10, 50].forEach(function(n) {
+    counted('repaid' + n, 'money', '\u{1F91D}', n, 'ach.nameRepaid', 'ach.descRepaid', function(g) { return (g.stats.loansRepaid || 0) >= n; });
+  });
+  MACHINES.forEach(function(m) {
+    for (var lv = 1; lv <= m.max; lv++) {
+      (function(n) {
+        add('mach_' + m.id + '_' + n, 'shop', m.e, null, null, null, null, function(g) { return ((g.machines || {})[m.id] || 0) >= n; });
+        var a = ACHIEVEMENTS[ACHIEVEMENTS.length - 1];
+        a.nameFn = function() { return t('ach.nameMachine', { n: t('mach.' + m.id), v: n }); };
+        a.descFn = function() { return t('ach.descMachine', { n: t('mach.' + m.id), v: n }); };
+      })(lv);
+    }
   });
 
   // ---------- Les 5 secrets : rien n'est affiche tant qu'ils ne sont pas trouves ----------
@@ -188,11 +222,13 @@ var ACHIEVEMENTS = [];
 
 function achName(a) {
   if (a.nameFn) return a.nameFn();
+  if (currentLang === 'es') return achNameEs(a.en) || a.en;
   return currentLang === 'en' ? a.en : a.fr;
 }
 
 function achDesc(a) {
   if (a.descFn) return a.descFn();
+  if (currentLang === 'es') return achDescEs(a.descEn) || a.descEn;
   return currentLang === 'en' ? a.descEn : a.descFr;
 }
 
@@ -211,4 +247,16 @@ function checkAchievements(state) {
   }
   if (newAch && typeof onAchievementUnlocked === 'function') onAchievementUnlocked();
   return newAch;
+}
+
+// Combien de succes : les secrets se comptent a part, et restent caches tant qu'ils ne sont pas trouves
+function achCounts() {
+  var c = { done: 0, total: 0, secrets: 0 };
+  ACHIEVEMENTS.forEach(function(a) {
+    var got = !!G.achievements[a.id];
+    if (a.hidden) { if (got) c.secrets++; return; }
+    c.total++;
+    if (got) c.done++;
+  });
+  return c;
 }

@@ -7,7 +7,10 @@
 var consoleHistory = [];
 var lastCommandState = null;
 
-function L(fr, en) { return currentLang === 'en' ? en : fr; }
+function L(fr, en) {
+  if (currentLang === 'es') return CONSOLE_ES[en] || en;
+  return currentLang === 'en' ? en : fr;
+}
 
 function showCommandConsole() {
   var h = '<div class="console-modal">';
@@ -178,6 +181,8 @@ function processCommand(cmd) {
     G.rebirth = 7;
     G.bankUnlocked = true;
     G.secondBakery = true;
+    // Tous les themes, meme ceux des saisons
+    THEME_LIST.forEach(function(th) { if (th.season || th.birthday || th.level) G.unlockedThemes[th.id] = true; });
     // All ingredients
     ING.forEach(function(i) { G.ing[i.id] = maxStockFor(i); });
     // All cakes
@@ -335,15 +340,19 @@ function processCommand(cmd) {
   }
 
   // /debt clear
-  if (action === 'debt') {
-    if (parts[1] === 'set') {
-      var debtN = parseFloat(parts[2]);
-      if (isNaN(debtN) || debtN < 0) return '<span class="cmd-err">Usage: /debt set N</span>';
-      G.rentDebt = debtN;
-      return '<span class="cmd-ok">' + L('Dette = ', 'Debt = ') + '' + fmtMoney(G.rentDebt) + '</span>';
+  if (action === 'debt' || action === 'dept') {
+    var debtOp = parts[1], debtN = parseFloat(parts[2]);
+    if (debtOp === 'cancel' && parts[2] === 'all') {
+      G.rentDebt = 0;
+      G.rentLate = 0;
+    } else if ((debtOp === 'cancel' || debtOp === 'set' || debtOp === 'add') && !isNaN(debtN) && debtN >= 0) {
+      if (debtOp === 'cancel') G.rentDebt = Math.max(0, G.rentDebt - debtN);
+      else if (debtOp === 'set') G.rentDebt = debtN;
+      else G.rentDebt += debtN;
+    } else {
+      return '<span class="cmd-err">Usage: /debt cancel N|all, /debt set N, /debt add N</span>';
     }
-    G.rentDebt = 0;
-    return '<span class="cmd-ok">' + L('Dette effacée !', 'Debt cleared!') + '</span>';
+    return '<span class="cmd-ok">' + L('Dette = ', 'Debt = ') + fmtMoney(G.rentDebt) + '</span>';
   }
 
   // /bank unlock | /bank clear
@@ -360,20 +369,20 @@ function processCommand(cmd) {
     return '<span class="cmd-err">Usage: /bank unlock|clear</span>';
   }
 
-  // /theme <name> | /theme unlock all|spring|summer|fall|winter|birthday
+  // /theme <name> | /theme unlock all|spring|summer|fall|winter|birthday|party|space
   if (action === 'theme') {
     var themeName = parts[1];
     var names = THEME_LIST.map(function(th) { return th.id; }).join(', ');
-    if (!themeName) return '<span class="cmd-err">Usage: /theme &lt;' + names + '&gt; | /theme unlock all|spring|summer|fall|winter|birthday</span>';
+    if (!themeName) return '<span class="cmd-err">Usage: /theme &lt;' + names + '&gt; | /theme unlock all|spring|summer|fall|winter|birthday|party|space</span>';
     if (themeName === 'unlock') {
       var what = parts[2];
-      var lockable = THEME_LIST.filter(function(th) { return th.season || th.birthday; });
+      var lockable = THEME_LIST.filter(function(th) { return th.season || th.birthday || th.level; });
       if (what === 'all') {
         lockable.forEach(function(th) { G.unlockedThemes[th.id] = true; });
         return '<span class="cmd-ok">' + t('console.themesUnlocked') + '</span>';
       }
       var target = findTheme(what);
-      if (!target || !(target.season || target.birthday)) return '<span class="cmd-err">Usage: /theme unlock all|spring|summer|fall|winter|birthday</span>';
+      if (!target || !(target.season || target.birthday || target.level)) return '<span class="cmd-err">Usage: /theme unlock all|spring|summer|fall|winter|birthday|party|space</span>';
       G.unlockedThemes[what] = true;
       return '<span class="cmd-ok">' + t('console.themeUnlocked', { n: t(target.langKey) }) + '</span>';
     }
@@ -573,11 +582,11 @@ var COMMAND_DOCS = [
     { name:'/stats', use:['/stats max','/stats clicks|cakes|sold|salary|rent set N'], ex:['/stats max','/stats sold set 1000'], fr:'Change tes statistiques.', en:'Changes your statistics.' },
   ]},
   { id:'bank', fr:'Argent et banque', en:'Money and bank', list:[
-    { name:'/debt', use:['/debt','/debt set N'], ex:['/debt','/debt set 100'], fr:'Efface ta dette de loyer, ou la fixe à un montant. La première dette fait venir Bob.', en:'Clears your rent debt, or sets it to an amount. Your first debt brings Bob over.' },
+    { name:'/debt', use:['/debt cancel N|all','/debt set N','/debt add N'], ex:['/debt cancel 100','/debt cancel all','/debt set 100','/debt add 100'], fr:'Enlève une partie ou toute ta dette de loyer (cancel), la fixe à un montant (set) ou l’augmente (add). La première dette fait venir Bob.', en:'Removes part or all of your rent debt (cancel), sets it to an amount (set) or increases it (add). Your first debt brings Bob over.' },
     { name:'/bank', use:['/bank unlock','/bank clear'], ex:['/bank unlock','/bank clear'], fr:'Ouvre l’onglet Banque, ou efface tous tes prêts en cours.', en:'Opens the Bank tab, or clears all your current loans.' },
   ]},
   { id:'bulk', fr:'Tout d’un coup', en:'All at once', list:[
-    { name:'/max', use:['/max'], ex:['/max'], fr:'Met tout au maximum : niveau, argent, stock, stockage, bâtiments, fours et succès, sauf les secrets.', en:'Maxes everything: level, money, stock, storage, buildings, ovens and achievements, except secret ones.' },
+    { name:'/max', use:['/max'], ex:['/max'], fr:'Met tout au maximum : niveau, argent, stock, stockage, bâtiments, fours, succès et thèmes, sauf les succès secrets. Plus un ingrédient est rare, moins tu en as.', en:'Maxes everything: level, money, stock, storage, buildings, ovens, achievements and themes, except secret achievements. The rarer an ingredient, the less you get.' },
     { name:'/unmax', use:['/unmax'], ex:['/unmax'], fr:'Revient à l’état d’avant /max.', en:'Goes back to before /max.' },
     { name:'/undo', use:['/undo'], ex:['/undo'], fr:'Annule la dernière commande.', en:'Undoes the last command.' },
     { name:'/random', use:['/random'], ex:['/random'], fr:'Met des valeurs au hasard.', en:'Sets random values.' },
@@ -598,7 +607,7 @@ var COMMAND_DOCS = [
   ]},
   { id:'world', fr:'Monde', en:'World', list:[
     { name:'/time', use:['/time set N'], ex:['/time set 5','/time set 1'], fr:'Vitesse du jeu, de 0.1 à 10. 1 est la vitesse normale.', en:'Game speed, from 0.1 to 10. 1 is normal speed.' },
-    { name:'/theme', use:['/theme NOM','/theme unlock all|spring|summer|fall|winter|birthday'], ex:['/theme winter','/theme unlock all'], fr:'Change de thème, ou débloque des thèmes pour toujours.', en:'Changes theme, or unlocks themes forever.' },
+    { name:'/theme', use:['/theme NOM','/theme unlock all|spring|summer|fall|winter|birthday|party|space'], ex:['/theme winter','/theme unlock all'], fr:'Change de thème, ou débloque des thèmes pour toujours.', en:'Changes theme, or unlocks themes forever.' },
     { name:'/birthday', use:['/birthday JJ MM'], ex:['/birthday 14 7'], fr:'Change ta date d’anniversaire.', en:'Changes your birthday.' },
     { name:'/bob', use:['/bob challenge'], ex:['/bob challenge'], fr:'Bob te propose son défi tout de suite.', en:'Bob offers you his challenge right away.' },
     { name:'/help', use:['/help'], ex:['/help'], fr:'Ouvre ce guide.', en:'Opens this guide.' },
@@ -636,6 +645,11 @@ function commandUsage(use) {
     .replace(/\|/g, '<span class="cg-or">|</span>');
 }
 
+function guideGroupName(g) {
+  if (currentLang === 'es') return COMMAND_GROUPS_ES[g.id];
+  return currentLang === 'en' ? g.en : g.fr;
+}
+
 function renderCommandList() {
   var cats = document.getElementById('cg-cats');
   var list = document.getElementById('cg-list');
@@ -643,7 +657,7 @@ function renderCommandList() {
   var en = currentLang === 'en';
   var c = '<button class="cg-cat' + (ui.guideCat === 'all' ? ' active' : '') + '" onclick="ui.guideCat=\'all\';renderCommandList()">' + t('console.guideAll') + '</button>';
   COMMAND_DOCS.forEach(function(g) {
-    c += '<button class="cg-cat' + (ui.guideCat === g.id ? ' active' : '') + '" onclick="ui.guideCat=\'' + g.id + '\';renderCommandList()">' + (en ? g.en : g.fr) + '</button>';
+    c += '<button class="cg-cat' + (ui.guideCat === g.id ? ' active' : '') + '" onclick="ui.guideCat=\'' + g.id + '\';renderCommandList()">' + guideGroupName(g) + '</button>';
   });
   cats.innerHTML = c;
   var q = ui.guideSearch.trim().toLowerCase();
@@ -652,7 +666,7 @@ function renderCommandList() {
     if (ui.guideCat !== 'all' && ui.guideCat !== g.id) return;
     var cards = '';
     g.list.forEach(function(cmd) {
-      var desc = en ? cmd.en : cmd.fr;
+      var desc = currentLang === 'es' ? COMMAND_ES[cmd.name] : (en ? cmd.en : cmd.fr);
       var hay = (cmd.name + ' ' + cmd.use.join(' ') + ' ' + desc).toLowerCase();
       if (q && hay.indexOf(q) < 0) return;
       cards += '<article class="cg-card' + (cmd.danger ? ' danger' : '') + '">';
@@ -666,7 +680,7 @@ function renderCommandList() {
       });
       cards += '</div></article>';
     });
-    if (cards) h += '<h4>' + (en ? g.en : g.fr) + '</h4>' + cards;
+    if (cards) h += '<h4>' + guideGroupName(g) + '</h4>' + cards;
   });
   list.innerHTML = h || '<p class="cg-empty">' + t('console.guideNone') + '</p>';
 }

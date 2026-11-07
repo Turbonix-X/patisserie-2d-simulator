@@ -22,8 +22,19 @@ function setCard(title, body, extra) {
 }
 
 // ============ REGLAGES ============
+function settingsPaneHTML() {
+  var h = '';
+  if (ui.settingsTab === 'general') h = settingsGeneral();
+  else if (ui.settingsTab === 'look') h = settingsLook();
+  else if (ui.settingsTab === 'audio') h = settingsAudio();
+  else if (ui.settingsTab === 'ach') h = settingsAchievements();
+  else if (ui.settingsTab === 'stats') h = statsPane();
+  else h = settingsSave();
+  return h + '<p class="set-version">P2DS ' + GAME_VERSION + ' · Turbonix Entertainment</p>';
+}
+
 function showSettingsModal() {
-  var tabs = [['general', 'settings.tabGeneral', 'globe'], ['look', 'settings.tabLook', 'palette'], ['audio', 'settings.tabAudio', 'music'], ['save', 'settings.tabSave', 'save']];
+  var tabs = [['general', 'settings.tabGeneral', 'globe'], ['look', 'settings.tabLook', 'palette'], ['audio', 'settings.tabAudio', 'music'], ['save', 'settings.tabSave', 'save'], ['ach', 'settings.tabAch', 'ach'], ['stats', 'settings.tabStats', 'stats']];
   var h = '<div class="set-head"><h2>' + uiIcon('settings') + t('settings.title') + '</h2>';
   h += '<button class="icon-btn" onclick="closeMenu()" aria-label="' + escH(t('common.close')) + '" title="' + escH(t('common.close')) + '">' + uiIcon('close') + '</button></div>';
   h += '<div class="set-body"><nav class="set-nav">';
@@ -31,14 +42,49 @@ function showSettingsModal() {
     var active = ui.settingsTab === tb[0];
     h += '<button class="set-tab' + (active ? ' active' : '') + '"' + (active ? ' aria-current="page"' : '') + ' onclick="ui.settingsTab=\'' + tb[0] + '\';showSettingsModal()">' + uiIcon(tb[2]) + '<span>' + t(tb[1]) + '</span></button>';
   });
-  h += '</nav><div class="set-pane">';
-  if (ui.settingsTab === 'general') h += settingsGeneral();
-  else if (ui.settingsTab === 'look') h += settingsLook();
-  else if (ui.settingsTab === 'audio') h += settingsAudio();
-  else h += settingsSave();
-  h += '<p class="set-version">P2DS ' + GAME_VERSION + ' · Turbonix Entertainment</p>';
-  h += '</div></div>';
+  h += '</nav><div class="set-pane" id="set-pane">' + settingsPaneHTML() + '</div></div>';
   showModal(h, 'modal-settings');
+}
+
+// Met a jour le contenu sans bouger le defilement
+function refreshSettingsPane() {
+  var el = document.getElementById('set-pane');
+  if (el) setHTML(el, settingsPaneHTML());
+}
+
+// ============ SUCCES ============
+function settingsAchievements() {
+  var c = achCounts();
+  var byCat = {};
+  ACHIEVEMENTS.forEach(function(a) {
+    var got = !!G.achievements[a.id];
+    byCat[a.cat] = byCat[a.cat] || { all: 0, done: 0 };
+    if (a.hidden && !got) return; // Un secret n'existe pas tant qu'il n'est pas trouve
+    byCat[a.cat].all++;
+    if (got) byCat[a.cat].done++;
+  });
+  if (ui.achCat === 'secret' && c.secrets === 0) ui.achCat = 'general';
+  var h = '<section class="set-card"><div class="ach-head"><b>' + t('ach.title') + '</b><span>' + c.done + ' / ' + c.total + (c.secrets > 0 ? ' ' + t('ach.secretsFound', { v: c.secrets }) : '') + '</span></div>';
+  h += '<div class="loan-bar"><div style="width:' + (c.done / c.total * 100).toFixed(1) + '%"></div></div>';
+  h += '<p class="set-help">' + t('ach.bonus', { v: Math.round((achievementBonus() - 1) * 1000) / 10 }) + '</p></section>';
+  h += '<div class="list-tools">';
+  ACH_CATEGORIES.forEach(function(cat) {
+    if (cat === 'secret' && c.secrets === 0) return;
+    h += '<button class="chip' + (ui.achCat === cat ? ' active' : '') + '" onclick="ui.achCat=\'' + cat + '\';refreshSettingsPane()">' + t('ach.cat.' + cat) + ' ' + byCat[cat].done + '/' + byCat[cat].all + '</button>';
+  });
+  h += '</div><div class="ach-grid">';
+  ACHIEVEMENTS.forEach(function(a) {
+    if (a.cat !== ui.achCat) return;
+    var done = !!G.achievements[a.id];
+    if (a.hidden && !done) return;
+    // Tant qu'un succes n'est pas obtenu, on ne sait pas ce qu'il demande
+    var desc = done ? achDesc(a) : t('ach.lockedDesc');
+    h += '<div class="ach-item ' + (done ? 'unlocked' : 'locked') + '" title="' + escH(desc) + '">';
+    h += '<div class="ach-icon">' + a.icon + '</div>';
+    h += '<div class="ach-name">' + escH(achName(a)) + '</div>';
+    h += '<div class="ach-desc">' + escH(desc) + '</div></div>';
+  });
+  return h + '</div>';
 }
 
 function currencyName(c) {
@@ -90,7 +136,7 @@ function settingsLook() {
     var lock = themeLockReason(thm);
     var name = t(thm.langKey);
     var active = active0 === thm.id;
-    var why = lock ? t(lock === 'level' ? 'settings.lockLevel' : lock === 'season' ? 'settings.lockSeason' : lock === 'birthday' ? 'settings.lockBirthday' : 'settings.lockNoBirthday') : '';
+    var why = lock ? t(lock === 'level' ? 'settings.lockLevel' : lock === 'season' ? 'settings.lockSeason' : lock === 'birthday' ? 'settings.lockBirthday' : 'settings.lockNoBirthday', { v: thm.level }) : '';
     cards += '<button class="theme-card' + (active ? ' active' : '') + (lock ? ' locked' : '') + '"' + (lock ? ' disabled' : ' onclick="chooseTheme(\'' + thm.id + '\')"') + ' aria-pressed="' + active + '">';
     cards += '<span class="theme-prev tp-' + thm.id + '"><i></i><i></i><i></i>' + Decor.mark(thm.id) + '</span>';
     cards += '<span class="theme-name">' + (lock ? '\u{1F512} ' : '') + name + '</span>';
@@ -106,7 +152,7 @@ function settingsLook() {
 function settingsAudio() {
   var track = '<select class="set-select" aria-label="' + escH(t('settings.musicTrack')) + '" onchange="setMusicTrack(this.value);showSettingsModal()">';
   MUSIC_TRACKS.forEach(function(mt) {
-    if (trackAvailable(mt)) track += '<option value="' + mt.id + '"' + (G.settings.musicTrack === mt.id ? ' selected' : '') + '>' + mt.name + '</option>';
+    if (trackAvailable(mt)) track += '<option value="' + mt.id + '"' + (G.settings.musicTrack === mt.id ? ' selected' : '') + '>' + t('mus.' + mt.id) + '</option>';
   });
   track += '</select>';
   var volume = '<div class="volume-row"><input type="range" min="0" max="100" value="' + G.settings.musicVolume + '" aria-label="' + escH(t('settings.musicVolume')) + '" oninput="setMusicVolume(this.value);document.getElementById(\'vol-val\').textContent=this.value+\' %\'"><span id="vol-val">' + G.settings.musicVolume + ' %</span></div>';

@@ -16,6 +16,7 @@
 <script>document.write('<script src="../JS/GameData.js?t=' + Date.now() + '"><\/script>');</script>
 <script>document.write('<script src="../JS/Icons.js?t=' + Date.now() + '"><\/script>');</script>
 <script>document.write('<script src="../JS/Languages.js?t=' + Date.now() + '"><\/script>');</script>
+<script>document.write('<script src="../JS/LangES.js?t=' + Date.now() + '"><\/script>');</script>
 <script>document.write('<script src="../JS/PlayerData.js?t=' + Date.now() + '"><\/script>');</script>
 <script>document.write('<script src="../JS/Logic.js?t=' + Date.now() + '"><\/script>');</script>
 <script>document.write('<script src="../JS/Achievements.js?t=' + Date.now() + '"><\/script>');</script>
@@ -122,7 +123,7 @@ check('Le rebirth donne plus d espace', G.maxSpace > 5, G.maxSpace);
 var ids = {}, dup = [];
 ACHIEVEMENTS.forEach(function(a) { if (ids[a.id]) dup.push(a.id); ids[a.id] = 1; });
 check('Aucun succes en double', dup.length === 0, dup.join(', '));
-check('Des centaines de succes', ACHIEVEMENTS.length >= 500, ACHIEVEMENTS.length);
+check('Exactement 1000 succes visibles', ACHIEVEMENTS.filter(function(a) { return !a.hidden; }).length === 1000, ACHIEVEMENTS.length);
 check('Exactement 5 succes secrets', ACHIEVEMENTS.filter(function(a) { return a.hidden; }).length === 5);
 G = createFreshState();
 var noName = ACHIEVEMENTS.filter(function(a) { return !achName(a) || !achDesc(a) || achName(a).indexOf('r.') === 0; }).map(function(a) { return a.id; });
@@ -132,7 +133,7 @@ check('Chaque succes a une categorie', badCat.length === 0, badCat.join(', '));
 
 // --- Textes ---
 var missing = [];
-['fr', 'en'].forEach(function(lang) {
+['fr', 'en', 'es'].forEach(function(lang) {
   ING.forEach(function(i) { if (!LANGS[lang]['i.' + i.id]) missing.push(lang + ':i.' + i.id); });
   REC.forEach(function(r) { if (!LANGS[lang]['r.' + r.id]) missing.push(lang + ':r.' + r.id); });
   BUILDINGS.forEach(function(b) { if (!LANGS[lang]['b.' + b.id]) missing.push(lang + ':b.' + b.id); });
@@ -143,6 +144,19 @@ var missing = [];
 var onlyOne = Object.keys(LANGS.fr).filter(function(k) { return !LANGS.en[k]; }).concat(Object.keys(LANGS.en).filter(function(k) { return !LANGS.fr[k]; }));
 check('Tous les noms sont traduits', missing.length === 0, missing.slice(0, 8).join(', '));
 check('Le francais et l anglais ont les memes textes', onlyOne.length === 0, onlyOne.slice(0, 8).join(', '));
+var esDiff = Object.keys(LANGS.fr).filter(function(k) { return !LANGS.es[k]; }).concat(Object.keys(LANGS.es).filter(function(k) { return !LANGS.fr[k]; }));
+check('L espagnol a tous les textes', esDiff.length === 0, esDiff.slice(0, 12).join(', '));
+var paramsBad = Object.keys(LANGS.es).filter(function(k) {
+  function p(x) { return (String(x).match(/\{\{\w+\}\}/g) || []).sort().join(); }
+  return LANGS.en[k] && p(LANGS.es[k]) !== p(LANGS.en[k]);
+});
+check('L espagnol garde les memes valeurs a remplacer', paramsBad.length === 0, paramsBad.slice(0, 8).join(', '));
+currentLang = 'es';
+var esNames = ACHIEVEMENTS.filter(function(a) { return !a.nameFn && !achNameEs(a.en); }).map(function(a) { return a.en; });
+var esDescs = ACHIEVEMENTS.filter(function(a) { return !a.descFn && !achDescEs(a.descEn); }).map(function(a) { return a.descEn; });
+check('Tous les succes ont un nom en espagnol', esNames.length === 0, esNames.slice(0, 8).join(', '));
+check('Tous les succes ont une description en espagnol', esDescs.length === 0, esDescs.slice(0, 8).join(', '));
+currentLang = 'fr';
 
 // --- Banque ---
 G = createFreshState(); G.money = 0; G.level = 50;
@@ -188,21 +202,7 @@ check('... seulement apres 3 minutes', G.rentDebt > 0);
 G.money = 10; G.rentDebt = 0; tickRent(1);
 check('Payer le loyer remet le compteur a zero', G.rentLate === 0);
 
-// --- Saisons ---
-var realSeason = currentSeason;
-['spring', 'summer', 'fall', 'winter'].forEach(function(sn) {
-  var list = REC.filter(function(r) { return r.season === sn; });
-  check('10 gateaux pour ' + sn + ', du niveau 1 au niveau 900', list.length === 10 && list[0].unlockLvl === 1 && list[9].unlockLvl === 900);
-});
-G = createFreshState(); G.level = 1000; G.cakes.wi_biscuit = 5; G.ing.farine = 1e4; G.ing.sucre = 1e4; G.ing.oeuf = 1e4;
-currentSeason = function() { return 'summer'; };
-var offRec = findRec('wi_biscuit');
-check('Hors saison : ni preparer ni vendre', !canMake(offRec) && doSell(offRec, 5) === 0 && G.cakes.wi_biscuit === 5 && stockValue() === 0);
-currentSeason = function() { return 'winter'; };
-check('En saison : on prepare et on vend', canMake(offRec) && doSell(offRec, 5) > 0 && G.cakes.wi_biscuit === 0);
-currentSeason = realSeason;
-var saisonPerte = REC.filter(function(r) { return r.season && r.val * r.qty <= cost(r); }).map(function(r) { return r.id; });
-check('Les gateaux de saison sont rentables', saisonPerte.length === 0, saisonPerte.join(', '));
+check('Plus de gateaux de saison', REC.length === 60 && !REC.some(function(r) { return r.season; }), REC.length);
 
 // --- Commandes et machines ---
 G = createFreshState(); G.level = 200; G.money = 0;
@@ -246,10 +246,64 @@ check('Le prix depend de ce qu elle contient', getBakeryValueForIndex(1) > v0);
 var moneyBefore = G.money, price = getBakeryValueForIndex(1);
 check('La vendre verse le prix et la retire', sellBakery(1) && G.money === moneyBefore + price && G.bakeries.length === 1);
 
+// --- Batiments et transport ---
+G = createFreshState(); G.level = 39; G.money = 1e9;
+check('Pas de batiment avant le niveau 40', buyBuilding(BUILDINGS[0], '1') === 0);
+G.level = 40;
+check('... puis on peut en acheter', buyBuilding(BUILDINGS[0], '1') === 1);
+G = createFreshState(); G.money = 1000; G.level = 50; G.bakeryName = 'Une'; G.cakes.cookie = 10; G.ing.farine = 5; openNewBakery(true, 'Deux');
+var dest = G.bakeries[1].state, earn0 = G.totalEarned, destCookieSpace = Math.floor(dest.maxSpace / findRec('cookie').space);
+check('Bob transporte de l argent, sans que ce soit un gain', transferMoney(0, 1, 300) === 300 && G.money === 700 && dest.money === 350 && G.totalEarned === earn0);
+check('Il ne transporte pas plus que ce qu il y a', transferMoney(0, 1, 1e9) === 700 && G.money === 0);
+check('Il transporte des ingredients', transferStock(0, 1, 'ing', 'farine', 3) === 3 && G.ing.farine === 2 && dest.ing.farine === 3);
+check('Il transporte des gateaux dans la place disponible', transferStock(0, 1, 'cake', 'cookie', 10) === Math.min(10, destCookieSpace));
+check('Ca marche aussi depuis l autre boutique', transferMoney(1, 0, 50) === 50 && G.money === 50);
+check('Pas vers elle-meme', transferMoney(0, 0, 10) === 0);
+
+// --- Transporteur ---
+G = createFreshState(); G.level = 50; G.money = 1e6;
+check('Pas de transporteur avec une seule patisserie', hireEmployee('carrier') === false);
+G.bakeryName = 'Une'; openNewBakery(true, 'Deux');
+check('Avec deux patisseries, on peut en recruter', hireEmployee('carrier') === true);
+var carrier = G.employees[0], other2 = G.bakeries[1].state, otherMoney = other2.money, myMoney = G.money;
+tickCarriers(1);
+check('Pas de voyage avant d avoir fini le trajet', other2.money === otherMoney);
+for (var ct = 0; ct < 60; ct++) tickCarriers(1);
+check('Il transporte de l argent tout seul', other2.money > otherMoney && G.money < myMoney, other2.money);
+carrier.carryWhat = 'cakes'; G.cakes.cookie = 5; carrier.carryCd = CARRIER_TRIP_SEC;
+tickCarriers(1);
+check('Il transporte des gateaux', other2.cakes.cookie === 5 && G.cakes.cookie === 0, other2.cakes.cookie);
+carrier.carryWhat = 'ings'; G.ing.farine = 50; carrier.carryCd = CARRIER_TRIP_SEC;
+tickCarriers(1);
+check('Il transporte des ingredients', other2.ing.farine === 50 && G.ing.farine === 0, other2.ing.farine);
+G.money = 1; carrier.carryWhat = 'money'; carrier.carryCd = CARRIER_TRIP_SEC; var low = other2.money;
+tickCarriers(1);
+check('Il laisse de quoi payer les salaires et le loyer', G.money === 1 && other2.money === low, G.money);
+
+// --- Conseils de Bob ---
+G = createFreshState(); G.level = 50; G.maxSpace = 10; G.cakes.cake = 10;
+var kinds = function() { return bobAdvice().map(function(a) { return a.kind; }); };
+check('Bob voit un stock qui deborde', kinds().indexOf('space') >= 0, kinds().join());
+G.soldCount.cake = 1000; G.totalAllSold = 1000;
+check('Bob voit un gateau qui se vend mal', kinds().indexOf('slow') >= 0, kinds().join());
+G = createFreshState(); G.orders = [{ id: 1, name: 'Tom', items: [], expiresAt: Date.now() + 20000 }];
+check('Bob voit une commande qui expire', kinds()[0] === 'order');
+G = createFreshState(); G.employees = [{ id: 1, name: 'Tom', morale: 25, status: 'poor' }];
+check('Bob voit un employe qui va faire greve', kinds()[0] === 'empSoon');
+G = createFreshState(); G.maxSpace = 5000; G.playTimeMs = 600000;
+G.history = { t: [0, 1e5, 2e5, 3e5], money: [0, 0, 0, 0], earned: [0, 1, 2, 3], spent: [0, 0, 0, 0], level: [1, 1, 1, 1], sold: [0, 0, 0, 0], step: 3e4, next: 0 };
+check('Bob voit un loyer trop cher', kinds().indexOf('rent') >= 0, kinds().join());
+G = createFreshState();
+check('Sans souci, Bob ne dit rien', bobAdvice().length === 0);
+
 // --- /max et themes ---
-check('Limite de /max : plus c est rare, plus c est haut', maxStockFor(findIng('farine')) < maxStockFor(findIng('cristalceleste')) && maxStockFor(findIng('lait')) < maxStockFor(findIng('infinipur')));
+check('Limite de /max : plus c est rare, moins on en a', maxStockFor(findIng('farine')) > maxStockFor(findIng('cristalceleste')) && maxStockFor(findIng('lait')) > maxStockFor(findIng('infinipur')) && maxStockFor(findIng('infinipur')) >= 1000);
 G = createFreshState(); G.money = 100; setBirthday(1, 1);
 check('Corriger son anniversaire coute 50 EUR', fixBirthday(2, 3) && G.money === 50 && G.birthday.month === 3);
+G = createFreshState();
+check('Le theme fete attend le niveau 500', themeLockReason(findTheme('party')) === 'level');
+G.level = 500;
+check('... puis se debloque', themeLockReason(findTheme('party')) === null);
 G = createFreshState();
 check('Le theme espace attend le niveau 1000', themeLockReason(findTheme('space')) === 'level');
 G.level = 1000;
@@ -294,7 +348,7 @@ G = createFreshState();
 var oldSave = JSON.parse(JSON.stringify(G));
 delete oldSave.ovens; oldSave.saveVersion = 7; oldSave.settings.musicVolume = 0.3; oldSave.settings.theme = 'nature_fleur'; oldSave.stats.totalClicks = 5;
 var migrated = migrateSave(oldSave);
-check('Une ancienne sauvegarde se met a jour', migrated.ovens === 2 && migrated.settings.musicVolume === 30 && migrated.settings.theme === 'light' && migrated.introDone && migrated.saveVersion === 10);
+check('Une ancienne sauvegarde se met a jour', migrated.ovens === 2 && migrated.settings.musicVolume === 30 && migrated.settings.theme === 'light' && migrated.introDone && migrated.saveVersion === 11);
 check('Un code invalide est refuse', importSave('abc') === false && importSave(btoa('{"money":"x"}')) === false);
 
 var ko = results.filter(function(r) { return !r.ok; }).length;

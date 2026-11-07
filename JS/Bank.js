@@ -7,7 +7,7 @@
 // ============ BOB QUI PARLE EN GRAND ============
 function bobFigure() {
   var svg = document.querySelector('#bob svg');
-  return '<div class="bob-talk-figure bob-fig" data-anger="' + (bobAnger() === 5 ? 5 : 0) + '">' + (svg ? svg.outerHTML : '') + '</div>';
+  return '<div class="bob-talk-figure bob-fig" data-anger="' + bobStage(true) + '">' + (svg ? svg.outerHTML : '') + '</div>';
 }
 
 // Plusieurs repliques a la suite, puis une action
@@ -125,7 +125,7 @@ function renderBank() {
 function fmtLoan(amount) {
   var curr = CURRENCIES[0];
   CURRENCIES.forEach(function(c) { if (c.id === G.settings.currency) curr = c; });
-  return (amount * curr.rate).toLocaleString(currentLang === 'fr' ? 'fr-FR' : 'en-US', { maximumFractionDigits: 2 }) + curr.symbol;
+  return (amount * curr.rate).toLocaleString(currentLang === 'fr' ? 'fr-FR' : currentLang === 'es' ? 'es-ES' : 'en-US', { maximumFractionDigits: 2 }) + curr.symbol;
 }
 
 function bankTile(label, value, alert) {

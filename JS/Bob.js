@@ -162,8 +162,9 @@ function bobSay(msg) {
 // ============ SA COLERE ============
 var BOB_CLICKS_NEEDED = 50;
 
-// 0 calme, 1 agace, 2 enerve, 3 furieux, 4 fou de rage, 5 aigri (pour toujours)
+// 0 calme, 1 agace, 2 enerve, 3 furieux, 4 fou de rage, 5 aigri (il faut du sucre pour l'en sortir)
 function bobAnger() {
+  if ((G.bobSad || 0) > 0) return 5;
   var c = G.bobClicks || 0;
   if (c >= BOB_CLICKS_NEEDED) return 5;
   if (c >= 40) return 4;
@@ -173,11 +174,21 @@ function bobAnger() {
   return 0;
 }
 
+// Ce qui s'affiche : sa colere, ou sa tristesse quand il se remet (s3, s2, s1).
+// calmOnly : dans les grandes fenetres, Bob ne montre pas sa colere.
+function bobStage(calmOnly) {
+  var sad = G.bobSad || 0;
+  if (sad >= 4) return '5';
+  if (sad > 0) return 's' + sad;
+  var a = bobAnger();
+  return calmOnly && a !== 5 ? '0' : String(a);
+}
+
 function renderBob() {
   var bob = document.getElementById('bob');
   if (!bob) return;
-  var anger = String(bobAnger());
-  if (bob.getAttribute('data-anger') !== anger) bob.setAttribute('data-anger', anger);
+  var stage = bobStage();
+  if (bob.getAttribute('data-anger') !== stage) bob.setAttribute('data-anger', stage);
   renderSugar();
 }
 
@@ -193,7 +204,7 @@ function bobMood(mood, ms) {
 // ============ IL AIME LE SUCRE ============
 // Quand il est triste, on peut lui donner un sucre en le glissant sur lui.
 function bobWantsSugar() {
-  return !introActive && bobAnger() > 0 && (G.ing.sucre || 0) >= 1;
+  return !introActive && (G.bobSad || 0) > 0 && (G.ing.sucre || 0) >= 1;
 }
 
 function renderSugar() {
@@ -207,17 +218,17 @@ function renderSugar() {
 
 function feedBob() {
   if (!bobWantsSugar()) return false;
-  var before = bobAnger();
   G.ing.sucre -= 1;
   G.sugarFed = (G.sugarFed || 0) + 1;
-  // Une etape de colere en moins
-  G.bobClicks = Math.max(0, (before - 1) * 10);
+  // Il est de moins en moins triste, sans repasser par la colere
+  G.bobSad -= 1;
+  if (G.bobSad <= 0) { G.bobSad = 0; G.bobClicks = 0; }
   renderBob();
   bobMood('joy', 2200);
   var bob = document.getElementById('bob');
   fxBurstOn(bob, 22, ['#fff', '#ffd60a', '#ff85ac'], true);
   playSuccessSound();
-  bobSay(pickLine(before === 5 ? 'bob.sugarFed5' : bobAnger() === 0 ? 'bob.sugarFed0' : 'bob.sugarFed1'));
+  bobSay(pickLine('bob.sugar' + G.bobSad));
   renderIngredients();
   save();
   return true;
@@ -316,6 +327,7 @@ function bobPoke() {
   fxBump(bob, 1.05 + after * 0.04);
   playSound(260 + after * 120, 0.08, after >= 2 ? 'sawtooth' : 'square', 0, 0.08);
   if (after === 5) {
+    G.bobSad = 4;
     bobSay(t('bob.giveup'));
     fxBurstOn(bob, 40, ['#8fa36b', '#6d7f50', '#c9c9a6'], false);
     checkAchievements();
@@ -429,4 +441,32 @@ function tickChallenge() {
     return;
   }
   if (!G.challenge && now >= G.nextChallengeAt && !modalIsOpen()) offerChallenge();
+}
+
+// ============ SES CONSEILS ============
+// Bob dit ce qu'il remarque, tout simplement.
+function adviceText(a) {
+  if (a.kind === 'order') return t('adv.order', { n: escH(a.n), t: fmtTime(Math.max(0, a.t)) });
+  if (a.kind === 'empStrike' || a.kind === 'empSoon') return t('adv.' + a.kind, { n: escH(a.n) });
+  if (a.kind === 'slow') return t('adv.slow', { n: recShortName(a.rec), v: a.v });
+  return t('adv.' + a.kind, { v: a.v });
+}
+
+var bobSeen = {};
+var bobLastAlert = 0;
+
+function tickBobWatch() {
+  if (!G.introDone || !G.tutorialDone || bobTalkTimer) return;
+  var now = Date.now();
+  if (now - bobLastAlert < 15000) return;
+  var list = bobAdvice();
+  for (var i = 0; i < list.length; i++) {
+    var a = list[i];
+    // Ce qui presse : une fois. Le reste : au plus toutes les 5 minutes.
+    if (bobSeen[a.key] && (a.urgent || now - bobSeen[a.key] < 300000)) continue;
+    bobSeen[a.key] = now;
+    bobLastAlert = now;
+    bobSay(adviceText(a));
+    return;
+  }
 }

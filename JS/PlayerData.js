@@ -49,6 +49,7 @@ function createFreshState() {
     unlockedThemes: {},
     cheatUnlocked: false,
     bobClicks: 0,
+    bobSad: 0,
     logoClicks: 0,
     introDone: false,
     tutorialStep: 0,
@@ -105,7 +106,7 @@ function createFreshState() {
       ordersDone: 0,
       earnedById: {},
     },
-    saveVersion: 10,
+    saveVersion: 11,
   };
   ING.forEach(function(i) { state.ing[i.id] = 0; });
   REC.forEach(function(r) { state.cakes[r.id] = 0; state.soldCount[r.id] = 0; });
@@ -176,6 +177,21 @@ function migrateSave(data) {
     data.rentDebt = 0;
     data.gameOver = false;
     data.saveVersion = 10;
+  }
+  // Avant la 1.2 revue : plus de gateaux de saison, Bob peut etre triste
+  if (data.saveVersion < 11) {
+    var known = {};
+    REC.forEach(function(r) { known[r.id] = true; });
+    Object.keys(data.cakes).forEach(function(id) { if (!known[id]) delete data.cakes[id]; });
+    data.crafting = data.crafting.filter(function(c) { return c.isIngCraft || known[c.recId]; });
+    data.orders = data.orders.filter(function(o) { return o.items.every(function(it) { return known[it.recId]; }); });
+    if (typeof ACHIEVEMENTS !== 'undefined') {
+      var ids = {};
+      ACHIEVEMENTS.forEach(function(a) { ids[a.id] = true; });
+      Object.keys(data.achievements).forEach(function(id) { if (!ids[id]) delete data.achievements[id]; });
+    }
+    if (data.bobClicks >= 50) data.bobSad = 4;
+    data.saveVersion = 11;
   }
   // Les autres patisseries sont sauvegardees a l'interieur de celle-ci
   data.bakeries.forEach(function(b) { if (b.state) b.state = migrateSave(b.state); });

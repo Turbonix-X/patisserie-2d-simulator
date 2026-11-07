@@ -4,7 +4,7 @@
    employes, espace, rebirths, evenements, themes
    ============================================ */
 
-var GAME_VERSION = 'B\u00eata 1.2';
+var GAME_VERSION = 'B\u00eata 1.3';
 
 // ============ CURRENCIES ============
 var CURRENCIES = [
@@ -210,6 +210,8 @@ var EMP_TYPES = [
   { id:'manager',   baseSalary:1,    unlockLvl:25, hireCost:1000 },
   { id:'chef',      baseSalary:2,    unlockLvl:40, hireCost:3000 },
   { id:'maitre',    baseSalary:1.5,  unlockLvl:30, hireCost:2500 },
+  // Le transporteur n'a de travail qu'a partir de deux patisseries
+  { id:'carrier',   baseSalary:0.8,  unlockLvl:20, hireCost:1500, needsBakeries:2 },
 ];
 
 var EMP_NAMES_LANG = {
@@ -317,7 +319,7 @@ function bestRevenueAt(lvl) {
   if (_bestRevenueCache[lvl] !== undefined) return _bestRevenueCache[lvl];
   var best = 0;
   for (var i = 0; i < REC.length; i++) {
-    if (REC[i].unlockLvl <= lvl && !REC[i].season) best = Math.max(best, REC[i].val * REC[i].qty);
+    if (REC[i].unlockLvl <= lvl) best = Math.max(best, REC[i].val * REC[i].qty);
   }
   _bestRevenueCache[lvl] = best;
   return best;
@@ -365,6 +367,7 @@ var LOANS = [
 ];
 
 var RENAME_COST = 100;
+var BUILDINGS_LVL = 40; // Les batiments s'achetent a partir de ce niveau
 var BIRTHDAY_FIX_COST = 50;
 
 // Les commandes des clients : plus c'est complique, plus la prime est grosse
@@ -429,81 +432,6 @@ var THEME_LIST = [
   { id:'fall',     langKey:'settings.themeFall',   season:true },
   { id:'winter',   langKey:'settings.themeWinter', season:true },
   { id:'birthday', langKey:'settings.themeBirthday', birthday:true },
-  { id:'party',    langKey:'settings.themeParty' },
+  { id:'party',    langKey:'settings.themeParty', level:500 },
   { id:'space',    langKey:'settings.themeSpace', level:1000 },
 ];
-
-// ============ GATEAUX DE SAISON ============
-// 10 par saison, un tous les 100 niveaux : du gateau pour les nuls a la piece exceptionnelle.
-// On ne peut les preparer et les vendre que pendant leur saison.
-// [id, icone, nom fr, nom en, pieces par fournee, ingredients (en proportions)]
-var SEASONAL_LEVELS = [1, 100, 200, 300, 400, 500, 600, 700, 800, 900];
-var SEASONAL_CAKES = {
-  spring: [
-    ['sp_sable', '\u{1F36A}', 'Sablé de printemps pour les nuls', 'Spring shortbread for dummies', 6, {farine:2,sucre:2,oeuf:2}],
-    ['sp_fraise', '\u{1F353}', 'Tartelette aux fraises des bois', 'Wild strawberry tartlet', 4, {fraise:3,farine:2,sucre:2,creme:1}],
-    ['sp_chou', '\u{1F338}', 'Chou à la fleur de cerisier', 'Cherry blossom puff', 4, {rose:1,creme:2,farine:2,oeuf:3}],
-    ['sp_violette', '\u{1F49C}', 'Mille-feuille à la violette', 'Violet mille-feuille', 1, {lavande:2,creme:3,farine:3}],
-    ['sp_pavlova', '\u{1F370}', 'Pavlova d’avril', 'April pavlova', 1, {meringue:3,fraise:3,creme:2,ambrosie:1}],
-    ['sp_charlotte', '\u{1F33C}', 'Charlotte aux primevères', 'Primrose charlotte', 1, {vanille:2,fraise:3,nectar:1,creme:3}],
-    ['sp_nid', '\u{1F95A}', 'Nid de Pâques doré', 'Golden Easter nest', 1, {chocolat:3,orfeuille:1,poudreetoile:1,praline:2}],
-    ['sp_eclosion', '\u{1F331}', 'Éclosion en sucre filé', 'Spun sugar blossom', 1, {sucre:5,rose:2,essencetps:1}],
-    ['sp_couronne', '\u{1F33A}', 'Couronne des mille fleurs', 'Crown of a thousand flowers', 1, {safran:2,rose:3,cristalceleste:1,nectar:1}],
-    ['sp_jardin', '\u{1F339}', 'Le Jardin éternel', 'The Eternal Garden', 1, {rose:5,cristalceleste:1,flamcosm:1,orfeuille:2}],
-  ],
-  summer: [
-    ['su_gaufre', '\u{1F95E}', 'Gaufrette d’été pour les nuls', 'Summer wafer for dummies', 6, {farine:2,oeuf:3,sucre:1}],
-    ['su_citron', '\u{1F34B}', 'Tarte citron de la plage', 'Beach lemon tart', 4, {citron:4,farine:2,sucre:2,beurre:2}],
-    ['su_mangue', '\u{1F96D}', 'Sorbet mangue en coque', 'Mango sorbet in a shell', 4, {mangue:4,sucre:3,mascarpone:1}],
-    ['su_melba', '\u{1F36E}', 'Melba aux framboises', 'Raspberry melba', 1, {framb:3,vanille:2,creme:3,yuzu:2}],
-    ['su_baba', '\u{1F334}', 'Baba au rhum des îles', 'Island rum baba', 1, {rhum:3,noixcoco:3,ambrosie:1,farine:3}],
-    ['su_souffle', '\u{1F34A}', 'Soufflé aux fruits du soleil', 'Sun fruit soufflé', 1, {bergamote:3,mangue:3,nectar:1,meringue:2}],
-    ['su_coucher', '\u2600\uFE0F', 'Coucher de soleil glacé', 'Frozen sunset', 1, {mangue:3,framb:3,poudreetoile:1,creme:3}],
-    ['su_vague', '\u{1F3D6}\uFE0F', 'Vague de crème marine', 'Sea cream wave', 1, {creme:5,noixcoco:3,essencetps:1,yuzu:2}],
-    ['su_ile', '\u{1F3DD}\uFE0F', 'L’Île au trésor', 'Treasure Island', 1, {rhum:3,orfeuille:2,cristalceleste:1,noixcoco:4}],
-    ['su_soleil', '\u{1F31F}', 'Le Soleil de minuit', 'The Midnight Sun', 1, {nectar:3,flamcosm:1,cristalceleste:1,mangue:5}],
-  ],
-  fall: [
-    ['fa_petit', '\u{1F342}', 'Petit gâteau d’automne pour les nuls', 'Little fall cake for dummies', 6, {farine:3,oeuf:2,sucre:1}],
-    ['fa_pomme', '\u{1F34E}', 'Tarte aux pommes caramélisées', 'Caramelized apple tart', 4, {pomme:5,caramel:2,farine:2,cannelle:1}],
-    ['fa_noisette', '\u{1F330}', 'Moelleux à la noisette', 'Soft hazelnut cake', 4, {noisette:4,chocolat:2,anis:1,farine:3}],
-    ['fa_montblanc', '\u{1F370}', 'Mont-blanc aux châtaignes', 'Chestnut mont-blanc', 1, {noisette:3,creme:3,meringue:2,rhum:1}],
-    ['fa_foret', '\u{1F36B}', 'Forêt-noire de la Toussaint', 'All Saints black forest', 1, {chocolat:4,framb:3,ambrosie:1,creme:3}],
-    ['fa_flan', '\u{1F36E}', 'Flan de la récolte d’or', 'Golden harvest flan', 1, {orfeuille:1,caramel:3,nectar:1,cannelle:2}],
-    ['fa_champi', '\u{1F344}', 'Champignon de sous-bois', 'Forest floor mushroom', 1, {truffe:2,chocolat:3,poudreetoile:1,noisette:3}],
-    ['fa_tourbillon', '\u{1F300}', 'Tourbillon de feuilles mortes', 'Whirl of fallen leaves', 1, {cannelle:3,essencetps:1,pomme:4,caramel:3}],
-    ['fa_ecrin', '\u{1F48E}', 'Écrin de sous-bois', 'Forest jewel box', 1, {truffe:3,cristalceleste:1,miel:3,noisette:4}],
-    ['fa_infini', '\u{1F308}', 'L’Automne infini', 'The Endless Fall', 1, {flamcosm:1,cristalceleste:1,truffe:3,safran:3}],
-  ],
-  winter: [
-    ['wi_biscuit', '\u{1F36A}', 'Biscuit de Noël pour les nuls', 'Christmas cookie for dummies', 6, {farine:3,sucre:2,oeuf:1}],
-    ['wi_epices', '\u{1F950}', 'Pain d’épices', 'Gingerbread', 4, {miel:3,cannelle:2,farine:3,gingembre:1}],
-    ['wi_chaud', '\u2615', 'Chocolat chaud en gâteau', 'Hot chocolate cake', 4, {chocolat:3,cacao:3,creme:2,anis:1}],
-    ['wi_buche', '\u{1F36B}', 'Bûche de Noël', 'Yule log', 1, {chocolat:4,creme:3,farine:3,praline:1}],
-    ['wi_galette', '\u{1F451}', 'Galette des rois', 'King cake', 1, {amande:4,beurre:3,farine:4,ambrosie:1}],
-    ['wi_boule', '\u2744\uFE0F', 'Boule de neige', 'Snowball', 1, {meringue:3,noixcoco:3,nectar:1,creme:2}],
-    ['wi_etoile', '\u2B50', 'Étoile du berger', 'Evening star', 1, {anis:3,poudreetoile:1,miel:3,chocolat:2}],
-    ['wi_givre', '\u{1F4AB}', 'Cristal de givre', 'Frost crystal', 1, {essencetps:1,meringue:4,yuzu:2}],
-    ['wi_palais', '\u{1F3F0}', 'Palais de glace', 'Ice palace', 1, {cristalceleste:1,meringue:4,orfeuille:2,creme:4}],
-    ['wi_eternel', '\u2728', 'L’Hiver éternel', 'The Eternal Winter', 1, {cristalceleste:2,flamcosm:1,nectar:2,meringue:5}],
-  ],
-};
-
-(function() {
-  function ingCost(id) { for (var i = 0; i < ING.length; i++) { if (ING[i].id === id) return ING[i].cost; } return 0; }
-  Object.keys(SEASONAL_CAKES).forEach(function(season) {
-    SEASONAL_CAKES[season].forEach(function(c, tier) {
-      var lvl = SEASONAL_LEVELS[tier];
-      var base = 0, k;
-      for (k in c[5]) base += ingCost(k) * c[5][k];
-      // Une fournee de saison vaut plus cher que les recettes de ce niveau
-      var target = revenueAt(lvl) * 0.5;
-      var scale = Math.max(1, target / base);
-      var req = {}, cost = 0;
-      for (k in c[5]) { req[k] = Math.ceil(c[5][k] * scale); cost += ingCost(k) * req[k]; }
-      var total = cost * 2.6;
-      REC.push({ id: c[0], e: c[1], req: req, val: Math.round(total / c[4] * 100) / 100, qty: c[4], unlockLvl: lvl, season: season,
-        space: c[4] > 1 ? 0.5 : Math.min(4, 1.5 + tier * 0.25), prepTime: Math.round(4 + lvl / 25), xp: Math.max(5, Math.round(total * 0.2)) });
-    });
-  });
-})();

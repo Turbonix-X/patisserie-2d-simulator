@@ -7,30 +7,28 @@
 // Donnees des courbes affichees, pour le survol
 var chartStore = {};
 
-// ============ L'ONGLET ============
-function renderStats() {
-  var el = document.getElementById('main-panel');
-  if (!el) return;
+// ============ DANS LES REGLAGES ============
+function statsPane() {
   var open = !!G.secondBakery;
   if (!open) ui.statsView = 'here';
-  var h = '<div class="panel-head"><h2>' + t('stats.title') + '</h2></div>';
+  var h = '';
   if (open) {
     h += '<div class="list-tools">';
     [['here', 'stats.viewHere'], ['charts', 'stats.viewCharts'], ['all', 'stats.viewAll']].forEach(function(v) {
-      h += '<button class="chip' + (ui.statsView === v[0] ? ' active' : '') + '" onclick="ui.statsView=\'' + v[0] + '\';renderStats()">' + t(v[1]) + '</button>';
+      h += '<button class="chip' + (ui.statsView === v[0] ? ' active' : '') + '" onclick="ui.statsView=\'' + v[0] + '\';refreshSettingsPane()">' + t(v[1]) + '</button>';
     });
     h += '</div>';
   }
-  if (ui.statsView === 'charts') h += statsCharts(el);
+  if (ui.statsView === 'charts') h += statsCharts();
   else if (ui.statsView === 'all') h += statsAll();
   else h += statsHere(open);
-  setHTML(el, h);
+  return h;
 }
 
 function statRows(rows) {
-  var h = '<div class="stats-grid">';
-  rows.forEach(function(r) { h += '<div class="stat-row"><span>' + t(r[0]) + '</span><span>' + r[1] + '</span></div>'; });
-  return h + '</div>';
+  var h = '<section class="set-card stat-rows">';
+  rows.forEach(function(r) { h += '<div class="set-row"><span class="set-label"><b>' + t(r[0]) + '</b></span><span class="set-value">' + r[1] + '</span></div>'; });
+  return h + '</section>';
 }
 
 function fmtPlay(ms) {
@@ -40,8 +38,7 @@ function fmtPlay(ms) {
 function statsHere(open) {
   var bldCount = 0;
   BUILDINGS.forEach(function(b) { bldCount += (G.buildings[b.id] || { qty: 0 }).qty; });
-  var unlocked = 0;
-  for (var k in G.achievements) { if (G.achievements[k]) unlocked++; }
+  var ac = achCounts();
   var rows = [
     ['stats.totalEarned', fmtMoney(G.totalEarned)],
     ['stats.totalCakes', fmt(G.stats.totalCakesMade)],
@@ -56,7 +53,7 @@ function statsHere(open) {
     ['stats.employees', fmt(G.employees.length)],
     ['stats.ovens', fmt(ovenSlots())],
     ['stats.events', fmt(G.stats.eventsSeen || 0)],
-    ['stats.achievements', unlocked + ' / ' + ACHIEVEMENTS.length],
+    ['stats.achievements', ac.done + ' / ' + ac.total],
     ['stats.sellBonus', '+' + Math.round((sellValueMult() - 1) * 100) + ' %'],
     ['stats.rebirths', G.rebirth],
   ];
@@ -175,7 +172,7 @@ function barChart(title, sub, rows, cls, fmtV) {
 }
 
 // ============ LES GRAPHIQUES ============
-function statsCharts(panel) {
+function statsCharts() {
   var hist = G.history;
   var n = hist.t.length;
   var spent = totalSpent();
@@ -202,7 +199,8 @@ function statsCharts(panel) {
   h += '</div>';
 
   // Largeur reelle du panneau, pour que le texte des graphiques garde sa taille
-  var inner = (panel.clientWidth || 700) - 30;
+  var pane = document.getElementById('set-pane');
+  var inner = (pane && pane.clientWidth ? pane.clientWidth : Math.min(window.innerWidth - 32, 920) - (window.innerWidth > 720 ? 190 : 0)) - 36;
   var two = inner >= 820;
   var w = Math.floor(two ? (inner - 12) / 2 : inner) - 26;
 
@@ -244,7 +242,7 @@ function statsCharts(panel) {
   if (top.length > 0) h += barChart(t('chart.top'), t('chart.topSub'), top, 's1', fmt);
   h += '</div>';
 
-  h += '<button class="chip chart-table-toggle' + (ui.chartTable ? ' active' : '') + '" onclick="ui.chartTable=!ui.chartTable;renderStats()">' + t(ui.chartTable ? 'chart.hideTable' : 'chart.showTable') + '</button>';
+  h += '<button class="chip chart-table-toggle' + (ui.chartTable ? ' active' : '') + '" onclick="ui.chartTable=!ui.chartTable;refreshSettingsPane()">' + t(ui.chartTable ? 'chart.hideTable' : 'chart.showTable') + '</button>';
   if (ui.chartTable && n > 0) {
     h += '<div class="table-wrap"><table class="chart-table"><thead><tr><th>' + t('stats.playTime') + '</th><th>' + t('chart.money') + '</th><th>' + t('stats.totalEarned') + '</th><th>' + t('chart.spent') + '</th><th>' + t('chart.levelName') + '</th><th>' + t('stats.totalSold') + '</th></tr></thead><tbody>';
     for (var r = n - 1; r >= Math.max(0, n - 20); r--) {
@@ -259,8 +257,7 @@ function statsCharts(panel) {
 function statsAll() {
   var all = allBakeriesState();
   var list = bakeryStates();
-  var unlocked = 0;
-  for (var k in G.achievements) { if (G.achievements[k]) unlocked++; }
+  var ac = achCounts();
   var h = '<div class="kpi-grid">';
   h += statTile(t('all.bakeries'), list.length);
   h += statTile(t('stats.totalEarned'), fmtMoney(all.totalEarned));
@@ -269,8 +266,8 @@ function statsAll() {
   h += '</div>';
 
   // Succes
-  var pct = unlocked / ACHIEVEMENTS.length * 100;
-  h += '<div class="all-ach"><div class="all-ach-top"><b>' + t('all.ach') + '</b><span>' + unlocked + ' / ' + ACHIEVEMENTS.length + '</span></div>';
+  var pct = ac.done / ac.total * 100;
+  h += '<div class="all-ach"><div class="all-ach-top"><b>' + t('all.ach') + '</b><span>' + ac.done + ' / ' + ac.total + '</span></div>';
   h += '<div class="loan-bar"><div style="width:' + pct.toFixed(1) + '%"></div></div>';
   h += '<p class="hint-note">' + t('all.achHelp') + '</p></div>';
   var byCat = {};
@@ -279,7 +276,7 @@ function statsAll() {
     byCat[a.cat].all++;
     if (G.achievements[a.id]) byCat[a.cat].done++;
   });
-  var rows = ACH_CATEGORIES.map(function(c) { return { label: t('ach.cat.' + c), value: byCat[c].done }; });
+  var rows = ACH_CATEGORIES.filter(function(c) { return c !== 'secret' || ac.secrets > 0; }).map(function(c) { return { label: t('ach.cat.' + c), value: byCat[c].done }; });
   rows.sort(function(a, b) { return b.value - a.value; });
   h += '<div class="chart-grid">';
   h += barChart(t('all.achCat'), t('all.achCatSub'), rows, 's1', fmt);

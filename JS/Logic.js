@@ -240,11 +240,8 @@ function startQueuedCrafts() {
 }
 
 // ============ RECETTES ============
-// Un gateau de saison ne se prepare et ne se vend que pendant sa saison
-function seasonOk(rec) { return !rec.season || rec.season === currentSeason(); }
-
 function canMake(rec) {
-  if (rec.unlockLvl > G.level || !seasonOk(rec)) return false;
+  if (rec.unlockLvl > G.level) return false;
   for (var k in rec.req) {
     if ((G.ing[k] || 0) < rec.req[k]) return false;
   }
@@ -425,13 +422,21 @@ function buildingCost(bld) {
   return Math.floor(bld.baseCost * Math.pow(1.15, qty));
 }
 
+function buildingUnlockLvl(bld) { return Math.max(bld.unlockLvl, BUILDINGS_LVL); }
+
+function buildingsOwned() {
+  var n = 0;
+  BUILDINGS.forEach(function(b) { n += (G.buildings[b.id] || { qty: 0 }).qty; });
+  return n;
+}
+
 // bulk : '1', '10', '100' ou 'max'
 function buyBuilding(bld, bulk) {
   var want = bulk === 'max' ? 100000 : (parseInt(bulk, 10) || 1);
   var bought = 0;
   while (bought < want) {
     var cost = buildingCost(bld);
-    if (G.money < cost || G.level < bld.unlockLvl) break;
+    if (G.money < cost || G.level < buildingUnlockLvl(bld)) break;
     G.money -= cost;
     G.stats.totalInvested += cost;
     G.buildings[bld.id].qty++;
@@ -468,7 +473,7 @@ function baseSkill() {
 
 function hireEmployee(typeId, applicant) {
   var empType = findEmpType(typeId);
-  if (!empType || G.level < empType.unlockLvl) return false;
+  if (!empType || !empTypeOpen(empType)) return false;
   var cost = applicant ? applicant.hireCost : recruitCost(empType);
   if (G.money < cost) return false;
   G.money -= cost;
@@ -478,6 +483,10 @@ function hireEmployee(typeId, applicant) {
   G.stats.totalEmployeesHired++;
   startQueuedCrafts();
   return true;
+}
+
+function empTypeOpen(et) {
+  return G.level >= et.unlockLvl && (!et.needsBakeries || G.bakeries.length >= et.needsBakeries);
 }
 
 // Recruter tout de suite coute plus cher qu'attendre un candidat
@@ -536,7 +545,7 @@ function totalSalary() {
 
 function generateApplicant() {
   if (G.applicants.length >= 5) return;
-  var open = EMP_TYPES.filter(function(et) { return G.level >= et.unlockLvl; });
+  var open = EMP_TYPES.filter(empTypeOpen);
   if (open.length === 0) return;
   var empType = open[Math.floor(Math.random() * open.length)];
   var skill = Math.max(1, Math.min(100, baseSkill() + Math.floor(Math.random() * 30) - 15));
@@ -589,7 +598,7 @@ function sellOneBatchAuto(emp, dtSec) {
   // Le vendeur vend d'abord ce qui rapporte le plus
   var best = null;
   for (var r = 0; r < REC.length; r++) {
-    if (G.cakes[REC[r].id] > 0 && seasonOk(REC[r]) && (!best || REC[r].val > best.val)) best = REC[r];
+    if (G.cakes[REC[r].id] > 0 && (!best || REC[r].val > best.val)) best = REC[r];
   }
   if (!best) return;
   var qty = Math.min(G.cakes[best.id], whole);
@@ -818,7 +827,7 @@ function doRebirth() {
   var keepMoney = old.money - rb.cost;
   // Tout ce qui t'appartient a toi, et pas a la boutique
   var keys = ['level','xp','achievements','stats','settings','bakeryName','bakeries','currentBakeryIndex','tutorialDone','tutorialStep',
-    'introDone','birthday','birthdaySetOn','birthdayBoostYear','unlockedThemes','birthdayBoostUntil','cheatUnlocked','bobClicks','logoClicks',
+    'introDone','birthday','birthdaySetOn','birthdayBoostYear','unlockedThemes','birthdayBoostUntil','cheatUnlocked','bobClicks','bobSad','logoClicks',
     'totalEarned','playTimeMs','rentDebt','favRecipes','lvl1000Shown','wentBankrupt',
     'secondBakery','achHere','bankUnlocked','loans','nextLoanId','history','machines','cmdUsage','challenge','nextChallengeAt','sugarFed','bakeryTheme'];
   G = createFreshState();
@@ -892,7 +901,7 @@ function solveCaptcha(answer) {
 // ============ VENTE ============
 function doSell(rec, qty) {
   var actual = Math.min(qty, G.cakes[rec.id]);
-  if (!actual || !seasonOk(rec)) return 0;
+  if (!actual) return 0;
   var earned = batchPrice(rec, actual);
   addCakeEarning(rec.id, earned);
   G.cakes[rec.id] -= actual;
@@ -916,7 +925,7 @@ function doSellAll() {
 function stockValue() {
   var total = 0;
   for (var i = 0; i < REC.length; i++) {
-    if (G.cakes[REC[i].id] > 0 && seasonOk(REC[i])) total += batchPrice(REC[i], G.cakes[REC[i].id]);
+    if (G.cakes[REC[i].id] > 0) total += batchPrice(REC[i], G.cakes[REC[i].id]);
   }
   return total;
 }
@@ -1125,7 +1134,7 @@ function calcOfflineProgress(elapsedSec) {
   G.employees.forEach(function(e) {
     if (e.type === 'seller' && empWorking(e)) capacity += (e.level || 1) * empSkillMult(e) * dt * (e.status === 'poor' ? 0.5 : 1);
   });
-  var byValue = REC.filter(seasonOk).sort(function(a, b) { return b.val - a.val; });
+  var byValue = REC.slice().sort(function(a, b) { return b.val - a.val; });
   for (var s = 0; s < byValue.length && capacity >= 1; s++) {
     var rec = byValue[s];
     var qty = Math.min(G.cakes[rec.id] || 0, Math.floor(capacity));
@@ -1223,7 +1232,7 @@ function switchToBakery(index) {
   target.currentBakeryIndex = index;
   // Ce qui appartient au joueur, et pas a une patisserie
   ['settings','birthday','birthdaySetOn','birthdayBoostYear','birthdayBoostUntil','achievements','tutorialDone','tutorialStep',
-   'introDone','cheatUnlocked','bobClicks','logoClicks','unlockedThemes','favRecipes','lvl1000Shown','wentBankrupt',
+   'introDone','cheatUnlocked','bobClicks','bobSad','logoClicks','unlockedThemes','favRecipes','lvl1000Shown','wentBankrupt',
    'secondBakery','bankUnlocked','loans','nextLoanId','machines','cmdUsage','challenge','nextChallengeAt','sugarFed'].forEach(function(k) {
     target[k] = G[k];
   });
@@ -1293,7 +1302,7 @@ function bakeryStates() {
 
 // Une fausse partie qui additionne tout : pour les totaux et les succes
 function allBakeriesState() {
-  var all = { money: 0, totalEarned: 0, playTimeMs: 0, maxSpace: 0, ovens: 0, level: 0, rebirth: 0, employees: [], ing: {}, buildings: {}, stats: { cakesMadeById: {} },
+  var all = { machines: G.machines, money: 0, totalEarned: 0, playTimeMs: 0, maxSpace: 0, ovens: 0, level: 0, rebirth: 0, employees: [], ing: {}, buildings: {}, stats: { cakesMadeById: {} },
     bakeries: G.bakeries, bakeryName: G.bakeryName, bobClicks: G.bobClicks, logoClicks: G.logoClicks, wentBankrupt: G.wentBankrupt };
   bakeryStates().forEach(function(x) {
     var s = x.state;
@@ -1347,7 +1356,7 @@ function buyMachine(id) {
 }
 
 // ============ COMMANDES ============
-var ORDER_NAMES = ['Mme Dupont', 'M. Martin', 'Léa', 'Hugo', 'Mamie Rose', 'Le maire', 'Chloé', 'Nora', 'Karim', 'Sofia', 'Le voisin', 'Une star de cinéma', 'L’école du quartier', 'Tom', 'Zoé', 'Yanis'];
+var ORDER_NAMES = ['Léa', 'Hugo', 'Chloé', 'Nora', 'Karim', 'Sofia', 'Tom', 'Zoé', 'Yanis', 'Emma', 'Noah', 'Lucia', 'Diego', 'Mia', 'Sam', 'Ana'];
 
 function orderMaxItems() { return G.level >= 150 ? 4 : G.level >= 80 ? 3 : 2; }
 
@@ -1356,7 +1365,7 @@ function orderPrime(n) {
 }
 
 function createOrder() {
-  var pool = REC.filter(function(r) { return r.unlockLvl <= G.level && seasonOk(r); });
+  var pool = REC.filter(function(r) { return r.unlockLvl <= G.level; });
   if (pool.length === 0) return null;
   // Surtout les recettes recentes
   pool = pool.slice(-14);
@@ -1477,11 +1486,83 @@ function offlineBackgroundBakeries(elapsedSec) {
 }
 
 // ============ STOCK MAX (/max) ============
-// Plus un ingredient est rare, plus la limite est haute
+// Plus un ingredient est rare, moins /max t'en donne
 function maxStockFor(ing) {
   var sorted = ING.slice().sort(function(a, b) { return a.cost - b.cost; });
   var rank = sorted.indexOf(ing) / (sorted.length - 1);
-  return Math.pow(10, Math.round(5 + rank * 19));
+  return Math.pow(10, Math.round(24 - rank * 21));
+}
+
+// ============ LES CONSEILS DE BOB ============
+// Ce que Bob remarque. urgent : il le dit tout de suite.
+function bobAdvice() {
+  var list = [], now = Date.now();
+  (G.orders || []).forEach(function(o) {
+    var left = (o.expiresAt - now) / 1000;
+    if (left <= 45) list.push({ key: 'order' + o.id, kind: 'order', urgent: true, n: o.name, t: left, tab: 'orders' });
+  });
+  G.employees.forEach(function(e) {
+    if (e.status === 'striking') list.push({ key: 'strike' + e.id, kind: 'empStrike', urgent: true, n: e.name, tab: 'emp' });
+    else if (e.morale < 30 || (e.unpaidTime || 0) > 15) list.push({ key: 'soon' + e.id, kind: 'empSoon', urgent: true, n: e.name, tab: 'emp' });
+  });
+  var full = G.maxSpace > 0 ? (usedSpace() + reservedSpace()) / G.maxSpace : 0;
+  if (full >= 0.9) list.push({ key: 'space', kind: 'space', v: Math.min(100, Math.round(full * 100)), tab: 'sell' });
+  var worst = null, worstPct = -25;
+  REC.forEach(function(r) {
+    if ((G.cakes[r.id] || 0) > 0 && inflationPct(r) <= worstPct) { worst = r; worstPct = inflationPct(r); }
+  });
+  if (worst) list.push({ key: 'slow' + worst.id, kind: 'slow', rec: worst, v: 100 + worstPct, tab: 'sell' });
+  var h = G.history;
+  var rent = getRentPerHour();
+  if (h && h.t.length >= 4 && rent > 0) {
+    var a = Math.max(0, h.t.length - 21), z = h.t.length - 1;
+    var hours = Math.max(1e-6, (h.t[z] - h.t[a]) / 3600000);
+    var income = Math.max(0, h.earned[z] - h.earned[a]) / hours;
+    if (income <= 0) list.push({ key: 'rent', kind: 'rentNone' });
+    else if (rent > income * 0.4) list.push({ key: 'rent', kind: 'rent', v: Math.round(rent / income * 100) });
+  }
+  return list;
+}
+
+// ============ LE TRANSPORTEUR ============
+function bakeryStateAt(index) {
+  ensureBakeryList();
+  var b = G.bakeries[index];
+  return b ? (index === G.currentBakeryIndex ? G : b.state) : null;
+}
+
+// Renvoie la somme vraiment transportee
+function transferMoney(from, to, amount) {
+  var a = bakeryStateAt(from), b = bakeryStateAt(to);
+  if (!a || !b || from === to) return 0;
+  var moved = Math.min(Math.max(0, amount), Math.max(0, a.money));
+  a.money -= moved;
+  b.money += moved;
+  return moved;
+}
+
+function stateUsedSpace(s) {
+  var u = 0;
+  REC.forEach(function(r) { u += (s.cakes[r.id] || 0) * r.space; });
+  return u;
+}
+
+// kind : 'cake' ou 'ing'. Les gateaux doivent avoir la place en arrivant.
+function transferStock(from, to, kind, id, qty) {
+  var a = bakeryStateAt(from), b = bakeryStateAt(to);
+  if (!a || !b || from === to) return 0;
+  var box = kind === 'cake' ? 'cakes' : 'ing';
+  var moved = Math.min(Math.max(0, qty), a[box][id] || 0);
+  if (kind === 'cake') {
+    moved = Math.floor(moved);
+    var rec = findRec(id);
+    if (!rec) return 0;
+    moved = Math.min(moved, Math.floor((b.maxSpace - stateUsedSpace(b)) / rec.space));
+  }
+  if (moved <= 0) return 0;
+  a[box][id] -= moved;
+  b[box][id] = (b[box][id] || 0) + moved;
+  return moved;
 }
 
 // ============ LE DEFI DE BOB ============
@@ -1529,3 +1610,58 @@ function completeChallenge() {
   scheduleNextChallenge();
   return reward;
 }
+
+// Une patisserie garde son identifiant meme si la liste change
+function bakeryUid(b) {
+  if (!b.uid) b.uid = 'b' + Date.now().toString(36) + Math.floor(Math.random() * 1e6);
+  return b.uid;
+}
+
+// Ou va ce transporteur : la patisserie choisie, sinon la premiere autre
+function carrierTarget(emp, fromIndex) {
+  var fallback = -1;
+  for (var i = 0; i < G.bakeries.length; i++) {
+    if (i === fromIndex) continue;
+    if (fallback < 0) fallback = i;
+    if (emp.carryTo && bakeryUid(G.bakeries[i]) === emp.carryTo) return i;
+  }
+  return fallback;
+}
+
+// Un voyage. Il laisse toujours de quoi payer une minute de salaires et de loyer.
+function carrierTrip(emp, from, to) {
+  var s = bakeryStateAt(from);
+  var what = emp.carryWhat || 'money';
+  if (what === 'cakes') {
+    var best = null;
+    REC.forEach(function(r) { if ((s.cakes[r.id] || 0) >= 1 && (!best || r.val > best.val)) best = r; });
+    return best ? transferStock(from, to, 'cake', best.id, 10) : 0;
+  }
+  if (what === 'ings') {
+    var most = null;
+    ING.forEach(function(i) { if ((s.ing[i.id] || 0) >= 1 && (!most || s.ing[i.id] > s.ing[most.id])) most = i; });
+    return most ? transferStock(from, to, 'ing', most.id, 100) : 0;
+  }
+  var reserve = s.maxSpace * RENT_CONFIG.basePricePerM2PerHour / 60;
+  s.employees.forEach(function(e) { reserve += getEmpSalary(e) * 60; });
+  return transferMoney(from, to, Math.min(Math.max(0, s.money - reserve), revenueAt(s.level) * 3));
+}
+
+// Tous les transporteurs de toutes les patisseries
+function tickCarriers(dtSec) {
+  if (G.bakeries.length < 2) return;
+  for (var i = 0; i < G.bakeries.length; i++) {
+    var s = bakeryStateAt(i);
+    if (!s) continue;
+    s.employees.forEach(function(emp) {
+      if (emp.type !== 'carrier' || !empWorking(emp)) return;
+      emp.carryCd = (emp.carryCd || 0) + dtSec * (emp.level || 1) * empSkillMult(emp) * (emp.status === 'poor' ? 0.5 : 1);
+      if (emp.carryCd < CARRIER_TRIP_SEC) return;
+      var to = carrierTarget(emp, i);
+      if (to < 0) return;
+      emp.carryCd = 0;
+      carrierTrip(emp, i, to);
+    });
+  }
+}
+var CARRIER_TRIP_SEC = 20;

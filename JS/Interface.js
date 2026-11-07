@@ -11,7 +11,6 @@ var ui = {
   recSort: 'new',
   ingSearch: '',
   achCat: 'general',
-  achDirty: true,
   settingsTab: 'general',
   statsView: 'here',
   chartTable: false,
@@ -94,6 +93,7 @@ function showLevelUp(lvl) {
   toast(t('xp.level', { v: lvl }));
   if (lvl === ORDER_CONFIG.lvl) bobSay(t('order.unlocked'));
   if (lvl === MACHINE_LVL) bobSay(t('mach.unlocked'));
+  if (lvl === BUILDINGS_LVL) bobSay(t('bld.unlocked'));
   fxLevelUp();
   playSuccessSound();
   if (lvl === 1000 && !G.lvl1000Shown) {
@@ -172,7 +172,7 @@ function renderHeader() {
   if (rb) {
     if (canRebirth()) {
       var next = getNextRebirth();
-      setHTML(rb, '<div class="rebirth-banner-inner" role="button" tabindex="0" onclick="showRebirthModal()">\u{1F31F} ' + t('rebirth.banner') + ' - ' + next.name + ' (' + t('rebirth.bonus', { v: Math.floor(next.bonus * 100) }) + ')</div>');
+      setHTML(rb, '<div class="rebirth-banner-inner" role="button" tabindex="0" onclick="showRebirthModal()">\u{1F31F} ' + t('rebirth.banner') + ' - ' + t('rb.' + next.id) + ' (' + t('rebirth.bonus', { v: Math.floor(next.bonus * 100) }) + ')</div>');
       rb.style.display = 'block';
     } else {
       rb.style.display = 'none';
@@ -194,11 +194,13 @@ function logoClick() {
 
 // ============ ONGLETS ============
 function visibleTabs() {
-  var tabs = ['rec', 'sell', 'bld', 'emp'];
-  if (G.bankUnlocked) tabs.push('bank');
+  var tabs = ['rec', 'sell'];
+  if (G.level >= BUILDINGS_LVL || buildingsOwned() > 0) tabs.push('bld');
+  tabs.push('emp');
   if (G.level >= ORDER_CONFIG.lvl) tabs.push('orders');
   if (G.level >= MACHINE_LVL) tabs.push('machines');
-  return tabs.concat(['ach', 'stats']);
+  if (G.bankUnlocked) tabs.push('bank');
+  return tabs;
 }
 
 function renderTabs() {
@@ -207,7 +209,7 @@ function renderTabs() {
   var tabs = visibleTabs();
   if (tabs.indexOf(currentTab) < 0) currentTab = 'rec';
   el.style.setProperty('--tabs', tabs.length);
-  el.classList.toggle('many', tabs.length >= 8);
+  el.classList.toggle('many', tabs.length >= 7);
   var h = '<div class="gtab-track"><span class="gtab-ind" style="--i:' + tabs.indexOf(currentTab) + '"></span></div>';
   for (var i = 0; i < tabs.length; i++) {
     var active = currentTab === tabs[i];
@@ -233,7 +235,6 @@ function switchTab(tab) {
     panel.innerHTML = '';
     panel._lastHTML = null;
     panel.scrollTop = 0;
-    ui.achDirty = true;
   }
   renderMainPanel();
   tutorialCheck();
@@ -357,8 +358,6 @@ function renderMainPanel() {
     case 'bank': renderBank(); break;
     case 'orders': renderOrders(); break;
     case 'machines': renderMachines(); break;
-    case 'ach': if (ui.achDirty) renderAchievements(); break;
-    case 'stats': renderStats(); break;
   }
 }
 
@@ -370,7 +369,7 @@ function recipeProfit(rec) {
 function visibleRecipes() {
   var search = ui.recSearch.trim().toLowerCase();
   var list = REC.filter(function(rec) {
-    if (rec.unlockLvl > G.level || !seasonOk(rec)) return false;
+    if (rec.unlockLvl > G.level) return false;
     if (ui.recOnlyMakable && craftBlockReason(rec)) return false;
     if (ui.recOnlyFav && !G.favRecipes[rec.id]) return false;
     if (search && t('r.' + rec.id).toLowerCase().indexOf(search) < 0) return false;
@@ -399,7 +398,7 @@ function renderRecipes() {
 
   // Ce qui arrive bientot
   if (!ui.recSearch && !ui.recOnlyMakable && !ui.recOnlyFav) {
-    var next = REC.filter(function(r) { return r.unlockLvl > G.level && r.unlockLvl <= G.level + 2 && seasonOk(r); });
+    var next = REC.filter(function(r) { return r.unlockLvl > G.level && r.unlockLvl <= G.level + 2; });
     next.forEach(function(rec) {
       h += '<div class="rec-card locked"><span class="rec-emoji">\u{1F512}</span> ' + t('ing.locked', { v: rec.unlockLvl }) + '</div>';
     });
@@ -412,7 +411,7 @@ function renderRecipes() {
     h += '<div class="rec-card' + (block ? ' disabled' : '') + '">';
     h += '<span class="rec-emoji">' + rec.e + '</span>';
     h += '<div class="rec-info">';
-    h += '<div class="rec-name"><button class="fav-btn' + (G.favRecipes[rec.id] ? ' on' : '') + '" onclick="toggleFav(\'' + rec.id + '\')" title="' + escH(t('rec.fav')) + '" aria-label="' + escH(t('rec.fav')) + '">' + uiIcon('star') + '</button>' + t('r.' + rec.id) + (rec.season ? '<span class="season-badge ' + rec.season + '">' + t('season.' + rec.season) + '</span>' : '') + '</div>';
+    h += '<div class="rec-name"><button class="fav-btn' + (G.favRecipes[rec.id] ? ' on' : '') + '" onclick="toggleFav(\'' + rec.id + '\')" title="' + escH(t('rec.fav')) + '" aria-label="' + escH(t('rec.fav')) + '">' + uiIcon('star') + '</button>' + t('r.' + rec.id) + '</div>';
     h += '<div class="rec-req">';
     for (var k in rec.req) {
       var have = G.ing[k] || 0;
@@ -505,13 +504,6 @@ function renderSell() {
     var stock = G.cakes[rec.id] || 0;
     if (stock <= 0) return;
     any = true;
-    if (!seasonOk(rec)) {
-      h += '<div class="sell-card off-season"><span class="sell-emoji">' + rec.e + '</span><div class="sell-info">';
-      h += '<div class="sell-name">' + t('r.' + rec.id) + '<span class="season-badge ' + rec.season + '">' + t('season.' + rec.season) + '</span></div>';
-      h += '<div class="sell-stock">' + t('sell.stock', { v: fmt(stock) }) + '</div><div class="off-note">' + t('sell.offSeason', { v: t('season.' + rec.season) }) + '</div></div>';
-      h += '<div class="sell-btns"><button class="btn btn-small btn-danger" onclick="doDiscard(\'' + rec.id + '\')">' + t('sell.discard') + '</button></div></div>';
-      return;
-    }
     var pct = inflationPct(rec);
     h += '<div class="sell-card"><span class="sell-emoji">' + rec.e + '</span><div class="sell-info">';
     h += '<div class="sell-name">' + t('r.' + rec.id) + '</div>';
@@ -526,13 +518,6 @@ function renderSell() {
   });
   if (!any) h += '<p class="empty-note">' + t('sell.noStock') + '</p>';
   setHTML(el, h);
-}
-
-function doDiscard(recId) {
-  G.cakes[recId] = 0;
-  toast(t('sell.discarded'));
-  renderSell();
-  renderSpaceBar();
 }
 
 function afterSell() {
@@ -581,17 +566,11 @@ function renderBuildings() {
   var el = document.getElementById('main-panel');
   if (!el) return;
   var h = '<div class="panel-head"><h2>' + t('bld.title') + '</h2>' + bulkChips() + '</div>';
-  // Les fours
-  var atMax = G.ovens >= OVEN_CONFIG.max;
-  h += '<div class="bld-card oven-card"><span class="bld-emoji">\u{1F525}</span><div class="bld-info">';
-  h += '<div class="bld-name">' + t('oven.title') + ' <span class="bld-qty">' + t('bld.qty', { v: G.ovens }) + '</span></div>';
-  h += '<div class="bld-prod">' + t('oven.desc') + '</div></div>';
-  h += atMax ? '<span class="empty-note">' + t('oven.max') + '</span>' : '<button class="btn btn-primary" onclick="doBuyOven()"' + (G.money < ovenCost() ? ' disabled' : '') + '>' + t('oven.buy', { c: fmtMoney(ovenCost()) }) + '</button>';
-  h += '</div>';
   BUILDINGS.forEach(function(bld) {
-    if (bld.unlockLvl > G.level + 3) return;
-    if (bld.unlockLvl > G.level) {
-      h += '<div class="bld-card locked"><span>\u{1F512}</span> ' + t('bld.locked', { v: bld.unlockLvl }) + '</div>';
+    var bldLvl = buildingUnlockLvl(bld);
+    if (bldLvl > G.level + 3) return;
+    if (bldLvl > G.level) {
+      h += '<div class="bld-card locked"><span>\u{1F512}</span> ' + t('bld.locked', { v: bldLvl }) + '</div>';
       return;
     }
     var qty = (G.buildings[bld.id] || { qty: 0 }).qty;
@@ -623,7 +602,8 @@ function doBuyOven() {
   if (buyOven()) {
     toast(t('oven.bought'));
     playSuccessSound();
-    renderBuildings();
+    renderSpaceBar();
+    renderMainPanel();
     renderHeader();
     renderCraftingBar();
   }
@@ -637,7 +617,7 @@ function renderEmployees() {
   var sal = totalSalary();
   if (sal > 0) h += '<div class="emp-total-salary">' + t('emp.totalSalary', { v: fmtMoney(sal * 3600) }) + '</div>';
   // Recruter tout de suite
-  var open = EMP_TYPES.filter(function(et) { return G.level >= et.unlockLvl; });
+  var open = EMP_TYPES.filter(empTypeOpen);
   if (open.length === 0) {
     h += '<p class="empty-note">' + t('emp.lockedAll') + '</p>';
   } else {
@@ -671,7 +651,7 @@ function renderEmployees() {
     G.employees.forEach(function(emp) {
       var moraleColor = emp.morale > 60 ? 'morale-good' : (emp.morale > 30 ? 'morale-mid' : 'morale-bad');
       var statusCls = emp.status === 'working' ? 'status-good' : (emp.status === 'striking' ? 'status-bad' : 'status-warn');
-      h += '<div class="emp-card" role="button" tabindex="0" onclick="if(event.target.tagName!==\'SELECT\'&&event.target.tagName!==\'OPTION\')showEmpInfoModal(' + emp.id + ')" title="' + escH(t('emp.desc.' + emp.type)) + '">';
+      h += '<div class="emp-card" role="button" tabindex="0" onclick="if(!event.target.closest(\'select,label\'))showEmpInfoModal(' + emp.id + ')" title="' + escH(t('emp.desc.' + emp.type)) + '">';
       h += '<div class="emp-header">';
       h += '<span class="emp-name">' + escH(emp.name) + '</span>';
       h += '<span class="emp-type">' + t('emp.' + emp.type) + '</span>';
@@ -688,11 +668,35 @@ function renderEmployees() {
         });
         h += '</select></div>';
       }
+      if (emp.type === 'carrier') h += carrierControls(emp);
       h += '</div>';
     });
     h += '</div>';
   }
   setHTML(el, h);
+}
+
+function carrierControls(emp) {
+  ensureBakeryList();
+  if (G.bakeries.length < 2) return '<div class="emp-assign"><span class="hint-note">' + t('carry.noShop') + '</span></div>';
+  var to = carrierTarget(emp, G.currentBakeryIndex);
+  var h = '<div class="emp-assign carrier-assign"><label>' + t('carry.to') + ' <select onchange="assignCarrier(' + emp.id + ',\'to\',this.value)">';
+  G.bakeries.forEach(function(b, i) {
+    if (i === G.currentBakeryIndex) return;
+    h += '<option value="' + bakeryUid(b) + '"' + (i === to ? ' selected' : '') + '>' + escH(b.name) + '</option>';
+  });
+  h += '</select></label><label>' + t('carry.what') + ' <select onchange="assignCarrier(' + emp.id + ',\'what\',this.value)">';
+  ['money', 'cakes', 'ings'].forEach(function(w) {
+    h += '<option value="' + w + '"' + ((emp.carryWhat || 'money') === w ? ' selected' : '') + '>' + t('carry.' + w) + '</option>';
+  });
+  return h + '</select></label></div>';
+}
+
+function assignCarrier(empId, field, value) {
+  var emp = findEmp(empId);
+  if (!emp) return;
+  if (field === 'to') emp.carryTo = value;
+  else emp.carryWhat = value;
 }
 
 function assignCollector(empId, ingId) {
@@ -782,50 +786,8 @@ function doFireEmployee(empId) {
 
 // ============ SUCCES ============
 function onAchievementUnlocked() {
-  ui.achDirty = true;
   playSuccessSound();
-}
-
-function renderAchievements() {
-  var el = document.getElementById('main-panel');
-  if (!el) return;
-  ui.achDirty = false;
-  var total = 0, unlocked = 0, hiddenTotal = 0, hiddenFound = 0;
-  var byCat = {};
-  ACHIEVEMENTS.forEach(function(a) {
-    var done = !!G.achievements[a.id];
-    if (a.hidden) {
-      hiddenTotal++;
-      if (done) hiddenFound++;
-    }
-    total++;
-    if (done) unlocked++;
-    byCat[a.cat] = byCat[a.cat] || { all: 0, done: 0 };
-    byCat[a.cat].all++;
-    if (done) byCat[a.cat].done++;
-  });
-  var h = '<div class="panel-head"><h2>' + t('ach.title') + ' (' + unlocked + '/' + total + ')</h2></div>';
-  h += '<p class="ach-bonus">' + t('ach.bonus', { v: (Math.round((achievementBonus() - 1) * 1000) / 10) }) + '</p>';
-  h += '<div class="list-tools">';
-  ACH_CATEGORIES.forEach(function(cat) {
-    h += '<button class="chip' + (ui.achCat === cat ? ' active' : '') + '" onclick="ui.achCat=\'' + cat + '\';ui.achDirty=true;renderAchievements()">' + t('ach.cat.' + cat) + ' ' + byCat[cat].done + '/' + byCat[cat].all + '</button>';
-  });
-  h += '</div>';
-  if (ui.achCat === 'secret') h += '<p class="hint-note">' + t('ach.hiddenCount', { a: hiddenFound, b: hiddenTotal }) + '</p>';
-  h += '<div class="ach-grid">';
-  ACHIEVEMENTS.forEach(function(a) {
-    if (a.cat !== ui.achCat) return;
-    var done = !!G.achievements[a.id];
-    var secretLocked = a.hidden && !done;
-    var name = secretLocked ? t('ach.hiddenName') : achName(a);
-    var desc = secretLocked ? t('ach.hiddenDesc') : achDesc(a);
-    h += '<div class="ach-item ' + (done ? 'unlocked' : 'locked') + '" title="' + escH(desc) + '">';
-    h += '<div class="ach-icon">' + (secretLocked ? '\u{1F512}' : a.icon) + '</div>';
-    h += '<div class="ach-name">' + escH(name) + '</div>';
-    h += '<div class="ach-desc">' + escH(desc) + '</div></div>';
-  });
-  h += '</div>';
-  setHTML(el, h);
+  if (ui.settingsTab === 'ach') refreshSettingsPane();
 }
 
 // ============ BARRE DU BAS ============
@@ -845,6 +807,9 @@ function renderSpaceBar() {
     else h += '<button class="btn btn-small btn-primary" onclick="doBuySpace()"' + (G.money < su.cost ? ' disabled' : '') + '>' + t('space.buy', { a: fmt(su.add), c: fmtMoney(su.cost) }) + '</button>';
   } else {
     h += '<span class="space-rent">' + t('space.max') + '</span>';
+  }
+  if (G.ovens < OVEN_CONFIG.max) {
+    h += '<button class="btn btn-small" title="' + escH(t('oven.desc')) + '" onclick="doBuyOven()"' + (G.money < ovenCost() ? ' disabled' : '') + '>' + uiIcon('flame') + t('oven.buy', { c: fmtMoney(ovenCost()) }) + '</button>';
   }
   h += '</div>';
   setHTML(el, h);
@@ -954,7 +919,7 @@ function showRebirthModal() {
   var rb = getNextRebirth();
   if (!rb) return;
   var h = '<h2>' + t('rebirth.title') + '</h2>';
-  h += '<p>' + t('rebirth.desc', { name: rb.name }) + '</p>';
+  h += '<p>' + t('rebirth.desc', { name: t('rb.' + rb.id) }) + '</p>';
   h += '<p>' + t('rebirth.cost', { v: fmtMoney(rb.cost) }) + '</p>';
   h += '<p>' + t('rebirth.bonus', { v: Math.floor(rb.bonus * 100) }) + ' · ' + t('rebirth.spaceBonus', { v: rb.spaceMulti }) + '</p>';
   h += '<p class="warning">' + t('rebirth.warning') + '</p>';
@@ -1113,7 +1078,7 @@ function doGameOverSell() {
 }
 
 function doGameOverRestart() {
-  var keep = { settings: G.settings, achievements: G.achievements, birthday: G.birthday, unlockedThemes: G.unlockedThemes, cheatUnlocked: G.cheatUnlocked, bobClicks: G.bobClicks, wentBankrupt: true, logoClicks: G.logoClicks, birthdaySetOn: G.birthdaySetOn, birthdayBoostYear: G.birthdayBoostYear, machines: G.machines, cmdUsage: G.cmdUsage, sugarFed: G.sugarFed, challenge: G.challenge, nextChallengeAt: G.nextChallengeAt, bakeryTheme: G.bakeryTheme, bakeries: G.bakeries, currentBakeryIndex: G.currentBakeryIndex, secondBakery: G.secondBakery, bankUnlocked: G.bankUnlocked, achHere: G.achHere };
+  var keep = { settings: G.settings, achievements: G.achievements, birthday: G.birthday, unlockedThemes: G.unlockedThemes, cheatUnlocked: G.cheatUnlocked, bobClicks: G.bobClicks, bobSad: G.bobSad, wentBankrupt: true, logoClicks: G.logoClicks, birthdaySetOn: G.birthdaySetOn, birthdayBoostYear: G.birthdayBoostYear, machines: G.machines, cmdUsage: G.cmdUsage, sugarFed: G.sugarFed, challenge: G.challenge, nextChallengeAt: G.nextChallengeAt, bakeryTheme: G.bakeryTheme, bakeries: G.bakeries, currentBakeryIndex: G.currentBakeryIndex, secondBakery: G.secondBakery, bankUnlocked: G.bankUnlocked, achHere: G.achHere };
   G = createFreshState();
   Object.assign(G, keep);
   if (G.bakeries[G.currentBakeryIndex]) G.bakeries[G.currentBakeryIndex].name = G.bakeryName;
@@ -1152,7 +1117,9 @@ function showLevel1000() {
 document.addEventListener('keydown', function(e) {
   if (e.key === 'Escape') {
     if (typeof introActive !== 'undefined' && introActive) return;
-    dismissModal();
+    // Une fenetre ouverte se ferme. Sinon, Echap met le jeu en pause.
+    if (document.getElementById('modal-overlay').style.display === 'flex') dismissModal();
+    else if (!G.gameOver) togglePause();
     return;
   }
   if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.tagName === 'SELECT') return;
@@ -1176,7 +1143,6 @@ function doPayDebt() {
 
 // ============ TOUT REDESSINER ============
 function fullRender() {
-  ui.achDirty = true;
   renderHeader();
   renderTabs();
   renderIngredients();

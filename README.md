@@ -16,19 +16,18 @@ Un jeu de gestion de pâtisserie : achète tes ingrédients, prépare tes gâtea
 - **Recettes :** 60 pâtisseries à préparer, du cookie au gâteau infini.
 - **Ventes :** les prix bougent selon ce que tu vends, et la demande revient avec le temps.
 - **Bâtiments :** 59 bâtiments qui produisent des ingrédients tout seuls, et des fours à ajouter.
-- **Employés :** cueilleurs, boulangers, vendeurs, managers et chefs, avec leur moral et leur salaire.
+- **Employés :** cueilleurs, boulangers, vendeurs, managers, chefs, maîtres d'hôtel et transporteurs, avec leur moral et leur salaire.
 - **Espace et loyer :** agrandis ta boutique, mais gare aux dettes.
 - **Banque :** à ta première dette, Bob t'ouvre un compte et t'explique les prêts, de 10 € à 10 000 €.
 - **Commandes :** au niveau 30, des clients passent commande. Plus c'est compliqué, plus la prime est grosse.
 - **Machines :** au niveau 50, des améliorations pour toujours, à prix élevé.
-- **Gâteaux de saison :** 10 par saison, à préparer et à vendre seulement pendant celle-ci.
 - **Rebirth :** ouvre une nouvelle pâtisserie pour gagner des bonus permanents.
 - **Événements :** rush, soldes, passage à la télé, contrôle sanitaire…
 - **Succès et statistiques :** des centaines de succès, dont 5 secrets. Chacun augmente tes prix de vente.
 - **Plusieurs pâtisseries :** dès la deuxième, des graphiques et les totaux de toutes tes boutiques.
-- **Thèmes :** clair, sombre, fête, un par saison avec ses décors (fleurs, plage, neige, feuilles), un pour ton anniversaire, et l'espace au niveau 1000.
+- **Thèmes :** clair, sombre, un par saison avec ses décors (fleurs, plage, neige, feuilles), un pour ton anniversaire, la fête au niveau 500 et l'espace au niveau 1000.
 - **Musique :** des morceaux composés pour le jeu, joués en direct par le navigateur.
-- **Bob :** ton chef pâtissier t'explique le jeu, te lance des défis et adore le sucre. Évite de trop l'embêter.
+- **Bob :** ton chef pâtissier t'explique le jeu, te conseille, te lance des défis et adore le sucre. Évite de trop l'embêter.
 - **Sauvegarde :** automatique, avec export et import d'un code, et gains pendant ton absence.
 
 ## Lancer le jeu sur ton ordi

@@ -1512,11 +1512,14 @@ body.reduced-particles .dp-fly { left: var(--y); }
 }
 
 /* Guirlande sous l'en-tete */
-:root[data-decor] #header::after {
+:root[data-decor] #tabs::before {
   content: "";
   position: absolute;
-  left: 0; right: 0; top: 100%;
-  height: 26px;
+  left: 50%;
+  width: 100vw;
+  margin-left: -50vw;
+  bottom: 100%;
+  height: 24px;
   background: var(--decor-strip) repeat-x left top;
   pointer-events: none;
   z-index: 5;
@@ -1607,7 +1610,7 @@ body.reduced-particles .dp-fly { left: var(--y); }
 
 /* ---------- Réglages ---------- */
 
-.modal.modal-settings { width: min(780px, 100%); padding: 0; overflow: hidden; display: flex; flex-direction: column; }
+.modal.modal-settings { width: min(920px, 100%); padding: 0; overflow: hidden; display: flex; flex-direction: column; }
 .set-head { display: flex; align-items: center; justify-content: space-between; padding: 16px 20px; border-bottom: 1px solid var(--border); }
 .set-head h2 { display: flex; align-items: center; gap: 10px; margin: 0; font-size: 1.35rem; }
 .set-head h2 .uii { color: var(--mauve); }
@@ -1627,7 +1630,7 @@ body.reduced-particles .dp-fly { left: var(--y); }
 }
 .set-tab:hover:not(.active) { background: var(--mauve-soft); transform: translateX(2px); }
 .set-tab.active { background: var(--mauve); color: #fff; }
-.set-pane { padding: 16px 18px; overflow-y: auto; min-height: 420px; max-height: calc(100dvh - 110px); }
+.set-pane { padding: 16px 18px; overflow-y: auto; min-height: 460px; max-height: calc(100dvh - 110px); }
 .set-card { padding: 4px 14px; margin-bottom: 12px; background: var(--surface); border: 1px solid var(--border); border-radius: 14px; }
 .set-card h3 { margin: 10px 0 6px; font-size: .78rem; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
 .set-card > .btn { margin: 0 0 12px; }
@@ -1809,7 +1812,7 @@ body.reduced-particles .dp-fly { left: var(--y); }
 .chart-tip {
   display: none;
   position: fixed;
-  z-index: 1900;
+  z-index: 2600;
   max-width: 260px;
   padding: 7px 10px;
   border-radius: 10px;
@@ -1821,7 +1824,7 @@ body.reduced-particles .dp-fly { left: var(--y); }
   box-shadow: 0 6px 18px rgba(0,0,0,.3);
 }
 .chart-tip strong { font-variant-numeric: tabular-nums; }
-.chart-cross { display: none; position: fixed; z-index: 1890; width: 1px; background: var(--muted); pointer-events: none; }
+.chart-cross { display: none; position: fixed; z-index: 2590; width: 1px; background: var(--muted); pointer-events: none; }
 .chart-table-toggle { margin-bottom: 10px; padding: 4px 10px; font-size: .8rem; }
 .table-wrap { overflow-x: auto; margin-bottom: 12px; border: 1px solid var(--border); border-radius: 12px; background: var(--surface-solid); }
 .chart-table { width: 100%; border-collapse: collapse; font-size: .8rem; }
@@ -1956,15 +1959,6 @@ body.reduced-particles .dp-comet { display: none; }
   #tabs.many .gtab { padding: 8px 2px; }
 }
 
-/* Gateaux de saison */
-.season-badge { display: inline-block; margin-inline-start: 6px; padding: 0 7px; border-radius: 99px; font-size: .66rem; font-weight: 800; color: #fff; vertical-align: 1px; }
-.season-badge.spring { background: #3F8F2B; }
-.season-badge.summer { background: #1976D2; }
-.season-badge.fall { background: #C1341A; }
-.season-badge.winter { background: #155C9E; }
-.sell-card.off-season { opacity: .78; }
-.off-note { color: var(--muted); font-size: .78rem; font-weight: 700; }
-
 /* Loyer en retard */
 .rent-late { background: #E65100; color: #fff; }
 
@@ -2056,7 +2050,7 @@ body.reduced-particles .dp-comet { display: none; }
 .bob-fig[data-anger="5"] .bob-tear { opacity: 1; animation: bob-tear 2.8s ease-in infinite; }
 @keyframes bob-tear { 0% { transform: translateY(-4px) scale(.5); opacity: 0; } 25% { opacity: 1; transform: none; } 100% { transform: translateY(20px); opacity: 0; } }
 .bob-fig[data-anger="0"] .m-happy, .bob-fig[data-anger="1"] .m-neutral, .bob-fig[data-anger="2"] .m-sad,
-.bob-fig[data-anger="3"] .m-grit, .bob-fig[data-anger="4"] .m-yell, .bob-fig[data-anger="5"] .m-sour { display: block; }
+.bob-fig[data-anger="3"] .m-grit, .bob-fig[data-anger="4"] .m-grit, .bob-fig[data-anger="5"] .m-sour { display: block; }
 /* Une humeur passagere passe avant tout le reste */
 .bob-fig[data-mood] .m { display: none !important; }
 .bob-fig[data-mood] .bob-lid { opacity: 0; }
@@ -2070,8 +2064,8 @@ body.reduced-particles .dp-comet { display: none; }
 .bob-fig[data-mood="wow"] .m-wow { display: block !important; }
 .bob-fig[data-mood="wow"] .bob-brow { transform: translateY(-5px); }
 @keyframes bob-hop { 50% { transform: translateY(-9px); } }
-.bob-fig.talking:not([data-mood]) .m { display: none; }
-.bob-fig.talking:not([data-mood]) .m-talk { display: block; }
+.bob-fig.talking[data-anger="0"]:not([data-mood]) .m { display: none; }
+.bob-fig.talking[data-anger="0"]:not([data-mood]) .m-talk { display: block; }
 .bob-aside { display: block; margin-top: 6px; font-size: .72em; font-weight: 500; opacity: .62; font-style: italic; }
 
 /* Bob : ses tenues */
@@ -2134,3 +2128,67 @@ body.reduced-particles .dp-comet { display: none; }
 #bob.wants-sugar { filter: drop-shadow(0 0 10px #ffd60a); }
 body.dragging-sugar, body.dragging-sugar * { cursor: grabbing !important; user-select: none; }
 @media (max-width: 899px) { #bob-sugar { left: 68px; bottom: 70px; width: 34px; height: 34px; } }
+
+
+/* ---------- Bêta 1.2, suite ---------- */
+
+/* Bob se remet : de moins en moins triste */
+.bob-fig[data-anger="s3"] { --eye: #bcc27f; filter: saturate(.75); }
+.bob-fig[data-anger="s3"] .bob-head { transform: rotate(-4deg) translateY(4px); }
+.bob-fig[data-anger="s3"] .bob-rig { animation-duration: 6s; }
+.bob-fig[data-anger="s3"] .bob-lid { opacity: 1; }
+.bob-fig[data-anger="s3"] .bob-lid-l { transform: rotate(-9deg) translateY(5px); }
+.bob-fig[data-anger="s3"] .bob-lid-r { transform: rotate(9deg) translateY(5px); }
+.bob-fig[data-anger="s3"] .m-sad { display: block; }
+.bob-fig[data-anger="s3"] .bob-tear { opacity: 1; animation: bob-tear 4s ease-in infinite; }
+.bob-fig[data-anger="s2"] { --eye: #dcd15e; filter: saturate(.9); }
+.bob-fig[data-anger="s2"] .bob-head { transform: rotate(-2deg) translateY(2px); }
+.bob-fig[data-anger="s2"] .bob-lid { opacity: 1; }
+.bob-fig[data-anger="s2"] .bob-lid-l { transform: rotate(-6deg) translateY(2px); }
+.bob-fig[data-anger="s2"] .bob-lid-r { transform: rotate(6deg) translateY(2px); }
+.bob-fig[data-anger="s2"] .m-sad { display: block; }
+.bob-fig[data-anger="s1"] { --eye: #f2dc3a; }
+.bob-fig[data-anger="s1"] .bob-lid { opacity: 1; }
+.bob-fig[data-anger="s1"] .bob-lid-l { transform: rotate(-3deg) translateY(-2px); }
+.bob-fig[data-anger="s1"] .bob-lid-r { transform: rotate(3deg) translateY(-2px); }
+.bob-fig[data-anger="s1"] .m-neutral { display: block; }
+
+#bob { -webkit-touch-callout: none; user-select: none; -webkit-user-select: none; }
+
+/* Succes et stats dans les reglages */
+.ach-head { display: flex; justify-content: space-between; gap: 8px; padding-top: 10px; font-size: .95rem; }
+.modal-settings .loan-bar { margin: 8px 0; }
+.modal-settings .ach-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 8px; margin-bottom: 12px; }
+.modal-settings .ach-item { padding: 9px; border-radius: 12px; border: 1px solid var(--border); background: var(--surface); text-align: center; min-width: 0; }
+.modal-settings .ach-item.unlocked { border-color: var(--success); }
+.modal-settings .ach-icon { font-size: 1.5rem; line-height: 1.2; }
+.modal-settings .ach-name { font-size: .78rem; font-weight: 800; line-height: 1.2; margin-top: 3px; overflow-wrap: anywhere; }
+.stat-rows .set-row { padding: 8px 0; }
+.stat-rows .set-label b { font-weight: 600; font-size: .9rem; }
+.stat-rows .set-value { font-variant-numeric: tabular-nums; font-weight: 800; }
+.modal-settings .kpi-label { text-transform: none; letter-spacing: 0; }
+.modal-settings .kpi { text-align: start; }
+.modal-settings .list-tools { margin-bottom: 12px; }
+@media (max-width: 720px) {
+  .set-nav { scrollbar-width: none; }
+  .modal-settings .ach-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+/* Barre du bas : bouton des fours */
+#space-bar .btn .uii { margin-inline-end: 3px; }
+
+/* Transporteur */
+.carrier-assign { display: flex; flex-wrap: wrap; gap: 6px 14px; }
+.carrier-assign label { display: inline-flex; align-items: center; gap: 6px; font-size: .8rem; font-weight: 700; }
+
+/* Petit ecran : les ingredients passent au-dessus de la barre d'onglets */
+@media (max-width: 899px) {
+  body > * { order: 1; }
+  #header { order: -4; }
+  #rebirth-banner { order: -3; }
+  #game-area { display: contents; }
+  #ingredients { order: -2; flex: 0 0 28dvh; min-height: 0; margin: 8px 12px 0; }
+  #tabs { order: -1; }
+  #main-panel { order: 0; flex: 1 1 0; min-height: 0; margin: 8px 12px; }
+  #game-footer { order: 2; }
+}

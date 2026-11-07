@@ -75,6 +75,7 @@ document.addEventListener('DOMContentLoaded', function() {
     tickLoans(dtSec);
     tickOrders(dtSec);
     tickBackgroundBakeries(dtSec);
+    tickCarriers(dtSec);
     recoverDemand(dtSec);
     tickCrafting();
     recordHistory();
@@ -93,6 +94,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
     checkFirstDebt();
     tickChallenge();
+    tickBobWatch();
+    if (ui.settingsTab === 'stats' && document.getElementById('set-pane')) refreshSettingsPane();
     renderBob();
     // La saison a change pendant que tu jouais ?
     if (totalsCounter % 30 === 0 && enforceThemeLocks()) {

@@ -1,6 +1,6 @@
 # Règles de Pâtisserie 2D Simulator
 
-Ces règles sont celles de la **Bêta 1.2**.
+Ces règles sont celles de la **Bêta 1.3**.
 
 ## Le but
 
@@ -26,7 +26,7 @@ Tu peux acheter par ×1, ×10, ×100 ou Max.
 ## Les fours et l'espace
 
 - Tu commences avec 2 fours. Chaque four prépare une fournée à la fois, et les autres attendent leur tour, 50 au maximum.
-- Un four coûte 200 €, puis 4 fois plus à chaque achat, jusqu'à 30 fours.
+- Un four coûte 200 €, puis 4 fois plus à chaque achat, jusqu'à 30 fours. Le bouton est dans la barre du bas.
 - Chaque gâteau prend de la place, et une fournée qui ne rentre pas est refusée. Si la place manque à la fin de la cuisson, les ingrédients sont rendus.
 
 ## Le loyer et les dettes
@@ -68,7 +68,7 @@ Tu fais faillite seulement si tout cela est vrai en même temps :
 
 ## Les bâtiments
 
-Chaque bâtiment produit un ingrédient tout seul. Son prix monte de 15 % à chaque achat.
+Les bâtiments s'achètent à partir du **niveau 40**. Chaque bâtiment produit un ingrédient tout seul, et son prix monte de 15 % à chaque achat.
 
 ## Les employés
 
@@ -80,8 +80,11 @@ Ils reçoivent un salaire. Un employé impayé perd le moral, peut faire grève,
 | Boulanger | 10 | Ajoute un four et prépare 5 % plus vite |
 | Vendeur | 15 | Vend tes gâteaux tout seul, les plus chers d'abord |
 | Manager | 25 | Remonte le moral de l'équipe |
+| Transporteur | 20, avec 2 pâtisseries | Transporte de l'argent, des gâteaux ou des ingrédients vers une autre pâtisserie |
 | Maître d'hôtel | 30 | Livre les commandes des clients à ta place |
 | Chef pâtissier | 40 | Prépare 8 % plus vite et fait monter les prix de 5 % |
+
+Sur la carte du Transporteur, tu choisis sa destination et ce qu'il transporte. Il fait un voyage toutes les 20 secondes environ, plus vite s'il est formé et compétent, et seulement pendant que tu joues. Il laisse toujours une minute de salaires et de loyer dans la caisse. Les gâteaux doivent avoir la place en arrivant.
 
 Tu peux recruter tout de suite, ou attendre un candidat, moins cher. Former un employé le rend plus efficace, mais mieux payé. Une prime remonte son moral.
 
@@ -114,19 +117,13 @@ Des améliorations pour toujours, pour toutes tes pâtisseries, même après un 
 | Guichet des commandes | 600 000 € | Primes des commandes +10 % |
 | Académie du goût | 800 000 € | XP +10 % |
 
-## Les gâteaux de saison
-
-- Il y a 10 gâteaux par saison, débloqués aux niveaux 1, 100, 200… jusqu'à 900.
-- Ils rapportent plus que les autres, mais **on ne peut les préparer et les vendre que pendant leur saison**.
-- Hors saison, ton stock attend l'année suivante et prend toujours de la place. Tu peux le jeter pour en libérer.
-- Printemps : du 20 mars au 20 juin. Été : du 21 juin au 21 septembre. Automne : du 22 septembre au 20 décembre. Hiver : du 21 décembre au 19 mars.
-
 ## Plusieurs pâtisseries
 
 - La deuxième coûte 10 000 €, puis le prix est multiplié par 3 à chaque nouvelle boutique.
 - **Toutes travaillent en même temps :** production, cuissons, vendeurs, loyers, salaires et commandes continuent même quand tu n'y es pas.
 - Chaque boutique garde son argent, son stock et son équipe. La dette d'une boutique où tu n'es pas ne prend pas d'intérêts.
-- Dès la deuxième boutique, l'onglet Stats ajoute des graphiques et les totaux de toutes tes pâtisseries, dont le gâteau qui rapporte le plus dans chacune.
+- Dès la deuxième boutique, les Statistiques des réglages ajoutent des graphiques et les totaux de toutes tes pâtisseries, dont le gâteau qui rapporte le plus dans chacune.
+- Le Transporteur déplace ton argent et ton stock d'une pâtisserie à l'autre (voir Les employés).
 - **Vendre une pâtisserie :** tu reçois son argent, la moitié de la valeur de ses gâteaux et de ses ingrédients, la moitié de la valeur de son équipement, 10 % de ce qu'elle a gagné et la moitié de son prix d'achat, moins sa dette. Tu perds toutes ses statistiques. Tes succès restent.
 - Renommer une pâtisserie coûte 100 €.
 
@@ -149,8 +146,9 @@ Tu gardes ton argent, ton niveau, tes succès, tes statistiques, tes machines, t
 ## Bob
 
 - Bob est ton chef pâtissier. Il t'accueille et t'explique le jeu.
-- Évite de trop cliquer sur lui : il s'énerve de plus en plus, puis il devient aigri.
-- Bob adore le sucre. Quand il n'a pas le moral, glisse un sucre sur lui : il coûte 1 sucre et lui enlève une étape de colère.
+- **Ses conseils :** de lui-même, il te signale dans sa bulle un gâteau qui se vend mal, un stock qui déborde, un loyer trop cher, une commande qui va expirer et un employé qui va faire grève.
+- Évite de cliquer sur lui : il s'énerve de plus en plus, puis il devient aigri.
+- Bob adore le sucre. Quand il est triste, glisse un sucre sur lui : il coûte 1 sucre et le rend moins triste, sans repasser par la colère. Il faut 4 sucres pour le remettre de bonne humeur.
 - **Son défi :** tous les 2 à 5 jours, Bob te propose un défi à réussir en 24 heures. Si tu réussis, il te donne 5 % de tout ton argent, toutes pâtisseries confondues. Tu peux refuser sans pénalité.
 
 ## Les événements
@@ -161,9 +159,10 @@ Environ toutes les 4 minutes, un événement change le jeu pour un moment : rush
 
 | Thème | Disponible |
 |---|---|
-| Clair, Sombre, Fête | Toujours |
+| Clair, Sombre | Toujours |
 | Printemps, Été, Automne, Hiver | Pendant leur saison. Le thème se bloque quand la saison se termine. |
 | Anniversaire | Le jour de ton anniversaire, si tu as indiqué ta date |
+| Fête | Pour toujours dès le niveau 500 |
 | Espace | Pour toujours dès le niveau 1000 |
 
 Tu peux choisir un thème pour tout le jeu, ou seulement pour la pâtisserie où tu es. Dans les thèmes spéciaux, Bob change de tenue.
@@ -174,7 +173,11 @@ Indique ta date dans les réglages. Le jour J, tu as le thème spécial et un bo
 
 ## Les succès
 
-Il y a 828 succès, dont 5 secrets. Les totaux de toutes tes pâtisseries comptent aussi pour les débloquer.
+Il y a 1000 succès, plus 5 secrets. Ils se trouvent dans les réglages, avec les statistiques. Un succès pas encore obtenu ne dit pas ce qu'il demande, et un secret reste invisible tant que tu ne l'as pas trouvé. Les totaux de toutes tes pâtisseries comptent aussi pour les débloquer.
+
+## Clavier
+
+Échap met le jeu en pause, ou ferme la fenêtre ouverte. Les chiffres ouvrent les onglets.
 
 ## Absence et sauvegarde
 
@@ -192,4 +195,4 @@ Une console de commandes se cache dans le jeu. Il te faudra embêter Bob pour la
 
 ## Langues
 
-Le jeu existe en français et en anglais. Il choisit la langue de ton navigateur au départ, et tu peux la changer dans les réglages.
+Le jeu existe en français, en anglais et en espagnol. Il choisit la langue de ton navigateur au départ, et tu peux la changer dans les réglages.
