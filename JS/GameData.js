@@ -4,7 +4,7 @@
    employes, espace, rebirths, evenements, themes
    ============================================ */
 
-var GAME_VERSION = 'B\u00eata 1.3';
+var GAME_VERSION = 'B\u00eata 1.4';
 
 // ============ CURRENCIES ============
 var CURRENCIES = [
@@ -204,15 +204,18 @@ var BUILDINGS = [
 // ============ EMPLOYEE TYPES ============
 // baseSalary = euros par seconde
 var EMP_TYPES = [
+  { id:'novice',    baseSalary:0.1,  unlockLvl:5,  hireCost:80 },
   { id:'collector', baseSalary:0.25, unlockLvl:5,  hireCost:200 },
   { id:'baker',     baseSalary:0.6,  unlockLvl:10, hireCost:500 },
-  { id:'seller',    baseSalary:0.5,  unlockLvl:15, hireCost:400 },
-  { id:'manager',   baseSalary:1,    unlockLvl:25, hireCost:1000 },
-  { id:'chef',      baseSalary:2,    unlockLvl:40, hireCost:3000 },
-  { id:'maitre',    baseSalary:1.5,  unlockLvl:30, hireCost:2500 },
   // Le transporteur n'a de travail qu'a partir de deux patisseries
   { id:'carrier',   baseSalary:0.8,  unlockLvl:20, hireCost:1500, needsBakeries:2 },
+  { id:'manager',   baseSalary:1,    unlockLvl:25, hireCost:1000 },
+  { id:'maitre',    baseSalary:1.5,  unlockLvl:30, hireCost:2500 },
+  { id:'seller',    baseSalary:0.5,  unlockLvl:35, hireCost:1200 },
+  { id:'chef',      baseSalary:2,    unlockLvl:65, hireCost:6000 },
+  { id:'buyer',     baseSalary:3,    unlockLvl:90, hireCost:15000 },
 ];
+var EMP_MAX_LVL = 5;
 
 var EMP_NAMES_LANG = {
   fr: ['Pierre','Marie','Jean','Sophie','Louis','Claire','Thomas','Julie','Hugo','Emma','Lucas','L\u00e9a','Nathan','Manon','Paul','Camille','Arthur','Alice','Gabriel','Jade'],
@@ -380,21 +383,35 @@ var ORDER_CONFIG = {
   butlerSec: 25, // un maitre d'hotel de niveau 1 livre une commande toutes les 25 s
 };
 
-// La boutique de machines : des ameliorations pour toujours, a prix eleve
-var MACHINE_LVL = 50;
+// Les machines : disponibles des le debut, propres a chaque patisserie.
+// effect : ce qu'elles ameliorent. step : le gain par niveau. lvl : niveau du joueur requis.
 var MACHINES = [
-  { id:'petrin',    e:'\u{1F3ED}', cost:100000, growth:6, max:5, step:5 },
-  { id:'isolant',   e:'\u{1F3E0}', cost:150000, growth:6, max:5, step:8 },
-  { id:'robot',     e:'\u26A1',    cost:200000, growth:6, max:5, step:3 },
-  { id:'fourturbo', e:'\u{1F525}', cost:250000, growth:8, max:5, step:2 },
-  { id:'convoyeur', e:'\u{1F3D7}\uFE0F', cost:300000, growth:7, max:5, step:10 },
-  { id:'caisse',    e:'\u{1F9FE}', cost:350000, growth:7, max:5, step:15 },
-  { id:'etiquette', e:'\u{1F3AF}', cost:400000, growth:7, max:5, step:10 },
-  { id:'vitrine',   e:'\u{1F48E}', cost:500000, growth:8, max:5, step:5 },
-  { id:'guichet',   e:'\u{1F91D}', cost:600000, growth:8, max:5, step:10 },
-  { id:'academie',  e:'\u{1F3C5}', cost:800000, growth:9, max:5, step:10 },
+  { id:'four',       e:'\u{1F525}', cost:200,     growth:4,  max:10, step:3,  effect:'ovens',   lvl:1 },
+  { id:'fouet',      e:'\u2728',    cost:150,     growth:3,  max:10, step:2,  effect:'prep',    lvl:1 },
+  { id:'balance',    e:'\u{1F4D0}', cost:300,     growth:3.5,max:8,  step:1,  effect:'ingCost', lvl:3 },
+  { id:'batteur',    e:'\u26A1',    cost:800,     growth:4,  max:8,  step:2,  effect:'prep',    lvl:5 },
+  { id:'minuteur',   e:'\u23F0',    cost:1000,    growth:4,  max:6,  step:2,  effect:'prep',    lvl:10 },
+  { id:'frigo',      e:'\u2744\uFE0F', cost:1500, growth:4, max:10, step:5,  effect:'space',   lvl:12 },
+  { id:'caissereg',  e:'\u{1F4B0}', cost:2000,    growth:4,  max:8,  step:1,  effect:'price',   lvl:14 },
+  { id:'isolant',    e:'\u{1F3E0}', cost:5000,    growth:5,  max:5,  step:8,  effect:'rent',    lvl:15 },
+  { id:'petrin',     e:'\u{1F3ED}', cost:20000,   growth:6,  max:5,  step:5,  effect:'prep',    lvl:20 },
+  { id:'robot',      e:'\u{1F52C}', cost:60000,   growth:6,  max:5,  step:3,  effect:'ingCost', lvl:30 },
+  { id:'guichet',    e:'\u{1F91D}', cost:100000,  growth:6,  max:5,  step:10, effect:'prime',   lvl:30 },
+  { id:'fourturbo',  e:'\u{1F3EA}', cost:250000,  growth:8,  max:5,  step:2,  effect:'ovens',   lvl:35 },
+  { id:'caisse',     e:'\u{1F9FE}', cost:350000,  growth:7,  max:5,  step:15, effect:'sellers', lvl:35 },
+  { id:'convoyeur',  e:'\u{1F3D7}\uFE0F', cost:300000, growth:7, max:5, step:10, effect:'bld', lvl:40 },
+  { id:'etiquette',  e:'\u{1F3AF}', cost:400000,  growth:7,  max:5,  step:10, effect:'decay',   lvl:45 },
+  { id:'vitrine',    e:'\u{1F48E}', cost:500000,  growth:8,  max:5,  step:5,  effect:'price',   lvl:50 },
+  { id:'academie',   e:'\u{1F3C5}', cost:800000,  growth:9,  max:5,  step:10, effect:'xp',      lvl:60 },
+  { id:'sablier',    e:'\u231B',    cost:5e6,     growth:8,  max:10, step:2,  effect:'prep',    lvl:100 },
+  { id:'labo',       e:'\u{1F4AB}', cost:5e7,     growth:8,  max:10, step:5,  effect:'xp',      lvl:150 },
+  { id:'megafour',   e:'\u{1F3E2}', cost:1e9,     growth:10, max:5,  step:3,  effect:'ovens',   lvl:200 },
+  { id:'empire',     e:'\u{1F4C8}', cost:1e11,    growth:10, max:10, step:3,  effect:'price',   lvl:300 },
 ];
+
 var HISTORY_MAX = 240;
+var BLD_CYCLE_SEC = 3600; // Un batiment livre une fois par heure de jeu
+var SALE_DELAY_MS = 2000; // Meme vendre prend un petit moment
 
 var OVEN_CONFIG = { start: 2, max: 30, baseCost: 200, growth: 4, maxQueue: 50 };
 
@@ -435,3 +452,17 @@ var THEME_LIST = [
   { id:'party',    langKey:'settings.themeParty', level:500 },
   { id:'space',    langKey:'settings.themeSpace', level:1000 },
 ];
+
+// Un tout petit peu moins cher, c'etait trop facile
+REC.forEach(function(r) { r.val = Math.round(r.val * 95) / 100; });
+
+// Deux recettes des le debut : le gateau simple n'a plus besoin de beurre
+(function() {
+  REC.forEach(function(r) {
+    if (r.id === 'cake') {
+      delete r.req.beurre;
+      r.unlockLvl = 1;
+      r.val = 15;
+    }
+  });
+})();

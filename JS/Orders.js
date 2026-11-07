@@ -58,17 +58,20 @@ function renderMachines() {
   var h = '<div class="panel-head"><h2>' + t('mach.title') + '</h2></div>';
   h += '<p class="hint-note">' + t('mach.help') + '</p><div class="mach-grid">';
   MACHINES.forEach(function(m) {
+    if (m.lvl > G.level + 10) return;
     var lvl = machineLevel(m.id);
     var maxed = lvl >= m.max;
     var cost = machineCost(m);
-    h += '<article class="mach-card' + (maxed ? ' maxed' : '') + '">';
-    h += '<div class="mach-top"><span class="mach-icon">' + m.e + '</span><div><b>' + t('mach.' + m.id) + '</b>';
+    var locked = G.level < m.lvl;
+    h += '<article class="mach-card' + (maxed ? ' maxed' : '') + (locked ? ' locked' : '') + '">';
+    h += '<div class="mach-top"><span class="mach-icon">' + (locked ? '\u{1F512}' : m.e) + '</span><div><b>' + t('mach.' + m.id) + '</b>';
     h += '<small>' + t('mach.' + m.id + '.d', { v: m.step }) + '</small></div></div>';
     h += '<div class="mach-pips" aria-label="' + lvl + ' / ' + m.max + '">';
     for (var i = 0; i < m.max; i++) h += '<i class="' + (i < lvl ? 'on' : '') + '"></i>';
     h += '</div>';
-    if (lvl > 0) h += '<p class="mach-now">' + t('mach.now', { v: m.step * lvl }) + '</p>';
-    h += '<button class="btn' + (maxed ? '' : ' btn-primary') + '" onclick="doBuyMachine(\'' + m.id + '\')"' + (maxed || G.money < cost ? ' disabled' : '') + '>' + (maxed ? t('mach.max') : t('mach.buy', { v: fmtMoney(cost) })) + '</button>';
+    if (lvl > 0) h += '<p class="mach-now">' + t('mach.level', { a: lvl, b: m.max }) + '</p>';
+    if (locked) h += '<button class="btn" disabled>' + t('bank.levelReq', { v: m.lvl }) + '</button>';
+    else h += '<button class="btn' + (maxed ? '' : ' btn-primary') + '" onclick="doBuyMachine(\'' + m.id + '\')"' + (maxed || G.money < cost ? ' disabled' : '') + '>' + (maxed ? t('mach.max') : t('mach.buy', { v: fmtMoney(cost) })) + '</button>';
     h += '</article>';
   });
   h += '</div>';

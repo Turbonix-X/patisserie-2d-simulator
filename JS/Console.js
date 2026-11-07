@@ -13,6 +13,7 @@ function L(fr, en) {
 }
 
 function showCommandConsole() {
+  beginMenuPause();
   var h = '<div class="console-modal">';
   h += '<div class="console-left">';
   h += '<div class="console-head"><h2>' + uiIcon('terminal') + t('console.title') + '</h2>';
@@ -173,53 +174,64 @@ function processCommand(cmd) {
     return '<span class="cmd-ok">' + L('Partie effacée !', 'Game reset!') + '</span>';
   }
 
-  // /max (was /ultimate)
+  // /max | /max all | /max NOM
   if (action === 'max') {
+    var maxArg = cmd.trim().split(/\s+/).slice(1).join(' ').trim();
+    ensureBakeryList();
+    var maxTargets = [];
+    if (!maxArg) maxTargets = [G.currentBakeryIndex];
+    else if (maxArg.toLowerCase() === 'all') maxTargets = G.bakeries.map(function(b, i) { return i; });
+    else {
+      G.bakeries.forEach(function(b, i) {
+        var nm = i === G.currentBakeryIndex ? G.bakeryName : b.name;
+        if (nm.toLowerCase() === maxArg.toLowerCase()) maxTargets.push(i);
+      });
+      if (maxTargets.length === 0) return '<span class="cmd-err">' + t('console.bakeryUnknown') + bakeryListText() + '</span>';
+    }
     saveBeforeMax();
-    G.level = 1000; G.xp = 0;
-    G.money = MONEY_CAP; G.totalEarned = MONEY_CAP;
-    G.rebirth = 7;
+    maxTargets.forEach(function(i) {
+      if (i === G.currentBakeryIndex) maxThisBakery();
+      else if (G.bakeries[i].state) withBakery(G.bakeries[i].state, maxThisBakery);
+    });
     G.bankUnlocked = true;
     G.secondBakery = true;
-    // Tous les themes, meme ceux des saisons
     THEME_LIST.forEach(function(th) { if (th.season || th.birthday || th.level) G.unlockedThemes[th.id] = true; });
-    // All ingredients
-    ING.forEach(function(i) { G.ing[i.id] = maxStockFor(i); });
-    // All cakes
-    REC.forEach(function(r) { G.cakes[r.id] = 9999; });
-    // Stockage max : tous les agrandissements achetes, et de la place pour tout ce stock
-    var allSpace = 5;
-    SPACE_UPG.forEach(function(su) { allSpace += su.add; });
-    G.spaceBought = SPACE_UPG.length;
-    // Assez grand pour tout ce stock, et encore autant de libre pour preparer
-    G.maxSpace = allSpace + Math.ceil(usedSpace() * 2);
-    // All buildings
-    BUILDINGS.forEach(function(b) { G.buildings[b.id] = { qty: 999 }; });
-    // All achievements
-    // Tout, sauf les succes secrets : ceux-la se meritent
     ACHIEVEMENTS.forEach(function(a) { if (!a.hidden) G.achievements[a.id] = true; });
-    G.ovens = OVEN_CONFIG.max;
-    // All employee types (one of each at level 1)
-    G.employees = [];
-    G.nextEmployeeId = 1;
-    EMP_TYPES.forEach(function(et) {
-      G.employees.push({
-        id: G.nextEmployeeId++,
-        name: getEmpName(),
-        type: et.id,
-        morale: 100,
-        status: 'working',
-        skill: 50,
-        level: 1,
-        assignedIng: et.id === 'collector' ? 'farine' : null,
-        unpaidTime: 0
-      });
-    });
-    // Boost stats for achievement conditions
-    G.stats.totalClicks = 100000;
-    G.stats.totalSold = 100000;
     checkAchievements();
     return '<span class="cmd-ok">' + t('console.maxDone') + '</span>';
+  }
+
+  // /creative | /creative off
+  if (action === 'creative') {
+    if (parts[1] === 'off') {
+      if (!lastSaveBeforeCreative) return '<span class="cmd-err">' + t('console.creativeNone') + '</span>';
+      Object.assign(G, lastSaveBeforeCreative);
+      lastSaveBeforeCreative = null;
+      return '<span class="cmd-ok">' + t('console.creativeOff') + '</span>';
+    }
+    lastSaveBeforeCreative = JSON.parse(JSON.stringify(G));
+    maxThisBakery();
+    G.creative = true;
+    tickCreative();
+    return '<span class="cmd-ok">' + t('console.creativeOn') + '</span>';
+  }
+
+  // /machine set|add NOM N | /machine set NOM max | /machine remove NOM N|all
+  if (action === 'machine' || action === 'machines') {
+    var mOp = parts[1], mach = findMachine(parts[2]), mVal = parts[3];
+    var mNames = MACHINES.map(function(x) { return x.id; }).join(', ');
+    if (['set', 'add', 'remove'].indexOf(mOp) < 0 || !parts[2]) return '<span class="cmd-err">Usage: /machine set|add|remove ' + t('console.machineName') + ' N|max|all. ' + mNames + '</span>';
+    if (!mach) return '<span class="cmd-err">' + t('console.machineUnknown') + mNames + '</span>';
+    var mNow = machineLevel(mach.id), mN = parseInt(mVal, 10), mNew;
+    if (mOp === 'set' && mVal === 'max') mNew = mach.max;
+    else if (mOp === 'remove' && mVal === 'all') mNew = 0;
+    else if (isNaN(mN)) return '<span class="cmd-err">Usage: /machine ' + mOp + ' ' + mach.id + ' N</span>';
+    else if (mOp === 'set') mNew = mN;
+    else if (mOp === 'add') mNew = mNow + mN;
+    else mNew = mNow - mN;
+    G.machines[mach.id] = Math.max(0, Math.min(mach.max, mNew));
+    syncOvens();
+    return '<span class="cmd-ok">' + t('console.machineSet', { n: t('mach.' + mach.id), a: G.machines[mach.id], b: mach.max }) + '</span>';
   }
 
   // /unmax - restore before max
@@ -500,13 +512,6 @@ function processCommand(cmd) {
     return '<span class="cmd-err">Usage: /bob challenge</span>';
   }
 
-  // /gameover
-  if (action === 'gameover') {
-    G.gameOver = true;
-    showGameOverModal();
-    return '<span class="cmd-ok">' + L('Faillite déclenchée !', 'Game Over triggered!') + '</span>';
-  }
-
   if (action === 'oeufs') action = 'oeuf';
 
   // Check if it's an ingredient name (with liquid unit support)
@@ -564,6 +569,41 @@ function renderConsoleButton() {
   }
 }
 
+var lastSaveBeforeCreative = null;
+
+// Tout au maximum dans la patisserie en cours (G peut etre une autre patisserie)
+function maxThisBakery() {
+  G.level = 1000;
+  G.xp = 0;
+  G.money = MONEY_CAP;
+  G.totalEarned = MONEY_CAP;
+  G.rebirth = 7;
+  unlockEverything();
+  ING.forEach(function(i) { G.ing[i.id] = maxStockFor(i); });
+  REC.forEach(function(r) { G.cakes[r.id] = 9999; });
+  var allSpace = 5;
+  SPACE_UPG.forEach(function(su) { allSpace += su.add; });
+  G.spaceBought = SPACE_UPG.length;
+  G.maxSpace = allSpace + Math.ceil(usedSpace() * 2);
+  BUILDINGS.forEach(function(b) {
+    G.buildings[b.id] = { qty: 999 };
+    if (!G.bldTimers[b.id]) G.bldTimers[b.id] = BLD_CYCLE_SEC;
+  });
+  // Toutes les machines, au niveau maximum
+  MACHINES.forEach(function(m) { G.machines[m.id] = m.max; });
+  syncOvens();
+  G.employees = [];
+  G.nextEmployeeId = 1;
+  EMP_TYPES.forEach(function(et) {
+    if (et.id === 'novice') return;
+    var e = newEmployee(et.id, getEmpName(), 50);
+    e.morale = 100;
+    G.employees.push(e);
+  });
+  G.stats.totalClicks = Math.max(G.stats.totalClicks, 100000);
+  G.stats.totalSold = Math.max(G.stats.totalSold, 100000);
+}
+
 function bakeryListText() {
   var lines = G.bakeries.map(function(b, i) {
     var cur = i === G.currentBakeryIndex;
@@ -573,44 +613,129 @@ function bakeryListText() {
 }
 
 // ============ GUIDE DES COMMANDES ============
-// use : comment l'ecrire. ex : exemples, un clic les met dans la console.
+// Chaque commande se deplie, avec tous ses cas de figure.
+function cmdCase(use, fr, en, es, ex) { return { use: use, fr: fr, en: en, es: es, ex: ex || use }; }
+
 var COMMAND_DOCS = [
-  { id:'progress', fr:'Progression', en:'Progress', list:[
-    { name:'/level', use:['/level add|set|remove N','/level max'], ex:['/level add 10','/level set 50','/level max'], fr:'Change ton niveau.', en:'Changes your level.' },
-    { name:'/xp', use:['/xp add|set N'], ex:['/xp add 500'], fr:'Change ton XP. Avec add, tu peux monter de niveau.', en:'Changes your XP. With add, you can level up.' },
-    { name:'/money', use:['/money set N [monnaie]'], ex:['/money set 1000','/money set 500 usd'], fr:'Fixe ton argent, en euros ou dans une autre monnaie.', en:'Sets your money, in euros or another currency.' },
-    { name:'/stats', use:['/stats max','/stats clicks|cakes|sold|salary|rent set N'], ex:['/stats max','/stats sold set 1000'], fr:'Change tes statistiques.', en:'Changes your statistics.' },
+  { id:'progress', fr:'Progression', en:'Progress', es:'Progreso', list:[
+    { name:'/level', fr:'Change ton niveau.', en:'Changes your level.', es:'Cambia tu nivel.', cases:[
+      cmdCase('/level add N', 'Ajoute N niveaux.', 'Adds N levels.', 'Añade N niveles.', '/level add 10'),
+      cmdCase('/level remove N', 'Enlève N niveaux.', 'Removes N levels.', 'Quita N niveles.', '/level remove 5'),
+      cmdCase('/level set N', 'Te met au niveau N.', 'Sets you to level N.', 'Te pone en el nivel N.', '/level set 50'),
+      cmdCase('/level max', 'Te met au niveau 1000.', 'Sets you to level 1000.', 'Te pone en el nivel 1000.'),
+    ]},
+    { name:'/xp', fr:'Change ton XP.', en:'Changes your XP.', es:'Cambia tu XP.', cases:[
+      cmdCase('/xp add N', 'Ajoute N XP. Tu peux monter de niveau.', 'Adds N XP. You can level up.', 'Añade N XP. Puedes subir de nivel.', '/xp add 500'),
+      cmdCase('/xp set N', 'Fixe ton XP à N.', 'Sets your XP to N.', 'Fija tu XP en N.', '/xp set 0'),
+    ]},
+    { name:'/money', fr:'Fixe ton argent.', en:'Sets your money.', es:'Fija tu dinero.', cases:[
+      cmdCase('/money set N', 'En euros.', 'In euros.', 'En euros.', '/money set 1000'),
+      cmdCase('/money set N usd', 'Dans une autre monnaie : usd, gbp, jpy…', 'In another currency: usd, gbp, jpy…', 'En otra moneda: usd, gbp, jpy…', '/money set 500 usd'),
+    ]},
+    { name:'/stats', fr:'Change tes statistiques.', en:'Changes your statistics.', es:'Cambia tus estadísticas.', cases:[
+      cmdCase('/stats max', 'Met les clics, les gâteaux préparés et vendus au maximum.', 'Maxes clicks, cakes baked and sold.', 'Pone al máximo los clics y los pasteles preparados y vendidos.'),
+      cmdCase('/stats clicks set N', 'Change une stat : clicks, cakes, sold, salary ou rent.', 'Changes one stat: clicks, cakes, sold, salary or rent.', 'Cambia una estadística: clicks, cakes, sold, salary o rent.', '/stats sold set 1000'),
+    ]},
   ]},
-  { id:'bank', fr:'Argent et banque', en:'Money and bank', list:[
-    { name:'/debt', use:['/debt cancel N|all','/debt set N','/debt add N'], ex:['/debt cancel 100','/debt cancel all','/debt set 100','/debt add 100'], fr:'Enlève une partie ou toute ta dette de loyer (cancel), la fixe à un montant (set) ou l’augmente (add). La première dette fait venir Bob.', en:'Removes part or all of your rent debt (cancel), sets it to an amount (set) or increases it (add). Your first debt brings Bob over.' },
-    { name:'/bank', use:['/bank unlock','/bank clear'], ex:['/bank unlock','/bank clear'], fr:'Ouvre l’onglet Banque, ou efface tous tes prêts en cours.', en:'Opens the Bank tab, or clears all your current loans.' },
+  { id:'bank', fr:'Argent et banque', en:'Money and bank', es:'Dinero y banco', list:[
+    { name:'/debt', fr:'Gère ta dette de loyer.', en:'Manages your rent debt.', es:'Gestiona tu deuda de alquiler.', cases:[
+      cmdCase('/debt cancel N', 'Enlève N € de dette.', 'Removes N € of debt.', 'Quita N € de deuda.', '/debt cancel 100'),
+      cmdCase('/debt cancel all', 'Enlève toute la dette.', 'Removes all the debt.', 'Quita toda la deuda.'),
+      cmdCase('/debt set N', 'Met la dette à N €.', 'Sets the debt to N €.', 'Pone la deuda en N €.', '/debt set 100'),
+      cmdCase('/debt add N', 'Ajoute N € de dette.', 'Adds N € of debt.', 'Añade N € de deuda.', '/debt add 100'),
+    ]},
+    { name:'/bank', fr:'Gère ton compte à la banque.', en:'Manages your bank account.', es:'Gestiona tu cuenta del banco.', cases:[
+      cmdCase('/bank unlock', 'Ouvre l’onglet Banque.', 'Opens the Bank tab.', 'Abre la pestaña Banco.'),
+      cmdCase('/bank clear', 'Efface tous tes prêts en cours.', 'Clears all your current loans.', 'Borra todos tus préstamos actuales.'),
+    ]},
   ]},
-  { id:'bulk', fr:'Tout d’un coup', en:'All at once', list:[
-    { name:'/max', use:['/max'], ex:['/max'], fr:'Met tout au maximum : niveau, argent, stock, stockage, bâtiments, fours, succès et thèmes, sauf les succès secrets. Plus un ingrédient est rare, moins tu en as.', en:'Maxes everything: level, money, stock, storage, buildings, ovens, achievements and themes, except secret achievements. The rarer an ingredient, the less you get.' },
-    { name:'/unmax', use:['/unmax'], ex:['/unmax'], fr:'Revient à l’état d’avant /max.', en:'Goes back to before /max.' },
-    { name:'/undo', use:['/undo'], ex:['/undo'], fr:'Annule la dernière commande.', en:'Undoes the last command.' },
-    { name:'/random', use:['/random'], ex:['/random'], fr:'Met des valeurs au hasard.', en:'Sets random values.' },
-    { name:'/gameover', use:['/gameover'], ex:['/gameover'], fr:'Déclenche la faillite.', en:'Triggers bankruptcy.', danger:true },
-    { name:'/reset', use:['/reset'], ex:['/reset'], fr:'Efface toute la partie, tout de suite et pour de bon.', en:'Erases the whole game, right away and for good.', danger:true },
+  { id:'bulk', fr:'Tout d’un coup', en:'All at once', es:'Todo de golpe', list:[
+    { name:'/max', fr:'Met tout au maximum : niveau 1000, argent, stock, bâtiments, machines, employés, succès et thèmes. Plus un ingrédient est rare, moins tu en as.', en:'Maxes everything: level 1000, money, stock, buildings, machines, employees, achievements and themes. The rarer an ingredient, the less you get.', es:'Lo pone todo al máximo: nivel 1000, dinero, stock, edificios, máquinas, empleados, logros y temas. Cuanto más raro es un ingrediente, menos tienes.', cases:[
+      cmdCase('/max', 'Dans la pâtisserie où tu es.', 'In the bakery you are in.', 'En la pastelería donde estás.'),
+      cmdCase('/max all', 'Dans toutes tes pâtisseries.', 'In all your bakeries.', 'En todas tus pastelerías.'),
+      cmdCase('/max NOM', 'Dans la pâtisserie qui porte ce nom.', 'In the bakery with this name.', 'En la pastelería con ese nombre.', '/max Chez Bob'),
+    ]},
+    { name:'/unmax', fr:'Revient à l’état d’avant /max.', en:'Goes back to before /max.', es:'Vuelve a como estaba antes de /max.', cases:[cmdCase('/unmax', 'Annule le dernier /max.', 'Undoes the last /max.', 'Anula el último /max.')] },
+    { name:'/creative', fr:'Le mode créatif : tout à l’infini, et des employés à l’infini.', en:'Creative mode: everything infinite, and infinite employees.', es:'Modo creativo: todo infinito y empleados infinitos.', cases:[
+      cmdCase('/creative', 'Active le mode créatif.', 'Turns creative mode on.', 'Activa el modo creativo.'),
+      cmdCase('/creative off', 'L’arrête et te rend ta partie d’avant.', 'Turns it off and gives your game back.', 'Lo desactiva y te devuelve tu partida.'),
+    ]},
+    { name:'/undo', fr:'Annule la dernière commande.', en:'Undoes the last command.', es:'Anula el último comando.', cases:[cmdCase('/undo', 'Une seule commande en arrière.', 'One command back.', 'Un solo comando atrás.')] },
+    { name:'/random', fr:'Met des valeurs au hasard.', en:'Sets random values.', es:'Pone valores al azar.', cases:[cmdCase('/random', 'Argent, XP et stock au hasard.', 'Random money, XP and stock.', 'Dinero, XP y stock al azar.')] },
+    { name:'/reset', danger:true, fr:'Efface toute la partie, pour de bon.', en:'Erases the whole game, for good.', es:'Borra toda la partida, para siempre.', cases:[cmdCase('/reset', 'Tout de suite, sans retour possible.', 'Right away, with no way back.', 'Ahora mismo, sin vuelta atrás.')] },
   ]},
-  { id:'shop', fr:'Boutique', en:'Shop', list:[
-    { name:'/bakery', use:['/bakery create [NOM]','/bakery delete [NUMÉRO]','/bakery list'], ex:['/bakery create Chez Bob','/bakery list','/bakery delete 2'], fr:'Crée une pâtisserie gratuitement, ou en supprime une sans la revendre. Sans numéro, delete supprime celle où tu es.', en:'Creates a bakery for free, or deletes one without selling it. With no number, delete removes the one you are in.' },
-    { name:'/building', use:['/building set|add|remove N','/building max'], ex:['/building add 5','/building max'], fr:'Change le nombre de chaque bâtiment.', en:'Changes the amount of every building.' },
-    { name:'/employee', use:['/employee set|add|remove N','/employee max','/employee upgrade N','/employee NOM level set N'], ex:['/employee add 3','/employee upgrade 80'], fr:'Gère tes employés et leur compétence.', en:'Manages your employees and their skill.' },
-    { name:'/space', use:['/space set|add|remove N'], ex:['/space add 50'], fr:'Change ton espace, en m².', en:'Changes your space, in m².' },
+  { id:'shop', fr:'Boutique', en:'Shop', es:'Tienda', list:[
+    { name:'/machine', fr:'Change le niveau d’une machine, entre 0 et son maximum (de 5 à 10 selon la machine).', en:'Changes a machine’s level, between 0 and its maximum (5 to 10 depending on the machine).', es:'Cambia el nivel de una máquina, entre 0 y su máximo (de 5 a 10 según la máquina).', cases:[
+      cmdCase('/machine set NOM N', 'Met la machine au niveau N.', 'Sets the machine to level N.', 'Pone la máquina en el nivel N.', '/machine set four 3'),
+      cmdCase('/machine set NOM max', 'La met à son niveau maximum.', 'Sets it to its maximum level.', 'La pone en su nivel máximo.', '/machine set four max'),
+      cmdCase('/machine add NOM N', 'Ajoute N niveaux.', 'Adds N levels.', 'Añade N niveles.', '/machine add fouet 2'),
+      cmdCase('/machine remove NOM N', 'Enlève N niveaux.', 'Removes N levels.', 'Quita N niveles.', '/machine remove four 5'),
+      cmdCase('/machine remove NOM all', 'Enlève tous ses niveaux.', 'Removes all its levels.', 'Quita todos sus niveles.', '/machine remove four all'),
+    ]},
+    { name:'/bakery', fr:'Crée ou supprime des pâtisseries.', en:'Creates or deletes bakeries.', es:'Crea o elimina pastelerías.', cases:[
+      cmdCase('/bakery create NOM', 'Crée une pâtisserie gratuitement. Le nom est facultatif.', 'Creates a bakery for free. The name is optional.', 'Crea una pastelería gratis. El nombre es opcional.', '/bakery create Chez Bob'),
+      cmdCase('/bakery delete', 'Supprime la pâtisserie où tu es, sans la revendre.', 'Deletes the bakery you are in, without selling it.', 'Elimina la pastelería donde estás, sin venderla.'),
+      cmdCase('/bakery delete N', 'Supprime la pâtisserie numéro N.', 'Deletes bakery number N.', 'Elimina la pastelería número N.', '/bakery delete 2'),
+      cmdCase('/bakery list', 'Liste tes pâtisseries et leurs numéros.', 'Lists your bakeries and their numbers.', 'Lista tus pastelerías y sus números.'),
+    ]},
+    { name:'/building', fr:'Change le nombre de chaque bâtiment.', en:'Changes the amount of every building.', es:'Cambia la cantidad de cada edificio.', cases:[
+      cmdCase('/building set N', 'En met N de chaque.', 'Sets N of each.', 'Pone N de cada uno.', '/building set 10'),
+      cmdCase('/building add N', 'En ajoute N de chaque.', 'Adds N of each.', 'Añade N de cada uno.', '/building add 5'),
+      cmdCase('/building remove N', 'En enlève N de chaque.', 'Removes N of each.', 'Quita N de cada uno.', '/building remove 5'),
+      cmdCase('/building max', 'En met 999 de chaque.', 'Sets 999 of each.', 'Pone 999 de cada uno.'),
+    ]},
+    { name:'/employee', fr:'Gère tes employés.', en:'Manages your employees.', es:'Gestiona tus empleados.', cases:[
+      cmdCase('/employee add N', 'Ajoute N employés au hasard.', 'Adds N random employees.', 'Añade N empleados al azar.', '/employee add 3'),
+      cmdCase('/employee remove N', 'Enlève N employés.', 'Removes N employees.', 'Quita N empleados.', '/employee remove 1'),
+      cmdCase('/employee set N', 'Fixe leur nombre à N.', 'Sets their number to N.', 'Fija su número en N.', '/employee set 5'),
+      cmdCase('/employee max', 'Ajoute 50 employés très compétents.', 'Adds 50 very skilled employees.', 'Añade 50 empleados muy hábiles.'),
+      cmdCase('/employee upgrade N', 'Met la compétence de tous à N.', 'Sets everyone’s skill to N.', 'Pone la habilidad de todos en N.', '/employee upgrade 80'),
+      cmdCase('/employee NOM level set N', 'Met la compétence d’un employé à N.', 'Sets one employee’s skill to N.', 'Pone la habilidad de un empleado en N.', '/employee Emma level set 90'),
+    ]},
+    { name:'/space', fr:'Change ton espace, en m².', en:'Changes your space, in m².', es:'Cambia tu espacio, en m².', cases:[
+      cmdCase('/space set N', 'Fixe l’espace à N m².', 'Sets the space to N m².', 'Fija el espacio en N m².', '/space set 100'),
+      cmdCase('/space add N', 'Ajoute N m².', 'Adds N m².', 'Añade N m².', '/space add 50'),
+      cmdCase('/space remove N', 'Enlève N m².', 'Removes N m².', 'Quita N m².', '/space remove 10'),
+    ]},
   ]},
-  { id:'stock', fr:'Stock', en:'Stock', list:[
-    { name:'/buy', use:['/buy INGRÉDIENT N|all'], ex:['/buy farine 10','/buy sucre all'], fr:'Achète un ingrédient, avec ton argent.', en:'Buys an ingredient, with your money.' },
-    { name:'/sell', use:['/sell INGRÉDIENT N|all'], ex:['/sell farine 10','/sell sucre all'], fr:'Revend un ingrédient.', en:'Resells an ingredient.' },
-    { name:'/farine', generic:true, use:['/INGRÉDIENT set|add|remove N','/INGRÉDIENT max'], ex:['/farine add 100','/lait set 50 cl'], fr:'Change un ingrédient directement. Lait, crème et rhum acceptent ml, cl et l.', en:'Changes an ingredient directly. Milk, cream and rum accept ml, cl and l.' },
-    { name:'/cookie', generic:true, use:['/RECETTE set|add N','/RECETTE max'], ex:['/cookie add 10','/cookie max'], fr:'Change le stock d’un gâteau.', en:'Changes the stock of a cake.' },
+  { id:'stock', fr:'Stock', en:'Stock', es:'Stock', list:[
+    { name:'/buy', fr:'Achète un ingrédient, avec ton argent.', en:'Buys an ingredient, with your money.', es:'Compra un ingrediente, con tu dinero.', cases:[
+      cmdCase('/buy INGRÉDIENT N', 'En achète N.', 'Buys N.', 'Compra N.', '/buy farine 10'),
+      cmdCase('/buy INGRÉDIENT all', 'Avec tout ton argent.', 'With all your money.', 'Con todo tu dinero.', '/buy sucre all'),
+    ]},
+    { name:'/sell', fr:'Revend un ingrédient.', en:'Resells an ingredient.', es:'Revende un ingrediente.', cases:[
+      cmdCase('/sell INGRÉDIENT N', 'En revend N.', 'Resells N.', 'Revende N.', '/sell farine 10'),
+      cmdCase('/sell INGRÉDIENT all', 'Revend tout.', 'Resells it all.', 'Lo revende todo.', '/sell sucre all'),
+    ]},
+    { name:'/INGRÉDIENT', generic:true, fr:'Change un ingrédient directement.', en:'Changes an ingredient directly.', es:'Cambia un ingrediente directamente.', cases:[
+      cmdCase('/farine add N', 'En ajoute N.', 'Adds N.', 'Añade N.', '/farine add 100'),
+      cmdCase('/farine remove N', 'En enlève N.', 'Removes N.', 'Quita N.', '/farine remove 10'),
+      cmdCase('/farine set N', 'Fixe la quantité à N.', 'Sets the amount to N.', 'Fija la cantidad en N.', '/farine set 100'),
+      cmdCase('/farine max', 'Sa limite : plus c’est rare, moins tu en as.', 'Its limit: the rarer, the less you get.', 'Su límite: cuanto más raro, menos tienes.'),
+      cmdCase('/lait set N cl', 'Lait, crème et rhum acceptent ml, cl et l.', 'Milk, cream and rum accept ml, cl and l.', 'Leche, nata y ron aceptan ml, cl y l.', '/lait set 50 cl'),
+    ]},
+    { name:'/RECETTE', generic:true, fr:'Change le stock d’un gâteau.', en:'Changes the stock of a cake.', es:'Cambia el stock de un pastel.', cases:[
+      cmdCase('/cookie add N', 'En ajoute N.', 'Adds N.', 'Añade N.', '/cookie add 10'),
+      cmdCase('/cookie set N', 'Fixe le stock à N.', 'Sets the stock to N.', 'Fija el stock en N.', '/cookie set 10'),
+      cmdCase('/cookie max', 'En met 9999.', 'Sets 9999.', 'Pone 9999.'),
+    ]},
   ]},
-  { id:'world', fr:'Monde', en:'World', list:[
-    { name:'/time', use:['/time set N'], ex:['/time set 5','/time set 1'], fr:'Vitesse du jeu, de 0.1 à 10. 1 est la vitesse normale.', en:'Game speed, from 0.1 to 10. 1 is normal speed.' },
-    { name:'/theme', use:['/theme NOM','/theme unlock all|spring|summer|fall|winter|birthday|party|space'], ex:['/theme winter','/theme unlock all'], fr:'Change de thème, ou débloque des thèmes pour toujours.', en:'Changes theme, or unlocks themes forever.' },
-    { name:'/birthday', use:['/birthday JJ MM'], ex:['/birthday 14 7'], fr:'Change ta date d’anniversaire.', en:'Changes your birthday.' },
-    { name:'/bob', use:['/bob challenge'], ex:['/bob challenge'], fr:'Bob te propose son défi tout de suite.', en:'Bob offers you his challenge right away.' },
-    { name:'/help', use:['/help'], ex:['/help'], fr:'Ouvre ce guide.', en:'Opens this guide.' },
+  { id:'world', fr:'Monde', en:'World', es:'Mundo', list:[
+    { name:'/time', fr:'Change la vitesse du jeu.', en:'Changes the game speed.', es:'Cambia la velocidad del juego.', cases:[
+      cmdCase('/time set N', 'De 0.1 à 10. 1 est la vitesse normale.', 'From 0.1 to 10. 1 is normal speed.', 'De 0.1 a 10. 1 es la velocidad normal.', '/time set 5'),
+    ]},
+    { name:'/theme', fr:'Change de thème, ou en débloque.', en:'Changes theme, or unlocks themes.', es:'Cambia de tema o los desbloquea.', cases:[
+      cmdCase('/theme NOM', 'Met ce thème : light, dark, spring, summer, fall, winter, birthday, party ou space.', 'Applies this theme: light, dark, spring, summer, fall, winter, birthday, party or space.', 'Pone este tema: light, dark, spring, summer, fall, winter, birthday, party o space.', '/theme winter'),
+      cmdCase('/theme unlock all', 'Débloque tous les thèmes pour toujours.', 'Unlocks all themes forever.', 'Desbloquea todos los temas para siempre.'),
+      cmdCase('/theme unlock NOM', 'Débloque ce thème pour toujours.', 'Unlocks this theme forever.', 'Desbloquea este tema para siempre.', '/theme unlock party'),
+    ]},
+    { name:'/birthday', fr:'Change ta date d’anniversaire.', en:'Changes your birthday.', es:'Cambia tu fecha de cumpleaños.', cases:[
+      cmdCase('/birthday JJ MM', 'Jour, puis mois.', 'Day, then month.', 'Día y luego mes.', '/birthday 14 7'),
+    ]},
+    { name:'/bob', fr:'Parle à Bob.', en:'Talk to Bob.', es:'Habla con Bob.', cases:[
+      cmdCase('/bob challenge', 'Il te propose son défi tout de suite.', 'He offers you his challenge right away.', 'Te propone su reto ahora mismo.'),
+    ]},
+    { name:'/help', fr:'Ouvre ce guide.', en:'Opens this guide.', es:'Abre esta guía.', cases:[cmdCase('/help', 'Le guide s’ouvre à côté de la console.', 'The guide opens next to the console.', 'La guía se abre junto a la consola.')] },
   ]},
 ];
 
@@ -618,6 +743,8 @@ var CONSOLE_COMMANDS = [];
 COMMAND_DOCS.forEach(function(group) {
   group.list.forEach(function(c) { if (!c.generic) CONSOLE_COMMANDS.push(c.name); });
 });
+
+function docText(x) { return x[currentLang] || x.fr; }
 
 function toggleCommandHelp() {
   var el = document.getElementById('console-help');
@@ -637,27 +764,18 @@ function toggleCommandHelp() {
   renderCommandList();
 }
 
-// Met en valeur ce qu'il faut remplacer (N, NOM...) et les choix (add|set)
+// Met en valeur ce qu'il faut remplacer (N, NOM...)
 function commandUsage(use) {
-  return escH(use)
-    .replace(/\[([^\]]+)\]/g, '<em class="cg-opt">[$1]</em>')
-    .replace(/\b(N|NOM|NUMÉRO|INGRÉDIENT|RECETTE|JJ|MM)\b/g, '<i class="cg-arg">$1</i>')
-    .replace(/\|/g, '<span class="cg-or">|</span>');
-}
-
-function guideGroupName(g) {
-  if (currentLang === 'es') return COMMAND_GROUPS_ES[g.id];
-  return currentLang === 'en' ? g.en : g.fr;
+  return escH(use).replace(/\b(N|NOM|INGRÉDIENT|RECETTE|JJ|MM)\b/g, '<i class="cg-arg">$1</i>');
 }
 
 function renderCommandList() {
   var cats = document.getElementById('cg-cats');
   var list = document.getElementById('cg-list');
   if (!cats || !list) return;
-  var en = currentLang === 'en';
   var c = '<button class="cg-cat' + (ui.guideCat === 'all' ? ' active' : '') + '" onclick="ui.guideCat=\'all\';renderCommandList()">' + t('console.guideAll') + '</button>';
   COMMAND_DOCS.forEach(function(g) {
-    c += '<button class="cg-cat' + (ui.guideCat === g.id ? ' active' : '') + '" onclick="ui.guideCat=\'' + g.id + '\';renderCommandList()">' + guideGroupName(g) + '</button>';
+    c += '<button class="cg-cat' + (ui.guideCat === g.id ? ' active' : '') + '" onclick="ui.guideCat=\'' + g.id + '\';renderCommandList()">' + docText(g) + '</button>';
   });
   cats.innerHTML = c;
   var q = ui.guideSearch.trim().toLowerCase();
@@ -666,21 +784,18 @@ function renderCommandList() {
     if (ui.guideCat !== 'all' && ui.guideCat !== g.id) return;
     var cards = '';
     g.list.forEach(function(cmd) {
-      var desc = currentLang === 'es' ? COMMAND_ES[cmd.name] : (en ? cmd.en : cmd.fr);
-      var hay = (cmd.name + ' ' + cmd.use.join(' ') + ' ' + desc).toLowerCase();
+      var hay = (cmd.name + ' ' + docText(cmd) + ' ' + cmd.cases.map(function(x) { return x.use + ' ' + docText(x); }).join(' ')).toLowerCase();
       if (q && hay.indexOf(q) < 0) return;
-      cards += '<article class="cg-card' + (cmd.danger ? ' danger' : '') + '">';
-      cards += '<div class="cg-usage">';
-      cmd.use.forEach(function(u) { cards += '<code>' + commandUsage(u) + '</code>'; });
-      cards += '</div><p>' + desc + '</p>';
+      // Un menu depliant par commande
+      cards += '<details class="cg-card' + (cmd.danger ? ' danger' : '') + '"' + (q ? ' open' : '') + '><summary><code>' + escH(cmd.name) + '</code><span>' + docText(cmd) + '</span></summary>';
       if (cmd.danger) cards += '<span class="cg-warn">' + t('console.guideDanger') + '</span>';
-      cards += '<div class="cg-ex"><span>' + t('console.guideTry') + '</span>';
-      cmd.ex.forEach(function(ex) {
-        cards += '<button type="button" onclick="useExample(\'' + ex + '\')">' + escH(ex) + '</button>';
+      cmd.cases.forEach(function(x) {
+        cards += '<div class="cg-case"><code>' + commandUsage(x.use) + '</code><p>' + docText(x) + '</p>';
+        cards += '<button type="button" onclick="useExample(\'' + x.ex.replace(/'/g, '') + '\')">' + escH(x.ex) + '</button></div>';
       });
-      cards += '</div></article>';
+      cards += '</details>';
     });
-    if (cards) h += '<h4>' + guideGroupName(g) + '</h4>' + cards;
+    if (cards) h += '<h4>' + docText(g) + '</h4>' + cards;
   });
   list.innerHTML = h || '<p class="cg-empty">' + t('console.guideNone') + '</p>';
 }

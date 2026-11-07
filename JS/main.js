@@ -3,6 +3,11 @@
    Demarrage, boucle de jeu, sauvegarde auto
    ============================================ */
 
+// Telephone : taper vite ne doit ni zoomer ni recharger la page
+['gesturestart', 'gesturechange', 'dblclick'].forEach(function(ev) {
+  document.addEventListener(ev, function(e) { e.preventDefault(); }, { passive: false });
+});
+
 document.addEventListener('DOMContentLoaded', function() {
 
   load();
@@ -53,7 +58,7 @@ document.addEventListener('DOMContentLoaded', function() {
   // Boucle de jeu (chaque seconde)
   setInterval(function() {
     // En pause ou pendant l'intro, le temps ne s'accumule pas
-    if (G.paused || introActive) { lastTick = Date.now(); return; }
+    if (G.paused || introActive || menuPause.on) { lastTick = Date.now(); return; }
     if (G.gameOver) return;
 
     var now = Date.now();
@@ -69,15 +74,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
     G.playTimeMs += dtMs;
 
-    tickAutoCollect(dtSec);
-    tickEmployees(dtSec);
-    tickRent(dtSec);
+    tickBakeryWork(dtSec, true);
     tickLoans(dtSec);
-    tickOrders(dtSec);
     tickBackgroundBakeries(dtSec);
+    tickCreative();
     tickCarriers(dtSec);
-    recoverDemand(dtSec);
-    tickCrafting();
     recordHistory();
     checkAchievements();
     // Les totaux de toutes les patisseries comptent aussi pour les succes
@@ -95,6 +96,7 @@ document.addEventListener('DOMContentLoaded', function() {
     checkFirstDebt();
     tickChallenge();
     tickBobWatch();
+    tickIdle();
     if (ui.settingsTab === 'stats' && document.getElementById('set-pane')) refreshSettingsPane();
     renderBob();
     // La saison a change pendant que tu jouais ?
@@ -114,7 +116,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // Affichage fluide
   setInterval(function() {
-    if (G.paused || G.gameOver || introActive) return;
+    if (G.paused || G.gameOver || introActive || menuPause.on) return;
+    tickSalesUI();
     renderIngredients();
     renderCraftingBar();
     renderMainPanel();
@@ -122,8 +125,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // Candidatures (une toutes les minutes environ)
   setInterval(function() {
-    if (G.paused || G.gameOver || introActive) return;
-    if (G.level >= 5 && Math.random() < 0.5) {
+    if (G.paused || G.gameOver || introActive || menuPause.on) return;
+    // Peu de candidats au debut, de plus en plus ensuite
+    if (G.level >= 5 && Math.random() < applicantChance()) {
       generateApplicant();
       renderTabs();
     }

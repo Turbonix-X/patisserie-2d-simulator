@@ -331,3 +331,96 @@ function fmtMoney(amount) {
   if (currentLang !== 'en') txt = txt.replace('.', ',');
   return txt + curr.symbol;
 }
+
+// ======================== BETA 1.4 ========================
+Object.assign(LANGS.fr, {
+  'is.oeuf':'Œuf','is.fraise':'Fraise','is.amande':'Amande','is.pomme':'Pomme','is.framb':'Framboise','is.noisette':'Noisette',
+  'tuto.step1':'Pour tes premiers cookies, clique sur les ingrédients : 2 Farine, 2 Sucre et 1 Œuf.',
+  'unlock.btn':'Débloquer ({{v}})','unlock.waiting':'Arrive dans {{v}}','unlock.started':'{{n}} arrive dans {{v}}.','unlock.done':'{{n}} est débloqué !',
+  'sell.selling':'Vente : {{v}}',
+  'bld.delivery':'+{{q}} {{n}} dans {{t}}','bld.eachHour':'Livre beaucoup de {{n}}, une fois par heure','bld.done':'{{n}} a livré {{q}} {{i}} !','bld.unlocked':'Niveau 40 ! Tu peux acheter des bâtiments.',
+  'emp.novice':'Apprenti','emp.buyer':'Intendant','emp.desc.novice':'Il n\'a pas encore de métier. Paie-lui en un.','emp.desc.buyer':'Achète les ingrédients qui manquent pour tes recettes favorites, ou les plus récentes. La livraison prend du temps.',
+  'emp.desc.baker':'Fait baisser le temps de préparation.','emp.desc.seller':'Vend tes gâteaux tout seul. Plus il y a de vendeurs, plus ça va vite.','emp.desc.manager':'Remonte le moral de l\'équipe, et peut embaucher à ta place.','emp.desc.chef':'Prépare tes pâtisseries tout seul, avec les ingrédients en stock.','emp.desc.carrier':'Emmène de l\'argent ou du stock vers une autre de tes pâtisseries. Clique sur lui pour le régler.',
+  'emp.creative':'Mode créatif : des employés à l\'infini.','emp.search':'Chercher un employé','emp.searchHint':'Une recherche prend du temps, et ne marche pas toujours : {{v}} % de chances à ton niveau.','emp.searchStarted':'Recherche d\'un {{n}} en cours…','emp.searchFound':'Un {{n}} a répondu à ton annonce !','emp.searchNone':'Personne n\'a répondu pour le poste de {{n}}.',
+  'emp.training':'En formation : {{v}}','emp.config':'Réglages','emp.trainMax':'Niveau maximum','emp.sellHelp':'La part de ce que tu prépares que ce vendeur a le droit de vendre.','emp.sellAll':'Appliquer à tous les vendeurs de cette pâtisserie','emp.sellAllDone':'Tous les vendeurs : {{v}} %.',
+  'emp.chefAll':'Tout','emp.chefOnly':'Seulement','emp.chefPriority':'Priorité','emp.chefHelp.all':'Il prépare tout ce qu\'il peut, le plus rentable d\'abord.','emp.chefHelp.only':'Il prépare seulement les recettes que tu choisis.','emp.chefHelp.priority':'Il prépare d\'abord celles que tu choisis, dans l\'ordre, puis le reste.',
+  'emp.mgrAuto':'Embauche automatique','emp.mgrHelp':'Il embauche le candidat le moins cher qui a la compétence demandée, si tu as cinq fois son prix. Un cueilleur va sur l\'ingrédient le moins produit.','emp.mgrMin':'Compétence minimum','emp.mgrHired':'{{n}} a embauché quelqu\'un !',
+  'emp.noviceHelp':'Choisis son métier. C\'est moins cher que d\'embaucher.','emp.jobDone':'Il est maintenant {{n}} !','emp.buyerDone':'L\'intendant a reçu sa livraison !',
+  'carry.oneCake':'Un gâteau précis','carry.oneIng':'Un ingrédient précis','carry.qty':'Combien par voyage','carry.max':'Le maximum','carry.help':'Un voyage toutes les {{v}} environ.',
+  'mach.title':'Machines','mach.help':'Des améliorations permanentes, mais seulement dans cette pâtisserie. Chaque niveau coûte beaucoup plus cher que le précédent.','mach.level':'Niveau {{a}} / {{b}}',
+  'mach.four':'Four','mach.four.d':'{{v}} fournées de plus en même temps, par niveau.','mach.fouet':'Fouet','mach.fouet.d':'Préparations {{v}} % plus rapides par niveau.','mach.balance':'Balance','mach.balance.d':'Ingrédients {{v}} % moins chers par niveau.','mach.batteur':'Batteur','mach.batteur.d':'Préparations {{v}} % plus rapides par niveau.','mach.minuteur':'Minuteur','mach.minuteur.d':'Préparations {{v}} % plus rapides par niveau.','mach.frigo':'Réfrigérateur','mach.frigo.d':'Espace +{{v}} % par niveau.','mach.caissereg':'Caisse enregistreuse','mach.caissereg.d':'Prix de vente +{{v}} % par niveau.','mach.sablier':'Sablier magique','mach.sablier.d':'Préparations {{v}} % plus rapides par niveau.','mach.labo':'Laboratoire du goût','mach.labo.d':'XP +{{v}} % par niveau.','mach.megafour':'Méga-four','mach.megafour.d':'{{v}} fournées de plus en même temps, par niveau.','mach.empire':'Enseigne géante','mach.empire.d':'Prix de vente +{{v}} % par niveau.','mach.fourturbo.d':'{{v}} fournées de plus en même temps, par niveau.','mach.convoyeur.d':'Livraisons des bâtiments +{{v}} % par niveau.',
+  'adv.space':'Plus de place : {{v}} % de ton espace est plein. Agrandis ta pâtisserie, ou vends tes gâteaux.',
+  'bakery.bobCongrats':'Bravo ! Une nouvelle pâtisserie, je suis fier de toi ! Comment veux-tu l\'appeler ?',
+  'bakery.statsUnlocked':'Deux boutiques ! Dans les réglages, Statistiques, je t\'ai préparé des graphiques et les totaux de toutes tes pâtisseries.',
+  'settings.tabGeneral':'Général',
+  'bob.refuse':'Non. Je ne te parle pas.|Débrouille-toi.|Demande à quelqu\'un d\'autre.|Pas envie.|Va lire le wiki.|Tu crois que je vais t\'aider, après ça ?|…',
+  'bob.grumbleA':'Bon. En vitesse.|Si ça peut te faire taire :|Vite fait :','bob.grumbleB':'Bon, d\'accord.|Puisqu\'il le faut.|Je veux bien te dire ça.','bob.grumbleC':'Ça va un peu mieux, alors écoute.|Tiens, je t\'explique.|Merci pour le sucre. Donc :',
+  'bob.idle':'Tu es encore là ? Si tu pars, il y a un bouton pause en haut. Ou la touche Échap.',
+  'bob.bldSoon':'Ta livraison de {{i}} ({{n}}) arrive dans une minute !',
+  'unl.research':'Niveau 2 ! Une nouveauté t\'attend : clique sur un ingrédient ou une recette qui clignote pour le débloquer, puis attends un peu.',
+  'unl.machines':'Regarde l\'onglet Machines : un four en plus, c\'est une fournée de plus en même temps. Un fouet, c\'est plus rapide. Elles restent, mais seulement dans cette pâtisserie.',
+  'unl.staff':'Niveau 5 ! Tu peux embaucher. Lance une recherche dans l\'onglet Employés. Un cueilleur produit un ingrédient à la seconde. Attention : un employé mal payé ou démoralisé finit par démissionner.',
+  'unl.baker':'Niveau 10 : le boulanger ! Il fait baisser le temps de préparation.',
+  'unl.carrier':'Niveau 20 : le transporteur ! Avec deux pâtisseries, il emmène de l\'argent ou du stock de l\'une à l\'autre. Clique sur lui pour le régler.',
+  'unl.manager':'Niveau 25 : le manager ! Il remonte le moral de l\'équipe, et peut embaucher à ta place. Clique sur lui pour le régler.',
+  'unl.orders':'Niveau 30 : les commandes ! Des clients demandent des gâteaux, et plus c\'est compliqué, plus ça paie. Le maître d\'hôtel les livre à ta place.',
+  'unl.seller':'Niveau 35 : le vendeur ! Il vend tout seul, mais lentement s\'il est seul. Tu peux choisir la part du stock qu\'il a le droit de vendre.',
+  'unl.buildings':'Niveau 40 : les bâtiments ! Ils ne produisent pas à la seconde : ils livrent une énorme quantité d\'un coup, une fois par heure.',
+  'unl.rebirth':'Avec assez d\'argent, tu peux aussi faire un rebirth : tu repars de zéro avec un bonus permanent.',
+  'unl.chef':'Niveau 65 : le chef pâtissier ! Il prépare tout seul avec ce qu\'il y a en stock. Clique sur lui pour choisir ce qu\'il prépare.',
+  'unl.buyer':'Niveau 90 : l\'intendant ! Il commande les ingrédients qui manquent. La livraison prend un peu de temps.',
+  'unl.top':'Niveau 1000 ! Tu as tout vu. Tu peux continuer à monter, mais c\'est la fin du parcours. Bravo.',
+  'console.machineSet':'{{n}} : niveau {{a}} / {{b}}','console.machineName':'NOM','console.machineUnknown':'Machine inconnue. Les machines : ','console.creativeOn':'Mode créatif : tout est à l\'infini !','console.creativeOff':'Mode créatif arrêté, ta partie est revenue.','console.creativeNone':'Le mode créatif n\'est pas activé.',
+});
+
+Object.assign(LANGS.en, {
+  'is.oeuf':'Egg','is.fraise':'Strawberry','is.amande':'Almond','is.pomme':'Apple','is.framb':'Raspberry','is.noisette':'Hazelnut',
+  'unlock.btn':'Unlock ({{v}})','unlock.waiting':'Arrives in {{v}}','unlock.started':'{{n}} arrives in {{v}}.','unlock.done':'{{n}} unlocked!',
+  'sell.selling':'Selling: {{v}}',
+  'bld.delivery':'+{{q}} {{n}} in {{t}}','bld.eachHour':'Delivers a lot of {{n}}, once an hour','bld.done':'{{n}} delivered {{q}} {{i}}!','bld.unlocked':'Level 40! You can buy buildings.',
+  'emp.novice':'Apprentice','emp.buyer':'Purveyor','emp.desc.novice':'They have no job yet. Pay for one.','emp.desc.buyer':'Buys the ingredients missing for your favorite or latest recipes. Delivery takes a while.',
+  'emp.desc.baker':'Lowers baking time.','emp.desc.seller':'Sells your cakes on their own. The more sellers, the faster it goes.','emp.desc.manager':'Lifts the team\'s morale, and can hire for you.','emp.desc.chef':'Bakes your pastries on their own, with the ingredients in stock.','emp.desc.carrier':'Takes money or stock to another of your bakeries. Click them to set it up.',
+  'emp.creative':'Creative mode: infinite employees.','emp.search':'Search for an employee','emp.searchHint':'A search takes time and doesn\'t always work: {{v}}% chance at your level.','emp.searchStarted':'Searching for a {{n}}…','emp.searchFound':'A {{n}} answered your ad!','emp.searchNone':'Nobody answered for the {{n}} job.',
+  'emp.training':'Training: {{v}}','emp.config':'Settings','emp.trainMax':'Maximum level','emp.sellHelp':'The share of what you bake that this seller may sell.','emp.sellAll':'Apply to all sellers of this bakery','emp.sellAllDone':'All sellers: {{v}}%.',
+  'emp.chefAll':'All','emp.chefOnly':'Only','emp.chefPriority':'Priority','emp.chefHelp.all':'Bakes all they can, the most profitable first.','emp.chefHelp.only':'Bakes only the recipes you choose.','emp.chefHelp.priority':'Bakes the ones you choose first, in order, then the rest.',
+  'emp.mgrAuto':'Automatic hiring','emp.mgrHelp':'Hires the cheapest applicant with the required skill, if you have five times their price. A collector goes to the least produced ingredient.','emp.mgrMin':'Minimum skill','emp.mgrHired':'{{n}} hired someone!',
+  'emp.noviceHelp':'Choose their job. It costs less than hiring.','emp.jobDone':'They are now a {{n}}!','emp.buyerDone':'The purveyor got a delivery!',
+  'carry.oneCake':'One specific cake','carry.oneIng':'One specific ingredient','carry.qty':'How much per trip','carry.max':'The maximum','carry.help':'One trip about every {{v}}.',
+  'mach.title':'Machines','mach.help':'Permanent upgrades, but only in this bakery. Each level costs much more than the last.','mach.level':'Level {{a}} / {{b}}',
+  'mach.four':'Oven','mach.four.d':'{{v}} more batches at the same time, per level.','mach.fouet':'Whisk','mach.fouet.d':'Baking {{v}}% faster per level.','mach.balance':'Scale','mach.balance.d':'Ingredients {{v}}% cheaper per level.','mach.batteur':'Mixer','mach.batteur.d':'Baking {{v}}% faster per level.','mach.minuteur':'Timer','mach.minuteur.d':'Baking {{v}}% faster per level.','mach.frigo':'Fridge','mach.frigo.d':'Space +{{v}}% per level.','mach.caissereg':'Cash register','mach.caissereg.d':'Sale prices +{{v}}% per level.','mach.sablier':'Magic hourglass','mach.sablier.d':'Baking {{v}}% faster per level.','mach.labo':'Taste lab','mach.labo.d':'XP +{{v}}% per level.','mach.megafour':'Mega-oven','mach.megafour.d':'{{v}} more batches at the same time, per level.','mach.empire':'Giant sign','mach.empire.d':'Sale prices +{{v}}% per level.','mach.fourturbo.d':'{{v}} more batches at the same time, per level.','mach.convoyeur.d':'Building deliveries +{{v}}% per level.',
+  'adv.space':'Out of room: {{v}}% of your space is full. Expand your bakery, or sell your cakes.',
+  'bakery.bobCongrats':'Well done! A new bakery, I\'m proud of you! What do you want to call it?',
+  'bakery.statsUnlocked':'Two shops! In Settings, Statistics, I prepared charts and the totals of all your bakeries.',
+  'bob.refuse':'No. I\'m not talking to you.|Figure it out.|Ask someone else.|Don\'t feel like it.|Go read the wiki.|You think I\'ll help you, after that?|…',
+  'bob.grumbleA':'Fine. Quickly.|If it\'ll shut you up:|Short version:','bob.grumbleB':'Fine, OK.|If I must.|I\'ll tell you this.','bob.grumbleC':'I feel a bit better, so listen.|Here, let me explain.|Thanks for the sugar. So:',
+  'bob.idle':'Still there? If you\'re leaving, there\'s a pause button at the top. Or the Esc key.',
+  'bob.bldSoon':'Your {{i}} delivery ({{n}}) arrives in one minute!',
+  'unl.research':'Level 2! Something new: click a blinking ingredient or recipe to unlock it, then wait a little.',
+  'unl.machines':'Check the Machines tab: one more oven means one more batch at the same time. A whisk makes it faster. They stay, but only in this bakery.',
+  'unl.staff':'Level 5! You can hire. Start a search in the Employees tab. A collector produces an ingredient every second. Careful: an unpaid or demoralized employee ends up quitting.',
+  'unl.baker':'Level 10: the baker! They lower baking time.',
+  'unl.carrier':'Level 20: the carrier! With two bakeries, they take money or stock from one to the other. Click them to set it up.',
+  'unl.manager':'Level 25: the manager! They lift the team\'s morale and can hire for you. Click them to set it up.',
+  'unl.orders':'Level 30: orders! Customers ask for cakes, and the harder it is, the more it pays. The head waiter delivers them for you.',
+  'unl.seller':'Level 35: the seller! They sell on their own, but slowly if alone. You can choose the share of stock they may sell.',
+  'unl.buildings':'Level 40: buildings! They don\'t produce every second: they deliver a huge amount at once, once an hour.',
+  'unl.rebirth':'With enough money, you can also rebirth: you restart from zero with a permanent bonus.',
+  'unl.chef':'Level 65: the head chef! They bake on their own with what\'s in stock. Click them to choose what they bake.',
+  'unl.buyer':'Level 90: the purveyor! They order the missing ingredients. Delivery takes a little while.',
+  'unl.top':'Level 1000! You\'ve seen it all. You can keep rising, but this is the end of the road. Well done.',
+  'console.machineSet':'{{n}}: level {{a}} / {{b}}','console.machineName':'NAME','console.machineUnknown':'Unknown machine. The machines: ','console.creativeOn':'Creative mode: everything is infinite!','console.creativeOff':'Creative mode off, your game is back.','console.creativeNone':'Creative mode is not on.',
+});
+
+// Bob a beaucoup plus de choses a dire
+LANGS.fr['bob.p0'] += '|Attention, le four est chaud.|Tu as vu mon fouet ? Il est neuf.|J\'adore l\'odeur de la vanille le matin.|Un jour, j\'ouvrirai ma propre pâtisserie. Ah non, c\'est la tienne.|Goûte ça. Non, attends, ça brûle.|Tu savais qu\'un robot pouvait avoir faim ?|Je compte les cookies. Il en manque un.|Ta boutique sent bon aujourd\'hui.|Si tu cherches la farine, elle est partout sur moi.|Bonjour, bonsoir, je ne sais plus, je n\'ai pas de fenêtre.';
+LANGS.fr['bob.p1'] += '|Je vais finir par le noter quelque part.|Un clic de plus et je boude.|Tu n\'as vraiment rien d\'autre à faire ?|C\'est un fouet, pas un jouet. Et moi non plus.|Mes capteurs commencent à chauffer.|Je t\'ai à l\'œil. Aux deux, même.';
+LANGS.fr['bob.p2'] += '|J\'ai déjà brûlé des gâteaux pour moins que ça.|Je préviens, je vais me fâcher.|Tu veux vraiment voir ce qu\'il y a après ?|Mes circuits n\'aiment pas ça.|Va cliquer sur un ingrédient, tiens !|Je perds ma patience, et elle était déjà petite.';
+LANGS.fr['bob.p3'] += '|JE VAIS TOUT SALER !|PLUS JAMAIS DE MACARONS POUR TOI !|MA VISIÈRE VIRE AU ROUGE, TU VOIS ?!|JE DÉMONTE LE FOUR !|QUI T\'A APPRIS À CLIQUER, D\'ABORD ?!|ÇA VA MAL FINIR, JE TE LE DIS !';
+LANGS.fr['bob.p4'] += '|TOUT VA BRÛLER !|ERREUR 404 : PATIENCE INTROUVABLE !|JE VAIS FAIRE UN GÂTEAU AU VINAIGRE !|ARRÊTE ! ARRÊTE ! ARRÊTE !|PLUS DE SUCRE ! PLUS RIEN !';
+LANGS.fr['bob.sour'] += '|Même le four a arrêté de me parler.|Je fouette dans le vide, comme tous les jours.|Avant, je sifflais en cuisinant.|Tes clients ne me regardent même plus.|La crème retombe. Moi aussi.|Pourquoi cuire, au fond ?';
+LANGS.en['bob.p0'] += '|Careful, the oven is hot.|Have you seen my whisk? It\'s new.|I love the smell of vanilla in the morning.|One day I\'ll open my own bakery. Oh wait, it\'s yours.|Taste this. No, wait, it\'s burning.|Did you know a robot can be hungry?|I\'m counting cookies. One is missing.|Your shop smells good today.|If you\'re looking for the flour, it\'s all over me.|Good morning, good evening, I can\'t tell, I have no window.';
+LANGS.en['bob.p1'] += '|I\'m going to write this down somewhere.|One more click and I sulk.|Do you really have nothing else to do?|It\'s a whisk, not a toy. And neither am I.|My sensors are getting warm.|I\'ve got my eye on you. Both eyes, actually.';
+LANGS.en['bob.p2'] += '|I\'ve burned cakes for less than this.|I\'m warning you, I\'ll get angry.|Do you really want to see what comes next?|My circuits don\'t like this.|Go click on an ingredient instead!|I\'m losing my patience, and it was small to begin with.';
+LANGS.en['bob.p3'] += '|I\'LL SALT EVERYTHING!|NO MORE MACARONS FOR YOU!|MY VISOR IS TURNING RED, SEE?!|I\'M TAKING THE OVEN APART!|WHO TAUGHT YOU TO CLICK ANYWAY?!|THIS WILL END BADLY, I\'M TELLING YOU!';
+LANGS.en['bob.p4'] += '|EVERYTHING WILL BURN!|ERROR 404: PATIENCE NOT FOUND!|I\'LL BAKE A VINEGAR CAKE!|STOP! STOP! STOP!|NO MORE SUGAR! NOTHING!';
+LANGS.en['bob.sour'] += '|Even the oven stopped talking to me.|I whisk at nothing, like every day.|I used to whistle while cooking.|Your customers don\'t even look at me anymore.|The cream is falling. So am I.|Why bake, really?';

@@ -66,6 +66,14 @@ function createFreshState() {
     loans: [],
     nextLoanId: 1,
     machines: {},
+    unlocks: { done: {}, pending: {} },
+    sales: [],
+    searches: [],
+    deliveries: [],
+    bldTimers: {},
+    sellerSold: {},
+    explained: {},
+    creative: false,
     orders: [],
     nextOrderId: 1,
     nextOrderAt: 0,
@@ -106,7 +114,7 @@ function createFreshState() {
       ordersDone: 0,
       earnedById: {},
     },
-    saveVersion: 11,
+    saveVersion: 12,
   };
   ING.forEach(function(i) { state.ing[i.id] = 0; });
   REC.forEach(function(r) { state.cakes[r.id] = 0; state.soldCount[r.id] = 0; });
@@ -193,6 +201,15 @@ function migrateSave(data) {
     if (data.bobClicks >= 50) data.bobSad = 4;
     data.saveVersion = 11;
   }
+  // Avant la Beta 1.4 : ce que tu avais deja reste debloque, et les fours deviennent une machine
+  if (data.saveVersion < 12) {
+    ING.forEach(function(i) { if (i.unlockLvl <= data.level) data.unlocks.done['ing:' + i.id] = true; });
+    REC.forEach(function(r) { if (r.unlockLvl <= data.level) data.unlocks.done['rec:' + r.id] = true; });
+    if (data.ovens > 2) data.machines.four = Math.min(10, Math.ceil((data.ovens - 2) / 3));
+    data.employees.forEach(function(e) { if ((e.level || 1) > 5) e.level = 5; });
+    if (typeof UNLOCK_TALKS !== 'undefined') UNLOCK_TALKS.forEach(function(x) { if (x[0] <= data.level) data.explained[x[1]] = true; });
+    data.saveVersion = 12;
+  }
   // Les autres patisseries sont sauvegardees a l'interieur de celle-ci
   data.bakeries.forEach(function(b) { if (b.state) b.state = migrateSave(b.state); });
   if (!LANGS[data.settings.lang]) data.settings.lang = 'fr';
@@ -204,6 +221,7 @@ function migrateSave(data) {
 var saveWarningShown = false;
 
 function save() {
+  if (typeof capMoney === 'function') capMoney();
   G.lastTick = Date.now();
   try {
     var json = JSON.stringify(G);

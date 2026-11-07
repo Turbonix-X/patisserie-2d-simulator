@@ -34,6 +34,7 @@ function settingsPaneHTML() {
 }
 
 function showSettingsModal() {
+  beginMenuPause();
   var tabs = [['general', 'settings.tabGeneral', 'globe'], ['look', 'settings.tabLook', 'palette'], ['audio', 'settings.tabAudio', 'music'], ['save', 'settings.tabSave', 'save'], ['ach', 'settings.tabAch', 'ach'], ['stats', 'settings.tabStats', 'stats']];
   var h = '<div class="set-head"><h2>' + uiIcon('settings') + t('settings.title') + '</h2>';
   h += '<button class="icon-btn" onclick="closeMenu()" aria-label="' + escH(t('common.close')) + '" title="' + escH(t('common.close')) + '">' + uiIcon('close') + '</button></div>';
@@ -276,6 +277,7 @@ function confirmResetGame() {
 
 // ============ PAUSE ============
 function togglePause() {
+  endMenuPause();
   G.paused = !G.paused;
   if (G.paused) {
     G.pausedAt = Date.now();
@@ -297,6 +299,11 @@ function shiftGameTimers(ms) {
   if (G.activeEvent) G.eventEndTime += ms;
   G.lastEventTime += ms;
   G.applicants.forEach(function(a) { a.expiresAt += ms; });
+  G.sales.forEach(function(s) { s.at += ms; s.start += ms; });
+  G.searches.forEach(function(s) { s.doneAt += ms; });
+  G.deliveries.forEach(function(d) { d.at += ms; });
+  G.employees.forEach(function(e) { if (e.trainingUntil) e.trainingUntil += ms; });
+  Object.keys(G.unlocks.pending).forEach(function(k) { G.unlocks.pending[k] += ms; });
   G.orders.forEach(function(o) { o.expiresAt += ms; });
   if (G.nextOrderAt) G.nextOrderAt += ms;
 }

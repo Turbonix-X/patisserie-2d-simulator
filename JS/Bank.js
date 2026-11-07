@@ -7,14 +7,14 @@
 // ============ BOB QUI PARLE EN GRAND ============
 function bobFigure() {
   var svg = document.querySelector('#bob svg');
-  return '<div class="bob-talk-figure bob-fig" data-anger="' + bobStage(true) + '">' + (svg ? svg.outerHTML : '') + '</div>';
+  return '<div class="bob-talk-figure bob-fig" data-anger="' + bobStage() + '">' + (svg ? svg.outerHTML : '') + '</div>';
 }
 
 // Plusieurs repliques a la suite, puis une action
 var bobDialog = null;
 
 function showBobDialog(lines, lastLabel, onDone) {
-  bobDialog = { lines: lines, i: 0, lastLabel: lastLabel, onDone: onDone };
+  bobDialog = { lines: bobFilterLines(lines), i: 0, lastLabel: lastLabel, onDone: onDone };
   renderBobDialog();
 }
 

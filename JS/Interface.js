@@ -8,11 +8,11 @@ var ui = {
   recSearch: '',
   recOnlyMakable: false,
   recOnlyFav: false,
-  recSort: 'new',
   ingSearch: '',
   achCat: 'general',
   settingsTab: 'general',
   statsView: 'here',
+  recSort: 'old',
   chartTable: false,
   pauseTip: null,
   guideCat: 'all',
@@ -91,9 +91,7 @@ function removeToast(msg, div) {
 function showLevelUp(lvl) {
   if (typeof bgTick !== 'undefined' && bgTick) return;
   toast(t('xp.level', { v: lvl }));
-  if (lvl === ORDER_CONFIG.lvl) bobSay(t('order.unlocked'));
-  if (lvl === MACHINE_LVL) bobSay(t('mach.unlocked'));
-  if (lvl === BUILDINGS_LVL) bobSay(t('bld.unlocked'));
+  explainLevel(lvl);
   fxLevelUp();
   playSuccessSound();
   if (lvl === 1000 && !G.lvl1000Shown) {
@@ -198,7 +196,7 @@ function visibleTabs() {
   if (G.level >= BUILDINGS_LVL || buildingsOwned() > 0) tabs.push('bld');
   tabs.push('emp');
   if (G.level >= ORDER_CONFIG.lvl) tabs.push('orders');
-  if (G.level >= MACHINE_LVL) tabs.push('machines');
+  tabs.push('machines');
   if (G.bankUnlocked) tabs.push('bank');
   return tabs;
 }
@@ -241,39 +239,52 @@ function switchTab(tab) {
 }
 
 // ============ INGREDIENTS ============
+// Singulier pour une seule unite : 1 Oeuf, 2 Oeufs
+function ingName(id, count) {
+  if (count !== undefined && count < 2 && LANGS[currentLang]['is.' + id]) return t('is.' + id);
+  return t('i.' + id);
+}
+
 function renderIngredients() {
   var el = document.getElementById('ingredients');
   if (!el) return;
-  var unlocked = ING.filter(function(i) { return i.unlockLvl <= G.level; });
-  var h = '<div class="panel-head"><h2>' + t('ing.title') + '</h2>' + bulkChips() + '</div>';
-  if (unlocked.length > 12) {
+  var h = '<div class="panel-head"><h2>' + t('ing.title') + '</h2></div>';
+  var known = ING.filter(ingUnlocked);
+  if (known.length > 12) {
     h += '<input class="panel-search" type="search" placeholder="' + escH(t('ing.search')) + '" value="' + escH(ui.ingSearch) + '" oninput="ui.ingSearch=this.value;renderIngredients()">';
   }
   h += '<div class="ing-grid">';
   var search = ui.ingSearch.trim().toLowerCase();
   var perClick = clickMult();
-  var bulk = G.settings.bulk;
+  var now = Date.now();
   ING.forEach(function(ing) {
-    if (ing.unlockLvl > G.level + 3) return;
-    if (ing.unlockLvl > G.level) {
-      if (!search) h += '<div class="ing-card locked"><div class="ing-emoji">\u{1F512}</div><div class="ing-name">' + t('ing.locked', { v: ing.unlockLvl }) + '</div></div>';
+    if (!ingUnlocked(ing)) {
+      if (search || ing.unlockLvl > G.level + 3) return;
+      var pending = unlockPending('ing', ing);
+      if (pending) {
+        h += '<div class="ing-card locked researching"><div class="ing-emoji">' + ing.e + '</div><div class="ing-name">' + t('i.' + ing.id) + '</div><div class="ing-info">' + t('unlock.waiting', { v: fmtTime(Math.max(0, (pending - now) / 1000)) }) + '</div></div>';
+      } else if (ing.unlockLvl <= G.level) {
+        h += '<div class="ing-card can-unlock" role="button" tabindex="0" onclick="doUnlock(\'ing\',\'' + ing.id + '\')"><div class="ing-emoji">' + ing.e + '</div><div class="ing-name">' + t('i.' + ing.id) + '</div><div class="unlock-tag">' + uiIcon('search') + t('unlock.btn', { v: fmtTime(unlockDelay(ing)) }) + '</div></div>';
+      } else {
+        h += '<div class="ing-card locked"><div class="ing-emoji">\u{1F512}</div><div class="ing-name">' + t('ing.locked', { v: ing.unlockLvl }) + '</div></div>';
+      }
       return;
     }
-    var name = t('i.' + ing.id);
-    if (search && name.toLowerCase().indexOf(search) < 0) return;
     var count = G.ing[ing.id] || 0;
+    var name = ingName(ing.id, count);
+    if (search && t('i.' + ing.id).toLowerCase().indexOf(search) < 0) return;
     var auto = autoRate(ing.id);
     var cost = getIngredientCost(ing);
     h += '<div class="ing-card' + (G.money >= cost ? '' : ' cant-afford') + '" data-ing="' + ing.id + '" role="button" tabindex="0" aria-label="' + escH(name) + '" title="' + escH(name) + '" onclick="if(!event.target.closest(\'button\'))doClickIngredient(\'' + ing.id + '\')" onkeydown="ingKey(event,\'' + ing.id + '\')">';
     h += '<div class="ing-emoji">' + ing.e + '</div>';
     h += '<div class="ing-name">' + name + '</div>';
     h += '<div class="ing-count">' + fmt(count) + '</div>';
-    h += '<div class="ing-info">' + t('ing.perClick', { v: bulk === 'max' ? t('bulk.max') : fmtQty(perClick * parseInt(bulk, 10)) }) + '</div>';
+    h += '<div class="ing-info">' + t('ing.perClick', { v: fmtQty(perClick) }) + '</div>';
     if (auto > 0) h += '<div class="ing-auto">' + t('ing.autoRate', { v: fmtQty(auto) }) + '</div>';
     h += '<div class="ing-cost">' + t('ing.cost', { v: fmtMoney(cost) }) + '</div>';
     h += '<div class="ing-actions">';
     // Toujours en place, invisible a 0, pour que les cartes ne bougent pas
-    var resellQty = resellAmount(ing, bulk);
+    var resellQty = resellAmount(ing, '1');
     var resellValue = getIngredientResellPrice(ing) * resellQty;
     h += '<button class="btn-tiny' + (count >= 1 ? '' : ' ghosted') + '" onclick="doResellIngredient(\'' + ing.id + '\')" title="' + escH(t('ing.resellTip', { q: fmtQty(resellQty), v: fmtMoney(resellValue) })) + '">' + t('ing.resell') + ' ' + fmtMoney(resellValue) + '</button>';
     if (ing.craftable) {
@@ -285,6 +296,16 @@ function renderIngredients() {
   });
   h += '</div>';
   setHTML(el, h);
+}
+
+function doUnlock(kind, id) {
+  var item = kind === 'ing' ? findIng(id) : findRec(id);
+  if (item && startUnlock(kind, item)) {
+    playClickSound();
+    toast(t('unlock.started', { n: kind === 'ing' ? t('i.' + id) : recShortName(item), v: fmtTime(unlockDelay(item)) }));
+    renderIngredients();
+    renderMainPanel();
+  }
 }
 
 function ingKey(e, ingId) {
@@ -305,7 +326,7 @@ function doClickIngredient(ingId) {
   }
   var ing = findIng(ingId);
   if (!ing) return;
-  var units = buyIngredient(ing, G.settings.bulk);
+  var units = buyIngredient(ing, '1');
   if (units === false) {
     toast(t('ing.noMoney'));
     playErrorSound();
@@ -323,7 +344,7 @@ function doClickIngredient(ingId) {
 function doResellIngredient(ingId) {
   var ing = findIng(ingId);
   if (!ing) return;
-  var amount = resellAmount(ing, G.settings.bulk);
+  var amount = resellAmount(ing, '1');
   if (amount <= 0) return;
   var earned = resellIngredient(ing, amount);
   if (earned > 0) {
@@ -369,7 +390,7 @@ function recipeProfit(rec) {
 function visibleRecipes() {
   var search = ui.recSearch.trim().toLowerCase();
   var list = REC.filter(function(rec) {
-    if (rec.unlockLvl > G.level) return false;
+    if (!recUnlocked(rec)) return false;
     if (ui.recOnlyMakable && craftBlockReason(rec)) return false;
     if (ui.recOnlyFav && !G.favRecipes[rec.id]) return false;
     if (search && t('r.' + rec.id).toLowerCase().indexOf(search) < 0) return false;
@@ -391,18 +412,10 @@ function renderRecipes() {
   h += '<button class="chip' + (ui.recOnlyMakable ? ' active' : '') + '" onclick="ui.recOnlyMakable=!ui.recOnlyMakable;renderRecipes()">' + t('rec.onlyMakable') + '</button>';
   h += '<button class="chip' + (ui.recOnlyFav ? ' active' : '') + '" onclick="ui.recOnlyFav=!ui.recOnlyFav;renderRecipes()">' + uiIcon('star') + t('rec.onlyFav') + '</button>';
   h += '<select class="sort-select" onchange="ui.recSort=this.value;renderRecipes()">';
-  [['new', 'rec.sortNew'], ['old', 'rec.sortOld'], ['profit', 'rec.sortProfit']].forEach(function(o) {
+  [['old', 'rec.sortOld'], ['new', 'rec.sortNew'], ['profit', 'rec.sortProfit']].forEach(function(o) {
     h += '<option value="' + o[0] + '"' + (ui.recSort === o[0] ? ' selected' : '') + '>' + t(o[1]) + '</option>';
   });
   h += '</select></div>';
-
-  // Ce qui arrive bientot
-  if (!ui.recSearch && !ui.recOnlyMakable && !ui.recOnlyFav) {
-    var next = REC.filter(function(r) { return r.unlockLvl > G.level && r.unlockLvl <= G.level + 2; });
-    next.forEach(function(rec) {
-      h += '<div class="rec-card locked"><span class="rec-emoji">\u{1F512}</span> ' + t('ing.locked', { v: rec.unlockLvl }) + '</div>';
-    });
-  }
 
   var list = visibleRecipes();
   if (list.length === 0) h += '<p class="empty-note">' + t('rec.none') + '</p>';
@@ -411,7 +424,7 @@ function renderRecipes() {
     h += '<div class="rec-card' + (block ? ' disabled' : '') + '">';
     h += '<span class="rec-emoji">' + rec.e + '</span>';
     h += '<div class="rec-info">';
-    h += '<div class="rec-name"><button class="fav-btn' + (G.favRecipes[rec.id] ? ' on' : '') + '" onclick="toggleFav(\'' + rec.id + '\')" title="' + escH(t('rec.fav')) + '" aria-label="' + escH(t('rec.fav')) + '">' + uiIcon('star') + '</button>' + t('r.' + rec.id) + '</div>';
+    h += '<div class="rec-name"><button class="fav-btn' + (G.favRecipes[rec.id] ? ' on' : '') + '" aria-pressed="' + !!G.favRecipes[rec.id] + '" onclick="toggleFav(\'' + rec.id + '\')" title="' + escH(t('rec.fav')) + '" aria-label="' + escH(t('rec.fav')) + '">' + uiIcon('star') + '</button>' + t('r.' + rec.id) + '</div>';
     h += '<div class="rec-req">';
     for (var k in rec.req) {
       var have = G.ing[k] || 0;
@@ -433,12 +446,23 @@ function renderRecipes() {
     h += '<div class="rec-actions">';
     h += '<button class="btn btn-primary rec-btn" onclick="doCraft(\'' + rec.id + '\')"' + (block ? ' disabled' : '') + '>' + t('rec.prepare') + '</button>';
     if (!block) h += '<button class="btn btn-small" onclick="doCraftMax(\'' + rec.id + '\')">' + t('rec.prepareMax') + '</button>';
-    var miss = missingCost(rec);
-    if (block === 'ing') {
-      h += '<button class="btn btn-small" onclick="doBuyMissing(\'' + rec.id + '\')"' + (G.money < miss ? ' disabled' : '') + ' title="' + escH(t('rec.buyMissing', { v: fmtMoney(miss) })) + '">' + uiIcon('cart') + fmtMoney(miss) + '</button>';
-    }
     h += '</div></div>';
   });
+  // Ce qui reste a debloquer vient en bas : plus on descend, plus c'est rare
+  if (!ui.recSearch && !ui.recOnlyMakable && !ui.recOnlyFav) {
+    var now = Date.now();
+    REC.forEach(function(rec) {
+      if (recUnlocked(rec) || rec.unlockLvl > G.level + 2) return;
+      var pending = unlockPending('rec', rec);
+      if (pending) {
+        h += '<div class="rec-card locked researching"><span class="rec-emoji">' + rec.e + '</span> ' + recShortName(rec) + ' · ' + t('unlock.waiting', { v: fmtTime(Math.max(0, (pending - now) / 1000)) }) + '</div>';
+      } else if (rec.unlockLvl <= G.level) {
+        h += '<button type="button" class="rec-card can-unlock" onclick="doUnlock(\'rec\',\'' + rec.id + '\')"><span class="rec-emoji">' + rec.e + '</span> <b>' + recShortName(rec) + '</b> <span class="unlock-tag">' + uiIcon('search') + t('unlock.btn', { v: fmtTime(unlockDelay(rec)) }) + '</span></button>';
+      } else {
+        h += '<div class="rec-card locked"><span class="rec-emoji">\u{1F512}</span> ' + t('ing.locked', { v: rec.unlockLvl }) + '</div>';
+      }
+    });
+  }
   setHTML(el, h);
 }
 
@@ -480,18 +504,6 @@ function doCraftMax(recId) {
   }
 }
 
-function doBuyMissing(recId) {
-  var rec = findRec(recId);
-  if (rec && buyMissing(rec)) {
-    toast(t('rec.bought'));
-    playClickSound();
-    renderRecipes();
-    renderIngredients();
-    renderHeader();
-    tutorialCheck();
-  }
-}
-
 // ============ VENTES ============
 function renderSell() {
   var el = document.getElementById('main-panel');
@@ -512,8 +524,8 @@ function renderSell() {
     if (pct > 0) h += ' <span class="infl-up">' + t('sell.inflUp', { v: pct }) + '</span>';
     else if (pct < 0) h += ' <span class="infl-down">' + t('sell.inflDown', { v: pct }) + '</span>';
     h += '</div></div><div class="sell-btns">';
-    h += '<button class="btn btn-small sell-btn-single" onclick="doSellClick(\'' + rec.id + '\',1,this)">' + t('sell.sell') + '</button>';
-    if (stock > 1) h += '<button class="btn btn-small btn-primary sell-btn-all" onclick="doSellClick(\'' + rec.id + '\',' + stock + ',this)">' + t('sell.sellAll') + ' (' + fmtMoney(batchPrice(rec, stock)) + ')</button>';
+    h += '<button class="btn btn-small sell-btn-single" onclick="doSellClick(\'' + rec.id + '\',1)">' + t('sell.sell') + '</button>';
+    if (stock > 1) h += '<button class="btn btn-small btn-primary sell-btn-all" onclick="doSellClick(\'' + rec.id + '\',' + stock + ')">' + t('sell.sellAll') + ' (' + fmtMoney(batchPrice(rec, stock)) + ')</button>';
     h += '</div></div>';
   });
   if (!any) h += '<p class="empty-note">' + t('sell.noStock') + '</p>';
@@ -527,24 +539,33 @@ function afterSell() {
   tutorialCheck();
 }
 
-function doSellClick(recId, qty, btnElem) {
+function doSellClick(recId, qty) {
   var rec = findRec(recId);
-  if (!rec) return;
-  var earned = doSell(rec, qty);
-  if (earned > 0) {
-    playSellSound();
-    showFloatingMoney(earned, btnElem);
+  if (rec && queueSale([{ rec: rec, qty: qty }]) > 0) {
+    playClickSound();
     afterSell();
+    renderCraftingBar();
   }
 }
 
 function doSellAllClick() {
-  var earned = doSellAll();
+  var items = REC.filter(function(r) { return (G.cakes[r.id] || 0) > 0; }).map(function(r) { return { rec: r, qty: G.cakes[r.id] }; });
+  if (queueSale(items) > 0) {
+    playClickSound();
+    afterSell();
+    renderCraftingBar();
+  }
+}
+
+// L'argent des ventes arrive apres un petit moment
+function tickSalesUI() {
+  var earned = tickSales();
   if (earned > 0) {
     playSellSound();
     showFloatingMoney(earned, null);
     toast(t('sell.earnedAll', { v: fmtMoney(earned) }));
-    afterSell();
+    renderHeader();
+    tutorialCheck();
   }
 }
 
@@ -577,7 +598,8 @@ function renderBuildings() {
     var info = buildingBulkInfo(bld);
     h += '<div class="bld-card"><span class="bld-emoji">' + bld.e + '</span><div class="bld-info">';
     h += '<div class="bld-name">' + t('b.' + bld.id) + ' <span class="bld-qty">' + t('bld.qty', { v: qty }) + '</span></div>';
-    h += '<div class="bld-prod" title="' + escH(t('i.' + bld.produces)) + '">' + t('bld.prod', { v: fmtQty(bld.baseRate * qty) }) + ' ' + getIngEmoji(bld.produces) + ' ' + t('i.' + bld.produces) + '</div>';
+    var deliveryLeft = qty > 0 ? (G.bldTimers[bld.id] || BLD_CYCLE_SEC) : BLD_CYCLE_SEC;
+    h += '<div class="bld-prod" title="' + escH(t('i.' + bld.produces)) + '">' + getIngEmoji(bld.produces) + ' ' + (qty > 0 ? t('bld.delivery', { q: fmt(buildingDelivery(bld)), n: t('i.' + bld.produces), t: fmtTime(deliveryLeft) }) : t('bld.eachHour', { n: t('i.' + bld.produces) })) + '</div>';
     h += '<div class="bld-cost">' + fmtMoney(info.cost) + '</div></div>';
     h += '<button class="btn btn-primary" onclick="doBuyBuilding(\'' + bld.id + '\')"' + (G.money < info.cost ? ' disabled' : '') + '>' + t('bld.buy') + ' ×' + fmt(info.shown) + '</button></div>';
   });
@@ -598,192 +620,6 @@ function doBuyBuilding(bldId) {
   }
 }
 
-function doBuyOven() {
-  if (buyOven()) {
-    toast(t('oven.bought'));
-    playSuccessSound();
-    renderSpaceBar();
-    renderMainPanel();
-    renderHeader();
-    renderCraftingBar();
-  }
-}
-
-// ============ EMPLOYES ============
-function renderEmployees() {
-  var el = document.getElementById('main-panel');
-  if (!el) return;
-  var h = '<div class="panel-head"><h2>' + t('emp.title') + '</h2></div>';
-  var sal = totalSalary();
-  if (sal > 0) h += '<div class="emp-total-salary">' + t('emp.totalSalary', { v: fmtMoney(sal * 3600) }) + '</div>';
-  // Recruter tout de suite
-  var open = EMP_TYPES.filter(empTypeOpen);
-  if (open.length === 0) {
-    h += '<p class="empty-note">' + t('emp.lockedAll') + '</p>';
-  } else {
-    h += '<div class="recruit-section"><h4>' + t('emp.recruit') + '</h4><div class="recruit-row">';
-    open.forEach(function(et) {
-      var c = recruitCost(et);
-      h += '<button class="btn btn-small" onclick="doRecruit(\'' + et.id + '\')"' + (G.money < c ? ' disabled' : '') + ' title="' + escH(t('emp.desc.' + et.id)) + '">' + t('emp.recruitBtn', { n: t('emp.' + et.id), c: fmtMoney(c) }) + '</button>';
-    });
-    h += '</div><p class="hint-note">' + t('emp.recruitHint') + '</p></div>';
-  }
-  if (G.applicants && G.applicants.length > 0) {
-    h += '<div class="applicants-section"><h4>' + t('emp.applicants') + ' (' + G.applicants.length + ')</h4>';
-    G.applicants.forEach(function(app) {
-      var remaining = Math.max(0, Math.ceil((app.expiresAt - Date.now()) / 1000));
-      h += '<div class="applicant-card" title="' + escH(t('emp.desc.' + app.type)) + '">';
-      h += '<span class="app-name">' + escH(app.name) + '</span>';
-      h += '<span class="app-type">' + t('emp.' + app.type) + '</span>';
-      h += '<span class="app-skill">' + t('emp.skill', { v: app.skill }) + '</span>';
-      h += '<span class="app-cost">' + fmtMoney(app.hireCost) + '</span>';
-      h += '<span class="app-timer">' + fmtTime(remaining) + '</span>';
-      h += '<button class="btn btn-small btn-primary" onclick="doAcceptApplicant(' + app.id + ')"' + (G.money < app.hireCost ? ' disabled' : '') + '>' + t('emp.accept') + '</button>';
-      h += '<button class="btn btn-small btn-danger" onclick="doRejectApplicant(' + app.id + ')">' + t('emp.reject') + '</button>';
-      h += '</div>';
-    });
-    h += '</div>';
-  } else if (open.length > 0) {
-    h += '<p class="empty-note">' + t('emp.noApplicants') + '</p>';
-  }
-  if (G.employees.length > 0) {
-    h += '<div class="emp-list">';
-    G.employees.forEach(function(emp) {
-      var moraleColor = emp.morale > 60 ? 'morale-good' : (emp.morale > 30 ? 'morale-mid' : 'morale-bad');
-      var statusCls = emp.status === 'working' ? 'status-good' : (emp.status === 'striking' ? 'status-bad' : 'status-warn');
-      h += '<div class="emp-card" role="button" tabindex="0" onclick="if(!event.target.closest(\'select,label\'))showEmpInfoModal(' + emp.id + ')" title="' + escH(t('emp.desc.' + emp.type)) + '">';
-      h += '<div class="emp-header">';
-      h += '<span class="emp-name">' + escH(emp.name) + '</span>';
-      h += '<span class="emp-type">' + t('emp.' + emp.type) + '</span>';
-      h += '<span class="emp-status ' + statusCls + '">' + t('emp.' + emp.status) + '</span>';
-      h += '<span class="emp-skill-badge">' + t('emp.levelTxt', { v: emp.level || 1 }) + '</span>';
-      h += '<span class="app-skill">' + t('emp.skill', { v: emp.skill }) + '</span>';
-      h += '</div>';
-      h += '<div class="emp-morale-bar" title="' + escH(t('emp.morale')) + ' : ' + Math.floor(emp.morale) + '%"><div class="emp-morale-fill ' + moraleColor + '" style="width:' + Math.floor(emp.morale) + '%"></div></div>';
-      if (emp.type === 'collector') {
-        h += '<div class="emp-assign"><select onchange="assignCollector(' + emp.id + ',this.value)" aria-label="' + escH(t('emp.assign')) + '">';
-        ING.forEach(function(ing) {
-          if (ing.unlockLvl > G.level) return;
-          h += '<option value="' + ing.id + '"' + (emp.assignedIng === ing.id ? ' selected' : '') + '>' + t('i.' + ing.id) + '</option>';
-        });
-        h += '</select></div>';
-      }
-      if (emp.type === 'carrier') h += carrierControls(emp);
-      h += '</div>';
-    });
-    h += '</div>';
-  }
-  setHTML(el, h);
-}
-
-function carrierControls(emp) {
-  ensureBakeryList();
-  if (G.bakeries.length < 2) return '<div class="emp-assign"><span class="hint-note">' + t('carry.noShop') + '</span></div>';
-  var to = carrierTarget(emp, G.currentBakeryIndex);
-  var h = '<div class="emp-assign carrier-assign"><label>' + t('carry.to') + ' <select onchange="assignCarrier(' + emp.id + ',\'to\',this.value)">';
-  G.bakeries.forEach(function(b, i) {
-    if (i === G.currentBakeryIndex) return;
-    h += '<option value="' + bakeryUid(b) + '"' + (i === to ? ' selected' : '') + '>' + escH(b.name) + '</option>';
-  });
-  h += '</select></label><label>' + t('carry.what') + ' <select onchange="assignCarrier(' + emp.id + ',\'what\',this.value)">';
-  ['money', 'cakes', 'ings'].forEach(function(w) {
-    h += '<option value="' + w + '"' + ((emp.carryWhat || 'money') === w ? ' selected' : '') + '>' + t('carry.' + w) + '</option>';
-  });
-  return h + '</select></label></div>';
-}
-
-function assignCarrier(empId, field, value) {
-  var emp = findEmp(empId);
-  if (!emp) return;
-  if (field === 'to') emp.carryTo = value;
-  else emp.carryWhat = value;
-}
-
-function assignCollector(empId, ingId) {
-  var emp = findEmp(empId);
-  if (emp) emp.assignedIng = ingId;
-}
-
-function doRecruit(typeId) {
-  if (hireEmployee(typeId)) {
-    toast(t('emp.hired'));
-    renderEmployees();
-    renderHeader();
-    renderTabs();
-  }
-}
-
-function doAcceptApplicant(appId) {
-  if (acceptApplicant(appId)) {
-    toast(t('emp.hired'));
-    renderEmployees();
-    renderHeader();
-    renderTabs();
-  }
-}
-
-function doRejectApplicant(appId) {
-  rejectApplicant(appId);
-  renderEmployees();
-  renderTabs();
-}
-
-function showEmpInfoModal(empId) {
-  var emp = findEmp(empId);
-  if (!emp) return;
-  var h = '<h2>' + escH(emp.name) + '</h2>';
-  h += '<div class="emp-info-modal">';
-  h += '<p><strong>' + t('emp.' + emp.type) + '</strong> : ' + t('emp.desc.' + emp.type) + '</p>';
-  h += '<p>' + t('emp.levelTxt', { v: emp.level || 1 }) + ' · ' + t('emp.skill', { v: emp.skill }) + '</p>';
-  h += '<p>' + t('emp.morale') + ' : ' + Math.floor(emp.morale) + ' %</p>';
-  h += '<p>' + t('emp.salary', { v: fmtMoney(getEmpSalary(emp) * 3600) }) + '</p>';
-  if (emp.type === 'collector') h += '<p>' + t('emp.assign') + ' : ' + t('i.' + (emp.assignedIng || 'farine')) + '</p>';
-  h += '<button class="btn btn-primary" onclick="doTrainEmployee(' + emp.id + ')">' + t('emp.trainBtn', { v: fmtMoney(getTrainCost(emp)) }) + '</button>';
-  h += '<button class="btn" onclick="doGiveBonus(' + emp.id + ')">' + t('emp.bonus', { v: fmtMoney(getBonusCost(emp)) }) + '</button>';
-  h += '<button class="btn btn-danger" onclick="confirmFire(' + emp.id + ')">' + t('emp.fire') + '</button>';
-  h += '</div>';
-  h += '<div class="modal-btns"><button class="btn" onclick="hideModal()">' + t('common.close') + '</button></div>';
-  showModal(h);
-}
-
-function doTrainEmployee(empId) {
-  if (trainEmployee(empId)) {
-    toast(t('emp.trained'));
-    showEmpInfoModal(empId);
-    renderEmployees();
-    renderHeader();
-  } else {
-    toast(t('ing.noMoney'));
-    playErrorSound();
-  }
-}
-
-function doGiveBonus(empId) {
-  if (giveBonus(empId)) {
-    toast(t('emp.bonusDone'));
-    showEmpInfoModal(empId);
-    renderEmployees();
-    renderHeader();
-  } else {
-    playErrorSound();
-  }
-}
-
-function confirmFire(empId) {
-  var emp = findEmp(empId);
-  if (!emp) return;
-  var h = '<h2>' + t('emp.fire') + '</h2><p>' + t('emp.fireConfirm', { n: escH(emp.name) }) + '</p>';
-  h += '<div class="modal-btns"><button class="btn btn-danger" onclick="doFireEmployee(' + emp.id + ')">' + t('common.yes') + '</button>';
-  h += '<button class="btn" onclick="showEmpInfoModal(' + emp.id + ')">' + t('common.cancel') + '</button></div>';
-  showModal(h);
-}
-
-function doFireEmployee(empId) {
-  fireEmployee(empId);
-  hideModal();
-  renderEmployees();
-}
-
 // ============ SUCCES ============
 function onAchievementUnlocked() {
   playSuccessSound();
@@ -795,7 +631,7 @@ function renderSpaceBar() {
   var el = document.getElementById('space-bar');
   if (!el) return;
   var used = usedSpace() + reservedSpace();
-  var max = G.maxSpace;
+  var max = maxSpaceNow();
   var pct = max > 0 ? Math.min(100, Math.floor(used / max * 100)) : 0;
   var h = '<div class="space-row"><div class="space-usage-wrap">';
   h += '<span>' + t('space.label') + ' : ' + t('space.text', { u: used < 1000 ? used.toFixed(1) : fmt(used), m: fmt(max) }) + '</span>';
@@ -807,9 +643,6 @@ function renderSpaceBar() {
     else h += '<button class="btn btn-small btn-primary" onclick="doBuySpace()"' + (G.money < su.cost ? ' disabled' : '') + '>' + t('space.buy', { a: fmt(su.add), c: fmtMoney(su.cost) }) + '</button>';
   } else {
     h += '<span class="space-rent">' + t('space.max') + '</span>';
-  }
-  if (G.ovens < OVEN_CONFIG.max) {
-    h += '<button class="btn btn-small" title="' + escH(t('oven.desc')) + '" onclick="doBuyOven()"' + (G.money < ovenCost() ? ' disabled' : '') + '>' + uiIcon('flame') + t('oven.buy', { c: fmtMoney(ovenCost()) }) + '</button>';
   }
   h += '</div>';
   setHTML(el, h);
@@ -830,7 +663,7 @@ function doBuySpace() {
 function renderCraftingBar() {
   var el = document.getElementById('crafting-bar');
   if (!el) return;
-  if (G.crafting.length === 0) { setHTML(el, ''); return; }
+  if (G.crafting.length === 0 && G.sales.length === 0) { setHTML(el, ''); return; }
   var now = Date.now();
   var groups = {};
   var order = [];
@@ -844,6 +677,11 @@ function renderCraftingBar() {
   var h = '<span class="oven-count" title="' + escH(t('oven.title')) + '">' + uiIcon('flame') + t('oven.label', { a: activeCrafts(), m: ovenSlots() });
   if (waiting > 0) h += ' · ' + t('oven.queue', { v: waiting });
   h += '</span>';
+  G.sales.forEach(function(sale) {
+    var pct = Math.min(100, Math.floor((now - sale.start) / SALE_DELAY_MS * 100));
+    h += '<div class="craft-item sale-item"><span class="craft-emoji">\u{1F4B0}</span><div class="craft-progress-wrap"><div class="craft-progress" style="width:' + pct + '%"></div>';
+    h += '<span class="craft-label">' + t('sell.selling', { v: fmtMoney(sale.total) }) + '</span></div></div>';
+  });
   order.forEach(function(key) {
     var grp = groups[key];
     var first = grp.items[0];
@@ -903,6 +741,7 @@ function dismissModal() {
 }
 
 function hideModal() {
+  endMenuPause();
   var el = document.getElementById('modal-overlay');
   if (!el || el.style.display === 'none') return;
   el.classList.add('closing');
@@ -913,6 +752,23 @@ function hideModal() {
     el.classList.remove('closing');
     modalCloseTimer = null;
   }, 160);
+}
+
+// Les reglages, les patisseries et la console arretent le temps
+var menuPause = { on: false, since: 0 };
+
+function beginMenuPause() {
+  if (G.paused || menuPause.on) return;
+  menuPause.on = true;
+  menuPause.since = Date.now();
+}
+
+function endMenuPause() {
+  if (!menuPause.on) return;
+  menuPause.on = false;
+  var ms = Date.now() - menuPause.since;
+  shiftGameTimers(ms);
+  shiftAllBakeries(ms);
 }
 
 function showRebirthModal() {
@@ -1003,6 +859,7 @@ function showBanOverlay(seconds) {
 
 // ============ PATISSERIES ============
 function showBakeriesModal() {
+  beginMenuPause();
   ensureBakeryList();
   var h = '<h2>' + t('bakery.title') + '</h2><p class="hint-note">' + t('bakery.help') + '</p>';
   var several = G.bakeries.length >= 2;
@@ -1053,11 +910,33 @@ function doSellBakery(index) {
 function doOpenNewBakery() {
   var first = !G.secondBakery;
   if (openNewBakery()) {
-    showBakeriesModal();
     fullRender();
     checkAchievements();
-    if (first) bobSay(t('bakery.statsUnlocked'));
+    showNameBakery(G.bakeries.length - 1, first);
   }
+}
+
+// Bob te felicite et te demande son nom
+function showNameBakery(index, first) {
+  var b = G.bakeries[index];
+  var h = '<div class="bob-talk">' + bobFigure() + '<div class="bob-talk-speech"><span class="bob-bubble-name">Bob</span>';
+  h += '<p>' + bobFilter(t('bakery.bobCongrats')) + '</p>';
+  h += '<input id="new-bakery-name" maxlength="30" value="' + escH(b.name) + '" onkeydown="if(event.key===\'Enter\')doNameBakery(' + index + ',' + !!first + ')">';
+  h += '<div class="bob-talk-foot"><span></span><button class="btn btn-primary" onclick="doNameBakery(' + index + ',' + !!first + ')">' + t('common.next') + '</button></div></div></div>';
+  showModal(h, 'modal-bob');
+  var input = document.getElementById('new-bakery-name');
+  if (input) { input.focus(); input.select(); }
+}
+
+function doNameBakery(index, first) {
+  var b = G.bakeries[index];
+  var val = document.getElementById('new-bakery-name').value.trim().slice(0, 30);
+  if (b && val) {
+    b.name = val;
+    if (b.state) b.state.bakeryName = val;
+  }
+  showBakeriesModal();
+  if (first) bobTell(t('bakery.statsUnlocked'));
 }
 
 // ============ FAILLITE ET ABSENCE ============

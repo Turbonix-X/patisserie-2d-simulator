@@ -352,7 +352,53 @@ var Decor = (function() {
     extra: '<span class="disco-beams"></span><span class="disco-ball"><img alt="" src="' + uri(svg(120, 150, at(60, 90, 1, 0, discoBall(44)))) + '"></span>',
   };
 
-  var THEMES = { spring: spring, summer: summer, winter: winter, fall: fall, space: space, party: party };
+  // ---------- Anniversaire : gateaux, bougies, ballons et confettis ----------
+  function candle(c) {
+    return '<rect x="-1.800" y="-12" width="3.600" height="12" rx="1" fill="' + c + '"/><path d="M-1.800-9l3.600-2M-1.800-5l3.600-2" stroke="#fff" stroke-width=".9"/>' +
+      '<path d="M0-20C3-16 2.500-13 0-12.500-2.500-13-3-16 0-20z" fill="#FFB300"/><path d="M0-17.500C1.200-15.500 1-14 0-13.500-1-14-1.200-15.500 0-17.500z" fill="#FFF59D"/>';
+  }
+  function bdayCake() {
+    return at(-14, -30, 1, 0, candle('#42A5F5')) + at(0, -33, 1, 0, candle('#FFD54F')) + at(14, -30, 1, 0, candle('#69F0AE')) +
+      '<path d="M-24-30v18h48v-18z" fill="#FFE0B2"/><path d="M-26-32c0-3 52-3 52 0v5c0 3-5 3-5 0 0-2-5-2-5 0v3c0 3-5 3-5 0v-3c0-2-5-2-5 0v5c0 3-5 3-5 0v-5c0-2-5-2-5 0v2c0 3-5 3-5 0v-2c0-2-5-2-5 0v1c0 3-7 3-7 0z" fill="#F48FB1"/>' +
+      '<path d="M-36-12v28h72v-28z" fill="#FFCC80"/><path d="M-36 2h72v4h-72z" fill="#C2185B" opacity=".7"/>' +
+      '<path d="M-38-14c0-3 76-3 76 0v5c0 3-6 3-6 0 0-2-6-2-6 0v5c0 3-6 3-6 0v-5c0-2-6-2-6 0v3c0 3-6 3-6 0v-3c0-2-6-2-6 0v6c0 3-6 3-6 0v-6c0-2-6-2-6 0v2c0 3-6 3-6 0v-2c0-2-6-2-6 0v4c0 3-8 3-8 0z" fill="#FF80AB"/>' +
+      '<g fill="#FFD54F"><circle cx="-24" cy="10" r="1.800"/><circle cx="4" cy="12" r="1.800"/></g><g fill="#42A5F5"><circle cx="-8" cy="11" r="1.800"/><circle cx="22" cy="10" r="1.800"/></g>' +
+      '<path d="M-44 16h88c2 0 2 4 0 4h-88c-2 0-2-4 0-4z" fill="#fff" stroke="#E0C8D4" stroke-width="1"/>';
+  }
+  function gift(c1, c2) {
+    return '<rect x="-13" y="-8" width="26" height="20" rx="2" fill="' + c1 + '"/><rect x="-15" y="-13" width="30" height="7" rx="2" fill="' + c1 + '" stroke="' + c2 + '" stroke-width=".8"/><path d="M0-13v25" stroke="' + c2 + '" stroke-width="5"/>' +
+      '<path d="M0-13C-9-22-13-14-5-13zM0-13C9-22 13-14 5-13z" fill="' + c2 + '"/>';
+  }
+  function cupcakeMini() {
+    return '<path d="M-7 1h14l-2 9H-5z" fill="#FFCC80"/><path d="M-9 1c-2-6 3-8 5-7 1-5 7-5 8 0 2-1 7 1 5 7z" fill="#FF80AB"/><circle cy="-8" r="2.200" fill="#D81B3C"/>';
+  }
+  var birthday = {
+    strip: svg(240, 26,
+      '<path d="M0 3Q60 9 120 3T240 3" fill="none" stroke="#C2185B" stroke-width="1.500"/>' +
+      '<path d="M6 5h24L18 21z" fill="#FF4081"/><path d="M46 7h24L58 23z" fill="#FFD54F"/><path d="M86 7h24L98 23z" fill="#42A5F5"/><path d="M126 5h24L138 21z" fill="#69F0AE"/><path d="M166 7h24L178 23z" fill="#FF9100"/><path d="M206 7h24L218 23z" fill="#BA68C8"/>'),
+    ground: svg(200, 22,
+      '<path d="M0 22V12c5 5 10 5 15 0s10-5 15 0 10 5 15 0 10-5 15 0 10 5 15 0 10-5 15 0 10 5 15 0 10-5 15 0 10 5 15 0 10-5 15 0 10 5 15 0 10-5 15 0 10 5 15 0v10z" fill="#FF80AB"/>' +
+      '<g fill="#FFD54F"><circle cx="20" cy="18" r="1.500"/><circle cx="110" cy="19" r="1.500"/></g><g fill="#fff"><circle cx="55" cy="18" r="1.500"/><circle cx="150" cy="18" r="1.500"/></g><g fill="#42A5F5"><circle cx="85" cy="18" r="1.500"/><circle cx="185" cy="19" r="1.500"/></g>'),
+    corner: svg(240, 190,
+      at(150, 150, 1.25, 0, bdayCake()) + at(48, 172, 1, -4, gift('#42A5F5', '#FFD54F')) + at(222, 176, .8, 5, gift('#69F0AE', '#E91E63')) +
+      at(44, 70, 1.1, -8, balloon('#FF4081')) + at(82, 50, .95, 6, balloon('#FFD54F')) + at(14, 110, .8, -4, balloon('#42A5F5'))),
+    corner2: svg(170, 90, at(60, 62, 1.5, 0, cupcakeMini()) + at(120, 66, .9, 4, gift('#FF4081', '#FFD54F')) + at(30, 22, 1, 0, star4('#FFD54F', 6))),
+    top: svg(120, 80, at(84, 26, .7, 6, balloon('#FF4081')) + at(52, 30, .6, -6, balloon('#42A5F5'))),
+    tile: svg(150, 150,
+      at(30, 30, .9, -10, cupcakeMini(), .28) + at(112, 66, 1, 0, star4('#FFD54F', 6), .45) + at(40, 112, .8, 8, candle('#42A5F5'), .3) + at(120, 124, 1, 0, star4('#FF4081', 5), .35)),
+    card: svg(48, 48, at(24, 26, 1.5, 8, cupcakeMini(), .32)),
+    mark: svg(28, 28, at(14, 16, 1.1, 0, cupcakeMini())),
+    motion: 'fall', count: 24,
+    pieces: [
+      svg(12, 18, '<rect x="2" y="2" width="8" height="14" rx="1.500" fill="#FF4081"/>'),
+      svg(12, 18, '<rect x="2" y="2" width="8" height="14" rx="1.500" fill="#42A5F5"/>'),
+      svg(14, 14, '<circle cx="7" cy="7" r="5" fill="#FFD54F"/>'),
+      svg(12, 18, '<rect x="2" y="2" width="8" height="14" rx="1.500" fill="#69F0AE"/>'),
+      svg(20, 20, at(10, 10, 1, 0, star4('#FF9100', 9))),
+    ],
+  };
+
+  var THEMES = { birthday: birthday, spring: spring, summer: summer, winter: winter, fall: fall, space: space, party: party };
   var VARS = { strip: '--decor-strip', ground: '--decor-ground', corner: '--decor-corner', corner2: '--decor-corner2', top: '--decor-top', tile: '--decor-tile', card: '--decor-card', mark: '--decor-mark' };
   var applied = null;
 

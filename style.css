@@ -2181,14 +2181,118 @@ body.dragging-sugar, body.dragging-sugar * { cursor: grabbing !important; user-s
 .carrier-assign { display: flex; flex-wrap: wrap; gap: 6px 14px; }
 .carrier-assign label { display: inline-flex; align-items: center; gap: 6px; font-size: .8rem; font-weight: 700; }
 
-/* Petit ecran : les ingredients passent au-dessus de la barre d'onglets */
+/* ---------- Bêta 1.4 ---------- */
+
+/* Telephone : taper vite ne doit ni zoomer ni recharger la page */
+html, body {
+  overscroll-behavior: none;
+  touch-action: manipulation;
+}
+body { position: fixed; inset: 0; width: 100%; }
+button, .ing-card, .rec-card, .emp-card { touch-action: manipulation; user-select: none; -webkit-user-select: none; }
+#ingredients, #main-panel, .set-pane, .modal, .cg-list { overscroll-behavior: contain; -webkit-overflow-scrolling: touch; }
+
+/* Favori : bien visible */
+.fav-btn {
+  display: inline-grid;
+  place-items: center;
+  width: 28px; height: 28px;
+  padding: 0;
+  margin-inline-end: 6px;
+  border: 1.5px solid #D4A017;
+  border-radius: 9px;
+  background: #FFF8DC;
+  color: #B8860B;
+  vertical-align: -6px;
+}
+.fav-btn .uii { width: 17px; height: 17px; }
+.fav-btn:hover { background: #FFE9A8; color: #8A6500; }
+.fav-btn.on { background: #FFC107; border-color: #B8860B; color: #5D4300; }
+.fav-btn.on .uii { fill: #5D4300; }
+
+/* Debloquer */
+.can-unlock { cursor: pointer; border: 2px dashed var(--mauve) !important; animation: unlock-pulse 2s ease-in-out infinite; }
+button.rec-card.can-unlock { display: flex; align-items: center; gap: 8px; width: 100%; text-align: start; color: var(--text); background-color: var(--surface-solid); font-weight: 600; }
+@keyframes unlock-pulse { 50% { box-shadow: 0 0 0 4px var(--mauve-soft); } }
+.unlock-tag { display: inline-flex; align-items: center; gap: 4px; color: var(--mauve-dark); font-size: .74rem; font-weight: 800; }
+.researching { opacity: .85; font-weight: 600; }
+.researching .ing-info { display: block !important; color: var(--mauve-dark); font-weight: 800; }
+@media (prefers-reduced-motion: reduce) { .can-unlock { animation: none; } }
+
+/* Les tetes des employes */
+.emp-face { width: 34px; height: 34px; flex-shrink: 0; border-radius: 50%; background: var(--surface-2); overflow: visible; }
+.recruit-row .btn { display: inline-flex; align-items: center; gap: 6px; }
+.recruit-row .emp-face { width: 24px; height: 24px; }
+.search-going { opacity: .7; }
+.applicant-card, .emp-header { align-items: center; }
+.emp-sheet-head { display: flex; align-items: center; gap: 12px; margin-bottom: 8px; }
+.emp-sheet-head .emp-face { width: 60px; height: 60px; }
+.emp-sheet-head h2 { margin: 0; }
+.emp-sheet-head p { margin: 0 !important; color: var(--muted); font-weight: 600; }
+.emp-facts { display: flex; flex-wrap: wrap; gap: 4px 12px; margin-bottom: 10px; font-size: .84rem; font-weight: 700; color: var(--muted); }
+.emp-config { margin-top: 8px; padding-bottom: 10px; }
+.cfg-row { display: grid; grid-template-columns: 120px minmax(0, 1fr); align-items: center; gap: 8px; margin-bottom: 8px; font-size: .86rem; font-weight: 700; }
+.cfg-row .set-select { max-width: none; width: 100%; }
+.modal .cfg-row input[type="number"] { margin: 0; }
+.emp-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+.chef-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 5px; max-height: 220px; overflow-y: auto; }
+.chef-rec { display: flex; align-items: center; gap: 6px; padding: 5px 8px; border: 1.5px solid var(--border); border-radius: 10px; background: var(--surface-solid); color: var(--text); font-size: .78rem; font-weight: 600; text-align: start; min-width: 0; }
+.chef-rec span { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.chef-rec.on { border-color: var(--mauve); background: var(--mauve-soft); }
+.chef-rec b { display: grid; place-items: center; width: 18px; height: 18px; border-radius: 50%; background: var(--mauve); color: #fff; font-size: .68rem; }
+.mach-card.locked { opacity: .6; }
+
+/* Guide : menus depliants */
+.cg-card summary { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 2px 10px; align-items: baseline; cursor: pointer; list-style: none; padding-inline-end: 18px; position: relative; }
+.cg-card summary::-webkit-details-marker { display: none; }
+.cg-card summary::after { content: "▸"; position: absolute; right: 0; top: 0; color: #b9b5c9; transition: transform .2s; }
+.cg-card[open] summary::after { transform: rotate(90deg); }
+.cg-card summary code { padding: 0; background: none; border: none; color: #ffd60a; font-family: var(--mono); font-size: .86rem; font-weight: 700; }
+.cg-card summary span { color: #e0deea; font-size: .8rem; line-height: 1.3; }
+.cg-case { margin-top: 8px; padding: 7px 9px; border-radius: 8px; background: #12101a; }
+.cg-case code { display: block; padding: 0; background: none; border: none; color: #ffe88a; font-family: var(--mono); font-size: .78rem; word-break: break-word; }
+.cg-case p { margin: 3px 0 5px !important; color: #d5d2e0; font-size: .78rem; line-height: 1.3; }
+.cg-case button { padding: 2px 8px; border: 1px solid rgba(255,214,10,.3); border-radius: 7px; background: rgba(255,214,10,.08); color: #ffe88a; font-family: var(--mono); font-size: .72rem; }
+.cg-case button:hover { background: rgba(255,214,10,.22); }
+
+/* Barre du bas : les ventes */
+.sale-item .craft-progress { background: var(--success); }
+
+/* Le morceau de sucre, facile a attraper */
+@media (max-width: 899px) { #bob-sugar { left: 16px; bottom: 112px; width: 46px; height: 46px; font-size: 1.4rem; } }
+
+/* ---------- Petit ecran ---------- */
 @media (max-width: 899px) {
   body > * { order: 1; }
-  #header { order: -4; }
-  #rebirth-banner { order: -3; }
+  #header { order: -6; }
+  #rebirth-banner { order: -5; }
   #game-area { display: contents; }
-  #ingredients { order: -2; flex: 0 0 28dvh; min-height: 0; margin: 8px 12px 0; }
-  #tabs { order: -1; }
-  #main-panel { order: 0; flex: 1 1 0; min-height: 0; margin: 8px 12px; }
-  #game-footer { order: 2; }
+  #ingredients { order: -4; flex: 0 0 26dvh; min-height: 0; margin: 8px 12px 0; }
+  #tabs { order: -3; }
+  /* Bob parle au-dessus de la liste, il ne cache plus rien */
+  #bob-bubble { position: static; order: -2; width: auto; flex-shrink: 0; margin: 12px 12px 0; padding: 10px 12px 8px; }
+  #bob-bubble::before { display: none; }
+  #bob-bubble p { font-size: .84rem; }
+  #main-panel { order: -1; flex: 1 1 0; min-height: 0; margin: 8px 12px; }
+  #game-footer { order: 2; font-size: .62rem; padding: 2px 8px; }
+  /* Barre du bas : le temps de preparation et les boutons toujours visibles */
+  #dock { flex-direction: column; align-items: stretch; flex-wrap: nowrap; gap: 4px; min-height: 76px; padding: 6px 10px 6px 70px; margin-bottom: 4px; }
+  #space-bar { width: 100%; }
+  .space-row { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 3px 8px; align-items: center; }
+  .space-usage-wrap { min-width: 0; }
+  .space-bar-bg { width: 100%; }
+  .space-rent { font-size: .7rem; text-align: end; }
+  .space-row .btn { grid-column: 1 / -1; padding: 4px 8px; font-size: .74rem; }
+  #crafting-bar { width: 100%; min-height: 0; flex-basis: auto; display: flex; gap: 6px; overflow-x: auto; }
+  #crafting-bar:empty { display: none; }
+  .craft-item { flex: 0 0 auto; min-width: 150px; }
+  .oven-count { display: none; }
+  #bob { bottom: 26px; }
+  #console-btn-wrap { top: 8px; bottom: auto; right: auto; left: 50%; margin-left: -18px; }
+  .console-float-btn { width: 36px; height: 36px; border-radius: 10px; }
+  #toast-area { bottom: 130px; }
 }
+@media (max-width: 720px) {
+  #console-btn-wrap { top: 44px; left: auto; right: 10px; margin: 0; }
+}
+.emp-sheet-head h2::before { display: none !important; }

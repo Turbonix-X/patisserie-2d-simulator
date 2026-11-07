@@ -109,9 +109,111 @@ check('Les fours limitent les preparations', activeCrafts() === 2 && G.crafting.
 // --- Moral ---
 G = createFreshState(); G.money = 1e9; G.level = 50;
 hireEmployee('collector');
-G.employees[0].morale = 30;
-for (var s = 0; s < 3000; s++) tickEmployees(1);
-check('Un employe paye ne demissionne jamais', G.employees.length === 1 && G.employees[0].morale >= 59, G.employees[0] && G.employees[0].morale);
+var solo = moraleDecay();
+hireEmployee('collector'); hireEmployee('collector');
+check('Plus il y a d employes, plus le moral descend lentement', moraleDecay() < solo);
+G.employees[0].morale = 50;
+tickEmployees(100);
+check('Le moral descend tout seul', G.employees[0].morale < 50, G.employees[0].morale);
+G.employees[0].morale = 9.5;
+var before2 = G.employees.length;
+tickEmployees(1);
+check('Moral trop bas : il demissionne', G.employees.length === before2 - 1);
+G = createFreshState(); G.money = 1e9; G.level = 50;
+hireEmployee('collector'); hireEmployee('manager');
+G.employees[0].morale = 50;
+tickEmployees(10);
+check('Un manager remonte le moral', G.employees[0].morale > 50, G.employees[0].morale);
+
+// --- Employes ---
+G = createFreshState(); G.money = 1e12; G.level = 100;
+check('Vendeur au niveau 35 et chef patissier au niveau 65', findEmpType('seller').unlockLvl === 35 && findEmpType('chef').unlockLvl === 65);
+hireEmployee('collector');
+var e0 = G.employees[0], p1 = empPower(e0), c1 = getTrainCost(e0);
+trainEmployee(e0.id);
+check('Former double la capacite, et coute cher', empPower(e0) === p1 * 2 && getTrainCost(e0) === c1 * 8);
+check('En formation, il ne travaille pas', empTraining(e0) && !empWorking(e0));
+for (var ti = 0; ti < 3; ti++) { e0.trainingUntil = 0; trainEmployee(e0.id); }
+e0.trainingUntil = 0;
+check('5 niveaux au maximum', e0.level === 5 && trainEmployee(e0.id) === false, e0.level);
+G = createFreshState(); G.money = 1e6; G.level = 100;
+G.applicants = []; hireEmployee('novice');
+var nov = G.employees[0];
+check('Un employe sans metier ne produit rien', autoRate('farine') === 0);
+check('On peut lui payer un metier', giveJob(nov.id, 'collector') && nov.type === 'collector' && G.money < 1e6);
+G = createFreshState(); G.level = 5;
+var lowChance = applicantChance(), lowSearch = searchChance();
+G.level = 200;
+check('Les candidats viennent plus souvent a haut niveau', applicantChance() > lowChance && searchChance() > lowSearch);
+check('Chercher un metier prend du temps', startSearch('seller') && G.searches.length === 1 && G.searches[0].doneAt > Date.now() && startSearch('seller') === false);
+G = createFreshState(); G.money = 1e9; G.level = 100; G.maxSpace = 1000;
+hireEmployee('seller');
+var v1 = sellerRate(G.employees[0]);
+hireEmployee('seller'); hireEmployee('seller');
+check('Plus de vendeurs, ca vend plus vite', sellerRate(G.employees[0]) > v1 && v1 < 0.2, v1);
+G.cakes.cookie = 10; G.stats.cakesMadeById.cookie = 10; G.employees[0].sellPct = 50;
+check('Le vendeur respecte son pourcentage', sellerAllowance(G.employees[0], findRec('cookie')) === 5);
+G.employees[0].sellPct = 100;
+hireEmployee('maitre');
+G.orders = [{ id: 1, name: 'A', items: [{ recId: 'cookie', qty: 4 }], base: 1, reward: 2, duration: 100, expiresAt: Date.now() + 1e6 }];
+check('Avec un maitre d hotel, les commandes passent d abord', sellerAllowance(G.employees[0], findRec('cookie')) === 6);
+G = createFreshState(); G.money = 1e9; G.level = 100; G.maxSpace = 1000;
+G.ing.farine = 100; G.ing.sucre = 100; G.ing.oeuf = 100;
+hireEmployee('chef');
+tickChefs(60);
+check('Le chef patissier prepare tout seul', G.crafting.length === 1, G.crafting.length);
+var chef = G.employees[0];
+chef.chefMode = 'only'; chef.chefList = ['cake']; G.crafting = []; chef.chefCd = 99;
+tickChefs(1);
+check('... seulement les recettes choisies', G.crafting.length === 1 && G.crafting[0].recId === 'cake', G.crafting[0] && G.crafting[0].recId);
+G.crafting = []; chef.chefMode = 'priority'; chef.chefList = ['cookie']; chef.chefCd = 99;
+tickChefs(1);
+check('... ou d abord celles que tu preferes', G.crafting[0].recId === 'cookie');
+G = createFreshState(); G.money = 1e6; G.level = 100;
+hireEmployee('buyer'); G.employees[0].buyCd = 99;
+var mBefore = G.money;
+tickBuyers(1);
+check('L intendant achete ce qui manque, avec un delai', G.deliveries.length === 1 && G.money < mBefore && G.ing.farine === 0, G.deliveries.length);
+G = createFreshState(); G.money = 1e9; G.level = 100;
+hireEmployee('collector'); hireEmployee('manager');
+var mgr = G.employees[1];
+mgr.mgrAuto = true; mgr.mgrMin = 50; mgr.mgrCd = 99;
+G.applicants = [{ id: 1, name: 'A', type: 'collector', skill: 20, hireCost: 100, expiresAt: Date.now() + 1e6 }, { id: 2, name: 'B', type: 'collector', skill: 60, hireCost: 300, expiresAt: Date.now() + 1e6 }, { id: 3, name: 'C', type: 'collector', skill: 70, hireCost: 500, expiresAt: Date.now() + 1e6 }];
+tickManagers(1);
+check('Le manager embauche le moins cher au niveau demande', G.employees.length === 3 && G.employees[2].name === 'B', G.employees.length);
+check('... et l envoie sur l ingredient le moins produit', G.employees[2].assignedIng !== G.employees[0].assignedIng, G.employees[2].assignedIng);
+
+// --- Deblocages ---
+G = createFreshState();
+check('Deux recettes au depart', REC.filter(recUnlocked).length === 2);
+G.level = 2;
+var butter = findIng('beurre');
+check('Il faut cliquer pour debloquer un ingredient', !ingUnlocked(butter) && startUnlock('ing', butter));
+check('... et attendre', !ingUnlocked(butter) && unlockPending('ing', butter) > Date.now());
+G.unlocks.pending['ing:beurre'] = 1;
+tickUnlocks();
+check('... puis il arrive', ingUnlocked(butter));
+check('Pas avant le bon niveau', startUnlock('ing', findIng('infinipur')) === false);
+G = createFreshState(); G.level = 500;
+check('Une recette pas debloquee ne se prepare pas', !canMake(findRec('madel')));
+
+// --- Vendre ---
+G = createFreshState(); G.cakes.cookie = 5;
+var saleTotal = queueSale([{ rec: findRec('cookie'), qty: 5 }]);
+check('Vendre prend un petit moment', saleTotal > 0 && G.cakes.cookie === 0 && G.money === 50 && G.sales.length === 1);
+G.sales[0].at = 1;
+check('... puis l argent arrive', tickSales() === saleTotal && G.money === 50 + saleTotal);
+
+// --- Batiments ---
+G = createFreshState(); G.level = 40; G.money = 1e9;
+var firstBld = BUILDINGS[0];
+buyBuilding(firstBld, '1');
+check('Un batiment ne produit rien a la seconde', autoRate(firstBld.produces) === 0);
+var ingStart = G.ing[firstBld.produces];
+advanceBuildings(100);
+check('Il attend sa livraison', G.ing[firstBld.produces] === ingStart);
+advanceBuildings(BLD_CYCLE_SEC);
+check('Puis il livre une enorme quantite d un coup', G.ing[firstBld.produces] >= firstBld.baseRate * BLD_CYCLE_SEC, G.ing[firstBld.produces]);
 
 // --- Rebirth ---
 G = createFreshState(); G.level = 40; G.money = 6000; G.rentDebt = 50; G.totalEarned = 999; G.playTimeMs = 1234; G.cheatUnlocked = true;
@@ -221,18 +323,26 @@ G.nextOrderAt = Date.now() + 1e7;
 for (var ms2 = 0; ms2 < 120; ms2++) tickOrders(1);
 check('Le maitre d hotel livre tout seul', G.stats.ordersDone >= 1, G.stats.ordersDone);
 G = createFreshState(); G.level = 49; G.money = 1e12;
-check('Pas de machine avant le niveau 50', buyMachine('vitrine') === false);
+check('La vitrine attend le niveau 50', buyMachine('vitrine') === false);
+check('Le four est la des le debut', findMachine('four').lvl === 1 && MACHINES.length >= 20);
 G.level = 50;
 var priceBefore = sellValueMult();
 check('Une machine ameliore le jeu', buyMachine('vitrine') && sellValueMult() > priceBefore && machineCost(findMachine('vitrine')) > 500000);
 G.level = 40; G.money = 1e6; doRebirth();
 check('Les machines restent apres un rebirth', machineLevel('vitrine') === 1);
+G = createFreshState(); G.level = 50; G.money = 1e9; G.bakeryName = 'Une';
+buyMachine('four');
+check('Un four machine ajoute des places', ovenSlots() === OVEN_CONFIG.start + 3);
+openNewBakery(true, 'Deux');
+switchToBakery(1);
+check('Les machines restent dans leur patisserie', machineLevel('four') === 0 && ovenSlots() === OVEN_CONFIG.start);
 
 // --- Toutes les patisseries travaillent ---
 G = createFreshState(); G.money = 1e6; G.level = 50; G.bakeryName = 'Une'; openNewBakery(true, 'Deux');
 var other = G.bakeries[G.bakeries.length - 1].state;
 other.buildings[BUILDINGS[0].id].qty = 10; other.level = 50;
 var ingBefore = other.ing[BUILDINGS[0].produces], mainIng = G.ing[BUILDINGS[0].produces];
+other.bldTimers[BUILDINGS[0].id] = 50;
 tickBackgroundBakeries(100);
 check('Une patisserie produit meme sans toi', other.ing[BUILDINGS[0].produces] > ingBefore && G.ing[BUILDINGS[0].produces] === mainIng);
 check('Apres, on revient bien dans la sienne', G.bakeryName === 'Une' && !bgTick);
@@ -348,7 +458,7 @@ G = createFreshState();
 var oldSave = JSON.parse(JSON.stringify(G));
 delete oldSave.ovens; oldSave.saveVersion = 7; oldSave.settings.musicVolume = 0.3; oldSave.settings.theme = 'nature_fleur'; oldSave.stats.totalClicks = 5;
 var migrated = migrateSave(oldSave);
-check('Une ancienne sauvegarde se met a jour', migrated.ovens === 2 && migrated.settings.musicVolume === 30 && migrated.settings.theme === 'light' && migrated.introDone && migrated.saveVersion === 11);
+check('Une ancienne sauvegarde se met a jour', migrated.ovens === 2 && migrated.settings.musicVolume === 30 && migrated.settings.theme === 'light' && migrated.introDone && migrated.saveVersion === 12);
 check('Un code invalide est refuse', importSave('abc') === false && importSave(btoa('{"money":"x"}')) === false);
 
 var ko = results.filter(function(r) { return !r.ok; }).length;

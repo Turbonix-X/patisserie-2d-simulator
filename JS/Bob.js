@@ -147,16 +147,21 @@ function bobMouth(ms) {
 }
 
 // Bob repond, puis le tutoriel reprend s'il n'est pas fini
-function bobSay(msg) {
+function bobSay(msg, ms) {
   if (bobTalkTimer) clearTimeout(bobTalkTimer);
   bobTalkTimer = null;
   bobBubbleText = null;
   showBobBubble(msg);
   bobTalkTimer = setTimeout(function() {
     bobTalkTimer = null;
+    if (bobQueue.length > 0) {
+      var next = bobQueue.shift();
+      bobSay(next, Math.max(3500, next.length * 60));
+      return;
+    }
     hideBobBubble();
     renderTutorial();
-  }, 2800);
+  }, ms || 2800);
 }
 
 // ============ SA COLERE ============
@@ -175,13 +180,74 @@ function bobAnger() {
 }
 
 // Ce qui s'affiche : sa colere, ou sa tristesse quand il se remet (s3, s2, s1).
-// calmOnly : dans les grandes fenetres, Bob ne montre pas sa colere.
-function bobStage(calmOnly) {
+function bobStage() {
   var sad = G.bobSad || 0;
   if (sad >= 4) return '5';
   if (sad > 0) return 's' + sad;
-  var a = bobAnger();
-  return calmOnly && a !== 5 ? '0' : String(a);
+  return String(bobAnger());
+}
+
+// ============ COMMENT IL TE PARLE ============
+// Enerve, il ne veut meme pas t'expliquer les choses.
+// Plus il va mieux, plus ses explications sont completes.
+function bobFilter(text) {
+  var stage = bobStage();
+  if (stage === '0') return text;
+  if (stage === '5' || stage === '4') return pickLine('bob.refuse');
+  var sentences = String(text).match(/[^.!?…]+[.!?…]+\s*/g) || [text];
+  if (stage === 's3' || stage === '3') return pickLine('bob.grumbleA') + ' ' + sentences[0];
+  if (stage === 's2' || stage === '2') return pickLine('bob.grumbleB') + ' ' + sentences.slice(0, 2).join('');
+  return pickLine('bob.grumbleC') + ' ' + text;
+}
+
+function bobFilterLines(lines) {
+  var stage = bobStage();
+  if (stage === '5' || stage === '4') return [pickLine('bob.refuse')];
+  return lines.map(bobFilter);
+}
+
+// Quand une explication arrive, elle attend son tour si Bob parle deja
+var bobQueue = [];
+
+function bobTell(text) {
+  var msg = bobFilter(text);
+  if (bobTalkTimer) { bobQueue.push(msg); return; }
+  bobSay(msg, Math.max(3500, msg.length * 60));
+}
+
+// Ce que Bob explique a chaque nouvelle fonction : [niveau, cle]
+var UNLOCK_TALKS = [[2, 'research'], [3, 'machines'], [5, 'staff'], [10, 'baker'], [20, 'carrier'], [25, 'manager'], [30, 'orders'], [35, 'seller'], [40, 'buildings'], [40, 'rebirth'], [65, 'chef'], [90, 'buyer'], [1000, 'top']];
+
+function explainLevel(lvl) {
+  UNLOCK_TALKS.forEach(function(x) {
+    if (x[0] !== lvl || G.explained[x[1]]) return;
+    G.explained[x[1]] = true;
+    bobTell(t('unl.' + x[1]));
+  });
+}
+
+function onBuildingSoon(bld) {
+  if (typeof bgTick !== 'undefined' && bgTick) return;
+  bobTell(t('bob.bldSoon', { n: t('b.' + bld.id), i: t('i.' + bld.produces) }));
+}
+
+function onBuildingDone(bld, amount) {
+  if (typeof bgTick !== 'undefined' && bgTick) return;
+  toast(t('bld.done', { n: t('b.' + bld.id), q: fmt(amount), i: t('i.' + bld.produces) }));
+}
+
+// Tu es parti sans mettre pause ?
+var bobLastInput = Date.now();
+var bobLastIdle = 0;
+['pointerdown', 'keydown'].forEach(function(ev) {
+  document.addEventListener(ev, function() { bobLastInput = Date.now(); });
+});
+
+function tickIdle() {
+  var now = Date.now();
+  if (now - bobLastInput < 180000 || now - bobLastIdle < 600000 || !G.tutorialDone) return;
+  bobLastIdle = now;
+  bobTell(t('bob.idle'));
 }
 
 function renderBob() {
@@ -242,36 +308,53 @@ function feedBob() {
     return x >= r.left - 14 && x <= r.right + 14 && y >= r.top - 14 && y <= r.bottom + 14;
   }
 
+  function startGhost() {
+    drag.ghost = document.createElement('div');
+    drag.ghost.className = 'sugar-ghost';
+    drag.ghost.innerHTML = iconify(findIng('sucre').e);
+    document.body.appendChild(drag.ghost);
+    document.body.classList.add('dragging-sugar');
+  }
+
   document.addEventListener('pointerdown', function(e) {
-    if (!e.target.closest || e.button !== 0 || !bobWantsSugar()) return;
+    if (!e.target.closest || !bobWantsSugar()) return;
     var token = e.target.closest('#bob-sugar');
-    // Depuis la carte du sucre : a la souris seulement, un doigt doit pouvoir faire defiler
+    // Depuis la carte du sucre : a la souris. Au doigt, on prend le morceau a cote de Bob.
     var card = !token && e.pointerType === 'mouse' && !e.target.closest('button') && e.target.closest('.ing-card[data-ing="sucre"]');
     if (!token && !card) return;
-    drag = { x: e.clientX, y: e.clientY, ghost: null };
-    if (token) e.preventDefault();
+    drag = { x: e.clientX, y: e.clientY, ghost: null, token: !!token };
+    if (token) {
+      e.preventDefault();
+      // Le doigt reste accroche au sucre meme en sortant du bouton
+      try { token.setPointerCapture(e.pointerId); } catch (err) { /* pas grave */ }
+    }
   });
 
   document.addEventListener('pointermove', function(e) {
     if (!drag) return;
     if (!drag.ghost) {
       if (Math.abs(e.clientX - drag.x) + Math.abs(e.clientY - drag.y) < 6) return;
-      drag.ghost = document.createElement('div');
-      drag.ghost.className = 'sugar-ghost';
-      drag.ghost.innerHTML = iconify(findIng('sucre').e);
-      document.body.appendChild(drag.ghost);
-      document.body.classList.add('dragging-sugar');
+      startGhost();
     }
     drag.ghost.style.left = e.clientX + 'px';
     drag.ghost.style.top = e.clientY + 'px';
     document.getElementById('bob').classList.toggle('wants-sugar', overBob(e.clientX, e.clientY));
   });
 
+  // Sur iOS, sans ca, la page bouge pendant qu'on glisse le sucre
+  document.addEventListener('touchmove', function(e) {
+    if (drag) e.preventDefault();
+  }, { passive: false });
+
   function endDrag(e) {
     if (!drag) return;
     var was = drag;
     drag = null;
-    if (!was.ghost) return;
+    if (!was.ghost) {
+      // Un simple toucher sur le morceau de sucre le donne aussi
+      if (was.token && e.type === 'pointerup') feedBob();
+      return;
+    }
     was.ghost.remove();
     document.body.classList.remove('dragging-sugar');
     document.getElementById('bob').classList.remove('wants-sugar');
@@ -440,7 +523,8 @@ function tickChallenge() {
     }
     return;
   }
-  if (!G.challenge && now >= G.nextChallengeAt && !modalIsOpen()) offerChallenge();
+  // Bob ne te propose rien s'il est fache
+  if (!G.challenge && now >= G.nextChallengeAt && !modalIsOpen() && bobAnger() < 4) offerChallenge();
 }
 
 // ============ SES CONSEILS ============
@@ -466,7 +550,7 @@ function tickBobWatch() {
     if (bobSeen[a.key] && (a.urgent || now - bobSeen[a.key] < 300000)) continue;
     bobSeen[a.key] = now;
     bobLastAlert = now;
-    bobSay(adviceText(a));
+    bobTell(adviceText(a));
     return;
   }
 }

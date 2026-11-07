@@ -196,8 +196,9 @@ function tierName(tier) {
   [1, 10, 50].forEach(function(n) {
     counted('repaid' + n, 'money', '\u{1F91D}', n, 'ach.nameRepaid', 'ach.descRepaid', function(g) { return (g.stats.loansRepaid || 0) >= n; });
   });
-  MACHINES.forEach(function(m) {
-    for (var lv = 1; lv <= m.max; lv++) {
+  // Les 10 machines qui ont une serie de succes : 5 niveaux chacune
+  ['petrin', 'isolant', 'robot', 'fourturbo', 'convoyeur', 'caisse', 'etiquette', 'vitrine', 'guichet', 'academie'].map(findMachine).forEach(function(m) {
+    for (var lv = 1; lv <= 5; lv++) {
       (function(n) {
         add('mach_' + m.id + '_' + n, 'shop', m.e, null, null, null, null, function(g) { return ((g.machines || {})[m.id] || 0) >= n; });
         var a = ACHIEVEMENTS[ACHIEVEMENTS.length - 1];

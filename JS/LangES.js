@@ -215,13 +215,48 @@ var CONSOLE_ES = {
   'Game Over triggered!':'¡Quiebra provocada!','Theme = ':'Tema = ','Space = ':'Espacio = ','Sold ':'Vendido ','Bought ':'Comprado ','Unknown command: ':'Comando desconocido: ','. Type /help':'. Escribe /help',
 };
 
-var COMMAND_GROUPS_ES = { progress:'Progreso', bank:'Dinero y banco', bulk:'Todo de golpe', shop:'Tienda', stock:'Stock', world:'Mundo' };
+// ======================== BETA 1.4 ========================
+Object.assign(LANGS.es, {
+  'is.oeuf':'Huevo','is.fraise':'Fresa','is.amande':'Almendra','is.pomme':'Manzana','is.framb':'Frambuesa','is.noisette':'Avellana',
+  'unlock.btn':'Desbloquear ({{v}})','unlock.waiting':'Llega en {{v}}','unlock.started':'{{n}} llega en {{v}}.','unlock.done':'¡{{n}} desbloqueado!',
+  'sell.selling':'Venta: {{v}}',
+  'bld.delivery':'+{{q}} {{n}} en {{t}}','bld.eachHour':'Entrega mucho {{n}}, una vez por hora','bld.done':'¡{{n}} ha entregado {{q}} {{i}}!','bld.unlocked':'¡Nivel 40! Ya puedes comprar edificios.',
+  'emp.novice':'Aprendiz','emp.buyer':'Intendente','emp.desc.novice':'Aún no tiene oficio. Págale uno.','emp.desc.buyer':'Compra los ingredientes que faltan para tus recetas favoritas o más recientes. La entrega lleva tiempo.',
+  'emp.desc.baker':'Reduce el tiempo de preparación.','emp.desc.seller':'Vende tus pasteles por su cuenta. Cuantos más vendedores, más rápido va.','emp.desc.manager':'Sube la moral del equipo y puede contratar por ti.','emp.desc.chef':'Prepara tus pasteles solo, con los ingredientes en stock.','emp.desc.carrier':'Lleva dinero o stock a otra de tus pastelerías. Haz clic en él para ajustarlo.',
+  'emp.creative':'Modo creativo: empleados infinitos.','emp.search':'Buscar un empleado','emp.searchHint':'Una búsqueda lleva tiempo y no siempre funciona: {{v}} % de probabilidad en tu nivel.','emp.searchStarted':'Buscando un {{n}}…','emp.searchFound':'¡Un {{n}} ha respondido a tu anuncio!','emp.searchNone':'Nadie ha respondido al puesto de {{n}}.',
+  'emp.training':'En formación: {{v}}','emp.config':'Ajustes','emp.trainMax':'Nivel máximo','emp.sellHelp':'La parte de lo que preparas que este vendedor puede vender.','emp.sellAll':'Aplicar a todos los vendedores de esta pastelería','emp.sellAllDone':'Todos los vendedores: {{v}} %.',
+  'emp.chefAll':'Todo','emp.chefOnly':'Solo','emp.chefPriority':'Prioridad','emp.chefHelp.all':'Prepara todo lo que puede, lo más rentable primero.','emp.chefHelp.only':'Prepara solo las recetas que elijas.','emp.chefHelp.priority':'Prepara primero las que elijas, en orden, y luego el resto.',
+  'emp.mgrAuto':'Contratación automática','emp.mgrHelp':'Contrata al candidato más barato con la habilidad pedida, si tienes cinco veces su precio. Un recolector va al ingrediente menos producido.','emp.mgrMin':'Habilidad mínima','emp.mgrHired':'¡{{n}} ha contratado a alguien!',
+  'emp.noviceHelp':'Elige su oficio. Cuesta menos que contratar.','emp.jobDone':'¡Ahora es {{n}}!','emp.buyerDone':'¡El intendente ha recibido su entrega!',
+  'carry.oneCake':'Un pastel concreto','carry.oneIng':'Un ingrediente concreto','carry.qty':'Cuánto por viaje','carry.max':'El máximo','carry.help':'Un viaje cada {{v}} aproximadamente.',
+  'mach.title':'Máquinas','mach.help':'Mejoras permanentes, pero solo en esta pastelería. Cada nivel cuesta mucho más que el anterior.','mach.level':'Nivel {{a}} / {{b}}',
+  'mach.four':'Horno','mach.four.d':'{{v}} hornadas más a la vez, por nivel.','mach.fouet':'Batidor','mach.fouet.d':'Preparaciones un {{v}} % más rápidas por nivel.','mach.balance':'Báscula','mach.balance.d':'Ingredientes un {{v}} % más baratos por nivel.','mach.batteur':'Batidora','mach.batteur.d':'Preparaciones un {{v}} % más rápidas por nivel.','mach.minuteur':'Temporizador','mach.minuteur.d':'Preparaciones un {{v}} % más rápidas por nivel.','mach.frigo':'Frigorífico','mach.frigo.d':'Espacio +{{v}} % por nivel.','mach.caissereg':'Caja registradora','mach.caissereg.d':'Precios de venta +{{v}} % por nivel.','mach.sablier':'Reloj de arena mágico','mach.sablier.d':'Preparaciones un {{v}} % más rápidas por nivel.','mach.labo':'Laboratorio del gusto','mach.labo.d':'XP +{{v}} % por nivel.','mach.megafour':'Megahorno','mach.megafour.d':'{{v}} hornadas más a la vez, por nivel.','mach.empire':'Letrero gigante','mach.empire.d':'Precios de venta +{{v}} % por nivel.','mach.fourturbo.d':'{{v}} hornadas más a la vez, por nivel.','mach.convoyeur.d':'Entregas de los edificios +{{v}} % por nivel.',
+  'adv.space':'Sin sitio: {{v}} % de tu espacio está lleno. Amplía tu pastelería o vende tus pasteles.',
+  'bakery.bobCongrats':'¡Bravo! Una nueva pastelería, ¡estoy orgulloso de ti! ¿Cómo quieres llamarla?',
+  'bakery.statsUnlocked':'¡Dos tiendas! En los ajustes, Estadísticas, te he preparado gráficos y los totales de todas tus pastelerías.',
+  'bob.refuse':'No. No te hablo.|Búscate la vida.|Pregúntale a otro.|No me apetece.|Ve a leer la wiki.|¿Crees que te voy a ayudar, después de eso?|…',
+  'bob.grumbleA':'Bueno. Rápido.|Si así te callas:|Resumiendo:','bob.grumbleB':'Bueno, vale.|Ya que hay que hacerlo.|Te diré esto.','bob.grumbleC':'Estoy algo mejor, así que escucha.|Toma, te lo explico.|Gracias por el azúcar. Entonces:',
+  'bob.idle':'¿Sigues ahí? Si te vas, hay un botón de pausa arriba. O la tecla Esc.',
+  'bob.bldSoon':'¡Tu entrega de {{i}} ({{n}}) llega en un minuto!',
+  'unl.research':'¡Nivel 2! Hay algo nuevo: haz clic en un ingrediente o una receta que parpadea para desbloquearlo, y espera un poco.',
+  'unl.machines':'Mira la pestaña Máquinas: un horno más es una hornada más a la vez. Un batidor va más rápido. Se quedan, pero solo en esta pastelería.',
+  'unl.staff':'¡Nivel 5! Puedes contratar. Lanza una búsqueda en la pestaña Empleados. Un recolector produce un ingrediente por segundo. Cuidado: un empleado sin paga o sin moral acaba dimitiendo.',
+  'unl.baker':'Nivel 10: ¡el panadero! Reduce el tiempo de preparación.',
+  'unl.carrier':'Nivel 20: ¡el transportista! Con dos pastelerías, lleva dinero o stock de una a otra. Haz clic en él para ajustarlo.',
+  'unl.manager':'Nivel 25: ¡el gerente! Sube la moral del equipo y puede contratar por ti. Haz clic en él para ajustarlo.',
+  'unl.orders':'Nivel 30: ¡los pedidos! Los clientes piden pasteles, y cuanto más difícil, más pagan. El maître los entrega por ti.',
+  'unl.seller':'Nivel 35: ¡el vendedor! Vende solo, pero despacio si está solo. Puedes elegir qué parte del stock puede vender.',
+  'unl.buildings':'Nivel 40: ¡los edificios! No producen cada segundo: entregan una cantidad enorme de golpe, una vez por hora.',
+  'unl.rebirth':'Con dinero suficiente, también puedes renacer: vuelves a empezar con una bonificación permanente.',
+  'unl.chef':'Nivel 65: ¡el jefe pastelero! Prepara solo con lo que hay en stock. Haz clic en él para elegir lo que prepara.',
+  'unl.buyer':'Nivel 90: ¡el intendente! Pide los ingredientes que faltan. La entrega tarda un poco.',
+  'unl.top':'¡Nivel 1000! Lo has visto todo. Puedes seguir subiendo, pero este es el final del camino. Bravo.',
+  'console.machineSet':'{{n}}: nivel {{a}} / {{b}}','console.machineName':'NOMBRE','console.machineUnknown':'Máquina desconocida. Las máquinas: ','console.creativeOn':'Modo creativo: ¡todo es infinito!','console.creativeOff':'Modo creativo apagado, tu partida ha vuelto.','console.creativeNone':'El modo creativo no está activado.',
+});
 
-var COMMAND_ES = {
-  '/level':'Cambia tu nivel.','/xp':'Cambia tu XP. Con add, puedes subir de nivel.','/money':'Fija tu dinero, en euros o en otra moneda.','/stats':'Cambia tus estadísticas.',
-  '/debt':'Quita una parte de tu deuda de alquiler o toda (cancel), la fija en una cantidad (set) o la aumenta (add). Tu primera deuda trae a Bob.','/bank':'Abre la pestaña Banco, o borra todos tus préstamos actuales.',
-  '/max':'Lo pone todo al máximo: nivel, dinero, stock, almacén, edificios, hornos, logros y temas, salvo los logros secretos. Cuanto más raro es un ingrediente, menos tienes.','/unmax':'Vuelve a como estaba antes de /max.','/undo':'Anula el último comando.','/random':'Pone valores al azar.','/gameover':'Provoca la quiebra.','/reset':'Borra toda la partida, ahora mismo y para siempre.',
-  '/bakery':'Crea una pastelería gratis, o elimina una sin venderla. Sin número, delete elimina aquella en la que estás.','/building':'Cambia la cantidad de cada edificio.','/employee':'Gestiona tus empleados y su habilidad.','/space':'Cambia tu espacio, en m².',
-  '/buy':'Compra un ingrediente, con tu dinero.','/sell':'Revende un ingrediente.','/farine':'Cambia un ingrediente directamente. Leche, nata y ron aceptan ml, cl y l.','/cookie':'Cambia el stock de un pastel.',
-  '/time':'Velocidad del juego, de 0.1 a 10. 1 es la velocidad normal.','/theme':'Cambia de tema, o desbloquea temas para siempre.','/birthday':'Cambia tu fecha de cumpleaños.','/bob':'Bob te propone su reto ahora mismo.','/help':'Abre esta guía.',
-};
+LANGS.es['bob.p0'] += '|Cuidado, el horno quema.|¿Has visto mi batidor? Es nuevo.|Me encanta el olor a vainilla por la mañana.|Un día abriré mi propia pastelería. Ah no, es la tuya.|Prueba esto. No, espera, que quema.|¿Sabías que un robot puede tener hambre?|Estoy contando galletas. Falta una.|Tu tienda huele bien hoy.|Si buscas la harina, la llevo toda encima.|Buenos días, buenas noches, no lo sé, no tengo ventana.';
+LANGS.es['bob.p1'] += '|Voy a acabar apuntándolo.|Un clic más y me enfado.|¿De verdad no tienes otra cosa que hacer?|Es un batidor, no un juguete. Y yo tampoco.|Mis sensores se están calentando.|Te tengo vigilado. Con los dos ojos.';
+LANGS.es['bob.p2'] += '|He quemado pasteles por menos que esto.|Te aviso, me voy a enfadar.|¿De verdad quieres ver lo que viene después?|A mis circuitos no les gusta esto.|¡Ve a hacer clic en un ingrediente!|Pierdo la paciencia, y ya era poca.';
+LANGS.es['bob.p3'] += '|¡VOY A SALARLO TODO!|¡SE ACABARON LOS MACARONS PARA TI!|¡MI VISOR SE PONE ROJO, ¿LO VES?!|¡VOY A DESMONTAR EL HORNO!|¡¿QUIÉN TE ENSEÑÓ A HACER CLIC?!|¡ESTO VA A ACABAR MAL, TE LO DIGO!';
+LANGS.es['bob.p4'] += '|¡TODO VA A ARDER!|¡ERROR 404: PACIENCIA NO ENCONTRADA!|¡VOY A HACER UN PASTEL DE VINAGRE!|¡PARA! ¡PARA! ¡PARA!|¡NI AZÚCAR! ¡NI NADA!';
+LANGS.es['bob.sour'] += '|Hasta el horno ha dejado de hablarme.|Bato al vacío, como todos los días.|Antes silbaba mientras cocinaba.|Tus clientes ya ni me miran.|La nata se baja. Yo también.|¿Para qué hornear, en el fondo?';
