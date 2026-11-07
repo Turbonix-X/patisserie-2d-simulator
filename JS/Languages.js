@@ -1,12 +1,14 @@
 /* ============================================
    PATISSERIE 2D SIMULATOR - LANGUES
-   Francais et anglais
+   Francais et anglais (les autres langues ont chacune leur fichier)
    ============================================ */
-// La langue du navigateur choisit au depart : francais, espagnol, ou anglais pour tout le reste
+// La langue du navigateur choisit au depart, et l'anglais pour tout le reste
 function detectLang() {
   var list = (navigator.languages && navigator.languages.length) ? navigator.languages : [navigator.language || 'fr'];
   if (/^fr/i.test(list[0])) return 'fr';
   if (/^es/i.test(list[0])) return 'es';
+  if (/^pt/i.test(list[0])) return 'pt';
+  if (/^de/i.test(list[0])) return 'de';
   return 'en';
 }
 var currentLang = detectLang();
@@ -14,8 +16,30 @@ var LANG_LIST = [
   { code:'fr', name:'Français', flag:'\u{1F1EB}\u{1F1F7}' },
   { code:'en', name:'English', flag:'\u{1F1FA}\u{1F1F8}' },
   { code:'es', name:'Español', flag:'\u{1F1EA}\u{1F1F8}' },
+  { code:'pt', name:'Português', flag:'\u{1F1F5}\u{1F1F9}' },
+  { code:'de', name:'Deutsch', flag:'\u{1F1E9}\u{1F1EA}' },
 ];
 var LANGS = {};
+
+// Portugais et allemand : noms des succes, reponses de la console et guide des commandes
+var I18N_EXTRA = {};
+function extraAchName(lang, en) {
+  var x = I18N_EXTRA[lang];
+  if (!x) return null;
+  if (x.achNames[en]) return x.achNames[en];
+  for (var i = 0; i < x.achNameRules.length; i++) {
+    if (x.achNameRules[i][0].test(en)) return en.replace(x.achNameRules[i][0], x.achNameRules[i][1]);
+  }
+  return null;
+}
+function extraAchDesc(lang, en) {
+  var x = I18N_EXTRA[lang];
+  if (!x) return null;
+  for (var i = 0; i < x.achDescRules.length; i++) {
+    if (x.achDescRules[i][0].test(en)) return en.replace(x.achDescRules[i][0], x.achDescRules[i][1]);
+  }
+  return null;
+}
 
 // ======================== FRANCAIS ========================
 LANGS.fr = {
@@ -424,3 +448,13 @@ LANGS.en['bob.p2'] += '|I\'ve burned cakes for less than this.|I\'m warning you,
 LANGS.en['bob.p3'] += '|I\'LL SALT EVERYTHING!|NO MORE MACARONS FOR YOU!|MY VISOR IS TURNING RED, SEE?!|I\'M TAKING THE OVEN APART!|WHO TAUGHT YOU TO CLICK ANYWAY?!|THIS WILL END BADLY, I\'M TELLING YOU!';
 LANGS.en['bob.p4'] += '|EVERYTHING WILL BURN!|ERROR 404: PATIENCE NOT FOUND!|I\'LL BAKE A VINEGAR CAKE!|STOP! STOP! STOP!|NO MORE SUGAR! NOTHING!';
 LANGS.en['bob.sour'] += '|Even the oven stopped talking to me.|I whisk at nothing, like every day.|I used to whistle while cooking.|Your customers don\'t even look at me anymore.|The cream is falling. So am I.|Why bake, really?';
+
+// ======================== BETA 1.5 ========================
+Object.assign(LANGS.fr, {
+  'settings.themeBakery':'Boulangerie','settings.themeCubes':'Cubes',
+  'console.creativeOn':'Mode créatif : tout est infini et tous les thèmes sont débloqués, avec le thème Cubes en cadeau !',
+});
+Object.assign(LANGS.en, {
+  'settings.themeBakery':'Bakery','settings.themeCubes':'Cubes',
+  'console.creativeOn':'Creative mode: everything is infinite and all themes are unlocked, with the Cubes theme as a gift!',
+});

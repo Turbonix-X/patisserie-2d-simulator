@@ -1,6 +1,6 @@
 # Le wiki de Pâtisserie 2D Simulator
 
-Tout ce qu'il faut savoir pour comprendre le jeu. Ce wiki décrit la **Bêta 1.4**.
+Tout ce qu'il faut savoir pour comprendre le jeu. Ce wiki décrit la **Bêta 1.5**.
 
 > **À savoir :** les recettes du jeu sont fausses. Les quantités et les ingrédients servent juste à donner un parcours au jeu. Ne les cuisine pas chez toi !
 
@@ -211,6 +211,7 @@ Environ toutes les 4 minutes, un événement change le jeu pour un moment : rush
 | Clair, Sombre | Toujours |
 | Printemps, Été, Automne, Hiver | Pendant leur saison, et ils se bloquent quand elle se termine |
 | Anniversaire | Le jour de ton anniversaire, si tu as indiqué ta date |
+| Boulangerie | Pour toujours dès le niveau 100 |
 | Fête | Pour toujours dès le niveau 500 |
 | Espace | Pour toujours dès le niveau 1000 |
 
@@ -232,4 +233,4 @@ Ils sont dans les **réglages**. Il y a 1000 succès. Un succès pas encore obte
 
 ## Sur téléphone
 
-Le jeu marche aussi sur téléphone et sur tablette. Les ingrédients sont en haut, au-dessus des onglets. Le jeu existe en français, en anglais et en espagnol : il prend la langue de ton navigateur au départ, et tu peux la changer dans les réglages.
+Le jeu marche aussi sur téléphone et sur tablette. Les ingrédients sont en haut, au-dessus des onglets. Le jeu existe en français, en anglais, en espagnol, en portugais et en allemand : il prend la langue de ton navigateur au départ, et tu peux la changer dans les réglages.

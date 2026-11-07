@@ -260,3 +260,9 @@ LANGS.es['bob.p2'] += '|He quemado pasteles por menos que esto.|Te aviso, me voy
 LANGS.es['bob.p3'] += '|¡VOY A SALARLO TODO!|¡SE ACABARON LOS MACARONS PARA TI!|¡MI VISOR SE PONE ROJO, ¿LO VES?!|¡VOY A DESMONTAR EL HORNO!|¡¿QUIÉN TE ENSEÑÓ A HACER CLIC?!|¡ESTO VA A ACABAR MAL, TE LO DIGO!';
 LANGS.es['bob.p4'] += '|¡TODO VA A ARDER!|¡ERROR 404: PACIENCIA NO ENCONTRADA!|¡VOY A HACER UN PASTEL DE VINAGRE!|¡PARA! ¡PARA! ¡PARA!|¡NI AZÚCAR! ¡NI NADA!';
 LANGS.es['bob.sour'] += '|Hasta el horno ha dejado de hablarme.|Bato al vacío, como todos los días.|Antes silbaba mientras cocinaba.|Tus clientes ya ni me miran.|La nata se baja. Yo también.|¿Para qué hornear, en el fondo?';
+
+// ======================== BETA 1.5 ========================
+Object.assign(LANGS.es, {
+  'settings.themeBakery':'Panadería','settings.themeCubes':'Cubos',
+  'console.creativeOn':'Modo creativo: todo es infinito y todos los temas están desbloqueados, ¡con el tema Cubos de regalo!',
+});

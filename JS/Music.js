@@ -110,8 +110,8 @@ function getCurrentTrack() {
 
 function trackAvailable(track) {
   if (G.level < track.unlockLvl) return false;
-  if (track.season) return !!(G.unlockedThemes && G.unlockedThemes[track.season]) || currentSeason() === track.season;
-  if (track.birthday) return !!(G.unlockedThemes && G.unlockedThemes.birthday) || isBirthdayToday();
+  if (track.season) return !!G.creative || !!(G.unlockedThemes && G.unlockedThemes[track.season]) || currentSeason() === track.season;
+  if (track.birthday) return !!G.creative || !!(G.unlockedThemes && G.unlockedThemes.birthday) || isBirthdayToday();
   return true;
 }
 

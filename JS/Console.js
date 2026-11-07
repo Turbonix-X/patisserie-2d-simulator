@@ -9,6 +9,7 @@ var lastCommandState = null;
 
 function L(fr, en) {
   if (currentLang === 'es') return CONSOLE_ES[en] || en;
+  if (I18N_EXTRA[currentLang]) return I18N_EXTRA[currentLang].console[en] || en;
   return currentLang === 'en' ? en : fr;
 }
 
@@ -207,11 +208,15 @@ function processCommand(cmd) {
       if (!lastSaveBeforeCreative) return '<span class="cmd-err">' + t('console.creativeNone') + '</span>';
       Object.assign(G, lastSaveBeforeCreative);
       lastSaveBeforeCreative = null;
+      G.unlockedThemes.cubes = true; // Le theme Cubes reste, une fois gagne
+      enforceThemeLocks();
+      applyTheme();
       return '<span class="cmd-ok">' + t('console.creativeOff') + '</span>';
     }
-    lastSaveBeforeCreative = JSON.parse(JSON.stringify(G));
+    if (!lastSaveBeforeCreative) lastSaveBeforeCreative = JSON.parse(JSON.stringify(G));
     maxThisBakery();
     G.creative = true;
+    G.unlockedThemes.cubes = true;
     tickCreative();
     return '<span class="cmd-ok">' + t('console.creativeOn') + '</span>';
   }
@@ -381,20 +386,20 @@ function processCommand(cmd) {
     return '<span class="cmd-err">Usage: /bank unlock|clear</span>';
   }
 
-  // /theme <name> | /theme unlock all|spring|summer|fall|winter|birthday|party|space
+  // /theme <name> | /theme unlock all|spring|summer|fall|winter|birthday|bakery|party|space|cubes
   if (action === 'theme') {
     var themeName = parts[1];
     var names = THEME_LIST.map(function(th) { return th.id; }).join(', ');
-    if (!themeName) return '<span class="cmd-err">Usage: /theme &lt;' + names + '&gt; | /theme unlock all|spring|summer|fall|winter|birthday|party|space</span>';
+    if (!themeName) return '<span class="cmd-err">Usage: /theme &lt;' + names + '&gt; | /theme unlock all|spring|summer|fall|winter|birthday|bakery|party|space|cubes</span>';
     if (themeName === 'unlock') {
       var what = parts[2];
-      var lockable = THEME_LIST.filter(function(th) { return th.season || th.birthday || th.level; });
+      var lockable = THEME_LIST.filter(function(th) { return th.season || th.birthday || th.level || th.secret; });
       if (what === 'all') {
         lockable.forEach(function(th) { G.unlockedThemes[th.id] = true; });
         return '<span class="cmd-ok">' + t('console.themesUnlocked') + '</span>';
       }
       var target = findTheme(what);
-      if (!target || !(target.season || target.birthday || target.level)) return '<span class="cmd-err">Usage: /theme unlock all|spring|summer|fall|winter|birthday|party|space</span>';
+      if (!target || !(target.season || target.birthday || target.level || target.secret)) return '<span class="cmd-err">Usage: /theme unlock all|spring|summer|fall|winter|birthday|bakery|party|space|cubes</span>';
       G.unlockedThemes[what] = true;
       return '<span class="cmd-ok">' + t('console.themeUnlocked', { n: t(target.langKey) }) + '</span>';
     }
@@ -656,7 +661,7 @@ var COMMAND_DOCS = [
       cmdCase('/max NOM', 'Dans la pâtisserie qui porte ce nom.', 'In the bakery with this name.', 'En la pastelería con ese nombre.', '/max Chez Bob'),
     ]},
     { name:'/unmax', fr:'Revient à l’état d’avant /max.', en:'Goes back to before /max.', es:'Vuelve a como estaba antes de /max.', cases:[cmdCase('/unmax', 'Annule le dernier /max.', 'Undoes the last /max.', 'Anula el último /max.')] },
-    { name:'/creative', fr:'Le mode créatif : tout à l’infini, et des employés à l’infini.', en:'Creative mode: everything infinite, and infinite employees.', es:'Modo creativo: todo infinito y empleados infinitos.', cases:[
+    { name:'/creative', fr:'Le mode créatif : tout à l’infini, des employés à l’infini et tous les thèmes.', en:'Creative mode: everything infinite, infinite employees and all themes.', es:'Modo creativo: todo infinito, empleados infinitos y todos los temas.', cases:[
       cmdCase('/creative', 'Active le mode créatif.', 'Turns creative mode on.', 'Activa el modo creativo.'),
       cmdCase('/creative off', 'L’arrête et te rend ta partie d’avant.', 'Turns it off and gives your game back.', 'Lo desactiva y te devuelve tu partida.'),
     ]},
@@ -725,7 +730,7 @@ var COMMAND_DOCS = [
       cmdCase('/time set N', 'De 0.1 à 10. 1 est la vitesse normale.', 'From 0.1 to 10. 1 is normal speed.', 'De 0.1 a 10. 1 es la velocidad normal.', '/time set 5'),
     ]},
     { name:'/theme', fr:'Change de thème, ou en débloque.', en:'Changes theme, or unlocks themes.', es:'Cambia de tema o los desbloquea.', cases:[
-      cmdCase('/theme NOM', 'Met ce thème : light, dark, spring, summer, fall, winter, birthday, party ou space.', 'Applies this theme: light, dark, spring, summer, fall, winter, birthday, party or space.', 'Pone este tema: light, dark, spring, summer, fall, winter, birthday, party o space.', '/theme winter'),
+      cmdCase('/theme NOM', 'Met ce thème : light, dark, spring, summer, fall, winter, birthday, bakery, party, space ou cubes.', 'Applies this theme: light, dark, spring, summer, fall, winter, birthday, bakery, party, space or cubes.', 'Pone este tema: light, dark, spring, summer, fall, winter, birthday, bakery, party, space o cubes.', '/theme winter'),
       cmdCase('/theme unlock all', 'Débloque tous les thèmes pour toujours.', 'Unlocks all themes forever.', 'Desbloquea todos los temas para siempre.'),
       cmdCase('/theme unlock NOM', 'Débloque ce thème pour toujours.', 'Unlocks this theme forever.', 'Desbloquea este tema para siempre.', '/theme unlock party'),
     ]},
@@ -738,6 +743,18 @@ var COMMAND_DOCS = [
     { name:'/help', fr:'Ouvre ce guide.', en:'Opens this guide.', es:'Abre esta guía.', cases:[cmdCase('/help', 'Le guide s’ouvre à côté de la console.', 'The guide opens next to the console.', 'La guía se abre junto a la consola.')] },
   ]},
 ];
+
+// Portugais et allemand : leurs textes du guide viennent de leur fichier de langue
+Object.keys(I18N_EXTRA).forEach(function(lang) {
+  var d = I18N_EXTRA[lang].cmd;
+  COMMAND_DOCS.forEach(function(g) {
+    g[lang] = d['g:' + g.id];
+    g.list.forEach(function(c) {
+      c[lang] = d[c.name];
+      c.cases.forEach(function(x) { x[lang] = d['c:' + x.use]; });
+    });
+  });
+});
 
 var CONSOLE_COMMANDS = [];
 COMMAND_DOCS.forEach(function(group) {

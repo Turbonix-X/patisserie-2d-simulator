@@ -17,6 +17,8 @@
 <script>document.write('<script src="../JS/Icons.js?t=' + Date.now() + '"><\/script>');</script>
 <script>document.write('<script src="../JS/Languages.js?t=' + Date.now() + '"><\/script>');</script>
 <script>document.write('<script src="../JS/LangES.js?t=' + Date.now() + '"><\/script>');</script>
+<script>document.write('<script src="../JS/LangPT.js?t=' + Date.now() + '"><\/script>');</script>
+<script>document.write('<script src="../JS/LangDE.js?t=' + Date.now() + '"><\/script>');</script>
 <script>document.write('<script src="../JS/PlayerData.js?t=' + Date.now() + '"><\/script>');</script>
 <script>document.write('<script src="../JS/Logic.js?t=' + Date.now() + '"><\/script>');</script>
 <script>document.write('<script src="../JS/Achievements.js?t=' + Date.now() + '"><\/script>');</script>
@@ -235,7 +237,7 @@ check('Chaque succes a une categorie', badCat.length === 0, badCat.join(', '));
 
 // --- Textes ---
 var missing = [];
-['fr', 'en', 'es'].forEach(function(lang) {
+['fr', 'en', 'es', 'pt', 'de'].forEach(function(lang) {
   ING.forEach(function(i) { if (!LANGS[lang]['i.' + i.id]) missing.push(lang + ':i.' + i.id); });
   REC.forEach(function(r) { if (!LANGS[lang]['r.' + r.id]) missing.push(lang + ':r.' + r.id); });
   BUILDINGS.forEach(function(b) { if (!LANGS[lang]['b.' + b.id]) missing.push(lang + ':b.' + b.id); });
@@ -259,6 +261,37 @@ var esDescs = ACHIEVEMENTS.filter(function(a) { return !a.descFn && !achDescEs(a
 check('Tous les succes ont un nom en espagnol', esNames.length === 0, esNames.slice(0, 8).join(', '));
 check('Tous les succes ont une description en espagnol', esDescs.length === 0, esDescs.slice(0, 8).join(', '));
 currentLang = 'fr';
+['pt', 'de'].forEach(function(lang) {
+  var diff = Object.keys(LANGS.fr).filter(function(k) { return !LANGS[lang][k]; }).concat(Object.keys(LANGS[lang]).filter(function(k) { return !LANGS.fr[k]; }));
+  check(lang + ' : tous les textes', diff.length === 0, diff.slice(0, 12).join(', '));
+  var bad = Object.keys(LANGS[lang]).filter(function(k) {
+    function p(x) { return (String(x).match(/\{\{\w+\}\}/g) || []).sort().join(); }
+    return LANGS.en[k] && p(LANGS[lang][k]) !== p(LANGS.en[k]);
+  });
+  check(lang + ' : les memes valeurs a remplacer', bad.length === 0, bad.slice(0, 8).join(', '));
+  var names = ACHIEVEMENTS.filter(function(a) { return !a.nameFn && !extraAchName(lang, a.en); }).map(function(a) { return a.en; });
+  var descs = ACHIEVEMENTS.filter(function(a) { return !a.descFn && !extraAchDesc(lang, a.descEn); }).map(function(a) { return a.descEn; });
+  check(lang + ' : le nom de tous les succes', names.length === 0, names.slice(0, 8).join(', '));
+  check(lang + ' : la description de tous les succes', descs.length === 0, descs.slice(0, 8).join(', '));
+  check(lang + ' : des noms d employes et de patisseries', EMP_NAMES_LANG[lang].length === EMP_NAMES_LANG.fr.length && BAKERY_NAMES_LANG[lang].length === BAKERY_NAMES_LANG.fr.length);
+  var sameCount = Object.keys(LANGS[lang]).filter(function(k) { return /\|/.test(LANGS.fr[k] || '') && /^(bob|pause)\./.test(k) && !LANGS[lang][k]; });
+  check(lang + ' : Bob a ses repliques', sameCount.length === 0, sameCount.join(', '));
+});
+
+// --- Themes de la Beta 1.5 ---
+G = createFreshState(); G.level = 99;
+check('La Boulangerie est bloquee avant le niveau 100', themeLockReason(findTheme('bakery')) === 'level');
+G.level = 100;
+check('La Boulangerie arrive au niveau 100', themeLockReason(findTheme('bakery')) === null);
+G = createFreshState();
+check('Le theme Cubes est cache au depart', themeLockReason(findTheme('cubes')) === 'secret');
+G.settings.theme = 'cubes';
+check('Le theme Cubes ne peut pas etre force', activeThemeId() === 'light');
+G = createFreshState(); G.creative = true;
+var lockedInCreative = THEME_LIST.filter(function(th) { return themeLockReason(th); }).map(function(th) { return th.id; });
+check('En creatif, tous les themes sont debloques', lockedInCreative.length === 0, lockedInCreative.join(', '));
+G = createFreshState(); G.unlockedThemes.cubes = true;
+check('Le theme Cubes reste une fois gagne', themeLockReason(findTheme('cubes')) === null);
 
 // --- Banque ---
 G = createFreshState(); G.money = 0; G.level = 50;

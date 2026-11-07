@@ -2,7 +2,7 @@
 
 Tout ce qui a été ajouté à Pâtisserie 2D Simulator, de la plus récente à la plus ancienne. Pour comprendre les règles du jeu, va voir le [wiki](REGLES.md).
 
-## Bêta 1.5 (pas encore en ligne)
+## Bêta 1.5 (7 novembre 2026)
 
 **Langues**
 - Le jeu existe maintenant en portugais et en allemand, en plus du français, de l'anglais et de l'espagnol. Tout est traduit, jusqu'aux répliques de Bob et aux 1000 succès.
