@@ -64,6 +64,9 @@ function iconify(html) {
 
 // ============ ICONES D'INTERFACE (SVG, traits de 2 px) ============
 var UI_ICONS = {
+  store: '<path d="M4 10v10h16V10"/><path d="M3 10l1.500-6h15L21 10a3 3 0 0 1-4.500 2.600A3 3 0 0 1 12 12.600a3 3 0 0 1-4.500 0A3 3 0 0 1 3 10z"/><path d="M9 20v-5h6v5"/>',
+  orders: '<path d="M6 3h12v18l-3-2-3 2-3-2-3 2z"/><path d="M9 8h6M9 12h6"/>',
+  machines: '<circle cx="12" cy="12" r="3"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.600 5.600l2.100 2.100M16.300 16.300l2.100 2.100M5.600 18.400l2.100-2.100M16.300 7.700l2.100-2.100"/>',
   bank: '<path d="M3 10l9-6 9 6"/><path d="M4 10h16M6 10v8M10 10v8M14 10v8M18 10v8M4 18h16M3 21h18"/>',
   chart: '<path d="M4 4v16h16"/><path d="M7 15l4-5 3 3 5-7"/>',
   globe: '<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3 3.800 6 3.800 9s-.8 6-3.800 9c-3-3-3.800-6-3.800-9S9 6 12 3z"/>',

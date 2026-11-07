@@ -2,7 +2,12 @@
    PATISSERIE 2D SIMULATOR - LANGUES
    Francais et anglais
    ============================================ */
-var currentLang = 'fr';
+// La langue du navigateur choisit au depart : francais, ou anglais pour tout le reste
+function detectLang() {
+  var list = (navigator.languages && navigator.languages.length) ? navigator.languages : [navigator.language || 'fr'];
+  return /^fr/i.test(list[0]) ? 'fr' : 'en';
+}
+var currentLang = detectLang();
 var LANG_LIST = [
   { code:'fr', name:'Français', flag:'\u{1F1EB}\u{1F1F7}' },
   { code:'en', name:'English', flag:'\u{1F1FA}\u{1F1F8}' },
@@ -11,6 +16,22 @@ var LANGS = {};
 
 // ======================== FRANCAIS ========================
 LANGS.fr = {
+  'order.title':'Commandes','tab.orders':'Commandes','order.doneCount':'{{v}} livrées','order.help':'Des clients passent commande. Prépare les gâteaux demandés et livre avant la fin du temps : plus la commande est compliquée, plus la prime est grosse.','order.none':'Aucune commande pour l\'instant. Les clients arrivent vite !','order.level1':'Simple','order.level2':'Moyenne','order.level3':'Difficile','order.level4':'Extrême','order.prime':'dont {{v}} de prime','order.deliver':'Livrer','order.delivered':'Commande livrée : +{{v}} !','order.new':'Nouvelle commande !','order.butler':'{{v}} maître(s) d\'hôtel livrent tout seuls ce qui est prêt.','order.butlerDone':'{{n}} a livré une commande : +{{v}} !','order.unlocked':'Niveau 30 ! Des clients passent commande maintenant. Regarde l\'onglet Commandes.',
+  'emp.maitre':'Maître d\'hôtel','emp.desc.maitre':'Livre les commandes des clients à ta place, dès que le stock est prêt.',
+  'mach.title':'Boutique de machines','tab.machines':'Machines','mach.help':'Des améliorations pour toujours, pour toutes tes pâtisseries, même après un rebirth. Elles coûtent très cher.','mach.buy':'Acheter ({{v}})','mach.max':'Au maximum','mach.bought':'Machine installée !','mach.now':'Bonus actuel : {{v}} %','mach.unlocked':'Niveau 50 ! La boutique de machines est ouverte. Ça coûte cher, mais c\'est pour toujours.',
+  'mach.petrin':'Pétrin industriel','mach.petrin.d':'Préparations {{v}} % plus rapides par niveau.','mach.isolant':'Isolation du local','mach.isolant.d':'Loyer {{v}} % moins cher par niveau.','mach.robot':'Robot de cuisine','mach.robot.d':'Ingrédients {{v}} % moins chers par niveau.','mach.fourturbo':'Four à convection','mach.fourturbo.d':'{{v}} fours de plus par niveau.','mach.convoyeur':'Tapis roulant','mach.convoyeur.d':'Bâtiments {{v}} % plus productifs par niveau.','mach.caisse':'Caisse automatique','mach.caisse.d':'Vendeurs {{v}} % plus rapides par niveau.','mach.etiquette':'Étiqueteuse de luxe','mach.etiquette.d':'Les prix baissent {{v}} % moins vite quand tu vends, par niveau.','mach.vitrine':'Vitrine réfrigérée','mach.vitrine.d':'Prix de vente +{{v}} % par niveau.','mach.guichet':'Guichet des commandes','mach.guichet.d':'Primes des commandes +{{v}} % par niveau.','mach.academie':'Académie du goût','mach.academie.d':'XP +{{v}} % par niveau.',
+  'season.spring':'Printemps','season.summer':'Été','season.fall':'Automne','season.winter':'Hiver','sell.offSeason':'Hors saison : ça se revend en {{v}}.','sell.discard':'Jeter','sell.discarded':'Stock jeté.',
+  'rent.late':'Loyer en retard ! Si tu ne trouves pas d\'argent, une dette commence dans {{v}}.',
+  'bakery.level':'Niveau {{v}}','bakery.money':'Argent : {{v}}','bakery.debt':'Dette : {{v}}','bakery.sellTitle':'Vendre « {{n}} » ?','bakery.sellWarn':'Tu perds cette pâtisserie et toutes ses statistiques. Tes succès restent.','bakery.partCash':'Argent en caisse','bakery.partStock':'Gâteaux en stock','bakery.partIng':'Ingrédients','bakery.partEquip':'Bâtiments, fours et espace','bakery.partRep':'Réputation et fonds de commerce','bakery.partDebt':'Dette à rembourser','bakery.partTotal':'Prix de vente','bakery.sellConfirm':'Vendre','bakery.best':'Le plus rentable','bakery.bestChart':'Le gâteau qui rapporte le plus','bakery.bestChartSub':'dans chaque pâtisserie, en argent gagné','bakery.noBest':'Rien vendu encore',
+  'bank.saving':'Tu économises {{v}} d\'intérêts','bank.levelReq':'Niveau {{v}} requis','bank.repayNow':'Rembourser ({{v}})','bank.limitHelp':'Plus ton niveau monte, plus la banque te fait confiance.',
+  'settings.themeScope':'Appliquer','settings.scopeAll':'À tout le jeu','settings.scopeHere':'À cette pâtisserie','settings.ownTheme':'Cette pâtisserie a son propre thème.','settings.ownThemeReset':'Suivre le thème du jeu','settings.themeParty':'Fête','settings.themeSpace':'Espace','settings.lockLevel':'au niveau 1000','settings.themeEnded':'La saison est finie : son thème n\'est plus disponible.',
+  'settings.birthdayFix':'Corriger ({{v}})','settings.birthdayFixed':'Date corrigée !','settings.birthdayHelpFix':'Tu t\'es trompé ? Corriger la date coûte {{v}}.',
+  'bob.sugarFed1':'Mmm… du sucre. Bon, ça va mieux.|Oh ! Mon péché mignon.|Du sucre ! Tu connais mes faiblesses.','bob.sugarFed0':'Merci ! Je suis de nouveau de bonne humeur !|Je t\'aime bien, finalement.','bob.sugarFed5':'Du sucre… ça faisait longtemps que je n\'avais pas souri.',
+  'bob.debtBonus':'Et tiens, voilà {{v}} de ma poche pour t\'aider. Ne le dis à personne.',
+  'bob.challengeHello':'Psst ! J\'ai un défi pour toi. {{d}}. Tu as 24 heures. Réussis, et je te donne 5 % de tout ton argent, soit {{v}} pour l\'instant !','bob.challengeYes':'J\'accepte !','bob.challengeNo':'Pas cette fois','bob.challengeNoLine':'Tant pis. Je reviendrai dans quelques jours.','bob.challengeWin':'Défi réussi ! Voilà {{v}}, c\'est mérité.','bob.challengeLost':'Le défi est terminé. Raté ! On retentera plus tard.',
+  'chal.banner':'Défi de Bob','chal.sold':'Vends {{v}} pièces','chal.made':'Prépare {{v}} pièces','chal.earned':'Gagne {{v}}','chal.buildings':'Achète {{v}} bâtiments','chal.orders':'Livre {{v}} commandes',
+  'console.mostUsed':'Tes commandes les plus utilisées','console.challengeStarted':'Bob te propose un défi.','console.maxDone':'Tout est au maximum, sauf les ingrédients : plus ils sont rares, plus la limite est haute.',
+  'footer.rights':'Turbonix Entertainment. Tous droits réservés.','footer.icons':'Icônes :',
   'tab.bank':'Banque',
   'bank.title':'Banque','bank.whatIs':'Bob, c\'est quoi un prêt ?','bank.balance':'Ton compte','bank.toRepay':'Reste à rembourser','bank.perMin':'Prélevé par minute','bank.rentDebt':'Dette de loyer',
   'bank.active':'Tes prêts en cours','bank.offers':'Demander un prêt','bank.loanOf':'Prêt de {{v}}','bank.remaining':'Reste {{v}}','bank.late':'En retard : pas assez d\'argent, ce prêt coûte de plus en plus cher.','bank.autoPay':'{{v}} prélevés par minute','bank.repayAll':'Tout rembourser ({{v}})',
@@ -19,7 +40,7 @@ LANGS.fr = {
   'bank.bobDebt':'Aïe. Tu n\'as plus de quoi payer le loyer : tu as {{v}} de dette. Pas de panique, je t\'ai créé un compte bancaire. Regarde, il y a un nouvel onglet : Banque.',
   'bank.bobLoan':'À la banque, tu peux demander un prêt. Un prêt, c\'est simple : la banque te donne de l\'argent tout de suite, et tu le lui rends petit à petit.',
   'bank.bobInterest':'Mais tu rends toujours un peu plus que ce que tu as reçu : ce petit plus, ce sont les intérêts. Par exemple, tu empruntes {{a}} et tu rembourses {{b}}. C\'est prélevé tout seul, un peu chaque seconde.',
-  'bank.bobAdvice':'Si tu n\'as plus d\'argent au moment du prélèvement, le prêt coûte de plus en plus cher. Alors, emprunte seulement ce que tu sais pouvoir rembourser. Et plus le prêt est gros, plus les intérêts le sont aussi !',
+  'bank.bobAdvice':'Si tu n\'as plus d\'argent au moment du prélèvement, le prêt coûte de plus en plus cher. Alors, emprunte seulement ce que tu sais pouvoir rembourser. Et rembourser en avance coûte moins cher : juste après l\'emprunt, tu ne perds rien !',
   'bank.bobGo':'Voir la banque',
   'rename.price':'Changer le nom de ta pâtisserie coûte {{v}}.','rename.noMoney':'Il te faut {{v}} pour la renommer.',
   'offline.loans':'Prêts remboursés : -{{v}}',
@@ -75,10 +96,10 @@ LANGS.fr = {
   'intro.name':'Il lui faut un nom, quand même. Comment veux-tu l\'appeler ?',
   'intro.namePlaceholder':'Le nom de ta pâtisserie','intro.nameError':'Il faut au moins une lettre !',
   'intro.money':'« {{n}} », j\'adore ! Tiens, voilà 50 € pour commencer. Ne dépense pas tout d\'un coup !',
-  'intro.outfit':'Bon, je vais enfiler ma tenue de chef. On se retrouve en cuisine !',
+  'intro.outfit':'Bon, je vais enfiler ma tenue de chef. On se retrouve en cuisine !<small class="bob-aside">(Entre nous, je ne dis jamais non à un peu de sucre.)</small>',
   'intro.go':'C\'est parti !','intro.moneyToast':'+50 € de la part de Bob !',
   'bob.p0':'Hé, ça chatouille !|Oui ? Je surveille le four.|Je suis Bob, pas un bouton !|Tu veux quelque chose ?',
-  'bob.p1':'Tu as fini de cliquer ?|Attention à ma toque !|Hé ! Je travaille, moi !|Ça devient lourd, là.',
+  'bob.p1':'Tu as fini de cliquer ?|Un peu de sucre me calmerait…|Attention à ma toque !|Hé ! Je travaille, moi !|Ça devient lourd, là.',
   'bob.p2':'Bon, ça commence à m\'énerver.|ARRÊTE de cliquer sur moi !|Je vais te mettre de la farine partout !|Tu n\'as pas des gâteaux à vendre ?',
   'bob.p3':'MAIS ÇA SUFFIT !|JE VAIS BRÛLER TOUS TES GÂTEAUX !|MON FOUET VA TE PARLER !|TU VAS ARRÊTER, OUI ?!',
   'bob.p4':'GRRRAAAH !|MES CIRCUITS SURCHAUFFENT !|ENCORE UN CLIC ET JE… JE…|J\'AI UN FOUR ET JE SAIS M\'EN SERVIR !|JE DÉMISSIONNE ! NON ! JE RESTE ET JE TE HAIS !',
@@ -112,7 +133,7 @@ LANGS.fr = {
   'settings.export':'Exporter la partie','settings.import':'Importer une partie','settings.exportBtn':'Copier','settings.importBtn':'Charger','settings.importPlaceholder':'Colle ton code ici...','settings.exported':'Code copié !','settings.imported':'Partie importée !','settings.importError':'Code invalide !','settings.saveFull':'Impossible de sauvegarder : le stockage du navigateur est plein !',
   'console.title':'Console de commandes','console.placeholder':'Tape une commande...','console.send':'OK','console.commands':'Commandes',
   'console.themesUnlocked':'Tous les thèmes sont débloqués pour toujours !','console.themeUnlocked':'{{n}} débloqué pour toujours !','console.unknownTheme':'Thème inconnu : {{n}}','console.themeLocked':'Thème verrouillé. Essaie /theme unlock.',
-  'console.help':'Commandes : /help, /level, /money, /max, /unmax, /undo, /building, /employee, /stats, /xp, /space, /rebirth, /debt, /theme, /buy, /sell, /random, /time, /bakery, /bank, /birthday, /gameover, /reset, /(ingrédient), /(recette). Clique sur le bouton Commandes pour tout comprendre.',
+  'console.help':'Commandes : /help, /level, /money, /max, /unmax, /undo, /building, /employee, /stats, /xp, /space, /debt, /theme, /buy, /sell, /random, /time, /bakery, /bank, /birthday, /gameover, /reset, /(ingrédient), /(recette). Clique sur le bouton Commandes pour tout comprendre.',
   'ban.message':'Tu es banni pendant {{v}} minutes !',
   'lvl1000.title':'FÉLICITATIONS !','lvl1000.text':'Tu as atteint le niveau 1000 ! Tu es un Maître Pâtissier Légendaire !',
   'debt.pay':'Rembourser','debt.paid':'{{v}} remboursés !','debt.cantPay':'Tu n\'as pas d\'argent pour rembourser !',
@@ -122,6 +143,22 @@ LANGS.fr = {
 
 // ======================== ENGLISH ========================
 LANGS.en = {
+  'order.title':'Orders','tab.orders':'Orders','order.doneCount':'{{v}} delivered','order.help':'Customers place orders. Bake what they want and deliver before time runs out: the harder the order, the bigger the bonus.','order.none':'No orders right now. Customers will show up soon!','order.level1':'Simple','order.level2':'Medium','order.level3':'Hard','order.level4':'Extreme','order.prime':'including {{v}} bonus','order.deliver':'Deliver','order.delivered':'Order delivered: +{{v}}!','order.new':'New order!','order.butler':'{{v}} head waiter(s) deliver whatever is ready.','order.butlerDone':'{{n}} delivered an order: +{{v}}!','order.unlocked':'Level 30! Customers place orders now. Check the Orders tab.',
+  'emp.maitre':'Head waiter','emp.desc.maitre':'Delivers customer orders for you, as soon as the stock is ready.',
+  'mach.title':'Machine shop','tab.machines':'Machines','mach.help':'Upgrades that last forever, for all your bakeries, even after a rebirth. They cost a lot.','mach.buy':'Buy ({{v}})','mach.max':'Maxed out','mach.bought':'Machine installed!','mach.now':'Current bonus: {{v}}%','mach.unlocked':'Level 50! The machine shop is open. It\'s expensive, but it\'s forever.',
+  'mach.petrin':'Industrial mixer','mach.petrin.d':'Baking {{v}}% faster per level.','mach.isolant':'Shop insulation','mach.isolant.d':'Rent {{v}}% cheaper per level.','mach.robot':'Kitchen robot','mach.robot.d':'Ingredients {{v}}% cheaper per level.','mach.fourturbo':'Convection oven','mach.fourturbo.d':'{{v}} more ovens per level.','mach.convoyeur':'Conveyor belt','mach.convoyeur.d':'Buildings {{v}}% more productive per level.','mach.caisse':'Self-checkout','mach.caisse.d':'Sellers {{v}}% faster per level.','mach.etiquette':'Luxury labeler','mach.etiquette.d':'Prices drop {{v}}% slower when you sell, per level.','mach.vitrine':'Chilled display','mach.vitrine.d':'Sale prices +{{v}}% per level.','mach.guichet':'Order desk','mach.guichet.d':'Order bonuses +{{v}}% per level.','mach.academie':'Taste academy','mach.academie.d':'XP +{{v}}% per level.',
+  'season.spring':'spring','season.summer':'summer','season.fall':'fall','season.winter':'winter','sell.offSeason':'Out of season: sells again in {{v}}.','sell.discard':'Throw away','sell.discarded':'Stock thrown away.',
+  'rent.late':'Rent is late! If you don\'t find money, a debt starts in {{v}}.',
+  'bakery.level':'Level {{v}}','bakery.money':'Money: {{v}}','bakery.debt':'Debt: {{v}}','bakery.sellTitle':'Sell "{{n}}"?','bakery.sellWarn':'You lose this bakery and all its statistics. Your achievements stay.','bakery.partCash':'Cash in the till','bakery.partStock':'Cakes in stock','bakery.partIng':'Ingredients','bakery.partEquip':'Buildings, ovens and space','bakery.partRep':'Reputation and goodwill','bakery.partDebt':'Debt to repay','bakery.partTotal':'Sale price','bakery.sellConfirm':'Sell','bakery.best':'Best earner','bakery.bestChart':'The cake that earns the most','bakery.bestChartSub':'in each bakery, in money earned','bakery.noBest':'Nothing sold yet',
+  'bank.saving':'You save {{v}} of interest','bank.levelReq':'Level {{v}} required','bank.repayNow':'Repay ({{v}})','bank.limitHelp':'The higher your level, the more the bank trusts you.',
+  'settings.themeScope':'Apply','settings.scopeAll':'To the whole game','settings.scopeHere':'To this bakery','settings.ownTheme':'This bakery has its own theme.','settings.ownThemeReset':'Follow the game theme','settings.themeParty':'Party','settings.themeSpace':'Space','settings.lockLevel':'at level 1000','settings.themeEnded':'The season is over: its theme is no longer available.',
+  'settings.birthdayFix':'Correct it ({{v}})','settings.birthdayFixed':'Date corrected!','settings.birthdayHelpFix':'Made a mistake? Correcting the date costs {{v}}.',
+  'bob.sugarFed1':'Mmm… sugar. OK, that\'s better.|Oh! My guilty pleasure.|Sugar! You know my weakness.','bob.sugarFed0':'Thanks! I\'m in a good mood again!|I like you after all.','bob.sugarFed5':'Sugar… it\'s been a long time since I smiled.',
+  'bob.debtBonus':'And here, {{v}} from my own pocket to help you. Don\'t tell anyone.',
+  'bob.challengeHello':'Psst! I have a challenge for you. {{d}}. You have 24 hours. Succeed, and I\'ll give you 5% of all your money, which is {{v}} right now!','bob.challengeYes':'I accept!','bob.challengeNo':'Not this time','bob.challengeNoLine':'Too bad. I\'ll be back in a few days.','bob.challengeWin':'Challenge complete! Here\'s {{v}}, well deserved.','bob.challengeLost':'The challenge is over. Missed it! We\'ll try again later.',
+  'chal.banner':'Bob\'s challenge','chal.sold':'Sell {{v}} pieces','chal.made':'Bake {{v}} pieces','chal.earned':'Earn {{v}}','chal.buildings':'Buy {{v}} buildings','chal.orders':'Deliver {{v}} orders',
+  'console.mostUsed':'Your most used commands','console.challengeStarted':'Bob offers you a challenge.','console.maxDone':'Everything is maxed out, except ingredients: the rarer they are, the higher the limit.',
+  'footer.rights':'Turbonix Entertainment. All rights reserved.','footer.icons':'Icons:',
   'tab.bank':'Bank',
   'bank.title':'Bank','bank.whatIs':'Bob, what\'s a loan?','bank.balance':'Your account','bank.toRepay':'Left to repay','bank.perMin':'Taken per minute','bank.rentDebt':'Rent debt',
   'bank.active':'Your current loans','bank.offers':'Ask for a loan','bank.loanOf':'{{v}} loan','bank.remaining':'{{v}} left','bank.late':'Late: not enough money, this loan keeps getting more expensive.','bank.autoPay':'{{v}} taken per minute','bank.repayAll':'Repay it all ({{v}})',
@@ -130,7 +167,7 @@ LANGS.en = {
   'bank.bobDebt':'Ouch. You can\'t pay the rent anymore: you have {{v}} of debt. Don\'t panic, I opened a bank account for you. Look, there\'s a new tab: Bank.',
   'bank.bobLoan':'At the bank, you can ask for a loan. A loan is simple: the bank gives you money right away, and you pay it back little by little.',
   'bank.bobInterest':'But you always pay back a bit more than you received: that little extra is called interest. For example, you borrow {{a}} and repay {{b}}. It\'s taken automatically, a little each second.',
-  'bank.bobAdvice':'If you run out of money when a payment is due, the loan keeps getting more expensive. So only borrow what you know you can repay. And the bigger the loan, the higher the interest!',
+  'bank.bobAdvice':'If you run out of money when a payment is due, the loan keeps getting more expensive. So only borrow what you know you can repay. And repaying early costs less: right after borrowing, you lose nothing!',
   'bank.bobGo':'See the bank',
   'rename.price':'Changing your bakery\'s name costs {{v}}.','rename.noMoney':'You need {{v}} to rename it.',
   'offline.loans':'Loans repaid: -{{v}}',
@@ -186,10 +223,10 @@ LANGS.en = {
   'intro.name':'It needs a name, though. What do you want to call it?',
   'intro.namePlaceholder':'Your bakery\'s name','intro.nameError':'At least one letter, please!',
   'intro.money':'"{{n}}", I love it! Here, take 50€ to get started. Don\'t spend it all at once!',
-  'intro.outfit':'Right, I\'ll go put on my chef outfit. See you in the kitchen!',
+  'intro.outfit':'Right, I\'ll go put on my chef outfit. See you in the kitchen!<small class="bob-aside">(Between us, I never say no to a bit of sugar.)</small>',
   'intro.go':'Let\'s go!','intro.moneyToast':'+50€ from Bob!',
   'bob.p0':'Hey, that tickles!|Yes? I\'m watching the oven.|I\'m Bob, not a button!|Do you want something?',
-  'bob.p1':'Are you done clicking?|Careful with my hat!|Hey! I\'m working here!|This is getting old.',
+  'bob.p1':'Are you done clicking?|A little sugar would calm me down…|Careful with my hat!|Hey! I\'m working here!|This is getting old.',
   'bob.p2':'OK, this is getting annoying.|STOP clicking on me!|I\'ll throw flour all over you!|Don\'t you have cakes to sell?',
   'bob.p3':'THAT\'S ENOUGH!|I\'LL BURN ALL YOUR CAKES!|MY WHISK WILL HAVE A WORD WITH YOU!|WILL YOU STOP?!',
   'bob.p4':'GRRRAAAH!|MY CIRCUITS ARE OVERHEATING!|ONE MORE CLICK AND I… I…|I HAVE AN OVEN AND I KNOW HOW TO USE IT!|I QUIT! NO! I\'M STAYING AND I HATE YOU!',
@@ -223,7 +260,7 @@ LANGS.en = {
   'settings.export':'Export save','settings.import':'Import save','settings.exportBtn':'Copy','settings.importBtn':'Load','settings.importPlaceholder':'Paste your code here...','settings.exported':'Code copied!','settings.imported':'Save imported!','settings.importError':'Invalid code!','settings.saveFull':'Can\'t save: browser storage is full!',
   'console.title':'Command console','console.placeholder':'Type a command...','console.send':'OK','console.commands':'Commands',
   'console.themesUnlocked':'All themes unlocked forever!','console.themeUnlocked':'{{n}} unlocked forever!','console.unknownTheme':'Unknown theme: {{n}}','console.themeLocked':'Theme locked. Try /theme unlock.',
-  'console.help':'Commands: /help, /level, /money, /max, /unmax, /undo, /building, /employee, /stats, /xp, /space, /rebirth, /debt, /theme, /buy, /sell, /random, /time, /bakery, /bank, /birthday, /gameover, /reset, /(ingredient), /(recipe). Click the Commands button to understand them all.',
+  'console.help':'Commands: /help, /level, /money, /max, /unmax, /undo, /building, /employee, /stats, /xp, /space, /debt, /theme, /buy, /sell, /random, /time, /bakery, /bank, /birthday, /gameover, /reset, /(ingredient), /(recipe). Click the Commands button to understand them all.',
   'ban.message':'You are banned for {{v}} minutes!',
   'lvl1000.title':'CONGRATULATIONS!','lvl1000.text':'You reached level 1000! You are a Legendary Master Baker!',
   'debt.pay':'Repay','debt.paid':'{{v}} repaid!','debt.cantPay':'You have no money to repay!',
@@ -281,3 +318,14 @@ function fmtMoney(amount) {
   if (currentLang === 'fr') txt = txt.replace('.', ',');
   return txt + curr.symbol;
 }
+
+// Les noms des gateaux de saison
+(function() {
+  Object.keys(SEASONAL_CAKES).forEach(function(season) {
+    SEASONAL_CAKES[season].forEach(function(c) {
+      var suffix = c[4] > 1 ? ' x' + c[4] : '';
+      LANGS.fr['r.' + c[0]] = c[2] + suffix;
+      LANGS.en['r.' + c[0]] = c[3] + suffix;
+    });
+  });
+})();

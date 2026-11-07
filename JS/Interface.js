@@ -50,6 +50,7 @@ var toastCounter = 0;
 var activeToasts = {};
 
 function toast(msg) {
+  if (typeof bgTick !== 'undefined' && bgTick) return; // Une autre patisserie : pas de bruit
   var area = document.getElementById('toast-area');
   if (!area) return;
   if (activeToasts[msg]) {
@@ -89,7 +90,10 @@ function removeToast(msg, div) {
 }
 
 function showLevelUp(lvl) {
+  if (typeof bgTick !== 'undefined' && bgTick) return;
   toast(t('xp.level', { v: lvl }));
+  if (lvl === ORDER_CONFIG.lvl) bobSay(t('order.unlocked'));
+  if (lvl === MACHINE_LVL) bobSay(t('mach.unlocked'));
   fxLevelUp();
   playSuccessSound();
   if (lvl === 1000 && !G.lvl1000Shown) {
@@ -138,7 +142,7 @@ function renderHeader() {
   h += '<span class="xp-bar-text">' + t('xp.text', { c: fmt(Math.floor(G.xp)), n: fmt(xpNeeded) }) + '</span></div>';
   h += '</div>';
   h += '<div class="header-right">';
-  h += headerBtn('showBakeriesModal()', t('bakery.title'), 'home');
+  h += headerBtn('showBakeriesModal()', t('bakery.title'), 'store', false, G.bakeries.length >= 2 ? G.bakeries.length : 0);
   var pauseLabel = G.paused ? t('pause.resume') : t('pause.title');
   h += headerBtn('togglePause()', pauseLabel, G.paused ? 'play' : 'pause');
   h += headerBtn('showSettingsModal()', t('settings.title'), 'settings');
@@ -150,6 +154,10 @@ function renderHeader() {
     if (G.bankUnlocked) alerts += ' <button class="debt-pay-btn" onclick="switchTab(\'bank\')">' + t('tab.bank') + '</button>';
     alerts += '</div>';
   }
+  if (G.rentLate > 0 && G.rentDebt <= 0 && G.money <= 0) {
+    alerts += '<div class="debt-warning rent-late">' + t('rent.late', { v: fmtTime(Math.max(0, RENT_CONFIG.graceSec - G.rentLate)) }) + '</div>';
+  }
+  if (G.challenge && G.challenge.accepted) alerts += challengeBanner();
   if (G.activeEvent) {
     var remaining = Math.max(0, Math.ceil((G.eventEndTime - Date.now()) / 1000));
     alerts += '<div class="event-banner">⚡ ' + t('event.' + G.activeEvent, { t: remaining }) + '</div>';
@@ -172,9 +180,9 @@ function renderHeader() {
   }
 }
 
-function headerBtn(action, label, icon, off) {
+function headerBtn(action, label, icon, off, count) {
   var safe = escH(label);
-  return '<button class="hbtn' + (off ? ' off' : '') + '" onclick="' + action + '" title="' + safe + '" aria-label="' + safe + '">' + uiIcon(icon) + '</button>';
+  return '<button class="hbtn' + (off ? ' off' : '') + '" onclick="' + action + '" title="' + safe + '" aria-label="' + safe + '">' + uiIcon(icon) + (count ? '<span class="hbtn-count">' + count + '</span>' : '') + '</button>';
 }
 
 // Le logo ne fait rien... ou presque
@@ -186,7 +194,11 @@ function logoClick() {
 
 // ============ ONGLETS ============
 function visibleTabs() {
-  return G.bankUnlocked ? ['rec', 'sell', 'bld', 'emp', 'bank', 'ach', 'stats'] : ['rec', 'sell', 'bld', 'emp', 'ach', 'stats'];
+  var tabs = ['rec', 'sell', 'bld', 'emp'];
+  if (G.bankUnlocked) tabs.push('bank');
+  if (G.level >= ORDER_CONFIG.lvl) tabs.push('orders');
+  if (G.level >= MACHINE_LVL) tabs.push('machines');
+  return tabs.concat(['ach', 'stats']);
 }
 
 function renderTabs() {
@@ -195,12 +207,16 @@ function renderTabs() {
   var tabs = visibleTabs();
   if (tabs.indexOf(currentTab) < 0) currentTab = 'rec';
   el.style.setProperty('--tabs', tabs.length);
+  el.classList.toggle('many', tabs.length >= 8);
   var h = '<div class="gtab-track"><span class="gtab-ind" style="--i:' + tabs.indexOf(currentTab) + '"></span></div>';
   for (var i = 0; i < tabs.length; i++) {
     var active = currentTab === tabs[i];
     h += '<button class="gtab' + (active ? ' active' : '') + '" onclick="switchTab(\'' + tabs[i] + '\')" title="' + escH(t('tab.key', { v: i + 1 })) + '"' + (active ? ' aria-current="page"' : '') + '>' + uiIcon(tabs[i]) + '<span>' + t('tab.' + tabs[i]) + '</span>';
     if (tabs[i] === 'emp' && G.applicants && G.applicants.length > 0) {
       h += '<span class="applicant-badge">' + G.applicants.length + '</span>';
+    }
+    if (tabs[i] === 'orders' && G.orders.length > 0) {
+      h += '<span class="applicant-badge">' + G.orders.length + '</span>';
     }
     h += '</button>';
   }
@@ -339,6 +355,8 @@ function renderMainPanel() {
     case 'bld': renderBuildings(); break;
     case 'emp': renderEmployees(); break;
     case 'bank': renderBank(); break;
+    case 'orders': renderOrders(); break;
+    case 'machines': renderMachines(); break;
     case 'ach': if (ui.achDirty) renderAchievements(); break;
     case 'stats': renderStats(); break;
   }
@@ -352,7 +370,7 @@ function recipeProfit(rec) {
 function visibleRecipes() {
   var search = ui.recSearch.trim().toLowerCase();
   var list = REC.filter(function(rec) {
-    if (rec.unlockLvl > G.level) return false;
+    if (rec.unlockLvl > G.level || !seasonOk(rec)) return false;
     if (ui.recOnlyMakable && craftBlockReason(rec)) return false;
     if (ui.recOnlyFav && !G.favRecipes[rec.id]) return false;
     if (search && t('r.' + rec.id).toLowerCase().indexOf(search) < 0) return false;
@@ -381,7 +399,7 @@ function renderRecipes() {
 
   // Ce qui arrive bientot
   if (!ui.recSearch && !ui.recOnlyMakable && !ui.recOnlyFav) {
-    var next = REC.filter(function(r) { return r.unlockLvl > G.level && r.unlockLvl <= G.level + 2; });
+    var next = REC.filter(function(r) { return r.unlockLvl > G.level && r.unlockLvl <= G.level + 2 && seasonOk(r); });
     next.forEach(function(rec) {
       h += '<div class="rec-card locked"><span class="rec-emoji">\u{1F512}</span> ' + t('ing.locked', { v: rec.unlockLvl }) + '</div>';
     });
@@ -394,7 +412,7 @@ function renderRecipes() {
     h += '<div class="rec-card' + (block ? ' disabled' : '') + '">';
     h += '<span class="rec-emoji">' + rec.e + '</span>';
     h += '<div class="rec-info">';
-    h += '<div class="rec-name"><button class="fav-btn' + (G.favRecipes[rec.id] ? ' on' : '') + '" onclick="toggleFav(\'' + rec.id + '\')" title="' + escH(t('rec.fav')) + '" aria-label="' + escH(t('rec.fav')) + '">' + uiIcon('star') + '</button>' + t('r.' + rec.id) + '</div>';
+    h += '<div class="rec-name"><button class="fav-btn' + (G.favRecipes[rec.id] ? ' on' : '') + '" onclick="toggleFav(\'' + rec.id + '\')" title="' + escH(t('rec.fav')) + '" aria-label="' + escH(t('rec.fav')) + '">' + uiIcon('star') + '</button>' + t('r.' + rec.id) + (rec.season ? '<span class="season-badge ' + rec.season + '">' + t('season.' + rec.season) + '</span>' : '') + '</div>';
     h += '<div class="rec-req">';
     for (var k in rec.req) {
       var have = G.ing[k] || 0;
@@ -487,6 +505,13 @@ function renderSell() {
     var stock = G.cakes[rec.id] || 0;
     if (stock <= 0) return;
     any = true;
+    if (!seasonOk(rec)) {
+      h += '<div class="sell-card off-season"><span class="sell-emoji">' + rec.e + '</span><div class="sell-info">';
+      h += '<div class="sell-name">' + t('r.' + rec.id) + '<span class="season-badge ' + rec.season + '">' + t('season.' + rec.season) + '</span></div>';
+      h += '<div class="sell-stock">' + t('sell.stock', { v: fmt(stock) }) + '</div><div class="off-note">' + t('sell.offSeason', { v: t('season.' + rec.season) }) + '</div></div>';
+      h += '<div class="sell-btns"><button class="btn btn-small btn-danger" onclick="doDiscard(\'' + rec.id + '\')">' + t('sell.discard') + '</button></div></div>';
+      return;
+    }
     var pct = inflationPct(rec);
     h += '<div class="sell-card"><span class="sell-emoji">' + rec.e + '</span><div class="sell-info">';
     h += '<div class="sell-name">' + t('r.' + rec.id) + '</div>';
@@ -501,6 +526,13 @@ function renderSell() {
   });
   if (!any) h += '<p class="empty-note">' + t('sell.noStock') + '</p>';
   setHTML(el, h);
+}
+
+function doDiscard(recId) {
+  G.cakes[recId] = 0;
+  toast(t('sell.discarded'));
+  renderSell();
+  renderSpaceBar();
 }
 
 function afterSell() {
@@ -1008,16 +1040,19 @@ function showBanOverlay(seconds) {
 function showBakeriesModal() {
   ensureBakeryList();
   var h = '<h2>' + t('bakery.title') + '</h2><p class="hint-note">' + t('bakery.help') + '</p>';
+  var several = G.bakeries.length >= 2;
   G.bakeries.forEach(function(b, i) {
     var isCurrent = i === G.currentBakeryIndex;
+    var s = isCurrent ? G : b.state;
     h += '<div class="bakery-card' + (isCurrent ? ' current' : '') + '">';
     h += '<span class="bakery-card-name">' + escH(isCurrent ? G.bakeryName : b.name) + '</span>';
-    h += '<span>' + t('bakery.value', { v: fmtMoney(getBakeryValueForIndex(i)) }) + '</span>';
-    if (isCurrent) {
-      h += '<span class="bakery-current-tag">' + t('bakery.current') + '</span>';
-    } else {
-      h += '<button class="btn btn-small btn-primary" onclick="doSwitchBakery(' + i + ')">' + t('bakery.go') + '</button>';
-      h += '<button class="btn btn-small btn-danger" onclick="doSellBakery(' + i + ')">' + t('bakery.sell') + '</button>';
+    if (isCurrent) h += '<span class="bakery-current-tag">' + t('bakery.current') + '</span>';
+    else h += '<button class="btn btn-small btn-primary" onclick="doSwitchBakery(' + i + ')">' + t('bakery.go') + '</button>';
+    if (several) h += '<button class="btn btn-small btn-danger" onclick="confirmSellBakery(' + i + ')">' + t('bakery.sell') + '</button>';
+    if (s) {
+      h += '<div class="bakery-stats"><span>' + t('bakery.level', { v: s.level }) + '</span><span>' + t('bakery.money', { v: fmtMoney(s.money) }) + '</span>';
+      if (s.rentDebt > 0) h += '<span class="debt">' + t('bakery.debt', { v: fmtMoney(s.rentDebt) }) + '</span>';
+      h += '<span>' + t('bakery.value', { v: fmtMoney(getBakeryValueForIndex(i)) }) + '</span></div>';
     }
     h += '</div>';
   });
@@ -1028,11 +1063,26 @@ function showBakeriesModal() {
 }
 
 function doSwitchBakery(index) {
-  if (switchToBakery(index)) { hideModal(); fullRender(); }
+  if (switchToBakery(index)) { hideModal(); enforceThemeLocks(); applyTheme(); fullRender(); }
+}
+
+function confirmSellBakery(index) {
+  var p = bakeryValueParts(index);
+  if (!p) return;
+  var name = index === G.currentBakeryIndex ? G.bakeryName : G.bakeries[index].name;
+  var h = '<h2>' + t('bakery.sellTitle', { n: escH(name) }) + '</h2><p class="warning">' + t('bakery.sellWarn') + '</p><ul class="sell-lines">';
+  [['bakery.partCash', p.cash], ['bakery.partStock', p.stock], ['bakery.partIng', p.ingredients], ['bakery.partEquip', p.equipment], ['bakery.partRep', p.reputation]].forEach(function(x) {
+    h += '<li><span>' + t(x[0]) + '</span><b>' + fmtMoney(x[1]) + '</b></li>';
+  });
+  if (p.debt > 0) h += '<li><span>' + t('bakery.partDebt') + '</span><b>-' + fmtMoney(p.debt) + '</b></li>';
+  h += '<li class="total"><span>' + t('bakery.partTotal') + '</span><b>' + fmtMoney(p.total) + '</b></li></ul>';
+  h += '<div class="modal-btns"><button class="btn btn-danger" onclick="doSellBakery(' + index + ')">' + t('bakery.sellConfirm') + '</button>';
+  h += '<button class="btn" onclick="showBakeriesModal()">' + t('common.cancel') + '</button></div>';
+  showModal(h);
 }
 
 function doSellBakery(index) {
-  if (sellBakery(index)) { showBakeriesModal(); renderHeader(); }
+  if (sellBakery(index)) { enforceThemeLocks(); applyTheme(); fullRender(); showBakeriesModal(); renderHeader(); }
 }
 
 function doOpenNewBakery() {
@@ -1063,7 +1113,7 @@ function doGameOverSell() {
 }
 
 function doGameOverRestart() {
-  var keep = { settings: G.settings, achievements: G.achievements, birthday: G.birthday, unlockedThemes: G.unlockedThemes, cheatUnlocked: G.cheatUnlocked, bobClicks: G.bobClicks, wentBankrupt: true, logoClicks: G.logoClicks, birthdaySetOn: G.birthdaySetOn, birthdayBoostYear: G.birthdayBoostYear, bakeries: G.bakeries, currentBakeryIndex: G.currentBakeryIndex, secondBakery: G.secondBakery, bankUnlocked: G.bankUnlocked, achHere: G.achHere };
+  var keep = { settings: G.settings, achievements: G.achievements, birthday: G.birthday, unlockedThemes: G.unlockedThemes, cheatUnlocked: G.cheatUnlocked, bobClicks: G.bobClicks, wentBankrupt: true, logoClicks: G.logoClicks, birthdaySetOn: G.birthdaySetOn, birthdayBoostYear: G.birthdayBoostYear, machines: G.machines, cmdUsage: G.cmdUsage, sugarFed: G.sugarFed, challenge: G.challenge, nextChallengeAt: G.nextChallengeAt, bakeryTheme: G.bakeryTheme, bakeries: G.bakeries, currentBakeryIndex: G.currentBakeryIndex, secondBakery: G.secondBakery, bankUnlocked: G.bankUnlocked, achHere: G.achHere };
   G = createFreshState();
   Object.assign(G, keep);
   if (G.bakeries[G.currentBakeryIndex]) G.bakeries[G.currentBakeryIndex].name = G.bakeryName;
@@ -1136,4 +1186,10 @@ function fullRender() {
   renderTutorial();
   renderBob();
   renderConsoleButton();
+  renderFooter();
+}
+
+function renderFooter() {
+  var el = document.getElementById('footer-text');
+  if (el) setHTML(el, t('footer.rights') + ' ' + t('footer.icons') + ' <a href="https://github.com/jdecked/twemoji" target="_blank" rel="noopener">Twemoji</a> (CC-BY 4.0).');
 }

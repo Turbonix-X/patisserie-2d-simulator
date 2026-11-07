@@ -64,9 +64,19 @@ function createFreshState() {
     bankUnlocked: false,
     loans: [],
     nextLoanId: 1,
+    machines: {},
+    orders: [],
+    nextOrderId: 1,
+    nextOrderAt: 0,
+    bakeryTheme: null,
+    rentLate: 0,
+    cmdUsage: {},
+    challenge: null,
+    nextChallengeAt: 0,
+    sugarFed: 0,
     history: { t: [], money: [], earned: [], spent: [], level: [], sold: [], step: 30000, next: 0 },
     settings: {
-      lang: 'fr',
+      lang: lang,
       theme: 'light',
       currency: 'eur',
       music: true,
@@ -92,8 +102,10 @@ function createFreshState() {
       totalInterestPaid: 0,
       loansTaken: 0,
       loansRepaid: 0,
+      ordersDone: 0,
+      earnedById: {},
     },
-    saveVersion: 9,
+    saveVersion: 10,
   };
   ING.forEach(function(i) { state.ing[i.id] = 0; });
   REC.forEach(function(r) { state.cakes[r.id] = 0; state.soldCount[r.id] = 0; });
@@ -110,7 +122,7 @@ function migrateSave(data) {
   // Tout champ absent reprend sa valeur de depart
   for (var k in fresh) {
     if (data[k] === undefined || data[k] === null) {
-      if (k !== 'birthday' && k !== 'activeEvent' && k !== 'birthdaySetOn' && k !== 'birthdayBoostYear') data[k] = fresh[k];
+      if (k !== 'birthday' && k !== 'activeEvent' && k !== 'birthdaySetOn' && k !== 'birthdayBoostYear' && k !== 'bakeryTheme' && k !== 'challenge') data[k] = fresh[k];
     }
   }
   ['settings', 'stats'].forEach(function(section) {
@@ -158,6 +170,12 @@ function migrateSave(data) {
     if (data.gameOver && data.rentDebt > 0) data.gameOver = false;
     if (data.bakeries.length >= 2) data.secondBakery = true;
     data.saveVersion = 9;
+  }
+  // Avant la Beta 1.2 : le loyer est moins cher et les dettes moins dures, les anciennes sont effacees
+  if (data.saveVersion < 10) {
+    data.rentDebt = 0;
+    data.gameOver = false;
+    data.saveVersion = 10;
   }
   // Les autres patisseries sont sauvegardees a l'interieur de celle-ci
   data.bakeries.forEach(function(b) { if (b.state) b.state = migrateSave(b.state); });

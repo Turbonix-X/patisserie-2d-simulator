@@ -7,7 +7,7 @@
 // ============ BOB QUI PARLE EN GRAND ============
 function bobFigure() {
   var svg = document.querySelector('#bob svg');
-  return '<div class="bob-talk-figure" data-anger="' + (bobAnger() === 5 ? 5 : 0) + '">' + (svg ? svg.outerHTML : '') + '</div>';
+  return '<div class="bob-talk-figure bob-fig" data-anger="' + (bobAnger() === 5 ? 5 : 0) + '">' + (svg ? svg.outerHTML : '') + '</div>';
 }
 
 // Plusieurs repliques a la suite, puis une action
@@ -50,18 +50,22 @@ function modalIsOpen() {
   return !!el && el.style.display === 'flex';
 }
 
+var BOB_DEBT_GIFT = 50;
+
 // A appeler a chaque seconde de jeu
 function checkFirstDebt() {
   if (G.bankUnlocked || G.rentDebt <= 0 || modalIsOpen()) return;
   G.bankUnlocked = true;
+  G.money += BOB_DEBT_GIFT; // Bob met la main a la poche
   renderTabs();
+  renderHeader();
   save();
   showBankExplanation(true);
 }
 
 function showBankExplanation(firstTime) {
   var lines = [];
-  if (firstTime) lines.push(t('bank.bobDebt', { v: fmtMoney(G.rentDebt) }));
+  if (firstTime) lines.push(t('bank.bobDebt', { v: fmtMoney(G.rentDebt) }) + ' ' + t('bob.debtBonus', { v: fmtMoney(BOB_DEBT_GIFT) }));
   lines.push(t('bank.bobLoan'));
   lines.push(t('bank.bobInterest', { a: fmtMoney(100), b: fmtMoney(110) }));
   lines.push(t('bank.bobAdvice'));
@@ -92,7 +96,9 @@ function renderBank() {
       h += '<span>' + t('bank.remaining', { v: fmtMoney(l.remaining) }) + '</span></div>';
       h += '<div class="loan-bar" role="progressbar" aria-valuenow="' + Math.floor(pct) + '" aria-valuemin="0" aria-valuemax="100"><div style="width:' + pct.toFixed(1) + '%"></div></div>';
       h += '<div class="loan-active-foot"><span>' + (l.late ? t('bank.late') : t('bank.autoPay', { v: fmtMoney(l.perSec * 60) })) + '</span>';
-      h += '<button class="btn btn-small btn-primary" onclick="doRepayLoan(' + l.id + ')"' + (G.money < l.remaining ? ' disabled' : '') + '>' + t('bank.repayAll', { v: fmtMoney(l.remaining) }) + '</button></div>';
+      var payoff = loanPayoff(l);
+      h += '<button class="btn btn-small btn-primary" onclick="doRepayLoan(' + l.id + ')"' + (G.money < payoff ? ' disabled' : '') + '>' + t('bank.repayNow', { v: fmtMoney(payoff) }) + '</button></div>';
+      if (l.remaining - payoff >= 0.01) h += '<div class="loan-saving">' + t('bank.saving', { v: fmtMoney(l.remaining - payoff) }) + '</div>';
       h += '</div>';
     });
     h += '</div>';
@@ -101,15 +107,17 @@ function renderBank() {
   h += '<h3 class="bank-h">' + t('bank.offers') + '</h3><div class="loan-grid">';
   LOANS.forEach(function(offer) {
     var active = hasLoan(offer.amount);
-    h += '<div class="loan-card' + (active ? ' taken' : '') + '">';
+    var locked = !loanUnlocked(offer);
+    h += '<div class="loan-card' + (active ? ' taken' : '') + (locked ? ' locked' : '') + '">';
     h += '<div class="loan-amount">' + fmtLoan(offer.amount) + '</div>';
     h += '<dl><div><dt>' + t('bank.rate') + '</dt><dd>' + Math.round(offer.rate * 100) + ' %</dd></div>';
     h += '<div><dt>' + t('bank.repay') + '</dt><dd>' + fmtLoan(offer.amount * (1 + offer.rate)) + '</dd></div>';
     h += '<div><dt>' + t('bank.during') + '</dt><dd>' + t('bank.minutes', { v: offer.minutes }) + '</dd></div></dl>';
-    h += '<button class="btn btn-small' + (active ? '' : ' btn-primary') + '" onclick="doTakeLoan(' + offer.amount + ')"' + (active ? ' disabled' : '') + '>' + (active ? t('bank.inProgress') : t('bank.borrow')) + '</button>';
+    if (locked) h += '<div class="loan-lock">\u{1F512} ' + t('bank.levelReq', { v: offer.minLvl }) + '</div>';
+    else h += '<button class="btn btn-small' + (active ? '' : ' btn-primary') + '" onclick="doTakeLoan(' + offer.amount + ')"' + (active ? ' disabled' : '') + '>' + (active ? t('bank.inProgress') : t('bank.borrow')) + '</button>';
     h += '</div>';
   });
-  h += '</div><p class="hint-note">' + t('bank.oneEach') + '</p>';
+  h += '</div><p class="hint-note">' + t('bank.oneEach') + ' ' + t('bank.limitHelp') + '</p>';
   setHTML(el, h);
 }
 

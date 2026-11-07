@@ -20,6 +20,7 @@
 <script>document.write('<script src="../JS/Logic.js?t=' + Date.now() + '"><\/script>');</script>
 <script>document.write('<script src="../JS/Achievements.js?t=' + Date.now() + '"><\/script>');</script>
 <script>
+currentLang = 'fr';
 var results = [];
 function check(name, ok, detail) { results.push({ name: name, ok: !!ok, detail: detail || '' }); }
 
@@ -144,17 +145,29 @@ check('Tous les noms sont traduits', missing.length === 0, missing.slice(0, 8).j
 check('Le francais et l anglais ont les memes textes', onlyOne.length === 0, onlyOne.slice(0, 8).join(', '));
 
 // --- Banque ---
-G = createFreshState(); G.money = 0;
+G = createFreshState(); G.money = 0; G.level = 50;
 check('Pas de pret sans compte', takeLoan(100) === false);
 G.bankUnlocked = true;
 check('Les 9 prets existent', LOANS.map(function(l) { return l.amount; }).join() === '10,20,50,100,200,500,1000,5000,10000');
 var earned0 = G.totalEarned;
 check('Un pret donne l argent sans compter comme un gain', takeLoan(100) && G.money === 100 && G.totalEarned === earned0);
 check('Un seul pret de chaque montant', takeLoan(100) === false);
-G = createFreshState(); G.bankUnlocked = true; G.money = 1000; takeLoan(100);
+G = createFreshState(); G.bankUnlocked = true; G.level = 1;
+check('La limite de pret depend du niveau', takeLoan(50) && !takeLoan(100) && !takeLoan(10000));
+G.level = 40;
+check('... et monte avec le niveau', takeLoan(10000));
+G = createFreshState(); G.bankUnlocked = true; G.level = 50; G.money = 1000; takeLoan(100);
 for (var ls2 = 0; ls2 < 400; ls2++) tickLoans(1);
-check('... et il coute le montant plus les interets', G.loans.length === 0 && Math.abs(G.money - (1100 - 110)) < 0.05, G.money);
-G = createFreshState(); G.bankUnlocked = true; takeLoan(100); G.money = 0;
+check('Un pret va au bout : le montant plus les interets', G.loans.length === 0 && Math.abs(G.money - (1100 - 110)) < 0.05, G.money);
+G = createFreshState(); G.bankUnlocked = true; G.level = 50; G.money = 0; takeLoan(100);
+var idNow = G.loans[0].id;
+check('Rembourser tout de suite ne coute rien', repayLoan(idNow) && Math.abs(G.money) < 0.001 && G.loans.length === 0, G.money);
+G = createFreshState(); G.bankUnlocked = true; G.level = 50; G.money = 1000; takeLoan(100);
+for (var ls3 = 0; ls3 < 150; ls3++) tickLoans(1); // la moitie du temps
+var left = loanPayoff(G.loans[0]), m1 = G.money;
+repayLoan(G.loans[0] && G.loans[0].id);
+check('Rembourser en avance coute moins cher', 1100 - G.money < 110 - 1 && 1100 - G.money > 100, 1100 - G.money);
+G = createFreshState(); G.bankUnlocked = true; G.level = 50; takeLoan(100); G.money = 0;
 var before = G.loans[0].remaining; tickLoans(60);
 check('Sans argent, un pret coute plus cher', G.loans[0].late && G.loans[0].remaining > before);
 LOANS.forEach(function(l) { if (!hasLoan(l.amount)) takeLoan(l.amount); });
@@ -165,6 +178,86 @@ check('... sinon tu peux encore emprunter', checkGameOver() === false);
 G = createFreshState(); G.bankUnlocked = true; G.level = 40; G.money = 6000; takeLoan(10);
 doRebirth();
 check('Le rebirth garde les prets et le compte', G.loans.length === 1 && G.bankUnlocked);
+
+// --- Dette moins facile ---
+G = createFreshState(); G.money = 0;
+tickRent(60);
+check('Le loyer impaye ne fait pas de dette tout de suite', G.rentDebt === 0 && G.rentLate === 60);
+tickRent(200);
+check('... seulement apres 3 minutes', G.rentDebt > 0);
+G.money = 10; G.rentDebt = 0; tickRent(1);
+check('Payer le loyer remet le compteur a zero', G.rentLate === 0);
+
+// --- Saisons ---
+var realSeason = currentSeason;
+['spring', 'summer', 'fall', 'winter'].forEach(function(sn) {
+  var list = REC.filter(function(r) { return r.season === sn; });
+  check('10 gateaux pour ' + sn + ', du niveau 1 au niveau 900', list.length === 10 && list[0].unlockLvl === 1 && list[9].unlockLvl === 900);
+});
+G = createFreshState(); G.level = 1000; G.cakes.wi_biscuit = 5; G.ing.farine = 1e4; G.ing.sucre = 1e4; G.ing.oeuf = 1e4;
+currentSeason = function() { return 'summer'; };
+var offRec = findRec('wi_biscuit');
+check('Hors saison : ni preparer ni vendre', !canMake(offRec) && doSell(offRec, 5) === 0 && G.cakes.wi_biscuit === 5 && stockValue() === 0);
+currentSeason = function() { return 'winter'; };
+check('En saison : on prepare et on vend', canMake(offRec) && doSell(offRec, 5) > 0 && G.cakes.wi_biscuit === 0);
+currentSeason = realSeason;
+var saisonPerte = REC.filter(function(r) { return r.season && r.val * r.qty <= cost(r); }).map(function(r) { return r.id; });
+check('Les gateaux de saison sont rentables', saisonPerte.length === 0, saisonPerte.join(', '));
+
+// --- Commandes et machines ---
+G = createFreshState(); G.level = 200; G.money = 0;
+var ord = createOrder();
+check('Une commande a une prime', ord && ord.reward > ord.base);
+check('Plus de gateaux differents, plus de prime', ORDER_CONFIG.prime[4] > ORDER_CONFIG.prime[3] && ORDER_CONFIG.prime[3] > ORDER_CONFIG.prime[2] && ORDER_CONFIG.prime[2] > ORDER_CONFIG.prime[1]);
+G.orders = [ord];
+check('Sans stock, pas de livraison', fulfillOrder(ord.id) === 0);
+ord.items.forEach(function(it) { G.cakes[it.recId] = it.qty; });
+check('Livrer paie la commande et retire le stock', fulfillOrder(ord.id) === ord.reward && G.money === ord.reward && G.orders.length === 0);
+G = createFreshState(); G.level = 200; G.money = 1e9; G.nextOrderAt = 1;
+hireEmployee('maitre');
+var ord2 = createOrder(); ord2.expiresAt = Date.now() + 1e7; G.orders = [ord2];
+ord2.items.forEach(function(it) { G.cakes[it.recId] = it.qty; });
+G.nextOrderAt = Date.now() + 1e7;
+for (var ms2 = 0; ms2 < 120; ms2++) tickOrders(1);
+check('Le maitre d hotel livre tout seul', G.stats.ordersDone >= 1, G.stats.ordersDone);
+G = createFreshState(); G.level = 49; G.money = 1e12;
+check('Pas de machine avant le niveau 50', buyMachine('vitrine') === false);
+G.level = 50;
+var priceBefore = sellValueMult();
+check('Une machine ameliore le jeu', buyMachine('vitrine') && sellValueMult() > priceBefore && machineCost(findMachine('vitrine')) > 500000);
+G.level = 40; G.money = 1e6; doRebirth();
+check('Les machines restent apres un rebirth', machineLevel('vitrine') === 1);
+
+// --- Toutes les patisseries travaillent ---
+G = createFreshState(); G.money = 1e6; G.level = 50; G.bakeryName = 'Une'; openNewBakery(true, 'Deux');
+var other = G.bakeries[G.bakeries.length - 1].state;
+other.buildings[BUILDINGS[0].id].qty = 10; other.level = 50;
+var ingBefore = other.ing[BUILDINGS[0].produces], mainIng = G.ing[BUILDINGS[0].produces];
+tickBackgroundBakeries(100);
+check('Une patisserie produit meme sans toi', other.ing[BUILDINGS[0].produces] > ingBefore && G.ing[BUILDINGS[0].produces] === mainIng);
+check('Apres, on revient bien dans la sienne', G.bakeryName === 'Une' && !bgTick);
+
+// --- Vendre une patisserie ---
+G = createFreshState(); G.money = 1e6; G.level = 50; G.bakeryName = 'Une'; openNewBakery();
+var sold = G.bakeries[1].state;
+var v0 = getBakeryValueForIndex(1);
+sold.cakes.cookie = 100; sold.buildings[BUILDINGS[0].id].qty = 5; sold.totalEarned = 1000;
+check('Le prix depend de ce qu elle contient', getBakeryValueForIndex(1) > v0);
+var moneyBefore = G.money, price = getBakeryValueForIndex(1);
+check('La vendre verse le prix et la retire', sellBakery(1) && G.money === moneyBefore + price && G.bakeries.length === 1);
+
+// --- /max et themes ---
+check('Limite de /max : plus c est rare, plus c est haut', maxStockFor(findIng('farine')) < maxStockFor(findIng('cristalceleste')) && maxStockFor(findIng('lait')) < maxStockFor(findIng('infinipur')));
+G = createFreshState(); G.money = 100; setBirthday(1, 1);
+check('Corriger son anniversaire coute 50 EUR', fixBirthday(2, 3) && G.money === 50 && G.birthday.month === 3);
+G = createFreshState();
+check('Le theme espace attend le niveau 1000', themeLockReason(findTheme('space')) === 'level');
+G.level = 1000;
+check('... et se debloque pour toujours', themeLockReason(findTheme('space')) === null && G.unlockedThemes.space);
+G = createFreshState(); G.settings.theme = 'dark'; G.bakeryTheme = 'light';
+check('Une patisserie peut avoir son propre theme', activeThemeId() === 'light');
+G = createFreshState(); G.settings.theme = currentSeason() === 'fall' ? 'winter' : 'fall';
+check('Un theme de saison se bloque quand la saison passe', enforceThemeLocks() && G.settings.theme === 'light');
 
 // --- Renommer ---
 G = createFreshState(); G.bakeryName = 'A'; G.money = 99;
@@ -201,7 +294,7 @@ G = createFreshState();
 var oldSave = JSON.parse(JSON.stringify(G));
 delete oldSave.ovens; oldSave.saveVersion = 7; oldSave.settings.musicVolume = 0.3; oldSave.settings.theme = 'nature_fleur'; oldSave.stats.totalClicks = 5;
 var migrated = migrateSave(oldSave);
-check('Une ancienne sauvegarde se met a jour', migrated.ovens === 2 && migrated.settings.musicVolume === 30 && migrated.settings.theme === 'light' && migrated.introDone && migrated.saveVersion === 9);
+check('Une ancienne sauvegarde se met a jour', migrated.ovens === 2 && migrated.settings.musicVolume === 30 && migrated.settings.theme === 'light' && migrated.introDone && migrated.saveVersion === 10);
 check('Un code invalide est refuse', importSave('abc') === false && importSave(btoa('{"money":"x"}')) === false);
 
 var ko = results.filter(function(r) { return !r.ok; }).length;

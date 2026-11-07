@@ -41,6 +41,10 @@ function showSettingsModal() {
   showModal(h, 'modal-settings');
 }
 
+function currencyName(c) {
+  try { return new Intl.DisplayNames([currentLang], { type: 'currency' }).of(c.id.toUpperCase()); } catch (e) { return c.fullName; }
+}
+
 function settingsGeneral() {
   var lang = '<div class="segmented">';
   LANG_LIST.forEach(function(l) {
@@ -49,32 +53,45 @@ function settingsGeneral() {
   lang += '</div>';
   var curr = '<select class="set-select" aria-label="' + escH(t('settings.currency')) + '" onchange="setCurrency(this.value);showSettingsModal()">';
   CURRENCIES.forEach(function(c) {
-    curr += '<option value="' + c.id + '"' + (G.settings.currency === c.id ? ' selected' : '') + '>' + c.symbol + ' · ' + c.fullName + '</option>';
+    curr += '<option value="' + c.id + '"' + (G.settings.currency === c.id ? ' selected' : '') + '>' + c.symbol + ' · ' + currencyName(c) + '</option>';
   });
   curr += '</select>';
   var h = setCard('', setRow(t('settings.lang'), t('settings.langHelp'), lang) + setRow(t('settings.currency'), t('settings.currencyHelp'), curr));
   var bday;
   if (G.birthday) {
-    bday = setRow(t('settings.birthday'), t('settings.birthdayHelpSet'), '<span class="set-value">' + t('settings.birthdaySet', { d: G.birthday.day, m: G.birthday.month }) + '</span>');
+    var fix = '<div class="birthday-pick"><span class="set-value">' + t('settings.birthdaySet', { d: G.birthday.day, m: G.birthday.month }) + '</span>' + birthdaySelects(G.birthday.day, G.birthday.month);
+    fix += '<button class="btn btn-small" onclick="confirmBirthdayFix()"' + (G.money < BIRTHDAY_FIX_COST ? ' disabled' : '') + '>' + t('settings.birthdayFix', { v: fmtMoney(BIRTHDAY_FIX_COST) }) + '</button></div>';
+    bday = setRow(t('settings.birthday'), t('settings.birthdayHelpFix', { v: fmtMoney(BIRTHDAY_FIX_COST) }), fix);
   } else {
-    var ctl = '<div class="birthday-pick"><select class="set-select" id="bday-day" aria-label="' + escH(t('settings.day')) + '">';
-    for (var d = 1; d <= 31; d++) ctl += '<option value="' + d + '">' + d + '</option>';
-    ctl += '</select><select class="set-select" id="bday-month" aria-label="' + escH(t('settings.month')) + '">';
-    for (var m = 1; m <= 12; m++) ctl += '<option value="' + m + '">' + m + '</option>';
-    ctl += '</select><button class="btn btn-small btn-primary" onclick="confirmBirthday()">' + t('settings.birthdayBtn') + '</button></div>';
-    bday = setRow(t('settings.birthday'), t('settings.birthdayHelp'), ctl);
+    var ctl = '<div class="birthday-pick">' + birthdaySelects(1, 1) + '<button class="btn btn-small btn-primary" onclick="confirmBirthday()">' + t('settings.birthdayBtn') + '</button></div>';
+        bday = setRow(t('settings.birthday'), t('settings.birthdayHelp'), ctl);
   }
   return h + setCard('', bday);
 }
 
+function birthdaySelects(day, month) {
+  var h = '<select class="set-select" id="bday-day" aria-label="' + escH(t('settings.day')) + '">';
+  for (var d = 1; d <= 31; d++) h += '<option value="' + d + '"' + (d === day ? ' selected' : '') + '>' + d + '</option>';
+  h += '</select><select class="set-select" id="bday-month" aria-label="' + escH(t('settings.month')) + '">';
+  for (var m = 1; m <= 12; m++) h += '<option value="' + m + '"' + (m === month ? ' selected' : '') + '>' + m + '</option>';
+  return h + '</select>';
+}
+
 function settingsLook() {
-  var cards = '<div class="theme-cards">';
+  var active0 = activeThemeId();
+  var scope = '<div class="segmented theme-scope">';
+  [['all', 'settings.scopeAll'], ['here', 'settings.scopeHere']].forEach(function(o) {
+    scope += '<button class="' + ((ui.themeScope || 'all') === o[0] ? 'active' : '') + '" onclick="ui.themeScope=\'' + o[0] + '\';showSettingsModal()">' + t(o[1]) + '</button>';
+  });
+  scope += '</div>';
+  var note = G.bakeryTheme ? '<div class="theme-own-note"><span>' + t('settings.ownTheme') + '</span><button class="btn btn-small" onclick="clearBakeryTheme()">' + t('settings.ownThemeReset') + '</button></div>' : '';
+  var cards = scope + note + '<div class="theme-cards">';
   THEME_LIST.forEach(function(thm) {
     var lock = themeLockReason(thm);
     var name = t(thm.langKey);
-    var active = G.settings.theme === thm.id;
-    var why = lock ? t(lock === 'season' ? 'settings.lockSeason' : lock === 'birthday' ? 'settings.lockBirthday' : 'settings.lockNoBirthday') : '';
-    cards += '<button class="theme-card' + (active ? ' active' : '') + (lock ? ' locked' : '') + '"' + (lock ? ' disabled' : ' onclick="setTheme(\'' + thm.id + '\');showSettingsModal()"') + ' aria-pressed="' + active + '">';
+    var active = active0 === thm.id;
+    var why = lock ? t(lock === 'level' ? 'settings.lockLevel' : lock === 'season' ? 'settings.lockSeason' : lock === 'birthday' ? 'settings.lockBirthday' : 'settings.lockNoBirthday') : '';
+    cards += '<button class="theme-card' + (active ? ' active' : '') + (lock ? ' locked' : '') + '"' + (lock ? ' disabled' : ' onclick="chooseTheme(\'' + thm.id + '\')"') + ' aria-pressed="' + active + '">';
     cards += '<span class="theme-prev tp-' + thm.id + '"><i></i><i></i><i></i>' + Decor.mark(thm.id) + '</span>';
     cards += '<span class="theme-name">' + (lock ? '\u{1F512} ' : '') + name + '</span>';
     if (lock) cards += '<small>' + why + '</small>';
@@ -132,10 +149,41 @@ function confirmBirthday() {
 }
 
 function applyTheme() {
-  var theme = (G.settings && G.settings.theme) || 'light';
+  var theme = activeThemeId();
   document.body.className = theme + (G.settings && G.settings.reducedParticles ? ' reduced-particles' : '') + (typeof introActive !== 'undefined' && introActive ? ' in-intro' : '');
   document.documentElement.dataset.theme = theme;
   Decor.apply(theme);
+}
+
+// Depuis les reglages : pour tout le jeu, ou seulement pour cette patisserie
+function chooseTheme(theme) {
+  if (ui.themeScope === 'here') {
+    G.bakeryTheme = theme;
+    applyTheme();
+    fullRender();
+  } else {
+    G.bakeryTheme = null;
+    setTheme(theme);
+  }
+  showSettingsModal();
+}
+
+function clearBakeryTheme() {
+  G.bakeryTheme = null;
+  applyTheme();
+  fullRender();
+  showSettingsModal();
+}
+
+function confirmBirthdayFix() {
+  var day = parseInt(document.getElementById('bday-day').value, 10);
+  var month = parseInt(document.getElementById('bday-month').value, 10);
+  if (fixBirthday(day, month)) {
+    save();
+    toast(t('settings.birthdayFixed'));
+    renderHeader();
+    showSettingsModal();
+  }
 }
 
 function setTheme(theme) {
@@ -188,7 +236,9 @@ function togglePause() {
     ui.pauseTip = null;
     showPauseModal();
   } else {
-    shiftGameTimers(Date.now() - (G.pausedAt || Date.now()));
+    var pausedFor = Date.now() - (G.pausedAt || Date.now());
+    shiftGameTimers(pausedFor);
+    shiftAllBakeries(pausedFor);
     G.pausedAt = 0;
     hideModal();
   }
@@ -201,6 +251,8 @@ function shiftGameTimers(ms) {
   if (G.activeEvent) G.eventEndTime += ms;
   G.lastEventTime += ms;
   G.applicants.forEach(function(a) { a.expiresAt += ms; });
+  G.orders.forEach(function(o) { o.expiresAt += ms; });
+  if (G.nextOrderAt) G.nextOrderAt += ms;
 }
 
 function showPauseModal() {

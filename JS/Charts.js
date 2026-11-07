@@ -286,11 +286,17 @@ function statsAll() {
   // Comparaison
   var earned = list.map(function(s) { return { label: escH(s.name), value: s.state.totalEarned || 0 }; }).sort(function(a, b) { return b.value - a.value; });
   h += barChart(t('all.compare'), t('all.compareSub'), earned, 's1', fmtMoney);
+  // Le gateau qui rapporte le plus, boutique par boutique
+  var bestRows = list.map(function(s) {
+    var b = bestCakeOf(s.state);
+    return { label: escH(s.name) + ' : ' + (b ? b.rec.e + ' ' + recShortName(b.rec) : t('bakery.noBest')), plain: s.name + (b ? ' : ' + recShortName(b.rec) : ''), value: b ? b.earned : 0 };
+  }).sort(function(a, b) { return b.value - a.value; });
+  h += barChart(t('bakery.bestChart'), t('bakery.bestChartSub'), bestRows, 's1', fmtMoney);
   h += '</div>';
 
-  h += '<div class="table-wrap"><table class="chart-table"><thead><tr><th>' + t('all.name') + '</th><th>' + t('chart.levelName') + '</th><th>' + t('stats.totalEarned') + '</th><th>' + t('stats.totalSold') + '</th><th>' + t('all.achHere') + '</th><th>' + t('stats.playTime') + '</th></tr></thead><tbody>';
+  h += '<div class="table-wrap"><table class="chart-table"><thead><tr><th>' + t('all.name') + '</th><th>' + t('chart.levelName') + '</th><th>' + t('stats.totalEarned') + '</th><th>' + t('stats.totalSold') + '</th><th>' + t('bakery.best') + '</th><th>' + t('all.achHere') + '</th><th>' + t('stats.playTime') + '</th></tr></thead><tbody>';
   list.forEach(function(s) {
-    h += '<tr' + (s.current ? ' class="current"' : '') + '><td>' + escH(s.name) + (s.current ? ' <em>' + t('bakery.current') + '</em>' : '') + '</td><td>' + s.state.level + '</td><td>' + fmtMoney(s.state.totalEarned || 0) + '</td><td>' + fmt(s.state.stats.totalSold) + '</td><td>' + (s.state.achHere || 0) + '</td><td>' + fmtPlay(s.state.playTimeMs || 0) + '</td></tr>';
+    h += '<tr' + (s.current ? ' class="current"' : '') + '><td>' + escH(s.name) + (s.current ? ' <em>' + t('bakery.current') + '</em>' : '') + '</td><td>' + s.state.level + '</td><td>' + fmtMoney(s.state.totalEarned || 0) + '</td><td>' + fmt(s.state.stats.totalSold) + '</td><td>' + (bestCakeOf(s.state) ? recShortName(bestCakeOf(s.state).rec) : '-') + '</td><td>' + (s.state.achHere || 0) + '</td><td>' + fmtPlay(s.state.playTimeMs || 0) + '</td></tr>';
   });
   h += '</tbody></table></div>';
 

@@ -166,7 +166,6 @@ var BOB_CLICKS_NEEDED = 50;
 function bobAnger() {
   var c = G.bobClicks || 0;
   if (c >= BOB_CLICKS_NEEDED) return 5;
-  if (G.cheatUnlocked) return 0;
   if (c >= 40) return 4;
   if (c >= 30) return 3;
   if (c >= 20) return 2;
@@ -176,8 +175,115 @@ function bobAnger() {
 
 function renderBob() {
   var bob = document.getElementById('bob');
-  if (bob) bob.setAttribute('data-anger', bobAnger());
+  if (!bob) return;
+  var anger = String(bobAnger());
+  if (bob.getAttribute('data-anger') !== anger) bob.setAttribute('data-anger', anger);
+  renderSugar();
 }
+
+// Une expression qui passe : 'joy' (heureux), 'wow' (surpris)
+function bobMood(mood, ms) {
+  var bob = document.getElementById('bob');
+  if (!bob) return;
+  bob.setAttribute('data-mood', mood);
+  clearTimeout(bobMood._t);
+  bobMood._t = setTimeout(function() { bob.removeAttribute('data-mood'); }, ms);
+}
+
+// ============ IL AIME LE SUCRE ============
+// Quand il est triste, on peut lui donner un sucre en le glissant sur lui.
+function bobWantsSugar() {
+  return !introActive && bobAnger() > 0 && (G.ing.sucre || 0) >= 1;
+}
+
+function renderSugar() {
+  var el = document.getElementById('bob-sugar');
+  if (!el) return;
+  var want = bobWantsSugar();
+  el.style.display = want ? 'grid' : 'none';
+  if (want && !el.firstChild) el.innerHTML = iconify(findIng('sucre').e);
+  if (want) el.title = t('i.sucre');
+}
+
+function feedBob() {
+  if (!bobWantsSugar()) return false;
+  var before = bobAnger();
+  G.ing.sucre -= 1;
+  G.sugarFed = (G.sugarFed || 0) + 1;
+  // Une etape de colere en moins
+  G.bobClicks = Math.max(0, (before - 1) * 10);
+  renderBob();
+  bobMood('joy', 2200);
+  var bob = document.getElementById('bob');
+  fxBurstOn(bob, 22, ['#fff', '#ffd60a', '#ff85ac'], true);
+  playSuccessSound();
+  bobSay(pickLine(before === 5 ? 'bob.sugarFed5' : bobAnger() === 0 ? 'bob.sugarFed0' : 'bob.sugarFed1'));
+  renderIngredients();
+  save();
+  return true;
+}
+
+(function() {
+  var drag = null;
+
+  function overBob(x, y) {
+    var r = document.getElementById('bob').getBoundingClientRect();
+    return x >= r.left - 14 && x <= r.right + 14 && y >= r.top - 14 && y <= r.bottom + 14;
+  }
+
+  document.addEventListener('pointerdown', function(e) {
+    if (!e.target.closest || e.button !== 0 || !bobWantsSugar()) return;
+    var token = e.target.closest('#bob-sugar');
+    // Depuis la carte du sucre : a la souris seulement, un doigt doit pouvoir faire defiler
+    var card = !token && e.pointerType === 'mouse' && !e.target.closest('button') && e.target.closest('.ing-card[data-ing="sucre"]');
+    if (!token && !card) return;
+    drag = { x: e.clientX, y: e.clientY, ghost: null };
+    if (token) e.preventDefault();
+  });
+
+  document.addEventListener('pointermove', function(e) {
+    if (!drag) return;
+    if (!drag.ghost) {
+      if (Math.abs(e.clientX - drag.x) + Math.abs(e.clientY - drag.y) < 6) return;
+      drag.ghost = document.createElement('div');
+      drag.ghost.className = 'sugar-ghost';
+      drag.ghost.innerHTML = iconify(findIng('sucre').e);
+      document.body.appendChild(drag.ghost);
+      document.body.classList.add('dragging-sugar');
+    }
+    drag.ghost.style.left = e.clientX + 'px';
+    drag.ghost.style.top = e.clientY + 'px';
+    document.getElementById('bob').classList.toggle('wants-sugar', overBob(e.clientX, e.clientY));
+  });
+
+  function endDrag(e) {
+    if (!drag) return;
+    var was = drag;
+    drag = null;
+    if (!was.ghost) return;
+    was.ghost.remove();
+    document.body.classList.remove('dragging-sugar');
+    document.getElementById('bob').classList.remove('wants-sugar');
+    if (e.type === 'pointerup' && overBob(e.clientX, e.clientY)) feedBob();
+    // Le clic qui suit ce glisser ne doit pas acheter de sucre, ni embeter Bob
+    var stop = function(ev) { ev.stopPropagation(); ev.preventDefault(); };
+    document.addEventListener('click', stop, { capture: true, once: true });
+    setTimeout(function() { document.removeEventListener('click', stop, true); }, 80);
+  }
+  document.addEventListener('pointerup', endDrag);
+  document.addEventListener('pointercancel', endDrag);
+
+  // Ses yeux suivent la souris
+  document.addEventListener('pointermove', function(e) {
+    var bob = document.getElementById('bob');
+    if (!bob || !fxEnabled()) return;
+    var r = bob.getBoundingClientRect();
+    var dx = e.clientX - (r.left + r.width / 2), dy = e.clientY - (r.top + r.height / 3);
+    var d = Math.max(1, Math.sqrt(dx * dx + dy * dy));
+    bob.style.setProperty('--look-x', (dx / d * Math.min(4, d / 60)).toFixed(1) + 'px');
+    bob.style.setProperty('--look-y', (dy / d * Math.min(3, d / 60)).toFixed(1) + 'px');
+  }, { passive: true });
+})();
 
 function pickLine(key) {
   var lines = t(key).split('|');
@@ -187,6 +293,7 @@ function pickLine(key) {
 function bobPoke() {
   var bob = document.getElementById('bob');
   var anger = bobAnger();
+  if (anger === 0 && !G.cheatUnlocked) bobMood('wow', 500);
   if (anger === 5) {
     fxBump(bob, 1.03);
     playSound(150, 0.2, 'sine');
@@ -262,4 +369,64 @@ function tryAdminCode() {
     toast(t('settings.cheatWrong'));
     playErrorSound();
   }
+}
+
+// ============ LE DEFI DE BOB ============
+// Tous les 2 a 5 jours, Bob propose un defi. Recompense : 5 % de tout ton argent.
+function challengeText(ch) {
+  var v = ch.type === 'earned' ? fmtMoney(ch.target) : fmt(ch.target);
+  return t('chal.' + ch.type, { v: v });
+}
+
+function offerChallenge() {
+  var ch = createChallenge();
+  var h = '<div class="bob-talk">' + bobFigure() + '<div class="bob-talk-speech"><span class="bob-bubble-name">Bob</span>';
+  h += '<p>' + t('bob.challengeHello', { d: challengeText(ch), v: fmtMoney(globalMoney() * CHALLENGE_REWARD) }) + '</p>';
+  h += '<div class="bob-talk-foot"><button class="btn" onclick="declineChallenge()">' + t('bob.challengeNo') + '</button>';
+  h += '<button class="btn btn-primary" onclick="acceptChallenge()">' + t('bob.challengeYes') + '</button></div></div></div>';
+  showModal(h, 'modal-bob');
+}
+
+function acceptChallenge() {
+  if (G.challenge) G.challenge.accepted = true;
+  hideModal();
+  renderHeader();
+  bobMood('joy', 1500);
+}
+
+function declineChallenge() {
+  G.challenge = null;
+  scheduleNextChallenge();
+  hideModal();
+  bobSay(t('bob.challengeNoLine'));
+}
+
+function challengeBanner() {
+  var ch = G.challenge;
+  var done = challengeProgress();
+  var pct = Math.min(100, done / ch.target * 100);
+  var left = Math.max(0, (ch.expiresAt - Date.now()) / 1000);
+  var shown = ch.type === 'earned' ? fmtMoney(done) + ' / ' + fmtMoney(ch.target) : fmt(done) + ' / ' + fmt(ch.target);
+  return '<div class="challenge-banner"><span>' + t('chal.banner') + ' : ' + challengeText(ch) + '</span><span class="challenge-bar"><i style="width:' + pct.toFixed(1) + '%"></i></span><span>' + shown + ' · ' + fmtTime(left) + '</span></div>';
+}
+
+function tickChallenge() {
+  if (!G.introDone || !G.tutorialDone) return;
+  var now = Date.now();
+  if (!G.nextChallengeAt) { scheduleNextChallenge(); return; }
+  if (G.challenge && G.challenge.accepted) {
+    if (challengeProgress() >= G.challenge.target) {
+      var reward = completeChallenge();
+      bobMood('joy', 2500);
+      bobSay(t('bob.challengeWin', { v: fmtMoney(reward) }));
+      playFanfare();
+      fxBurstOn(document.querySelector('.money-display'), 40, null, true);
+    } else if (now > G.challenge.expiresAt) {
+      G.challenge = null;
+      scheduleNextChallenge();
+      bobSay(t('bob.challengeLost'));
+    }
+    return;
+  }
+  if (!G.challenge && now >= G.nextChallengeAt && !modalIsOpen()) offerChallenge();
 }

@@ -7,6 +7,8 @@
 var consoleHistory = [];
 var lastCommandState = null;
 
+function L(fr, en) { return currentLang === 'en' ? en : fr; }
+
 function showCommandConsole() {
   var h = '<div class="console-modal">';
   h += '<div class="console-left">';
@@ -19,7 +21,7 @@ function showCommandConsole() {
   h += '</div>';
   h += '<div id="console-autocomplete" class="console-autocomplete" style="display:none"></div>';
   h += '<div class="console-input-row">';
-  h += '<input type="text" id="console-cmd-input" placeholder="' + t('console.placeholder') + '" onkeydown="handleConsoleKey(event)" oninput="handleConsoleAutocomplete()">';
+  h += '<input type="text" id="console-cmd-input" placeholder="' + t('console.placeholder') + '" onkeydown="handleConsoleKey(event)" oninput="handleConsoleAutocomplete()" onfocus="handleConsoleAutocomplete()">';
   h += '<button class="btn btn-small" onclick="execConsoleCmd()">' + t('console.send') + '</button>';
   h += '<button class="btn btn-small console-help-btn" onclick="toggleCommandHelp()">' + uiIcon('rec') + t('console.commands') + '</button>';
   h += '</div></div>';
@@ -37,37 +39,46 @@ function handleConsoleKey(e) {
   if (e.key === 'Tab') {
     e.preventDefault();
     var ac = document.getElementById('console-autocomplete');
-    if (ac && ac.children.length > 0) {
+    var firstItem = ac && ac.querySelector('.console-autocomplete-item');
+    if (firstItem) {
       var inp = document.getElementById('console-cmd-input');
-      if (inp) inp.value = ac.children[0].textContent;
+      if (inp) inp.value = firstItem.getAttribute('data-cmd') + ' ';
       ac.style.display = 'none';
     }
   }
 }
 
+function commandCount(cmd) {
+  return (G.cmdUsage && G.cmdUsage[cmd.replace(/^\//, '')]) || 0;
+}
+
+// Les suggestions : d'abord les commandes que tu utilises le plus
 function handleConsoleAutocomplete() {
   var inp = document.getElementById('console-cmd-input');
   var ac = document.getElementById('console-autocomplete');
   if (!inp || !ac) return;
   var val = inp.value.trim().toLowerCase();
-  if (!val) { ac.style.display = 'none'; return; }
-  // Build list of all commands including ingredients
-  var allCmds = CONSOLE_COMMANDS.slice();
-  for (var i = 0; i < ING.length; i++) { allCmds.push('/' + ING[i].id); }
-  // Filter matching
   var matches = [];
-  for (var i = 0; i < allCmds.length; i++) {
-    if (allCmds[i].indexOf(val) === 0 || allCmds[i].indexOf('/' + val) === 0) {
-      matches.push(allCmds[i]);
-    }
+  var allCmds = CONSOLE_COMMANDS.slice();
+  for (var i = 0; i < ING.length; i++) allCmds.push('/' + ING[i].id);
+  for (var r = 0; r < REC.length; r++) allCmds.push('/' + REC[r].id);
+  if (!val) {
+    // Rien de tape : tes favorites seulement
+    matches = allCmds.filter(function(c) { return commandCount(c) > 0; });
+  } else {
+    matches = allCmds.filter(function(c) { return c.indexOf(val) === 0 || c.indexOf('/' + val) === 0; });
   }
+  matches.sort(function(a, b) { return commandCount(b) - commandCount(a); });
   if (matches.length === 0 || (matches.length === 1 && matches[0] === val)) {
-    ac.style.display = 'none'; return;
+    ac.style.display = 'none';
+    return;
   }
   var html = '';
-  for (var i = 0; i < Math.min(matches.length, 10); i++) {
-    html += '<div class="console-autocomplete-item" onclick="selectAutocomplete(\'' + matches[i] + '\')">' + matches[i] + '</div>';
-  }
+  if (!val || commandCount(matches[0]) > 0) html += '<div class="console-autocomplete-title">' + t('console.mostUsed') + '</div>';
+  matches.slice(0, val ? 8 : 5).forEach(function(m) {
+    var n = commandCount(m);
+    html += '<div class="console-autocomplete-item" data-cmd="' + m + '" onmousedown="event.preventDefault();selectAutocomplete(\'' + m + '\')">' + m + (n > 0 ? '<small>×' + n + '</small>' : '') + '</div>';
+  });
   ac.innerHTML = html;
   ac.style.display = 'block';
 }
@@ -90,6 +101,14 @@ function execConsoleCmd() {
   // Save undo state before command
   saveUndoState();
   var result = processCommand(cmd);
+  // On compte seulement les commandes qui ont marche
+  if (result.indexOf('cmd-err') < 0) {
+    var base = cmd.toLowerCase().replace(/^\//, '').split(/\s+/)[0];
+    if (undoState !== null || base === 'undo') {
+      G.cmdUsage = G.cmdUsage || {};
+      G.cmdUsage[base] = (G.cmdUsage[base] || 0) + 1;
+    }
+  }
   consoleHistory.push('<span class="cmd-info">&gt; ' + escH(cmd) + '</span>');
   consoleHistory.push(result);
   if (consoleHistory.length > 100) consoleHistory = consoleHistory.slice(-80);
@@ -105,7 +124,7 @@ function execConsoleCmd() {
 
 function processCommand(cmd) {
   var parts = cmd.toLowerCase().replace(/^\//, '').split(/\s+/);
-  if (parts.length === 0) return '<span class="cmd-err">Commande vide</span>';
+  if (parts.length === 0) return '<span class="cmd-err">' + L('Commande vide', 'Empty command') + '</span>';
   var action = parts[0];
 
   // /help
@@ -124,7 +143,7 @@ function processCommand(cmd) {
     else if (op === 'remove') { G.level = Math.max(1, G.level - n); G.xp = 0; }
     else if (op === 'max') { G.level = 1000; G.xp = 0; checkAchievements(); }
     else return '<span class="cmd-err">Usage: /level add|set|remove|max N</span>';
-    return '<span class="cmd-ok">Level = ' + G.level + '</span>';
+    return '<span class="cmd-ok">' + L('Niveau = ', 'Level = ') + '' + G.level + '</span>';
   }
 
   // /money set N [currency]
@@ -142,13 +161,13 @@ function processCommand(cmd) {
     G.money = Math.min(n, MONEY_CAP);
     G.totalEarned = Math.max(G.totalEarned, G.money);
     checkAchievements();
-    return '<span class="cmd-ok">Money = ' + fmtMoney(G.money) + '</span>';
+    return '<span class="cmd-ok">' + L('Argent = ', 'Money = ') + '' + fmtMoney(G.money) + '</span>';
   }
 
   // /reset
   if (action === 'reset') {
     resetGame(); fullRender();
-    return '<span class="cmd-ok">Game reset!</span>';
+    return '<span class="cmd-ok">' + L('Partie effacée !', 'Game reset!') + '</span>';
   }
 
   // /max (was /ultimate)
@@ -160,7 +179,7 @@ function processCommand(cmd) {
     G.bankUnlocked = true;
     G.secondBakery = true;
     // All ingredients
-    ING.forEach(function(i) { G.ing[i.id] = 1e24; });
+    ING.forEach(function(i) { G.ing[i.id] = maxStockFor(i); });
     // All cakes
     REC.forEach(function(r) { G.cakes[r.id] = 9999; });
     // Stockage max : tous les agrandissements achetes, et de la place pour tout ce stock
@@ -195,32 +214,32 @@ function processCommand(cmd) {
     G.stats.totalClicks = 100000;
     G.stats.totalSold = 100000;
     checkAchievements();
-    return '<span class="cmd-ok">MAX MODE! Everything maxed!</span>';
+    return '<span class="cmd-ok">' + t('console.maxDone') + '</span>';
   }
 
   // /unmax - restore before max
   if (action === 'unmax') {
-    if (restoreBeforeMax()) return '<span class="cmd-ok">Restored to pre-max state!</span>';
-    return '<span class="cmd-err">No max save found.</span>';
+    if (restoreBeforeMax()) return '<span class="cmd-ok">' + L('Retour à l’état d’avant /max !', 'Restored to pre-max state!') + '</span>';
+    return '<span class="cmd-err">' + L('Aucun état d’avant /max.', 'No max save found.') + '</span>';
   }
 
   // /undo - restore last command state
   if (action === 'undo') {
-    if (restoreUndoState()) return '<span class="cmd-ok">Last command undone!</span>';
-    return '<span class="cmd-err">Nothing to undo.</span>';
+    if (restoreUndoState()) return '<span class="cmd-ok">' + L('Dernière commande annulée !', 'Last command undone!') + '</span>';
+    return '<span class="cmd-err">' + L('Rien à annuler.', 'Nothing to undo.') + '</span>';
   }
 
   // /building set|add|remove|max N
   if (action === 'building' || action === 'buildings') {
     var op = parts[1]; var n = parseInt(parts[2]);
-    if (op === 'max') { BUILDINGS.forEach(function(b) { G.buildings[b.id] = { qty: 999 }; }); return '<span class="cmd-ok">All buildings = 999</span>'; }
+    if (op === 'max') { BUILDINGS.forEach(function(b) { G.buildings[b.id] = { qty: 999 }; }); return '<span class="cmd-ok">' + L('Tous les bâtiments = 999', 'All buildings = 999') + '</span>'; }
     if (isNaN(n)) return '<span class="cmd-err">Usage: /building set|add|remove|max N</span>';
     BUILDINGS.forEach(function(b) {
       if (op === 'set') G.buildings[b.id] = { qty: Math.max(0, n) };
       else if (op === 'add') G.buildings[b.id].qty += n;
       else if (op === 'remove') G.buildings[b.id].qty = Math.max(0, G.buildings[b.id].qty - n);
     });
-    return '<span class="cmd-ok">Buildings updated (' + op + ' ' + n + ')</span>';
+    return '<span class="cmd-ok">' + L('Bâtiments changés (', 'Buildings updated (') + '' + op + ' ' + n + ')</span>';
   }
 
   // /employee ... (multiple sub-commands)
@@ -232,7 +251,7 @@ function processCommand(cmd) {
       if (isNaN(lvl)) return '<span class="cmd-err">Usage: /employee upgrade N</span>';
       lvl = Math.min(100, Math.max(1, lvl));
       G.employees.forEach(function(e) { e.skill = lvl; });
-      return '<span class="cmd-ok">All employees skill = ' + lvl + '</span>';
+      return '<span class="cmd-ok">' + L('Compétence de tous les employés = ', 'All employees skill = ') + '' + lvl + '</span>';
     }
     // /employee <name> level set <N>
     if (parts.length >= 4 && parts[2] === 'level' && parts[3] === 'set') {
@@ -247,7 +266,7 @@ function processCommand(cmd) {
         }
       }
       if (found) return '<span class="cmd-ok">' + empName + ' skill = ' + lvl + '</span>';
-      return '<span class="cmd-err">Employee not found: ' + empName + '</span>';
+      return '<span class="cmd-err">' + L('Employé introuvable : ', 'Employee not found: ') + '' + empName + '</span>';
     }
     // /employee set|add|remove|max N
     var n = parseInt(parts[2]);
@@ -256,7 +275,7 @@ function processCommand(cmd) {
         var typeIdx = Math.floor(Math.random() * EMP_TYPES.length);
         G.employees.push({ id: G.nextEmployeeId++, name: getEmpName(), type: EMP_TYPES[typeIdx].id, morale: 100, status: 'working', level: 1, unpaidTime: 0, assignedIng: 'farine', skill: 90 + Math.floor(Math.random() * 11) });
       }
-      return '<span class="cmd-ok">50 max-skill employees added!</span>';
+      return '<span class="cmd-ok">' + L('50 employés très compétents ajoutés !', '50 max-skill employees added!') + '</span>';
     }
     if (isNaN(n)) return '<span class="cmd-err">Usage: /employee set|add|remove|max|upgrade N</span>';
     if (sub === 'add') {
@@ -273,14 +292,14 @@ function processCommand(cmd) {
         G.employees.push({ id: G.nextEmployeeId++, name: getEmpName(), type: EMP_TYPES[typeIdx].id, morale: 80, status: 'working', level: 1, unpaidTime: 0, assignedIng: 'farine', skill: 50 });
       }
     }
-    return '<span class="cmd-ok">Employees = ' + G.employees.length + '</span>';
+    return '<span class="cmd-ok">' + L('Employés = ', 'Employees = ') + '' + G.employees.length + '</span>';
   }
 
   // /stats max | /stats <stat> set N
   if (action === 'stats') {
     if (parts[1] === 'max') {
       G.stats.totalClicks = 999999; G.stats.totalCakesMade = 999999; G.stats.totalSold = 999999;
-      return '<span class="cmd-ok">All stats maxed!</span>';
+      return '<span class="cmd-ok">' + L('Toutes les stats au maximum !', 'All stats maxed!') + '</span>';
     }
     // /stats <stat> set N
     var statName = parts[1]; var op = parts[2]; var n = parseInt(parts[3]);
@@ -312,15 +331,7 @@ function processCommand(cmd) {
     else if (op === 'add' && !isNaN(n)) { G.maxSpace += n; }
     else if (op === 'remove' && !isNaN(n)) { G.maxSpace = Math.max(1, G.maxSpace - n); }
     else return '<span class="cmd-err">Usage: /space set|add|remove N</span>';
-    return '<span class="cmd-ok">Space = ' + G.maxSpace + 'm\u00b2</span>';
-  }
-
-  // /rebirth set|max N
-  if (action === 'rebirth') {
-    var op = parts[1]; var n = parseInt(parts[2]);
-    if (op === 'max') { G.rebirth = 7; return '<span class="cmd-ok">Rebirth = 7 (max)</span>'; }
-    if (op === 'set' && !isNaN(n)) { G.rebirth = Math.min(7, Math.max(0, n)); return '<span class="cmd-ok">Rebirth = ' + G.rebirth + '</span>'; }
-    return '<span class="cmd-err">Usage: /rebirth set|max N</span>';
+    return '<span class="cmd-ok">' + L('Espace = ', 'Space = ') + '' + G.maxSpace + 'm\u00b2</span>';
   }
 
   // /debt clear
@@ -329,10 +340,10 @@ function processCommand(cmd) {
       var debtN = parseFloat(parts[2]);
       if (isNaN(debtN) || debtN < 0) return '<span class="cmd-err">Usage: /debt set N</span>';
       G.rentDebt = debtN;
-      return '<span class="cmd-ok">Debt = ' + fmtMoney(G.rentDebt) + '</span>';
+      return '<span class="cmd-ok">' + L('Dette = ', 'Debt = ') + '' + fmtMoney(G.rentDebt) + '</span>';
     }
     G.rentDebt = 0;
-    return '<span class="cmd-ok">Debt cleared!</span>';
+    return '<span class="cmd-ok">' + L('Dette effacée !', 'Debt cleared!') + '</span>';
   }
 
   // /bank unlock | /bank clear
@@ -370,7 +381,7 @@ function processCommand(cmd) {
     if (!chosen) return '<span class="cmd-err">' + t('console.unknownTheme', { n: escH(themeName) }) + '</span>';
     if (themeLockReason(chosen)) return '<span class="cmd-err">' + t('console.themeLocked') + '</span>';
     setTheme(themeName);
-    return '<span class="cmd-ok">Theme = ' + themeName + '</span>';
+    return '<span class="cmd-ok">' + L('Thème = ', 'Theme = ') + '' + themeName + '</span>';
   }
 
   // /birthday set DD MM
@@ -384,7 +395,7 @@ function processCommand(cmd) {
     G.birthdaySetOn = null;
     G.birthdayBoostYear = null;
     tryBirthdayBoost();
-    return '<span class="cmd-ok">Birthday set to ' + day + '/' + month + '</span>';
+    return '<span class="cmd-ok">' + L('Anniversaire : ', 'Birthday set to ') + '' + day + '/' + month + '</span>';
   }
 
   // /buy <ingredient> all|N
@@ -393,16 +404,16 @@ function processCommand(cmd) {
     if (!ingName) return '<span class="cmd-err">Usage: /buy &lt;ingredient&gt; all|N</span>';
     var ing = null;
     for (var i = 0; i < ING.length; i++) { if (ING[i].id === ingName) { ing = ING[i]; break; } }
-    if (!ing) return '<span class="cmd-err">Unknown ingredient: ' + ingName + '</span>';
+    if (!ing) return '<span class="cmd-err">' + L('Ingrédient inconnu : ', 'Unknown ingredient: ') + '' + ingName + '</span>';
     if (amount === 'all') {
       var bought = 0;
       bought = buyIngredient(ing, 'max') || 0;
-      return '<span class="cmd-ok">Bought ' + fmt(bought) + 'x ' + ing.id + '</span>';
+      return '<span class="cmd-ok">' + L('Acheté ', 'Bought ') + '' + fmt(bought) + 'x ' + ing.id + '</span>';
     }
     var n = parseInt(amount);
     if (isNaN(n)) return '<span class="cmd-err">Usage: /buy ' + ingName + ' all|N</span>';
     buyIngredient(ing, String(n));
-    return '<span class="cmd-ok">Bought ' + n + 'x ' + ing.id + '</span>';
+    return '<span class="cmd-ok">' + L('Acheté ', 'Bought ') + '' + n + 'x ' + ing.id + '</span>';
   }
 
   // /sell <ingredient> all|N
@@ -411,17 +422,17 @@ function processCommand(cmd) {
     if (!ingName) return '<span class="cmd-err">Usage: /sell &lt;ingredient&gt; all|N</span>';
     var ing = null;
     for (var i = 0; i < ING.length; i++) { if (ING[i].id === ingName) { ing = ING[i]; break; } }
-    if (!ing) return '<span class="cmd-err">Unknown ingredient: ' + ingName + '</span>';
+    if (!ing) return '<span class="cmd-err">' + L('Ingrédient inconnu : ', 'Unknown ingredient: ') + '' + ingName + '</span>';
     var have = G.ing[ing.id] || 0;
     if (amount === 'all') {
       var earned = resellIngredient(ing, have);
-      return '<span class="cmd-ok">Sold ' + have + 'x ' + ing.id + ' for ' + fmtMoney(earned) + '</span>';
+      return '<span class="cmd-ok">' + L('Vendu ', 'Sold ') + '' + have + 'x ' + ing.id + ' for ' + fmtMoney(earned) + '</span>';
     }
     var n = parseInt(amount);
     if (isNaN(n)) return '<span class="cmd-err">Usage: /sell ' + ingName + ' all|N</span>';
     n = Math.min(n, have);
     var earned = resellIngredient(ing, n);
-    return '<span class="cmd-ok">Sold ' + n + 'x ' + ing.id + ' for ' + fmtMoney(earned) + '</span>';
+    return '<span class="cmd-ok">' + L('Vendu ', 'Sold ') + '' + n + 'x ' + ing.id + ' for ' + fmtMoney(earned) + '</span>';
   }
 
   // /random
@@ -431,7 +442,7 @@ function processCommand(cmd) {
     G.totalEarned = G.money;
     ING.forEach(function(i) { G.ing[i.id] = Math.floor(Math.random() * 10000); });
     REC.forEach(function(r) { G.cakes[r.id] = Math.floor(Math.random() * 100); });
-    return '<span class="cmd-ok">Everything randomized!</span>';
+    return '<span class="cmd-ok">' + L('Tout est au hasard !', 'Everything randomized!') + '</span>';
   }
 
   // /time set N (1=normal, <1=slow, >1=fast)
@@ -441,7 +452,7 @@ function processCommand(cmd) {
       if (isNaN(speed) || speed <= 0) return '<span class="cmd-err">Usage: /time set N (0.1 - 10)</span>';
       speed = Math.max(0.1, Math.min(10, speed));
       G.timeSpeed = speed;
-      return '<span class="cmd-ok">Time speed = x' + speed + '</span>';
+      return '<span class="cmd-ok">' + L('Vitesse du temps = x', 'Time speed = x') + '' + speed + '</span>';
     }
     return '<span class="cmd-err">Usage: /time set N</span>';
   }
@@ -471,11 +482,20 @@ function processCommand(cmd) {
     return '<span class="cmd-err">Usage: /bakery create [nom] | delete [n] | list</span>';
   }
 
+  // /bob challenge
+  if (action === 'bob') {
+    if (parts[1] === 'challenge') {
+      setTimeout(offerChallenge, 50);
+      return '<span class="cmd-ok">' + t('console.challengeStarted') + '</span>';
+    }
+    return '<span class="cmd-err">Usage: /bob challenge</span>';
+  }
+
   // /gameover
   if (action === 'gameover') {
     G.gameOver = true;
     showGameOverModal();
-    return '<span class="cmd-ok">Game Over triggered!</span>';
+    return '<span class="cmd-ok">' + L('Faillite déclenchée !', 'Game Over triggered!') + '</span>';
   }
 
   if (action === 'oeufs') action = 'oeuf';
@@ -499,7 +519,7 @@ function processCommand(cmd) {
     if (isNaN(n) && op !== 'max') return '<span class="cmd-err">Usage: /' + action + ' set|add|remove|max N' + (isLiquid ? ' [ml|cl|l]' : '') + '</span>';
     if (op === 'set') G.ing[ingMatch.id] = Math.max(0, n);
     else if (op === 'add') G.ing[ingMatch.id] = (G.ing[ingMatch.id] || 0) + n;
-    else if (op === 'max') G.ing[ingMatch.id] = 99999;
+    else if (op === 'max') G.ing[ingMatch.id] = maxStockFor(ingMatch);
     else if (op === 'remove') G.ing[ingMatch.id] = Math.max(0, (G.ing[ingMatch.id] || 0) - n);
     var display = (G.ing[ingMatch.id] || 0);
     if (isLiquid && typeof fmtLiquid === 'function') display = fmtLiquid(display);
@@ -520,7 +540,7 @@ function processCommand(cmd) {
     return '<span class="cmd-ok">' + recMatch.id + ' = ' + (G.cakes[recMatch.id] || 0) + '</span>';
   }
 
-  return '<span class="cmd-err">Commande inconnue: ' + escH(action) + '. Tapez /help</span>';
+  return '<span class="cmd-err">' + L('Commande inconnue : ', 'Unknown command: ') + escH(action) + L('. Tape /help', '. Type /help') + '</span>';
 }
 
 // ============ CONSOLE BUTTON (bottom-right) ============
@@ -550,7 +570,6 @@ var COMMAND_DOCS = [
     { name:'/level', use:['/level add|set|remove N','/level max'], ex:['/level add 10','/level set 50','/level max'], fr:'Change ton niveau.', en:'Changes your level.' },
     { name:'/xp', use:['/xp add|set N'], ex:['/xp add 500'], fr:'Change ton XP. Avec add, tu peux monter de niveau.', en:'Changes your XP. With add, you can level up.' },
     { name:'/money', use:['/money set N [monnaie]'], ex:['/money set 1000','/money set 500 usd'], fr:'Fixe ton argent, en euros ou dans une autre monnaie.', en:'Sets your money, in euros or another currency.' },
-    { name:'/rebirth', use:['/rebirth set N','/rebirth max'], ex:['/rebirth set 2','/rebirth max'], fr:'Change ton nombre de rebirths, de 0 à 7.', en:'Changes your rebirth count, from 0 to 7.' },
     { name:'/stats', use:['/stats max','/stats clicks|cakes|sold|salary|rent set N'], ex:['/stats max','/stats sold set 1000'], fr:'Change tes statistiques.', en:'Changes your statistics.' },
   ]},
   { id:'bank', fr:'Argent et banque', en:'Money and bank', list:[
@@ -581,6 +600,7 @@ var COMMAND_DOCS = [
     { name:'/time', use:['/time set N'], ex:['/time set 5','/time set 1'], fr:'Vitesse du jeu, de 0.1 à 10. 1 est la vitesse normale.', en:'Game speed, from 0.1 to 10. 1 is normal speed.' },
     { name:'/theme', use:['/theme NOM','/theme unlock all|spring|summer|fall|winter|birthday'], ex:['/theme winter','/theme unlock all'], fr:'Change de thème, ou débloque des thèmes pour toujours.', en:'Changes theme, or unlocks themes forever.' },
     { name:'/birthday', use:['/birthday JJ MM'], ex:['/birthday 14 7'], fr:'Change ta date d’anniversaire.', en:'Changes your birthday.' },
+    { name:'/bob', use:['/bob challenge'], ex:['/bob challenge'], fr:'Bob te propose son défi tout de suite.', en:'Bob offers you his challenge right away.' },
     { name:'/help', use:['/help'], ex:['/help'], fr:'Ouvre ce guide.', en:'Opens this guide.' },
   ]},
 ];

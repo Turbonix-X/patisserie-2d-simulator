@@ -10,16 +10,16 @@
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://turbonix-x.github.io/patisserie-2d-simulator/">
   <meta name="theme-color" content="#D4956B">
-  <link rel="icon" href="logo.svg?v=2" type="image/svg+xml" sizes="any">
-  <link rel="alternate icon" href="favicon.png?v=2" type="image/png">
-  <link rel="apple-touch-icon" href="favicon.png?v=2">
+  <link rel="icon" href="logo.svg?v=3" type="image/svg+xml" sizes="any">
+  <link rel="alternate icon" href="favicon.png?v=3" type="image/png">
+  <link rel="apple-touch-icon" href="favicon.png?v=3">
   <script>
     // Applique le thème avant l'affichage pour éviter un flash
     (function () {
       var theme = "light";
       try {
         var save = JSON.parse(localStorage.getItem("p2ds_save"));
-        if (save && save.settings && save.settings.theme) theme = save.settings.theme;
+        if (save && save.settings && save.settings.theme) theme = save.bakeryTheme || save.settings.theme;
       } catch (e) {}
       document.documentElement.dataset.theme = theme;
     })();
@@ -27,8 +27,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="turbonix.css?v=2.5">
-  <link rel="stylesheet" href="style.css?v=2.5">
+  <link rel="stylesheet" href="turbonix.css?v=2.6">
+  <link rel="stylesheet" href="style.css?v=2.6">
 </head>
 <body>
   <div class="bg-blobs" aria-hidden="true"><span></span><span></span><span></span></div>
@@ -63,12 +63,14 @@
 
   <!-- Bob, chef patissier : il explique le tutoriel, et cache la console -->
   <div id="bob-bubble" role="status" aria-live="polite" style="display:none"></div>
-  <button id="bob" type="button" data-anger="0" onclick="bobPoke()" aria-label="Bob" title="Bob">
+  <button id="bob-sugar" type="button" style="display:none" aria-label="Sucre"></button>
+  <button id="bob" class="bob-fig" type="button" data-anger="0" onclick="bobPoke()" aria-label="Bob" title="Bob">
     <svg viewBox="0 -38 160 228" aria-hidden="true">
       <defs>
         <linearGradient id="bobShell" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5a5468"/><stop offset=".55" stop-color="#34303e"/><stop offset="1" stop-color="#1c1a21"/></linearGradient>
         <linearGradient id="bobRim" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#c4a8ff"/><stop offset=".5" stop-color="#9b6dff"/><stop offset="1" stop-color="#6f45d9"/></linearGradient>
         <linearGradient id="bobJetFill" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff6a8"/><stop offset=".45" stop-color="#ffd60a"/><stop offset="1" stop-color="#ff6a1f" stop-opacity="0"/></linearGradient>
+        <clipPath id="bobVisorClip"><rect x="33" y="38" width="94" height="59" rx="19"/></clipPath>
         <radialGradient id="bobVisor" cx=".5" cy=".35" r=".8"><stop offset="0" stop-color="#231c33"/><stop offset="1" stop-color="#07060b"/></radialGradient>
         <linearGradient id="bobToque" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#e6e0d8"/></linearGradient>
       </defs>
@@ -80,6 +82,14 @@
         <path class="bob-apron" d="M58 110h44v26q0 19-22 19t-22-19z"/>
         <path class="bob-apron-pocket" d="M67 134h26v7q0 6-6 6H73q-6 0-6-6z"/>
         <path class="bob-apron-heart" d="M80 128c-2-4-8-3-8 1 0 3 5 6 8 8 3-2 8-5 8-8 0-4-6-5-8-1z"/>
+        <!-- Le motif du tablier selon le theme -->
+        <g class="bob-acc bob-acc-spring" transform="translate(80 126)"><g fill="#F48FB1"><circle cy="-4.500" r="3.400"/><circle cx="4.300" cy="-1.400" r="3.400"/><circle cx="2.600" cy="3.700" r="3.400"/><circle cx="-2.600" cy="3.700" r="3.400"/><circle cx="-4.300" cy="-1.400" r="3.400"/></g><circle r="2.400" fill="#FFC928"/></g>
+        <path class="bob-acc bob-acc-summer" transform="translate(80 126)" d="M0-9l2.500 5.500 6 .7-4.400 4.100 1.200 6L0 4.300l-5.300 3 1.200-6L-8.500-1.800l6-.7z" fill="#FF8A5C"/>
+        <g class="bob-acc bob-acc-fall" transform="translate(80 126)"><path d="M0-9C6-5 6 3 0 7-6 3-6-5 0-9z" fill="#E8590C"/><path d="M0 9V-6" stroke="#8E220F" stroke-width="1.200"/></g>
+        <path class="bob-acc bob-acc-winter" transform="translate(80 126)" d="M0-9V9M-8-4.500L8 4.500M-8 4.500L8-4.500M-2.500-7L0-4.500 2.500-7M-2.500 7L0 4.500 2.500 7" fill="none" stroke="#1C74C4" stroke-width="1.800" stroke-linecap="round"/>
+        <g class="bob-acc bob-acc-birthday" transform="translate(80 126)"><rect x="-8" y="-5" width="16" height="13" rx="2" fill="#FFC107"/><path d="M0-5V8M-8 1H8" stroke="#E91E63" stroke-width="2.500"/><path d="M0-5C-4-11-8-7-4-5ZM0-5C4-11 8-7 4-5Z" fill="#E91E63"/></g>
+        <g class="bob-acc bob-acc-space" transform="translate(80 126)"><ellipse rx="11" ry="3.200" fill="none" stroke="#FFD54F" stroke-width="1.600" transform="rotate(-16)"/><circle r="6" fill="#E0A458"/></g>
+        <path class="bob-acc bob-acc-party" transform="translate(80 126)" d="M-3 6V-6L7-8V4M-3 6a3 2.500 0 1 1-1-2M7 4a3 2.500 0 1 1-1-2" fill="none" stroke="#C2188F" stroke-width="2.200" stroke-linecap="round"/>
         <!-- Foulard de chef -->
         <path class="bob-kerchief" d="M56 102q24 11 48 0l1 7q-25 11-50 0z"/>
         <g class="bob-head">
@@ -90,26 +100,69 @@
           <rect class="bob-visor" x="33" y="38" width="94" height="59" rx="19"/>
           <circle class="bob-cheek" cx="47" cy="80" r="6.500"/>
           <circle class="bob-cheek" cx="113" cy="80" r="6.500"/>
-          <g class="bob-eyes">
-            <g class="bob-eye-open">
-              <g class="bob-eye"><ellipse cx="60" cy="62" rx="10.500" ry="12.500"/><circle class="bob-shine" cx="64" cy="57" r="3.400"/></g>
-              <g class="bob-eye"><ellipse cx="100" cy="62" rx="10.500" ry="12.500"/><circle class="bob-shine" cx="104" cy="57" r="3.400"/></g>
+          <g class="bob-look">
+            <g class="bob-eyes">
+              <g class="bob-eye-open">
+                <g class="bob-eye"><ellipse cx="60" cy="62" rx="10.500" ry="12.500"/><circle class="bob-shine" cx="64" cy="57" r="3.400"/></g>
+                <g class="bob-eye"><ellipse cx="100" cy="62" rx="10.500" ry="12.500"/><circle class="bob-shine" cx="104" cy="57" r="3.400"/></g>
+              </g>
             </g>
+            <g class="bob-eye-joy"><path d="M49 67q11-16 22 0"/><path d="M89 67q11-16 22 0"/></g>
+          </g>
+          <g clip-path="url(#bobVisorClip)">
+            <path class="bob-lid bob-lid-l" d="M42 30h36v25H42z"/>
+            <path class="bob-lid bob-lid-r" d="M82 30h36v25H82z"/>
           </g>
           <path class="bob-brow bob-brow-l" d="M49 47q11-5 22 0"/>
           <path class="bob-brow bob-brow-r" d="M89 47q11-5 22 0"/>
           <path class="m m-happy" d="M65 77h30q-1 15-15 15t-15-15z"/>
-          <path class="m m-neutral" d="M71 82q9 5 18 0"/>
+          <path class="m m-neutral" d="M69 86q11 2 22-4"/>
           <path class="m m-sad" d="M68 89q12-11 24 0"/>
-          <path class="m m-angry" d="M63 84l6-4 5.500 4 5.500-4 5.500 4 5.500-4 6 4"/>
+          <g class="m m-grit"><rect x="61" y="78" width="38" height="13" rx="5" fill="#3a0606"/><path d="M61 84.500h38M69 78v13M77 78v13M85 78v13M92 78v13" stroke-width="2"/></g>
+          <g class="m m-yell"><path d="M59 75h42q2 21-21 21T59 75z" fill="#3a0606"/><path class="m-teeth" d="M62 75h36l-2 6H64z"/><path class="m-tongue" d="M70 90q10-7 20 0-3 5-10 5t-10-5z"/></g>
+          <path class="m m-sour" d="M66 89q6-6 11-2t11-1 6-1"/>
+          <g class="m m-joy"><path d="M61 74h38q0 23-19 23T61 74z" fill="#3a0606"/><path class="m-teeth" d="M63 74h34l-2 5H65z"/><path class="m-tongue" d="M71 90q9-7 18 0-3 6-9 6t-9-6z"/></g>
+          <ellipse class="m m-wow" cx="80" cy="86" rx="6.500" ry="8"/>
           <ellipse class="m m-talk" cx="80" cy="83" rx="9" ry="6"/>
-          <path class="m m-sour" d="M68 88q12-5 24 2"/>
+          <path class="bob-tear" d="M50 76c3.500 5 5 7 5 9.500a5 5 0 0 1-10 0c0-2.500 1.500-4.500 5-9.500z"/>
           <path class="bob-spring" d="M80 28q-7-3 0-6t0-6 0-6"/>
           <circle class="bob-tip" cx="80" cy="7" r="6.500"/>
           <!-- Toque -->
           <path class="bob-toque" d="M44 30q-22-4-20-24 2-17 22-16 6-16 34-16t34 16q20-1 22 16 2 20-20 24z"/>
           <path class="bob-toque-fold" d="M64 -6v28M80 -10v32M96 -6v28"/>
           <rect class="bob-toque-band" x="42" y="18" width="76" height="15" rx="6"/>
+          <!-- Ses tenues selon le theme -->
+          <g class="bob-acc bob-acc-spring">
+            <g transform="translate(106 2)"><g fill="#FFB7D0"><circle cy="-6" r="4.500"/><circle cx="5.700" cy="-1.900" r="4.500"/><circle cx="3.500" cy="4.900" r="4.500"/><circle cx="-3.500" cy="4.900" r="4.500"/><circle cx="-5.700" cy="-1.900" r="4.500"/></g><circle r="3.200" fill="#FFC928"/></g>
+            <path d="M92 8C96 2 100 2 102 4 100 9 96 10 92 8z" fill="#6DBD4B"/>
+            <g transform="translate(58 -4) scale(.65)"><g fill="#fff" stroke="#E5DCCF" stroke-width=".8"><circle cy="-6" r="4.500"/><circle cx="5.700" cy="-1.900" r="4.500"/><circle cx="3.500" cy="4.900" r="4.500"/><circle cx="-3.500" cy="4.900" r="4.500"/><circle cx="-5.700" cy="-1.900" r="4.500"/></g><circle r="3.200" fill="#FFC928"/></g>
+          </g>
+          <g class="bob-acc bob-acc-summer">
+            <path d="M58-12v30M80-20v38M102-12v30" fill="none" stroke="#7CC8F2" stroke-width="5" stroke-linecap="round" opacity=".8"/>
+            <rect x="56" y="17" width="20" height="13" rx="5" fill="#123"/><rect x="84" y="17" width="20" height="13" rx="5" fill="#123"/><path d="M76 22h8" stroke="#123" stroke-width="2.500"/><path d="M60 20l6 6M88 20l6 6" stroke="#fff" stroke-width="1.500" opacity=".6"/>
+          </g>
+          <g class="bob-acc bob-acc-fall">
+            <g transform="translate(106 0) rotate(18) scale(1.1)"><path d="M0-11l1.600 4.300 2-1.100-.8 4.500 2.600-2.200.8 1.900 3.200-.7-1 3.300 2 1.300-4.500 3.600.8 1.900-5.400-.7L.5 11h-1l-.2-6.900-5.400.7.8-1.900-4.500-3.600 2-1.300-1-3.300 3.200.7.8-1.900 2.600 2.200-.8-4.500 2 1.100z" fill="#D9480F"/></g>
+            <g transform="translate(56 -2) rotate(-20) scale(.75)"><path d="M0-11C7-6 7 4 0 9-7 4-7-6 0-11z" fill="#F9B115"/><path d="M0 9v3M0 8V-8" stroke="#B9770A" stroke-width="1"/></g>
+          </g>
+          <g class="bob-acc bob-acc-winter">
+            <circle cx="80" cy="-30" r="10" fill="#fff" stroke="#CFE5F7" stroke-width="2"/>
+            <g fill="#fff" stroke="#CFE5F7" stroke-width="1.200"><circle cx="46" cy="27" r="7"/><circle cx="58" cy="28" r="7.500"/><circle cx="72" cy="28" r="7.500"/><circle cx="88" cy="28" r="7.500"/><circle cx="102" cy="28" r="7.500"/><circle cx="114" cy="27" r="7"/></g>
+            <path d="M58-8l5 5M63-8l-5 5M98-2l5 5M103-2l-5 5" stroke="#9CC6E8" stroke-width="2" stroke-linecap="round"/>
+          </g>
+          <g class="bob-acc bob-acc-birthday">
+            <path d="M64-22L80-58l16 36z" fill="#FF4081" stroke="#C2185B" stroke-width="1.500"/><path d="M71-37L88-30M76-48L92-42" stroke="#FFD740" stroke-width="3" stroke-linecap="round"/><circle cx="80" cy="-60" r="5.500" fill="#FFD740"/>
+            <g fill="#42A5F5"><circle cx="54" cy="4" r="2"/><circle cx="108" cy="8" r="2"/></g><g fill="#69F0AE"><circle cx="46" cy="-4" r="2"/><circle cx="114" cy="-6" r="2"/></g>
+          </g>
+          <g class="bob-acc bob-acc-space">
+            <circle cx="80" cy="56" r="72" fill="rgba(140,200,255,.1)" stroke="#9FD3FF" stroke-width="3"/><path d="M26 22C36 6 54-6 72-9" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" opacity=".6"/>
+            <path d="M80-14l2.500 6.500 7 .5-5.500 4.300 1.900 6.700L80 0l-5.900 4 1.900-6.700L70.500-7l7-.5z" fill="#FFD54F"/>
+          </g>
+          <g class="bob-acc bob-acc-party">
+            <path d="M106-30V-16" stroke="#D9C2F0" stroke-width="1.500"/><circle cx="106" cy="-6" r="11" fill="#B9B3D6"/><path d="M96-11h20M95-5h22M96 1h20M101-16v20M106-17v22M111-16v20" stroke="#F5F3FF" stroke-width="1.500"/><circle cx="102" cy="-10" r="2.500" fill="#fff"/>
+            <path d="M48 20h64" stroke="#FF4081" stroke-width="3" stroke-dasharray="4 4"/>
+            <path d="M58-8l1.500 4 4 .3-3 2.700 1 4L58 1l-3.500 2 1-4-3-2.700 4-.3z" fill="#FFD740"/>
+          </g>
           <g class="bob-sweat">
             <path d="M139 28c5 7 7 10 7 14a7 7 0 0 1-14 0c0-4 2-7 7-14z"/>
             <path d="M20 40c3 5 5 7 5 10a5 5 0 0 1-10 0c0-3 2-5 5-10z"/>
@@ -136,7 +189,7 @@
 
   <!-- Premiere partie : Bob, sans sa tenue, ouvre la boutique -->
   <div id="intro" style="display:none">
-    <div id="intro-bob" class="plain" data-anger="0"></div>
+    <div id="intro-bob" class="plain bob-fig" data-anger="0"></div>
     <div id="intro-speech"></div>
   </div>
 
@@ -149,27 +202,27 @@
 
   <!-- Footer -->
   <footer id="game-footer" class="site-footer">
-    <span id="year"></span> Turbonix Entertainment. Tous droits réservés.
-    Icônes : <a href="https://github.com/jdecked/twemoji" target="_blank" rel="noopener">Twemoji</a> (CC-BY 4.0).
+    <span id="year"></span> <span id="footer-text">Turbonix Entertainment.</span>
   </footer>
   <script>document.getElementById("year").textContent = new Date().getFullYear();</script>
 
   <!-- Game scripts (order matters) -->
-  <script src="JS/GameData.js?v=2.5"></script>
-  <script src="JS/Icons.js?v=2.5"></script>
-  <script src="JS/Languages.js?v=2.5"></script>
-  <script src="JS/PlayerData.js?v=2.5"></script>
-  <script src="JS/Logic.js?v=2.5"></script>
-  <script src="JS/Achievements.js?v=2.5"></script>
-  <script src="JS/Music.js?v=2.5"></script>
-  <script src="JS/Decor.js?v=2.5"></script>
-  <script src="JS/Interface.js?v=2.5"></script>
-  <script src="JS/Menus.js?v=2.5"></script>
-  <script src="JS/Bank.js?v=2.5"></script>
-  <script src="JS/Charts.js?v=2.5"></script>
-  <script src="JS/Console.js?v=2.5"></script>
-  <script src="JS/Bob.js?v=2.5"></script>
-  <script src="JS/main.js?v=2.5"></script>
+  <script src="JS/GameData.js?v=2.6"></script>
+  <script src="JS/Icons.js?v=2.6"></script>
+  <script src="JS/Languages.js?v=2.6"></script>
+  <script src="JS/PlayerData.js?v=2.6"></script>
+  <script src="JS/Logic.js?v=2.6"></script>
+  <script src="JS/Achievements.js?v=2.6"></script>
+  <script src="JS/Music.js?v=2.6"></script>
+  <script src="JS/Decor.js?v=2.6"></script>
+  <script src="JS/Interface.js?v=2.6"></script>
+  <script src="JS/Menus.js?v=2.6"></script>
+  <script src="JS/Bank.js?v=2.6"></script>
+  <script src="JS/Orders.js?v=2.6"></script>
+  <script src="JS/Charts.js?v=2.6"></script>
+  <script src="JS/Console.js?v=2.6"></script>
+  <script src="JS/Bob.js?v=2.6"></script>
+  <script src="JS/main.js?v=2.6"></script>
 
 </body>
 </html>

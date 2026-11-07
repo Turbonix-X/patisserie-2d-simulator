@@ -8,12 +8,12 @@ document.addEventListener('DOMContentLoaded', function() {
   load();
   checkDesktopSync();
 
-  currentLang = LANGS[G.settings.lang] ? G.settings.lang : 'fr';
+  currentLang = LANGS[G.settings.lang] ? G.settings.lang : detectLang();
+  G.settings.lang = currentLang;
   document.documentElement.lang = currentLang;
 
   // Un theme de saison s'arrete avec la saison, sauf s'il est debloque pour toujours
-  var activeTheme = findTheme(G.settings.theme);
-  if (!activeTheme || themeLockReason(activeTheme)) G.settings.theme = 'light';
+  enforceThemeLocks();
   applyTheme();
 
   // Gains d'absence
@@ -25,6 +25,7 @@ document.addEventListener('DOMContentLoaded', function() {
     var elapsed = (Date.now() - G.lastTick) / 1000;
     if (elapsed > 60) {
       var result = calcOfflineProgress(elapsed);
+      result.money += offlineBackgroundBakeries(elapsed);
       setTimeout(function() { showOfflineModal(result); }, 500);
     }
   }
@@ -59,7 +60,11 @@ document.addEventListener('DOMContentLoaded', function() {
     var speed = G.timeSpeed || 1;
     var dtMs = (now - lastTick) * speed;
     var dtSec = dtMs / 1000;
-    if (speed !== 1) shiftGameTimers(-(now - lastTick) * (speed - 1)); // /time accelere aussi les fours
+    if (speed !== 1) {
+      // /time accelere aussi les fours
+      shiftGameTimers(-(now - lastTick) * (speed - 1));
+      shiftAllBakeries(-(now - lastTick) * (speed - 1));
+    }
     lastTick = now;
 
     G.playTimeMs += dtMs;
@@ -68,6 +73,8 @@ document.addEventListener('DOMContentLoaded', function() {
     tickEmployees(dtSec);
     tickRent(dtSec);
     tickLoans(dtSec);
+    tickOrders(dtSec);
+    tickBackgroundBakeries(dtSec);
     recoverDemand(dtSec);
     tickCrafting();
     recordHistory();
@@ -85,6 +92,14 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     checkFirstDebt();
+    tickChallenge();
+    renderBob();
+    // La saison a change pendant que tu jouais ?
+    if (totalsCounter % 30 === 0 && enforceThemeLocks()) {
+      applyTheme();
+      fullRender();
+      toast(t('settings.themeEnded'));
+    }
     renderHeader();
     renderSpaceBar();
     renderTabs();

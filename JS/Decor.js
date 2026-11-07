@@ -246,7 +246,113 @@ var Decor = (function() {
     ],
   };
 
-  var THEMES = { spring: spring, summer: summer, winter: winter, fall: fall };
+  // ---------- Espace : le theme du niveau 1000 ----------
+  function saturn() {
+    return '<ellipse rx="44" ry="12" fill="none" stroke="#E8C98F" stroke-width="5" transform="rotate(-16)" opacity=".9"/>' +
+      '<circle r="26" fill="#E0A458"/><path d="M-25-7C-10-11 12-11 25-6M-26 2C-10-2 14-2 26 3M-22 12C-8 8 10 8 22 12" fill="none" stroke="#B9783A" stroke-width="3" stroke-linecap="round"/>' +
+      '<circle cx="-9" cy="-11" r="6" fill="#fff" opacity=".22"/>' +
+      '<path d="M-43 12A44 12 0 0 0 43-12" transform="rotate(-1)" fill="none" stroke="#F4DCA8" stroke-width="5" stroke-linecap="round"/>';
+  }
+  function earthPlanet() {
+    return '<circle r="20" fill="#3D8BDE"/><path d="M-13-12C-6-16 2-12 0-7S-8-4-11-1-17-6-13-12zM5 0C11-3 17 1 15 7S6 15 3 10 0 3 5 0z" fill="#58B368"/><circle cx="-6" cy="-8" r="5" fill="#fff" opacity=".2"/>';
+  }
+  function marsPlanet() {
+    return '<circle r="13" fill="#D9603B"/><circle cx="-4" cy="-3" r="3" fill="#A83F22"/><circle cx="5" cy="4" r="2" fill="#A83F22"/><circle cx="-2" cy="7" r="1.500" fill="#A83F22"/>';
+  }
+  function rocket() {
+    return '<path d="M-7 22L-15 34-7 30zM7 22L15 34 7 30z" fill="#E53935"/><path d="M0-30C10-18 11 8 8 26H-8C-11 8-10-18 0-30z" fill="#ECEFF1"/>' +
+      '<path d="M0-30C4-25 7-19 8-13H-8C-7-19-4-25 0-30z" fill="#E53935"/><circle cy="0" r="5.500" fill="#4FC3F7" stroke="#607D8B" stroke-width="2"/>' +
+      '<path d="M-5 26L0 44 5 26z" fill="#FFB300"/><path d="M-2.500 26L0 36 2.500 26z" fill="#FFF59D"/>';
+  }
+  function star4(c, r) { return '<path d="M0-' + r + 'Q' + (r * .15) + '-' + (r * .15) + ' ' + r + ' 0Q' + (r * .15) + ' ' + (r * .15) + ' 0 ' + r + 'Q-' + (r * .15) + ' ' + (r * .15) + '-' + r + ' 0Q-' + (r * .15) + '-' + (r * .15) + ' 0-' + r + 'z" fill="' + c + '"/>'; }
+
+  var space = {
+    strip: svg(260, 18,
+      '<path d="M14 4L52 11 96 3 138 10 180 4 226 11" fill="none" stroke="#9FB2FF" stroke-width="1" opacity=".75"/>' +
+      at(14, 4, 1, 0, star4('#fff', 4)) + at(52, 11, 1, 0, star4('#FFE082', 3.500)) + at(96, 3, 1, 0, star4('#fff', 3)) + at(138, 10, 1, 0, star4('#fff', 4)) + at(180, 4, 1, 0, star4('#FFE082', 3)) + at(226, 11, 1, 0, star4('#fff', 3.500))),
+    ground: svg(260, 22,
+      '<path d="M0 22V13c20-5 44-5 70-1s50 3 80-1 70-3 110 2v9z" fill="#8791B5"/>' +
+      '<g fill="#646E96"><ellipse cx="40" cy="17" rx="9" ry="2.500"/><ellipse cx="120" cy="18" rx="6" ry="1.800"/><ellipse cx="200" cy="17" rx="11" ry="2.700"/></g>'),
+    corner: svg(250, 190,
+      at(150, 96, 1.2, 0, saturn()) + at(46, 96, 1, 22, rocket()) + at(226, 40, 1, 0, marsPlanet()) +
+      at(100, 30, 1, 0, star4('#fff', 7)) + at(20, 30, 1, 0, star4('#FFE082', 5)) + at(210, 160, 1, 0, star4('#fff', 6))),
+    corner2: svg(170, 80, at(112, 42, 1.4, 0, earthPlanet()) + at(38, 22, 1, 0, star4('#fff', 6)) + at(60, 62, 1, 0, star4('#FFE082', 4))),
+    top: svg(110, 60, at(84, 28, .85, 0, marsPlanet()) + at(38, 18, 1, 0, star4('#FFE082', 6))),
+    tile: svg(150, 150,
+      at(22, 30, 1, 0, star4('#fff', 2.500), .65) + at(94, 16, 1, 0, star4('#fff', 1.800), .55) + at(132, 66, 1, 0, star4('#BFD0FF', 2.800), .6) + at(54, 84, 1, 0, star4('#fff', 1.600), .5) + at(100, 122, 1, 0, star4('#FFE082', 2.200), .55) + at(20, 132, 1, 0, star4('#fff', 1.800), .55)),
+    card: svg(48, 48, at(24, 24, 1, 0, star4('#9FB2FF', 11), .35)),
+    mark: svg(28, 28, at(14, 14, .34, 0, saturn())),
+    motion: 'twinkle', count: 34,
+    pieces: [svg(16, 16, at(8, 8, 1, 0, star4('#fff', 7))), svg(10, 10, '<circle cx="5" cy="5" r="2.200" fill="#fff"/>'), svg(14, 14, at(7, 7, 1, 0, star4('#FFE082', 6)))],
+    extra: '<span class="dp-comet"></span>',
+  };
+
+  // ---------- Fete : le disco ----------
+  function discoBall(r) {
+    var h = '<path d="M0-' + (r + 26) + 'V-' + r + '" stroke="#D9C2F0" stroke-width="1.500"/><circle r="' + r + '" fill="#B9B3D6"/>';
+    var colors = ['#F5F3FF', '#7FE7FF', '#FF7BD1', '#D9D5F2', '#FFE27A', '#8E88B8', '#F5F3FF', '#B18CFF'];
+    var size = r / 3.500, n = 0;
+    for (var y = -r; y < r; y += size) {
+      for (var x = -r; x < r; x += size) {
+        if ((x + size / 2) * (x + size / 2) + (y + size / 2) * (y + size / 2) < r * r * .92) {
+          h += '<rect x="' + x.toFixed(1) + '" y="' + y.toFixed(1) + '" width="' + (size - .7).toFixed(1) + '" height="' + (size - .7).toFixed(1) + '" fill="' + colors[(n * 5 + Math.floor(y)) & 7] + '"/>';
+          n++;
+        }
+      }
+    }
+    return h + '<circle cx="-' + (r * .35) + '" cy="-' + (r * .4) + '" r="' + (r * .25) + '" fill="#fff" opacity=".35"/>';
+  }
+  function balloon(c) { return '<path d="M0 18C-2 26 3 30 0 38" fill="none" stroke="#D9C2F0" stroke-width="1"/><ellipse rx="14" ry="17" fill="' + c + '"/><path d="M-3 17h6l-3-4z" fill="' + c + '"/><ellipse cx="-5" cy="-6" rx="3" ry="5" fill="#fff" opacity=".4"/>'; }
+  function noteMusic(c) { return '<path d="M-3 7V-8L8-11V4" fill="none" stroke="' + c + '" stroke-width="2.200" stroke-linecap="round"/><ellipse cx="-6" cy="7" rx="3.500" ry="2.700" fill="' + c + '"/><ellipse cx="5" cy="4" rx="3.500" ry="2.700" fill="' + c + '"/>'; }
+  function speaker() {
+    return '<rect x="-22" y="-44" width="44" height="88" rx="6" fill="#1A0D2E" stroke="#E040FB" stroke-width="2"/>' +
+      '<circle cy="-20" r="11" fill="#2E1B4F" stroke="#00E5FF" stroke-width="2"/><circle cy="-20" r="4" fill="#00E5FF"/>' +
+      '<circle cy="16" r="17" fill="#2E1B4F" stroke="#FF4081" stroke-width="2"/><circle cy="16" r="7" fill="#FF4081"/>';
+  }
+  function vinyl() {
+    return '<circle r="22" fill="#14091F"/><circle r="17" fill="none" stroke="#3E2C5C" stroke-width="1"/><circle r="12" fill="none" stroke="#3E2C5C" stroke-width="1"/><circle r="7" fill="#FFD740"/><circle r="1.500" fill="#14091F"/><path d="M-15-11A19 19 0 0 1-3-18" fill="none" stroke="#fff" stroke-width="1.500" opacity=".5"/>';
+  }
+  function flagTile() {
+    var c = ['#FF4081', '#00E5FF', '#FFD740', '#69F0AE', '#E040FB', '#FF9100'], h = '<path d="M0 3Q60 9 120 3T240 3" fill="none" stroke="#FDF3FF" stroke-width="1.500"/>';
+    for (var i = 0; i < 6; i++) {
+      var x = 6 + i * 40, y = 3 + (i % 3 === 1 ? 3 : i % 3 === 0 ? 2 : 2);
+      h += '<path d="M' + x + ' ' + y + 'h26l-13 16z" fill="' + c[i] + '"/>';
+    }
+    return h;
+  }
+  function danceFloor() {
+    var c = ['#FF4081', '#00E5FF', '#FFD740', '#69F0AE', '#E040FB', '#7C4DFF'], h = '';
+    for (var i = 0; i < 12; i++) {
+      h += '<rect x="' + (i * 20) + '" y="4" width="19" height="8.500" fill="' + c[i % 6] + '"/><rect x="' + (i * 20) + '" y="13.500" width="19" height="8.500" fill="' + c[(i + 3) % 6] + '"/>';
+    }
+    return h;
+  }
+
+  var party = {
+    strip: svg(240, 24, flagTile()),
+    ground: svg(240, 22, danceFloor()),
+    corner: svg(250, 190,
+      at(220, 142, 1, 0, speaker()) + at(160, 166, 1, 0, vinyl()) + at(112, 96, 1, -8, balloon('#FF4081')) + at(70, 112, 1, 8, balloon('#00E5FF')) + at(150, 74, .85, 6, balloon('#FFD740')) +
+      at(36, 150, 1.2, -10, noteMusic('#69F0AE')) + at(190, 44, 1.2, 10, noteMusic('#E040FB'))),
+    corner2: svg(170, 90, at(120, 60, 1, 20, vinyl()) + at(50, 44, 1.2, -10, noteMusic('#00E5FF')) + at(82, 20, .9, 15, noteMusic('#FF4081'))),
+    top: svg(110, 90, at(70, 44, 1, 0, discoBall(20))),
+    tile: svg(150, 150,
+      at(28, 30, .75, -10, noteMusic('#E040FB'), .28) + at(110, 62, .7, 12, noteMusic('#00E5FF'), .28) + at(46, 116, .7, 0, noteMusic('#FFD740'), .24) +
+      at(100, 14, 1, 0, star4('#FF4081', 5), .4) + at(128, 120, 1, 0, star4('#69F0AE', 4), .4) + at(14, 82, 1, 0, star4('#FFD740', 4), .4)),
+    card: svg(48, 48, at(26, 26, 1.6, 10, noteMusic('#E040FB'), .32)),
+    mark: svg(28, 28, at(14, 16, .52, 0, discoBall(19))),
+    motion: 'fall', count: 26,
+    pieces: [
+      svg(12, 18, '<rect x="2" y="2" width="8" height="14" rx="1.500" fill="#FF4081"/>'),
+      svg(12, 18, '<rect x="2" y="2" width="8" height="14" rx="1.500" fill="#00E5FF"/>'),
+      svg(14, 14, '<circle cx="7" cy="7" r="5" fill="#FFD740"/>'),
+      svg(12, 18, '<rect x="2" y="2" width="8" height="14" rx="1.500" fill="#69F0AE"/>'),
+      svg(16, 16, at(8, 8, 1, 0, star4('#E040FB', 7))),
+    ],
+    extra: '<span class="disco-beams"></span><span class="disco-ball"><img alt="" src="' + uri(svg(120, 150, at(60, 90, 1, 0, discoBall(44)))) + '"></span>',
+  };
+
+  var THEMES = { spring: spring, summer: summer, winter: winter, fall: fall, space: space, party: party };
   var VARS = { strip: '--decor-strip', ground: '--decor-ground', corner: '--decor-corner', corner2: '--decor-corner2', top: '--decor-top', tile: '--decor-tile', card: '--decor-card', mark: '--decor-mark' };
   var applied = null;
 
@@ -260,7 +366,7 @@ var Decor = (function() {
       if (d.motion === 'fly') {
         h += '<span class="dp dp-fly" style="--y:' + (10 + r2 * 34).toFixed(1) + 'vh;--d:' + (44 + r * 30).toFixed(0) + 's;--dl:-' + (r * 70).toFixed(0) + 's;--sz:' + (26 + r2 * 16).toFixed(0) + 'px;background-image:url(&quot;' + src + '&quot;)"></span>';
       } else {
-        var small = d.motion === 'snow';
+        var small = d.motion === 'snow' || d.motion === 'twinkle';
         var size = small ? 8 + r2 * 16 : 14 + r2 * 16;
         h += '<span class="dp dp-' + d.motion + '" style="--x:' + (r * 100).toFixed(1) + '%;--y:' + (r2 * 92).toFixed(0) + 'vh;--d:' + ((small ? 11 : 17) + r2 * 11).toFixed(1) + 's;--dl:-' + (r * 28).toFixed(1) + 's;--sw:' + (18 + r * 46).toFixed(0) + 'px;--sp:' + (i % 2 ? '' : '-') + (120 + r2 * 220).toFixed(0) + 'deg;--sz:' + size.toFixed(0) + 'px;background-image:url(&quot;' + src + '&quot;)"></span>';
       }
@@ -285,7 +391,7 @@ var Decor = (function() {
       if (d[k]) root.style.setProperty(VARS[k], url(d[k]));
       else root.style.setProperty(VARS[k], 'none');
     });
-    if (layer) layer.innerHTML = buildPieces(d);
+    if (layer) layer.innerHTML = buildPieces(d) + (d.extra || '');
   }
 
   // Pour l'apercu des themes dans les reglages
