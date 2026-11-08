@@ -274,15 +274,9 @@ function bobWantsSugar() {
 }
 
 function renderSugar() {
-  var el = document.getElementById('bob-sugar');
-  if (!el) return;
-  var want = bobWantsSugar();
-  el.style.display = want ? 'grid' : 'none';
-  // Sur telephone, on glisse le sucre depuis sa carte d'ingredient
-  document.body.classList.toggle('bob-wants-sugar', want);
-  if (want) document.body.style.setProperty('--sugar-hint', JSON.stringify(t('sugar.drag')));
-  if (want && !el.firstChild) el.innerHTML = iconify(findIng('sucre').e);
-  if (want) el.title = t('i.sucre');
+  // Aucun bouton, aucun indice : on comprend tout seul qu'il aime le sucre.
+  // La classe sert seulement a pouvoir glisser la carte du sucre au doigt.
+  document.body.classList.toggle('bob-wants-sugar', bobWantsSugar());
 }
 
 function feedBob() {
@@ -321,7 +315,7 @@ function feedBob() {
 
   document.addEventListener('pointerdown', function(e) {
     if (!e.target.closest || !bobWantsSugar()) return;
-    var token = e.target.closest('#bob-sugar');
+    var token = null;
     // Depuis la carte du sucre, a la souris comme au doigt
     var card = !token && !e.target.closest('button') && e.target.closest('.ing-card[data-ing="sucre"]');
     if (!token && !card) return;

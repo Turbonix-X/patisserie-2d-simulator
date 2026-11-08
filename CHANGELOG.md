@@ -2,6 +2,15 @@
 
 Tout ce qui a été ajouté à Pâtisserie 2D Simulator, de la plus récente à la plus ancienne. Pour comprendre les règles du jeu, va voir le [wiki](REGLES.md).
 
+## Bêta 1.6.1 (8 novembre 2026)
+
+- Deux nouvelles langues : l'arabe, avec tout le jeu qui se lit de droite à gauche, et le mandarin (chinois simplifié).
+- Le thème caché est retiré.
+- Le sucre pour Bob : plus de bouton ni d'indice, c'est à toi de comprendre ce qui lui fait plaisir.
+- Les icônes des recettes reviennent comme avant la Bêta 1.6.
+- Corrigé : un bouton ou une carte qui clignotait quand la souris était tout au bord.
+- Corrigé : avec beaucoup de langues, leurs boutons débordaient dans les réglages.
+
 ## Bêta 1.6 (7 novembre 2026)
 
 - Le thème caché passe en vert et marron : blocs d'herbe, de terre, de bois et de pierre en pixels, des arbres, des torches et un petit pâtissier en blocs. Bob change de tenue avec lui.

@@ -9,6 +9,8 @@ function detectLang() {
   if (/^es/i.test(list[0])) return 'es';
   if (/^pt/i.test(list[0])) return 'pt';
   if (/^de/i.test(list[0])) return 'de';
+  if (/^ar/i.test(list[0])) return 'ar';
+  if (/^zh/i.test(list[0])) return 'zh';
   return 'en';
 }
 var currentLang = detectLang();
@@ -18,6 +20,8 @@ var LANG_LIST = [
   { code:'es', name:'Español', flag:'\u{1F1EA}\u{1F1F8}' },
   { code:'pt', name:'Português', flag:'\u{1F1F5}\u{1F1F9}' },
   { code:'de', name:'Deutsch', flag:'\u{1F1E9}\u{1F1EA}' },
+  { code:'ar', name:'العربية', flag:'\u{1F1F8}\u{1F1E6}' },
+  { code:'zh', name:'中文', flag:'\u{1F1E8}\u{1F1F3}' },
 ];
 var LANGS = {};
 
@@ -324,6 +328,10 @@ LANGS.en = {
 // ============ Traduction ============
 function t(key, params) {
   var str = (LANGS[currentLang] && LANGS[currentLang][key]) || LANGS.fr[key] || LANGS.en[key] || key;
+  // En arabe, chaque valeur (et son signe + ou -) reste dans le bon ordre au milieu du texte
+  if (params && currentLang === 'ar') {
+    str = str.replace(/([+\-]?)\{\{(\w+)\}\}/g, function(m, sign, k) { return params.hasOwnProperty(k) ? '⁨' + m + '⁩' : m; });
+  }
   if (params) {
     for (var k in params) {
       if (params.hasOwnProperty(k)) str = str.split('{{' + k + '}}').join(params[k]);
@@ -332,10 +340,21 @@ function t(key, params) {
   return str;
 }
 
+// En arabe, un montant comme 12€ ne doit pas devenir €12 au milieu du texte
+function bidiIsolate(s) { return currentLang === 'ar' ? '⁨' + s + '⁩' : s; }
+
+// L'arabe s'ecrit de droite a gauche : toute la page se retourne
+function applyLangDir() {
+  document.documentElement.lang = currentLang === 'zh' ? 'zh-Hans' : currentLang;
+  document.documentElement.dir = currentLang === 'ar' ? 'rtl' : 'ltr';
+}
+
 function setLanguage(code) {
   if (!LANGS[code]) code = 'fr';
   currentLang = code;
-  document.documentElement.lang = code;
+  applyLangDir();
+  // Ce que Bob disait dans l'ancienne langue disparait
+  if (typeof hideBobBubble === 'function') hideBobBubble();
   if (typeof G !== 'undefined') G.settings.lang = code;
   if (typeof fullRender === 'function') fullRender();
 }
@@ -350,10 +369,10 @@ function fmtMoney(amount) {
   }
   var converted = amount * curr.rate;
   var abs = Math.abs(converted);
-  if (abs >= 1000) return fmt(converted) + curr.symbol;
+  if (abs >= 1000) return bidiIsolate(fmt(converted) + curr.symbol);
   var txt = converted.toFixed(2).replace(/\.00$/, '');
-  if (currentLang !== 'en') txt = txt.replace('.', ',');
-  return txt + curr.symbol;
+  if (['fr', 'es', 'pt', 'de'].indexOf(currentLang) >= 0) txt = txt.replace('.', ',');
+  return bidiIsolate(txt + curr.symbol);
 }
 
 // ======================== BETA 1.4 ========================
@@ -451,19 +470,19 @@ LANGS.en['bob.sour'] += '|Even the oven stopped talking to me.|I whisk at nothin
 
 // ======================== BETA 1.5 ========================
 Object.assign(LANGS.fr, {
-  'settings.themeBakery':'Boulangerie','settings.themeCubes':'Cubes',
-  'console.creativeOn':'Mode créatif : tout est infini et tous les thèmes sont débloqués, avec le thème Cubes en cadeau !',
+  'settings.themeBakery':'Boulangerie',
+  'console.creativeOn':'Mode créatif : tout est infini et tous les thèmes sont débloqués !',
 });
 Object.assign(LANGS.en, {
-  'settings.themeBakery':'Bakery','settings.themeCubes':'Cubes',
-  'console.creativeOn':'Creative mode: everything is infinite and all themes are unlocked, with the Cubes theme as a gift!',
+  'settings.themeBakery':'Bakery',
+  'console.creativeOn':'Creative mode: everything is infinite and all themes are unlocked!',
 });
 
 // ======================== BETA 1.6 ========================
 Object.assign(LANGS.fr, {
-  'emp.paused':'En pause','emp.pause':'Mettre en pause','emp.resume':'Remettre au travail','emp.pauseHelp':'En pause, il ne fait rien, mais tu le paies quand même.','sugar.drag':'Glisse-moi sur Bob',
+  'emp.paused':'En pause','emp.pause':'Mettre en pause','emp.resume':'Remettre au travail','emp.pauseHelp':'En pause, il ne fait rien, mais tu le paies quand même.',
 });
 
 Object.assign(LANGS.en, {
-  'emp.paused':'On break','emp.pause':'Put on break','emp.resume':'Back to work','emp.pauseHelp':'On break, they do nothing, but you still pay them.','sugar.drag':'Drag me onto Bob',
+  'emp.paused':'On break','emp.pause':'Put on break','emp.resume':'Back to work','emp.pauseHelp':'On break, they do nothing, but you still pay them.',
 });

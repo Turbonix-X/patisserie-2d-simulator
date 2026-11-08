@@ -4,7 +4,7 @@
    employes, espace, rebirths, evenements, themes
    ============================================ */
 
-var GAME_VERSION = 'B\u00eata 1.6';
+var GAME_VERSION = 'B\u00eata 1.6.1';
 
 // ============ CURRENCIES ============
 var CURRENCIES = [
@@ -452,7 +452,6 @@ var THEME_LIST = [
   { id:'bakery',   langKey:'settings.themeBakery', level:100 },
   { id:'party',    langKey:'settings.themeParty', level:500 },
   { id:'space',    langKey:'settings.themeSpace', level:1000 },
-  { id:'cubes',    langKey:'settings.themeCubes', secret:true }, // Debloque par /creative, cache avant ca
 ];
 
 // Un tout petit peu moins cher, c'etait trop facile

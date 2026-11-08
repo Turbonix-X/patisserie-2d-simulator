@@ -2104,30 +2104,11 @@ body.reduced-particles .dp-comet { display: none; }
 :root[data-theme="party"] .bob-kerchief { fill: #E040FB; stroke: #9A1DB3; }
 :root[data-theme="party"] .bob-toque-band { fill: #00E5FF; stroke: #00A7C4; }
 
-/* Le morceau de sucre a donner a Bob */
-#bob-sugar {
-  position: fixed;
-  z-index: 1401;
-  left: calc(max(20px, calc(50vw - 742px)) + 74px);
-  bottom: 94px;
-  width: 38px; height: 38px;
-  display: grid; place-items: center;
-  padding: 0;
-  font-size: 1.15rem;
-  border-radius: 12px;
-  border: 2px dashed var(--mauve);
-  background: var(--surface-solid);
-  cursor: grab;
-  touch-action: none;
-  user-select: none;
-  animation: sugar-wiggle 2.4s ease-in-out infinite;
-}
-#bob-sugar:active { cursor: grabbing; }
+/* Le sucre qu'on glisse sur Bob */
 @keyframes sugar-wiggle { 0%, 80%, 100% { transform: none; } 85% { transform: rotate(-12deg); } 92% { transform: rotate(12deg); } }
 .sugar-ghost { position: fixed; z-index: 3000; font-size: 2rem; pointer-events: none; transform: translate(-50%, -50%) rotate(-8deg); filter: drop-shadow(0 4px 6px rgba(0,0,0,.35)); }
 #bob.wants-sugar { filter: drop-shadow(0 0 10px #ffd60a); }
 body.dragging-sugar, body.dragging-sugar * { cursor: grabbing !important; user-select: none; }
-@media (max-width: 899px) { #bob-sugar { left: 68px; bottom: 70px; width: 34px; height: 34px; } }
 
 
 /* ---------- Bêta 1.2, suite ---------- */
@@ -2258,8 +2239,6 @@ button.rec-card.can-unlock { display: flex; align-items: center; gap: 8px; width
 /* Barre du bas : les ventes */
 .sale-item .craft-progress { background: var(--success); }
 
-/* Le morceau de sucre, facile a attraper */
-@media (max-width: 899px) { #bob-sugar { left: 16px; bottom: 112px; width: 46px; height: 46px; font-size: 1.4rem; } }
 
 /* ---------- Petit ecran ---------- */
 @media (max-width: 899px) {
@@ -2311,51 +2290,55 @@ button.rec-card.can-unlock { display: flex; align-items: center; gap: 8px; width
 }
 :root[data-theme="bakery"] .site-header { background: linear-gradient(90deg, #5C3413, #8A4F1E 55%, #C9822F); }
 
-/* Thème Cubes : un monde en blocs, des angles droits partout */
-:root[data-theme="cubes"] {
-  --bg: #DCEBC8; --panel: #F2F6E6; --surface: #FFFDF5; --surface-solid: #FFFDF5; --surface-2: #E3EDCF;
-  --text: #2B2116; --muted: #5E4E3A; --border: #9DBB78; --radius: 3px;
-  --mauve: #3F7A1E; --mauve-light: #6BAA3A; --mauve-dark: #2E5C14; --mauve-deep: #2E5C14; --mauve-soft: rgba(93,161,48,.2);
-  --header-bg: #6B4423; --footer-bg: #4A2F18; --footer-text: #DCEBC8; --tab-bg: #F2F6E6; --toast-bg: #4A2F18;
-  --blob-1: rgba(93,161,48,.18); --blob-2: rgba(122,82,48,.14); --blob-3: rgba(255,212,122,.12);
-  --craft-bar: #5DA130; --space-bar: #8B5E37; --xp-empty: #D3E2BC;
-  --shadow: 4px 4px 0 rgba(43,33,22,.2);
-  --chart-1: #3F7A1E; --chart-2: #8B5E37;
-}
-:root[data-theme="cubes"] .site-header {
-  background: linear-gradient(#5DA130 0 6px, #4E8F27 6px 8px, transparent 8px),
-    repeating-conic-gradient(#6B4423 0 25%, #7A5230 0 50%) 0 0 / 16px 16px;
-}
-:root[data-theme="cubes"] .btn, :root[data-theme="cubes"] .rec-card, :root[data-theme="cubes"] .sell-card, :root[data-theme="cubes"] .bld-card,
-:root[data-theme="cubes"] .emp-card, :root[data-theme="cubes"] .ing-card, :root[data-theme="cubes"] .modal, :root[data-theme="cubes"] .tab,
-:root[data-theme="cubes"] #tabs button, :root[data-theme="cubes"] #main-panel, :root[data-theme="cubes"] #ingredients, :root[data-theme="cubes"] input,
-:root[data-theme="cubes"] select, :root[data-theme="cubes"] .theme-card, :root[data-theme="cubes"] .segmented, :root[data-theme="cubes"] .segmented button { border-radius: 3px !important; }
 
 .tp-bakery { --p-bg: #F6E7C8; --p-head: linear-gradient(90deg, #5C3413, #C9822F); --p-accent: #A05A22; --p-card: #FFF8EA; }
-.tp-cubes { --p-bg: #DCEBC8; --p-head: #6B4423; --p-accent: #5DA130; --p-card: #FFFDF5; }
 
-/* Bob en boulanger et en cubes */
-:root[data-theme="bakery"] .bob-acc-bakery, :root[data-theme="cubes"] .bob-acc-cubes { display: inline; }
-:root[data-theme="bakery"] .bob-apron-heart, :root[data-theme="cubes"] .bob-apron-heart { display: none; }
+/* Bob en boulanger */
+:root[data-theme="bakery"] .bob-acc-bakery { display: inline; }
+:root[data-theme="bakery"] .bob-apron-heart { display: none; }
 :root[data-theme="bakery"] .bob-apron { fill: #FBF3E3; stroke: #D9C7A8; }
 :root[data-theme="bakery"] .bob-apron-pocket { fill: #EFE3CB; stroke: #D9C7A8; }
 :root[data-theme="bakery"] .bob-kerchief { fill: #A05A22; stroke: #7E4517; }
 :root[data-theme="bakery"] .bob-toque-band { fill: #D9963F; stroke: #A05A22; }
-:root[data-theme="cubes"] .bob-apron { fill: #E3EDCF; stroke: #6BAA3A; }
-:root[data-theme="cubes"] .bob-apron-pocket { fill: #CFE0B4; stroke: #6BAA3A; }
-:root[data-theme="cubes"] .bob-kerchief { fill: #5DA130; stroke: #3F7A1E; }
-:root[data-theme="cubes"] .bob-toque-band { fill: #7A5230; stroke: #5A3A1C; }
 
 /* Cinq langues : elles passent à la ligne sur petit écran */
 .lang-choice { flex-wrap: wrap; max-width: 100%; }
 
 /* ---------- Bêta 1.6 ---------- */
 
-/* Le sucre : sur téléphone, on le glisse depuis sa carte, il n'y a plus de bouton */
-@media (max-width: 899px) { #bob-sugar { display: none !important; } }
-body.bob-wants-sugar .ing-card[data-ing="sucre"] { touch-action: none; outline: 2px dashed var(--mauve); outline-offset: 2px; animation: sugar-wiggle 2.4s ease-in-out infinite; }
-body.bob-wants-sugar .ing-card[data-ing="sucre"]::after {
-  content: var(--sugar-hint); position: absolute; left: 50%; top: -10px; transform: translateX(-50%);
-  padding: 2px 8px; border-radius: 99px; background: var(--mauve); color: #fff; font-size: .68rem; font-weight: 700; white-space: nowrap; pointer-events: none;
+/* Le sucre : pas de bouton ni d'indice. Quand Bob en veut, la carte du sucre se glisse aussi au doigt. */
+body.bob-wants-sugar .ing-card[data-ing="sucre"] { touch-action: none; }
+
+/* ---------- Bêta 1.6.1 ---------- */
+
+/* Survol : un élément qui monte ne doit plus clignoter quand la souris est sur son bord.
+   Une bande invisible le prolonge vers le bas pendant le survol. */
+:where(.btn, .chip, .btn-tiny, .emp-card, .ach-item, .theme-card, .loan-card, .debt-pay-btn, .cg-ex button, .set-tab) { position: relative; }
+.btn:hover:not(:disabled)::before, .hbtn:hover::before, .chip:hover::before, .gtab:hover:not(.active)::before, .ing-card:not(.locked):hover::before,
+.btn-tiny:hover::before, .emp-card:hover::before, .ach-item.unlocked:hover::before, .console-float-btn:hover::before, .theme-card:hover:not(:disabled)::before,
+.loan-card:hover:not(.taken)::before, .debt-pay-btn:hover::before, .cg-ex button:hover::before {
+  content: ""; position: absolute; left: 0; right: 0; top: 100%; height: 6px;
 }
-@media (min-width: 900px) { body.bob-wants-sugar .ing-card[data-ing="sucre"]::after { content: none; } }
+.set-tab:hover:not(.active)::before { content: ""; position: absolute; top: 0; bottom: 0; right: 100%; width: 6px; }
+[dir="rtl"] .set-tab:hover:not(.active) { transform: translateX(-2px); }
+[dir="rtl"] .set-tab:hover:not(.active)::before { right: auto; left: 100%; }
+/* Le reflet des boutons jaunes reste dedans sans couper la bande invisible */
+.btn-primary { overflow: visible; }
+.btn-primary::after { transform: none; border-radius: inherit; background: linear-gradient(110deg, transparent 42%, rgba(255,255,255,.65) 50%, transparent 58%) no-repeat; background-size: 300% 100%; animation-name: p2ds-shine; }
+.btn-primary:hover:not(:disabled)::after { animation-name: p2ds-shine; }
+.btn-sell-all::after { animation-name: p2ds-shine; }
+@keyframes p2ds-shine { 0%, 60% { background-position: 120% 0; } 100% { background-position: -20% 0; } }
+
+/* Arabe et chinois : des polices qui ont ces lettres */
+:root[lang="ar"] { --font: "Outfit", "Segoe UI", Tahoma, "Noto Sans Arabic", "Geeza Pro", sans-serif; }
+:root[lang="zh-Hans"] { --font: "Outfit", "PingFang SC", "Microsoft YaHei", "Noto Sans SC", "Hiragino Sans GB", sans-serif; }
+
+/* Sept langues : leurs boutons passent sous le titre, sur toute la largeur */
+.set-row:has(.lang-choice) { flex-wrap: wrap; }
+.set-row:has(.lang-choice) .set-ctl { flex: 1 1 100%; max-width: 100%; }
+.lang-choice { display: flex; width: 100%; }
+
+/* En arabe, l'en-tête est retourné : sur téléphone, le bouton de la console passe à gauche, sous les icônes */
+@media (max-width: 720px) {
+  [dir="rtl"] #console-btn-wrap { right: auto; left: 10px; }
+}

@@ -19,6 +19,8 @@
 <script>document.write('<script src="../JS/LangES.js?t=' + Date.now() + '"><\/script>');</script>
 <script>document.write('<script src="../JS/LangPT.js?t=' + Date.now() + '"><\/script>');</script>
 <script>document.write('<script src="../JS/LangDE.js?t=' + Date.now() + '"><\/script>');</script>
+<script>document.write('<script src="../JS/LangAR.js?t=' + Date.now() + '"><\/script>');</script>
+<script>document.write('<script src="../JS/LangZH.js?t=' + Date.now() + '"><\/script>');</script>
 <script>document.write('<script src="../JS/PlayerData.js?t=' + Date.now() + '"><\/script>');</script>
 <script>document.write('<script src="../JS/Logic.js?t=' + Date.now() + '"><\/script>');</script>
 <script>document.write('<script src="../JS/Achievements.js?t=' + Date.now() + '"><\/script>');</script>
@@ -237,7 +239,7 @@ check('Chaque succes a une categorie', badCat.length === 0, badCat.join(', '));
 
 // --- Textes ---
 var missing = [];
-['fr', 'en', 'es', 'pt', 'de'].forEach(function(lang) {
+['fr', 'en', 'es', 'pt', 'de', 'ar', 'zh'].forEach(function(lang) {
   ING.forEach(function(i) { if (!LANGS[lang]['i.' + i.id]) missing.push(lang + ':i.' + i.id); });
   REC.forEach(function(r) { if (!LANGS[lang]['r.' + r.id]) missing.push(lang + ':r.' + r.id); });
   BUILDINGS.forEach(function(b) { if (!LANGS[lang]['b.' + b.id]) missing.push(lang + ':b.' + b.id); });
@@ -261,7 +263,7 @@ var esDescs = ACHIEVEMENTS.filter(function(a) { return !a.descFn && !achDescEs(a
 check('Tous les succes ont un nom en espagnol', esNames.length === 0, esNames.slice(0, 8).join(', '));
 check('Tous les succes ont une description en espagnol', esDescs.length === 0, esDescs.slice(0, 8).join(', '));
 currentLang = 'fr';
-['pt', 'de'].forEach(function(lang) {
+['pt', 'de', 'ar', 'zh'].forEach(function(lang) {
   var diff = Object.keys(LANGS.fr).filter(function(k) { return !LANGS[lang][k]; }).concat(Object.keys(LANGS[lang]).filter(function(k) { return !LANGS.fr[k]; }));
   check(lang + ' : tous les textes', diff.length === 0, diff.slice(0, 12).join(', '));
   var bad = Object.keys(LANGS[lang]).filter(function(k) {
@@ -273,6 +275,7 @@ currentLang = 'fr';
   var descs = ACHIEVEMENTS.filter(function(a) { return !a.descFn && !extraAchDesc(lang, a.descEn); }).map(function(a) { return a.descEn; });
   check(lang + ' : le nom de tous les succes', names.length === 0, names.slice(0, 8).join(', '));
   check(lang + ' : la description de tous les succes', descs.length === 0, descs.slice(0, 8).join(', '));
+  check(lang + ' : chaque ingredient, recette et batiment a un nom', ING.concat(REC).concat(BUILDINGS).every(function(x) { return LANGS[lang]['i.' + x.id] || LANGS[lang]['r.' + x.id] || LANGS[lang]['b.' + x.id]; }));
   check(lang + ' : des noms d employes et de patisseries', EMP_NAMES_LANG[lang].length === EMP_NAMES_LANG.fr.length && BAKERY_NAMES_LANG[lang].length === BAKERY_NAMES_LANG.fr.length);
   var sameCount = Object.keys(LANGS[lang]).filter(function(k) { return /\|/.test(LANGS.fr[k] || '') && /^(bob|pause)\./.test(k) && !LANGS[lang][k]; });
   check(lang + ' : Bob a ses repliques', sameCount.length === 0, sameCount.join(', '));
@@ -283,20 +286,14 @@ G = createFreshState(); G.level = 99;
 check('La Boulangerie est bloquee avant le niveau 100', themeLockReason(findTheme('bakery')) === 'level');
 G.level = 100;
 check('La Boulangerie arrive au niveau 100', themeLockReason(findTheme('bakery')) === null);
-G = createFreshState();
-check('Le theme Cubes est cache au depart', themeLockReason(findTheme('cubes')) === 'secret');
-G.settings.theme = 'cubes';
-check('Le theme Cubes ne peut pas etre force', activeThemeId() === 'light');
 G = createFreshState(); G.creative = true;
 var lockedInCreative = THEME_LIST.filter(function(th) { return themeLockReason(th); }).map(function(th) { return th.id; });
 check('En creatif, tous les themes sont debloques', lockedInCreative.length === 0, lockedInCreative.join(', '));
-G = createFreshState(); G.unlockedThemes.cubes = true;
-check('Le theme Cubes reste une fois gagne', themeLockReason(findTheme('cubes')) === null);
+check('Le theme Cubes est retire', !findTheme('cubes'));
+G = createFreshState(); G.settings.theme = 'cubes'; enforceThemeLocks();
+check('Une partie restee sur Cubes revient au theme clair', G.settings.theme === 'light');
 
 // --- Beta 1.6 ---
-var recIcons = {}, dupIcons = [];
-REC.forEach(function(r) { if (recIcons[r.e]) dupIcons.push(recIcons[r.e] + '/' + r.id); recIcons[r.e] = r.id; });
-check('Chaque recette a sa propre icone', dupIcons.length === 0, dupIcons.join(', '));
 var ingIcons = {}, dupIng = [];
 ING.forEach(function(i) { if (ingIcons[i.e]) dupIng.push(ingIcons[i.e] + '/' + i.id); ingIcons[i.e] = i.id; });
 check('Chaque ingredient a sa propre icone', dupIng.length === 0, dupIng.join(', '));

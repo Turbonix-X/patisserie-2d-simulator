@@ -1,6 +1,6 @@
 # Le wiki de Pâtisserie 2D Simulator
 
-Tout ce qu'il faut savoir pour comprendre le jeu. Ce wiki décrit la **Bêta 1.6**.
+Tout ce qu'il faut savoir pour comprendre le jeu. Ce wiki décrit la **Bêta 1.6.1**.
 
 > **À savoir :** les recettes du jeu sont fausses. Les quantités et les ingrédients servent juste à donner un parcours au jeu. Ne les cuisine pas chez toi !
 
@@ -198,7 +198,7 @@ Bob est ton chef pâtissier. Il t'accueille, t'apprend les bases, et t'explique 
 
 - **Ses conseils :** il te dit quand un gâteau se vend mal, quand ton stock déborde, quand ton loyer est trop cher, quand une commande va expirer ou qu'un employé va faire grève.
 - **Ne l'embête pas :** clique trop sur lui et il s'énerve. Énervé, il refuse même de t'expliquer les choses.
-- **Il adore le sucre :** quand il est triste, glisse un sucre sur lui, depuis la carte du sucre. Sur téléphone, c'est pareil : pose ton doigt sur la carte du sucre et glisse-le jusqu'à Bob. Il te faut 4 sucres pour qu'il retrouve le sourire, et ses explications s'améliorent à chaque fois.
+- **Il adore le sucre.** Quand il est triste, à toi de trouver comment lui faire plaisir.
 - **Son défi :** tous les 2 à 5 jours, il te propose un défi de 24 heures. Réussis, et il te donne 5 % de tout ton argent, toutes pâtisseries confondues.
 - **Si tu pars sans mettre pause**, il te rappelle que le bouton existe.
 
@@ -235,4 +235,4 @@ Ils sont dans les **réglages**. Il y a 1000 succès. Un succès pas encore obte
 
 ## Sur téléphone
 
-Le jeu marche aussi sur téléphone et sur tablette. Les ingrédients sont en haut, au-dessus des onglets. Le jeu existe en français, en anglais, en espagnol, en portugais et en allemand : il prend la langue de ton navigateur au départ, et tu peux la changer dans les réglages.
+Le jeu marche aussi sur téléphone et sur tablette. Les ingrédients sont en haut, au-dessus des onglets. Le jeu existe en français, en anglais, en espagnol, en portugais, en allemand, en arabe et en mandarin : il prend la langue de ton navigateur au départ, et tu peux la changer dans les réglages.

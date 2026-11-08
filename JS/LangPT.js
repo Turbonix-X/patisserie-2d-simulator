@@ -12,7 +12,7 @@ LANGS.pt = {
   'rent.late':'Renda em atraso! Se não arranjares dinheiro, começa uma dívida em {{v}}.',
   'bakery.level':'Nível {{v}}','bakery.money':'Dinheiro: {{v}}','bakery.debt':'Dívida: {{v}}','bakery.sellTitle':'Vender «{{n}}»?','bakery.sellWarn':'Perdes esta pastelaria e todas as suas estatísticas. As tuas conquistas ficam.','bakery.partCash':'Dinheiro em caixa','bakery.partStock':'Bolos em stock','bakery.partIng':'Ingredientes','bakery.partEquip':'Edifícios, fornos e espaço','bakery.partRep':'Reputação e clientela','bakery.partDebt':'Dívida a pagar','bakery.partTotal':'Preço de venda','bakery.sellConfirm':'Vender','bakery.best':'O mais rentável','bakery.bestChart':'O bolo que rende mais','bakery.bestChartSub':'em cada pastelaria, em dinheiro ganho','bakery.noBest':'Ainda nada vendido',
   'bank.saving':'Poupas {{v}} de juros','bank.levelReq':'Nível {{v}} necessário','bank.repayNow':'Pagar ({{v}})','bank.limitHelp':'Quanto mais alto o teu nível, mais o banco confia em ti.',
-  'settings.themeScope':'Aplicar','settings.scopeAll':'A todo o jogo','settings.scopeHere':'A esta pastelaria','settings.ownTheme':'Esta pastelaria tem o seu próprio tema.','settings.ownThemeReset':'Seguir o tema do jogo','settings.themeBakery':'Padaria','settings.themeCubes':'Cubos','settings.themeParty':'Festa','settings.themeSpace':'Espaço','settings.lockLevel':'no nível {{v}}','settings.themeEnded':'A estação acabou: o seu tema já não está disponível.',
+  'settings.themeScope':'Aplicar','settings.scopeAll':'A todo o jogo','settings.scopeHere':'A esta pastelaria','settings.ownTheme':'Esta pastelaria tem o seu próprio tema.','settings.ownThemeReset':'Seguir o tema do jogo','settings.themeBakery':'Padaria','settings.themeParty':'Festa','settings.themeSpace':'Espaço','settings.lockLevel':'no nível {{v}}','settings.themeEnded':'A estação acabou: o seu tema já não está disponível.',
   'settings.birthdayFix':'Corrigir ({{v}})','settings.birthdayFixed':'Data corrigida!','settings.birthdayHelpFix':'Enganaste-te? Corrigir a data custa {{v}}.',
   'bob.sugar3':'Açúcar… Ainda estou triste, mas um pouco menos.|Mmm. Não resolve tudo, mas ajuda.','bob.sugar2':'Mais açúcar… Acho que estou um pouco melhor.|Oh. Isto faz bem.','bob.sugar1':'Quase sorrio. Mais um açúcar, talvez…|Já quase não estou triste.','bob.sugar0':'Obrigado! Estou outra vez bem-disposto!|Afinal até gosto de ti.',
   'bob.debtBonus':'E toma, {{v}} do meu bolso para te ajudar. Não digas a ninguém.',
@@ -149,7 +149,7 @@ LANGS.pt = {
   'console.title':'Consola de comandos','console.placeholder':'Escreve um comando...','console.send':'OK','console.commands':'Comandos',
   'console.themesUnlocked':'Todos os temas desbloqueados para sempre!','console.themeUnlocked':'{{n}} desbloqueado para sempre!','console.unknownTheme':'Tema desconhecido: {{n}}','console.themeLocked':'Tema bloqueado. Experimenta /theme unlock.',
   'console.help':'Comandos: /help, /level, /money, /max, /unmax, /undo, /building, /employee, /stats, /xp, /space, /debt, /theme, /buy, /sell, /random, /time, /bakery, /bank, /birthday, /machine, /creative, /reset, /(ingrediente), /(receita). Clica no botão Comandos para os perceber todos.',
-  'console.machineSet':'{{n}}: nível {{a}} / {{b}}','console.machineName':'NOME','console.machineUnknown':'Máquina desconhecida. As máquinas: ','console.creativeOn':'Modo criativo: tudo é infinito e todos os temas estão desbloqueados, com o tema Cubos de presente!','console.creativeOff':'Modo criativo desligado, o teu jogo voltou.','console.creativeNone':'O modo criativo não está ligado.',
+  'console.machineSet':'{{n}}: nível {{a}} / {{b}}','console.machineName':'NOME','console.machineUnknown':'Máquina desconhecida. As máquinas: ','console.creativeOn':'Modo criativo: tudo é infinito e todos os temas estão desbloqueados!','console.creativeOff':'Modo criativo desligado, o teu jogo voltou.','console.creativeNone':'O modo criativo não está ligado.',
   'ban.message':'Estás bloqueado durante {{v}} minutos!',
   'lvl1000.title':'PARABÉNS!','lvl1000.text':'Chegaste ao nível 1000! És um Mestre Pasteleiro Lendário!',
   'debt.pay':'Pagar','debt.paid':'{{v}} pagos!','debt.cantPay':'Não tens dinheiro para pagar!',
@@ -246,14 +246,14 @@ I18N_EXTRA.pt = {
     '/INGRÉDIENT':'Muda um ingrediente diretamente.','c:/farine add N':'Adiciona N.','c:/farine remove N':'Tira N.','c:/farine set N':'Fixa a quantidade em N.','c:/farine max':'O seu limite: quanto mais raro, menos tens.','c:/lait set N cl':'Leite, natas e rum aceitam ml, cl e l.',
     '/RECETTE':'Muda o stock de um bolo.','c:/cookie add N':'Adiciona N.','c:/cookie set N':'Fixa o stock em N.','c:/cookie max':'Põe 9999.',
     '/time':'Muda a velocidade do jogo.','c:/time set N':'De 0.1 a 10. 1 é a velocidade normal.',
-    '/theme':'Muda de tema ou desbloqueia-os.','c:/theme NOM':'Põe este tema: light, dark, spring, summer, fall, winter, birthday, bakery, party, space ou cubes.','c:/theme unlock all':'Desbloqueia os temas para sempre.','c:/theme unlock NOM':'Desbloqueia este tema para sempre.',
+    '/theme':'Muda de tema ou desbloqueia-os.','c:/theme NOM':'Põe este tema: light, dark, spring, summer, fall, winter, birthday, bakery, party ou space.','c:/theme unlock all':'Desbloqueia os temas para sempre.','c:/theme unlock NOM':'Desbloqueia este tema para sempre.',
     '/birthday':'Muda a tua data de aniversário.','c:/birthday JJ MM':'Dia e depois mês.','/bob':'Fala com o Bob.','c:/bob challenge':'Propõe-te o seu desafio já.','/help':'Abre este guia.','c:/help':'O guia abre ao lado da consola.',
   },
 };
 
 // ======================== BETA 1.6 ========================
 Object.assign(LANGS.pt, {
-  'emp.paused':'Em pausa','emp.pause':'Pôr em pausa','emp.resume':'Voltar ao trabalho','emp.pauseHelp':'Em pausa não faz nada, mas continuas a pagar-lhe.','sugar.drag':'Arrasta-me até ao Bob',
+  'emp.paused':'Em pausa','emp.pause':'Pôr em pausa','emp.resume':'Voltar ao trabalho','emp.pauseHelp':'Em pausa não faz nada, mas continuas a pagar-lhe.',
 });
 
 Object.assign(I18N_EXTRA.pt.console, {

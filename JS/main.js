@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
   currentLang = LANGS[G.settings.lang] ? G.settings.lang : detectLang();
   G.settings.lang = currentLang;
-  document.documentElement.lang = currentLang;
+  applyLangDir();
 
   // Un theme de saison s'arrete avec la saison, sauf s'il est debloque pour toujours
   enforceThemeLocks();

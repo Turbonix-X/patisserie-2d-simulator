@@ -263,13 +263,13 @@ LANGS.es['bob.sour'] += '|Hasta el horno ha dejado de hablarme.|Bato al vacío, 
 
 // ======================== BETA 1.5 ========================
 Object.assign(LANGS.es, {
-  'settings.themeBakery':'Panadería','settings.themeCubes':'Cubos',
-  'console.creativeOn':'Modo creativo: todo es infinito y todos los temas están desbloqueados, ¡con el tema Cubos de regalo!',
+  'settings.themeBakery':'Panadería',
+  'console.creativeOn':'Modo creativo: ¡todo es infinito y todos los temas están desbloqueados!',
 });
 
 // ======================== BETA 1.6 ========================
 Object.assign(LANGS.es, {
-  'emp.paused':'En pausa','emp.pause':'Poner en pausa','emp.resume':'Volver al trabajo','emp.pauseHelp':'En pausa no hace nada, pero le sigues pagando.','sugar.drag':'Arrástrame hasta Bob',
+  'emp.paused':'En pausa','emp.pause':'Poner en pausa','emp.resume':'Volver al trabajo','emp.pauseHelp':'En pausa no hace nada, pero le sigues pagando.',
 });
 
 Object.assign(CONSOLE_ES, {

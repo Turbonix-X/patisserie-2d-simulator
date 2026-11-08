@@ -1247,7 +1247,6 @@ function findTheme(id) {
 function themeLockReason(theme) {
   if (G.creative) return null; // En mode creatif, tous les themes sont la
   if (G.unlockedThemes && G.unlockedThemes[theme.id]) return null;
-  if (theme.secret) return 'secret';
   if (theme.level) {
     if (G.level < theme.level) return 'level';
     G.unlockedThemes[theme.id] = true; // Le niveau max le debloque pour toujours

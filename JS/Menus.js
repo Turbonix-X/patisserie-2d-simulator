@@ -135,7 +135,6 @@ function settingsLook() {
   var cards = scope + note + '<div class="theme-cards">';
   THEME_LIST.forEach(function(thm) {
     var lock = themeLockReason(thm);
-    if (lock === 'secret') return; // Personne ne doit le voir avant de l'avoir debloque
     var name = t(thm.langKey);
     var active = active0 === thm.id;
     var why = lock ? t(lock === 'level' ? 'settings.lockLevel' : lock === 'season' ? 'settings.lockSeason' : lock === 'birthday' ? 'settings.lockBirthday' : 'settings.lockNoBirthday', { v: thm.level }) : '';

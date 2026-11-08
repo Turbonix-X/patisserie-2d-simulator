@@ -12,7 +12,7 @@ LANGS.de = {
   'rent.late':'Miete im Rückstand! Wenn du kein Geld findest, beginnen in {{v}} Schulden.',
   'bakery.level':'Stufe {{v}}','bakery.money':'Geld: {{v}}','bakery.debt':'Schulden: {{v}}','bakery.sellTitle':'„{{n}}“ verkaufen?','bakery.sellWarn':'Du verlierst diese Konditorei und alle ihre Statistiken. Deine Erfolge bleiben.','bakery.partCash':'Geld in der Kasse','bakery.partStock':'Kuchen auf Lager','bakery.partIng':'Zutaten','bakery.partEquip':'Gebäude, Öfen und Platz','bakery.partRep':'Ruf und Kundschaft','bakery.partDebt':'Zu zahlende Schulden','bakery.partTotal':'Verkaufspreis','bakery.sellConfirm':'Verkaufen','bakery.best':'Bringt am meisten','bakery.bestChart':'Der Kuchen, der am meisten bringt','bakery.bestChartSub':'in jeder Konditorei, nach verdientem Geld','bakery.noBest':'Noch nichts verkauft',
   'bank.saving':'Du sparst {{v}} Zinsen','bank.levelReq':'Stufe {{v}} nötig','bank.repayNow':'Zurückzahlen ({{v}})','bank.limitHelp':'Je höher deine Stufe, desto mehr vertraut dir die Bank.',
-  'settings.themeScope':'Anwenden','settings.scopeAll':'Auf das ganze Spiel','settings.scopeHere':'Auf diese Konditorei','settings.ownTheme':'Diese Konditorei hat ihr eigenes Design.','settings.ownThemeReset':'Dem Spieldesign folgen','settings.themeBakery':'Bäckerei','settings.themeCubes':'Würfel','settings.themeParty':'Party','settings.themeSpace':'Weltraum','settings.lockLevel':'ab Stufe {{v}}','settings.themeEnded':'Die Jahreszeit ist vorbei: Ihr Design ist nicht mehr verfügbar.',
+  'settings.themeScope':'Anwenden','settings.scopeAll':'Auf das ganze Spiel','settings.scopeHere':'Auf diese Konditorei','settings.ownTheme':'Diese Konditorei hat ihr eigenes Design.','settings.ownThemeReset':'Dem Spieldesign folgen','settings.themeBakery':'Bäckerei','settings.themeParty':'Party','settings.themeSpace':'Weltraum','settings.lockLevel':'ab Stufe {{v}}','settings.themeEnded':'Die Jahreszeit ist vorbei: Ihr Design ist nicht mehr verfügbar.',
   'settings.birthdayFix':'Korrigieren ({{v}})','settings.birthdayFixed':'Datum korrigiert!','settings.birthdayHelpFix':'Vertan? Das Datum zu korrigieren kostet {{v}}.',
   'bob.sugar3':'Zucker… Ich bin noch traurig, aber etwas weniger.|Mmm. Das löst nicht alles, aber es hilft.','bob.sugar2':'Noch mehr Zucker… Ich glaube, es geht mir etwas besser.|Oh. Das tut gut.','bob.sugar1':'Ich lächle fast. Noch ein Zucker, vielleicht…|Ich bin kaum noch traurig.','bob.sugar0':'Danke! Ich habe wieder gute Laune!|Eigentlich mag ich dich doch.',
   'bob.debtBonus':'Und hier, {{v}} aus meiner eigenen Tasche, um dir zu helfen. Sag es niemandem.',
@@ -149,7 +149,7 @@ LANGS.de = {
   'console.title':'Befehlskonsole','console.placeholder':'Befehl eingeben...','console.send':'OK','console.commands':'Befehle',
   'console.themesUnlocked':'Alle Designs für immer freigeschaltet!','console.themeUnlocked':'{{n}} für immer freigeschaltet!','console.unknownTheme':'Unbekanntes Design: {{n}}','console.themeLocked':'Design gesperrt. Versuche /theme unlock.',
   'console.help':'Befehle: /help, /level, /money, /max, /unmax, /undo, /building, /employee, /stats, /xp, /space, /debt, /theme, /buy, /sell, /random, /time, /bakery, /bank, /birthday, /machine, /creative, /reset, /(Zutat), /(Rezept). Klicke auf den Knopf Befehle, um alle zu verstehen.',
-  'console.machineSet':'{{n}}: Stufe {{a}} / {{b}}','console.machineName':'NAME','console.machineUnknown':'Unbekannte Maschine. Die Maschinen: ','console.creativeOn':'Kreativmodus: Alles ist unendlich und alle Designs sind frei, mit dem Würfel-Design als Geschenk!','console.creativeOff':'Kreativmodus aus, dein Spiel ist zurück.','console.creativeNone':'Der Kreativmodus ist nicht an.',
+  'console.machineSet':'{{n}}: Stufe {{a}} / {{b}}','console.machineName':'NAME','console.machineUnknown':'Unbekannte Maschine. Die Maschinen: ','console.creativeOn':'Kreativmodus: Alles ist unendlich und alle Designs sind frei!','console.creativeOff':'Kreativmodus aus, dein Spiel ist zurück.','console.creativeNone':'Der Kreativmodus ist nicht an.',
   'ban.message':'Du bist {{v}} Minuten gesperrt!',
   'lvl1000.title':'GLÜCKWUNSCH!','lvl1000.text':'Du hast Stufe 1000 erreicht! Du bist ein legendärer Konditormeister!',
   'debt.pay':'Zahlen','debt.paid':'{{v}} gezahlt!','debt.cantPay':'Du hast kein Geld zum Zahlen!',
@@ -244,14 +244,14 @@ I18N_EXTRA.de = {
     '/INGRÉDIENT':'Ändert eine Zutat direkt.','c:/farine add N':'Fügt N hinzu.','c:/farine remove N':'Entfernt N.','c:/farine set N':'Setzt die Menge auf N.','c:/farine max':'Ihr Limit: Je seltener, desto weniger hast du.','c:/lait set N cl':'Milch, Sahne und Rum akzeptieren ml, cl und l.',
     '/RECETTE':'Ändert den Vorrat eines Kuchens.','c:/cookie add N':'Fügt N hinzu.','c:/cookie set N':'Setzt den Vorrat auf N.','c:/cookie max':'Setzt 9999.',
     '/time':'Ändert die Spielgeschwindigkeit.','c:/time set N':'Von 0.1 bis 10. 1 ist die normale Geschwindigkeit.',
-    '/theme':'Wechselt das Design oder schaltet Designs frei.','c:/theme NOM':'Setzt dieses Design: light, dark, spring, summer, fall, winter, birthday, bakery, party, space oder cubes.','c:/theme unlock all':'Schaltet die Designs für immer frei.','c:/theme unlock NOM':'Schaltet dieses Design für immer frei.',
+    '/theme':'Wechselt das Design oder schaltet Designs frei.','c:/theme NOM':'Setzt dieses Design: light, dark, spring, summer, fall, winter, birthday, bakery, party oder space.','c:/theme unlock all':'Schaltet die Designs für immer frei.','c:/theme unlock NOM':'Schaltet dieses Design für immer frei.',
     '/birthday':'Ändert dein Geburtsdatum.','c:/birthday JJ MM':'Tag, dann Monat.','/bob':'Sprich mit Bob.','c:/bob challenge':'Er bietet dir sofort seine Herausforderung an.','/help':'Öffnet diese Übersicht.','c:/help':'Die Übersicht öffnet sich neben der Konsole.',
   },
 };
 
 // ======================== BETA 1.6 ========================
 Object.assign(LANGS.de, {
-  'emp.paused':'Pausiert','emp.pause':'Pausieren','emp.resume':'Weiterarbeiten','emp.pauseHelp':'In der Pause wird nicht gearbeitet, aber der Lohn läuft weiter.','sugar.drag':'Zieh mich auf Bob',
+  'emp.paused':'Pausiert','emp.pause':'Pausieren','emp.resume':'Weiterarbeiten','emp.pauseHelp':'In der Pause wird nicht gearbeitet, aber der Lohn läuft weiter.',
 });
 
 Object.assign(I18N_EXTRA.de.console, {
