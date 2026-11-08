@@ -163,7 +163,16 @@ function demandMult(rec, extraSold) {
   var mySold = (G.soldCount[rec.id] || 0) + (extraSold || 0);
   var otherSold = Math.max(0, G.totalAllSold - (G.soldCount[rec.id] || 0));
   var mult = 1 - INFLATION.sellDecay * (1 - machineBonus('decay') / 100) * mySold + INFLATION.otherBoost * otherSold;
-  return Math.max(INFLATION.minMult, Math.min(INFLATION.maxMult, mult)) * prepMult(rec);
+  return Math.max(INFLATION.minMult, Math.min(INFLATION.maxMult, mult)) * prepMult(rec) * restMult(rec);
+}
+
+// Une recette qu'on n'a pas preparee depuis longtemps : son prix monte petit a petit
+function restMult(rec) {
+  var last = G.lastMadeAt && G.lastMadeAt[rec.id];
+  if (!last) return 1;
+  var idle = (Date.now() - last) / 1000;
+  if (idle <= REST_BONUS.afterSec) return 1;
+  return 1 + REST_BONUS.max * Math.min(1, (idle - REST_BONUS.afterSec) / (REST_BONUS.fullSec - REST_BONUS.afterSec));
 }
 
 // Trop preparer la meme recette : son prix de vente baisse un peu
@@ -366,6 +375,8 @@ function tickCrafting() {
       G.stats.cakesMadeById[rec.id] = (G.stats.cakesMadeById[rec.id] || 0) + rec.qty;
       if (!G.madeCount) G.madeCount = {};
       G.madeCount[rec.id] = (G.madeCount[rec.id] || 0) + 1;
+      if (!G.lastMadeAt) G.lastMadeAt = {};
+      G.lastMadeAt[rec.id] = Date.now();
       addXP(rec.xp);
       if (typeof toast === 'function') toast(rec.e + ' ' + t('rec.ready', { q: rec.qty, n: recShortName(rec) }));
     } else {
@@ -492,6 +503,7 @@ function advanceBuildings(dtSec) {
   var total = 0;
   BUILDINGS.forEach(function(bld) {
     if ((G.buildings[bld.id] || { qty: 0 }).qty <= 0) return;
+    if (isBroken('b', bld.id)) return; // En panne : il ne livre plus
     var left = (G.bldTimers[bld.id] || BLD_CYCLE_SEC) - dtSec;
     var before = left + dtSec;
     if (before > 60 && left <= 60 && left > 0 && typeof onBuildingSoon === 'function') onBuildingSoon(bld);
@@ -598,7 +610,7 @@ function giveBonus(empId) {
 function getEmpSalary(emp) {
   var empType = findEmpType(emp.type);
   if (!empType) return 0;
-  return empType.baseSalary * (1 + 0.5 * ((emp.level || 1) - 1));
+  return empType.baseSalary * (1 + 0.5 * ((emp.level || 1) - 1)) * (1 - machineBonus('salary') / 100);
 }
 
 function totalSalary() {
@@ -753,7 +765,7 @@ function sellOneBatchAuto(emp, dtSec) {
 // ---------- Le moral ----------
 // Il descend tout seul, moins vite si l'equipe est grande. Les managers le remontent.
 function moraleDecay() {
-  return 0.03 / (1 + 0.25 * Math.max(0, G.employees.length - 1));
+  return 0.03 / (1 + 0.25 * Math.max(0, G.employees.length - 1)) * (1 - machineBonus('morale') / 100);
 }
 
 function managerBoost() {
@@ -1137,7 +1149,7 @@ function solveCaptcha(answer) {
 
 // ============ DEBLOQUER ============
 // Arrive au bon niveau, il faut cliquer sur l'ingredient ou la recette, puis attendre.
-function unlockDelay(item) { return Math.min(300, Math.round(5 + item.unlockLvl * 1.5)); }
+function unlockDelay(item) { return Math.max(1, Math.round(Math.min(300, 5 + item.unlockLvl * 1.5) * (1 - machineBonus('unlock') / 100))); }
 
 function isUnlocked(kind, item) {
   return item.unlockLvl <= 1 || !!G.unlocks.done[kind + ':' + item.id];
@@ -1294,6 +1306,7 @@ function findTheme(id) {
 function themeLockReason(theme) {
   if (G.creative) return null; // En mode creatif, tous les themes sont la
   if (G.unlockedThemes && G.unlockedThemes[theme.id]) return null;
+  if (theme.month) return new Date().getMonth() + 1 === theme.month ? null : 'month';
   if (theme.level) {
     if (G.level < theme.level) return 'level';
     G.unlockedThemes[theme.id] = true; // Le niveau max le debloque pour toujours
@@ -1364,6 +1377,7 @@ function tickEvents() {
     if (typeof toast === 'function') toast(t('event.' + evt.id, { t: evt.duration }));
   }
   tickFocusEvent(now);
+  tickDisaster();
   // Petit incident, environ toutes les 8 minutes
   if (Math.random() < 0.002) {
     var inv = INVISIBLE_EVENTS[Math.floor(Math.random() * INVISIBLE_EVENTS.length)];
@@ -1375,6 +1389,38 @@ function tickEvents() {
     }
   }
 }
+
+// Un gros malheur : tres rare, a partir du niveau 30
+function tickDisaster(force) {
+  if (!force && (G.level < DISASTER_LVL || G.creative || Math.random() > 1 / DISASTER_EVERY_SEC)) return null;
+  var d = force ? findDisaster(force) : DISASTERS[Math.floor(Math.random() * DISASTERS.length)];
+  var part = d.lose[0] + Math.random() * (d.lose[1] - d.lose[0]);
+  var msg = null;
+  if (d.id === 'theft' && G.money > 0) {
+    var stolen = G.money * part;
+    G.money -= stolen;
+    msg = t('disaster.theft', { v: fmtMoney(stolen) });
+  } else if (d.id === 'freezer') {
+    var pieces = 0;
+    REC.forEach(function(r) { var n = Math.floor((G.cakes[r.id] || 0) * part); if (n > 0) { G.cakes[r.id] -= n; pieces += n; } });
+    if (pieces > 0) msg = t('disaster.freezer', { v: fmt(pieces) });
+  } else if (d.id === 'flood') {
+    var most = null;
+    ING.forEach(function(i) { if ((G.ing[i.id] || 0) > 10 && (!most || G.ing[i.id] > G.ing[most.id])) most = i; });
+    if (most) {
+      var gone = G.ing[most.id] * part;
+      G.ing[most.id] -= gone;
+      msg = t('disaster.flood', { n: t('i.' + most.id), v: fmt(gone) });
+    }
+  } else if (d.id === 'fire') {
+    var any = false;
+    ING.forEach(function(i) { if ((G.ing[i.id] || 0) > 0) { G.ing[i.id] *= 1 - part; any = true; } });
+    if (any) msg = t('disaster.fire', { v: Math.round(part * 100) });
+  }
+  if (msg && typeof toast === 'function') toast(msg);
+  return msg;
+}
+function findDisaster(id) { for (var i = 0; i < DISASTERS.length; i++) { if (DISASTERS[i].id === id) return DISASTERS[i]; } return DISASTERS[0]; }
 
 // Un evenement sur un seul ingredient ou une seule recette, environ toutes les 5 minutes
 function tickFocusEvent(now) {
@@ -1675,6 +1721,9 @@ function bestCakeOf(state) {
 // ============ MACHINES ============
 // Chaque patisserie a les siennes
 function machineLevel(id) { return (G.machines && G.machines[id]) || 0; }
+var ROMAN = ['I', 'II', 'III', 'IV', 'V'];
+function machName(m) { return m.family ? t('machf.' + m.family) + ' ' + ROMAN[m.tier] : t('mach.' + m.id); }
+function machDesc(m) { return m.family ? t('mach.eff.' + m.effect, { v: m.step }) : t('mach.' + m.id + '.d', { v: m.step }); }
 function findMachine(id) { for (var i = 0; i < MACHINES.length; i++) { if (MACHINES[i].id === id) return MACHINES[i]; } return null; }
 function machineCost(m) { return m.cost * Math.pow(m.growth, machineLevel(m.id)); }
 
@@ -1682,9 +1731,64 @@ function machineCost(m) { return m.cost * Math.pow(m.growth, machineLevel(m.id))
 function machineBonus(effect) {
   var b = 0;
   for (var i = 0; i < MACHINES.length; i++) {
-    if (MACHINES[i].effect === effect) b += ((G.machines && G.machines[MACHINES[i].id]) || 0) * MACHINES[i].step;
+    if (MACHINES[i].effect !== effect || isBroken('m', MACHINES[i].id)) continue; // En panne, elle ne sert a rien
+    b += ((G.machines && G.machines[MACHINES[i].id]) || 0) * MACHINES[i].step;
   }
-  return b;
+  return MACHINE_CAPS[effect] ? Math.min(MACHINE_CAPS[effect], b) : b;
+}
+
+// ============ PANNES ============
+function isBroken(kind, id) { return !!(G.broken && G.broken[kind + ':' + id]); }
+function repairingLeft(kind, id) {
+  var b = G.broken && G.broken[kind + ':' + id];
+  return b && b.until ? Math.max(0, (b.until - Date.now()) / 1000) : 0;
+}
+
+function repairCost(kind, id) {
+  if (kind === 'm') {
+    var m = findMachine(id);
+    return m ? m.cost * Math.pow(m.growth, Math.max(0, machineLevel(id) - 1)) * BREAKDOWN.machineRepairCost : 0;
+  }
+  var bld = findBld(id);
+  return bld ? buildingCost(bld) * BREAKDOWN.buildingRepairCost : 0;
+}
+
+function repairItem(kind, id) {
+  var b = G.broken && G.broken[kind + ':' + id];
+  if (!b || b.until) return false;
+  var cost = repairCost(kind, id);
+  if (G.money < cost) return false;
+  G.money -= cost;
+  b.until = Date.now() + (kind === 'm' ? BREAKDOWN.machineRepairSec : BREAKDOWN.buildingRepairSec) * 1000;
+  return true;
+}
+
+function tickBreakdowns(dtSec) {
+  if (!G.broken) G.broken = {};
+  var now = Date.now();
+  Object.keys(G.broken).forEach(function(key) {
+    var b = G.broken[key];
+    if (!b.until || now < b.until) return;
+    delete G.broken[key];
+    var kind = key.charAt(0), id = key.slice(2);
+    if (kind === 'm') syncOvens();
+    if (typeof toast === 'function') toast(t('broke.repaired', { n: kind === 'm' ? machName(findMachine(id)) : t('b.' + id) }));
+  });
+  if (G.creative) return;
+  var rarer = 1 - machineBonus('repair') / 100;
+  var machines = MACHINES.filter(function(m) { return machineLevel(m.id) > 0 && !isBroken('m', m.id); });
+  if (machines.length && Math.random() < dtSec / BREAKDOWN.machineEverySec * rarer) {
+    var m = machines[Math.floor(Math.random() * machines.length)];
+    G.broken['m:' + m.id] = { since: now, until: 0 };
+    syncOvens();
+    if (typeof toast === 'function') toast(t('broke.machine', { n: machName(m) }));
+  }
+  var blds = BUILDINGS.filter(function(b) { return (G.buildings[b.id] || { qty: 0 }).qty > 0 && !isBroken('b', b.id); });
+  if (blds.length && Math.random() < dtSec / BREAKDOWN.buildingEverySec * rarer) {
+    var bld = blds[Math.floor(Math.random() * blds.length)];
+    G.broken['b:' + bld.id] = { since: now, until: 0 };
+    if (typeof toast === 'function') toast(t('broke.building', { n: t('b.' + bld.id) }));
+  }
 }
 
 function syncOvens() { G.ovens = OVEN_CONFIG.start + machineBonus('ovens'); }
@@ -1755,18 +1859,22 @@ function fulfillOrder(id) {
   return 0;
 }
 
+// Plus tu avances, plus les clients commandent
+function orderMaxOpen() { return Math.min(10, ORDER_CONFIG.maxOpen + Math.floor(Math.max(0, G.level - ORDER_CONFIG.lvl) / 100)); }
+function orderEverySec() { return Math.max(10, ORDER_CONFIG.everySec * Math.pow(0.997, Math.max(0, G.level - ORDER_CONFIG.lvl))); }
+
 function tickOrders(dtSec) {
   if (G.level < ORDER_CONFIG.lvl) return;
   var now = Date.now();
   G.orders = G.orders.filter(function(o) { return o.expiresAt > now; });
   if (!G.nextOrderAt) G.nextOrderAt = now;
-  if (now >= G.nextOrderAt && G.orders.length < ORDER_CONFIG.maxOpen) {
+  if (now >= G.nextOrderAt && G.orders.length < orderMaxOpen()) {
     var created = createOrder();
     if (created) {
       G.orders.push(created);
       if (typeof toast === 'function') toast(t('order.new'));
     }
-    G.nextOrderAt = now + ORDER_CONFIG.everySec * 1000;
+    G.nextOrderAt = now + orderEverySec() * 1000;
   }
   // Le maitre d'hotel livre tout seul ce qui est pret
   G.employees.forEach(function(emp) {

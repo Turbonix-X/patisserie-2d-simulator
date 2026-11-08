@@ -63,19 +63,37 @@ function renderMachines() {
     var maxed = lvl >= m.max;
     var cost = machineCost(m);
     var locked = G.level < m.lvl;
-    h += '<article class="mach-card' + (maxed ? ' maxed' : '') + (locked ? ' locked' : '') + '">';
-    h += '<div class="mach-top"><span class="mach-icon">' + (locked ? '\u{1F512}' : m.e) + '</span><div><b>' + t('mach.' + m.id) + '</b>';
-    h += '<small>' + t('mach.' + m.id + '.d', { v: m.step }) + '</small></div></div>';
+    h += '<article class="mach-card' + (maxed ? ' maxed' : '') + (locked ? ' locked' : '') + (isBroken('m', m.id) ? ' broken' : '') + '">';
+    var broken = isBroken('m', m.id);
+    h += '<div class="mach-top"><span class="mach-icon">' + (locked ? '\u{1F512}' : m.e) + '</span><div><b>' + machName(m) + '</b>';
+    h += '<small>' + machDesc(m) + '</small></div></div>';
     h += '<div class="mach-pips" aria-label="' + lvl + ' / ' + m.max + '">';
     for (var i = 0; i < m.max; i++) h += '<i class="' + (i < lvl ? 'on' : '') + '"></i>';
     h += '</div>';
     if (lvl > 0) h += '<p class="mach-now">' + t('mach.level', { a: lvl, b: m.max }) + '</p>';
+    if (broken) {
+      var left = repairingLeft('m', m.id);
+      h += '<p class="broke-tag">' + t('broke.status') + '</p>';
+      h += left > 0 ? '<button class="btn" disabled>' + t('broke.repairing', { v: fmtTime(left) }) + '</button>'
+        : '<button class="btn btn-primary" onclick="doRepair(\'m\',\'' + m.id + '\')"' + (G.money < repairCost('m', m.id) ? ' disabled' : '') + '>' + t('broke.repair', { v: fmtMoney(repairCost('m', m.id)) }) + '</button>';
+    }
     if (locked) h += '<button class="btn" disabled>' + t('bank.levelReq', { v: m.lvl }) + '</button>';
     else h += '<button class="btn' + (maxed ? '' : ' btn-primary') + '" onclick="doBuyMachine(\'' + m.id + '\')"' + (maxed || G.money < cost ? ' disabled' : '') + '>' + (maxed ? t('mach.max') : t('mach.buy', { v: fmtMoney(cost) })) + '</button>';
     h += '</article>';
   });
   h += '</div>';
   setHTML(el, h);
+}
+
+function doRepair(kind, id) {
+  if (repairItem(kind, id)) {
+    playSuccessSound();
+    renderHeader();
+    if (kind === 'm') renderMachines(); else renderBuildings();
+  } else {
+    toast(t('ing.noMoney'));
+    playErrorSound();
+  }
 }
 
 function doBuyMachine(id) {

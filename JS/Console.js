@@ -202,7 +202,7 @@ function processCommand(cmd) {
     });
     G.bankUnlocked = true;
     G.secondBakery = true;
-    THEME_LIST.forEach(function(th) { if (th.season || th.birthday || th.level) G.unlockedThemes[th.id] = true; });
+    THEME_LIST.forEach(function(th) { if (th.season || th.birthday || th.level || th.month) G.unlockedThemes[th.id] = true; });
     ACHIEVEMENTS.forEach(function(a) { if (!a.hidden) G.achievements[a.id] = true; });
     checkAchievements();
     return '<span class="cmd-ok">' + t('console.maxDone') + '</span>';
@@ -240,7 +240,7 @@ function processCommand(cmd) {
     else mNew = mNow - mN;
     G.machines[mach.id] = Math.max(0, Math.min(mach.max, mNew));
     syncOvens();
-    return '<span class="cmd-ok">' + t('console.machineSet', { n: t('mach.' + mach.id), a: G.machines[mach.id], b: mach.max }) + '</span>';
+    return '<span class="cmd-ok">' + t('console.machineSet', { n: machName(mach), a: G.machines[mach.id], b: mach.max }) + '</span>';
   }
 
   // /unmax - restore before max
@@ -390,20 +390,20 @@ function processCommand(cmd) {
     return '<span class="cmd-err">Usage: /bank unlock|clear</span>';
   }
 
-  // /theme <name> | /theme unlock all|spring|summer|fall|winter|birthday|bakery|party|space
+  // /theme <name> | /theme unlock all|spring|summer|fall|winter|birthday|horror|bakery|party|space
   if (action === 'theme') {
     var themeName = parts[1];
     var names = THEME_LIST.map(function(th) { return th.id; }).join(', ');
-    if (!themeName) return '<span class="cmd-err">Usage: /theme &lt;' + names + '&gt; | /theme unlock all|spring|summer|fall|winter|birthday|bakery|party|space</span>';
+    if (!themeName) return '<span class="cmd-err">Usage: /theme &lt;' + names + '&gt; | /theme unlock all|spring|summer|fall|winter|birthday|horror|bakery|party|space</span>';
     if (themeName === 'unlock') {
       var what = parts[2];
-      var lockable = THEME_LIST.filter(function(th) { return th.season || th.birthday || th.level; });
+      var lockable = THEME_LIST.filter(function(th) { return th.season || th.birthday || th.level || th.month; });
       if (what === 'all') {
         lockable.forEach(function(th) { G.unlockedThemes[th.id] = true; });
         return '<span class="cmd-ok">' + t('console.themesUnlocked') + '</span>';
       }
       var target = findTheme(what);
-      if (!target || !(target.season || target.birthday || target.level)) return '<span class="cmd-err">Usage: /theme unlock all|spring|summer|fall|winter|birthday|bakery|party|space</span>';
+      if (!target || !(target.season || target.birthday || target.level || target.month)) return '<span class="cmd-err">Usage: /theme unlock all|spring|summer|fall|winter|birthday|horror|bakery|party|space</span>';
       G.unlockedThemes[what] = true;
       return '<span class="cmd-ok">' + t('console.themeUnlocked', { n: t(target.langKey) }) + '</span>';
     }
@@ -745,7 +745,7 @@ var COMMAND_DOCS = [
       cmdCase('/time set N', 'De 0.1 à 10. 1 est la vitesse normale.', 'From 0.1 to 10. 1 is normal speed.', 'De 0.1 a 10. 1 es la velocidad normal.', '/time set 5'),
     ]},
     { name:'/theme', fr:'Change de thème, ou en débloque.', en:'Changes theme, or unlocks themes.', es:'Cambia de tema o los desbloquea.', cases:[
-      cmdCase('/theme NOM', 'Met ce thème : light, dark, spring, summer, fall, winter, birthday, bakery, party ou space.', 'Applies this theme: light, dark, spring, summer, fall, winter, birthday, bakery, party or space.', 'Pone este tema: light, dark, spring, summer, fall, winter, birthday, bakery, party o space.', '/theme winter'),
+      cmdCase('/theme NOM', 'Met ce thème : light, dark, spring, summer, fall, winter, birthday, horror, bakery, party ou space.', 'Applies this theme: light, dark, spring, summer, fall, winter, birthday, horror, bakery, party or space.', 'Pone este tema: light, dark, spring, summer, fall, winter, birthday, horror, bakery, party o space.', '/theme winter'),
       cmdCase('/theme unlock all', 'Débloque tous les thèmes pour toujours.', 'Unlocks all themes forever.', 'Desbloquea todos los temas para siempre.'),
       cmdCase('/theme unlock NOM', 'Débloque ce thème pour toujours.', 'Unlocks this theme forever.', 'Desbloquea este tema para siempre.', '/theme unlock party'),
     ]},

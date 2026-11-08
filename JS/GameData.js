@@ -4,7 +4,7 @@
    employes, espace, rebirths, evenements, themes
    ============================================ */
 
-var GAME_VERSION = 'B\u00eata 1.7';
+var GAME_VERSION = 'B\u00eata 1.8';
 
 // ============ CURRENCIES ============
 var CURRENCIES = [
@@ -198,7 +198,7 @@ var BUILDINGS = [
   { id:'infinibaker',  e:'\u267E\uFE0F', produces:'sucre', baseRate:1000,baseCost:1000000000,unlockLvl:800 },
   { id:'minecelest', e:'\u{1F48E}', produces:'cristalceleste', baseRate:2, baseCost:9.4e6, unlockLvl:802 },
   { id:'forgecosmique', e:'\u{1F525}', produces:'flamcosm', baseRate:2, baseCost:3.8e7, unlockLvl:902 },
-  { id:'sourceinfinie', e:'\u267E\uFE0F', produces:'infinipur', baseRate:2, baseCost:3.8e8, unlockLvl:1002 },
+  { id:'sourceinfinie', e:'\u267E\uFE0F', produces:'infinipur', baseRate:2, baseCost:3.8e8, unlockLvl:1000 },
 ];
 
 // ============ EMPLOYEE TYPES ============
@@ -426,6 +426,48 @@ var MACHINES = [
   { id:'empire',     e:'\u{1F4C8}', cost:1e11,    growth:10, max:10, step:3,  effect:'price',   lvl:300 },
 ];
 
+// 80 machines de plus : 16 familles, chacune en 5 modeles (I a V) de plus en plus forts.
+// [famille, effet, icone, gain par niveau, niveaux max]
+var MACHINE_FAMILIES = [
+  ['sole', 'ovens', '\u{1F525}', 1, 5], ['spirale', 'prep', '\u{1F300}', 1, 8], ['laminoir', 'prep', '\u{1F4D0}', 1, 8], ['chambre', 'space', '\u2744\uFE0F', 3, 8],
+  ['comptoir', 'price', '\u{1F4B0}', 1, 8], ['caisserapide', 'sellers', '\u{1F9FE}', 3, 6], ['fournisseur', 'ingCost', '\u{1F91D}', 1, 6], ['isolation', 'rent', '\u{1F3E0}', 2, 6],
+  ['quai', 'bld', '\u{1F3D7}\uFE0F', 3, 6], ['presentoir', 'decay', '\u{1F3AF}', 2, 6], ['formation', 'xp', '\u{1F3C5}', 3, 6], ['bureau', 'prime', '\u{1F4C8}', 3, 6],
+  ['detente', 'morale', '\u2615', 4, 6], ['paie', 'salary', '\u{1F4B8}', 2, 6], ['recherche', 'unlock', '\u{1F52C}', 4, 6], ['maintenance', 'repair', '\u{1F3ED}', 5, 6],
+];
+(function() {
+  var tierLvl = [20, 140, 330, 580, 880];
+  // Le prix suit l'argent qu'on gagne a ce niveau-la
+  function costAt(lvl) { return lvl < 100 ? 500 * Math.pow(1.11, lvl) : 1e7 * Math.pow(10, (lvl - 100) / 50); }
+  MACHINE_FAMILIES.forEach(function(f, i) {
+    for (var tier = 0; tier < 5; tier++) {
+      var lvl = Math.min(1000, tierLvl[tier] + i * 7);
+      MACHINES.push({ id: f[0] + (tier + 1), family: f[0], tier: tier, e: f[2], effect: f[1], step: f[3] * (tier + 1),
+        max: f[4], growth: 3 + tier * 0.5, cost: Math.round(costAt(lvl) * (0.6 + 0.08 * i)), lvl: lvl });
+    }
+  });
+})();
+// Certains bonus ne peuvent pas depasser un plafond, sinon tout deviendrait gratuit
+var MACHINE_CAPS = { prep: 85, ingCost: 70, rent: 85, decay: 85, morale: 85, salary: 70, unlock: 85, repair: 85 };
+
+// Les pannes : souvent une machine (vite reparee, pas cher), tres rarement un batiment (cher et long)
+var BREAKDOWN = { machineEverySec: 900, machineRepairSec: 20, machineRepairCost: 0.05, buildingEverySec: 7200, buildingRepairSec: 600, buildingRepairCost: 0.5 };
+
+// Les gros malheurs : tres rares, a partir du niveau 30
+var DISASTERS = [
+  { id:'flood',   lose:[0.3, 0.6] },  // un ingredient
+  { id:'theft',   lose:[0.1, 0.2] },  // l'argent
+  { id:'freezer', lose:[0.25, 0.5] }, // tous les gateaux
+  { id:'fire',    lose:[0.1, 0.25] }, // tous les ingredients
+];
+var DISASTER_EVERY_SEC = 9000; // environ une fois toutes les 2 h 30 de jeu
+var DISASTER_LVL = 30;
+
+// Une recette qu'on ne prepare plus depuis longtemps se vend plus cher
+var REST_BONUS = { afterSec: 600, fullSec: 3600, max: 0.2 };
+
+// Bob raconte des choses de temps en temps
+var BOB_CHAT_SEC = 420;
+
 var HISTORY_MAX = 240;
 var BLD_CYCLE_SEC = 3600; // Un batiment livre une fois par heure de jeu
 var SALE_DELAY_MS = 2000; // Meme vendre prend un petit moment
@@ -466,6 +508,7 @@ var THEME_LIST = [
   { id:'fall',     langKey:'settings.themeFall',   season:true },
   { id:'winter',   langKey:'settings.themeWinter', season:true },
   { id:'birthday', langKey:'settings.themeBirthday', birthday:true },
+  { id:'horror',   langKey:'settings.themeHorror', month:10 }, // Seulement en octobre
   { id:'bakery',   langKey:'settings.themeBakery', level:100 },
   { id:'party',    langKey:'settings.themeParty', level:500 },
   { id:'space',    langKey:'settings.themeSpace', level:1000 },

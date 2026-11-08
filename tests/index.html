@@ -358,6 +358,69 @@ lateShip.eta = Date.now() - 1; tickShipments(dest);
 check('Un retard repousse l arrivee', dest.incoming.length === 1 && lateShip.eta > Date.now() && dest.money === 100);
 check('Un visage d employe est un dessin', /^<svg/.test(empAvatar('chef', 'Emma')) && empAvatar('chef', 'Emma') !== empAvatar('chef', 'Lucas'));
 
+// --- Beta 1.8 ---
+check('Au moins 100 machines', MACHINES.length >= 100, MACHINES.length);
+check('Toutes les machines s ameliorent', MACHINES.every(function(m) { return m.max >= 1 && m.cost > 0 && m.growth > 1; }));
+var allIds = {};
+check('Chaque machine a son propre identifiant', MACHINES.every(function(m) { if (allIds[m.id]) return false; allIds[m.id] = 1; return true; }));
+var tooLate = MACHINES.filter(function(m) { return m.lvl > 1000; }).map(function(m) { return m.id; })
+  .concat(ING.concat(REC).filter(function(x) { return x.unlockLvl > 1000; }).map(function(x) { return x.id; }))
+  .concat(BUILDINGS.filter(function(b) { return buildingUnlockLvl(b) > 1000; }).map(function(b) { return b.id; }));
+check('Rien ne se debloque apres le niveau 1000', tooLate.length === 0, tooLate.join(', '));
+check('La source d infini pur se debloque au niveau 1000', buildingUnlockLvl(findBld('sourceinfinie')) === 1000);
+var badMach = [];
+['fr', 'en', 'es', 'pt', 'de', 'ar', 'zh'].forEach(function(lang) {
+  currentLang = lang;
+  MACHINES.forEach(function(m) { if (/^mach/.test(machName(m)) || /^mach/.test(machDesc(m))) badMach.push(lang + ':' + m.id); });
+  if (LANGS[lang]['bob.facts'].split('|').length !== 15) badMach.push(lang + ':bob.facts');
+});
+currentLang = 'fr';
+check('Chaque machine a un nom et une description dans les 7 langues', badMach.length === 0, badMach.slice(0, 8).join(', '));
+check('L anglais est la premiere langue, puis le francais', LANG_LIST[0].code === 'en' && LANG_LIST[1].code === 'fr');
+G = createFreshState();
+var horror = findTheme('horror'), octNow = new Date().getMonth() + 1 === 10;
+check('Le theme Horreur n est la qu en octobre', themeLockReason(horror) === (octNow ? null : 'month'));
+G.creative = true;
+check('... ou en mode creatif', themeLockReason(horror) === null);
+// Pannes
+G = createFreshState(); G.level = 50; G.money = 1e9; G.machines.four = 2; syncOvens();
+var ovensOk = G.ovens;
+G.broken['m:four'] = { since: Date.now(), until: 0 }; syncOvens();
+check('Une machine en panne ne sert plus a rien', G.ovens < ovensOk && machineBonus('ovens') === 0);
+var mCost = repairCost('m', 'four'), bigCost = repairCost('b', BUILDINGS[0].id);
+check('Une machine coute peu a reparer', mCost > 0 && mCost < machineCost(findMachine('four')));
+check('Reparer prend un peu de temps', repairItem('m', 'four') && repairingLeft('m', 'four') > 0 && repairingLeft('m', 'four') <= BREAKDOWN.machineRepairSec);
+G.broken['m:four'].until = Date.now() - 1; tickBreakdowns(0);
+check('Puis elle remarche', !isBroken('m', 'four') && G.ovens === ovensOk);
+check('Un batiment se repare plus longtemps que une machine', BREAKDOWN.buildingRepairSec > BREAKDOWN.machineRepairSec && BREAKDOWN.buildingEverySec > BREAKDOWN.machineEverySec);
+G.buildings[BUILDINGS[0].id] = { qty: 1 }; G.bldTimers[BUILDINGS[0].id] = 1; G.broken['b:' + BUILDINGS[0].id] = { since: Date.now(), until: 0 };
+var before18 = G.ing[BUILDINGS[0].produces] || 0;
+advanceBuildings(10);
+check('Un batiment en panne ne livre plus', (G.ing[BUILDINGS[0].produces] || 0) === before18);
+// Gros malheurs
+G = createFreshState(); G.level = 10;
+check('Pas de gros malheur avant le niveau 30', DISASTER_LVL === 30 && tickDisaster() === null);
+G.level = 40; G.money = 1000; G.cakes.cookie = 100; G.ing.farine = 500;
+tickDisaster('theft');
+check('Un vol prend une bonne part de ton argent', G.money < 1000 && G.money >= 790);
+tickDisaster('freezer');
+check('Le congelateur fait perdre des gateaux', G.cakes.cookie < 100 && G.cakes.cookie >= 50);
+tickDisaster('flood');
+check('Une inondation fait perdre un ingredient', G.ing.farine < 500 && G.ing.farine >= 199);
+// Commandes et recettes oubliees
+G = createFreshState(); G.level = 30;
+var few = [orderMaxOpen(), orderEverySec()];
+G.level = 600;
+check('Plus tu avances, plus il y a de commandes', orderMaxOpen() > few[0] && orderEverySec() < few[1] && orderEverySec() >= 10);
+G = createFreshState();
+var ck = findRec('cookie'), base18 = inflatedPrice(ck);
+G.lastMadeAt = { cookie: Date.now() - 2 * 3600 * 1000 };
+check('Une recette oubliee depuis longtemps se vend plus cher', inflatedPrice(ck) > base18 && restMult(ck) <= 1 + REST_BONUS.max + 1e-9);
+G.lastMadeAt = { cookie: Date.now() };
+check('... mais pas si on vient de la preparer', restMult(ck) === 1);
+G.machines = {}; MACHINES.forEach(function(m) { G.machines[m.id] = m.max; });
+check('Les bonus ont un plafond', machineBonus('ingCost') <= MACHINE_CAPS.ingCost && getIngredientCost(findIng('farine')) > 0 && unlockDelay(findRec('opera')) >= 1);
+
 // --- Banque ---
 G = createFreshState(); G.money = 0; G.level = 50;
 check('Pas de pret sans compte', takeLoan(100) === false);

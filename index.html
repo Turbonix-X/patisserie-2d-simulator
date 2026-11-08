@@ -27,8 +27,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="turbonix.css?v=3.3">
-  <link rel="stylesheet" href="style.css?v=3.3">
+  <link rel="stylesheet" href="turbonix.css?v=3.4">
+  <link rel="stylesheet" href="style.css?v=3.4">
 </head>
 <body>
   <div class="bg-blobs" aria-hidden="true"><span></span><span></span><span></span></div>
@@ -89,6 +89,7 @@
         <g class="bob-acc bob-acc-birthday" transform="translate(80 126)"><rect x="-8" y="-5" width="16" height="13" rx="2" fill="#FFC107"/><path d="M0-5V8M-8 1H8" stroke="#E91E63" stroke-width="2.500"/><path d="M0-5C-4-11-8-7-4-5ZM0-5C4-11 8-7 4-5Z" fill="#E91E63"/></g>
         <g class="bob-acc bob-acc-space" transform="translate(80 126)"><ellipse rx="11" ry="3.200" fill="none" stroke="#FFD54F" stroke-width="1.600" transform="rotate(-16)"/><circle r="6" fill="#E0A458"/></g>
         <path class="bob-acc bob-acc-bakery" transform="translate(80 128)" d="M-10 5C-12-4-6-9 0-9S12-4 10 5C9 7 7 7 6 5 5 1 3-1 0-1S-5 1-6 5C-7 7-9 7-10 5z" fill="#D9963F" stroke="#9C5C22" stroke-width="1"/>
+        <g class="bob-acc bob-acc-horror" transform="translate(80 127)"><path d="M-1-9c1-3 3-4 5-3-2 1-3 2-3 4z" fill="#3E7D2A"/><ellipse rx="9" ry="7.500" fill="#F57C1F"/><path d="M-5-3l3-2 1 3zM5-3l-3-2-1 3zM-5 2c3 3 7 3 10 0l-2 .800-1.500-1.500-1.500 1.500-1.500-1.500-1.500 1.500z" fill="#1A0F0A"/></g>
         <path class="bob-acc bob-acc-party" transform="translate(80 126)" d="M-3 6V-6L7-8V4M-3 6a3 2.500 0 1 1-1-2M7 4a3 2.500 0 1 1-1-2" fill="none" stroke="#C2188F" stroke-width="2.200" stroke-linecap="round"/>
         <!-- Foulard de chef -->
         <path class="bob-kerchief" d="M56 102q24 11 48 0l1 7q-25 11-50 0z"/>
@@ -161,6 +162,11 @@
             <g transform="translate(110 -6) rotate(-62)"><rect x="-27" y="-6" width="54" height="12" rx="6" fill="#C9822F"/><rect x="-25" y="-5" width="50" height="6" rx="3" fill="#E3A957"/><path d="M-16-5l5 7M-3-5l5 7M10-5l5 7" stroke="#FBE6BC" stroke-width="2.200" stroke-linecap="round"/></g>
             <g fill="#fff" opacity=".9"><circle cx="38" cy="44" r="3"/><circle cx="46" cy="50" r="1.800"/><circle cx="124" cy="92" r="2.400"/><circle cx="58" cy="-4" r="2.200"/></g>
           </g>
+          <g class="bob-acc bob-acc-horror">
+            <path d="M40 24C56 14 70 6 84-46c6 18 14 46 38 70z" fill="#1A0F0A"/><path d="M40 24c10 6 70 6 82 0" fill="none" stroke="#1A0F0A" stroke-width="7" stroke-linecap="round"/>
+            <path d="M52 16c14 4 44 4 58 0l2 6c-16 4-46 4-62 0z" fill="#E8650A"/>
+            <g transform="translate(118 -4) scale(.9)"><path d="M-2-1C-6-7-13-7-17-3c3 0 4 2 4 4 2-2 4-2 5 0 1-2 3-2 5-1zM2-1C6-7 13-7 17-3c-3 0-4 2-4 4-2-2-4-2-5 0-1-2-3-2-5-1z" fill="#1A0F0A"/><ellipse rx="2.600" ry="4" fill="#1A0F0A"/></g>
+          </g>
           <g class="bob-acc bob-acc-party">
             <path d="M106-30V-16" stroke="#D9C2F0" stroke-width="1.500"/><circle cx="106" cy="-6" r="11" fill="#B9B3D6"/><path d="M96-11h20M95-5h22M96 1h20M101-16v20M106-17v22M111-16v20" stroke="#F5F3FF" stroke-width="1.500"/><circle cx="102" cy="-10" r="2.500" fill="#fff"/>
             <path d="M48 20h64" stroke="#FF4081" stroke-width="3" stroke-dasharray="4 4"/>
@@ -210,28 +216,28 @@
   <script>document.getElementById("year").textContent = new Date().getFullYear();</script>
 
   <!-- Game scripts (order matters) -->
-  <script src="JS/GameData.js?v=3.3"></script>
-  <script src="JS/Icons.js?v=3.3"></script>
-  <script src="JS/Languages.js?v=3.3"></script>
-  <script src="JS/LangES.js?v=3.3"></script>
-  <script src="JS/LangPT.js?v=3.3"></script>
-  <script src="JS/LangDE.js?v=3.3"></script>
-  <script src="JS/LangAR.js?v=3.3"></script>
-  <script src="JS/LangZH.js?v=3.3"></script>
-  <script src="JS/PlayerData.js?v=3.3"></script>
-  <script src="JS/Logic.js?v=3.3"></script>
-  <script src="JS/Achievements.js?v=3.3"></script>
-  <script src="JS/Music.js?v=3.3"></script>
-  <script src="JS/Decor.js?v=3.3"></script>
-  <script src="JS/Interface.js?v=3.3"></script>
-  <script src="JS/Menus.js?v=3.3"></script>
-  <script src="JS/Bank.js?v=3.3"></script>
-  <script src="JS/Orders.js?v=3.3"></script>
-  <script src="JS/Staff.js?v=3.3"></script>
-  <script src="JS/Charts.js?v=3.3"></script>
-  <script src="JS/Console.js?v=3.3"></script>
-  <script src="JS/Bob.js?v=3.3"></script>
-  <script src="JS/main.js?v=3.3"></script>
+  <script src="JS/GameData.js?v=3.4"></script>
+  <script src="JS/Icons.js?v=3.4"></script>
+  <script src="JS/Languages.js?v=3.4"></script>
+  <script src="JS/LangES.js?v=3.4"></script>
+  <script src="JS/LangPT.js?v=3.4"></script>
+  <script src="JS/LangDE.js?v=3.4"></script>
+  <script src="JS/LangAR.js?v=3.4"></script>
+  <script src="JS/LangZH.js?v=3.4"></script>
+  <script src="JS/PlayerData.js?v=3.4"></script>
+  <script src="JS/Logic.js?v=3.4"></script>
+  <script src="JS/Achievements.js?v=3.4"></script>
+  <script src="JS/Music.js?v=3.4"></script>
+  <script src="JS/Decor.js?v=3.4"></script>
+  <script src="JS/Interface.js?v=3.4"></script>
+  <script src="JS/Menus.js?v=3.4"></script>
+  <script src="JS/Bank.js?v=3.4"></script>
+  <script src="JS/Orders.js?v=3.4"></script>
+  <script src="JS/Staff.js?v=3.4"></script>
+  <script src="JS/Charts.js?v=3.4"></script>
+  <script src="JS/Console.js?v=3.4"></script>
+  <script src="JS/Bob.js?v=3.4"></script>
+  <script src="JS/main.js?v=3.4"></script>
 
 </body>
 </html>

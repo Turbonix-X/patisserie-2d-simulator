@@ -2,6 +2,28 @@
 
 Tout ce qui a été ajouté à Pâtisserie 2D Simulator, de la plus récente à la plus ancienne. Pour comprendre les règles du jeu, va voir le [wiki](REGLES.md).
 
+## Bêta 1.8 (8 novembre 2026)
+
+**Nouveautés**
+- Thème Horreur, seulement en octobre : noir et orange, citrouilles, chauves-souris, fantômes, toiles d'araignée et tombes. Bob met son chapeau de sorcier.
+- Au moins 100 machines : 80 de plus, en 16 familles de 5 modèles, avec de nouveaux bonus (moral, salaires, déblocages, pannes).
+- Les machines tombent parfois en panne (réparation rapide et pas chère), et très rarement un bâtiment (réparation longue et chère).
+- De gros malheurs, très rares, à partir du niveau 30 : inondation, cambriolage, panne de congélateur, petit incendie.
+- Plus tu avances, plus les clients passent de commandes.
+- Une recette que tu n'as pas préparée depuis longtemps se vend plus cher.
+- Bob donne des conseils, rappelle de sauvegarder et raconte des anecdotes sur les pâtisseries. Ça se coupe dans les réglages.
+
+**Réglages**
+- La sauvegarde se télécharge dans un fichier et s'ouvre depuis un fichier, au lieu d'un code à copier-coller.
+- L'anglais est en premier dans les langues, puis le français.
+- L'onglet Sauvegarde passe tout en bas, sous les succès et les statistiques.
+
+**Employés**
+- Le tableau de bord passe tout en haut de l'onglet, avec la recherche d'employés dedans.
+
+**Équilibrage**
+- La source d'infini pur se débloque au niveau 1000 : plus rien ne se débloque après.
+
 ## Bêta 1.7 (8 novembre 2026)
 
 **Employés**

@@ -243,8 +243,21 @@ var bobLastIdle = 0;
   document.addEventListener(ev, function() { bobLastInput = Date.now(); });
 });
 
+// De temps en temps, quand il est de bonne humeur : un conseil, une sauvegarde, ou une anecdote
+var bobLastChat = Date.now();
+function tickBobChat(now) {
+  if (G.settings.bobTalk === false || !G.tutorialDone || introActive || bobTalkTimer) return;
+  if (now - bobLastChat < BOB_CHAT_SEC * 1000 || bobStage() !== '0') return;
+  bobLastChat = now;
+  var r = Math.random();
+  if (r < 0.2) bobTell(t('bob.saveTip'));
+  else if (r < 0.55) bobTell(pickLine('pause.tips'));
+  else bobTell(t('bob.factIntro') + ' ' + pickLine('bob.facts'));
+}
+
 function tickIdle() {
   var now = Date.now();
+  tickBobChat(now);
   if (now - bobLastInput < 180000 || now - bobLastIdle < 600000 || !G.tutorialDone) return;
   bobLastIdle = now;
   bobTell(t('bob.idle'));

@@ -71,6 +71,8 @@ function renderEmployees() {
   if (!el) return;
   var h = '<div class="panel-head"><h2>' + t('emp.title') + '</h2></div>';
   if (G.creative) h += '<p class="order-butler">' + t('emp.creative') + '</p>';
+  var head = h;
+  h = '';
   var sal = totalSalary();
   if (sal > 0) h += '<div class="emp-total-salary">' + t('emp.totalSalary', { v: fmtMoney(sal * 3600) }) + '</div>';
   var open = EMP_TYPES.filter(empTypeOpen);
@@ -89,6 +91,8 @@ function renderEmployees() {
     });
     h += '</div><p class="hint-note">' + t('emp.searchHint', { v: Math.round(searchChance() * 100) }) + '</p></div>';
   }
+  // A partir du niveau 20, le tableau de bord est tout en haut, avec la recherche dedans
+  h = head + (G.level >= 20 ? empDashboardHTML(h) : h);
   if (G.applicants && G.applicants.length > 0) {
     h += '<div class="applicants-section"><h4>' + t('emp.applicants') + ' (' + G.applicants.length + ')</h4>';
     G.applicants.forEach(function(app) {
@@ -107,7 +111,6 @@ function renderEmployees() {
   } else if (open.length > 0) {
     h += '<p class="empty-note">' + t('emp.noApplicants') + '</p>';
   }
-  if (G.employees.length > 0 && G.level >= 20) h += empDashboardHTML();
   if (G.employees.length > 0) {
     var groups = {};
     G.employees.forEach(function(emp) { (groups[emp.type] = groups[emp.type] || []).push(emp); });
@@ -143,7 +146,7 @@ function renderEmployees() {
 }
 
 // Le tableau de bord, en haut de l'onglet a partir du niveau 20
-function empDashboardHTML() {
+function empDashboardHTML(extra) {
   if (!G.explained.dashboard && typeof bobTell === 'function') { G.explained.dashboard = true; bobTell(t('unl.dashboard')); }
   var d = empDashboard();
   var h = '<section class="emp-dash"><h4>' + t('dash.title') + '</h4><div class="dash-tiles">';
@@ -168,7 +171,7 @@ function empDashboardHTML() {
     });
     h += '</div>';
   }
-  return h + '</section>';
+  return h + (extra || '') + '</section>';
 }
 
 function nudgeEmpGroup(type, dir) {

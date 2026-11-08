@@ -467,7 +467,69 @@ var Decor = (function() {
     ],
   };
 
-  var THEMES = { birthday: birthday, spring: spring, summer: summer, winter: winter, fall: fall, space: space, party: party, bakery: bakery };
+  // ---------- Horreur : le theme d'octobre ----------
+  function pumpkin(lit) {
+    return '<path d="M-1-11c1-4 4-6 7-5-3 1-4 3-4 6z" fill="#3E7D2A"/>' +
+      '<ellipse cx="-8" cy="1" rx="9" ry="11" fill="#D9570B"/><ellipse cx="8" cy="1" rx="9" ry="11" fill="#D9570B"/><ellipse cy="1" rx="9.500" ry="12" fill="#F57C1F"/>' +
+      '<path d="M-4.500-10C-7.500-4-7.500 7-4.500 12M4.500-10C7.500-4 7.500 7 4.500 12" fill="none" stroke="#B8460A" stroke-width="1.200"/>' +
+      (lit ? '<path d="M-10-3l4-4.500 3 4.500zM10-3l-4-4.500-3 4.500zM-2 2l2-3 2 3zM-11 5c3 5 7 6 11 6s8-1 11-6l-3 1.500-2-2.500-2 2.500-4-1.500-4 1.500-2-2.500-2 2.500z" fill="#FFD54F"/>' : '');
+  }
+  function bat(c) {
+    var wing = '<path d="M-2-1C-6-7-13-7-17-3c3 0 4 2 4 4 2-2 4-2 5 0 1-2 3-2 5-1z" fill="' + c + '"/>';
+    return wing + '<g transform="scale(-1 1)">' + wing + '</g><ellipse rx="2.600" ry="4" fill="' + c + '"/><path d="M-2-3l-1-3 2 1zM2-3l1-3-2 1z" fill="' + c + '"/>' +
+      '<circle cx="-1" cy="-1" r=".6" fill="#FF8C1A"/><circle cx="1" cy="-1" r=".6" fill="#FF8C1A"/>';
+  }
+  function ghost() {
+    return '<path d="M-10 12V-2c0-7 4-11 10-11s10 4 10 11v14l-3.300-3-3.300 3-3.400-3-3.400 3-3.300-3z" fill="#F4EEE6"/>' +
+      '<ellipse cx="-3.500" cy="-2" rx="1.800" ry="2.600" fill="#1A0F0A"/><ellipse cx="3.500" cy="-2" rx="1.800" ry="2.600" fill="#1A0F0A"/><ellipse cy="4" rx="2" ry="2.800" fill="#1A0F0A"/>';
+  }
+  function grave() {
+    return '<path d="M-12 22V-6c0-8 5-12 12-12s12 4 12 12v28z" fill="#5E5A63"/><path d="M-12 22V-6c0-8 5-12 12-12" fill="none" stroke="#7A7680" stroke-width="2"/>' +
+      '<path d="M0-8V8M-6-2H6" stroke="#3E3A44" stroke-width="3" stroke-linecap="round"/><path d="M-16 22h32v4h-32z" fill="#2B1B12"/>';
+  }
+  function web(r) {
+    var h = '';
+    for (var i = 0; i <= 4; i++) { var a = i * Math.PI / 8; h += '<path d="M0 0L' + (Math.cos(a) * r).toFixed(1) + ' ' + (Math.sin(a) * r).toFixed(1) + '"/>'; }
+    [0.35, 0.6, 0.85].forEach(function(k) {
+      var d = '';
+      for (var j = 0; j <= 4; j++) { var b = j * Math.PI / 8; d += (j ? 'L' : 'M') + (Math.cos(b) * r * k).toFixed(1) + ' ' + (Math.sin(b) * r * k).toFixed(1); }
+      h += '<path d="' + d + '"/>';
+    });
+    return '<g fill="none" stroke="#CFC3B6" stroke-width=".7" opacity=".8">' + h + '</g>';
+  }
+  function spider() {
+    return '<path d="M0-40V-6" stroke="#CFC3B6" stroke-width=".7"/><g stroke="#1A0F0A" stroke-width="1.300" fill="none" stroke-linecap="round">' +
+      '<path d="M-3-2l-6-4-2-4M-3 0l-7-1-3-3M-3 2l-6 3-2 4M-2 3l-4 6-1 4M3-2l6-4 2-4M3 0l7-1 3-3M3 2l6 3 2 4M2 3l4 6 1 4"/></g>' +
+      '<ellipse cy="2" rx="4" ry="5" fill="#1A0F0A"/><circle cy="-4" r="3" fill="#1A0F0A"/><circle cx="-1" cy="-4.500" r=".7" fill="#FF8C1A"/><circle cx="1" cy="-4.500" r=".7" fill="#FF8C1A"/>';
+  }
+  function crescent() { return '<path d="M5-13A14 14 0 1 0 5 13 11 11 0 1 1 5-13z" fill="#FFE8B0"/>'; }
+  function hauntBunting() {
+    var c = ['#E8650A', '#1A0F0A', '#F57C1F', '#2B1B12', '#E8650A', '#1A0F0A'], h = '<path d="M0 3Q60 9 120 3T240 3" fill="none" stroke="#CFC3B6" stroke-width="1.200"/>';
+    for (var i = 0; i < 6; i++) h += '<path d="M' + (6 + i * 40) + ' 4h26l-13 17z" fill="' + c[i] + '"/>';
+    return h;
+  }
+
+  var horror = {
+    strip: svg(240, 24, hauntBunting()),
+    ground: svg(240, 22,
+      '<path d="M0 22V13c20-4 40-4 60-1s40 3 60 0 40-4 60-1 40 3 60 0v11z" fill="#2B1B12"/>' +
+      at(40, 12, .42, 0, pumpkin(true)) + at(130, 13, .36, 0, pumpkin(false)) + at(200, 11, .42, 0, pumpkin(true)) + at(86, 12, .9, 0, candle('#F4EEE6'))),
+    corner: svg(240, 190,
+      '<path d="M0 190c24-18 64-28 116-28s96 10 124 22v6z" fill="#2B1B12"/>' +
+      at(60, 150, 1.1, -4, grave()) + at(150, 160, 1.8, 0, pumpkin(true)) + at(208, 172, 1, 0, pumpkin(false)) +
+      at(96, 84, 1.2, -6, ghost()) + at(206, 40, 1.1, 0, crescent()) + at(40, 40, 1, 10, bat('#1A0F0A')) + at(150, 60, .8, -8, bat('#1A0F0A'))),
+    corner2: svg(170, 90,
+      at(52, 64, 1.2, 0, pumpkin(true)) + at(110, 70, .9, 0, pumpkin(false)) + at(146, 66, 1.4, 0, candle('#F4EEE6')) + at(84, 24, .8, 6, bat('#1A0F0A'))),
+    top: svg(150, 70, at(150, 0, 1, 90, web(60)) + at(100, 46, 1, 0, spider())),
+    tile: svg(150, 150,
+      at(32, 30, .9, 10, bat('#FF8C1A'), .14) + at(110, 72, .55, 0, pumpkin(false), .2) + at(42, 116, .7, -10, ghost(), .12) + at(120, 128, .7, 0, bat('#FF8C1A'), .12)),
+    card: svg(48, 48, at(26, 28, .9, 0, pumpkin(false), .3)),
+    mark: svg(28, 28, at(14, 15, .58, 0, pumpkin(true))),
+    motion: 'fly', count: 6,
+    pieces: [svg(44, 20, at(22, 10, 1.1, 0, bat('#1A0F0A')))],
+  };
+
+  var THEMES = { birthday: birthday, spring: spring, summer: summer, winter: winter, fall: fall, space: space, party: party, bakery: bakery, horror: horror };
   var VARS = { strip: '--decor-strip', ground: '--decor-ground', corner: '--decor-corner', corner2: '--decor-corner2', top: '--decor-top', tile: '--decor-tile', card: '--decor-card', mark: '--decor-mark' };
   var applied = null;
 

@@ -442,6 +442,7 @@ function renderRecipes() {
     h += '<span class="rec-price">' + t('rec.revenue', { v: fmtMoney(batchPrice(rec, rec.qty)) }) + '</span>';
     h += '<span class="rec-profit">' + t('rec.profit', { v: fmtMoney(recipeProfit(rec)) }) + '</span>';
     if (prepMult(rec) < 0.95) h += '<span class="rec-tired">' + t('rec.tooMuch', { v: Math.round(prepMult(rec) * 100) }) + '</span>';
+    else if (restMult(rec) > 1.02) h += '<span class="rec-rested">' + t('rec.rested', { v: Math.round((restMult(rec) - 1) * 100) }) + '</span>';
     h += '</div>';
     if (block) {
       h += '<div class="rec-reason">' + t(block === 'ing' ? 'rec.noIng' : block === 'space' ? 'rec.noSpace' : 'rec.queueFull') + '</div>';
@@ -604,6 +605,12 @@ function renderBuildings() {
     h += '<div class="bld-name">' + t('b.' + bld.id) + ' <span class="bld-qty">' + t('bld.qty', { v: qty }) + '</span></div>';
     var deliveryLeft = qty > 0 ? (G.bldTimers[bld.id] || BLD_CYCLE_SEC) : BLD_CYCLE_SEC;
     h += '<div class="bld-prod" title="' + escH(t('i.' + bld.produces)) + '">' + getIngEmoji(bld.produces) + ' ' + (qty > 0 ? t('bld.delivery', { q: fmt(buildingDelivery(bld)), n: t('i.' + bld.produces), t: fmtTime(deliveryLeft) }) : t('bld.eachHour', { n: t('i.' + bld.produces) })) + '</div>';
+    if (isBroken('b', bld.id)) {
+      var left = repairingLeft('b', bld.id);
+      h += '<div class="broke-tag">' + t('broke.status') + '</div>';
+      h += left > 0 ? '<button class="btn btn-small" disabled>' + t('broke.repairing', { v: fmtTime(left) }) + '</button>'
+        : '<button class="btn btn-small btn-primary" onclick="doRepair(\'b\',\'' + bld.id + '\')"' + (G.money < repairCost('b', bld.id) ? ' disabled' : '') + '>' + t('broke.repair', { v: fmtMoney(repairCost('b', bld.id)) }) + '</button>';
+    }
     h += '<div class="bld-cost">' + fmtMoney(info.cost) + '</div></div>';
     h += '<button class="btn btn-primary" onclick="doBuyBuilding(\'' + bld.id + '\')"' + (G.money < info.cost ? ' disabled' : '') + '>' + t('bld.buy') + ' ×' + fmt(info.shown) + '</button></div>';
   });

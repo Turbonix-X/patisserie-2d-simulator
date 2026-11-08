@@ -28,6 +28,8 @@ function createFreshState() {
     lastTick: Date.now(),
     soldCount: {},
     madeCount: {},     // fournees recentes par recette
+    lastMadeAt: {},    // quand chaque recette a ete preparee pour la derniere fois
+    broken: {},        // machines et batiments en panne
     focusEvent: null,  // evenement sur un seul ingredient ou une seule recette
     lastFocusAt: 0,
     incoming: [],      // ce que les transporteurs apportent ici

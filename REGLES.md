@@ -1,6 +1,6 @@
 # Le wiki de Pâtisserie 2D Simulator
 
-Tout ce qu'il faut savoir pour comprendre le jeu. Ce wiki décrit la **Bêta 1.7**.
+Tout ce qu'il faut savoir pour comprendre le jeu. Ce wiki décrit la **Bêta 1.8**.
 
 > **À savoir :** les recettes du jeu sont fausses. Les quantités et les ingrédients servent juste à donner un parcours au jeu. Ne les cuisine pas chez toi !
 
@@ -61,6 +61,7 @@ Préparer demande aussi de la place pour ranger ce qui sort du four. Si la place
 - Vendre prend 2 secondes : le stock part tout de suite, et l'argent arrive après.
 - Plus tu vends le même gâteau, plus son prix baisse, jusqu'à 30 % du prix normal au pire.
 - Préparer trop souvent la même recette fait aussi baisser son prix de vente, jusqu'à 70 % du prix normal. La carte de la recette te prévient, et ça s'oublie avec le temps.
+- À l'inverse, une recette que tu n'as pas préparée depuis plus de 10 minutes se vend petit à petit plus cher, jusqu'à +20 % au bout d'une heure.
 - Vendre d'autres gâteaux fait remonter un peu son prix, jusqu'à 150 % au mieux.
 - La demande revient toute seule avec le temps : varie tes recettes.
 - Chaque succès augmente tous tes prix de vente de 0,1 %.
@@ -127,6 +128,10 @@ L'onglet Machines est là dès le début. Chaque machine a de 5 à 10 niveaux, e
 | Méga-four | 200 | 3 fournées de plus en même temps |
 | Enseigne géante | 300 | Prix de vente +3 % |
 
+En plus de celles-ci, **80 autres machines** arrivent entre les niveaux 20 et 1000 : 16 familles (four à sole, pétrin à spirale, chambre froide, comptoir de prestige, salle de détente, logiciel de paie, atelier de maintenance…), chacune en 5 modèles, du I au V, de plus en plus forts et chers. Elles donnent aussi des bonus nouveaux : un moral qui baisse moins vite, des salaires moins chers, des déblocages plus rapides et des pannes plus rares. Certains bonus ont un plafond, pour que rien ne devienne gratuit.
+
+**Les pannes :** une machine tombe parfois en panne. Elle ne donne plus son bonus jusqu'à ce que tu la répares : c'est rapide (20 secondes) et pas cher. Très rarement, c'est un **bâtiment** qui tombe en panne : il ne livre plus rien, et sa réparation coûte la moitié de son prix et prend 10 minutes.
+
 ## Les employés
 
 Lance une **recherche** dans l'onglet Employés : elle prend du temps et ne marche pas toujours. Plus ton niveau est haut, plus tu as de chances. Des candidats se présentent aussi tout seuls, rarement au début, puis de plus en plus souvent.
@@ -137,7 +142,7 @@ Lance une **recherche** dans l'onglet Employés : elle prend du temps et ne marc
 
 **Rangés par métier :** tes employés sont regroupés par métier. De base, le meilleur métier est en haut et les apprentis tout en bas. Fais glisser un métier, ou utilise ses flèches, pour changer l'ordre.
 
-**Le tableau de bord :** dès le niveau 20, il s'affiche en haut de l'onglet. Il compte tes employés par métier, ceux au travail, en pause ou en grève, les livraisons sur la route, et ce que ramasse chaque cueilleur.
+**Le tableau de bord :** dès le niveau 20, il s'affiche tout en haut de l'onglet, avec la recherche d'employés dedans. Il compte tes employés par métier, ceux au travail, en pause ou en grève, les livraisons sur la route, et ce que ramasse chaque cueilleur.
 
 | Employé | Niveau | Ce qu'il fait | Réglages |
 |---|---|---|---|
@@ -159,7 +164,7 @@ Lance une **recherche** dans l'onglet Employés : elle prend du temps et ne marc
 
 ## Les commandes
 
-Dès le niveau 30, des clients passent commande, 4 au maximum en même temps. Livre avant la fin du temps. Rater une commande n'a aucune pénalité.
+Dès le niveau 30, des clients passent commande, 4 au maximum en même temps. Plus tu montes de niveau, plus ils commandent souvent, et plus il peut y avoir de commandes en même temps (jusqu'à 10). Livre avant la fin du temps. Rater une commande n'a aucune pénalité.
 
 | Gâteaux différents | Difficulté | Prix payé | Disponible au niveau |
 |---|---|---|---|
@@ -204,6 +209,7 @@ Bob est ton chef pâtissier. Il t'accueille, t'apprend les bases, et t'explique 
 - **Ses conseils :** il te dit quand un gâteau se vend mal, quand ton stock déborde, quand ton loyer est trop cher, quand une commande va expirer ou qu'un employé va faire grève.
 - **Ne l'embête pas :** clique trop sur lui et il s'énerve. Énervé, il refuse même de t'expliquer les choses.
 - **Il adore le sucre.** Quand il est triste, à toi de trouver comment lui faire plaisir.
+- **Il bavarde :** de temps en temps, quand il est de bonne humeur, il te donne un conseil, te rappelle de sauvegarder ou te raconte une anecdote sur les pâtisseries. Tu peux le couper dans les réglages.
 - **Son défi :** tous les 2 à 5 jours, il te propose un défi de 24 heures. Réussis, et il te donne 5 % de tout ton argent, toutes pâtisseries confondues.
 - **Si tu pars sans mettre pause**, il te rappelle que le bouton existe.
 
@@ -213,6 +219,8 @@ Environ toutes les 4 minutes, un événement change le jeu pour un moment : rush
 
 D'autres événements ne touchent qu'**un seul ingrédient** (pénurie : il coûte plus cher, récolte record : il coûte moins cher) ou **une seule recette** (à la mode : elle se vend plus cher, boudée : elle se vend moins cher). Ils durent de 1 à 2 minutes et demie.
 
+**Les gros malheurs :** à partir du niveau 30, très rarement (environ une fois toutes les 2 h 30 de jeu), un vrai coup dur arrive : une inondation te fait perdre une grosse part d'un ingrédient, un cambriolage une partie de ton argent, une panne de congélateur une partie de tes gâteaux, ou un petit incendie un peu de chaque ingrédient.
+
 ## Les thèmes
 
 | Thème | Disponible |
@@ -220,6 +228,7 @@ D'autres événements ne touchent qu'**un seul ingrédient** (pénurie : il coû
 | Clair, Sombre | Toujours |
 | Printemps, Été, Automne, Hiver | Pendant leur saison, et ils se bloquent quand elle se termine |
 | Anniversaire | Le jour de ton anniversaire, si tu as indiqué ta date |
+| Horreur | Seulement en octobre : noir et orange, avec citrouilles, chauves-souris et fantômes |
 | Boulangerie | Pour toujours dès le niveau 100 |
 | Fête | Pour toujours dès le niveau 500 |
 | Espace | Pour toujours dès le niveau 1000 |
@@ -237,7 +246,7 @@ Ils sont dans les **réglages**. Il y a 1000 succès. Un succès pas encore obte
 - **Le bouton pause** ou la touche **Échap** arrêtent le jeu. Ouvrir les réglages ou la liste des pâtisseries l'arrête aussi.
 - Le jeu se sauvegarde tout seul toutes les 30 secondes, dans ton navigateur.
 - Quand tu reviens, tes boutiques ont travaillé pendant 5 heures au maximum : cueilleurs, bâtiments, vendeurs, loyers, salaires et prêts. Aucune dette n'est créée pendant ton absence. Le transporteur, lui, attend ton retour.
-- Tu peux exporter ta partie sous forme de code, et l'importer ailleurs.
+- Tu peux télécharger ta partie dans un fichier, et l'ouvrir ailleurs pour la retrouver.
 - **Trop de clics :** plus de 15 clics par seconde déclenchent une pause de 3 secondes. Après 3 pauses, une petite addition vérifie que tu n'es pas un robot. Après 3 mauvaises réponses, tu es bloqué 5 minutes.
 
 ## Sur téléphone

@@ -35,7 +35,7 @@ function settingsPaneHTML() {
 
 function showSettingsModal() {
   beginMenuPause();
-  var tabs = [['general', 'settings.tabGeneral', 'globe'], ['look', 'settings.tabLook', 'palette'], ['audio', 'settings.tabAudio', 'music'], ['save', 'settings.tabSave', 'save'], ['ach', 'settings.tabAch', 'ach'], ['stats', 'settings.tabStats', 'stats']];
+  var tabs = [['general', 'settings.tabGeneral', 'globe'], ['look', 'settings.tabLook', 'palette'], ['audio', 'settings.tabAudio', 'music'], ['ach', 'settings.tabAch', 'ach'], ['stats', 'settings.tabStats', 'stats'], ['save', 'settings.tabSave', 'save']];
   var h = '<div class="set-head"><h2>' + uiIcon('settings') + t('settings.title') + '</h2>';
   h += '<button class="icon-btn" onclick="closeMenu()" aria-label="' + escH(t('common.close')) + '" title="' + escH(t('common.close')) + '">' + uiIcon('close') + '</button></div>';
   h += '<div class="set-body"><nav class="set-nav">';
@@ -98,12 +98,13 @@ function settingsGeneral() {
     lang += '<button class="' + (currentLang === l.code ? 'active' : '') + '" onclick="setLanguage(\'' + l.code + '\');showSettingsModal()">' + l.flag + ' ' + l.name + '</button>';
   });
   lang += '</div>';
+  var bobRow = setRow(t('settings.bobTalk'), t('settings.bobTalkHelp'), setSwitch(G.settings.bobTalk !== false, 'G.settings.bobTalk=(G.settings.bobTalk===false);refreshSettingsPane()', t('settings.bobTalk')));
   var curr = '<select class="set-select" aria-label="' + escH(t('settings.currency')) + '" onchange="setCurrency(this.value);showSettingsModal()">';
   CURRENCIES.forEach(function(c) {
     curr += '<option value="' + c.id + '"' + (G.settings.currency === c.id ? ' selected' : '') + '>' + c.symbol + ' · ' + currencyName(c) + '</option>';
   });
   curr += '</select>';
-  var h = setCard('', setRow(t('settings.lang'), t('settings.langHelp'), lang) + setRow(t('settings.currency'), t('settings.currencyHelp'), curr));
+  var h = setCard('', setRow(t('settings.lang'), t('settings.langHelp'), lang) + setRow(t('settings.currency'), t('settings.currencyHelp'), curr) + bobRow);
   var bday;
   if (G.birthday) {
     var fix = '<div class="birthday-pick"><span class="set-value">' + t('settings.birthdaySet', { d: G.birthday.day, m: G.birthday.month }) + '</span>' + birthdaySelects(G.birthday.day, G.birthday.month);
@@ -137,7 +138,7 @@ function settingsLook() {
     var lock = themeLockReason(thm);
     var name = t(thm.langKey);
     var active = active0 === thm.id;
-    var why = lock ? t(lock === 'level' ? 'settings.lockLevel' : lock === 'season' ? 'settings.lockSeason' : lock === 'birthday' ? 'settings.lockBirthday' : 'settings.lockNoBirthday', { v: thm.level }) : '';
+    var why = lock ? t(lock === 'level' ? 'settings.lockLevel' : lock === 'month' ? 'settings.lockOctober' : lock === 'season' ? 'settings.lockSeason' : lock === 'birthday' ? 'settings.lockBirthday' : 'settings.lockNoBirthday', { v: thm.level }) : '';
     cards += '<button class="theme-card' + (active ? ' active' : '') + (lock ? ' locked' : '') + '"' + (lock ? ' disabled' : ' onclick="chooseTheme(\'' + thm.id + '\')"') + ' aria-pressed="' + active + '">';
     cards += '<span class="theme-prev tp-' + thm.id + '"><i></i><i></i><i></i>' + Decor.mark(thm.id) + '</span>';
     cards += '<span class="theme-name">' + (lock ? '\u{1F512} ' : '') + name + '</span>';
@@ -167,8 +168,9 @@ function settingsAudio() {
 
 function settingsSave() {
   var h = setCard('', setRow(t('settings.saveNowTitle'), t('settings.saveHelp'), '<button class="btn btn-small btn-primary" onclick="doManualSave()">' + t('settings.saveNow') + '</button>'));
-  h += setCard(t('settings.export'), '<p class="set-help">' + t('settings.exportHelp') + '</p><textarea class="set-code" id="export-area" readonly onclick="this.select()">' + exportSave() + '</textarea><button class="btn btn-small" onclick="copyExport()">' + t('settings.exportBtn') + '</button>');
-  h += setCard(t('settings.import'), '<p class="set-help">' + t('settings.importHelp') + '</p><textarea class="set-code" id="import-area" placeholder="' + escH(t('settings.importPlaceholder')) + '"></textarea><button class="btn btn-small btn-primary" onclick="doImportSave()">' + t('settings.importBtn') + '</button>');
+  // La sauvegarde dans un fichier, plus de code a copier-coller
+  h += setCard('', setRow(t('settings.export'), t('settings.exportHelp'), '<button class="btn btn-small btn-primary" onclick="downloadSave()">' + t('settings.exportFile') + '</button>'));
+  h += setCard('', setRow(t('settings.import'), t('settings.importHelp'), '<label class="btn btn-small file-pick">' + t('settings.importFile') + '<input type="file" accept=".p2ds,.txt,text/plain" onchange="importSaveFile(this)"></label>'));
   h += setCard('', setRow(t('settings.reset'), t('settings.resetHelp'), '<button class="btn btn-small btn-danger" onclick="confirmResetGame()">' + t('settings.resetBtn') + '</button>'), 'danger');
   return h;
 }
@@ -253,13 +255,38 @@ function copyExport() {
   }
 }
 
+function downloadSave() {
+  save();
+  var blob = new Blob([exportSave()], { type: 'text/plain' });
+  var a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'p2ds-' + String(G.bakeryName || 'partie').replace(/[^A-Za-z0-9_-]+/g, '_').slice(0, 30) + '-' + new Date().toISOString().slice(0, 10) + '.p2ds';
+  document.body.appendChild(a);
+  a.click();
+  setTimeout(function() { URL.revokeObjectURL(a.href); a.remove(); }, 1000);
+  toast(t('settings.exportDone'));
+}
+
+function importSaveFile(input) {
+  var file = input.files && input.files[0];
+  if (!file) return;
+  var reader = new FileReader();
+  reader.onload = function() { applyImportedSave(String(reader.result || '')); input.value = ''; };
+  reader.readAsText(file);
+}
+
 function doImportSave() {
   var area = document.getElementById('import-area');
-  if (!area || !area.value.trim()) return;
-  if (importSave(area.value.trim())) {
+  if (area) applyImportedSave(area.value);
+}
+
+function applyImportedSave(code) {
+  if (!code || !code.trim()) return;
+  if (importSave(code.trim())) {
     toast(t('settings.imported'));
     hideModal();
     currentLang = G.settings.lang;
+    applyLangDir();
     applyTheme();
     fullRender();
   } else {
