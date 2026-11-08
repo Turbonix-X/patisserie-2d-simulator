@@ -21,6 +21,8 @@
 <script>document.write('<script src="../JS/LangDE.js?t=' + Date.now() + '"><\/script>');</script>
 <script>document.write('<script src="../JS/LangAR.js?t=' + Date.now() + '"><\/script>');</script>
 <script>document.write('<script src="../JS/LangZH.js?t=' + Date.now() + '"><\/script>');</script>
+<script>document.write('<script src="../JS/LangJA.js?t=' + Date.now() + '"><\/script>');</script>
+<script>document.write('<script src="../JS/LangKO.js?t=' + Date.now() + '"><\/script>');</script>
 <script>document.write('<script src="../JS/PlayerData.js?t=' + Date.now() + '"><\/script>');</script>
 <script>document.write('<script src="../JS/Logic.js?t=' + Date.now() + '"><\/script>');</script>
 <script>document.write('<script src="../JS/Achievements.js?t=' + Date.now() + '"><\/script>');</script>
@@ -240,7 +242,7 @@ check('Chaque succes a une categorie', badCat.length === 0, badCat.join(', '));
 
 // --- Textes ---
 var missing = [];
-['fr', 'en', 'es', 'pt', 'de', 'ar', 'zh'].forEach(function(lang) {
+['fr', 'en', 'es', 'pt', 'de', 'ar', 'zh', 'ja', 'ko'].forEach(function(lang) {
   ING.forEach(function(i) { if (!LANGS[lang]['i.' + i.id]) missing.push(lang + ':i.' + i.id); });
   REC.forEach(function(r) { if (!LANGS[lang]['r.' + r.id]) missing.push(lang + ':r.' + r.id); });
   BUILDINGS.forEach(function(b) { if (!LANGS[lang]['b.' + b.id]) missing.push(lang + ':b.' + b.id); });
@@ -264,7 +266,7 @@ var esDescs = ACHIEVEMENTS.filter(function(a) { return !a.descFn && !achDescEs(a
 check('Tous les succes ont un nom en espagnol', esNames.length === 0, esNames.slice(0, 8).join(', '));
 check('Tous les succes ont une description en espagnol', esDescs.length === 0, esDescs.slice(0, 8).join(', '));
 currentLang = 'fr';
-['pt', 'de', 'ar', 'zh'].forEach(function(lang) {
+['pt', 'de', 'ar', 'zh', 'ja', 'ko'].forEach(function(lang) {
   var diff = Object.keys(LANGS.fr).filter(function(k) { return !LANGS[lang][k]; }).concat(Object.keys(LANGS[lang]).filter(function(k) { return !LANGS.fr[k]; }));
   check(lang + ' : tous les textes', diff.length === 0, diff.slice(0, 12).join(', '));
   var bad = Object.keys(LANGS[lang]).filter(function(k) {
@@ -331,7 +333,7 @@ G.focusEvent = { type: 'ingShortage', kind: 'ing', id: 'farine', mult: 1.8, unti
 check('Un evenement change le prix d un seul ingredient', Math.abs(getIngredientCost(flour) - c0 * 1.8) < 1e-9 && getIngredientCost(findIng('sucre')) === findIng('sucre').cost);
 G.focusEvent = { type: 'recBoycott', kind: 'rec', id: 'cookie', mult: 0.7, until: Date.now() + 60000 };
 check('Un evenement change le prix d une seule recette', inflatedPrice(crep) < p0 && inflatedPrice(findRec('cake')) === (function() { var g = G.focusEvent; G.focusEvent = null; var v = inflatedPrice(findRec('cake')); G.focusEvent = g; return v; })());
-['fr', 'en', 'es', 'pt', 'de', 'ar', 'zh'].forEach(function(lang) {
+['fr', 'en', 'es', 'pt', 'de', 'ar', 'zh', 'ja', 'ko'].forEach(function(lang) {
   FOCUS_EVENTS.forEach(function(f) { if (!LANGS[lang]['fevent.' + f.id]) missing.push(lang + ':fevent.' + f.id); });
 });
 check('Les evenements cibles sont traduits', missing.length === 0, missing.join(', '));
@@ -369,13 +371,13 @@ var tooLate = MACHINES.filter(function(m) { return m.lvl > 1000; }).map(function
 check('Rien ne se debloque apres le niveau 1000', tooLate.length === 0, tooLate.join(', '));
 check('La source d infini pur se debloque au niveau 1000', buildingUnlockLvl(findBld('sourceinfinie')) === 1000);
 var badMach = [];
-['fr', 'en', 'es', 'pt', 'de', 'ar', 'zh'].forEach(function(lang) {
+['fr', 'en', 'es', 'pt', 'de', 'ar', 'zh', 'ja', 'ko'].forEach(function(lang) {
   currentLang = lang;
   MACHINES.forEach(function(m) { if (/^mach/.test(machName(m)) || /^mach/.test(machDesc(m))) badMach.push(lang + ':' + m.id); });
   if (LANGS[lang]['bob.facts'].split('|').length !== 15) badMach.push(lang + ':bob.facts');
 });
 currentLang = 'fr';
-check('Chaque machine a un nom et une description dans les 7 langues', badMach.length === 0, badMach.slice(0, 8).join(', '));
+check('Chaque machine a un nom et une description dans les 9 langues', badMach.length === 0, badMach.slice(0, 8).join(', '));
 check('L anglais est la premiere langue, puis le francais', LANG_LIST[0].code === 'en' && LANG_LIST[1].code === 'fr');
 G = createFreshState();
 var horror = findTheme('horror'), octNow = new Date().getMonth() + 1 === 10;
@@ -411,7 +413,13 @@ check('Une inondation fait perdre un ingredient', G.ing.farine < 500 && G.ing.fa
 G = createFreshState(); G.level = 30;
 var few = [orderMaxOpen(), orderEverySec()];
 G.level = 600;
-check('Plus tu avances, plus il y a de commandes', orderMaxOpen() > few[0] && orderEverySec() < few[1] && orderEverySec() >= 10);
+check('Plus tu avances, plus il y a de commandes', orderMaxOpen() > few[0] && orderEverySec() < few[1] && orderEverySec() > 10.5);
+G.level = 999;
+check('... mais pas encore une toutes les 10 s au niveau 999', orderEverySec() > 10.01);
+G.level = 1000;
+check('Au niveau 1000 : une commande toutes les 10 s, et 10 en meme temps', Math.abs(orderEverySec() - 10) < 1e-9 && orderMaxOpen() === 10);
+G.level = 30;
+check('Au niveau 30 : une toutes les 40 s, et 4 en meme temps', Math.abs(orderEverySec() - 40) < 1e-9 && orderMaxOpen() === 4);
 G = createFreshState();
 var ck = findRec('cookie'), base18 = inflatedPrice(ck);
 G.lastMadeAt = { cookie: Date.now() - 2 * 3600 * 1000 };

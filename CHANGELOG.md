@@ -2,6 +2,11 @@
 
 Tout ce qui a été ajouté à Pâtisserie 2D Simulator, de la plus récente à la plus ancienne. Pour comprendre les règles du jeu, va voir le [wiki](REGLES.md).
 
+## Bêta 1.8.1 (8 novembre 2026)
+
+- Deux nouvelles langues complètes : le japonais et le coréen. Le jeu existe maintenant en 9 langues.
+- Les commandes accélèrent petit à petit avec ton niveau : une toutes les 10 secondes seulement au niveau 1000.
+
 ## Bêta 1.8 (8 novembre 2026)
 
 **Nouveautés**

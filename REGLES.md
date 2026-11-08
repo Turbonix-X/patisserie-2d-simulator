@@ -1,6 +1,6 @@
 # Le wiki de Pâtisserie 2D Simulator
 
-Tout ce qu'il faut savoir pour comprendre le jeu. Ce wiki décrit la **Bêta 1.8**.
+Tout ce qu'il faut savoir pour comprendre le jeu. Ce wiki décrit la **Bêta 1.8.1**.
 
 > **À savoir :** les recettes du jeu sont fausses. Les quantités et les ingrédients servent juste à donner un parcours au jeu. Ne les cuisine pas chez toi !
 
@@ -164,7 +164,7 @@ Lance une **recherche** dans l'onglet Employés : elle prend du temps et ne marc
 
 ## Les commandes
 
-Dès le niveau 30, des clients passent commande, 4 au maximum en même temps. Plus tu montes de niveau, plus ils commandent souvent, et plus il peut y avoir de commandes en même temps (jusqu'à 10). Livre avant la fin du temps. Rater une commande n'a aucune pénalité.
+Dès le niveau 30, des clients passent commande, 4 au maximum en même temps. Plus tu montes de niveau, plus ils commandent souvent et plus il peut y avoir de commandes en même temps : d'une commande toutes les 40 secondes et 4 en même temps au niveau 30, jusqu'à une toutes les 10 secondes et 10 en même temps au niveau 1000. Livre avant la fin du temps. Rater une commande n'a aucune pénalité.
 
 | Gâteaux différents | Difficulté | Prix payé | Disponible au niveau |
 |---|---|---|---|
@@ -251,4 +251,4 @@ Ils sont dans les **réglages**. Il y a 1000 succès. Un succès pas encore obte
 
 ## Sur téléphone
 
-Le jeu marche aussi sur téléphone et sur tablette. Les ingrédients sont en haut, au-dessus des onglets. Le jeu existe en français, en anglais, en espagnol, en portugais, en allemand, en arabe et en mandarin : il prend la langue de ton navigateur au départ, et tu peux la changer dans les réglages.
+Le jeu marche aussi sur téléphone et sur tablette. Les ingrédients sont en haut, au-dessus des onglets. Le jeu existe en français, en anglais, en espagnol, en portugais, en allemand, en arabe, en mandarin, en japonais et en coréen : il prend la langue de ton navigateur au départ, et tu peux la changer dans les réglages.

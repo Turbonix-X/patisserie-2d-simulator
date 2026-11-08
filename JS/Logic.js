@@ -1860,8 +1860,10 @@ function fulfillOrder(id) {
 }
 
 // Plus tu avances, plus les clients commandent
-function orderMaxOpen() { return Math.min(10, ORDER_CONFIG.maxOpen + Math.floor(Math.max(0, G.level - ORDER_CONFIG.lvl) / 100)); }
-function orderEverySec() { return Math.max(10, ORDER_CONFIG.everySec * Math.pow(0.997, Math.max(0, G.level - ORDER_CONFIG.lvl))); }
+// Du niveau 30 au niveau 1000 : de 4 a 10 commandes en meme temps, et d'une toutes les 40 s a une toutes les 10 s
+function orderProgress() { return Math.min(1, Math.max(0, (G.level - ORDER_CONFIG.lvl) / (1000 - ORDER_CONFIG.lvl))); }
+function orderMaxOpen() { return ORDER_CONFIG.maxOpen + Math.floor(6 * orderProgress()); }
+function orderEverySec() { return ORDER_CONFIG.everySec * Math.pow(10 / ORDER_CONFIG.everySec, orderProgress()); }
 
 function tickOrders(dtSec) {
   if (G.level < ORDER_CONFIG.lvl) return;

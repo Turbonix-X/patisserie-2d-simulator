@@ -605,9 +605,11 @@ function maxThisBakery() {
     G.buildings[b.id] = { qty: 999 };
     if (!G.bldTimers[b.id]) G.bldTimers[b.id] = BLD_CYCLE_SEC;
   });
-  // Toutes les machines, au niveau maximum
+  // Toutes les machines au niveau maximum, aucune en panne, et tous les themes
   MACHINES.forEach(function(m) { G.machines[m.id] = m.max; });
+  G.broken = {};
   syncOvens();
+  THEME_LIST.forEach(function(th) { if (th.season || th.birthday || th.level || th.month) G.unlockedThemes[th.id] = true; });
   G.employees = [];
   G.nextEmployeeId = 1;
   EMP_TYPES.forEach(function(et) {

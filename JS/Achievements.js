@@ -144,7 +144,7 @@ function tierName(tier) {
       var legacy = (r.id === 'goldengate' && i === 0) ? 'golden' : (r.id === 'infinicake' && i === 0) ? 'infinimade' : ('rec_' + r.id + '_' + i);
       add(legacy, 'recipes', i === 0 ? r.e : tier[3], null, null, null, null, function(g) { return (g.stats.cakesMadeById[r.id] || 0) >= tier[0]; });
       var a = ACHIEVEMENTS[ACHIEVEMENTS.length - 1];
-      a.nameFn = function() { return tierName(tier) + (currentLang === 'fr' ? ' : ' : ': ') + recShortName(r); };
+      a.nameFn = function() { return tierName(tier) + (({ fr: ' : ', zh: '：', ja: '：' })[currentLang] || ': ') + recShortName(r); };
       a.descFn = function() { return t('ach.descRecipe', { v: fmt(tier[0]), n: recShortName(r) }); };
     });
   });
@@ -165,7 +165,7 @@ function tierName(tier) {
     bldTiers.forEach(function(tier, i) {
       add('bt_' + b.id + '_' + i, 'buildings', b.e, null, null, null, null, function(g) { return (g.buildings[b.id] || { qty: 0 }).qty >= tier[0]; });
       var a = ACHIEVEMENTS[ACHIEVEMENTS.length - 1];
-      a.nameFn = function() { return tierName(tier) + (currentLang === 'fr' ? ' : ' : ': ') + t('b.' + b.id); };
+      a.nameFn = function() { return tierName(tier) + (({ fr: ' : ', zh: '：', ja: '：' })[currentLang] || ': ') + t('b.' + b.id); };
       a.descFn = function() { return t('ach.descBuilding', { v: tier[0], n: t('b.' + b.id) }); };
     });
   });
@@ -176,7 +176,7 @@ function tierName(tier) {
     stockTiers.forEach(function(tier, i) {
       add('st_' + ing.id + '_' + i, 'stock', ing.e, null, null, null, null, function(g) { return (g.ing[ing.id] || 0) >= tier[0]; });
       var a = ACHIEVEMENTS[ACHIEVEMENTS.length - 1];
-      a.nameFn = function() { return tierName(tier) + (currentLang === 'fr' ? ' : ' : ': ') + t('i.' + ing.id); };
+      a.nameFn = function() { return tierName(tier) + (({ fr: ' : ', zh: '：', ja: '：' })[currentLang] || ': ') + t('i.' + ing.id); };
       a.descFn = function() { return t('ach.descStock', { v: fmt(tier[0]), n: t('i.' + ing.id) }); };
     });
   });

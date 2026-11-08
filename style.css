@@ -2414,3 +2414,8 @@ body.bob-wants-sugar .ing-card[data-ing="sucre"] { touch-action: none; }
 /* Le tableau de bord contient la recherche d'employés */
 .emp-dash .recruit-section { margin-top: 12px; padding-top: 10px; border-top: 1px solid var(--border); }
 .emp-dash .emp-total-salary { margin-top: 10px; }
+
+/* ---------- Bêta 1.8.1 ---------- */
+/* Japonais et coréen : des polices qui ont ces lettres */
+:root[lang="ja"] { --font: "Outfit", "Hiragino Sans", "Yu Gothic", "Meiryo", "Noto Sans JP", sans-serif; }
+:root[lang="ko"] { --font: "Outfit", "Apple SD Gothic Neo", "Malgun Gothic", "Noto Sans KR", sans-serif; }

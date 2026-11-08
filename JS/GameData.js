@@ -4,7 +4,7 @@
    employes, espace, rebirths, evenements, themes
    ============================================ */
 
-var GAME_VERSION = 'B\u00eata 1.8';
+var GAME_VERSION = 'B\u00eata 1.8.1';
 
 // ============ CURRENCIES ============
 var CURRENCIES = [

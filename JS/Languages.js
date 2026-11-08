@@ -11,6 +11,8 @@ function detectLang() {
   if (/^de/i.test(list[0])) return 'de';
   if (/^ar/i.test(list[0])) return 'ar';
   if (/^zh/i.test(list[0])) return 'zh';
+  if (/^ja/i.test(list[0])) return 'ja';
+  if (/^ko/i.test(list[0])) return 'ko';
   return 'en';
 }
 var currentLang = detectLang();
@@ -22,6 +24,8 @@ var LANG_LIST = [
   { code:'de', name:'Deutsch', flag:'\u{1F1E9}\u{1F1EA}' },
   { code:'ar', name:'العربية', flag:'\u{1F1F8}\u{1F1E6}' },
   { code:'zh', name:'中文', flag:'\u{1F1E8}\u{1F1F3}' },
+  { code:'ja', name:'日本語', flag:'\u{1F1EF}\u{1F1F5}' },
+  { code:'ko', name:'한국어', flag:'\u{1F1F0}\u{1F1F7}' },
 ];
 var LANGS = {};
 
