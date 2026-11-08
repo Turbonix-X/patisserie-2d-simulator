@@ -263,3 +263,29 @@ Object.assign(I18N_EXTRA.pt.cmd, {
   'c:/money infinite':'O teu dinheiro fica no máximo, como no modo criativo.','c:/money infinite off':'Para o dinheiro infinito.',
   'c:/farine infinite':'Este ingrediente nunca mais acaba. Funciona com todos os ingredientes.','c:/farine infinite off':'Volta ao normal.',
 });
+
+// ======================== BETA 1.7 ========================
+Object.assign(LANGS.pt, {
+  'dash.title':'Painel',
+  'dash.total':'Empregados',
+  'dash.working':'A trabalhar',
+  'dash.paused':'Em pausa',
+  'dash.striking':'Em greve',
+  'dash.collectors':'O que os teus colhedores apanham',
+  'dash.noCollector':'Ainda não há colhedores.',
+  'dash.transit':'{{v}} entrega(s) a caminho',
+  'emp.groupDrag':'Arrasta para mudar a ordem das profissões',
+  'emp.groupUp':'Subir',
+  'emp.groupDown':'Descer',
+  'unl.dashboard':'Nível 20: o painel! No topo do separador Empregados, vês quantos empregados tens em cada profissão e o que cada colhedor apanha. Os teus empregados estão arrumados por profissão: arrasta uma profissão para a pôr mais acima ou mais abaixo.',
+  'fevent.ingShortage':'Falta de {{n}}! O preço +{{v}} % durante {{t}} s',
+  'fevent.ingHarvest':'Colheita recorde de {{n}}! O preço -{{v}} % durante {{t}} s',
+  'fevent.recFashion':'{{n}} estão na moda! Preço de venda +{{v}} % durante {{t}} s',
+  'fevent.recBoycott':'Já ninguém quer {{n}}: preço de venda -{{v}} % durante {{t}} s',
+  'carry.help':'Uma viagem dura entre 10 s e 10 min. Pode atrasar-se, ou ter um acidente e perder a carga.',
+  'carry.late':'{{n}} está atrasado: há trânsito na estrada.',
+  'carry.accident':'{{n}} teve um acidente! A carga perdeu-se: {{v}}.',
+  'carry.onRoad':'A caminho',
+  'carry.eta':'{{v}}, chega em {{t}}',
+  'rec.tooMuch':'Feita demasiadas vezes: preço a {{v}} %',
+});

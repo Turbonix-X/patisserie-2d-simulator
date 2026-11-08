@@ -4,7 +4,7 @@
    employes, espace, rebirths, evenements, themes
    ============================================ */
 
-var GAME_VERSION = 'B\u00eata 1.6.1';
+var GAME_VERSION = 'B\u00eata 1.7';
 
 // ============ CURRENCIES ============
 var CURRENCIES = [
@@ -34,7 +34,7 @@ var ING = [
   { id:'creme', e:'\u{1F376}', unlockLvl:8, cost:3.5, resellRate:0.5, craftable:true, craftReq:{lait:3,sucre:1}, craftQty:2, craftTime:2 },
   { id:'vanille', e:'\u{1F33C}', unlockLvl:10, cost:6, resellRate:0.5 },
   { id:'cafe', e:'\u2615', unlockLvl:11, cost:10, resellRate:0.5 },
-  { id:'amande', e:'\u{1F95C}', unlockLvl:15, cost:5, resellRate:0.5 },
+  { id:'amande', e:'\u{1F330}', unlockLvl:15, cost:5, resellRate:0.5 },
   { id:'citron', e:'\u{1F34B}', unlockLvl:16, cost:1.5, resellRate:0.5 },
   { id:'miel', e:'\u{1F36F}', unlockLvl:18, cost:7, resellRate:0.5 },
   { id:'pomme', e:'\u{1F34E}', unlockLvl:21, cost:2, resellRate:0.5 },
@@ -49,7 +49,7 @@ var ING = [
   { id:'matcha', e:'\u{1F375}', unlockLvl:60, cost:25, resellRate:0.5 },
   { id:'mangue', e:'\u{1F96D}', unlockLvl:65, cost:4, resellRate:0.5 },
   { id:'lavande', e:'\u{1F49C}', unlockLvl:70, cost:15, resellRate:0.5 },
-  { id:'noisette', e:'\u{1F330}', unlockLvl:75, cost:8, resellRate:0.5 },
+  { id:'noisette', e:'\u{1F95C}', unlockLvl:75, cost:8, resellRate:0.5 },
   { id:'gingembre', e:'\u{1FADA}', unlockLvl:80, cost:6, resellRate:0.5 },
   { id:'rhum', e:'\u{1F943}', unlockLvl:85, cost:18, resellRate:0.5 },
   { id:'rose', e:'\u{1F339}', unlockLvl:90, cost:20, resellRate:0.5 },
@@ -78,15 +78,15 @@ var ING = [
 var REC = [
   { id:'cookie', e:'\u{1F36A}', req:{farine:2,sucre:2,oeuf:1}, val:3, qty:6, unlockLvl:1, space:0.5, prepTime:2, xp:5 },
   { id:'cake', e:'\u{1F382}', req:{farine:3,oeuf:8,sucre:3,beurre:2}, val:22, qty:1, unlockLvl:2, space:1, prepTime:3, xp:5 },
-  { id:'crepe', e:'\u{1F95E}', req:{farine:4,oeuf:11,lait:3,beurre:2}, val:3.5, qty:8, unlockLvl:3, space:0.5, prepTime:3, xp:5 },
-  { id:'madel', e:'\u{1F9C1}', req:{farine:4,oeuf:10,sucre:4,beurre:2,lait:3}, val:8.6, qty:4, unlockLvl:4, space:0.5, prepTime:4, xp:6 },
+  { id:'crepe', e:'\u{1FAD3}', req:{farine:4,oeuf:11,lait:3,beurre:2}, val:3.5, qty:8, unlockLvl:3, space:0.5, prepTime:3, xp:5 },
+  { id:'madel', e:'\u{1F96E}', req:{farine:4,oeuf:10,sucre:4,beurre:2,lait:3}, val:8.6, qty:4, unlockLvl:4, space:0.5, prepTime:4, xp:6 },
   { id:'pancake', e:'\u{1F95E}', req:{farine:6,oeuf:15,lait:4,sucre:5}, val:4, qty:10, unlockLvl:5, space:0.5, prepTime:3, xp:8 },
   { id:'brownie', e:'\u{1F7EB}', req:{farine:5,oeuf:14,sucre:5,beurre:3,cacao:2}, val:46.8, qty:1, unlockLvl:6, space:1, prepTime:5, xp:9 },
   { id:'muffin', e:'\u{1F9C1}', req:{farine:6,oeuf:16,sucre:5,beurre:3,fraise:2}, val:8.9, qty:6, unlockLvl:7, space:1, prepTime:5, xp:11 },
   { id:'eclair', e:'\u{1F956}', req:{farine:7,oeuf:18,beurre:4,chocolat:1,creme:2}, val:15, qty:4, unlockLvl:8, space:1, prepTime:7, xp:12 },
   { id:'fraisier', e:'\u{1F370}', req:{farine:6,oeuf:17,sucre:6,beurre:3,lait:5,fraise:2}, val:67.5, qty:1, unlockLvl:9, space:2, prepTime:8, xp:14 },
   { id:'fondant', e:'\u{1F36E}', req:{farine:7,oeuf:19,sucre:6,beurre:4,cacao:2,chocolat:1}, val:75, qty:1, unlockLvl:10, space:1.5, prepTime:8, xp:15 },
-  { id:'tiramisu', e:'\u{1F370}', req:{oeuf:25,sucre:8,creme:2,cafe:1,cacao:3}, val:83.6, qty:1, unlockLvl:11, space:1.5, prepTime:6, xp:17 },
+  { id:'tiramisu', e:'\u{1F368}', req:{oeuf:25,sucre:8,creme:2,cafe:1,cacao:3}, val:83.6, qty:1, unlockLvl:11, space:1.5, prepTime:6, xp:17 },
   { id:'cheesecake', e:'\u{1F9C0}', req:{farine:10,oeuf:26,sucre:8,beurre:5,creme:2,vanille:1}, val:100, qty:1, unlockLvl:13, space:2, prepTime:10, xp:20 },
   { id:'chouquette', e:'\u{1F535}', req:{farine:13,oeuf:33,beurre:7,lait:9,sucre:11}, val:9.2, qty:12, unlockLvl:14, space:1, prepTime:6, xp:22 },
   { id:'tarte_cit', e:'\u{1F34B}', req:{farine:15,oeuf:40,sucre:13,beurre:8,citron:8}, val:130, qty:1, unlockLvl:16, space:2, prepTime:12, xp:26 },
@@ -286,6 +286,23 @@ var EVENT_TYPES = [
   { id:'tv_feature',    duration:45, chance:3 },
   { id:'apprentice_day',duration:60, chance:5 },
 ];
+
+// Evenements qui ne touchent qu'un ingredient ou qu'une recette
+// mult : le prix est multiplie par ce nombre pendant l'evenement
+var FOCUS_EVENTS = [
+  { id:'ingShortage', kind:'ing', mult:1.8 },
+  { id:'ingHarvest',  kind:'ing', mult:0.6 },
+  { id:'recFashion',  kind:'rec', mult:1.4 },
+  { id:'recBoycott',  kind:'rec', mult:0.7 },
+];
+var FOCUS_EVENT_SEC = [60, 150];
+
+// Trop preparer une meme recette fait baisser son prix de vente.
+// Chaque fournee compte, et ca s'oublie avec le temps.
+var PREP_FATIGUE = { perBatch: 0.01, minMult: 0.7, recoveryPerSec: 0.004 };
+
+// Le transporteur : un trajet de 10 s a 10 min, et parfois un retard ou un accident
+var CARRIER_TRIP = { minSec: 10, maxSec: 600, lateChance: 0.15, lateSec: [60, 300], accidentChance: 0.05 };
 
 // Petits incidents de la vie d'une patisserie
 var INVISIBLE_EVENTS = [

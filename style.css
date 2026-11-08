@@ -2342,3 +2342,36 @@ body.bob-wants-sugar .ing-card[data-ing="sucre"] { touch-action: none; }
 @media (max-width: 720px) {
   [dir="rtl"] #console-btn-wrap { right: auto; left: 10px; }
 }
+
+/* ---------- Bêta 1.7 ---------- */
+
+/* Tableau de bord des employés */
+.emp-dash { margin: 10px 0 14px; padding: 12px 14px; border: 1.5px solid var(--border); border-radius: 14px; background: var(--surface); }
+.emp-dash h4 { margin: 0 0 8px; }
+.emp-dash h5 { margin: 12px 0 6px; font-size: .85rem; color: var(--muted); }
+.dash-tiles { display: flex; flex-wrap: wrap; gap: 8px; }
+.dash-tile { display: flex; align-items: center; gap: 6px; padding: 6px 10px; border-radius: 10px; background: var(--surface-2); font-size: .82rem; }
+.dash-tile .emp-face { width: 26px; height: 26px; }
+.dash-tile b { font-size: 1.05rem; }
+.dash-total { background: var(--mauve); color: #fff; }
+.dash-states { display: flex; flex-wrap: wrap; gap: 6px 14px; margin-top: 8px; font-size: .8rem; font-weight: 700; }
+.dash-coll { display: flex; flex-wrap: wrap; gap: 6px; }
+.dash-coll-item { padding: 4px 9px; border-radius: 99px; background: var(--surface-2); font-size: .8rem; }
+.dash-coll-item small { color: var(--muted); }
+
+/* Les employés rangés par métier */
+.emp-group { margin-top: 12px; border-radius: 12px; transition: opacity .2s, box-shadow .2s; }
+.emp-group-head { display: flex; align-items: center; gap: 8px; padding: 4px 6px; border-radius: 10px; background: var(--surface-2); cursor: grab; touch-action: none; user-select: none; }
+.emp-group-head .emp-face { width: 26px; height: 26px; }
+.emp-group-head b { flex: 1; }
+.emp-group-handle { color: var(--muted); font-size: 1.1rem; }
+.emp-group-count { min-width: 22px; padding: 1px 7px; border-radius: 99px; background: var(--mauve); color: #fff; font-size: .75rem; font-weight: 800; text-align: center; }
+.emp-group .emp-list { margin-top: 6px; }
+.emp-group.dragging { opacity: .5; }
+.emp-group.drop-before { box-shadow: 0 -3px 0 var(--mauve); }
+
+/* Recette trop préparée */
+.rec-tired { display: block; color: var(--warn, #E08A00); font-size: .76rem; font-weight: 700; }
+
+/* Ce que le transporteur a sur la route */
+.carry-road { margin: 4px 0 0; padding-inline-start: 18px; font-size: .82rem; }

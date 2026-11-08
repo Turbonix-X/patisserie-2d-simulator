@@ -216,7 +216,7 @@ function bobTell(text) {
 }
 
 // Ce que Bob explique a chaque nouvelle fonction : [niveau, cle]
-var UNLOCK_TALKS = [[2, 'research'], [3, 'machines'], [5, 'staff'], [10, 'baker'], [20, 'carrier'], [25, 'manager'], [30, 'orders'], [35, 'seller'], [40, 'buildings'], [40, 'rebirth'], [65, 'chef'], [90, 'buyer'], [1000, 'top']];
+var UNLOCK_TALKS = [[2, 'research'], [3, 'machines'], [5, 'staff'], [10, 'baker'], [20, 'carrier'], [20, 'dashboard'], [25, 'manager'], [30, 'orders'], [35, 'seller'], [40, 'buildings'], [40, 'rebirth'], [65, 'chef'], [90, 'buyer'], [1000, 'top']];
 
 function explainLevel(lvl) {
   UNLOCK_TALKS.forEach(function(x) {

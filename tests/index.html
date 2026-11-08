@@ -24,6 +24,7 @@
 <script>document.write('<script src="../JS/PlayerData.js?t=' + Date.now() + '"><\/script>');</script>
 <script>document.write('<script src="../JS/Logic.js?t=' + Date.now() + '"><\/script>');</script>
 <script>document.write('<script src="../JS/Achievements.js?t=' + Date.now() + '"><\/script>');</script>
+<script>document.write('<script src="../JS/Staff.js?t=' + Date.now() + '"><\/script>');</script>
 <script>
 currentLang = 'fr';
 var results = [];
@@ -310,6 +311,53 @@ G = createFreshState(); G.infiniteMoney = true; G.infiniteIng = { farine: true }
 tickInfinite();
 check('Argent et ingredient a l infini', G.money === MONEY_CAP && G.ing.farine >= 1e300 && G.ing.sucre === createFreshState().ing.sucre);
 
+// --- Beta 1.7 ---
+G = createFreshState();
+check('De base, les apprentis sont en bas et le meilleur metier en haut', empGroupOrder()[0] === 'buyer' && empGroupOrder()[empGroupOrder().length - 1] === 'novice');
+moveEmpGroup('collector', 'buyer');
+check('On peut monter un metier tout en haut', empGroupOrder()[0] === 'collector' && empGroupOrder().length === EMP_TYPES.length);
+G.employees = [{ id: 1, type: 'collector', assignedIng: 'farine', status: 'working', level: 1, skill: 50, morale: 100 }, { id: 2, type: 'manager', status: 'working', level: 1, skill: 50, morale: 100, paused: true }];
+var dash = empDashboard();
+check('Le tableau de bord compte les metiers et les cueilleurs', dash.total === 2 && dash.byType.manager === 1 && dash.collectors.farine === 1 && dash.paused === 1);
+G = createFreshState();
+var crep = findRec('cookie'), p0 = inflatedPrice(crep);
+G.madeCount = { cookie: 20 };
+check('Trop preparer une recette fait baisser son prix', inflatedPrice(crep) < p0 && prepMult(crep) >= PREP_FATIGUE.minMult);
+G.madeCount = { cookie: 1000 };
+check('... mais pas en dessous du plancher', Math.abs(prepMult(crep) - PREP_FATIGUE.minMult) < 1e-9);
+G = createFreshState();
+var flour = findIng('farine'), c0 = getIngredientCost(flour);
+G.focusEvent = { type: 'ingShortage', kind: 'ing', id: 'farine', mult: 1.8, until: Date.now() + 60000 };
+check('Un evenement change le prix d un seul ingredient', Math.abs(getIngredientCost(flour) - c0 * 1.8) < 1e-9 && getIngredientCost(findIng('sucre')) === findIng('sucre').cost);
+G.focusEvent = { type: 'recBoycott', kind: 'rec', id: 'cookie', mult: 0.7, until: Date.now() + 60000 };
+check('Un evenement change le prix d une seule recette', inflatedPrice(crep) < p0 && inflatedPrice(findRec('cake')) === (function() { var g = G.focusEvent; G.focusEvent = null; var v = inflatedPrice(findRec('cake')); G.focusEvent = g; return v; })());
+['fr', 'en', 'es', 'pt', 'de', 'ar', 'zh'].forEach(function(lang) {
+  FOCUS_EVENTS.forEach(function(f) { if (!LANGS[lang]['fevent.' + f.id]) missing.push(lang + ':fevent.' + f.id); });
+});
+check('Les evenements cibles sont traduits', missing.length === 0, missing.join(', '));
+// Un trajet : l'argent part, puis arrive, ou se perd
+G = createFreshState();
+var dest = createFreshState(); dest.money = 0;
+var carrier = { name: 'Test', type: 'carrier' };
+var oldRandom = Math.random;
+Math.random = function() { return 0.5; };
+var ship = shipOut(carrier, dest, 'money', null, 100);
+Math.random = oldRandom;
+check('Un trajet dure entre 10 s et 10 min', ship.eta - Date.now() >= 9000 && ship.eta - Date.now() <= 601000 && dest.money === 0);
+ship.eta = Date.now() - 1; tickShipments(dest);
+check('Le chargement arrive', dest.money === 100 && dest.incoming.length === 0);
+Math.random = function() { return 0.01; };
+var lostShip = shipOut(carrier, dest, 'money', null, 50);
+Math.random = oldRandom;
+lostShip.eta = Date.now() - 1; tickShipments(dest);
+check('Un accident fait perdre le chargement', lostShip.lost && dest.money === 100 && dest.incoming.length === 0);
+Math.random = function() { return 0.1; };
+var lateShip = shipOut(carrier, dest, 'money', null, 10);
+Math.random = oldRandom;
+lateShip.eta = Date.now() - 1; tickShipments(dest);
+check('Un retard repousse l arrivee', dest.incoming.length === 1 && lateShip.eta > Date.now() && dest.money === 100);
+check('Un visage d employe est un dessin', /^<svg/.test(empAvatar('chef', 'Emma')) && empAvatar('chef', 'Emma') !== empAvatar('chef', 'Lucas'));
+
 // --- Banque ---
 G = createFreshState(); G.money = 0; G.level = 50;
 check('Pas de pret sans compte', takeLoan(100) === false);
@@ -426,16 +474,31 @@ check('Pas de transporteur avec une seule patisserie', hireEmployee('carrier') =
 G.bakeryName = 'Une'; openNewBakery(true, 'Deux');
 check('Avec deux patisseries, on peut en recruter', hireEmployee('carrier') === true);
 var carrier = G.employees[0], other2 = G.bakeries[1].state, otherMoney = other2.money, myMoney = G.money;
+// Les trajets ont un hasard : ici, aucun retard ni accident, et on fait arriver le chargement tout de suite
+var realRandom = Math.random;
+Math.random = function() { return 0.5; };
+function arriveNow() {
+  other2.incoming.forEach(function(s) { s.eta = Date.now() - 1; });
+  tickCarriers(0);
+  carrier.tripUntil = 0;
+}
 tickCarriers(1);
 check('Pas de voyage avant d avoir fini le trajet', other2.money === otherMoney);
 for (var ct = 0; ct < 60; ct++) tickCarriers(1);
+check('L argent part sur la route, il n arrive pas tout de suite', G.money < myMoney && other2.money === otherMoney && other2.incoming.length === 1);
+arriveNow();
 check('Il transporte de l argent tout seul', other2.money > otherMoney && G.money < myMoney, other2.money);
 carrier.carryWhat = 'cakes'; G.cakes.cookie = 5; carrier.carryCd = CARRIER_TRIP_SEC;
-tickCarriers(1);
+tickCarriers(1); arriveNow();
 check('Il transporte des gateaux', other2.cakes.cookie === 5 && G.cakes.cookie === 0, other2.cakes.cookie);
 carrier.carryWhat = 'ings'; G.ing.farine = 50; carrier.carryCd = CARRIER_TRIP_SEC;
-tickCarriers(1);
+tickCarriers(1); arriveNow();
 check('Il transporte des ingredients', other2.ing.farine === 50 && G.ing.farine === 0, other2.ing.farine);
+carrier.carryCd = CARRIER_TRIP_SEC; carrier.tripUntil = Date.now() + 60000; G.ing.farine = 10;
+tickCarriers(1);
+check('Pendant un trajet, il ne repart pas', G.ing.farine === 10);
+carrier.tripUntil = 0;
+Math.random = realRandom;
 G.money = 1; carrier.carryWhat = 'money'; carrier.carryCd = CARRIER_TRIP_SEC; var low = other2.money;
 tickCarriers(1);
 check('Il laisse de quoi payer les salaires et le loyer', G.money === 1 && other2.money === low, G.money);

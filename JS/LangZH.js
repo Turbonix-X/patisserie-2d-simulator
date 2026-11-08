@@ -248,3 +248,29 @@ I18N_EXTRA.zh = {
     '/birthday':'修改你的生日。','c:/birthday JJ MM':'先日，后月。','/bob':'和鲍勃说话。','c:/bob challenge':'他马上给你出挑战。','/help':'打开这个指南。','c:/help':'指南会在控制台旁边打开。',
   },
 };
+
+// ======================== BETA 1.7 ========================
+Object.assign(LANGS.zh, {
+  'dash.title':'总览',
+  'dash.total':'员工',
+  'dash.working':'工作中',
+  'dash.paused':'休息中',
+  'dash.striking':'罢工中',
+  'dash.collectors':'采集员在采集什么',
+  'dash.noCollector':'还没有采集员。',
+  'dash.transit':'{{v}} 批货在路上',
+  'emp.groupDrag':'拖动以改变职业的顺序',
+  'emp.groupUp':'上移',
+  'emp.groupDown':'下移',
+  'unl.dashboard':'20 级：总览！在员工标签页顶部，你可以看到每种职业有多少员工，以及每个采集员在采集什么。员工按职业排列：拖动一个职业，就能把它往上或往下移。',
+  'fevent.ingShortage':'{{n}}短缺！价格 +{{v}} %，持续 {{t}} 秒',
+  'fevent.ingHarvest':'{{n}}大丰收！价格 -{{v}} %，持续 {{t}} 秒',
+  'fevent.recFashion':'{{n}}正流行！售价 +{{v}} %，持续 {{t}} 秒',
+  'fevent.recBoycott':'没人再想要{{n}}了：售价 -{{v}} %，持续 {{t}} 秒',
+  'carry.help':'一趟运输需要 10 秒到 10 分钟。可能会迟到，也可能出事故，丢掉货物。',
+  'carry.late':'{{n}} 迟到了：路上堵车。',
+  'carry.accident':'{{n}} 出了事故！货物丢了：{{v}}。',
+  'carry.onRoad':'在路上',
+  'carry.eta':'{{v}}，{{t}} 后到达',
+  'rec.tooMuch':'做得太多：价格只有 {{v}} %',
+});

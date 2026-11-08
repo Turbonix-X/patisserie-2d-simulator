@@ -2,6 +2,23 @@
 
 Tout ce qui a été ajouté à Pâtisserie 2D Simulator, de la plus récente à la plus ancienne. Pour comprendre les règles du jeu, va voir le [wiki](REGLES.md).
 
+## Bêta 1.7 (8 novembre 2026)
+
+**Employés**
+- Un tableau de bord en haut de l'onglet, dès le niveau 20 : le nombre d'employés par métier, ceux au travail, en pause ou en grève, les livraisons sur la route, et ce que ramasse chaque cueilleur. Bob l'explique.
+- Les employés sont rangés par métier : le meilleur en haut, les apprentis en bas. On peut glisser un métier, ou utiliser ses flèches, pour changer l'ordre.
+- Des visages plus réalistes : épaules à la couleur du métier, oreilles, sourcils, vrais yeux, nez, plusieurs coiffures et parfois une barbe.
+
+**Transport**
+- Un trajet du transporteur dure maintenant entre 10 s et 10 min. Il peut être en retard, ou avoir un accident et perdre son chargement.
+
+**Économie**
+- Préparer trop souvent la même recette fait baisser son prix de vente.
+- De nouveaux événements qui ne touchent qu'un ingrédient (pénurie, récolte record) ou qu'une recette (à la mode, boudée).
+
+**Icônes**
+- Nouvelles icônes pour les crêpes, les madeleines, le tiramisu et les amandes. Les noisettes changent aussi, pour ne pas avoir la même icône que les amandes.
+
 ## Bêta 1.6.1 (8 novembre 2026)
 
 - Deux nouvelles langues : l'arabe, avec tout le jeu qui se lit de droite à gauche, et le mandarin (chinois simplifié).

@@ -27,6 +27,11 @@ function createFreshState() {
     playTimeMs: 0,
     lastTick: Date.now(),
     soldCount: {},
+    madeCount: {},     // fournees recentes par recette
+    focusEvent: null,  // evenement sur un seul ingredient ou une seule recette
+    lastFocusAt: 0,
+    incoming: [],      // ce que les transporteurs apportent ici
+    empOrder: null,    // l'ordre des metiers dans l'onglet Employes
     totalAllSold: 0,
     crafting: [],
     paused: false,

@@ -160,6 +160,9 @@ function renderHeader() {
     var remaining = Math.max(0, Math.ceil((G.eventEndTime - Date.now()) / 1000));
     alerts += '<div class="event-banner">⚡ ' + t('event.' + G.activeEvent, { t: remaining }) + '</div>';
   }
+  if (G.focusEvent && Date.now() < G.focusEvent.until) {
+    alerts += '<div class="event-banner">⚡ ' + focusEventText(G.focusEvent, (G.focusEvent.until - Date.now()) / 1000) + '</div>';
+  }
   if (alerts) h += '<div class="hdr-alerts">' + alerts + '</div>';
   setHTML(el, h);
   if (typeof renderHeader._money === 'number' && G.money > renderHeader._money + 0.5) {
@@ -438,6 +441,7 @@ function renderRecipes() {
     h += '<span class="rec-money">' + t('rec.cost', { v: fmtMoney(recipeCost(rec)) }) + '</span>';
     h += '<span class="rec-price">' + t('rec.revenue', { v: fmtMoney(batchPrice(rec, rec.qty)) }) + '</span>';
     h += '<span class="rec-profit">' + t('rec.profit', { v: fmtMoney(recipeProfit(rec)) }) + '</span>';
+    if (prepMult(rec) < 0.95) h += '<span class="rec-tired">' + t('rec.tooMuch', { v: Math.round(prepMult(rec) * 100) }) + '</span>';
     h += '</div>';
     if (block) {
       h += '<div class="rec-reason">' + t(block === 'ing' ? 'rec.noIng' : block === 'space' ? 'rec.noSpace' : 'rec.queueFull') + '</div>';

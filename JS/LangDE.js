@@ -261,3 +261,29 @@ Object.assign(I18N_EXTRA.de.cmd, {
   'c:/money infinite':'Dein Geld bleibt auf Maximum, wie im Kreativmodus.','c:/money infinite off':'Beendet das unendliche Geld.',
   'c:/farine infinite':'Diese Zutat geht nie mehr aus. Klappt mit allen Zutaten.','c:/farine infinite off':'Wieder normal.',
 });
+
+// ======================== BETA 1.7 ========================
+Object.assign(LANGS.de, {
+  'dash.title':'Übersicht',
+  'dash.total':'Personal',
+  'dash.working':'Bei der Arbeit',
+  'dash.paused':'Pausiert',
+  'dash.striking':'Im Streik',
+  'dash.collectors':'Was deine Sammler ernten',
+  'dash.noCollector':'Noch keine Sammler.',
+  'dash.transit':'{{v}} Lieferung(en) unterwegs',
+  'emp.groupDrag':'Ziehen, um die Reihenfolge der Berufe zu ändern',
+  'emp.groupUp':'Nach oben',
+  'emp.groupDown':'Nach unten',
+  'unl.dashboard':'Stufe 20: die Übersicht! Oben im Tab Personal siehst du, wie viele Leute du in jedem Beruf hast und was jeder Sammler erntet. Dein Personal ist nach Beruf sortiert: Zieh einen Beruf nach oben oder unten.',
+  'fevent.ingShortage':'{{n}}-Knappheit! Preis +{{v}} % für {{t}} s',
+  'fevent.ingHarvest':'Rekordernte bei {{n}}! Preis -{{v}} % für {{t}} s',
+  'fevent.recFashion':'{{n}} sind im Trend! Verkaufspreis +{{v}} % für {{t}} s',
+  'fevent.recBoycott':'Niemand will mehr {{n}}: Verkaufspreis -{{v}} % für {{t}} s',
+  'carry.help':'Eine Fahrt dauert zwischen 10 s und 10 min. Sie kann sich verspäten oder einen Unfall haben und die Ladung verlieren.',
+  'carry.late':'{{n}} verspätet sich: Stau auf der Straße.',
+  'carry.accident':'{{n}} hatte einen Unfall! Die Ladung ist verloren: {{v}}.',
+  'carry.onRoad':'Unterwegs',
+  'carry.eta':'{{v}}, kommt in {{t}} an',
+  'rec.tooMuch':'Zu oft gebacken: Preis bei {{v}} %',
+});

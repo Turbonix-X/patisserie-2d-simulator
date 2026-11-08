@@ -1,6 +1,6 @@
 # Le wiki de Pâtisserie 2D Simulator
 
-Tout ce qu'il faut savoir pour comprendre le jeu. Ce wiki décrit la **Bêta 1.6.1**.
+Tout ce qu'il faut savoir pour comprendre le jeu. Ce wiki décrit la **Bêta 1.7**.
 
 > **À savoir :** les recettes du jeu sont fausses. Les quantités et les ingrédients servent juste à donner un parcours au jeu. Ne les cuisine pas chez toi !
 
@@ -60,6 +60,7 @@ Préparer demande aussi de la place pour ranger ce qui sort du four. Si la place
 
 - Vendre prend 2 secondes : le stock part tout de suite, et l'argent arrive après.
 - Plus tu vends le même gâteau, plus son prix baisse, jusqu'à 30 % du prix normal au pire.
+- Préparer trop souvent la même recette fait aussi baisser son prix de vente, jusqu'à 70 % du prix normal. La carte de la recette te prévient, et ça s'oublie avec le temps.
 - Vendre d'autres gâteaux fait remonter un peu son prix, jusqu'à 150 % au mieux.
 - La demande revient toute seule avec le temps : varie tes recettes.
 - Chaque succès augmente tous tes prix de vente de 0,1 %.
@@ -134,12 +135,16 @@ Lance une **recherche** dans l'onglet Employés : elle prend du temps et ne marc
 
 **La pause :** depuis sa fiche, tu peux mettre un employé en pause. Il arrête de travailler, mais tu continues de le payer.
 
+**Rangés par métier :** tes employés sont regroupés par métier. De base, le meilleur métier est en haut et les apprentis tout en bas. Fais glisser un métier, ou utilise ses flèches, pour changer l'ordre.
+
+**Le tableau de bord :** dès le niveau 20, il s'affiche en haut de l'onglet. Il compte tes employés par métier, ceux au travail, en pause ou en grève, les livraisons sur la route, et ce que ramasse chaque cueilleur.
+
 | Employé | Niveau | Ce qu'il fait | Réglages |
 |---|---|---|---|
 | Apprenti | 5 | Rien pour l'instant : paie-lui un métier, c'est moins cher qu'embaucher | Son futur métier |
 | Cueilleur | 5 | Produit un ingrédient à chaque seconde | Quel ingrédient |
 | Boulanger | 10 | Fait baisser le temps de préparation | Aucun |
-| Transporteur | 20, avec 2 pâtisseries | Emmène de l'argent ou du stock vers une autre pâtisserie | Où, quoi et combien |
+| Transporteur | 20, avec 2 pâtisseries | Emmène de l'argent ou du stock vers une autre pâtisserie. Un trajet dure de 10 s à 10 min, peut être en retard, ou avoir un accident et perdre son chargement | Où, quoi et combien |
 | Manager | 25 | Remonte le moral de l'équipe, et peut embaucher à ta place | Embauche automatique, compétence minimum |
 | Maître d'hôtel | 30 | Livre les commandes à ta place | Aucun |
 | Vendeur | 35 | Vend tout seul, les gâteaux les plus chers d'abord | La part du stock qu'il peut vendre |
@@ -205,6 +210,8 @@ Bob est ton chef pâtissier. Il t'accueille, t'apprend les bases, et t'explique 
 ## Les événements
 
 Environ toutes les 4 minutes, un événement change le jeu pour un moment : rush, soldes, passage à la télé, grève des fournisseurs, contrôle sanitaire… De petits incidents peuvent aussi te faire perdre un peu d'un ingrédient.
+
+D'autres événements ne touchent qu'**un seul ingrédient** (pénurie : il coûte plus cher, récolte record : il coûte moins cher) ou **une seule recette** (à la mode : elle se vend plus cher, boudée : elle se vend moins cher). Ils durent de 1 à 2 minutes et demie.
 
 ## Les thèmes
 

@@ -72,6 +72,34 @@ function empTraining(emp) { return !!emp.trainingUntil && emp.trainingUntil > Da
 // Un employe en pause ne fait rien, mais son salaire continue de tomber
 function empWorking(emp) { return (emp.status === 'working' || emp.status === 'poor') && !empTraining(emp) && !emp.paused; }
 
+// L'ordre des metiers dans l'onglet : de base, le meilleur metier en haut et les apprentis en bas
+function empGroupOrder() {
+  var all = EMP_TYPES.map(function(et) { return et.id; }).reverse();
+  var saved = Array.isArray(G.empOrder) ? G.empOrder.filter(function(id) { return all.indexOf(id) >= 0; }) : [];
+  all.forEach(function(id) { if (saved.indexOf(id) < 0) saved.push(id); });
+  return saved;
+}
+
+function moveEmpGroup(type, beforeType) {
+  var order = empGroupOrder().filter(function(id) { return id !== type; });
+  var at = beforeType ? order.indexOf(beforeType) : -1;
+  if (at < 0) order.push(type); else order.splice(at, 0, type);
+  G.empOrder = order;
+}
+
+// Ce que montre le tableau de bord
+function empDashboard() {
+  var d = { total: G.employees.length, byType: {}, working: 0, paused: 0, striking: 0, collectors: {} };
+  G.employees.forEach(function(e) {
+    d.byType[e.type] = (d.byType[e.type] || 0) + 1;
+    if (e.paused) d.paused++;
+    else if (e.status === 'striking') d.striking++;
+    else if (empWorking(e)) d.working++;
+    if (e.type === 'collector' && e.assignedIng) d.collectors[e.assignedIng] = (d.collectors[e.assignedIng] || 0) + 1;
+  });
+  return d;
+}
+
 // Chaque niveau double ce que sait faire un employe
 function empLevelMult(emp) { return Math.pow(2, Math.min(EMP_MAX_LVL, emp.level || 1) - 1); }
 
@@ -135,13 +163,28 @@ function demandMult(rec, extraSold) {
   var mySold = (G.soldCount[rec.id] || 0) + (extraSold || 0);
   var otherSold = Math.max(0, G.totalAllSold - (G.soldCount[rec.id] || 0));
   var mult = 1 - INFLATION.sellDecay * (1 - machineBonus('decay') / 100) * mySold + INFLATION.otherBoost * otherSold;
-  return Math.max(INFLATION.minMult, Math.min(INFLATION.maxMult, mult));
+  return Math.max(INFLATION.minMult, Math.min(INFLATION.maxMult, mult)) * prepMult(rec);
 }
 
-function eventPriceMult() { return G.eventPriceBonus ? 1 + G.eventPriceBonus : 1; }
+// Trop preparer la meme recette : son prix de vente baisse un peu
+function prepMult(rec) {
+  var made = (G.madeCount && G.madeCount[rec.id]) || 0;
+  return Math.max(PREP_FATIGUE.minMult, 1 - PREP_FATIGUE.perBatch * made);
+}
+
+function eventPriceMult(rec) {
+  var m = G.eventPriceBonus ? 1 + G.eventPriceBonus : 1;
+  return rec ? m * focusMult('rec', rec.id) : m;
+}
+
+// L'evenement en cours sur un seul ingredient ou une seule recette
+function focusMult(kind, id) {
+  var f = G.focusEvent;
+  return f && f.kind === kind && f.id === id && Date.now() < f.until ? f.mult : 1;
+}
 
 function inflatedPrice(rec) {
-  return Math.round(rec.val * sellValueMult() * demandMult(rec) * eventPriceMult() * 100) / 100;
+  return Math.round(rec.val * sellValueMult() * demandMult(rec) * eventPriceMult(rec) * 100) / 100;
 }
 
 // Prix total d'un lot : le prix baisse au fil de la vente, meme en gros
@@ -150,17 +193,19 @@ function batchPrice(rec, qty) {
   var samples = Math.min(qty, 8);
   var sum = 0;
   for (var i = 0; i < samples; i++) sum += demandMult(rec, (i + 0.5) * qty / samples);
-  return rec.val * sellValueMult() * eventPriceMult() * (sum / samples) * qty;
+  return rec.val * sellValueMult() * eventPriceMult(rec) * (sum / samples) * qty;
 }
 
 function inflationPct(rec) {
-  return Math.round((demandMult(rec) * eventPriceMult() - 1) * 100);
+  return Math.round((demandMult(rec) * eventPriceMult(rec) - 1) * 100);
 }
 
 function recoverDemand(dtSec) {
   var keep = Math.pow(1 - INFLATION.recoveryPerSec, dtSec);
   for (var k in G.soldCount) { G.soldCount[k] *= keep; }
   G.totalAllSold *= keep;
+  var keepMade = Math.pow(1 - PREP_FATIGUE.recoveryPerSec, dtSec);
+  for (var m in G.madeCount) { G.madeCount[m] *= keepMade; if (G.madeCount[m] < 0.01) delete G.madeCount[m]; }
 }
 
 // ============ XP ============
@@ -319,6 +364,8 @@ function tickCrafting() {
       G.cakes[rec.id] += rec.qty;
       G.stats.totalCakesMade += rec.qty;
       G.stats.cakesMadeById[rec.id] = (G.stats.cakesMadeById[rec.id] || 0) + rec.qty;
+      if (!G.madeCount) G.madeCount = {};
+      G.madeCount[rec.id] = (G.madeCount[rec.id] || 0) + 1;
       addXP(rec.xp);
       if (typeof toast === 'function') toast(rec.e + ' ' + t('rec.ready', { q: rec.qty, n: recShortName(rec) }));
     } else {
@@ -337,7 +384,7 @@ function recShortName(rec) {
 
 // ============ INGREDIENTS ============
 function getIngredientCost(ing) {
-  var c = ing.cost * (1 - machineBonus('ingCost') / 100);
+  var c = ing.cost * (1 - machineBonus('ingCost') / 100) * focusMult('ing', ing.id);
   return G.eventIngBonus ? c * (1 + G.eventIngBonus) : c;
 }
 
@@ -1316,6 +1363,7 @@ function tickEvents() {
     applyEvent(evt.id);
     if (typeof toast === 'function') toast(t('event.' + evt.id, { t: evt.duration }));
   }
+  tickFocusEvent(now);
   // Petit incident, environ toutes les 8 minutes
   if (Math.random() < 0.002) {
     var inv = INVISIBLE_EVENTS[Math.floor(Math.random() * INVISIBLE_EVENTS.length)];
@@ -1326,6 +1374,26 @@ function tickEvents() {
       if (typeof toast === 'function') toast(t('inv.' + inv.id, { v: Math.floor(lost) }));
     }
   }
+}
+
+// Un evenement sur un seul ingredient ou une seule recette, environ toutes les 5 minutes
+function tickFocusEvent(now) {
+  var f = G.focusEvent;
+  if (f && now >= f.until) { G.focusEvent = null; f = null; }
+  if (f || now - (G.lastFocusAt || 0) < 120000 || Math.random() > 0.003) return;
+  var type = FOCUS_EVENTS[Math.floor(Math.random() * FOCUS_EVENTS.length)];
+  var pool = type.kind === 'ing' ? ING.filter(ingUnlocked) : REC.filter(recUnlocked);
+  if (pool.length === 0) return;
+  var item = pool[Math.floor(Math.random() * pool.length)];
+  var dur = FOCUS_EVENT_SEC[0] + Math.floor(Math.random() * (FOCUS_EVENT_SEC[1] - FOCUS_EVENT_SEC[0] + 1));
+  G.focusEvent = { type: type.id, kind: type.kind, id: item.id, mult: type.mult, until: now + dur * 1000 };
+  G.lastFocusAt = now;
+  if (typeof toast === 'function') toast(focusEventText(G.focusEvent, dur));
+}
+
+function focusEventText(f, sec) {
+  var name = f.kind === 'ing' ? t('i.' + f.id) : recShortName(findRec(f.id));
+  return t('fevent.' + f.type, { n: name, v: Math.round(Math.abs(f.mult - 1) * 100), t: Math.max(0, Math.ceil(sec)) });
 }
 
 function applyEvent(evtId) {
@@ -1820,14 +1888,69 @@ function bakeryStateAt(index) {
   return b ? (index === G.currentBakeryIndex ? G : b.state) : null;
 }
 
-// Renvoie la somme vraiment transportee
-function transferMoney(from, to, amount) {
+// Renvoie la somme vraiment transportee. Avec un transporteur, elle part sur la route.
+function transferMoney(from, to, amount, emp) {
   var a = bakeryStateAt(from), b = bakeryStateAt(to);
   if (!a || !b || from === to) return 0;
   var moved = Math.min(Math.max(0, amount), Math.max(0, a.money));
   a.money -= moved;
-  b.money += moved;
+  if (emp) { if (moved > 0) shipOut(emp, b, 'money', null, moved); }
+  else b.money += moved;
   return moved;
+}
+
+// Un chargement prend la route : il arrive plus tard, en retard, ou jamais
+function shipOut(emp, b, kind, id, qty) {
+  var r = Math.random(), now = Date.now();
+  var sec = CARRIER_TRIP.minSec + Math.pow(Math.random(), 2) * (CARRIER_TRIP.maxSec - CARRIER_TRIP.minSec);
+  var ship = { kind: kind, id: id, qty: qty, by: emp.name, eta: now + sec * 1000, late: 0, lost: false };
+  if (r < CARRIER_TRIP.accidentChance) ship.lost = true;
+  else if (r < CARRIER_TRIP.accidentChance + CARRIER_TRIP.lateChance) ship.late = CARRIER_TRIP.lateSec[0] + Math.random() * (CARRIER_TRIP.lateSec[1] - CARRIER_TRIP.lateSec[0]);
+  if (!b.incoming) b.incoming = [];
+  b.incoming.push(ship);
+  emp.tripUntil = ship.eta + ship.late * 1000;
+  return ship;
+}
+
+function shipLabel(ship) {
+  if (ship.kind === 'money') return fmtMoney(ship.qty);
+  if (ship.kind === 'cake') return fmt(ship.qty) + ' ' + recShortName(findRec(ship.id));
+  return fmt(ship.qty) + ' ' + t('i.' + ship.id);
+}
+
+// Les chargements arrivent. Les gateaux attendent qu'il y ait la place.
+function tickShipments(s) {
+  if (!s.incoming || s.incoming.length === 0) return;
+  var now = Date.now();
+  s.incoming = s.incoming.filter(function(ship) {
+    if (now < ship.eta) return true;
+    if (ship.late > 0) {
+      ship.eta += ship.late * 1000;
+      ship.late = 0;
+      if (typeof toast === 'function') toast(t('carry.late', { n: ship.by }));
+      return true;
+    }
+    if (ship.lost) {
+      if (typeof toast === 'function') toast(t('carry.accident', { n: ship.by, v: shipLabel(ship) }));
+      return false;
+    }
+    if (ship.kind === 'money') { s.money += ship.qty; return false; }
+    if (ship.kind === 'ing') { s.ing[ship.id] = (s.ing[ship.id] || 0) + ship.qty; return false; }
+    var rec = findRec(ship.id);
+    if (!rec) return false;
+    var fit = Math.min(ship.qty, Math.floor((s.maxSpace - stateUsedSpace(s)) / rec.space));
+    if (fit > 0) { s.cakes[ship.id] = (s.cakes[ship.id] || 0) + fit; ship.qty -= fit; }
+    return ship.qty > 0;
+  });
+}
+
+function shipmentsOnRoad() {
+  var n = 0;
+  for (var i = 0; i < G.bakeries.length; i++) {
+    var s = bakeryStateAt(i);
+    if (s && s.incoming) n += s.incoming.length;
+  }
+  return n;
 }
 
 function stateUsedSpace(s) {
@@ -1837,7 +1960,7 @@ function stateUsedSpace(s) {
 }
 
 // kind : 'cake' ou 'ing'. Les gateaux doivent avoir la place en arrivant.
-function transferStock(from, to, kind, id, qty) {
+function transferStock(from, to, kind, id, qty, emp) {
   var a = bakeryStateAt(from), b = bakeryStateAt(to);
   if (!a || !b || from === to) return 0;
   var box = kind === 'cake' ? 'cakes' : 'ing';
@@ -1850,7 +1973,8 @@ function transferStock(from, to, kind, id, qty) {
   }
   if (moved <= 0) return 0;
   a[box][id] -= moved;
-  b[box][id] = (b[box][id] || 0) + moved;
+  if (emp) shipOut(emp, b, kind, id, moved);
+  else b[box][id] = (b[box][id] || 0) + moved;
   return moved;
 }
 
@@ -1923,31 +2047,33 @@ function carrierTrip(emp, from, to) {
   var what = emp.carryWhat || 'money';
   var asked = emp.carryQty > 0 ? emp.carryQty : Infinity;
   var power = empLevelMult(emp);
-  if (what.indexOf('cake:') === 0) return transferStock(from, to, 'cake', what.slice(5), Math.min(asked, 10 * power));
-  if (what.indexOf('ing:') === 0) return transferStock(from, to, 'ing', what.slice(4), Math.min(asked, 100 * power));
+  if (what.indexOf('cake:') === 0) return transferStock(from, to, 'cake', what.slice(5), Math.min(asked, 10 * power), emp);
+  if (what.indexOf('ing:') === 0) return transferStock(from, to, 'ing', what.slice(4), Math.min(asked, 100 * power), emp);
   if (what === 'cakes') {
     var best = null;
     REC.forEach(function(r) { if ((s.cakes[r.id] || 0) >= 1 && (!best || r.val > best.val)) best = r; });
-    return best ? transferStock(from, to, 'cake', best.id, Math.min(asked, 10 * power)) : 0;
+    return best ? transferStock(from, to, 'cake', best.id, Math.min(asked, 10 * power), emp) : 0;
   }
   if (what === 'ings') {
     var most = null;
     ING.forEach(function(i) { if ((s.ing[i.id] || 0) >= 1 && (!most || s.ing[i.id] > s.ing[most.id])) most = i; });
-    return most ? transferStock(from, to, 'ing', most.id, Math.min(asked, 100 * power)) : 0;
+    return most ? transferStock(from, to, 'ing', most.id, Math.min(asked, 100 * power), emp) : 0;
   }
   var reserve = s.maxSpace * RENT_CONFIG.basePricePerM2PerHour / 60;
   s.employees.forEach(function(e) { reserve += getEmpSalary(e) * 60; });
-  return transferMoney(from, to, Math.min(asked, Math.max(0, s.money - reserve), revenueAt(s.level) * 3 * power));
+  return transferMoney(from, to, Math.min(asked, Math.max(0, s.money - reserve), revenueAt(s.level) * 3 * power), emp);
 }
 
 // Tous les transporteurs de toutes les patisseries
 function tickCarriers(dtSec) {
+  for (var j = 0; j < G.bakeries.length; j++) { var st = bakeryStateAt(j); if (st) tickShipments(st); }
   if (G.bakeries.length < 2) return;
   for (var i = 0; i < G.bakeries.length; i++) {
     var s = bakeryStateAt(i);
     if (!s) continue;
     s.employees.forEach(function(emp) {
       if (emp.type !== 'carrier' || !empWorking(emp)) return;
+      if (emp.tripUntil && Date.now() < emp.tripUntil) return; // Il est sur la route
       emp.carryCd = (emp.carryCd || 0) + dtSec * empPower(emp);
       if (emp.carryCd < CARRIER_TRIP_SEC) return;
       var to = carrierTarget(emp, i);

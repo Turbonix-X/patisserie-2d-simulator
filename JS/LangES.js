@@ -275,3 +275,29 @@ Object.assign(LANGS.es, {
 Object.assign(CONSOLE_ES, {
   'Infinite money: it stays at the maximum.':'Dinero infinito: se queda al máximo.','Infinite money stopped.':'Dinero infinito detenido.',': infinite!':': ¡infinito!',': no longer infinite.':': ya no es infinito.',
 });
+
+// ======================== BETA 1.7 ========================
+Object.assign(LANGS.es, {
+  'dash.title':'Panel de control',
+  'dash.total':'Empleados',
+  'dash.working':'Trabajando',
+  'dash.paused':'En pausa',
+  'dash.striking':'En huelga',
+  'dash.collectors':'Lo que recogen tus recolectores',
+  'dash.noCollector':'Aún no hay recolectores.',
+  'dash.transit':'{{v}} entrega(s) en camino',
+  'emp.groupDrag':'Arrastra para cambiar el orden de los oficios',
+  'emp.groupUp':'Subir',
+  'emp.groupDown':'Bajar',
+  'unl.dashboard':'Nivel 20: ¡el panel de control! Arriba de la pestaña Empleados ves cuántos empleados tienes de cada oficio y lo que recoge cada recolector. Tus empleados están ordenados por oficio: arrastra un oficio para subirlo o bajarlo.',
+  'fevent.ingShortage':'¡Escasez de {{n}}! Su precio +{{v}} % durante {{t}} s',
+  'fevent.ingHarvest':'¡Cosecha récord de {{n}}! Su precio -{{v}} % durante {{t}} s',
+  'fevent.recFashion':'¡{{n}} están de moda! Precio de venta +{{v}} % durante {{t}} s',
+  'fevent.recBoycott':'Ya nadie quiere {{n}}: precio de venta -{{v}} % durante {{t}} s',
+  'carry.help':'Un viaje dura entre 10 s y 10 min. Puede llegar tarde, o tener un accidente y perder su carga.',
+  'carry.late':'{{n}} llega tarde: hay atascos en la carretera.',
+  'carry.accident':'¡{{n}} ha tenido un accidente! La carga se ha perdido: {{v}}.',
+  'carry.onRoad':'En camino',
+  'carry.eta':'{{v}}, llega en {{t}}',
+  'rec.tooMuch':'Preparada demasiado: precio al {{v}} %',
+});
