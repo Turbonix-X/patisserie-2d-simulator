@@ -216,7 +216,7 @@ function bobTell(text) {
 }
 
 // Ce que Bob explique a chaque nouvelle fonction : [niveau, cle]
-var UNLOCK_TALKS = [[2, 'research'], [3, 'machines'], [5, 'staff'], [10, 'baker'], [20, 'carrier'], [20, 'dashboard'], [25, 'manager'], [30, 'orders'], [35, 'seller'], [40, 'buildings'], [40, 'rebirth'], [65, 'chef'], [90, 'buyer'], [1000, 'top']];
+var UNLOCK_TALKS = [[2, 'research'], [3, 'machines'], [5, 'staff'], [10, 'baker'], [20, 'carrier'], [20, 'dashboard'], [25, 'manager'], [30, 'orders'], [35, 'seller'], [40, 'buildings'], [65, 'chef'], [90, 'buyer'], [1000, 'top']];
 
 function explainLevel(lvl) {
   UNLOCK_TALKS.forEach(function(x) {
@@ -258,6 +258,8 @@ function tickBobChat(now) {
 function tickIdle() {
   var now = Date.now();
   tickBobChat(now);
+  maybeAskNotifications();
+  tickAwayReminder();
   if (now - bobLastInput < 180000 || now - bobLastIdle < 600000 || !G.tutorialDone) return;
   bobLastIdle = now;
   bobTell(t('bob.idle'));
@@ -287,9 +289,62 @@ function bobWantsSugar() {
 }
 
 function renderSugar() {
-  // Aucun bouton, aucun indice : on comprend tout seul qu'il aime le sucre.
-  // La classe sert seulement a pouvoir glisser la carte du sucre au doigt.
+  // Aucun bouton, aucun indice : on comprend tout seul ce qu'on peut lui donner.
+  // Les classes servent seulement a pouvoir glisser ces cartes au doigt.
   document.body.classList.toggle('bob-wants-sugar', bobWantsSugar());
+  document.body.classList.toggle('bob-can-wasabi', canFeedBob('wasabi'));
+  document.body.classList.toggle('bob-can-gold', canFeedBob('orfeuille'));
+  var bob = document.getElementById('bob');
+  if (!bob) return;
+  // Le wasabi passe tout seul, petit a petit
+  if (G.bobChoke > 0 && Date.now() - (G.bobChokeAt || 0) > 20000) { G.bobChoke--; G.bobChokeAt = Date.now(); }
+  var choke = String(G.bobChoke || 0), gold = String(G.bobGold || 0);
+  if (bob.getAttribute('data-choke') !== choke) bob.setAttribute('data-choke', choke);
+  if (bob.getAttribute('data-gold') !== gold) bob.setAttribute('data-gold', gold);
+}
+
+// Ce qu'on peut glisser sur Bob : le sucre quand il est triste, le wasabi et l'or quand on en a
+var FEEDABLE = ['sucre', 'wasabi', 'orfeuille'];
+function canFeedBob(id) {
+  if (introActive || (G.ing[id] || 0) < 1) return false;
+  if (id === 'sucre') return bobWantsSugar();
+  return ingUnlocked(findIng(id));
+}
+
+function feedBobWith(id) {
+  if (id === 'sucre') return feedBob();
+  if (!canFeedBob(id)) return false;
+  G.ing[id] -= 1;
+  var bob = document.getElementById('bob');
+  if (id === 'wasabi') {
+    G.bobChoke = Math.min(3, (G.bobChoke || 0) + 1);
+    G.bobChokeAt = Date.now();
+    bobMood('wow', 1800);
+    bobSay(pickLine('bob.wasabi' + G.bobChoke));
+  } else {
+    G.bobGold = Math.min(5, (G.bobGold || 0) + 1);
+    fxBurstOn(bob, 18, ['#FFD54F', '#FFC107', '#FFF8E1'], true);
+    bobMood('joy', 1800);
+    bobSay(pickLine('bob.gold' + Math.min(3, Math.ceil(G.bobGold / 2))));
+  }
+  renderBob();
+  renderIngredients();
+  save();
+  return true;
+}
+
+// Vers le debut, Bob propose les notifications, une seule fois
+function maybeAskNotifications() {
+  if (G.notifAsked || !G.tutorialDone || G.level < 3 || introActive || typeof Notification === 'undefined') return;
+  if (Notification.permission === 'denied') { G.notifAsked = true; return; }
+  var overlay = document.getElementById('modal-overlay');
+  if (overlay && overlay.style.display === 'flex') return;
+  G.notifAsked = true;
+  var h = '<div class="bob-talk">' + bobFigure() + '<div class="bob-talk-speech"><span class="bob-bubble-name">Bob</span>';
+  h += '<p>' + t('bob.notifAsk') + '</p>';
+  h += '<div class="bob-talk-foot"><button class="btn" onclick="askNotifications(false)">' + t('bob.notifNo') + '</button>';
+  h += '<button class="btn btn-primary" onclick="askNotifications(true)">' + t('bob.notifYes') + '</button></div></div></div>';
+  showModal(h, 'modal-bob');
 }
 
 function feedBob() {
@@ -321,18 +376,19 @@ function feedBob() {
   function startGhost() {
     drag.ghost = document.createElement('div');
     drag.ghost.className = 'sugar-ghost';
-    drag.ghost.innerHTML = iconify(findIng('sucre').e);
+    drag.ghost.innerHTML = iconify(findIng(drag.ing).e);
     document.body.appendChild(drag.ghost);
     document.body.classList.add('dragging-sugar');
   }
 
   document.addEventListener('pointerdown', function(e) {
-    if (!e.target.closest || !bobWantsSugar()) return;
+    if (!e.target.closest || e.target.closest('button')) return;
     var token = null;
-    // Depuis la carte du sucre, a la souris comme au doigt
-    var card = !token && !e.target.closest('button') && e.target.closest('.ing-card[data-ing="sucre"]');
-    if (!token && !card) return;
-    drag = { x: e.clientX, y: e.clientY, ghost: null, token: !!token };
+    // Depuis la carte de l'ingredient, a la souris comme au doigt
+    var card = e.target.closest('.ing-card');
+    var ing = card && card.getAttribute('data-ing');
+    if (!card || FEEDABLE.indexOf(ing) < 0 || !canFeedBob(ing)) return;
+    drag = { x: e.clientX, y: e.clientY, ghost: null, token: false, ing: ing };
     if (card && e.pointerType !== 'mouse') {
       try { card.setPointerCapture(e.pointerId); } catch (err) { /* pas grave */ }
     }
@@ -371,7 +427,7 @@ function feedBob() {
     was.ghost.remove();
     document.body.classList.remove('dragging-sugar');
     document.getElementById('bob').classList.remove('wants-sugar');
-    if (e.type === 'pointerup' && overBob(e.clientX, e.clientY)) feedBob();
+    if (e.type === 'pointerup' && overBob(e.clientX, e.clientY)) feedBobWith(was.ing);
     // Le clic qui suit ce glisser ne doit pas acheter de sucre, ni embeter Bob
     var stop = function(ev) { ev.stopPropagation(); ev.preventDefault(); };
     document.addEventListener('click', stop, { capture: true, once: true });

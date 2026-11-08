@@ -30,6 +30,9 @@ function createFreshState() {
     madeCount: {},     // fournees recentes par recette
     lastMadeAt: {},    // quand chaque recette a ete preparee pour la derniere fois
     broken: {},        // machines et batiments en panne
+    bobGold: 0,        // l'or alimentaire le rend dore
+    bobChoke: 0,       // le wasabi le fait tousser
+    notifAsked: false, // Bob a deja propose les notifications
     focusEvent: null,  // evenement sur un seul ingredient ou une seule recette
     lastFocusAt: 0,
     incoming: [],      // ce que les transporteurs apportent ici

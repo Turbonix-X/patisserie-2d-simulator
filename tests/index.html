@@ -78,7 +78,7 @@ function roundTrip(setup, ingId) {
 }
 check('Acheter puis revendre perd de l argent', roundTrip(function() {}, 'farine') < 0);
 check('... pendant le Rush sucre aussi', roundTrip(function() { G.eventClickBonus = 2; }, 'farine') < 0);
-check('... au rebirth 7 avec l anniversaire aussi', roundTrip(function() { G.rebirth = 7; G.birthdayBoostUntil = Date.now() + 1e6; }, 'oeuf') < 0);
+check('... avec le bonus d anniversaire aussi', roundTrip(function() { G.birthdayBoostUntil = Date.now() + 1e6; }, 'oeuf') < 0);
 check('... pendant les soldes aussi', roundTrip(function() { G.eventIngBonus = -0.3; }, 'farine') < 0);
 G = createFreshState(); G.money = 1e7; G.level = 200;
 var m0 = G.money;
@@ -222,11 +222,11 @@ check('Il attend sa livraison', G.ing[firstBld.produces] === ingStart);
 advanceBuildings(BLD_CYCLE_SEC);
 check('Puis il livre une enorme quantite d un coup', G.ing[firstBld.produces] >= firstBld.baseRate * BLD_CYCLE_SEC, G.ing[firstBld.produces]);
 
-// --- Rebirth ---
-G = createFreshState(); G.level = 40; G.money = 6000; G.rentDebt = 50; G.totalEarned = 999; G.playTimeMs = 1234; G.cheatUnlocked = true;
-doRebirth();
-check('Le rebirth garde la dette, le total gagne, le temps et la console', G.rentDebt === 50 && G.totalEarned === 999 && G.playTimeMs === 1234 && G.cheatUnlocked);
-check('Le rebirth donne plus d espace', G.maxSpace > 5, G.maxSpace);
+// --- Plus de rebirth ---
+check('Les rebirths sont retires', typeof doRebirth === 'undefined' && typeof REBIRTHS === 'undefined' && typeof rebirthBonus === 'undefined');
+G = createFreshState(); G.rebirth = 7;
+var sv0 = sellValueMult(); G.rebirth = 0;
+check('Un ancien rebirth ne change plus les prix', sellValueMult() === sv0);
 
 // --- Succes ---
 var ids = {}, dup = [];
@@ -374,7 +374,7 @@ var badMach = [];
 ['fr', 'en', 'es', 'pt', 'de', 'ar', 'zh', 'ja', 'ko'].forEach(function(lang) {
   currentLang = lang;
   MACHINES.forEach(function(m) { if (/^mach/.test(machName(m)) || /^mach/.test(machDesc(m))) badMach.push(lang + ':' + m.id); });
-  if (LANGS[lang]['bob.facts'].split('|').length !== 15) badMach.push(lang + ':bob.facts');
+  if (LANGS[lang]['bob.facts'].split('|').length !== 30) badMach.push(lang + ':bob.facts');
 });
 currentLang = 'fr';
 check('Chaque machine a un nom et une description dans les 9 langues', badMach.length === 0, badMach.slice(0, 8).join(', '));
@@ -429,6 +429,19 @@ check('... mais pas si on vient de la preparer', restMult(ck) === 1);
 G.machines = {}; MACHINES.forEach(function(m) { G.machines[m.id] = m.max; });
 check('Les bonus ont un plafond', machineBonus('ingCost') <= MACHINE_CAPS.ingCost && getIngredientCost(findIng('farine')) > 0 && unlockDelay(findRec('opera')) >= 1);
 
+// --- Beta 1.9 ---
+G = createFreshState(); G.level = 50;
+G.orders = [{ id: 1, items: [{ recId: 'cookie', qty: 12 }, { recId: 'cake', qty: 1 }], expiresAt: Date.now() + 60000 }];
+G.cakes.cookie = 3; G.cakes.cake = 5;
+var chefO = { type: 'chef', chefMode: 'orders' };
+check('Le patissier en mode commandes ne fait que ce qui manque', chefQueue(chefO).map(function(r) { return r.id; }).join() === 'cookie');
+G.orders = [];
+check('... et rien sans commande', chefQueue(chefO).length === 0);
+check('Avec /max, l argent est au maximum sans etre infini', fmt(MAX_MONEY_SHOWN) !== '∞' && fmt(MAX_MONEY_SHOWN * 1e3) === '∞');
+G = createFreshState(); G.machines = { four: 5, fouet: 5 };
+check('Un succes compte les niveaux de machines', ACHIEVEMENTS.filter(function(a) { return /^machlv/.test(a.id) && a.check(G); }).length === 2);
+check('Bob connait 30 anecdotes', LANGS.fr['bob.facts'].split('|').length === 30);
+
 // --- Banque ---
 G = createFreshState(); G.money = 0; G.level = 50;
 check('Pas de pret sans compte', takeLoan(100) === false);
@@ -460,9 +473,6 @@ G.money = 0; G.rentDebt = 5;
 check('La faillite n arrive que si la banque ne peut plus preter', checkGameOver() === true);
 G.loans.pop(); G.gameOver = false;
 check('... sinon tu peux encore emprunter', checkGameOver() === false);
-G = createFreshState(); G.bankUnlocked = true; G.level = 40; G.money = 6000; takeLoan(10);
-doRebirth();
-check('Le rebirth garde les prets et le compte', G.loans.length === 1 && G.bankUnlocked);
 
 // --- Dette moins facile ---
 G = createFreshState(); G.money = 0;
@@ -497,8 +507,6 @@ check('Le four est la des le debut', findMachine('four').lvl === 1 && MACHINES.l
 G.level = 50;
 var priceBefore = sellValueMult();
 check('Une machine ameliore le jeu', buyMachine('vitrine') && sellValueMult() > priceBefore && machineCost(findMachine('vitrine')) > 500000);
-G.level = 40; G.money = 1e6; doRebirth();
-check('Les machines restent apres un rebirth', machineLevel('vitrine') === 1);
 G = createFreshState(); G.level = 50; G.money = 1e9; G.bakeryName = 'Une';
 buyMachine('four');
 check('Un four machine ajoute des places', ovenSlots() === OVEN_CONFIG.start + 3);

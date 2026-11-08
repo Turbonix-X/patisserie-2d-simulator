@@ -1,10 +1,10 @@
 /* ============================================
    PATISSERIE 2D SIMULATOR - GAME DATA
    Monnaies, ingredients, recettes, batiments,
-   employes, espace, rebirths, evenements, themes
+   employes, espace, evenements, themes
    ============================================ */
 
-var GAME_VERSION = 'B\u00eata 1.8.1';
+var GAME_VERSION = 'B\u00eata 1.9';
 
 // ============ CURRENCIES ============
 var CURRENCIES = [
@@ -248,18 +248,6 @@ var SPACE_UPG = [
   { add:300, cost:1000000000,lvlReq:300 },
   { add:500, cost:10000000000,lvlReq:500 },
   { add:1000,cost:500000000000,lvlReq:800 },
-];
-
-// ============ REBIRTH SYSTEM ============
-// spaceMulti : l'espace de depart et les agrandissements sont multiplies d'autant
-var REBIRTHS = [
-  { id:1, name:'Boulangerie',             minLvl:40,   cost:5000,         bonus:0.15, spaceMulti:1.1 },
-  { id:2, name:'Patisserie Fine',         minLvl:80,   cost:50000,        bonus:0.25, spaceMulti:1.25 },
-  { id:3, name:'Maison de Luxe',          minLvl:120,  cost:500000,       bonus:0.40, spaceMulti:1.5 },
-  { id:4, name:'Palace Gastronomique',    minLvl:200,  cost:5000000,      bonus:0.60, spaceMulti:2.0 },
-  { id:5, name:'Empire de la Patisserie', minLvl:300,  cost:50000000,     bonus:0.80, spaceMulti:3.0 },
-  { id:6, name:'Dynastie Sucree',         minLvl:500,  cost:500000000,    bonus:1.00, spaceMulti:5.0 },
-  { id:7, name:'Legende Eternelle',       minLvl:1000, cost:10000000000,  bonus:2.00, spaceMulti:10.0 },
 ];
 
 // ============ EVENT TYPES ============

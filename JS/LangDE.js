@@ -345,3 +345,31 @@ Object.assign(LANGS.de, {
   'mach.eff.unlock':'Freischaltungen {{v}} % schneller pro Stufe.',
   'mach.eff.repair':'Pannen {{v}} % seltener, pro Stufe.',
 });
+
+// ======================== BETA 1.9 ========================
+Object.assign(LANGS.de, {
+  'emp.chefOrders':'Bestellungen',
+  'emp.chefHelp.orders':'Backt nur, was für die laufenden Bestellungen noch fehlt.',
+  'settings.console':'Konsole',
+  'settings.openConsole':'Konsole öffnen',
+  'changelog.title':'Neuigkeiten',
+  'changelog.error':'Die Neuigkeiten können gerade nicht geladen werden.',
+  'bob.wasabi1':'Hust… Das war grün und etwas scharf.|Hm. Das ist kein Zucker.',
+  'bob.wasabi2':'HUST HUST! Meine Nase brennt!|Wasser! Schnell, Wasser!',
+  'bob.wasabi3':'HUST… HUST… Ich ersticke… nie wieder Wasabi…|Meine Schaltkreise… qualmen… grün…',
+  'bob.gold1':'Oh, das glänzt! Ich fühle mich kostbar.|Gold? Für mich?',
+  'bob.gold2':'Schau, ich werde golden! Ich bin wunderschön.|Ich glänze immer mehr. Herrlich.',
+  'bob.gold3':'Ich bin aus purem Gold. Verkauf mich bloß nicht.|Ich bin der glänzendste Konditor der Welt. Wortwörtlich.',
+  'bob.notifAsk':'Soll ich dich warnen, wenn du nicht im Spiel bist? Zum Beispiel, wenn deine Konditorei ohne Pause läuft oder etwas Wichtiges passiert.',
+  'bob.notifYes':'Ja, warn mich',
+  'bob.notifNo':'Nein, danke',
+  'bob.notifOk':'Perfekt! Ich melde mich, wenn nötig.',
+  'bob.notifDenied':'Dein Browser hat Nein gesagt. Du kannst das in den Einstellungen ändern.',
+  'bob.notifLater':'Okay. Wenn du es dir anders überlegst: Es ist in den Einstellungen.',
+  'settings.notifs':'Benachrichtigungen',
+  'settings.notifsHelp':'Wenn du nicht im Spiel bist, warnt dich Bob, wenn etwas passiert oder das Spiel ohne Pause läuft.',
+  'notif.running':'Deine Konditorei läuft immer noch, ohne Pause! Denk daran zu pausieren, wenn du gehst.',
+});
+LANGS.de['bob.facts'] += '|' + 'Brandteig heißt auf Französisch „pâte à choux“, weil die kleinen Windbeutel wie Kohlköpfe („choux“) aussehen.|Der Eclair soll so heißen, weil man ihn blitzschnell („éclair“) isst.|Die Crème Chantilly ist nach dem Schloss Chantilly benannt.|Die Tarte Tatin wird kopfüber gebacken und stammt aus dem Hotel der Schwestern Tatin in der Sologne.|Der Financier soll nach dem Pariser Börsenviertel benannt sein.|Die Schwarzwälder Kirschtorte stammt aus Deutschland: Schokolade, Kirschen und Sahne.|Die Pavlova wurde zu Ehren der Tänzerin Anna Pawlowa benannt.|Kouign-amann heißt auf Bretonisch „Butterkuchen“.|Der Cannolo ist ein sizilianisches Gebäck mit Ricottafüllung.|Die Sachertorte ist ein Schokoladenkuchen aus Wien.|Baklava besteht aus dünnen Teigblättern, Nüssen und Sirup oder Honig.|Japanischer Mochi wird aus gestampftem Klebreis gemacht.|Bei einer Zitronen-Baiser-Tarte wird das Baiser im Ofen oder mit dem Brenner gebräunt.|Panettone ist ein Weihnachtsgebäck aus Mailand.|Der Flan pâtissier ist eine im Teig gebackene Creme und in französischen Bäckereien sehr beliebt.';
+Object.assign(I18N_EXTRA.de.achNames, {'First machine':'Erste Maschine', 'Well equipped':'Gut ausgestattet', 'Workshop':'Werkstatt', 'Factory floor':'Fabrikhalle', 'Machine park':'Maschinenpark', 'Industrial empire':'Industrie-Imperium', 'Machine legend':'Maschinenlegende'});
+I18N_EXTRA.de.achDescRules.unshift([/^Own (\d+) machine levels? in total\.$/, 'Insgesamt $1 Maschinenstufe(n) besitzen.']);

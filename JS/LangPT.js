@@ -347,3 +347,31 @@ Object.assign(LANGS.pt, {
   'mach.eff.unlock':'Desbloqueios {{v}} % mais rápidos por nível.',
   'mach.eff.repair':'Avarias {{v}} % mais raras, por nível.',
 });
+
+// ======================== BETA 1.9 ========================
+Object.assign(LANGS.pt, {
+  'emp.chefOrders':'Encomendas',
+  'emp.chefHelp.orders':'Só prepara o que falta para entregar as encomendas em curso.',
+  'settings.console':'Consola',
+  'settings.openConsole':'Abrir a consola',
+  'changelog.title':'Novidades',
+  'changelog.error':'Não é possível carregar as novidades agora.',
+  'bob.wasabi1':'Hum… Era verde e picava um bocado.|Hm. Isto não é açúcar.',
+  'bob.wasabi2':'COF COF! O meu nariz está a arder!|Água! Depressa, água!',
+  'bob.wasabi3':'COF… COF… Estou a sufocar… nunca mais wasabi…|Os meus circuitos… deitam… fumo verde…',
+  'bob.gold1':'Oh, brilha! Sinto-me precioso.|Ouro? Para mim?',
+  'bob.gold2':'Olha, estou a ficar dourado! Estou lindo.|Brilho cada vez mais. Adoro.',
+  'bob.gold3':'Sou de ouro maciço. Não me vendas, está bem?|Sou o pasteleiro mais brilhante do mundo. Literalmente.',
+  'bob.notifAsk':'Queres que te avise quando não estás no jogo? Por exemplo, se a tua pastelaria continua sem pausa, ou se acontece algo importante.',
+  'bob.notifYes':'Sim, avisa-me',
+  'bob.notifNo':'Não, obrigado',
+  'bob.notifOk':'Perfeito! Aviso-te se for preciso.',
+  'bob.notifDenied':'O teu navegador disse que não. Podes mudar isso nas definições.',
+  'bob.notifLater':'Está bem. Se mudares de ideias, está nas definições.',
+  'settings.notifs':'Notificações',
+  'settings.notifsHelp':'Quando não estás no jogo, o Bob avisa-te se acontecer algo, ou se o jogo continuar sem pausa.',
+  'notif.running':'A tua pastelaria continua a funcionar, sem pausa! Lembra-te de pôr em pausa se vais sair.',
+});
+LANGS.pt['bob.facts'] += '|' + 'A massa choux tem este nome porque as bolinhas parecem couves («choux» em francês).|Diz-se que o éclair tem este nome porque se come num relâmpago («éclair»).|O creme chantilly tem o nome do castelo de Chantilly.|A tarte Tatin, cozida ao contrário, vem do hotel das irmãs Tatin, na Sologne.|Diz-se que o financier deve o nome ao bairro da Bolsa, em Paris.|A Floresta Negra vem da Alemanha: chocolate, cerejas e natas.|A pavlova recebeu o nome em homenagem à bailarina Anna Pavlova.|Kouign-amann quer dizer «bolo de manteiga» em bretão.|O cannolo é um doce siciliano recheado de ricota.|A Sachertorte é um bolo de chocolate nascido em Viena.|O baklava faz-se com folhas finas de massa, frutos secos e calda ou mel.|O mochi japonês é feito de arroz glutinoso pilado.|Numa tarte de limão merengada, o merengue é dourado no forno ou com maçarico.|O panettone é um pão doce de Natal originário de Milão.|O flan pâtissier é um creme cozido numa massa, muito popular nas padarias francesas.';
+Object.assign(I18N_EXTRA.pt.achNames, {'First machine':'Primeira máquina', 'Well equipped':'Bem equipado', 'Workshop':'Oficina', 'Factory floor':'Fábrica', 'Machine park':'Parque de máquinas', 'Industrial empire':'Império industrial', 'Machine legend':'Lenda das máquinas'});
+I18N_EXTRA.pt.achDescRules.unshift([/^Own (\d+) machine levels? in total\.$/, 'Ter $1 nível(eis) de máquinas no total.']);

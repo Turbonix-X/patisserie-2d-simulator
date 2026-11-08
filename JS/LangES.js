@@ -359,3 +359,31 @@ Object.assign(LANGS.es, {
   'mach.eff.unlock':'Desbloqueos un {{v}} % más rápidos por nivel.',
   'mach.eff.repair':'Averías un {{v}} % menos frecuentes, por nivel.',
 });
+
+// ======================== BETA 1.9 ========================
+Object.assign(LANGS.es, {
+  'emp.chefOrders':'Pedidos',
+  'emp.chefHelp.orders':'Solo prepara lo que falta para entregar los pedidos en curso.',
+  'settings.console':'Consola',
+  'settings.openConsole':'Abrir la consola',
+  'changelog.title':'Novedades',
+  'changelog.error':'No se pueden cargar las novedades ahora mismo.',
+  'bob.wasabi1':'Ejem… Era verde y picaba un poco.|Hm. Eso no es azúcar.',
+  'bob.wasabi2':'¡COF COF! ¡Me arde la nariz!|¡Agua! ¡Rápido, agua!',
+  'bob.wasabi3':'COF… COF… Me ahogo… nunca más wasabi…|Mis circuitos… echan… humo verde…',
+  'bob.gold1':'¡Oh, brilla! Me siento valioso.|¿Oro? ¿Para mí?',
+  'bob.gold2':'¡Mira, me estoy volviendo dorado! Estoy precioso.|Brillo cada vez más. Me encanta.',
+  'bob.gold3':'Soy de oro macizo. No me vendas, ¿eh?|Soy el pastelero más brillante del mundo. Literalmente.',
+  'bob.notifAsk':'¿Quieres que te avise cuando no estés en el juego? Por ejemplo, si tu pastelería sigue sin pausa o si pasa algo importante.',
+  'bob.notifYes':'Sí, avísame',
+  'bob.notifNo':'No, gracias',
+  'bob.notifOk':'¡Perfecto! Te avisaré si hace falta.',
+  'bob.notifDenied':'Tu navegador ha dicho que no. Puedes cambiarlo en los ajustes.',
+  'bob.notifLater':'Vale. Si cambias de idea, está en los ajustes.',
+  'settings.notifs':'Notificaciones',
+  'settings.notifsHelp':'Cuando no estás en el juego, Bob te avisa si pasa algo o si el juego sigue sin pausa.',
+  'notif.running':'¡Tu pastelería sigue funcionando, sin pausa! Acuérdate de pausar si te vas.',
+});
+LANGS.es['bob.facts'] += '|' + 'La masa choux se llama así porque los bollitos parecen coles («choux» en francés).|Se dice que el éclair se llama así porque se come en un relámpago («éclair»).|La crema chantillí lleva el nombre del castillo de Chantilly.|La tarta Tatin, que se hornea al revés, viene del hotel de las hermanas Tatin, en Sologne.|Se dice que el financier debe su nombre al barrio de la Bolsa de París.|La Selva Negra viene de Alemania: chocolate, cerezas y nata.|La pavlova se llamó así en honor a la bailarina Anna Pávlova.|Kouign-amann significa «pastel de mantequilla» en bretón.|El cannolo es un dulce siciliano relleno de ricota.|La Sachertorte es una tarta de chocolate nacida en Viena.|El baklava se hace con finas hojas de masa, frutos secos y almíbar o miel.|El mochi japonés se hace con arroz glutinoso machacado.|En una tarta de limón con merengue, el merengue se dora en el horno o con soplete.|El panettone es un pan dulce navideño originario de Milán.|El flan pâtissier es una crema horneada en masa, muy popular en las panaderías francesas.';
+Object.assign(ACH_ES_NAMES, {'First machine':'Primera máquina', 'Well equipped':'Bien equipado', 'Workshop':'Taller', 'Factory floor':'Fábrica', 'Machine park':'Parque de máquinas', 'Industrial empire':'Imperio industrial', 'Machine legend':'Leyenda de las máquinas'});
+ACH_ES_DESC_RULES.unshift([/^Own (\d+) machine levels? in total\.$/, 'Tener $1 nivel(es) de máquinas en total.']);

@@ -332,3 +332,31 @@ Object.assign(LANGS.zh, {
   'mach.eff.unlock':'每级解锁快 {{v}} %。',
   'mach.eff.repair':'每级故障少 {{v}} %。',
 });
+
+// ======================== BETA 1.9 ========================
+Object.assign(LANGS.zh, {
+  'emp.chefOrders':'订单',
+  'emp.chefHelp.orders':'只做当前订单还缺的东西。',
+  'settings.console':'控制台',
+  'settings.openConsole':'打开控制台',
+  'changelog.title':'更新内容',
+  'changelog.error':'现在无法加载更新内容。',
+  'bob.wasabi1':'咳……绿绿的，有点辣。|嗯。这可不是糖。',
+  'bob.wasabi2':'咳咳！我的鼻子在冒火！|水！快，水！',
+  'bob.wasabi3':'咳……咳……我要窒息了……再也不吃芥末了……|我的电路……在冒……绿烟……',
+  'bob.gold1':'哦，闪闪发光！我觉得自己好珍贵。|金子？给我的？',
+  'bob.gold2':'看，我变成金色了！我太美了。|我越来越亮了。我好喜欢。',
+  'bob.gold3':'我是纯金的。可别把我卖了。|我是世界上最闪亮的甜点师。字面意思。',
+  'bob.notifAsk':'你不在游戏里的时候，要我提醒你吗？比如你的店没暂停一直在运转，或者发生了重要的事。',
+  'bob.notifYes':'好，提醒我',
+  'bob.notifNo':'不用了，谢谢',
+  'bob.notifOk':'太好了！有需要我就提醒你。',
+  'bob.notifDenied':'你的浏览器拒绝了。你可以在设置里修改。',
+  'bob.notifLater':'好的。如果改主意了，设置里可以打开。',
+  'settings.notifs':'通知',
+  'settings.notifsHelp':'你不在游戏里时，如果发生了什么事，或者游戏没有暂停一直在运转，鲍勃会提醒你。',
+  'notif.running':'你的甜品店还在运转，没有暂停！如果要离开，记得暂停。',
+});
+LANGS.zh['bob.facts'] += '|' + '泡芙面团在法语里叫“choux”，因为小泡芙看起来像卷心菜。|据说闪电泡芙这个名字，是因为它一眨眼就被吃完了。|香缇奶油以尚蒂伊城堡命名。|倒着烤的反烤苹果挞，来自法国索洛涅地区塔坦姐妹的旅馆。|据说费南雪的名字来自巴黎的证券交易所街区。|黑森林蛋糕来自德国：巧克力、樱桃和奶油。|帕芙洛娃蛋糕是为纪念舞蹈家安娜·巴甫洛娃而命名的。|布列塔尼语里，kouign-amann 的意思是“黄油蛋糕”。|奶油甜馅煎饼卷是西西里的甜点，里面填满了乳清干酪。|萨赫蛋糕是诞生于维也纳的巧克力蛋糕。|果仁蜜饼用薄薄的面皮、坚果和糖浆或蜂蜜做成。|日本的麻糬是用捣过的糯米做的。|柠檬蛋白霜挞上的蛋白霜，是用烤箱或喷枪烤成金黄色的。|潘妮托妮是源自米兰的圣诞甜面包。|法式布丁挞是烤在酥皮里的蛋奶馅，在法国面包店里很受欢迎。';
+Object.assign(I18N_EXTRA.zh.achNames, {'First machine':'第一台机器', 'Well equipped':'装备齐全', 'Workshop':'工坊', 'Factory floor':'厂房', 'Machine park':'机器园区', 'Industrial empire':'工业帝国', 'Machine legend':'机器传奇'});
+I18N_EXTRA.zh.achDescRules.unshift([/^Own (\d+) machine levels? in total\.$/, '机器等级总共达到 $1 级。']);

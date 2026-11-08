@@ -50,6 +50,7 @@ var activeToasts = {};
 
 function toast(msg) {
   if (typeof bgTick !== 'undefined' && bgTick) return; // Une autre patisserie : pas de bruit
+  notifyAway(msg);
   var area = document.getElementById('toast-area');
   if (!area) return;
   if (activeToasts[msg]) {
@@ -130,7 +131,7 @@ function renderHeader() {
   h += '<div class="hdr-brand">';
   h += '<img class="game-logo" src="logo.svg" alt="" width="40" height="40" onclick="logoClick()">';
   h += '<h1 class="game-name">P2DS</h1>';
-  h += '<span class="version-badge">' + GAME_VERSION + '</span>';
+  h += '<button type="button" class="version-badge" onclick="showChangelog()" title="' + escH(t('changelog.title')) + '">' + GAME_VERSION + '</button>';
   h += '<button class="bakery-name" onclick="showRenameModal()" title="' + escH(t('rename.title')) + '"><span>' + escH(G.bakeryName) + '</span>' + uiIcon('pencil') + '</button>';
   h += '</div>';
   h += '<div class="hdr-stats">';
@@ -169,16 +170,6 @@ function renderHeader() {
     fxBump(el.querySelector('.money-display'), 1.14);
   }
   renderHeader._money = G.money;
-  var rb = document.getElementById('rebirth-banner');
-  if (rb) {
-    if (canRebirth()) {
-      var next = getNextRebirth();
-      setHTML(rb, '<div class="rebirth-banner-inner" role="button" tabindex="0" onclick="showRebirthModal()">\u{1F31F} ' + t('rebirth.banner') + ' - ' + t('rb.' + next.id) + ' (' + t('rebirth.bonus', { v: Math.floor(next.bonus * 100) }) + ')</div>');
-      rb.style.display = 'block';
-    } else {
-      rb.style.display = 'none';
-    }
-  }
 }
 
 function headerBtn(action, label, icon, off, count) {
@@ -691,7 +682,8 @@ function renderCraftingBar() {
   G.sales.forEach(function(sale) {
     var pct = Math.min(100, Math.floor((now - sale.start) / SALE_DELAY_MS * 100));
     h += '<div class="craft-item sale-item"><span class="craft-emoji">\u{1F4B0}</span><div class="craft-progress-wrap"><div class="craft-progress" style="width:' + pct + '%"></div>';
-    h += '<span class="craft-label">' + t('sell.selling', { v: fmtMoney(sale.total) }) + '</span></div></div>';
+    h += '<span class="craft-label">' + t('sell.selling', { v: fmtMoney(sale.total) }) + '</span></div>';
+    h += '<span class="craft-left">' + fmtTime(Math.max(0, (SALE_DELAY_MS - (now - sale.start)) / 1000)) + '</span></div>';
   });
   order.forEach(function(key) {
     var grp = groups[key];
@@ -703,8 +695,8 @@ function renderCraftingBar() {
     var name = grp.isIng ? t('i.' + grp.id) : recShortName(data);
     h += '<div class="craft-item"><span class="craft-emoji">' + data.e + '</span><div class="craft-progress-wrap">';
     h += '<div class="craft-progress" style="width:' + pct + '%"></div>';
-    h += '<span class="craft-label">' + name + (grp.items.length > 1 ? ' x' + grp.items.length : '') + ' - ' + fmtTime(remaining) + '</span>';
-    h += '</div></div>';
+    h += '<span class="craft-label">' + name + (grp.items.length > 1 ? ' x' + grp.items.length : '') + '</span>';
+    h += '</div><span class="craft-left">' + fmtTime(remaining) + '</span></div>';
   });
   setHTML(el, h);
 }
@@ -768,6 +760,76 @@ function hideModal() {
 // Les reglages, les patisseries et la console arretent le temps
 var menuPause = { on: false, since: 0 };
 
+// ============ NOTIFICATIONS ============
+var lastNotifyAt = 0;
+function notifyAway(msg, force) {
+  if (!G.settings || !G.settings.notifs || typeof Notification === 'undefined' || Notification.permission !== 'granted') return;
+  if (!document.hidden || menuPause.on) return;
+  var now = Date.now();
+  if (!force && now - lastNotifyAt < 60000) return;
+  lastNotifyAt = now;
+  var text = String(msg).replace(/<[^>]*>/g, '').trim();
+  try { new Notification('Pâtisserie 2D Simulator', { body: text, icon: 'favicon.png', tag: 'p2ds' }); } catch (e) { /* pas grave */ }
+}
+
+// Le jeu tourne en arriere-plan sans pause depuis 5 minutes
+var hiddenSince = 0, hiddenWarned = false;
+document.addEventListener('visibilitychange', function() {
+  hiddenSince = document.hidden ? Date.now() : 0;
+  hiddenWarned = false;
+});
+function tickAwayReminder() {
+  if (!hiddenSince || hiddenWarned || Date.now() - hiddenSince < 300000) return;
+  hiddenWarned = true;
+  notifyAway(t('notif.running'), true);
+}
+
+function askNotifications(yes) {
+  G.notifAsked = true;
+  hideModal();
+  if (!yes || typeof Notification === 'undefined') { G.settings.notifs = false; bobSay(t('bob.notifLater')); save(); return; }
+  Notification.requestPermission().then(function(p) {
+    G.settings.notifs = p === 'granted';
+    bobSay(t(p === 'granted' ? 'bob.notifOk' : 'bob.notifDenied'));
+    save();
+  });
+}
+
+function toggleNotifications() {
+  if (G.settings.notifs) { G.settings.notifs = false; refreshSettingsPane(); return; }
+  if (typeof Notification === 'undefined') return;
+  Notification.requestPermission().then(function(p) { G.settings.notifs = p === 'granted'; refreshSettingsPane(); save(); });
+}
+
+// ============ LE CHANGELOG ============
+function showChangelog() {
+  var h = '<h2>' + t('changelog.title') + '</h2><div class="changelog" id="changelog-body">…</div>';
+  h += '<div class="modal-btns"><button class="btn" onclick="hideModal()">' + t('common.close') + '</button></div>';
+  showModal(h, 'modal-changelog');
+  fetch('CHANGELOG.md', { cache: 'no-cache' }).then(function(r) { if (!r.ok) throw 0; return r.text(); }).then(function(md) {
+    var el = document.getElementById('changelog-body');
+    if (el) el.innerHTML = iconify(markdownLite(md));
+  }).catch(function() {
+    var el = document.getElementById('changelog-body');
+    if (el) el.textContent = t('changelog.error');
+  });
+}
+
+// Juste ce qu'il faut de Markdown pour le changelog : titres, listes, gras
+function markdownLite(md) {
+  var out = '', inList = false;
+  md.split(/\r?\n/).forEach(function(line) {
+    var txt = escH(line.trim()).replace(/\*\*(.+?)\*\*/g, '<b>$1</b>').replace(/\[([^\]]+)\]\([^)]+\)/g, '$1');
+    var item = /^- /.test(line.trim());
+    if (inList && !item) { out += '</ul>'; inList = false; }
+    if (/^# /.test(line)) return;
+    if (/^## /.test(line)) out += '<h3>' + txt.slice(3) + '</h3>';
+    else if (item) { if (!inList) { out += '<ul>'; inList = true; } out += '<li>' + txt.slice(2) + '</li>'; }
+    else if (txt) out += '<p>' + txt + '</p>';
+  });
+  return out + (inList ? '</ul>' : '');
+}
+
 function beginMenuPause() {
   if (G.paused || menuPause.on) return;
   menuPause.on = true;
@@ -780,29 +842,6 @@ function endMenuPause() {
   var ms = Date.now() - menuPause.since;
   shiftGameTimers(ms);
   shiftAllBakeries(ms);
-}
-
-function showRebirthModal() {
-  var rb = getNextRebirth();
-  if (!rb) return;
-  var h = '<h2>' + t('rebirth.title') + '</h2>';
-  h += '<p>' + t('rebirth.desc', { name: t('rb.' + rb.id) }) + '</p>';
-  h += '<p>' + t('rebirth.cost', { v: fmtMoney(rb.cost) }) + '</p>';
-  h += '<p>' + t('rebirth.bonus', { v: Math.floor(rb.bonus * 100) }) + ' · ' + t('rebirth.spaceBonus', { v: rb.spaceMulti }) + '</p>';
-  h += '<p class="warning">' + t('rebirth.warning') + '</p>';
-  h += '<p>' + t('rebirth.keep') + '</p>';
-  h += '<div class="modal-btns"><button class="btn btn-primary" onclick="doRebirthConfirm()">' + t('rebirth.btn') + '</button>';
-  h += '<button class="btn" onclick="hideModal()">' + t('rebirth.cancel') + '</button></div>';
-  showModal(h);
-}
-
-function doRebirthConfirm() {
-  if (doRebirth()) {
-    hideModal();
-    playFanfare();
-    toast(t('rebirth.done', { name: G.bakeryName, n: G.rebirth }));
-    fullRender();
-  }
 }
 
 function showRenameModal() {

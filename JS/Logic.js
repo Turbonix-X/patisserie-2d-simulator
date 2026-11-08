@@ -1,7 +1,7 @@
 /* ============================================
    PATISSERIE 2D SIMULATOR - GAME LOGIC
    Clics, production, preparation, vente, employes,
-   loyer, rebirth, evenements, faillite, absence
+   loyer, evenements, faillite, absence
    ============================================ */
 
 // ============ FORMAT HELPERS ============
@@ -16,6 +16,8 @@ var NUM_SUFFIXES = (function() {
   base.push('Ce');
   return base;
 })();
+
+var MAX_MONEY_SHOWN = 9.99e289; // Au-dela, fmt affiche le signe infini
 
 function fmt(n) {
   if (n < 0) return '-' + fmt(-n);
@@ -47,22 +49,6 @@ function findBld(id) { for (var i = 0; i < BUILDINGS.length; i++) { if (BUILDING
 function findEmpType(id) { for (var i = 0; i < EMP_TYPES.length; i++) { if (EMP_TYPES[i].id === id) return EMP_TYPES[i]; } return null; }
 
 // ============ BONUS ============
-function rebirthBonus() {
-  var bonus = 0;
-  for (var i = 0; i < REBIRTHS.length; i++) {
-    if (G.rebirth > i) bonus += REBIRTHS[i].bonus;
-  }
-  return 1 + bonus;
-}
-
-function spaceMultiplier() {
-  var mult = 1;
-  for (var i = 0; i < REBIRTHS.length; i++) {
-    if (G.rebirth > i) mult *= REBIRTHS[i].spaceMulti;
-  }
-  return mult;
-}
-
 function birthdayBonus() {
   return (G.birthdayBoostUntil && Date.now() < G.birthdayBoostUntil) ? 2 : 1;
 }
@@ -129,7 +115,7 @@ function achievementBonus() {
 
 // Unites achetees par clic. Le bonus fait gagner du temps : chaque unite se paie.
 function clickMult() {
-  var m = rebirthBonus() * birthdayBonus();
+  var m = birthdayBonus();
   if (G.eventClickBonus) m *= (1 + G.eventClickBonus);
   return Math.round(m * 100) / 100;
 }
@@ -143,7 +129,7 @@ function autoRate(ingId) {
     if (emp.type === 'collector' && emp.assignedIng === ingId && empWorking(emp)) r += empPower(emp);
   }
   if (G.eventAutoBonus) r *= (1 + G.eventAutoBonus);
-  return r * rebirthBonus() * birthdayBonus();
+  return r * birthdayBonus();
 }
 
 function totalAuto() {
@@ -154,7 +140,7 @@ function totalAuto() {
 
 // ============ PRIX DE VENTE ============
 function sellValueMult() {
-  return rebirthBonus() * birthdayBonus() * achievementBonus() * (1 + machineBonus('price') / 100);
+  return birthdayBonus() * achievementBonus() * (1 + machineBonus('price') / 100);
 }
 
 // Offre et demande : plus tu vends un gateau, plus son prix baisse.
@@ -265,7 +251,7 @@ function canFitRecipe(rec) {
 function nextSpaceUpgrade() {
   if (G.spaceBought >= SPACE_UPG.length) return null;
   var su = SPACE_UPG[G.spaceBought];
-  return { add: Math.round(su.add * spaceMultiplier()), cost: su.cost, lvlReq: su.lvlReq };
+  return { add: su.add, cost: su.cost, lvlReq: su.lvlReq };
 }
 
 // ============ FOURS ============
@@ -495,7 +481,7 @@ function buyBuilding(bld, bulk) {
 // Ce qu'un batiment livre d'un coup, une fois par heure
 function buildingDelivery(bld) {
   var qty = (G.buildings[bld.id] || { qty: 0 }).qty;
-  return qty * bld.baseRate * BLD_CYCLE_SEC * (1 + machineBonus('bld') / 100) * rebirthBonus() * birthdayBonus();
+  return qty * bld.baseRate * BLD_CYCLE_SEC * (1 + machineBonus('bld') / 100) * birthdayBonus();
 }
 
 // Fait avancer les batiments de dtSec. Renvoie ce qui a ete livre.
@@ -812,11 +798,19 @@ function tickEmployees(dtSec) {
 // ---------- Le chef patissier : il prepare tout seul ----------
 function chefQueue(emp) {
   var mode = emp.chefMode || 'all';
+  if (mode === 'orders') return ordersToBake();
   var list = (emp.chefList || []).map(findRec).filter(function(r) { return r && recUnlocked(r); });
   if (mode === 'only') return list;
   var rest = REC.filter(function(r) { return recUnlocked(r) && list.indexOf(r) < 0; });
   rest.sort(function(a, b) { return (batchPrice(b, b.qty) - recipeCost(b)) - (batchPrice(a, a.qty) - recipeCost(a)); });
   return mode === 'priority' ? list.concat(rest) : list.concat(rest).sort(function(a, b) { return (batchPrice(b, b.qty) - recipeCost(b)) - (batchPrice(a, a.qty) - recipeCost(a)); });
+}
+
+// Ce qui manque pour livrer les commandes en cours
+function ordersToBake() {
+  var need = {};
+  (G.orders || []).forEach(function(o) { o.items.forEach(function(it) { need[it.recId] = (need[it.recId] || 0) + it.qty; }); });
+  return REC.filter(function(r) { return need[r.id] && recUnlocked(r) && (G.cakes[r.id] || 0) < need[r.id]; });
 }
 
 function tickChefs(dtSec) {
@@ -1056,35 +1050,6 @@ function recordHistory() {
     });
     h.step *= 2;
   }
-}
-
-// ============ REBIRTH ============
-function canRebirth() {
-  if (G.rebirth >= REBIRTHS.length) return false;
-  var rb = REBIRTHS[G.rebirth];
-  return G.level >= rb.minLvl && G.money >= rb.cost;
-}
-
-function getNextRebirth() {
-  return G.rebirth >= REBIRTHS.length ? null : REBIRTHS[G.rebirth];
-}
-
-function doRebirth() {
-  var rb = getNextRebirth();
-  if (!rb || G.level < rb.minLvl || G.money < rb.cost) return false;
-  var old = G;
-  var keepMoney = old.money - rb.cost;
-  // Tout ce qui t'appartient a toi, et pas a la boutique
-  var keys = ['level','xp','achievements','stats','settings','bakeryName','bakeries','currentBakeryIndex','tutorialDone','tutorialStep',
-    'introDone','birthday','birthdaySetOn','birthdayBoostYear','unlockedThemes','birthdayBoostUntil','cheatUnlocked','bobClicks','bobSad','logoClicks',
-    'totalEarned','playTimeMs','rentDebt','favRecipes','lvl1000Shown','wentBankrupt',
-    'secondBakery','achHere','bankUnlocked','loans','nextLoanId','history','machines','cmdUsage','challenge','nextChallengeAt','sugarFed','bakeryTheme','unlocks','explained','creative','sellerSold'];
-  G = createFreshState();
-  keys.forEach(function(k) { if (old[k] !== undefined) G[k] = JSON.parse(JSON.stringify(old[k])); });
-  G.money = keepMoney;
-  G.rebirth = old.rebirth + 1;
-  G.maxSpace = Math.round(5 * spaceMultiplier());
-  return true;
 }
 
 // ============ ANTI AUTO-CLICKER ============
@@ -1610,7 +1575,7 @@ function switchToBakery(index) {
   target.currentBakeryIndex = index;
   // Ce qui appartient au joueur, et pas a une patisserie
   ['settings','birthday','birthdaySetOn','birthdayBoostYear','birthdayBoostUntil','achievements','tutorialDone','tutorialStep',
-   'introDone','cheatUnlocked','bobClicks','bobSad','logoClicks','unlockedThemes','favRecipes','lvl1000Shown','wentBankrupt',
+   'introDone','cheatUnlocked','bobClicks','bobSad','bobGold','bobChoke','logoClicks','unlockedThemes','favRecipes','lvl1000Shown','wentBankrupt',
    'secondBakery','bankUnlocked','loans','nextLoanId','cmdUsage','challenge','nextChallengeAt','sugarFed','explained','creative'].forEach(function(k) {
     target[k] = G[k];
   });
@@ -1691,7 +1656,6 @@ function allBakeriesState() {
     all.maxSpace += s.maxSpace || 0;
     all.ovens += s.ovens || 0;
     all.level = Math.max(all.level, s.level || 0);
-    all.rebirth = Math.max(all.rebirth, s.rebirth || 0);
     all.employees = all.employees.concat(s.employees || []);
     for (var k in s.stats) {
       if (typeof s.stats[k] === 'number') all.stats[k] = (all.stats[k] || 0) + s.stats[k];

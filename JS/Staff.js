@@ -155,9 +155,9 @@ function empDashboardHTML(extra) {
     if (!d.byType[type]) return;
     h += '<div class="dash-tile">' + empAvatar(type, type) + '<b>' + d.byType[type] + '</b><span>' + t('emp.' + type) + '</span></div>';
   });
-  h += '</div><div class="dash-states"><span class="status-good">' + t('dash.working') + ' : ' + d.working + '</span>';
-  if (d.paused) h += '<span class="status-warn">' + t('dash.paused') + ' : ' + d.paused + '</span>';
-  if (d.striking) h += '<span class="status-bad">' + t('dash.striking') + ' : ' + d.striking + '</span>';
+  h += '</div><div class="dash-states"><span class="dash-good">' + t('dash.working') + ' : ' + d.working + '</span>';
+  if (d.paused) h += '<span class="dash-warn">' + t('dash.paused') + ' : ' + d.paused + '</span>';
+  if (d.striking) h += '<span class="dash-bad">' + t('dash.striking') + ' : ' + d.striking + '</span>';
   var road = shipmentsOnRoad();
   if (road) h += '<span>' + t('dash.transit', { v: road }) + '</span>';
   h += '</div><h5>' + t('dash.collectors') + '</h5>';
@@ -318,11 +318,11 @@ function chefConfig(emp) {
   var mode = emp.chefMode || 'all';
   var list = emp.chefList || [];
   var h = '<div class="segmented theme-scope">';
-  [['all', 'emp.chefAll'], ['only', 'emp.chefOnly'], ['priority', 'emp.chefPriority']].forEach(function(m) {
+  [['all', 'emp.chefAll'], ['orders', 'emp.chefOrders'], ['only', 'emp.chefOnly'], ['priority', 'emp.chefPriority']].forEach(function(m) {
     h += '<button class="' + (mode === m[0] ? 'active' : '') + '" onclick="setChefMode(' + emp.id + ',\'' + m[0] + '\')">' + t(m[1]) + '</button>';
   });
   h += '</div><p class="set-help">' + t('emp.chefHelp.' + mode) + '</p>';
-  if (mode === 'all') return h;
+  if (mode === 'all' || mode === 'orders') return h;
   h += '<div class="chef-list">';
   REC.forEach(function(rec) {
     if (!recUnlocked(rec)) return;

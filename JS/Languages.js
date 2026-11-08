@@ -654,3 +654,53 @@ Object.assign(LANGS.en, {
   'mach.eff.unlock':'Unlocks {{v}} % faster per level.',
   'mach.eff.repair':'Breakdowns {{v}} % rarer, per level.',
 });
+
+// ======================== BETA 1.9 ========================
+Object.assign(LANGS.fr, {
+  'emp.chefOrders':'Commandes',
+  'emp.chefHelp.orders':'Prépare seulement ce qui manque pour livrer les commandes en cours.',
+  'settings.console':'Console',
+  'settings.openConsole':'Ouvrir la console',
+  'changelog.title':'Les nouveautés',
+  'changelog.error':'Impossible de charger les nouveautés pour l\'instant.',
+  'bob.wasabi1':'Kof… C\'était vert, ça piquait un peu.|Hm. Pas du sucre, ça.',
+  'bob.wasabi2':'KOF KOF ! Mon nez brûle !|De l\'eau ! Vite, de l\'eau !',
+  'bob.wasabi3':'KOF… KOF… J\'étouffe… plus jamais de wasabi…|Mes circuits… crachent… de la fumée verte…',
+  'bob.gold1':'Oh, ça brille ! Je me sens précieux.|De l\'or ? Pour moi ?',
+  'bob.gold2':'Regarde, je deviens doré ! Je suis magnifique.|Je brille de plus en plus. J\'adore.',
+  'bob.gold3':'Je suis en or massif. Ne me vends pas, hein.|Je suis le pâtissier le plus brillant du monde. Littéralement.',
+  'bob.notifAsk':'Tu veux que je te prévienne quand tu n\'es pas sur le jeu ? Par exemple si ta pâtisserie tourne sans pause, ou s\'il se passe quelque chose d\'important.',
+  'bob.notifYes':'Oui, préviens-moi',
+  'bob.notifNo':'Non merci',
+  'bob.notifOk':'Parfait ! Je te ferai signe si besoin.',
+  'bob.notifDenied':'Ton navigateur a dit non. Tu pourras changer ça dans les réglages.',
+  'bob.notifLater':'D\'accord. Si tu changes d\'avis, c\'est dans les réglages.',
+  'settings.notifs':'Notifications',
+  'settings.notifsHelp':'Quand tu n\'es pas sur le jeu, Bob te prévient s\'il se passe quelque chose, ou si le jeu tourne sans pause.',
+  'notif.running':'Ta pâtisserie tourne toujours, sans pause ! Pense à mettre pause si tu t\'en vas.',
+});
+LANGS.fr['bob.facts'] += '|' + 'La pâte à choux porte ce nom parce que les petits choux ressemblent aux choux du potager.|Le nom de l\'éclair viendrait du fait qu\'on le mange en un éclair.|La crème chantilly porte le nom du château de Chantilly.|La tarte Tatin, cuite à l\'envers, vient de l\'hôtel des sœurs Tatin, en Sologne.|Le financier devrait son nom au quartier de la Bourse, à Paris.|La forêt-noire vient d\'Allemagne : chocolat, cerises et crème.|La pavlova a été nommée en l\'honneur de la danseuse Anna Pavlova.|Kouign-amann veut dire « gâteau au beurre » en breton.|Le cannolo est une pâtisserie sicilienne fourrée à la ricotta.|La Sachertorte est un gâteau au chocolat né à Vienne.|Le baklava se fait avec de fines feuilles de pâte, des fruits secs et du sirop ou du miel.|Le mochi japonais est fait de riz gluant pilé.|Sur une tarte au citron meringuée, la meringue est dorée au four ou au chalumeau.|Le panettone est une brioche de Noël originaire de Milan.|Le flan pâtissier est une crème cuite dans une pâte, très populaire dans les boulangeries françaises.';
+Object.assign(LANGS.en, {
+  'emp.chefOrders':'Orders',
+  'emp.chefHelp.orders':'Only bakes what is missing to deliver the current orders.',
+  'settings.console':'Console',
+  'settings.openConsole':'Open the console',
+  'changelog.title':'What\'s new',
+  'changelog.error':'Can\'t load what\'s new right now.',
+  'bob.wasabi1':'Ahem… That was green, and a bit spicy.|Hm. That\'s not sugar.',
+  'bob.wasabi2':'COUGH COUGH! My nose is on fire!|Water! Quick, water!',
+  'bob.wasabi3':'COUGH… COUGH… I\'m choking… never again, wasabi…|My circuits… are puffing… green smoke…',
+  'bob.gold1':'Oh, it shines! I feel precious.|Gold? For me?',
+  'bob.gold2':'Look, I\'m turning golden! I\'m gorgeous.|I shine more and more. I love it.',
+  'bob.gold3':'I\'m solid gold. Don\'t sell me, okay?|I\'m the most brilliant pastry chef in the world. Literally.',
+  'bob.notifAsk':'Do you want me to warn you when you\'re not in the game? For example if your bakery runs without a pause, or if something important happens.',
+  'bob.notifYes':'Yes, warn me',
+  'bob.notifNo':'No thanks',
+  'bob.notifOk':'Perfect! I\'ll let you know if needed.',
+  'bob.notifDenied':'Your browser said no. You can change that in the settings.',
+  'bob.notifLater':'Okay. If you change your mind, it\'s in the settings.',
+  'settings.notifs':'Notifications',
+  'settings.notifsHelp':'When you\'re not in the game, Bob warns you if something happens, or if the game runs without a pause.',
+  'notif.running':'Your bakery is still running, without a pause! Remember to pause if you\'re leaving.',
+});
+LANGS.en['bob.facts'] += '|' + 'Choux pastry gets its name because the little puffs look like cabbages ("choux" in French).|The éclair is said to be named because you eat it in a flash ("éclair" means lightning).|Chantilly cream is named after the Château de Chantilly.|The tarte Tatin, baked upside down, comes from the Tatin sisters\' hotel in Sologne, France.|The financier is said to be named after the Paris stock exchange district.|Black Forest cake comes from Germany: chocolate, cherries and cream.|The pavlova was named in honor of the dancer Anna Pavlova.|Kouign-amann means "butter cake" in Breton.|The cannolo is a Sicilian pastry filled with ricotta.|The Sachertorte is a chocolate cake born in Vienna.|Baklava is made with thin sheets of pastry, nuts and syrup or honey.|Japanese mochi is made from pounded glutinous rice.|On a lemon meringue pie, the meringue is browned in the oven or with a torch.|Panettone is a Christmas sweet bread from Milan.|Flan pâtissier is a custard baked in pastry, very popular in French bakeries.';

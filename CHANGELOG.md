@@ -2,6 +2,25 @@
 
 Tout ce qui a été ajouté à Pâtisserie 2D Simulator, de la plus récente à la plus ancienne. Pour comprendre les règles du jeu, va voir le [wiki](REGLES.md).
 
+## Bêta 1.9 (8 novembre 2026)
+
+**Retiré**
+- Les rebirths n'existent plus : plus de bandeau, plus de bonus de rebirth. Les 7 succès de rebirth sont remplacés par 7 succès de niveaux de machines.
+
+**Nouveautés**
+- Le chef pâtissier peut ne préparer que ce qui manque pour les commandes en cours.
+- Clique sur le numéro de version, en haut, pour voir ces nouveautés dans le jeu.
+- Bob connaît 30 anecdotes sur les pâtisseries au lieu de 15.
+- Bob réagit à d'autres ingrédients qu'on lui donne. À toi de découvrir lesquels.
+- Vers le début, Bob propose de t'envoyer des notifications quand tu n'es pas sur le jeu : si ta pâtisserie tourne sans pause, ou s'il se passe quelque chose d'important.
+
+**Téléphone**
+- Les annonces d'événements sont plus petites et cachent moins l'écran.
+- Le temps de préparation et de vente est de nouveau visible, à côté de chaque barre.
+
+**Petits changements**
+- Dans le tableau de bord des employés, « au travail », « en pause » et « en grève » sont écrits dans leur couleur, qui change avec le thème.
+
 ## Bêta 1.8.1 (8 novembre 2026)
 
 - Deux nouvelles langues complètes : le japonais et le coréen. Le jeu existe maintenant en 9 langues.

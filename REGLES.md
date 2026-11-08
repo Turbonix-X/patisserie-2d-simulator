@@ -1,6 +1,6 @@
 # Le wiki de Pâtisserie 2D Simulator
 
-Tout ce qu'il faut savoir pour comprendre le jeu. Ce wiki décrit la **Bêta 1.8.1**.
+Tout ce qu'il faut savoir pour comprendre le jeu. Ce wiki décrit la **Bêta 1.9**.
 
 > **À savoir :** les recettes du jeu sont fausses. Les quantités et les ingrédients servent juste à donner un parcours au jeu. Ne les cuisine pas chez toi !
 
@@ -18,7 +18,6 @@ Tout ce qu'il faut savoir pour comprendre le jeu. Ce wiki décrit la **Bêta 1.8
 10. [Les commandes](#les-commandes)
 11. [Les bâtiments](#les-bâtiments)
 12. [Plusieurs pâtisseries](#plusieurs-pâtisseries)
-13. [Le rebirth](#le-rebirth)
 14. [Bob](#bob)
 15. [Les événements](#les-événements)
 16. [Les thèmes](#les-thèmes)
@@ -102,7 +101,7 @@ Un seul prêt de chaque montant à la fois :
 
 ## Les machines
 
-L'onglet Machines est là dès le début. Chaque machine a de 5 à 10 niveaux, et chaque niveau coûte bien plus cher que le précédent. Les améliorations sont permanentes, y compris après un rebirth, mais **seulement dans la pâtisserie où tu les achètes**.
+L'onglet Machines est là dès le début. Chaque machine a de 5 à 10 niveaux, et chaque niveau coûte bien plus cher que le précédent. Les améliorations sont permanentes, mais **seulement dans la pâtisserie où tu les achètes**.
 
 | Machine | Niveau du joueur | Bonus par niveau |
 |---|---|---|
@@ -153,7 +152,7 @@ Lance une **recherche** dans l'onglet Employés : elle prend du temps et ne marc
 | Manager | 25 | Remonte le moral de l'équipe, et peut embaucher à ta place | Embauche automatique, compétence minimum |
 | Maître d'hôtel | 30 | Livre les commandes à ta place | Aucun |
 | Vendeur | 35 | Vend tout seul, les gâteaux les plus chers d'abord | La part du stock qu'il peut vendre |
-| Chef pâtissier | 65 | Prépare tout seul avec ce qu'il y a en stock | Tout, seulement certaines recettes, ou des priorités |
+| Chef pâtissier | 65 | Prépare tout seul avec ce qu'il y a en stock | Tout, seulement ce qui manque pour les commandes, seulement certaines recettes, ou des priorités |
 | Intendant | 90 | Commande ce qui manque pour tes favoris, livré après 30 secondes | Aucun |
 
 **Les niveaux :** chaque employé a 5 niveaux. Chaque niveau double ses capacités, mais coûte 8 fois plus cher que le précédent. Pendant sa formation, il ne travaille pas.
@@ -186,22 +185,6 @@ Dès le niveau 40. **La différence avec les employés :** un cueilleur produit 
 - **Vendre une pâtisserie :** tu reçois son argent, la moitié de la valeur de ses gâteaux, de ses ingrédients et de son équipement, 10 % de ce qu'elle a gagné et la moitié de son prix d'achat, moins sa dette. Tu perds toutes ses statistiques. Tes succès restent.
 - Renommer une pâtisserie coûte 100 €.
 
-## Le rebirth
-
-Quand tu as le niveau et l'argent demandés, tu peux repartir avec une boutique vide contre un bonus permanent.
-
-| Rebirth | Niveau | Prix | Bonus | Espace |
-|---|---|---|---|---|
-| Boulangerie | 40 | 5 000 € | +15 % | ×1,1 |
-| Pâtisserie Fine | 80 | 50 000 € | +25 % | ×1,25 |
-| Maison de Luxe | 120 | 500 000 € | +40 % | ×1,5 |
-| Palace Gastronomique | 200 | 5 M€ | +60 % | ×2 |
-| Empire de la Pâtisserie | 300 | 50 M€ | +80 % | ×3 |
-| Dynastie Sucrée | 500 | 500 M€ | +100 % | ×5 |
-| Légende Éternelle | 1000 | 10 Md€ | +200 % | ×10 |
-
-Tu gardes ton argent, ton niveau, tes succès, tes statistiques, tes machines, tes déblocages, tes prêts et ta dette. Tu perds ton stock, tes bâtiments, tes employés et tes agrandissements.
-
 ## Bob
 
 Bob est ton chef pâtissier. Il t'accueille, t'apprend les bases, et t'explique chaque nouveauté.
@@ -210,6 +193,7 @@ Bob est ton chef pâtissier. Il t'accueille, t'apprend les bases, et t'explique 
 - **Ne l'embête pas :** clique trop sur lui et il s'énerve. Énervé, il refuse même de t'expliquer les choses.
 - **Il adore le sucre.** Quand il est triste, à toi de trouver comment lui faire plaisir.
 - **Il bavarde :** de temps en temps, quand il est de bonne humeur, il te donne un conseil, te rappelle de sauvegarder ou te raconte une anecdote sur les pâtisseries. Tu peux le couper dans les réglages.
+- **Les notifications :** vers le début, Bob te propose de te prévenir quand tu n'es pas sur le jeu : si ta pâtisserie tourne sans pause depuis 5 minutes, ou s'il se passe quelque chose d'important. Tu peux les activer ou les couper dans les réglages.
 - **Son défi :** tous les 2 à 5 jours, il te propose un défi de 24 heures. Réussis, et il te donne 5 % de tout ton argent, toutes pâtisseries confondues.
 - **Si tu pars sans mettre pause**, il te rappelle que le bouton existe.
 
@@ -243,6 +227,7 @@ Ils sont dans les **réglages**. Il y a 1000 succès. Un succès pas encore obte
 
 ## Pause, absence et sauvegarde
 
+- **Les nouveautés :** clique sur le numéro de version, en haut à côté du logo, pour voir tout ce qui a changé à chaque mise à jour.
 - **Le bouton pause** ou la touche **Échap** arrêtent le jeu. Ouvrir les réglages ou la liste des pâtisseries l'arrête aussi.
 - Le jeu se sauvegarde tout seul toutes les 30 secondes, dans ton navigateur.
 - Quand tu reviens, tes boutiques ont travaillé pendant 5 heures au maximum : cueilleurs, bâtiments, vendeurs, loyers, salaires et prêts. Aucune dette n'est créée pendant ton absence. Le transporteur, lui, attend ton retour.

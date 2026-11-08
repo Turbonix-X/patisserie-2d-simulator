@@ -25,7 +25,6 @@ Un jeu de gestion de pâtisserie : achète tes ingrédients, prépare tes gâtea
 - **Banque :** à ta première dette, Bob t'ouvre un compte et t'explique les prêts, de 10 € à 10 000 €.
 - **Commandes :** au niveau 30, des clients passent commande. Plus c'est compliqué, plus la prime est grosse.
 - **Machines :** four, fouet, pétrin… des améliorations permanentes, propres à chaque pâtisserie.
-- **Rebirth :** ouvre une nouvelle pâtisserie pour gagner des bonus permanents.
 - **Événements :** rush, soldes, passage à la télé, contrôle sanitaire…
 - **Succès et statistiques :** 1000 succès à débloquer. Chacun augmente tes prix de vente.
 - **Plusieurs pâtisseries :** dès la deuxième, des graphiques et les totaux de toutes tes boutiques.

@@ -109,14 +109,14 @@ function tierName(tier) {
     add(legacy, 'shop', v < 100 ? '\u{1F4D0}' : v < 500 ? '\u{1F3D7}️' : '\u{1F306}', v + ' m² de bonheur', v + ' m² of happiness',
       'Avoir ' + v + ' m² d’espace.', 'Own ' + v + ' m² of space.', function(g) { return g.maxSpace >= v; });
   });
-  var rbFr = ['Nouvelle vie', 'Deuxième fournée', 'Maison de luxe', 'Palace', 'Empire', 'Dynastie', 'Légende éternelle'];
-  var rbEn = ['New life', 'Second batch', 'Luxury house', 'Palace', 'Empire', 'Dynasty', 'Eternal legend'];
-  for (var rb = 1; rb <= 7; rb++) {
-    (function(n) {
-      add('rebirth' + n, 'shop', n < 3 ? '⭐' : n < 5 ? '\u{1F31F}' : n < 7 ? '\u{1F4AB}' : '\u{1F300}', rbFr[n-1], rbEn[n-1],
-        'Faire ' + n + ' rebirth' + (n > 1 ? 's' : '') + '.', 'Rebirth ' + n + ' time' + (n > 1 ? 's' : '') + '.', function(g) { return g.rebirth >= n; });
-    })(rb);
-  }
+  // Des niveaux de machines, au total
+  var mlFr = ['Première machine', 'Bien équipé', 'Atelier', 'Usine', 'Parc de machines', 'Empire industriel', 'Légende des machines'];
+  var mlEn = ['First machine', 'Well equipped', 'Workshop', 'Factory floor', 'Machine park', 'Industrial empire', 'Machine legend'];
+  [1, 10, 30, 60, 120, 250, 500].forEach(function(v, i) {
+    add('machlv' + (i + 1), 'shop', i < 2 ? '\u{1F527}' : i < 5 ? '\u{1F3ED}' : '\u2699\uFE0F', mlFr[i], mlEn[i],
+      'Avoir ' + v + ' niveau' + (v > 1 ? 'x' : '') + ' de machines au total.', 'Own ' + v + ' machine level' + (v > 1 ? 's' : '') + ' in total.',
+      function(g) { var n = 0; for (var k in (g.machines || {})) n += g.machines[k]; return n >= v; });
+  });
   [[1,'emp1','\u{1F9D1}‍\u{1F373}','Premier employé','First employee'],[5,'emp5','\u{1F465}','Petite équipe','Small team'],[10,'emp10','\u{1F465}','Brigade','Brigade'],
    [20,'emp20','\u{1F3E2}','Grande maison','Big house'],[50,'emp50','\u{1F3E2}','Ressources humaines dépassées','HR is overwhelmed'],[100,'emp100','\u{1F30D}','Plus gros employeur de la ville','Biggest employer in town']]
     .forEach(function(s) {

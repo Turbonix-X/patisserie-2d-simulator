@@ -104,7 +104,9 @@ function settingsGeneral() {
     curr += '<option value="' + c.id + '"' + (G.settings.currency === c.id ? ' selected' : '') + '>' + c.symbol + ' · ' + currencyName(c) + '</option>';
   });
   curr += '</select>';
-  var h = setCard('', setRow(t('settings.lang'), t('settings.langHelp'), lang) + setRow(t('settings.currency'), t('settings.currencyHelp'), curr) + bobRow);
+  var h = setCard('', setRow(t('settings.lang'), t('settings.langHelp'), lang) + setRow(t('settings.currency'), t('settings.currencyHelp'), curr) + bobRow +
+    (typeof Notification !== 'undefined' ? setRow(t('settings.notifs'), t('settings.notifsHelp'), setSwitch(!!G.settings.notifs, 'toggleNotifications()', t('settings.notifs'))) : '') +
+    (G.cheatUnlocked ? '<div class="only-phone">' + setRow(t('settings.console'), '', '<button class="btn btn-small" onclick="closeMenu();showCommandConsole()">' + t('settings.openConsole') + '</button>') + '</div>' : ''));
   var bday;
   if (G.birthday) {
     var fix = '<div class="birthday-pick"><span class="set-value">' + t('settings.birthdaySet', { d: G.birthday.day, m: G.birthday.month }) + '</span>' + birthdaySelects(G.birthday.day, G.birthday.month);

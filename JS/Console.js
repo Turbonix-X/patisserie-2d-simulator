@@ -591,9 +591,8 @@ var lastSaveBeforeCreative = null;
 function maxThisBakery() {
   G.level = 1000;
   G.xp = 0;
-  G.money = MONEY_CAP;
-  G.totalEarned = MONEY_CAP;
-  G.rebirth = 7;
+  G.money = MAX_MONEY_SHOWN; // Le plus gros montant qui s'affiche encore en chiffres
+  G.totalEarned = Math.max(G.totalEarned, MAX_MONEY_SHOWN);
   unlockEverything();
   ING.forEach(function(i) { G.ing[i.id] = maxStockFor(i); });
   REC.forEach(function(r) { G.cakes[r.id] = 9999; });

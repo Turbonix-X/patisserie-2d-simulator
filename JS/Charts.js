@@ -55,7 +55,6 @@ function statsHere(open) {
     ['stats.events', fmt(G.stats.eventsSeen || 0)],
     ['stats.achievements', ac.done + ' / ' + ac.total],
     ['stats.sellBonus', '+' + Math.round((sellValueMult() - 1) * 100) + ' %'],
-    ['stats.rebirths', G.rebirth],
   ];
   if (G.bankUnlocked) {
     rows.push(['stats.loansTaken', fmt(G.stats.loansTaken)]);
@@ -308,7 +307,6 @@ function statsAll() {
     ['stats.totalInvested', fmtMoney(all.stats.totalInvested)],
     ['stats.events', fmt(all.stats.eventsSeen || 0)],
     ['stats.employees', fmt(all.employees.length)],
-    ['stats.rebirths', all.rebirth],
   ]);
   return h;
 }
