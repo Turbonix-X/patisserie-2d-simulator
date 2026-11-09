@@ -14,13 +14,15 @@ function nameHash(str) {
 // Le haut du corps prend la couleur du metier
 var EMP_SHIRT = { novice:'#A1887F', collector:'#7B9B3E', baker:'#F4EFE6', seller:'#C62842', manager:'#37474F', maitre:'#26262B', carrier:'#1E78C8', chef:'#FFFFFF', buyer:'#3F8F2B' };
 
-function empAvatar(type, name) {
+function empAvatar(type, name, gender) {
   var h = nameHash(String(name || ''));
+  var female = (gender || (EMP_TYPES.some(function(et) { return et.id === name; }) ? 'm' : empGender(name))) === 'f';
   var skins = [['#FFDCC2', '#EBB894'], ['#F3C59B', '#D9A274'], ['#E0AC7E', '#C48A5A'], ['#C68650', '#A56A38'], ['#8D5A33', '#6E4324'], ['#5C3A21', '#462A16']];
   var sk = skins[h % 6];
   var hair = ['#2B1B12', '#5A3418', '#8A5A2B', '#C9A15A', '#A33A1E', '#3B3B3B', '#E8DFC8'][(h >> 3) % 7];
-  var style = (h >> 6) % 5; // 0 court, 1 long, 2 boucle, 3 chignon, 4 tres court
-  var beard = style !== 1 && style !== 3 && (h >> 9) % 4 === 0;
+  // Femmes : cheveux longs, boucles ou chignon. Hommes : courts, boucles ou tres courts, parfois une barbe.
+  var style = female ? [1, 2, 3][(h >> 6) % 3] : [0, 2, 4][(h >> 6) % 3];
+  var beard = !female && (h >> 9) % 4 === 0;
   var eye = ['#5B3A1E', '#2F5F8A', '#3E7A3E', '#4A3626'][(h >> 11) % 4];
   var shirt = EMP_SHIRT[type] || '#9E9E9E';
   var light = shirt === '#FFFFFF' || shirt === '#F4EFE6';
@@ -49,9 +51,10 @@ function empAvatar(type, name) {
   s += '<circle cx="16.200" cy="19.900" r="1.050" fill="' + eye + '"/><circle cx="24.200" cy="19.900" r="1.050" fill="' + eye + '"/>';
   s += '<circle cx="16.300" cy="20" r=".5" fill="#111"/><circle cx="24.300" cy="20" r=".5" fill="#111"/><circle cx="16.600" cy="19.500" r=".3" fill="#fff"/><circle cx="24.600" cy="19.500" r=".3" fill="#fff"/>';
   s += '<path d="M20 20.500v3.200c-.600.300-1.200.300-1.600 0" fill="none" stroke="' + sk[1] + '" stroke-width=".9" stroke-linecap="round"/>';
+  if (female) s += '<path d="M14 18.600l-.900-.800M15.300 18.200l-.500-.900M24 18.600l.900-.800M22.700 18.200l.500-.900" stroke="#2B1B12" stroke-width=".6" stroke-linecap="round"/>';
   s += '<ellipse cx="14.200" cy="23.500" rx="1.800" ry="1" fill="#E57373" opacity=".25"/><ellipse cx="25.800" cy="23.500" rx="1.800" ry="1" fill="#E57373" opacity=".25"/>';
   if (beard) s += '<path d="M11.300 20.500c.500 5 4 8.500 8.700 8.500s8.200-3.500 8.700-8.500c-1 3-2.500 4.500-4 4.800-1-.800-2.800-1.200-4.700-1.200s-3.700.400-4.700 1.200c-1.500-.300-3-1.800-4-4.800z" fill="' + hair + '" opacity=".9"/>';
-  s += '<path d="M17.300 25.400q2.700 1.700 5.400 0" fill="none" stroke="#9C4A3A" stroke-width="1.100" stroke-linecap="round"/>';
+  s += '<path d="M17.300 25.400q2.700 1.700 5.400 0" fill="none" stroke="' + (female ? '#C2185B' : '#9C4A3A') + '" stroke-width="' + (female ? '1.300' : '1.100') + '" stroke-linecap="round"/>';
   // Ce qui distingue chaque metier
   if (type === 'collector') s += '<ellipse cx="20" cy="12.500" rx="15" ry="3.500" fill="#E8C468" stroke="#B8922E" stroke-width=".8"/><path d="M12 12c0-6 3-8 8-8s8 2 8 8z" fill="#F2D57E" stroke="#B8922E" stroke-width=".8"/><path d="M12 11h16" stroke="#6DB54F" stroke-width="2"/>';
   else if (type === 'baker') s += '<path d="M11 14c-3-3-1-8 3-7 1-3 11-3 12 0 4-1 6 4 3 7z" fill="#fff" stroke="#D8D0C5"/><circle cx="26" cy="19" r="1.300" fill="#fff"/><circle cx="13" cy="26" r="1.200" fill="#fff"/>';
@@ -97,9 +100,10 @@ function renderEmployees() {
     h += '<div class="applicants-section"><h4>' + t('emp.applicants') + ' (' + G.applicants.length + ')</h4>';
     G.applicants.forEach(function(app) {
       var remaining = Math.max(0, Math.ceil((app.expiresAt - Date.now()) / 1000));
-      h += '<div class="applicant-card" title="' + escH(t('emp.desc.' + app.type)) + '">' + empAvatar(app.type, app.name);
+      h += '<div class="applicant-card' + ((app.level || 1) >= 3 ? ' rare' : '') + '" role="button" tabindex="0" onclick="if(!event.target.closest(\'button\'))showApplicantModal(' + app.id + ')" title="' + escH(t('emp.desc.' + app.type)) + '">' + empAvatar(app.type, app.name);
       h += '<span class="app-name">' + escH(app.name) + '</span>';
       h += '<span class="app-type">' + t('emp.' + app.type) + '</span>';
+      h += '<span class="emp-skill-badge">' + t('emp.levelTxt', { v: app.level || 1 }) + ' / ' + EMP_MAX_LVL + '</span>';
       h += '<span class="app-skill">' + t('emp.skill', { v: app.skill }) + '</span>';
       h += '<span class="app-cost">' + fmtMoney(app.hireCost) + '</span>';
       h += '<span class="app-timer">' + fmtTime(remaining) + '</span>';
@@ -126,8 +130,8 @@ function renderEmployees() {
       list.forEach(function(emp) {
       var moraleColor = emp.morale > 60 ? 'morale-good' : (emp.morale > 30 ? 'morale-mid' : 'morale-bad');
       var training = empTraining(emp);
-      var status = training ? t('emp.training', { v: fmtTime((emp.trainingUntil - Date.now()) / 1000) }) : emp.paused ? t('emp.paused') : t('emp.' + emp.status);
-      var statusCls = training || emp.paused ? 'status-warn' : emp.status === 'working' ? 'status-good' : (emp.status === 'striking' ? 'status-bad' : 'status-warn');
+      var status = training ? t('emp.training', { v: fmtTime((emp.trainingUntil - Date.now()) / 1000) }) : emp.paused ? t('emp.paused') : collectorMoving(emp) ? t('emp.moving', { n: t('i.' + emp.assignedIng), t: fmtTime((emp.moveUntil - Date.now()) / 1000) }) : t('emp.' + emp.status);
+      var statusCls = training || emp.paused || collectorMoving(emp) ? 'status-warn' : emp.status === 'working' ? 'status-good' : (emp.status === 'striking' ? 'status-bad' : 'status-warn');
       h += '<div class="emp-card" role="button" tabindex="0" onclick="showEmpInfoModal(' + emp.id + ')" title="' + escH(t('emp.desc.' + emp.type)) + '">';
       h += '<div class="emp-header">' + empAvatar(emp.type, emp.name);
       h += '<span class="emp-name">' + escH(emp.name) + '</span>';
@@ -235,6 +239,22 @@ function doSearchEmployee(typeId) {
   }
 }
 
+// La fiche d'une candidature : le metier, son niveau, et ce que ca veut dire
+function showApplicantModal(appId) {
+  var app = null;
+  G.applicants.forEach(function(a) { if (a.id === appId) app = a; });
+  if (!app) return;
+  var lv = app.level || 1;
+  var h = '<div class="emp-sheet-head">' + empAvatar(app.type, app.name) + '<div><h2>' + escH(app.name) + '</h2><p>' + t('emp.' + app.type) + '</p></div></div>';
+  h += '<p class="set-help">' + t('emp.desc.' + app.type) + '</p>';
+  h += '<div class="emp-facts"><span>' + t('emp.levelTxt', { v: lv }) + ' / ' + EMP_MAX_LVL + '</span><span>' + t('emp.skill', { v: app.skill }) + '</span><span>' + fmtMoney(app.hireCost) + '</span></div>';
+  h += '<p class="set-help">' + t('emp.levelHelp', { v: lv, x: Math.pow(2, lv - 1) }) + '</p>';
+  h += '<div class="modal-btns"><button class="btn btn-primary" onclick="hideModal();doAcceptApplicant(' + app.id + ')"' + (G.money < app.hireCost ? ' disabled' : '') + '>' + t('emp.accept') + '</button>';
+  h += '<button class="btn btn-danger" onclick="hideModal();doRejectApplicant(' + app.id + ')">' + t('emp.reject') + '</button>';
+  h += '<button class="btn" onclick="hideModal()">' + t('common.close') + '</button></div>';
+  showModal(h, 'modal-emp');
+}
+
 function doAcceptApplicant(appId) {
   if (acceptApplicant(appId)) {
     toast(t('emp.hired'));
@@ -259,6 +279,8 @@ function showEmpInfoModal(empId) {
   h += '<div class="emp-facts"><span>' + t('emp.levelTxt', { v: emp.level || 1 }) + ' / ' + EMP_MAX_LVL + '</span><span>' + t('emp.skill', { v: emp.skill }) + '</span><span>' + t('emp.morale') + ' : ' + Math.floor(emp.morale) + ' %</span><span>' + t('emp.salary', { v: fmtMoney(getEmpSalary(emp) * 3600) }) + '</span></div>';
   if (empTraining(emp)) h += '<p class="warning">' + t('emp.training', { v: fmtTime((emp.trainingUntil - Date.now()) / 1000) }) + '</p>';
   if (emp.paused) h += '<p class="warning">' + t('emp.pauseHelp') + '</p>';
+  if (collectorMoving(emp)) h += '<p class="warning">' + t('emp.moving', { n: t('i.' + emp.assignedIng), t: fmtTime((emp.moveUntil - Date.now()) / 1000) }) + '</p>';
+  if (emp.type === 'collector') h += '<p class="set-help">' + t('emp.moveHelp') + '</p>';
   var config = empConfigHTML(emp);
   if (config) h += '<section class="set-card emp-config"><h3>' + t('emp.config') + '</h3>' + config + '</section>';
   h += '<div class="emp-actions">';
@@ -294,7 +316,7 @@ function collectorConfig(emp) {
 
 function assignCollector(empId, ingId) {
   var emp = findEmp(empId);
-  if (emp) emp.assignedIng = ingId;
+  if (moveCollector(emp, ingId)) { save(); showEmpInfoModal(empId); }
 }
 
 function sellerConfig(emp) {

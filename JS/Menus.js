@@ -138,9 +138,11 @@ function settingsLook() {
   var cards = scope + note + '<div class="theme-cards">';
   THEME_LIST.forEach(function(thm) {
     var lock = themeLockReason(thm);
+    // Les themes secrets, et la fete et l'espace avant leur niveau, ne se montrent pas
+    if (lock === 'secret' || (lock && thm.hidden)) return;
     var name = t(thm.langKey);
     var active = active0 === thm.id;
-    var why = lock ? t(lock === 'level' ? 'settings.lockLevel' : lock === 'month' ? 'settings.lockOctober' : lock === 'season' ? 'settings.lockSeason' : lock === 'birthday' ? 'settings.lockBirthday' : 'settings.lockNoBirthday', { v: thm.level }) : '';
+    var why = lock ? t(lock === 'level' ? 'settings.lockLevel' : lock === 'sold' ? 'settings.lockCookies' : lock === 'month' ? 'settings.lockOctober' : lock === 'season' ? 'settings.lockSeason' : lock === 'birthday' ? 'settings.lockBirthday' : 'settings.lockNoBirthday', { v: thm.level }) : '';
     cards += '<button class="theme-card' + (active ? ' active' : '') + (lock ? ' locked' : '') + '"' + (lock ? ' disabled' : ' onclick="chooseTheme(\'' + thm.id + '\')"') + ' aria-pressed="' + active + '">';
     cards += '<span class="theme-prev tp-' + thm.id + '"><i></i><i></i><i></i>' + Decor.mark(thm.id) + '</span>';
     cards += '<span class="theme-name">' + (lock ? '\u{1F512} ' : '') + name + '</span>';

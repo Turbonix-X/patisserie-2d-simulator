@@ -13,11 +13,24 @@ function L(fr, en) {
   return currentLang === 'en' ? en : fr;
 }
 
+// On rend la console : pour la retrouver, il faut enerver Bob a nouveau
+function disableConsole() {
+  G.cheatUnlocked = false;
+  G.bobClicks = 0;
+  G.bobSad = 0;
+  hideModal();
+  renderConsoleButton();
+  renderBob();
+  save();
+  toast(t('console.disabled'));
+}
+
 function showCommandConsole() {
   beginMenuPause();
   var h = '<div class="console-modal">';
   h += '<div class="console-left">';
   h += '<div class="console-head"><h2>' + uiIcon('terminal') + t('console.title') + '</h2>';
+  h += '<button class="btn btn-small console-off" onclick="disableConsole()">' + t('console.disable') + '</button>';
   h += '<button class="icon-btn" onclick="hideModal()" aria-label="' + escH(t('common.close')) + '" title="' + escH(t('common.close')) + '">' + uiIcon('close') + '</button></div>';
   h += '<div class="console-output" id="console-output">';
   for (var i = 0; i < consoleHistory.length; i++) {
@@ -202,7 +215,7 @@ function processCommand(cmd) {
     });
     G.bankUnlocked = true;
     G.secondBakery = true;
-    THEME_LIST.forEach(function(th) { if (th.season || th.birthday || th.level || th.month) G.unlockedThemes[th.id] = true; });
+    THEME_LIST.forEach(function(th) { if (th.season || th.birthday || th.level || th.month || th.secret || th.sold) G.unlockedThemes[th.id] = true; });
     ACHIEVEMENTS.forEach(function(a) { if (!a.hidden) G.achievements[a.id] = true; });
     checkAchievements();
     return '<span class="cmd-ok">' + t('console.maxDone') + '</span>';
@@ -390,20 +403,20 @@ function processCommand(cmd) {
     return '<span class="cmd-err">Usage: /bank unlock|clear</span>';
   }
 
-  // /theme <name> | /theme unlock all|spring|summer|fall|winter|birthday|horror|bakery|party|space
+  // /theme <name> | /theme unlock all|spring|summer|fall|winter|birthday|horror|bakery|party|space|cookie|tech|techgold
   if (action === 'theme') {
     var themeName = parts[1];
     var names = THEME_LIST.map(function(th) { return th.id; }).join(', ');
-    if (!themeName) return '<span class="cmd-err">Usage: /theme &lt;' + names + '&gt; | /theme unlock all|spring|summer|fall|winter|birthday|horror|bakery|party|space</span>';
+    if (!themeName) return '<span class="cmd-err">Usage: /theme &lt;' + names + '&gt; | /theme unlock all|spring|summer|fall|winter|birthday|horror|bakery|party|space|cookie|tech|techgold</span>';
     if (themeName === 'unlock') {
       var what = parts[2];
-      var lockable = THEME_LIST.filter(function(th) { return th.season || th.birthday || th.level || th.month; });
+      var lockable = THEME_LIST.filter(function(th) { return th.season || th.birthday || th.level || th.month || th.secret || th.sold; });
       if (what === 'all') {
         lockable.forEach(function(th) { G.unlockedThemes[th.id] = true; });
         return '<span class="cmd-ok">' + t('console.themesUnlocked') + '</span>';
       }
       var target = findTheme(what);
-      if (!target || !(target.season || target.birthday || target.level || target.month)) return '<span class="cmd-err">Usage: /theme unlock all|spring|summer|fall|winter|birthday|horror|bakery|party|space</span>';
+      if (!target || !(target.season || target.birthday || target.level || target.month || target.secret || target.sold)) return '<span class="cmd-err">Usage: /theme unlock all|spring|summer|fall|winter|birthday|horror|bakery|party|space|cookie|tech|techgold</span>';
       G.unlockedThemes[what] = true;
       return '<span class="cmd-ok">' + t('console.themeUnlocked', { n: t(target.langKey) }) + '</span>';
     }
@@ -608,7 +621,7 @@ function maxThisBakery() {
   MACHINES.forEach(function(m) { G.machines[m.id] = m.max; });
   G.broken = {};
   syncOvens();
-  THEME_LIST.forEach(function(th) { if (th.season || th.birthday || th.level || th.month) G.unlockedThemes[th.id] = true; });
+  THEME_LIST.forEach(function(th) { if (th.season || th.birthday || th.level || th.month || th.secret || th.sold) G.unlockedThemes[th.id] = true; });
   G.employees = [];
   G.nextEmployeeId = 1;
   EMP_TYPES.forEach(function(et) {
@@ -746,7 +759,7 @@ var COMMAND_DOCS = [
       cmdCase('/time set N', 'De 0.1 à 10. 1 est la vitesse normale.', 'From 0.1 to 10. 1 is normal speed.', 'De 0.1 a 10. 1 es la velocidad normal.', '/time set 5'),
     ]},
     { name:'/theme', fr:'Change de thème, ou en débloque.', en:'Changes theme, or unlocks themes.', es:'Cambia de tema o los desbloquea.', cases:[
-      cmdCase('/theme NOM', 'Met ce thème : light, dark, spring, summer, fall, winter, birthday, horror, bakery, party ou space.', 'Applies this theme: light, dark, spring, summer, fall, winter, birthday, horror, bakery, party or space.', 'Pone este tema: light, dark, spring, summer, fall, winter, birthday, horror, bakery, party o space.', '/theme winter'),
+      cmdCase('/theme NOM', 'Met ce thème : light, dark, spring, summer, fall, winter, birthday, horror, bakery, party, space, cookie, tech ou techgold.', 'Applies this theme: light, dark, spring, summer, fall, winter, birthday, horror, bakery, party, space, cookie, tech or techgold.', 'Pone este tema: light, dark, spring, summer, fall, winter, birthday, horror, bakery, party, space, cookie, tech o techgold.', '/theme winter'),
       cmdCase('/theme unlock all', 'Débloque tous les thèmes pour toujours.', 'Unlocks all themes forever.', 'Desbloquea todos los temas para siempre.'),
       cmdCase('/theme unlock NOM', 'Débloque ce thème pour toujours.', 'Unlocks this theme forever.', 'Desbloquea este tema para siempre.', '/theme unlock party'),
     ]},

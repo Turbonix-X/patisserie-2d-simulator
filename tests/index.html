@@ -23,6 +23,7 @@
 <script>document.write('<script src="../JS/LangZH.js?t=' + Date.now() + '"><\/script>');</script>
 <script>document.write('<script src="../JS/LangJA.js?t=' + Date.now() + '"><\/script>');</script>
 <script>document.write('<script src="../JS/LangKO.js?t=' + Date.now() + '"><\/script>');</script>
+<script>document.write('<script src="../JS/LangRU.js?t=' + Date.now() + '"><\/script>');</script>
 <script>document.write('<script src="../JS/PlayerData.js?t=' + Date.now() + '"><\/script>');</script>
 <script>document.write('<script src="../JS/Logic.js?t=' + Date.now() + '"><\/script>');</script>
 <script>document.write('<script src="../JS/Achievements.js?t=' + Date.now() + '"><\/script>');</script>
@@ -242,7 +243,7 @@ check('Chaque succes a une categorie', badCat.length === 0, badCat.join(', '));
 
 // --- Textes ---
 var missing = [];
-['fr', 'en', 'es', 'pt', 'de', 'ar', 'zh', 'ja', 'ko'].forEach(function(lang) {
+['fr', 'en', 'es', 'pt', 'de', 'ar', 'zh', 'ja', 'ko', 'ru'].forEach(function(lang) {
   ING.forEach(function(i) { if (!LANGS[lang]['i.' + i.id]) missing.push(lang + ':i.' + i.id); });
   REC.forEach(function(r) { if (!LANGS[lang]['r.' + r.id]) missing.push(lang + ':r.' + r.id); });
   BUILDINGS.forEach(function(b) { if (!LANGS[lang]['b.' + b.id]) missing.push(lang + ':b.' + b.id); });
@@ -266,7 +267,7 @@ var esDescs = ACHIEVEMENTS.filter(function(a) { return !a.descFn && !achDescEs(a
 check('Tous les succes ont un nom en espagnol', esNames.length === 0, esNames.slice(0, 8).join(', '));
 check('Tous les succes ont une description en espagnol', esDescs.length === 0, esDescs.slice(0, 8).join(', '));
 currentLang = 'fr';
-['pt', 'de', 'ar', 'zh', 'ja', 'ko'].forEach(function(lang) {
+['pt', 'de', 'ar', 'zh', 'ja', 'ko', 'ru'].forEach(function(lang) {
   var diff = Object.keys(LANGS.fr).filter(function(k) { return !LANGS[lang][k]; }).concat(Object.keys(LANGS[lang]).filter(function(k) { return !LANGS.fr[k]; }));
   check(lang + ' : tous les textes', diff.length === 0, diff.slice(0, 12).join(', '));
   var bad = Object.keys(LANGS[lang]).filter(function(k) {
@@ -333,7 +334,7 @@ G.focusEvent = { type: 'ingShortage', kind: 'ing', id: 'farine', mult: 1.8, unti
 check('Un evenement change le prix d un seul ingredient', Math.abs(getIngredientCost(flour) - c0 * 1.8) < 1e-9 && getIngredientCost(findIng('sucre')) === findIng('sucre').cost);
 G.focusEvent = { type: 'recBoycott', kind: 'rec', id: 'cookie', mult: 0.7, until: Date.now() + 60000 };
 check('Un evenement change le prix d une seule recette', inflatedPrice(crep) < p0 && inflatedPrice(findRec('cake')) === (function() { var g = G.focusEvent; G.focusEvent = null; var v = inflatedPrice(findRec('cake')); G.focusEvent = g; return v; })());
-['fr', 'en', 'es', 'pt', 'de', 'ar', 'zh', 'ja', 'ko'].forEach(function(lang) {
+['fr', 'en', 'es', 'pt', 'de', 'ar', 'zh', 'ja', 'ko', 'ru'].forEach(function(lang) {
   FOCUS_EVENTS.forEach(function(f) { if (!LANGS[lang]['fevent.' + f.id]) missing.push(lang + ':fevent.' + f.id); });
 });
 check('Les evenements cibles sont traduits', missing.length === 0, missing.join(', '));
@@ -371,13 +372,13 @@ var tooLate = MACHINES.filter(function(m) { return m.lvl > 1000; }).map(function
 check('Rien ne se debloque apres le niveau 1000', tooLate.length === 0, tooLate.join(', '));
 check('La source d infini pur se debloque au niveau 1000', buildingUnlockLvl(findBld('sourceinfinie')) === 1000);
 var badMach = [];
-['fr', 'en', 'es', 'pt', 'de', 'ar', 'zh', 'ja', 'ko'].forEach(function(lang) {
+['fr', 'en', 'es', 'pt', 'de', 'ar', 'zh', 'ja', 'ko', 'ru'].forEach(function(lang) {
   currentLang = lang;
   MACHINES.forEach(function(m) { if (/^mach/.test(machName(m)) || /^mach/.test(machDesc(m))) badMach.push(lang + ':' + m.id); });
   if (LANGS[lang]['bob.facts'].split('|').length !== 30) badMach.push(lang + ':bob.facts');
 });
 currentLang = 'fr';
-check('Chaque machine a un nom et une description dans les 9 langues', badMach.length === 0, badMach.slice(0, 8).join(', '));
+check('Chaque machine a un nom et une description dans les 10 langues', badMach.length === 0, badMach.slice(0, 8).join(', '));
 check('L anglais est la premiere langue, puis le francais', LANG_LIST[0].code === 'en' && LANG_LIST[1].code === 'fr');
 G = createFreshState();
 var horror = findTheme('horror'), octNow = new Date().getMonth() + 1 === 10;
@@ -441,6 +442,33 @@ check('Avec /max, l argent est au maximum sans etre infini', fmt(MAX_MONEY_SHOWN
 G = createFreshState(); G.machines = { four: 5, fouet: 5 };
 check('Un succes compte les niveaux de machines', ACHIEVEMENTS.filter(function(a) { return /^machlv/.test(a.id) && a.check(G); }).length === 2);
 check('Bob connait 30 anecdotes', LANGS.fr['bob.facts'].split('|').length === 30);
+
+// --- Release 1.0 ---
+check('La version s appelle Release 1.0', GAME_VERSION === 'Release 1.0');
+G = createFreshState(); G.level = 499;
+check('La fete et l espace sont caches avant leur niveau', findTheme('party').hidden && findTheme('space').hidden && themeLockReason(findTheme('party')) === 'level');
+check('Les themes Tech sont secrets', themeLockReason(findTheme('tech')) === 'secret' && themeLockReason(findTheme('techgold')) === 'secret');
+check('Le theme Cookie attend un million de cookies', themeLockReason(findTheme('cookie')) === 'sold');
+addSoldStat('cookie', 999999);
+check('... pas encore a 999 999', themeLockReason(findTheme('cookie')) === 'sold');
+addSoldStat('cookie', 1);
+check('... et se debloque a un million', themeLockReason(findTheme('cookie')) === null && G.unlockedThemes.cookie);
+check('Les prenoms d hommes et de femmes', empGender('Pierre') === 'm' && empGender('Marie') === 'f' && empGender('Анна') === 'f' && empGender('Иван') === 'm' && empGender('ユイ') === 'f');
+var fem = empAvatar('chef', 'Marie'), mal = empAvatar('chef', 'Pierre');
+check('Les femmes ont leur visage', fem !== mal && /#C2185B/.test(fem) && !/#C2185B/.test(mal));
+G = createFreshState(); G.level = 50;
+var col = newEmployee('collector', 'Pierre', 50, 1); G.employees = [col]; col.assignedIng = 'farine';
+var r0 = autoRate('farine');
+moveCollector(col, 'sucre');
+check('Un cueilleur qui change d ingredient ne produit plus pendant le trajet', autoRate('sucre') === 0 && collectorMoving(col) && r0 > 0);
+check('Niveau 1 : 10 s, niveau max : 2 min', collectorMoveSec(col) === 10 && collectorMoveSec({ level: EMP_MAX_LVL }) === 120);
+col.moveUntil = Date.now() - 1;
+check('Puis il se remet au travail', autoRate('sucre') > 0);
+var lvls = {}; for (var al = 0; al < 4000; al++) { var lv = applicantLevel(); lvls[lv] = (lvls[lv] || 0) + 1; }
+check('Les candidats formes sont rares', lvls[1] > 2500 && (lvls[5] || 0) < 60 && (lvls[2] || 0) > (lvls[3] || 0));
+G = createFreshState(); G.level = 50; G.money = 1e9;
+G.applicants = [{ id: 7, name: 'Marie', type: 'baker', skill: 50, level: 3, hireCost: 5000, expiresAt: Date.now() + 60000 }];
+check('Embaucher une candidature de niveau 3 donne un employe de niveau 3', acceptApplicant(7) && G.employees[0].level === 3);
 
 // --- Banque ---
 G = createFreshState(); G.money = 0; G.level = 50;

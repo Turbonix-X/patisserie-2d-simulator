@@ -33,6 +33,7 @@ function createFreshState() {
     bobGold: 0,        // l'or alimentaire le rend dore
     bobChoke: 0,       // le wasabi le fait tousser
     notifAsked: false, // Bob a deja propose les notifications
+    bobPokes: 0,       // clics sur Bob tant que la console n'est pas la
     focusEvent: null,  // evenement sur un seul ingredient ou une seule recette
     lastFocusAt: 0,
     incoming: [],      // ce que les transporteurs apportent ici

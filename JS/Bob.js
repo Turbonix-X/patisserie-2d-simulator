@@ -102,11 +102,15 @@ function renderTutorial() {
     hideBobBubble();
     return;
   }
-  var steps = [t('tuto.step1'), t('tuto.step2'), t('tuto.step3'), t('tuto.step4'), t('tuto.done')];
+  var mood = bobMoodKind();
+  // Vraiment enerve, il refuse d'expliquer : le tutoriel attend qu'il se calme, ou qu'il soit triste
+  if (mood === 'angry' && bobAnger() >= 2) { hideBobBubble(); return; }
+  var sfx = mood === 'happy' ? '' : '.' + mood;
+  var keys = ['tuto.step1', 'tuto.step2', 'tuto.step3', 'tuto.step4', 'tuto.done'];
   var btn = G.tutorialStep === 4
-    ? '<button class="btn btn-small btn-primary" onclick="skipTutorial()">' + t('tuto.ok') + '</button>'
-    : '<button class="btn btn-small" onclick="skipTutorial()">' + t('tuto.skip') + '</button>';
-  showBobBubble(steps[G.tutorialStep], btn);
+    ? '<button class="btn btn-small btn-primary" onclick="skipTutorial()">' + t('tuto.ok' + sfx) + '</button>'
+    : '<button class="btn btn-small" onclick="skipTutorial()">' + t('tuto.skip' + sfx) + '</button>';
+  showBobBubble(t(keys[G.tutorialStep] + sfx), btn);
 }
 
 function skipTutorial() {
@@ -271,6 +275,8 @@ function renderBob() {
   var stage = bobStage();
   if (bob.getAttribute('data-anger') !== stage) bob.setAttribute('data-anger', stage);
   renderSugar();
+  // Le tutoriel change avec son humeur
+  if (!G.tutorialDone && !bobTalkTimer && !introActive) renderTutorial();
 }
 
 // Une expression qui passe : 'joy' (heureux), 'wow' (surpris)
@@ -284,8 +290,16 @@ function bobMood(mood, ms) {
 
 // ============ IL AIME LE SUCRE ============
 // Quand il est triste, on peut lui donner un sucre en le glissant sur lui.
+function bobHappy() { return !(G.bobSad > 0) && !(G.bobChoke > 0) && bobAnger() === 0; }
 function bobWantsSugar() {
-  return !introActive && (G.bobSad || 0) > 0 && (G.ing.sucre || 0) >= 1;
+  return !introActive && !bobHappy() && (G.ing.sucre || 0) >= 1;
+}
+
+// Son humeur, pour le tutoriel : heureux, triste, enerve ou en train de s'etouffer
+function bobMoodKind() {
+  if (G.bobChoke > 0) return 'choke';
+  if (G.bobSad > 0) return 'sad';
+  return bobAnger() > 0 ? 'angry' : 'happy';
 }
 
 function renderSugar() {
@@ -296,8 +310,7 @@ function renderSugar() {
   document.body.classList.toggle('bob-can-gold', canFeedBob('orfeuille'));
   var bob = document.getElementById('bob');
   if (!bob) return;
-  // Le wasabi passe tout seul, petit a petit
-  if (G.bobChoke > 0 && Date.now() - (G.bobChokeAt || 0) > 20000) { G.bobChoke--; G.bobChokeAt = Date.now(); }
+  // Le wasabi ne passe pas tout seul : il faut du sucre
   var choke = String(G.bobChoke || 0), gold = String(G.bobGold || 0);
   if (bob.getAttribute('data-choke') !== choke) bob.setAttribute('data-choke', choke);
   if (bob.getAttribute('data-gold') !== gold) bob.setAttribute('data-gold', gold);
@@ -317,12 +330,16 @@ function feedBobWith(id) {
   G.ing[id] -= 1;
   var bob = document.getElementById('bob');
   if (id === 'wasabi') {
-    G.bobChoke = Math.min(3, (G.bobChoke || 0) + 1);
+    var before = G.bobChoke || 0;
+    G.bobChoke = Math.min(3, before + 1);
     G.bobChokeAt = Date.now();
     bobMood('wow', 1800);
-    bobSay(pickLine('bob.wasabi' + G.bobChoke));
+    // Au bout du compte, il eternue si fort que le wasabi vole partout
+    if (G.bobChoke === 3) { wasabiSneeze(); bobSay(t('bob.sneeze') + ' ' + pickLine('bob.wasabi3')); }
+    else bobSay(pickLine('bob.wasabi' + G.bobChoke));
   } else {
     G.bobGold = Math.min(5, (G.bobGold || 0) + 1);
+    if (G.bobGold >= 5 && !G.unlockedThemes.techgold) { G.unlockedThemes.techgold = true; toast(t('theme.techGoldUnlocked')); }
     fxBurstOn(bob, 18, ['#FFD54F', '#FFC107', '#FFF8E1'], true);
     bobMood('joy', 1800);
     bobSay(pickLine('bob.gold' + Math.min(3, Math.ceil(G.bobGold / 2))));
@@ -331,6 +348,25 @@ function feedBobWith(id) {
   renderIngredients();
   save();
   return true;
+}
+
+// L'eternuement : du wasabi plein l'ecran, qui s'en va tout seul
+function wasabiSneeze() {
+  var old = document.getElementById('wasabi-splash');
+  if (old) old.remove();
+  var layer = document.createElement('div');
+  layer.id = 'wasabi-splash';
+  var h = '';
+  for (var i = 0; i < 26; i++) {
+    var r = (i * 0.618034) % 1, r2 = (i * 0.754877) % 1;
+    h += '<i style="left:' + (r * 96).toFixed(1) + '%;top:' + (r2 * 92).toFixed(1) + '%;--s:' + (40 + r2 * 110).toFixed(0) + 'px;--d:' + (r * 0.25).toFixed(2) + 's;--rot:' + Math.round(r * 360) + 'deg"></i>';
+  }
+  layer.innerHTML = h;
+  document.body.appendChild(layer);
+  if (document.body.animate && fxEnabled()) document.body.animate([{ transform: 'translate(-4px,2px)' }, { transform: 'translate(4px,-2px)' }, { transform: 'none' }], { duration: 220 });
+  playSound(90, 0.35, 'sawtooth', 0, 0.12);
+  setTimeout(function() { layer.classList.add('fade'); }, 2600);
+  setTimeout(function() { layer.remove(); }, 4200);
 }
 
 // Vers le debut, Bob propose les notifications, une seule fois
@@ -351,15 +387,33 @@ function feedBob() {
   if (!bobWantsSugar()) return false;
   G.ing.sucre -= 1;
   G.sugarFed = (G.sugarFed || 0) + 1;
-  // Il est de moins en moins triste, sans repasser par la colere
-  G.bobSad -= 1;
-  if (G.bobSad <= 0) { G.bobSad = 0; G.bobClicks = 0; }
+  var bob = document.getElementById('bob');
+  var line;
+  if (G.bobChoke > 0) {
+    // D'abord la toux : le sucre l'adoucit, une marche a la fois
+    G.bobChoke -= 1;
+    line = pickLine('bob.soothe' + G.bobChoke);
+    bob.classList.remove('soothe');
+    void bob.offsetWidth;
+    bob.classList.add('soothe');
+    setTimeout(function() { bob.classList.remove('soothe'); }, 1600);
+    fxBurstOn(bob, 16, ['#ffffff', '#ffd6e8', '#c8f7c5'], true);
+  } else if (G.bobSad > 0) {
+    // Il est de moins en moins triste, sans repasser par la colere
+    G.bobSad -= 1;
+    if (G.bobSad <= 0) { G.bobSad = 0; G.bobClicks = 0; }
+    line = pickLine('bob.sugar' + G.bobSad);
+    fxBurstOn(bob, 22, ['#fff', '#ffd60a', '#ff85ac'], true);
+  } else {
+    // En colere : le sucre le calme d'un cran
+    G.bobClicks = Math.max(0, (G.bobClicks || 0) - 10);
+    line = pickLine('bob.calmed');
+    fxBurstOn(bob, 14, ['#fff', '#ffd60a'], true);
+  }
   renderBob();
   bobMood('joy', 2200);
-  var bob = document.getElementById('bob');
-  fxBurstOn(bob, 22, ['#fff', '#ffd60a', '#ff85ac'], true);
   playSuccessSound();
-  bobSay(pickLine('bob.sugar' + G.bobSad));
+  bobSay(line);
   renderIngredients();
   save();
   return true;
@@ -455,6 +509,27 @@ function pickLine(key) {
 
 function bobPoke() {
   var bob = document.getElementById('bob');
+  if (!G.cheatUnlocked) {
+    G.bobPokes = (G.bobPokes || 0) + 1;
+    if (G.bobPokes >= TECH_CLICKS && !G.unlockedThemes.tech) { G.unlockedThemes.tech = true; toast(t('theme.techUnlocked')); save(); }
+    // En or massif, il est de trop bonne humeur : il donne l'acces tout de suite
+    if ((G.bobGold || 0) >= 5) {
+      bobMood('joy', 1500);
+      fxBurstOn(bob, 20, ['#FFD54F', '#FFC107', '#FFF8E1'], true);
+      bobSay(t('bob.goldGive'));
+      setTimeout(showAdminPopup, 1200);
+      return;
+    }
+  }
+  // Il tousse : il s'enerve, mais sans pouvoir aller jusqu'au bout
+  if (G.bobChoke > 0 && !G.cheatUnlocked && !(G.bobSad > 0)) {
+    G.bobClicks = Math.min(39, (G.bobClicks || 0) + 1);
+    renderBob();
+    fxBump(bob, 1.06);
+    playSound(200, 0.1, 'square', 0, 0.06);
+    if (G.bobClicks % 3 === 1) bobSay(pickLine('bob.chokeAngry'));
+    return;
+  }
   var anger = bobAnger();
   if (anger === 0 && !G.cheatUnlocked) bobMood('wow', 500);
   if (anger === 5) {

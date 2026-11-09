@@ -125,7 +125,7 @@ function renderBank() {
 function fmtLoan(amount) {
   var curr = CURRENCIES[0];
   CURRENCIES.forEach(function(c) { if (c.id === G.settings.currency) curr = c; });
-  return (amount * curr.rate).toLocaleString(({ fr:'fr-FR', es:'es-ES', pt:'pt-PT', de:'de-DE', ar:'ar-u-nu-latn', zh:'zh-CN', ja:'ja-JP', ko:'ko-KR' })[currentLang] || 'en-US', { maximumFractionDigits: 2 }) + curr.symbol;
+  return (amount * curr.rate).toLocaleString(({ fr:'fr-FR', es:'es-ES', pt:'pt-PT', de:'de-DE', ar:'ar-u-nu-latn', zh:'zh-CN', ja:'ja-JP', ko:'ko-KR', ru:'ru-RU' })[currentLang] || 'en-US', { maximumFractionDigits: 2 }) + curr.symbol;
 }
 
 function bankTile(label, value, alert) {

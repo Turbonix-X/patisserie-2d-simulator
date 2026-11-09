@@ -27,8 +27,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="turbonix.css?v=3.6">
-  <link rel="stylesheet" href="style.css?v=3.6">
+  <link rel="stylesheet" href="turbonix.css?v=3.7">
+  <link rel="stylesheet" href="style.css?v=3.7">
 </head>
 <body>
   <div class="bg-blobs" aria-hidden="true"><span></span><span></span><span></span></div>
@@ -66,7 +66,7 @@
     <svg viewBox="0 -38 160 228" aria-hidden="true">
       <defs>
         <linearGradient id="bobShell" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5a5468"/><stop offset=".55" stop-color="#34303e"/><stop offset="1" stop-color="#1c1a21"/></linearGradient>
-        <linearGradient id="bobRim" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#c4a8ff"/><stop offset=".5" stop-color="#9b6dff"/><stop offset="1" stop-color="#6f45d9"/></linearGradient>
+        <linearGradient id="bobRim" x1="0" y1="0" x2="1" y2="1"><stop class="rim-a" offset="0" stop-color="#c4a8ff"/><stop class="rim-b" offset=".5" stop-color="#9b6dff"/><stop class="rim-c" offset="1" stop-color="#6f45d9"/></linearGradient>
         <linearGradient id="bobJetFill" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff6a8"/><stop offset=".45" stop-color="#ffd60a"/><stop offset="1" stop-color="#ff6a1f" stop-opacity="0"/></linearGradient>
         <clipPath id="bobVisorClip"><rect x="33" y="38" width="94" height="59" rx="19"/></clipPath>
         <radialGradient id="bobVisor" cx=".5" cy=".35" r=".8"><stop offset="0" stop-color="#231c33"/><stop offset="1" stop-color="#07060b"/></radialGradient>
@@ -88,6 +88,8 @@
         <g class="bob-acc bob-acc-birthday" transform="translate(80 126)"><rect x="-8" y="-5" width="16" height="13" rx="2" fill="#FFC107"/><path d="M0-5V8M-8 1H8" stroke="#E91E63" stroke-width="2.500"/><path d="M0-5C-4-11-8-7-4-5ZM0-5C4-11 8-7 4-5Z" fill="#E91E63"/></g>
         <g class="bob-acc bob-acc-space" transform="translate(80 126)"><ellipse rx="11" ry="3.200" fill="none" stroke="#FFD54F" stroke-width="1.600" transform="rotate(-16)"/><circle r="6" fill="#E0A458"/></g>
         <path class="bob-acc bob-acc-bakery" transform="translate(80 128)" d="M-10 5C-12-4-6-9 0-9S12-4 10 5C9 7 7 7 6 5 5 1 3-1 0-1S-5 1-6 5C-7 7-9 7-10 5z" fill="#D9963F" stroke="#9C5C22" stroke-width="1"/>
+        <g class="bob-acc bob-acc-cookie" transform="translate(80 127)"><circle r="8" fill="#D9A35B" stroke="#B97C35"/><g fill="#4A2511"><circle cx="-3" cy="-2" r="1.300"/><circle cx="3" cy="-3" r="1.200"/><circle cx="2" cy="3" r="1.300"/><circle cx="-3" cy="3" r="1"/></g></g>
+        <g class="bob-acc bob-acc-tech bob-acc-techgold" transform="translate(80 127)"><rect x="-8" y="-8" width="16" height="16" rx="2" fill="var(--acc-chip)" stroke="var(--acc-line)" stroke-width="1.400"/><path d="M-4-4h8v8h-8z" fill="none" stroke="var(--acc-line)"/><path d="M-11-4h3M-11 4h3M8-4h3M8 4h3" stroke="var(--acc-line)" stroke-width="1.400"/></g>
         <g class="bob-acc bob-acc-horror" transform="translate(80 127)"><path d="M-1-9c1-3 3-4 5-3-2 1-3 2-3 4z" fill="#3E7D2A"/><ellipse rx="9" ry="7.500" fill="#F57C1F"/><path d="M-5-3l3-2 1 3zM5-3l-3-2-1 3zM-5 2c3 3 7 3 10 0l-2 .800-1.500-1.500-1.500 1.500-1.500-1.500-1.500 1.500z" fill="#1A0F0A"/></g>
         <path class="bob-acc bob-acc-party" transform="translate(80 126)" d="M-3 6V-6L7-8V4M-3 6a3 2.500 0 1 1-1-2M7 4a3 2.500 0 1 1-1-2" fill="none" stroke="#C2188F" stroke-width="2.200" stroke-linecap="round"/>
         <!-- Foulard de chef -->
@@ -108,6 +110,7 @@
               </g>
             </g>
             <g class="bob-eye-joy"><path d="M49 67q11-16 22 0"/><path d="M89 67q11-16 22 0"/></g>
+            <g class="bob-eye-x"><path d="M52 55l16 14M68 55l-16 14M92 55l16 14M108 55l-16 14"/></g>
           </g>
           <g clip-path="url(#bobVisorClip)">
             <path class="bob-lid bob-lid-l" d="M42 30h36v25H42z"/>
@@ -123,6 +126,7 @@
           <g class="m m-joy"><path d="M61 74h38q0 23-19 23T61 74z" fill="#3a0606"/><path class="m-teeth" d="M63 74h34l-2 5H65z"/><path class="m-tongue" d="M71 90q9-7 18 0-3 6-9 6t-9-6z"/></g>
           <ellipse class="m m-wow" cx="80" cy="86" rx="6.500" ry="8"/>
           <ellipse class="m m-talk" cx="80" cy="83" rx="9" ry="6"/>
+          <g class="m m-cough"><ellipse cx="80" cy="85" rx="8" ry="7"/><path d="M75 90q5-5 10 0"/></g>
           <path class="bob-tear" d="M50 76c3.500 5 5 7 5 9.500a5 5 0 0 1-10 0c0-2.500 1.500-4.500 5-9.500z"/>
           <path class="bob-spring" d="M80 28q-7-3 0-6t0-6 0-6"/>
           <circle class="bob-tip" cx="80" cy="7" r="6.500"/>
@@ -160,6 +164,13 @@
           <g class="bob-acc bob-acc-bakery">
             <g transform="translate(110 -6) rotate(-62)"><rect x="-27" y="-6" width="54" height="12" rx="6" fill="#C9822F"/><rect x="-25" y="-5" width="50" height="6" rx="3" fill="#E3A957"/><path d="M-16-5l5 7M-3-5l5 7M10-5l5 7" stroke="#FBE6BC" stroke-width="2.200" stroke-linecap="round"/></g>
             <g fill="#fff" opacity=".9"><circle cx="38" cy="44" r="3"/><circle cx="46" cy="50" r="1.800"/><circle cx="124" cy="92" r="2.400"/><circle cx="58" cy="-4" r="2.200"/></g>
+          </g>
+          <g class="bob-acc bob-acc-cookie">
+            <g transform="translate(106 -6)"><circle r="12" fill="#D9A35B" stroke="#B97C35" stroke-width="1.500"/><g fill="#4A2511"><circle cx="-4" cy="-3" r="1.800"/><circle cx="4" cy="-5" r="1.600"/><circle cx="3" cy="4" r="1.800"/><circle cx="-4" cy="5" r="1.400"/></g><circle cx="10" cy="-8" r="4" fill="#ffffff" opacity="0"/></g>
+          </g>
+          <g class="bob-acc bob-acc-tech bob-acc-techgold">
+            <path d="M80-14V-34" stroke="var(--acc-line)" stroke-width="3" stroke-linecap="round"/><circle cx="80" cy="-38" r="6" fill="var(--acc-line)"/><circle cx="80" cy="-38" r="11" fill="var(--acc-line)" opacity=".25"/>
+            <path d="M42 24h76" stroke="var(--acc-line)" stroke-width="3" stroke-dasharray="6 4"/>
           </g>
           <g class="bob-acc bob-acc-horror">
             <path d="M40 24C56 14 70 6 84-46c6 18 14 46 38 70z" fill="#1A0F0A"/><path d="M40 24c10 6 70 6 82 0" fill="none" stroke="#1A0F0A" stroke-width="7" stroke-linecap="round"/>
@@ -215,30 +226,31 @@
   <script>document.getElementById("year").textContent = new Date().getFullYear();</script>
 
   <!-- Game scripts (order matters) -->
-  <script src="JS/GameData.js?v=3.6"></script>
-  <script src="JS/Icons.js?v=3.6"></script>
-  <script src="JS/Languages.js?v=3.6"></script>
-  <script src="JS/LangES.js?v=3.6"></script>
-  <script src="JS/LangPT.js?v=3.6"></script>
-  <script src="JS/LangDE.js?v=3.6"></script>
-  <script src="JS/LangAR.js?v=3.6"></script>
-  <script src="JS/LangZH.js?v=3.6"></script>
-  <script src="JS/LangJA.js?v=3.6"></script>
-  <script src="JS/LangKO.js?v=3.6"></script>
-  <script src="JS/PlayerData.js?v=3.6"></script>
-  <script src="JS/Logic.js?v=3.6"></script>
-  <script src="JS/Achievements.js?v=3.6"></script>
-  <script src="JS/Music.js?v=3.6"></script>
-  <script src="JS/Decor.js?v=3.6"></script>
-  <script src="JS/Interface.js?v=3.6"></script>
-  <script src="JS/Menus.js?v=3.6"></script>
-  <script src="JS/Bank.js?v=3.6"></script>
-  <script src="JS/Orders.js?v=3.6"></script>
-  <script src="JS/Staff.js?v=3.6"></script>
-  <script src="JS/Charts.js?v=3.6"></script>
-  <script src="JS/Console.js?v=3.6"></script>
-  <script src="JS/Bob.js?v=3.6"></script>
-  <script src="JS/main.js?v=3.6"></script>
+  <script src="JS/GameData.js?v=3.7"></script>
+  <script src="JS/Icons.js?v=3.7"></script>
+  <script src="JS/Languages.js?v=3.7"></script>
+  <script src="JS/LangES.js?v=3.7"></script>
+  <script src="JS/LangPT.js?v=3.7"></script>
+  <script src="JS/LangDE.js?v=3.7"></script>
+  <script src="JS/LangAR.js?v=3.7"></script>
+  <script src="JS/LangZH.js?v=3.7"></script>
+  <script src="JS/LangJA.js?v=3.7"></script>
+  <script src="JS/LangKO.js?v=3.7"></script>
+  <script src="JS/LangRU.js?v=3.7"></script>
+  <script src="JS/PlayerData.js?v=3.7"></script>
+  <script src="JS/Logic.js?v=3.7"></script>
+  <script src="JS/Achievements.js?v=3.7"></script>
+  <script src="JS/Music.js?v=3.7"></script>
+  <script src="JS/Decor.js?v=3.7"></script>
+  <script src="JS/Interface.js?v=3.7"></script>
+  <script src="JS/Menus.js?v=3.7"></script>
+  <script src="JS/Bank.js?v=3.7"></script>
+  <script src="JS/Orders.js?v=3.7"></script>
+  <script src="JS/Staff.js?v=3.7"></script>
+  <script src="JS/Charts.js?v=3.7"></script>
+  <script src="JS/Console.js?v=3.7"></script>
+  <script src="JS/Bob.js?v=3.7"></script>
+  <script src="JS/main.js?v=3.7"></script>
 
 </body>
 </html>

@@ -2,6 +2,31 @@
 
 Tout ce qui a été ajouté à Pâtisserie 2D Simulator, de la plus récente à la plus ancienne. Pour comprendre les règles du jeu, va voir le [wiki](REGLES.md).
 
+## Release 1.0 (9 novembre 2026)
+
+La première version complète du jeu.
+
+**Langues**
+- Le russe, complet : le jeu existe maintenant en 10 langues.
+
+**Thèmes**
+- Nouveau thème Cookie, avec cookies, pépites de chocolat, verre de lait et bocal à cookies, débloqué après 1 million de cookies vendus.
+- Des thèmes cachés à découvrir.
+- Les thèmes Fête et Espace restent cachés tant que tu n'as pas leur niveau.
+
+**Bob**
+- Le sucre se donne à Bob dès qu'il ne va pas bien : triste, énervé ou malade. Plus quand il est heureux.
+- Le tutoriel change selon son humeur. S'il est trop énervé, il attend qu'il se calme pour l'expliquer.
+- Bob a de nouvelles expressions, et parfois des réactions bien plus fortes. À toi de voir lesquelles.
+
+**Employés**
+- Des visages d'hommes et de femmes, qui vont avec leur prénom.
+- Un cueilleur qui change d'ingrédient met du temps à s'y mettre : de 10 s au niveau 1 à 2 min au niveau max.
+- Des candidatures rares d'employés déjà formés, plus chers. On peut cliquer sur une candidature pour voir son métier et son niveau.
+
+**Petits changements**
+- Le numéro de version reprend son apparence d'avant, tout en restant cliquable pour voir les nouveautés.
+
 ## Bêta 1.9 (8 novembre 2026)
 
 **Retiré**

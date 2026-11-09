@@ -126,10 +126,15 @@ function autoRate(ingId) {
   var r = 0;
   for (var e = 0; e < G.employees.length; e++) {
     var emp = G.employees[e];
-    if (emp.type === 'collector' && emp.assignedIng === ingId && empWorking(emp)) r += empPower(emp);
+    if (emp.type === 'collector' && emp.assignedIng === ingId && empWorking(emp) && !collectorMoving(emp)) r += empPower(emp);
   }
   if (G.eventAutoBonus) r *= (1 + G.eventAutoBonus);
   return r * birthdayBonus();
+}
+
+function addSoldStat(recId, qty) {
+  if (!G.stats.soldById) G.stats.soldById = {};
+  G.stats.soldById[recId] = (G.stats.soldById[recId] || 0) + qty;
 }
 
 function totalAuto() {
@@ -512,7 +517,30 @@ function getEmpName() {
   return names[Math.floor(Math.random() * names.length)];
 }
 
-function newEmployee(typeId, name, skill) {
+function collectorMoving(emp) { return !!emp.moveUntil && Date.now() < emp.moveUntil; }
+function collectorMoveSec(emp) {
+  var lv = Math.min(EMP_MAX_LVL, emp.level || 1);
+  return Math.round(COLLECTOR_MOVE_SEC[0] + (COLLECTOR_MOVE_SEC[1] - COLLECTOR_MOVE_SEC[0]) * (lv - 1) / (EMP_MAX_LVL - 1));
+}
+function moveCollector(emp, ingId) {
+  if (!emp || emp.assignedIng === ingId) return false;
+  emp.assignedIng = ingId;
+  emp.moveUntil = Date.now() + collectorMoveSec(emp) * 1000;
+  return true;
+}
+
+// Homme ou femme : d'apres le prenom (les listes alternent un prenom d'homme, un prenom de femme)
+function empGender(name) {
+  for (var lang in EMP_NAMES_LANG) {
+    var i = EMP_NAMES_LANG[lang].indexOf(name);
+    if (i >= 0) return i % 2 === 0 ? 'm' : 'f';
+  }
+  var h = 0, str = String(name || '');
+  for (var k = 0; k < str.length; k++) h = (h * 31 + str.charCodeAt(k)) >>> 0;
+  return h % 2 ? 'f' : 'm';
+}
+
+function newEmployee(typeId, name, skill, level) {
   return {
     id: G.nextEmployeeId++,
     name: name,
@@ -520,7 +548,7 @@ function newEmployee(typeId, name, skill) {
     morale: 70 + Math.floor(Math.random() * 20),
     status: 'working',
     skill: skill,
-    level: 1,
+    level: Math.max(1, Math.min(EMP_MAX_LVL, level || 1)),
     assignedIng: typeId === 'collector' ? bestCollectorTarget() : null,
     unpaidTime: 0,
   };
@@ -542,7 +570,7 @@ function hireEmployee(typeId, applicant) {
   G.money -= cost;
   G.stats.totalInvested += cost;
   var skill = applicant ? applicant.skill : Math.max(1, baseSkill() - 15 + Math.floor(Math.random() * 20));
-  G.employees.push(newEmployee(typeId, applicant ? applicant.name : getEmpName(), skill));
+  G.employees.push(newEmployee(typeId, applicant ? applicant.name : getEmpName(), skill, applicant ? applicant.level : 1));
   G.stats.totalEmployeesHired++;
   startQueuedCrafts();
   return true;
@@ -625,21 +653,34 @@ function giveJob(empId, typeId) {
 function applicantChance() { return Math.min(0.6, 0.05 + G.level / 150); }
 function searchChance() { return Math.min(0.95, 0.25 + G.level / 150); }
 
+// La plupart des candidats debutent. Les candidats deja formes sont rares, et tres rares au niveau max.
+function applicantLevel() {
+  var r = Math.random();
+  if (r < 0.005) return 5;
+  if (r < 0.025) return 4;
+  if (r < 0.08) return 3;
+  if (r < 0.22) return 2;
+  return 1;
+}
+
 function generateApplicant(typeId) {
   if (G.applicants.length >= 5) return false;
   var open = EMP_TYPES.filter(empTypeOpen);
   if (open.length === 0) return false;
   var empType = typeId ? findEmpType(typeId) : open[Math.floor(Math.random() * open.length)];
   var skill = Math.max(1, Math.min(100, baseSkill() + Math.floor(Math.random() * 30) - 15));
+  var level = applicantLevel();
   G.applicants.push({
     id: Date.now() + Math.floor(Math.random() * 1000),
     name: getEmpName(),
     type: empType.id,
     skill: skill,
-    hireCost: Math.floor(empType.hireCost * (0.5 + skill * 0.01)),
+    level: level,
+    // Un employe deja forme coute bien plus cher
+    hireCost: Math.floor(empType.hireCost * (0.5 + skill * 0.01) * Math.pow(4, level - 1)),
     expiresAt: Date.now() + 180000,
   });
-  if (typeof toast === 'function') toast(t('emp.applicant'));
+  if (typeof toast === 'function') toast(level >= 3 ? t('emp.rareApplicant', { v: level }) : t('emp.applicant'));
   return true;
 }
 
@@ -742,6 +783,7 @@ function sellOneBatchAuto(emp, dtSec) {
   G.money += earned;
   G.totalEarned += earned;
   G.stats.totalSold += qty;
+  addSoldStat(best.id, qty);
   addCakeEarning(best.id, earned);
   G.soldCount[best.id] = (G.soldCount[best.id] || 0) + qty;
   G.totalAllSold += qty;
@@ -1177,7 +1219,7 @@ function tickSales() {
     G.money += s.total;
     G.totalEarned += s.total;
     G.stats.totalSold += s.units;
-    s.list.forEach(function(x) { addCakeEarning(x.id, x.earned); });
+    s.list.forEach(function(x) { addCakeEarning(x.id, x.earned); addSoldStat(x.id, x.qty || 0); });
     addXP(Math.floor(s.total * 0.3));
     done += s.total;
     return false;
@@ -1194,6 +1236,7 @@ function doSell(rec, qty) {
   G.money += earned;
   G.totalEarned += earned;
   G.stats.totalSold += actual;
+  addSoldStat(rec.id, actual);
   G.soldCount[rec.id] = (G.soldCount[rec.id] || 0) + actual;
   G.totalAllSold += actual;
   addXP(Math.floor(earned * 0.3));
@@ -1272,6 +1315,12 @@ function themeLockReason(theme) {
   if (G.creative) return null; // En mode creatif, tous les themes sont la
   if (G.unlockedThemes && G.unlockedThemes[theme.id]) return null;
   if (theme.month) return new Date().getMonth() + 1 === theme.month ? null : 'month';
+  if (theme.secret) return 'secret';
+  if (theme.sold) {
+    if (((G.stats.soldById || {})[theme.sold.rec] || 0) < theme.sold.n) return 'sold';
+    G.unlockedThemes[theme.id] = true;
+    return null;
+  }
   if (theme.level) {
     if (G.level < theme.level) return 'level';
     G.unlockedThemes[theme.id] = true; // Le niveau max le debloque pour toujours
@@ -1486,6 +1535,7 @@ function calcOfflineProgress(elapsedSec) {
       G.money += earned;
       G.totalEarned += earned;
       G.stats.totalSold += qty;
+      addSoldStat(rec.id, qty);
       addCakeEarning(rec.id, earned);
       totalMoney += earned;
       capacity -= qty;
@@ -1575,7 +1625,7 @@ function switchToBakery(index) {
   target.currentBakeryIndex = index;
   // Ce qui appartient au joueur, et pas a une patisserie
   ['settings','birthday','birthdaySetOn','birthdayBoostYear','birthdayBoostUntil','achievements','tutorialDone','tutorialStep',
-   'introDone','cheatUnlocked','bobClicks','bobSad','bobGold','bobChoke','logoClicks','unlockedThemes','favRecipes','lvl1000Shown','wentBankrupt',
+   'introDone','cheatUnlocked','bobClicks','bobSad','bobGold','bobChoke','bobPokes','logoClicks','unlockedThemes','favRecipes','lvl1000Shown','wentBankrupt',
    'secondBakery','bankUnlocked','loans','nextLoanId','cmdUsage','challenge','nextChallengeAt','sugarFed','explained','creative'].forEach(function(k) {
     target[k] = G[k];
   });
@@ -1810,6 +1860,7 @@ function fulfillOrder(id) {
     o.items.forEach(function(it) {
       G.cakes[it.recId] -= it.qty;
       units += it.qty;
+      addSoldStat(it.recId, it.qty);
       addCakeEarning(it.recId, o.reward * it.qty / Math.max(1, o.items.reduce(function(a, x) { return a + x.qty; }, 0)));
     });
     G.money += o.reward;

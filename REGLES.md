@@ -1,6 +1,6 @@
 # Le wiki de Pâtisserie 2D Simulator
 
-Tout ce qu'il faut savoir pour comprendre le jeu. Ce wiki décrit la **Bêta 1.9**.
+Tout ce qu'il faut savoir pour comprendre le jeu. Ce wiki décrit la **Release 1.0**.
 
 > **À savoir :** les recettes du jeu sont fausses. Les quantités et les ingrédients servent juste à donner un parcours au jeu. Ne les cuisine pas chez toi !
 
@@ -135,6 +135,8 @@ En plus de celles-ci, **80 autres machines** arrivent entre les niveaux 20 et 10
 
 Lance une **recherche** dans l'onglet Employés : elle prend du temps et ne marche pas toujours. Plus ton niveau est haut, plus tu as de chances. Des candidats se présentent aussi tout seuls, rarement au début, puis de plus en plus souvent.
 
+**Les candidatures :** la plupart des candidats débutent au niveau 1, mais il arrive, rarement, qu'un candidat soit déjà formé (jusqu'au niveau 5). Il coûte alors bien plus cher. Clique sur une candidature pour voir à quoi sert le métier et ce que veut dire son niveau.
+
 **Clique sur un employé** pour ouvrir sa fiche : ses réglages, sa formation, sa prime.
 
 **La pause :** depuis sa fiche, tu peux mettre un employé en pause. Il arrête de travailler, mais tu continues de le payer.
@@ -146,7 +148,7 @@ Lance une **recherche** dans l'onglet Employés : elle prend du temps et ne marc
 | Employé | Niveau | Ce qu'il fait | Réglages |
 |---|---|---|---|
 | Apprenti | 5 | Rien pour l'instant : paie-lui un métier, c'est moins cher qu'embaucher | Son futur métier |
-| Cueilleur | 5 | Produit un ingrédient à chaque seconde | Quel ingrédient |
+| Cueilleur | 5 | Produit un ingrédient à chaque seconde. Quand tu changes son ingrédient, il met de 10 s (niveau 1) à 2 min (niveau max) à s'y mettre | Quel ingrédient |
 | Boulanger | 10 | Fait baisser le temps de préparation | Aucun |
 | Transporteur | 20, avec 2 pâtisseries | Emmène de l'argent ou du stock vers une autre pâtisserie. Un trajet dure de 10 s à 10 min, peut être en retard, ou avoir un accident et perdre son chargement | Où, quoi et combien |
 | Manager | 25 | Remonte le moral de l'équipe, et peut embaucher à ta place | Embauche automatique, compétence minimum |
@@ -191,7 +193,8 @@ Bob est ton chef pâtissier. Il t'accueille, t'apprend les bases, et t'explique 
 
 - **Ses conseils :** il te dit quand un gâteau se vend mal, quand ton stock déborde, quand ton loyer est trop cher, quand une commande va expirer ou qu'un employé va faire grève.
 - **Ne l'embête pas :** clique trop sur lui et il s'énerve. Énervé, il refuse même de t'expliquer les choses.
-- **Il adore le sucre.** Quand il est triste, à toi de trouver comment lui faire plaisir.
+- **Il adore le sucre.** Quand il ne va pas bien, qu'il soit triste, énervé ou malade, à toi de trouver comment lui faire plaisir. Quand il est heureux, il n'en veut pas.
+- **Son humeur compte :** le tutoriel du début change selon son humeur. S'il est trop énervé, il refuse même de l'expliquer, jusqu'à ce qu'il se calme.
 - **Il bavarde :** de temps en temps, quand il est de bonne humeur, il te donne un conseil, te rappelle de sauvegarder ou te raconte une anecdote sur les pâtisseries. Tu peux le couper dans les réglages.
 - **Les notifications :** vers le début, Bob te propose de te prévenir quand tu n'es pas sur le jeu : si ta pâtisserie tourne sans pause depuis 5 minutes, ou s'il se passe quelque chose d'important. Tu peux les activer ou les couper dans les réglages.
 - **Son défi :** tous les 2 à 5 jours, il te propose un défi de 24 heures. Réussis, et il te donne 5 % de tout ton argent, toutes pâtisseries confondues.
@@ -214,8 +217,11 @@ D'autres événements ne touchent qu'**un seul ingrédient** (pénurie : il coû
 | Anniversaire | Le jour de ton anniversaire, si tu as indiqué ta date |
 | Horreur | Seulement en octobre : noir et orange, avec citrouilles, chauves-souris et fantômes |
 | Boulangerie | Pour toujours dès le niveau 100 |
-| Fête | Pour toujours dès le niveau 500 |
-| Espace | Pour toujours dès le niveau 1000 |
+| Fête | Pour toujours dès le niveau 500. Caché avant |
+| Espace | Pour toujours dès le niveau 1000. Caché avant |
+| Cookie | Pour toujours, une fois 1 million de cookies vendus |
+
+D'autres thèmes sont cachés : à toi de les trouver.
 
 Tu peux choisir un thème pour tout le jeu, ou seulement pour la pâtisserie où tu es. Dans les thèmes spéciaux, Bob change de tenue.
 
@@ -236,4 +242,4 @@ Ils sont dans les **réglages**. Il y a 1000 succès. Un succès pas encore obte
 
 ## Sur téléphone
 
-Le jeu marche aussi sur téléphone et sur tablette. Les ingrédients sont en haut, au-dessus des onglets. Le jeu existe en français, en anglais, en espagnol, en portugais, en allemand, en arabe, en mandarin, en japonais et en coréen : il prend la langue de ton navigateur au départ, et tu peux la changer dans les réglages.
+Le jeu marche aussi sur téléphone et sur tablette. Les ingrédients sont en haut, au-dessus des onglets. Le jeu existe en français, en anglais, en espagnol, en portugais, en allemand, en arabe, en mandarin, en japonais, en coréen et en russe : il prend la langue de ton navigateur au départ, et tu peux la changer dans les réglages.

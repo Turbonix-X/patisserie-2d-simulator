@@ -13,6 +13,7 @@ function detectLang() {
   if (/^zh/i.test(list[0])) return 'zh';
   if (/^ja/i.test(list[0])) return 'ja';
   if (/^ko/i.test(list[0])) return 'ko';
+  if (/^ru/i.test(list[0])) return 'ru';
   return 'en';
 }
 var currentLang = detectLang();
@@ -26,6 +27,7 @@ var LANG_LIST = [
   { code:'zh', name:'中文', flag:'\u{1F1E8}\u{1F1F3}' },
   { code:'ja', name:'日本語', flag:'\u{1F1EF}\u{1F1F5}' },
   { code:'ko', name:'한국어', flag:'\u{1F1F0}\u{1F1F7}' },
+  { code:'ru', name:'Русский', flag:'\u{1F1F7}\u{1F1FA}' },
 ];
 var LANGS = {};
 
@@ -375,7 +377,7 @@ function fmtMoney(amount) {
   var abs = Math.abs(converted);
   if (abs >= 1000) return bidiIsolate(fmt(converted) + curr.symbol);
   var txt = converted.toFixed(2).replace(/\.00$/, '');
-  if (['fr', 'es', 'pt', 'de'].indexOf(currentLang) >= 0) txt = txt.replace('.', ',');
+  if (['fr', 'es', 'pt', 'de', 'ru'].indexOf(currentLang) >= 0) txt = txt.replace('.', ',');
   return bidiIsolate(txt + curr.symbol);
 }
 
@@ -704,3 +706,89 @@ Object.assign(LANGS.en, {
   'notif.running':'Your bakery is still running, without a pause! Remember to pause if you\'re leaving.',
 });
 LANGS.en['bob.facts'] += '|' + 'Choux pastry gets its name because the little puffs look like cabbages ("choux" in French).|The éclair is said to be named because you eat it in a flash ("éclair" means lightning).|Chantilly cream is named after the Château de Chantilly.|The tarte Tatin, baked upside down, comes from the Tatin sisters\' hotel in Sologne, France.|The financier is said to be named after the Paris stock exchange district.|Black Forest cake comes from Germany: chocolate, cherries and cream.|The pavlova was named in honor of the dancer Anna Pavlova.|Kouign-amann means "butter cake" in Breton.|The cannolo is a Sicilian pastry filled with ricotta.|The Sachertorte is a chocolate cake born in Vienna.|Baklava is made with thin sheets of pastry, nuts and syrup or honey.|Japanese mochi is made from pounded glutinous rice.|On a lemon meringue pie, the meringue is browned in the oven or with a torch.|Panettone is a Christmas sweet bread from Milan.|Flan pâtissier is a custard baked in pastry, very popular in French bakeries.';
+
+// ======================== RELEASE 1.0 ========================
+Object.assign(LANGS.fr, {
+  'settings.themeCookie':'Cookie',
+  'settings.themeTech':'Tech',
+  'settings.themeTechGold':'Tech doré',
+  'settings.lockCookies':'après 1 million de cookies vendus',
+  'theme.techUnlocked':'Mille clics sur Bob ! Thème Tech débloqué.',
+  'theme.techGoldUnlocked':'Bob est en or massif ! Thème Tech doré débloqué.',
+  'console.disable':'Désactiver la console',
+  'console.disabled':'Console désactivée. Pour la retrouver, il faudra énerver Bob à nouveau.',
+  'bob.chokeAngry':'Kof ! Arrête… kof… de cliquer !|KOF… je t\'aurais bien… crié dessus… kof…|Tu profites… kof… que je tousse, hein ?',
+  'bob.sneeze':'ATCHAAA !',
+  'bob.soothe2':'Ah… le sucre adoucit… kof… un peu.|Mmm… ça passe un peu mieux.',
+  'bob.soothe1':'Encore un peu… et je respire.|Ça va mieux… presque plus de kof.',
+  'bob.soothe0':'Ouf ! Je respire enfin ! Merci pour le sucre.|Plus de toux ! Le sucre, ça soigne tout.',
+  'bob.calmed':'Bon… Le sucre, ça calme. Un peu.|Mmm. D\'accord, je suis un peu moins fâché.',
+  'bob.goldGive':'Je suis en or massif, je suis de bien trop bonne humeur pour me fâcher ! Tiens, voilà l\'accès à la console.',
+  'tuto.step1.sad':'Bon… Si tu veux des cookies, clique sur les ingrédients : 2 Farine, 2 Sucre et 1 Œuf. Moi, ça ne m\'amuse plus trop.',
+  'tuto.step1.angry':'Pff. Clique sur les ingrédients : 2 Farine, 2 Sucre et 1 Œuf. Et pas sur moi.',
+  'tuto.step1.choke':'Kof… Clique sur… kof… 2 Farine, 2 Sucre et 1 Œuf… kof kof.',
+  'tuto.step2.sad':'C\'est fait. Va dans Recettes et clique sur Préparer. Si ça t\'amuse.',
+  'tuto.step2.angry':'Bon. Recettes, puis Préparer. Vite.',
+  'tuto.step2.choke':'Kof… Recettes… kof… Préparer…',
+  'tuto.step3.sad':'Ils cuisent. Comme moi, dans mon chagrin. Va dans Ventes.',
+  'tuto.step3.angry':'Ça cuit. Va dans Ventes, et laisse-moi tranquille.',
+  'tuto.step3.choke':'Ça cuit… kof… moi aussi… Ventes… kof.',
+  'tuto.step4.sad':'Quand ils sont prêts, vends-les. Vendre 1 ou Tout vendre. Ça m\'est égal.',
+  'tuto.step4.angry':'Vends-les avec Vendre 1 ou Tout vendre. Voilà.',
+  'tuto.step4.choke':'Vends… kof… Vendre 1… ou Tout vendre… kof kof !',
+  'tuto.done.sad':'Tu connais les bases. Moi, je retourne fouetter mon chagrin.',
+  'tuto.done.angry':'Voilà, tu sais tout. Maintenant, laisse-moi.',
+  'tuto.done.choke':'Kof… tu sais tout… kof… de l\'eau, vite…',
+  'tuto.skip.sad':'Laisse tomber',
+  'tuto.skip.angry':'Ouste',
+  'tuto.skip.choke':'Kof… passer',
+  'tuto.ok.sad':'D\'accord',
+  'tuto.ok.angry':'Ça va',
+  'tuto.ok.choke':'Kof, OK',
+  'emp.moving':'En chemin vers {{n}} : {{t}}',
+  'emp.moveHelp':'Changer d\'ingrédient prend du temps : de 10 s à 2 min selon son niveau.',
+  'emp.levelHelp':'Niveau {{v}} : travaille {{x}} fois mieux qu\'un débutant.',
+  'emp.rareApplicant':'Candidature rare : un employé de niveau {{v}} !',
+});
+Object.assign(LANGS.en, {
+  'settings.themeCookie':'Cookie',
+  'settings.themeTech':'Tech',
+  'settings.themeTechGold':'Golden tech',
+  'settings.lockCookies':'after 1 million cookies sold',
+  'theme.techUnlocked':'A thousand clicks on Bob! Tech theme unlocked.',
+  'theme.techGoldUnlocked':'Bob is solid gold! Golden tech theme unlocked.',
+  'console.disable':'Turn off the console',
+  'console.disabled':'Console turned off. To get it back, you\'ll have to annoy Bob again.',
+  'bob.chokeAngry':'Cough! Stop… cough… clicking!|COUGH… I would yell at you… cough…|You\'re taking advantage… cough… of my cough, huh?',
+  'bob.sneeze':'ACHOOOO!',
+  'bob.soothe2':'Ah… sugar soothes… cough… a little.|Mmm… that goes down a bit better.',
+  'bob.soothe1':'A bit more… and I can breathe.|Better… hardly any cough left.',
+  'bob.soothe0':'Phew! I can breathe at last! Thanks for the sugar.|No more cough! Sugar fixes everything.',
+  'bob.calmed':'Well… Sugar calms me down. A little.|Mmm. Okay, I\'m a bit less upset.',
+  'bob.goldGive':'I\'m solid gold, I\'m in far too good a mood to get angry! Here, take the access to the console.',
+  'tuto.step1.sad':'Well… If you want cookies, click the ingredients: 2 Flour, 2 Sugar and 1 Egg. It doesn\'t really amuse me anymore.',
+  'tuto.step1.angry':'Pff. Click the ingredients: 2 Flour, 2 Sugar and 1 Egg. Not me.',
+  'tuto.step1.choke':'Cough… Click… cough… 2 Flour, 2 Sugar and 1 Egg… cough cough.',
+  'tuto.step2.sad':'Done. Go to Recipes and click Bake. If you feel like it.',
+  'tuto.step2.angry':'Fine. Recipes, then Bake. Quick.',
+  'tuto.step2.choke':'Cough… Recipes… cough… Bake…',
+  'tuto.step3.sad':'They\'re baking. Like me, in my sorrow. Go to Sales.',
+  'tuto.step3.angry':'It\'s baking. Go to Sales and leave me alone.',
+  'tuto.step3.choke':'It\'s baking… cough… so am I… Sales… cough.',
+  'tuto.step4.sad':'When they\'re ready, sell them. Sell 1 or Sell all. I don\'t care.',
+  'tuto.step4.angry':'Sell them with Sell 1 or Sell all. There.',
+  'tuto.step4.choke':'Sell… cough… Sell 1… or Sell all… cough cough!',
+  'tuto.done.sad':'You know the basics. I\'ll go back to whisking my sorrow.',
+  'tuto.done.angry':'There, you know everything. Now leave me alone.',
+  'tuto.done.choke':'Cough… you know everything… cough… water, quick…',
+  'tuto.skip.sad':'Never mind',
+  'tuto.skip.angry':'Shoo',
+  'tuto.skip.choke':'Cough… skip',
+  'tuto.ok.sad':'Okay',
+  'tuto.ok.angry':'Fine',
+  'tuto.ok.choke':'Cough, OK',
+  'emp.moving':'On the way to {{n}}: {{t}}',
+  'emp.moveHelp':'Switching ingredients takes time: from 10 s to 2 min depending on level.',
+  'emp.levelHelp':'Level {{v}}: works {{x}} times better than a beginner.',
+  'emp.rareApplicant':'Rare applicant: a level {{v}} employee!',
+});

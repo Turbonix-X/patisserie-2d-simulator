@@ -2431,8 +2431,8 @@ body.bob-wants-sugar .ing-card[data-ing="sucre"] { touch-action: none; }
 .dash-bad { color: var(--error); }
 
 /* Le changelog, en cliquant sur la version */
-button.version-badge { cursor: pointer; font: inherit; }
-button.version-badge:hover { filter: brightness(1.1); }
+/* Le badge de version reste comme avant : seulement cliquable */
+button.version-badge { cursor: pointer; appearance: none; -webkit-appearance: none; margin: 0; background: transparent; font-family: inherit; line-height: inherit; letter-spacing: inherit; color: #fff; }
 .modal-changelog { max-width: 640px; }
 .changelog { max-height: 62vh; overflow-y: auto; padding-inline-end: 6px; font-size: .9rem; line-height: 1.45; }
 .changelog h3 { margin: 16px 0 6px; font-size: 1rem; color: var(--mauve-deep); }
@@ -2440,18 +2440,6 @@ button.version-badge:hover { filter: brightness(1.1); }
 .changelog ul { margin: 4px 0 8px; padding-inline-start: 20px; }
 .changelog p { margin: 4px 0; }
 
-/* Bob et le wasabi : il tousse, de plus en plus fort */
-#bob[data-choke="1"] svg { filter: hue-rotate(-12deg) saturate(1.3); animation: bob-cough .5s ease-in-out 2; }
-#bob[data-choke="2"] svg { filter: hue-rotate(-25deg) saturate(1.6); animation: bob-cough .4s ease-in-out infinite; }
-#bob[data-choke="3"] svg { filter: hue-rotate(-40deg) saturate(2) brightness(.95); animation: bob-cough .25s ease-in-out infinite; }
-@keyframes bob-cough { 0%, 100% { transform: none; } 30% { transform: translateX(-2px) rotate(-3deg); } 60% { transform: translateX(2px) rotate(3deg) scale(1.03); } }
-
-/* Bob et l'or alimentaire : il devient doré */
-#bob[data-gold="1"] svg { filter: sepia(.25) saturate(1.3); }
-#bob[data-gold="2"] svg { filter: sepia(.45) saturate(1.6) hue-rotate(-6deg); }
-#bob[data-gold="3"] svg { filter: sepia(.65) saturate(2) hue-rotate(-8deg) brightness(1.05); }
-#bob[data-gold="4"] svg { filter: sepia(.85) saturate(2.6) hue-rotate(-10deg) brightness(1.08) drop-shadow(0 0 4px #FFD54F); }
-#bob[data-gold="5"] svg { filter: sepia(1) saturate(3.2) hue-rotate(-12deg) brightness(1.12) drop-shadow(0 0 10px #FFD54F); }
 body.bob-can-wasabi .ing-card[data-ing="wasabi"], body.bob-can-gold .ing-card[data-ing="orfeuille"] { touch-action: none; }
 
 /* Sur téléphone : annonces plus petites, et la console passe dans les réglages */
@@ -2462,3 +2450,108 @@ body.bob-can-wasabi .ing-card[data-ing="wasabi"], body.bob-can-gold .ing-card[da
   #console-btn-wrap { display: none !important; }
   .only-phone { display: block; }
 }
+
+/* ---------- Release 1.0 ---------- */
+
+/* Bob en or : seulement ce qui est mauve devient doré, petit à petit */
+#bob[data-gold="1"] .rim-a { stop-color: #D0B7EE; } #bob[data-gold="1"] .rim-b { stop-color: #AF7FD8; } #bob[data-gold="1"] .rim-c { stop-color: #8153B0; }
+#bob[data-gold="1"] .bob-ear { fill: #8456B3; stroke: #D0B4E8; }
+#bob[data-gold="2"] .rim-a { stop-color: #DCC5DC; } #bob[data-gold="2"] .rim-b { stop-color: #C392B1; } #bob[data-gold="2"] .rim-c { stop-color: #936188; }
+#bob[data-gold="2"] .bob-ear { fill: #99678D; stroke: #DCC0D0; }
+#bob[data-gold="3"] .rim-a { stop-color: #E7D4CB; } #bob[data-gold="3"] .rim-b { stop-color: #D7A48A; } #bob[data-gold="3"] .rim-c { stop-color: #A56E5F; }
+#bob[data-gold="3"] .bob-ear { fill: #AF7866; stroke: #E7CBB9; }
+#bob[data-gold="4"] .rim-a { stop-color: #F3E2B9; } #bob[data-gold="4"] .rim-b { stop-color: #EBB763; } #bob[data-gold="4"] .rim-c { stop-color: #B77C37; }
+#bob[data-gold="4"] .bob-ear { fill: #C48940; stroke: #F3D7A1; }
+#bob[data-gold="5"] .rim-a { stop-color: #FFF1A8; } #bob[data-gold="5"] .rim-b { stop-color: #FFC93C; } #bob[data-gold="5"] .rim-c { stop-color: #C98A0E; }
+#bob[data-gold="5"] .bob-ear { fill: #D99A1A; stroke: #FFE38A; }
+#bob[data-gold="5"] .bob-tip { fill: #FFF1A8; }
+
+/* Bob et le wasabi : joues rouges, sueur, puis yeux en croix, bouche ouverte et larmes */
+.bob-eye-x { display: none; fill: none; stroke: var(--eye); stroke-width: 4.5; stroke-linecap: round; filter: drop-shadow(0 0 4px var(--eye)); }
+#bob[data-choke="1"] .bob-cheek, #bob[data-choke="2"] .bob-cheek, #bob[data-choke="3"] .bob-cheek { opacity: 1; fill: #ff4d4d; }
+#bob[data-choke="1"] .bob-sweat, #bob[data-choke="2"] .bob-sweat, #bob[data-choke="3"] .bob-sweat { opacity: 1; animation: bob-sweat .7s ease-in infinite; }
+#bob[data-choke="1"] svg { animation: bob-cough .5s ease-in-out 2; }
+#bob[data-choke="2"] .bob-eye-open, #bob[data-choke="3"] .bob-eye-open, #bob[data-choke="2"] .bob-eye-joy, #bob[data-choke="3"] .bob-eye-joy { display: none !important; }
+#bob[data-choke="2"] .bob-eye-x, #bob[data-choke="3"] .bob-eye-x { display: inline; }
+#bob[data-choke="2"] .m, #bob[data-choke="3"] .m { display: none !important; }
+#bob[data-choke="2"] .m-cough, #bob[data-choke="3"] .m-cough { display: inline !important; }
+#bob[data-choke="2"] .bob-tear, #bob[data-choke="3"] .bob-tear { opacity: 1; animation: bob-tear 1.6s ease-in infinite; }
+#bob[data-choke="2"] svg { animation: bob-cough .45s ease-in-out infinite; }
+#bob[data-choke="3"] svg { animation: bob-cough .28s ease-in-out infinite; }
+#bob[data-choke="3"] .bob-visor { fill: #0f2a12; }
+@keyframes bob-cough { 0%, 100% { transform: none; } 30% { transform: translateX(-2px) rotate(-3deg); } 60% { transform: translateX(2px) rotate(3deg) scale(1.03); } }
+/* Le sucre l'apaise : un petit soupir doux, rien à voir avec la toux */
+#bob.soothe svg { animation: bob-soothe 1.5s ease-in-out !important; }
+@keyframes bob-soothe { 0% { transform: none; } 35% { transform: translateY(-6px) scale(1.04); filter: drop-shadow(0 0 10px #ffd6e8); } 70% { transform: translateY(1px) scale(.99); } 100% { transform: none; } }
+
+/* L'éternuement : du wasabi plein l'écran, qui s'efface tout seul */
+#wasabi-splash { position: fixed; inset: 0; z-index: 2500; pointer-events: none; transition: opacity 1.4s ease; }
+#wasabi-splash.fade { opacity: 0; }
+#wasabi-splash i { position: absolute; width: var(--s); height: calc(var(--s) * .8); transform: rotate(var(--rot)) scale(0);
+  background: radial-gradient(circle at 35% 35%, #c7f08a, #7fbf3a 45%, #4f8f22 75%, transparent 76%);
+  border-radius: 48% 52% 60% 40% / 55% 45% 55% 45%; animation: wasabi-pop .35s cubic-bezier(.34,1.56,.64,1) var(--d) forwards; opacity: .92; }
+@keyframes wasabi-pop { to { transform: rotate(var(--rot)) scale(1); } }
+
+/* Désactiver la console */
+.console-off { margin-inline-start: auto; margin-inline-end: 8px; }
+
+/* Candidatures : on peut cliquer, et les rares brillent */
+.applicant-card { cursor: pointer; }
+.applicant-card.rare { box-shadow: 0 0 0 2px #FFD54F, 0 0 14px rgba(255,213,79,.45); }
+
+/* Thème Cookie */
+:root[data-theme="cookie"] {
+  --bg: #F3E3CC; --panel: #FBF2E4; --surface: #FFF9F0; --surface-solid: #FFF9F0; --surface-2: #F0DEC2;
+  --text: #3B2412; --muted: #7A5A3A; --border: #DDBE92;
+  --mauve: #8B5A2B; --mauve-light: #B97C35; --mauve-dark: #6B4220; --mauve-deep: #6B4220; --mauve-soft: rgba(185,124,53,.22);
+  --header-bg: #6B4220; --footer-bg: #4A2E16; --footer-text: #F3E3CC; --tab-bg: #FBF2E4; --toast-bg: #4A2E16;
+  --blob-1: rgba(185,124,53,.2); --blob-2: rgba(74,37,17,.12); --blob-3: rgba(255,255,255,.3);
+  --craft-bar: #B97C35; --space-bar: #8B5A2B; --xp-empty: #EAD3B2;
+  --chart-1: #8B5A2B; --chart-2: #D9A35B;
+}
+:root[data-theme="cookie"] .site-header { background: linear-gradient(90deg, #4A2511, #8B5A2B 55%, #D9A35B); }
+.tp-cookie { --p-bg: #F3E3CC; --p-head: linear-gradient(90deg, #4A2511, #D9A35B); --p-accent: #8B5A2B; --p-card: #FFF9F0; }
+
+/* Thèmes Tech et Tech doré */
+:root[data-theme="tech"], :root[data-theme="techgold"] { color-scheme: dark; --shadow: 0 2px 14px rgba(0,0,0,.55); --btn-shadow: rgba(0,0,0,.45); }
+:root[data-theme="tech"] {
+  --bg: #070D18; --panel: #0C1626; --surface: #0A1322; --surface-solid: #101D31; --surface-2: #16263F;
+  --text: #E3F6FF; --muted: #9FC3D6; --border: #1E3A57;
+  --mauve: #0E7490; --mauve-light: #22D3EE; --mauve-dark: #155E75; --mauve-deep: #67E8F9; --mauve-soft: rgba(34,211,238,.18);
+  --header-bg: #050A14; --footer-bg: #04080F; --footer-text: #9FC3D6; --tab-bg: #0C1626; --toast-bg: #16263F;
+  --blob-1: rgba(34,211,238,.14); --blob-2: rgba(167,139,250,.12); --blob-3: rgba(34,211,238,.06);
+  --success: #5EEAD4; --error: #FB7185; --warn: #FBBF24; --craft-bar: #22D3EE; --space-bar: #A78BFA; --xp-empty: #16263F;
+  --chart-1: #22D3EE; --chart-2: #A78BFA; --acc-line: #22D3EE; --acc-chip: #0F1B2E;
+}
+:root[data-theme="techgold"] {
+  --bg: #0E0B05; --panel: #17130A; --surface: #13100A; --surface-solid: #1E1A0D; --surface-2: #2A2410;
+  --text: #FFF6D6; --muted: #D9C68A; --border: #4A3D16;
+  --mauve: #A16207; --mauve-light: #FACC15; --mauve-dark: #854D0E; --mauve-deep: #FDE68A; --mauve-soft: rgba(250,204,21,.18);
+  --header-bg: #0A0803; --footer-bg: #070502; --footer-text: #D9C68A; --tab-bg: #17130A; --toast-bg: #2A2410;
+  --blob-1: rgba(250,204,21,.14); --blob-2: rgba(245,158,11,.12); --blob-3: rgba(250,204,21,.06);
+  --success: #A3E635; --error: #FB7185; --warn: #FBBF24; --craft-bar: #FACC15; --space-bar: #F59E0B; --xp-empty: #2A2410;
+  --chart-1: #FACC15; --chart-2: #F59E0B; --acc-line: #FACC15; --acc-chip: #1F1A0B;
+}
+:root[data-theme="tech"] .site-header { background: linear-gradient(90deg, #050A14, #0B2A3F 55%, #0E7490); }
+:root[data-theme="techgold"] .site-header { background: linear-gradient(90deg, #0A0803, #3D2E07 55%, #A16207); }
+:root[data-theme="tech"] .rec-xp, :root[data-theme="techgold"] .rec-xp { color: #AED581; }
+:root[data-theme="tech"] .rec-time, :root[data-theme="techgold"] .rec-time { color: #64B5F6; }
+:root[data-theme="tech"] .rec-space, :root[data-theme="techgold"] .rec-space { color: #CE93D8; }
+.tp-tech { --p-bg: #0C1626; --p-head: linear-gradient(90deg, #050A14, #0E7490); --p-accent: #22D3EE; --p-card: #16263F; }
+.tp-techgold { --p-bg: #17130A; --p-head: linear-gradient(90deg, #0A0803, #A16207); --p-accent: #FACC15; --p-card: #2A2410; }
+
+/* Bob dans ces thèmes */
+:root[data-theme="cookie"] .bob-acc-cookie, :root[data-theme="tech"] .bob-acc-tech, :root[data-theme="techgold"] .bob-acc-techgold { display: inline; }
+:root[data-theme="cookie"] .bob-apron-heart, :root[data-theme="tech"] .bob-apron-heart, :root[data-theme="techgold"] .bob-apron-heart { display: none; }
+:root[data-theme="cookie"] .bob-apron { fill: #FFF9F0; stroke: #D9A35B; }
+:root[data-theme="cookie"] .bob-apron-pocket { fill: #F0DEC2; stroke: #D9A35B; }
+:root[data-theme="cookie"] .bob-kerchief { fill: #8B5A2B; stroke: #6B4220; }
+:root[data-theme="cookie"] .bob-toque-band { fill: #D9A35B; stroke: #8B5A2B; }
+:root[data-theme="tech"] .bob-apron { fill: #16263F; stroke: #22D3EE; }
+:root[data-theme="tech"] .bob-apron-pocket { fill: #1E3A57; stroke: #22D3EE; }
+:root[data-theme="tech"] .bob-kerchief { fill: #22D3EE; stroke: #0E7490; }
+:root[data-theme="tech"] .bob-toque-band { fill: #0E7490; stroke: #22D3EE; }
+:root[data-theme="techgold"] .bob-apron { fill: #2A2410; stroke: #FACC15; }
+:root[data-theme="techgold"] .bob-apron-pocket { fill: #3A3214; stroke: #FACC15; }
+:root[data-theme="techgold"] .bob-kerchief { fill: #FACC15; stroke: #A16207; }
+:root[data-theme="techgold"] .bob-toque-band { fill: #A16207; stroke: #FACC15; }

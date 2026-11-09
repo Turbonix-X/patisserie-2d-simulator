@@ -4,7 +4,7 @@
    employes, espace, evenements, themes
    ============================================ */
 
-var GAME_VERSION = 'B\u00eata 1.9';
+var GAME_VERSION = 'Release 1.0';
 
 // ============ CURRENCIES ============
 var CURRENCIES = [
@@ -455,6 +455,8 @@ var REST_BONUS = { afterSec: 600, fullSec: 3600, max: 0.2 };
 
 // Bob raconte des choses de temps en temps
 var BOB_CHAT_SEC = 420;
+var TECH_CLICKS = 1000; // Clics sur Bob, sans debloquer la console
+var COLLECTOR_MOVE_SEC = [10, 120]; // Changer d'ingredient : du niveau 1 au niveau max
 
 var HISTORY_MAX = 240;
 var BLD_CYCLE_SEC = 3600; // Un batiment livre une fois par heure de jeu
@@ -498,8 +500,11 @@ var THEME_LIST = [
   { id:'birthday', langKey:'settings.themeBirthday', birthday:true },
   { id:'horror',   langKey:'settings.themeHorror', month:10 }, // Seulement en octobre
   { id:'bakery',   langKey:'settings.themeBakery', level:100 },
-  { id:'party',    langKey:'settings.themeParty', level:500 },
-  { id:'space',    langKey:'settings.themeSpace', level:1000 },
+  { id:'party',    langKey:'settings.themeParty', level:500, hidden:true },
+  { id:'space',    langKey:'settings.themeSpace', level:1000, hidden:true },
+  { id:'cookie',   langKey:'settings.themeCookie', sold:{ rec:'cookie', n:1000000 } }, // 1 million de cookies vendus
+  { id:'tech',     langKey:'settings.themeTech', secret:true },     // 1000 clics sur Bob sans la console
+  { id:'techgold', langKey:'settings.themeTechGold', secret:true }, // Bob en or massif
 ];
 
 // Un tout petit peu moins cher, c'etait trop facile

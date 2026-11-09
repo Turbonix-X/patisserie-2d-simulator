@@ -529,7 +529,74 @@ var Decor = (function() {
     pieces: [svg(44, 20, at(22, 10, 1.1, 0, bat('#1A0F0A')))],
   };
 
-  var THEMES = { birthday: birthday, spring: spring, summer: summer, winter: winter, fall: fall, space: space, party: party, bakery: bakery, horror: horror };
+  // ---------- Cookie : le theme du million de cookies ----------
+  function cookieBig(c1, c2) {
+    return '<circle r="14" fill="' + (c1 || '#D9A35B') + '"/><circle r="14" fill="none" stroke="' + (c2 || '#B97C35') + '" stroke-width="1.600"/>' +
+      '<path d="M-9-6c2 1 3 0 4-2M6 4c1 2 3 2 4 1M-4 8c1 1 3 1 4 0" fill="none" stroke="#B97C35" stroke-width="1" stroke-linecap="round"/>' +
+      '<g fill="#4A2511"><path d="M-6-3l2.500-1 1 2.400-2.400 1z"/><path d="M3-8l2.400.6-.6 2.400-2.400-.6z"/><path d="M5 1l2.600.4-.4 2.600-2.600-.4z"/><path d="M-3 5l2.400.4-.4 2.400-2.400-.4z"/><path d="M-10 3l2 .6-.6 2-2-.6z"/></g>';
+  }
+  function cookieBitten() { return cookieBig() + '<circle cx="12" cy="-9" r="5" fill="var(--bite, #F3E3CC)"/><circle cx="8" cy="-12" r="3.500" fill="var(--bite, #F3E3CC)"/>'; }
+  function milkGlass() {
+    return '<path d="M-10-20h20l-2 38c0 2-2 3-4 3h-8c-2 0-4-1-4-3z" fill="#E8F4FF" stroke="#B9D4EA" stroke-width="1.200"/>' +
+      '<path d="M-9.300-8h18.600l-1.400 26c0 2-1.600 2.600-3.200 2.600h-9.400c-1.600 0-3.200-.6-3.200-2.600z" fill="#fff"/><path d="M-6-16v30" stroke="#fff" stroke-width="2" opacity=".7"/>';
+  }
+  function chip() { return '<path d="M-3-2l3-1.500 3 1.500-1 3.500h-4z" fill="#4A2511"/>'; }
+  function cookieJar() {
+    return '<rect x="-16" y="-20" width="32" height="40" rx="8" fill="#DCEFFA" opacity=".85" stroke="#9FC3DA" stroke-width="1.400"/>' +
+      '<rect x="-18" y="-26" width="36" height="8" rx="3" fill="#B97C35"/>' + at(-6, 6, .5, 10, cookieBig()) + at(7, 10, .45, -20, cookieBig()) + at(0, -6, .45, 30, cookieBig());
+  }
+  var cookie = {
+    strip: svg(240, 26, [0, 1, 2, 3, 4, 5].map(function(i) { return at(20 + i * 40, 12, .62, i * 33, cookieBig()); }).join('')),
+    ground: svg(240, 22, '<rect y="12" width="240" height="10" fill="#B97C35"/><path d="M0 12H240" stroke="#8A5A2B" stroke-width="2"/>' +
+      at(40, 8, .45, 20, cookieBig()) + at(120, 8, .45, -10, cookieBig()) + at(200, 8, .45, 40, cookieBig()) + at(80, 12, 1, 0, chip()) + at(160, 12, 1, 30, chip())),
+    corner: svg(240, 190, '<path d="M0 190c26-16 66-24 116-24s96 8 124 20v4z" fill="#E7C89B"/>' +
+      at(190, 140, 1.4, 0, cookieJar()) + at(110, 160, 1.6, 0, milkGlass()) + at(60, 168, 1.4, 20, cookieBitten()) + at(30, 178, .9, -30, cookieBig()) + at(150, 178, .8, 50, cookieBig()) +
+      at(80, 80, 1.2, 15, cookieBig()) + at(140, 50, .9, -10, cookieBig())),
+    corner2: svg(170, 90, at(50, 62, 1.5, 10, cookieBig()) + at(104, 66, 1.2, -25, cookieBitten()) + at(146, 40, 1, 0, chip()) + at(140, 70, 1, 40, chip())),
+    top: svg(150, 70, at(112, 36, 1.5, 15, cookieBitten()) + at(56, 30, .9, -20, cookieBig())),
+    tile: svg(150, 150, at(30, 30, .8, 10, cookieBig(), .2) + at(112, 64, .7, -30, cookieBig(), .18) + at(46, 116, 1.2, 0, chip(), .3) + at(120, 124, 1.2, 40, chip(), .3)),
+    card: svg(48, 48, at(26, 26, 1.1, 20, cookieBig(), .3)),
+    mark: svg(28, 28, at(14, 14, .78, 15, cookieBig())),
+    motion: 'fall', count: 18,
+    pieces: [svg(30, 30, at(15, 15, .8, 0, cookieBig())), svg(30, 30, at(15, 15, .7, 60, cookieBig())), svg(14, 14, at(7, 7, 1.6, 0, chip())), svg(14, 14, at(7, 7, 1.4, 45, chip()))],
+  };
+
+  // ---------- Tech : circuits, puces et chiffres binaires (et sa version doree) ----------
+  function techArt(c) {
+    function board(w, h, n, seed) {
+      var out = '', x = seed;
+      for (var i = 0; i < n; i++) {
+        x = (x * 9301 + 49297) % 233280;
+        var y0 = 10 + (x % (h - 20)), x0 = (x * 7) % w, len = 30 + (x % 70);
+        out += '<path d="M' + x0 + ' ' + y0 + 'h' + len + 'l10 10h' + (len / 2).toFixed(0) + '" fill="none" stroke="' + c.line + '" stroke-width="1.600" opacity=".8"/>' +
+          '<circle cx="' + x0 + '" cy="' + y0 + '" r="2.600" fill="' + c.dot + '"/><circle cx="' + (x0 + len * 1.5 + 10).toFixed(0) + '" cy="' + (y0 + 10) + '" r="2.600" fill="' + c.dot + '"/>';
+      }
+      return out;
+    }
+    function ic(scale) {
+      var legs = '';
+      for (var i = -2; i <= 2; i++) legs += '<path d="M' + (i * 7) + ' -18v-6M' + (i * 7) + ' 18v6M-18 ' + (i * 7) + 'h-6M18 ' + (i * 7) + 'h6" stroke="' + c.line + '" stroke-width="2"/>';
+      return '<g transform="scale(' + (scale || 1) + ')">' + legs + '<rect x="-18" y="-18" width="36" height="36" rx="4" fill="' + c.chip + '" stroke="' + c.line + '" stroke-width="1.600"/><rect x="-9" y="-9" width="18" height="18" rx="2" fill="none" stroke="' + c.dot + '" stroke-width="1.400"/><circle cx="-12" cy="-12" r="1.600" fill="' + c.dot + '"/></g>';
+    }
+    function led(col) { return '<circle r="4" fill="' + col + '"/><circle r="8" fill="' + col + '" opacity=".25"/>'; }
+    function bit(ch) { return '<text x="0" y="0" text-anchor="middle" dominant-baseline="central" font-family="monospace" font-size="16" font-weight="700" fill="' + c.dot + '">' + ch + '</text>'; }
+    return {
+      strip: svg(240, 18, '<path d="M0 9H240" stroke="' + c.line + '" stroke-width="1.600"/>' + [20, 70, 130, 190].map(function(x, i) { return at(x, 9, .6, 0, led(i % 2 ? c.led2 : c.led1)); }).join('')),
+      ground: svg(240, 22, '<rect y="10" width="240" height="12" fill="' + c.chip + '"/>' + board(240, 22, 3, 7)),
+      corner: svg(240, 190, board(240, 190, 9, 31) + at(170, 120, 1.6, 0, ic()) + at(70, 150, 1, 0, ic()) + at(210, 40, 1, 0, led(c.led1)) + at(40, 70, 1, 0, led(c.led2))),
+      corner2: svg(170, 90, board(170, 90, 4, 13) + at(120, 50, 1, 0, ic(.8))),
+      top: svg(150, 70, board(150, 70, 3, 5) + at(110, 34, 1, 0, led(c.led1)) + at(60, 26, 1, 0, bit('1'))),
+      tile: svg(150, 150, '<g opacity=".18">' + board(150, 150, 5, 77) + '</g>' + at(30, 30, 1, 0, bit('0'), .25) + at(112, 100, 1, 0, bit('1'), .25)),
+      card: svg(48, 48, at(24, 24, .7, 0, ic(), .3)),
+      mark: svg(28, 28, at(14, 14, .5, 0, ic())),
+      motion: 'fall', count: 22,
+      pieces: [svg(20, 20, at(10, 10, 1, 0, bit('0'))), svg(20, 20, at(10, 10, 1, 0, bit('1'))), svg(16, 16, at(8, 8, .9, 0, led(c.led1)))],
+    };
+  }
+  var tech = techArt({ line: '#22D3EE', dot: '#67E8F9', chip: '#0F1B2E', led1: '#22D3EE', led2: '#A78BFA' });
+  var techgold = techArt({ line: '#FACC15', dot: '#FDE68A', chip: '#1F1A0B', led1: '#FACC15', led2: '#F59E0B' });
+
+  var THEMES = { birthday: birthday, spring: spring, summer: summer, winter: winter, fall: fall, space: space, party: party, bakery: bakery, horror: horror, cookie: cookie, tech: tech, techgold: techgold };
   var VARS = { strip: '--decor-strip', ground: '--decor-ground', corner: '--decor-corner', corner2: '--decor-corner2', top: '--decor-top', tile: '--decor-tile', card: '--decor-card', mark: '--decor-mark' };
   var applied = null;
 
