@@ -30,6 +30,7 @@ function createFreshState() {
     madeCount: {},     // fournees recentes par recette
     lastMadeAt: {},    // quand chaque recette a ete preparee pour la derniere fois
     broken: {},        // machines et batiments en panne
+    bobGoldClicks: 0,
     bobGold: 0,        // l'or alimentaire le rend dore
     bobChoke: 0,       // le wasabi le fait tousser
     notifAsked: false, // Bob a deja propose les notifications
@@ -107,6 +108,8 @@ function createFreshState() {
       reducedParticles: false,
       soundEnabled: true,
       bulk: '1',
+      autoPause: 0,
+      changelogMax: false,
     },
     timeSpeed: 1,
     stats: {

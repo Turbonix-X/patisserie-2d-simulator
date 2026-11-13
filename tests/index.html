@@ -24,10 +24,17 @@
 <script>document.write('<script src="../JS/LangJA.js?t=' + Date.now() + '"><\/script>');</script>
 <script>document.write('<script src="../JS/LangKO.js?t=' + Date.now() + '"><\/script>');</script>
 <script>document.write('<script src="../JS/LangRU.js?t=' + Date.now() + '"><\/script>');</script>
+<script>document.write('<script src="../JS/Lang11.js?t=' + Date.now() + '"><\/script>');</script>
 <script>document.write('<script src="../JS/PlayerData.js?t=' + Date.now() + '"><\/script>');</script>
 <script>document.write('<script src="../JS/Logic.js?t=' + Date.now() + '"><\/script>');</script>
 <script>document.write('<script src="../JS/Achievements.js?t=' + Date.now() + '"><\/script>');</script>
 <script>document.write('<script src="../JS/Staff.js?t=' + Date.now() + '"><\/script>');</script>
+<script>document.write('<script src="../JS/Music.js?t=' + Date.now() + '"><\/script>');</script>
+<script>document.write('<script src="../JS/Decor.js?t=' + Date.now() + '"><\/script>');</script>
+<script>document.write('<script src="../JS/Interface.js?t=' + Date.now() + '"><\/script>');</script>
+<script>document.write('<script src="../JS/Menus.js?t=' + Date.now() + '"><\/script>');</script>
+<script>document.write('<script src="../JS/Console.js?t=' + Date.now() + '"><\/script>');</script>
+<script>document.write('<script src="../JS/Bob.js?t=' + Date.now() + '"><\/script>');</script>
 <script>
 currentLang = 'fr';
 var results = [];
@@ -108,7 +115,7 @@ check('Le temps n affiche jamais 60s', fmtTime(119.6) === '2m0s' && fmtTime(59.5
 G = createFreshState();
 G.ing.farine = 100; G.ing.sucre = 100; G.ing.oeuf = 100;
 var c1 = startCraft(findRec('cookie')), c2 = startCraft(findRec('cookie'));
-check('Une 2e fournee qui ne rentre pas est refusee', c1 && !c2);
+check('Une 2e fournee qui ne rentre pas se lance quand meme (sa barre gele)', c1 && c2 && G.crafting.length === 2);
 G = createFreshState(); G.maxSpace = 1000; G.ovens = 2;
 G.ing.farine = 100; G.ing.sucre = 100; G.ing.oeuf = 100;
 for (var c = 0; c < 4; c++) startCraft(findRec('cookie'));
@@ -141,9 +148,10 @@ var e0 = G.employees[0], p1 = empPower(e0), c1 = getTrainCost(e0);
 trainEmployee(e0.id);
 check('Former double la capacite, et coute cher', empPower(e0) === p1 * 2 && getTrainCost(e0) === c1 * 8);
 check('En formation, il ne travaille pas', empTraining(e0) && !empWorking(e0));
-for (var ti = 0; ti < 3; ti++) { e0.trainingUntil = 0; trainEmployee(e0.id); }
+G.money = 1e15;
+for (var ti = 0; ti < 14; ti++) { e0.trainingUntil = 0; trainEmployee(e0.id); }
 e0.trainingUntil = 0;
-check('5 niveaux au maximum', e0.level === 5 && trainEmployee(e0.id) === false, e0.level);
+check('10 niveaux au maximum', e0.level === EMP_MAX_LVL && EMP_MAX_LVL === 10 && trainEmployee(e0.id) === false, e0.level);
 G = createFreshState(); G.money = 1e6; G.level = 100;
 G.applicants = []; hireEmployee('novice');
 var nov = G.employees[0];
@@ -444,7 +452,7 @@ check('Un succes compte les niveaux de machines', ACHIEVEMENTS.filter(function(a
 check('Bob connait 30 anecdotes', LANGS.fr['bob.facts'].split('|').length === 30);
 
 // --- Release 1.0 ---
-check('La version s appelle Release 1.0', GAME_VERSION === 'Release 1.0');
+check('La version s appelle 1.1', GAME_VERSION === '1.1');
 G = createFreshState(); G.level = 499;
 check('La fete et l espace sont caches avant leur niveau', findTheme('party').hidden && findTheme('space').hidden && themeLockReason(findTheme('party')) === 'level');
 check('Les themes Tech sont secrets', themeLockReason(findTheme('tech')) === 'secret' && themeLockReason(findTheme('techgold')) === 'secret');
@@ -455,7 +463,7 @@ addSoldStat('cookie', 1);
 check('... et se debloque a un million', themeLockReason(findTheme('cookie')) === null && G.unlockedThemes.cookie);
 check('Les prenoms d hommes et de femmes', empGender('Pierre') === 'm' && empGender('Marie') === 'f' && empGender('Анна') === 'f' && empGender('Иван') === 'm' && empGender('ユイ') === 'f');
 var fem = empAvatar('chef', 'Marie'), mal = empAvatar('chef', 'Pierre');
-check('Les femmes ont leur visage', fem !== mal && /#C2185B/.test(fem) && !/#C2185B/.test(mal));
+check('Les femmes ont leur visage', fem !== mal && /#B83A5C/.test(fem) && !/#B83A5C/.test(mal));
 G = createFreshState(); G.level = 50;
 var col = newEmployee('collector', 'Pierre', 50, 1); G.employees = [col]; col.assignedIng = 'farine';
 var r0 = autoRate('farine');
@@ -465,7 +473,7 @@ check('Niveau 1 : 10 s, niveau max : 2 min', collectorMoveSec(col) === 10 && col
 col.moveUntil = Date.now() - 1;
 check('Puis il se remet au travail', autoRate('sucre') > 0);
 var lvls = {}; for (var al = 0; al < 4000; al++) { var lv = applicantLevel(); lvls[lv] = (lvls[lv] || 0) + 1; }
-check('Les candidats formes sont rares', lvls[1] > 2500 && (lvls[5] || 0) < 60 && (lvls[2] || 0) > (lvls[3] || 0));
+check('Les candidats formes sont rares', lvls[1] > 1700 && (lvls[5] || 0) < 300 && (lvls[2] || 0) > (lvls[3] || 0) && !lvls[11]);
 G = createFreshState(); G.level = 50; G.money = 1e9;
 G.applicants = [{ id: 7, name: 'Marie', type: 'baker', skill: 50, level: 3, hireCost: 5000, expiresAt: Date.now() + 60000 }];
 check('Embaucher une candidature de niveau 3 donne un employe de niveau 3', acceptApplicant(7) && G.employees[0].level === 3);
@@ -680,6 +688,91 @@ delete oldSave.ovens; oldSave.saveVersion = 7; oldSave.settings.musicVolume = 0.
 var migrated = migrateSave(oldSave);
 check('Une ancienne sauvegarde se met a jour', migrated.ovens === 2 && migrated.settings.musicVolume === 30 && migrated.settings.theme === 'light' && migrated.introDone && migrated.saveVersion === 12);
 check('Un code invalide est refuse', importSave('abc') === false && importSave(btoa('{"money":"x"}')) === false);
+
+// --- Release 1.1 ---
+currentLang = 'fr';
+check('Le cout d une recette est la somme de ses ingredients', (function() { var r = findRec('cake'), s = 0; for (var k in r.req) s += getIngredientCost(findIng(k)) * r.req[k]; return Math.abs(recipeCost(r) - s) < 1e-9 && s > 0; })());
+check('10 niveaux, et un niveau or 10 fois meilleur que le 10', EMP_MAX_LVL === 10 && EMP_GOLD_LVL === 11 && lvlMultOf(11) === 10 * lvlMultOf(10));
+G = createFreshState(); G.level = 119;
+check('Pas de niveau or avant le niveau 120', !applicantLevelWeights()[11]);
+G.level = 120;
+check('... il arrive au niveau 120, et il est tres rare', applicantLevelWeights()[11] > 0 && applicantLevelWeights()[11] < applicantLevelWeights()[10]);
+G = createFreshState(); G.level = 9;
+check('Aucune candidature toute seule avant le niveau 10', applicantChance() === 0);
+G.level = 10;
+check('... et ensuite elles arrivent', applicantChance() > 0);
+function shareFive(lvl) { G.level = lvl; var w = applicantLevelWeights(), tot = 0, hi = 0; for (var k in w) { tot += w[k]; if (+k >= 5) hi += w[k]; } return hi / tot; }
+G = createFreshState();
+check('Plus on monte, moins les niveaux 5 sont rares', shareFive(100) > shareFive(40) && shareFive(40) > shareFive(36));
+G = createFreshState(); G.level = 5;
+check('Au debut, pas de niveau 3 ou plus', (function() { for (var i = 0; i < 300; i++) if (applicantLevel() > 2) return false; return true; })());
+G = createFreshState(); G.level = 50; G.money = 1e9;
+var nov = newEmployee('novice', 'Max', 50, 7);
+check('Les apprentis n ont pas de niveau', nov.level === 1 && empLvl(nov) === 1 && levelBadge(nov) === '');
+check('Le badge or n existe qu au niveau 11', /gold/.test(levelBadge({ type: 'baker', level: 11 })) && !/gold/.test(levelBadge({ type: 'baker', level: 10 })));
+var vers = newEmployee('versatile', 'Zoe', 50, 4);
+check('Le touche-a-tout a jusqu a 3 metiers, de niveau 3 au plus', vers.jobs.length >= 1 && vers.jobs.length <= 3 && vers.jobs.every(function(j) { return j.level >= 1 && j.level <= 3; }) && hasJob(vers, vers.jobs[0].type));
+var other = vers.jobs[1] ? vers.jobs[1].type : null;
+check('Changer de metier prend entre 10 s et 1 min', !other || (setFocus(vers, other) && switchFocusSec(vers, 'all') >= 10 && switchFocusSec(vers, 'all') <= 60));
+G = createFreshState(); G.level = 50;
+var emp5 = newEmployee('baker', 'Pierre', 50, 1); G.employees = [emp5];
+var sal0 = getEmpSalary(emp5);
+check('Un salaire plus bas baisse la motivation maximale', (function() { emp5.payAdj = -10; return maxMorale(emp5) === 90 && getEmpSalary(emp5) < sal0; })());
+check('Un salaire plus haut la monte', (function() { emp5.payAdj = 20; return maxMorale(emp5) === 120 && getEmpSalary(emp5) > sal0; })());
+check('Les paliers de salaire', PAY_STEPS.join() === '-50,-20,-10,-5,0,5,10,20,50');
+var quits = 0; for (var pq = 0; pq < 200; pq++) { var pe = newEmployee('baker', 'Eva', 50, 1); G.employees = [pe]; if (setPay(pe, -50) === 'quit') quits++; }
+check('A -50 %, il demissionne presque toujours', quits > 150, quits);
+check('Les prix montent quand la perte baisse', lossCostMult(0) > lossCostMult(10) && lossCostMult(10) > lossCostMult(50) && lossCostMult(50) > lossCostMult(100));
+var losses = []; for (var ls4 = 0; ls4 < 2000; ls4++) losses.push(sampleLoss());
+check('La perte est entre 1 et 20 % en general, rarement pres de 0 ou de 100', losses.every(function(v) { return v >= 0 && v <= 100; }) && losses.filter(function(v) { return v >= 1 && v <= 20; }).length > 1400 && losses.filter(function(v) { return v > 60; }).length < 40);
+G = createFreshState(); G.level = 50;
+var cl = newEmployee('collector', 'Luc', 80, 3); cl.assignedIng = 'farine'; G.employees = [cl];
+var rFree = autoRate('farine');
+cl.limitMode = 'below'; cl.limitN = 50; G.ing.farine = 10;
+var rBelow = autoRate('farine');
+G.ing.farine = 80;
+var rAbove = autoRate('farine');
+cl.limitMode = 'hour'; cl.limitN = 1; G.ing.farine = 0;
+var rHour = autoRate('farine');
+check('Un cueilleur ne cueille que sous la limite, ou N par heure', rFree > 0 && rBelow > 0 && rAbove === 0 && rHour > 0 && rHour <= 1 / 3600 + 1e-12 && rHour < rFree, [rFree, rBelow, rAbove, rHour].join());
+G = createFreshState(); G.ing.farine = 100; G.ing.sucre = 100; G.ing.oeuf = 100;
+var disc = startCraft(findRec('cookie')); var dc = G.crafting[0]; dc.uid = 'u1';
+var back0 = craftRefund(dc);
+dc.startTime = Date.now() - dc.duration * 0.5;
+var back5 = craftRefund(dc);
+check('Jeter une preparation rend moins quand la barre a monte', disc && back0.farine === 2 && (back5.farine || 0) < back0.farine && discardCraft('u1') !== null && G.crafting.length === 0);
+G = createFreshState(); G.cakes.cookie = 5;
+var st = queueSale([{ rec: findRec('cookie'), qty: 5 }]); var m0 = G.money;
+G.sales[0].start = Date.now() - SALE_DELAY_MS / 2; G.sales[0].at = G.sales[0].start + SALE_DELAY_MS;
+tickSales();
+check('L argent d une vente arrive petit a petit', G.money > m0 + st * 0.4 && G.money < m0 + st * 0.6 && G.sales.length === 1, G.money - m0);
+check('Les themes boulangerie et cookie sont caches', findTheme('bakery').hidden === true && findTheme('cookie').hidden === true);
+G = createFreshState(); ui.seeTheme = 'horror';
+check('/theme see montre un theme sans le debloquer', activeThemeId() === 'horror' && !G.unlockedThemes.horror);
+ui.seeTheme = null;
+check('... et ne reste pas', activeThemeId() === 'light');
+G = createFreshState(); G.maxSpace = 100;
+processCommand('/ingredient strawberry set 4');
+processCommand('/recipe cookie set 3');
+check('Les commandes en anglais : /ingredient NOM set N, /recipe NOM set N', G.ing.fraise === 4 && G.cakes.cookie === 3, G.ing.fraise + ' ' + G.cakes.cookie);
+G.money = 1e6; var fl0 = G.ing.farine || 0;
+processCommand('/buy flour 3');
+check('/buy et /sell prennent un nom anglais', (G.ing.farine || 0) === fl0 + 3);
+processCommand('/machine set oven 2');
+check('/machine prend un nom anglais', G.machines.four === 2);
+processCommand('/employee add 2');
+processCommand('/employee ' + G.employees[0].name.toLowerCase() + ' level set 9');
+check('/employee NOM level set N change le niveau', G.employees.length === 2 && (G.employees[0].level === 9 || G.employees[0].type === 'novice'));
+check('/pause met le temps en pause sans toucher a G.paused', (function() { processCommand('/pause'); var on = softPause.on && !G.paused; processCommand('/pause off'); return on && !softPause.on; })());
+check('/changelog max et unmax', (function() { processCommand('/changelog max'); var a = G.settings.changelogMax === true; processCommand('/changelog unmax'); return a && G.settings.changelogMax === false; })());
+check('5 nouvelles musiques aux niveaux 100, 300, 500, 700 et 900', [100, 300, 500, 700, 900].every(function(lv) { return MUSIC_TRACKS.some(function(m) { return m.unlockLvl === lv; }); }));
+check('Chaque musique a des accords valides et des mesures completes', MUSIC_TRACKS.every(function(m) {
+  m.chords.forEach(function(c) { chordNotes(c); });
+  var per = m.beats / m.step;
+  return m.melody.split('|').every(function(bar) { return bar.trim().split(/\s+/).length === per; }) && m.melody.split('|').length === m.chords.length;
+}));
+check('Le sucre a son cube', findIng('sucre').e === '[[sugar_cube]]' && CUSTOM_ICONS.sugar_cube);
+check('Titres au feminin pour les femmes', empTitle('collector', 'Marie') === 'Cueilleuse' && empTitle('collector', 'Pierre') === 'Cueilleur' && empTitle('chef', 'Marie') === 'Cheffe pâtissière');
 
 var ko = results.filter(function(r) { return !r.ok; }).length;
 document.getElementById('total').textContent = (results.length - ko) + ' / ' + results.length + ' tests reussis';

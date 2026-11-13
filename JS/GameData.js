@@ -4,7 +4,7 @@
    employes, espace, evenements, themes
    ============================================ */
 
-var GAME_VERSION = 'Release 1.0';
+var GAME_VERSION = '1.1';
 
 // ============ CURRENCIES ============
 var CURRENCIES = [
@@ -212,10 +212,17 @@ var EMP_TYPES = [
   { id:'manager',   baseSalary:1,    unlockLvl:25, hireCost:1000 },
   { id:'maitre',    baseSalary:1.5,  unlockLvl:30, hireCost:2500 },
   { id:'seller',    baseSalary:0.5,  unlockLvl:35, hireCost:1200 },
+  // Le touche-a-tout : jusqu'a 3 metiers, tous niveau 3 au plus. On ne le trouve qu'en cherchant deux metiers a la fois.
+  { id:'versatile', baseSalary:2.5,  unlockLvl:20, hireCost:4000, hidden:true },
   { id:'chef',      baseSalary:2,    unlockLvl:65, hireCost:6000 },
   { id:'buyer',     baseSalary:3,    unlockLvl:90, hireCost:15000 },
 ];
-var EMP_MAX_LVL = 5;
+var EMP_MAX_LVL = 10;   // les niveaux qu'on peut former
+var EMP_GOLD_LVL = 11;  // le niveau or : seulement en candidature, a partir du niveau 120
+// Niveau du joueur a partir duquel un candidat de ce niveau peut se presenter
+var APPLICANT_LVL_REQ = { 1:0, 2:0, 3:15, 4:25, 5:35, 6:50, 7:65, 8:80, 9:95, 10:110, 11:120 };
+var PAY_STEPS = [-50, -20, -10, -5, 0, 5, 10, 20, 50];
+var VERSATILE_MAX_JOB_LVL = 3;
 
 var EMP_NAMES_LANG = {
   fr: ['Pierre','Marie','Jean','Sophie','Louis','Claire','Thomas','Julie','Hugo','Emma','Lucas','L\u00e9a','Nathan','Manon','Paul','Camille','Arthur','Alice','Gabriel','Jade'],
@@ -499,10 +506,10 @@ var THEME_LIST = [
   { id:'winter',   langKey:'settings.themeWinter', season:true },
   { id:'birthday', langKey:'settings.themeBirthday', birthday:true },
   { id:'horror',   langKey:'settings.themeHorror', month:10 }, // Seulement en octobre
-  { id:'bakery',   langKey:'settings.themeBakery', level:100 },
+  { id:'bakery',   langKey:'settings.themeBakery', level:100, hidden:true },
   { id:'party',    langKey:'settings.themeParty', level:500, hidden:true },
   { id:'space',    langKey:'settings.themeSpace', level:1000, hidden:true },
-  { id:'cookie',   langKey:'settings.themeCookie', sold:{ rec:'cookie', n:1000000 } }, // 1 million de cookies vendus
+  { id:'cookie',   langKey:'settings.themeCookie', sold:{ rec:'cookie', n:1000000 }, hidden:true }, // 1 million de cookies vendus
   { id:'tech',     langKey:'settings.themeTech', secret:true },     // 1000 clics sur Bob sans la console
   { id:'techgold', langKey:'settings.themeTechGold', secret:true }, // Bob en or massif
 ];

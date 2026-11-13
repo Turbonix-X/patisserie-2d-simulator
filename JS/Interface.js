@@ -289,8 +289,20 @@ function renderIngredients() {
     h += '</div></div>';
   });
   h += '</div>';
+  h += '<button type="button" class="ing-top" onclick="ingToTop()">↑ ' + t('ing.top') + '</button>';
   setHTML(el, h);
+  updateIngTop();
 }
+
+// Retour tout en haut des ingredients, visible seulement quand on est tout en bas
+function ingToTop() { var el = document.getElementById('ingredients'); if (el) el.scrollTo({ top: 0, behavior: 'smooth' }); }
+function updateIngTop() {
+  var el = document.getElementById('ingredients');
+  if (!el) return;
+  var low = el.scrollHeight - el.clientHeight - el.scrollTop < 40 && el.scrollTop > 60;
+  el.classList.toggle('at-bottom', low);
+}
+document.addEventListener('scroll', function(e) { if (e.target && e.target.id === 'ingredients') updateIngTop(); }, true);
 
 function doUnlock(kind, id) {
   var item = kind === 'ing' ? findIng(id) : findRec(id);
@@ -414,7 +426,7 @@ function renderRecipes() {
   var list = visibleRecipes();
   if (list.length === 0) h += '<p class="empty-note">' + t('rec.none') + '</p>';
   list.forEach(function(rec) {
-    var block = craftBlockReason(rec);
+    var blocks = craftBlockers(rec), block = blocks.length ? blocks[0] : null, tight = !canFitRecipe(rec);
     h += '<div class="rec-card' + (block ? ' disabled' : '') + '">';
     h += '<span class="rec-emoji">' + rec.e + '</span>';
     h += '<div class="rec-info">';
@@ -435,8 +447,12 @@ function renderRecipes() {
     if (prepMult(rec) < 0.95) h += '<span class="rec-tired">' + t('rec.tooMuch', { v: Math.round(prepMult(rec) * 100) }) + '</span>';
     else if (restMult(rec) > 1.02) h += '<span class="rec-rested">' + t('rec.rested', { v: Math.round((restMult(rec) - 1) * 100) }) + '</span>';
     h += '</div>';
-    if (block) {
-      h += '<div class="rec-reason">' + t(block === 'ing' ? 'rec.noIng' : block === 'space' ? 'rec.noSpace' : 'rec.queueFull') + '</div>';
+    // Manque d'ingredients et manque de place : les deux s'affichent en meme temps
+    if (blocks.length || tight) {
+      h += '<div class="rec-reason">';
+      blocks.forEach(function(b) { h += '<span>' + t(b === 'ing' ? 'rec.noIng' : 'rec.queueFull') + '</span>'; });
+      if (tight) h += '<span>' + t(blocks.length ? 'rec.noSpace' : 'rec.freeze') + '</span>';
+      h += '</div>';
     }
     h += '</div>';
     h += '<div class="rec-actions">';
@@ -556,6 +572,7 @@ function doSellAllClick() {
 // L'argent des ventes arrive apres un petit moment
 function tickSalesUI() {
   var earned = tickSales();
+  if (G.sales.length > 0) renderHeader();
   if (earned > 0) {
     playSellSound();
     showFloatingMoney(earned, null);
@@ -665,7 +682,8 @@ function doBuySpace() {
 function renderCraftingBar() {
   var el = document.getElementById('crafting-bar');
   if (!el) return;
-  if (G.crafting.length === 0 && G.sales.length === 0) { setHTML(el, ''); return; }
+  var pendingKeys = Object.keys(G.unlocks.pending || {});
+  if (G.crafting.length === 0 && G.sales.length === 0 && pendingKeys.length === 0) { setHTML(el, ''); fitDock(); return; }
   var now = Date.now();
   var groups = {};
   var order = [];
@@ -689,16 +707,64 @@ function renderCraftingBar() {
     var grp = groups[key];
     var first = grp.items[0];
     var elapsed = now - first.startTime;
-    var pct = Math.min(100, Math.floor(elapsed / first.duration * 100));
-    var remaining = Math.max(0, (first.duration - elapsed) / 1000);
     var data = grp.isIng ? findIng(grp.id) : findRec(grp.id);
     var name = grp.isIng ? t('i.' + grp.id) : recShortName(data);
-    h += '<div class="craft-item"><span class="craft-emoji">' + data.e + '</span><div class="craft-progress-wrap">';
+    // Une fournee gelee ne depasse pas ce que la place lui laisse
+    var pRaw = Math.max(0, Math.min(1, elapsed / first.duration));
+    var pCap = (!grp.isIng && first.cap !== undefined) ? Math.min(pRaw, first.cap) : pRaw;
+    var pct = Math.floor(pCap * 100);
+    var remaining = Math.max(0, (first.duration - elapsed) / 1000);
+    var frozen = !grp.isIng && first.frozen && pRaw > pCap + 0.001;
+    if (!first.uid) first.uid = newCraftUid();
+    h += '<div class="craft-item' + (frozen ? ' frozen' : '') + '" role="button" tabindex="0" onclick="showDiscardCraft(\'' + first.uid + '\')" title="' + escH(t(frozen ? 'craft.frozenTip' : 'craft.discardTip')) + '"><span class="craft-emoji">' + data.e + '</span><div class="craft-progress-wrap">';
     h += '<div class="craft-progress" style="width:' + pct + '%"></div>';
-    h += '<span class="craft-label">' + name + (grp.items.length > 1 ? ' x' + grp.items.length : '') + '</span>';
-    h += '</div><span class="craft-left">' + fmtTime(remaining) + '</span></div>';
+    h += '<span class="craft-label">' + name + (grp.items.length > 1 ? ' <small class="craft-x">x' + grp.items.length + '</small>' : '') + (frozen ? ' ❄' : '') + '</span>';
+    h += '</div><span class="craft-left">' + (frozen ? '❄' : fmtTime(remaining)) + '</span></div>';
+  });
+  // Un ingredient ou une recette en cours de deblocage
+  pendingKeys.forEach(function(key) {
+    var parts = key.split(':'), item = parts[0] === 'ing' ? findIng(parts[1]) : findRec(parts[1]);
+    if (!item) return;
+    var total = unlockDelay(item) * 1000, left = Math.max(0, G.unlocks.pending[key] - now);
+    h += '<div class="craft-item unlock-item" title="' + escH(t('unlock.barTip')) + '"><span class="craft-emoji">' + item.e + '</span><div class="craft-progress-wrap"><div class="craft-progress" style="width:' + Math.max(0, Math.min(100, Math.floor((1 - left / Math.max(1, total)) * 100))) + '%"></div>';
+    h += '<span class="craft-label">' + (parts[0] === 'ing' ? t('i.' + item.id) : recShortName(item)) + '</span></div><span class="craft-left">' + fmtTime(left / 1000) + '</span></div>';
+  });
+  // Un cueilleur qui change d'ingredient : son compte a rebours est la aussi
+  G.employees.forEach(function(emp) {
+    if (!hasJob(emp, 'collector') || !collectorMoving(emp)) return;
+    var total = collectorMoveSec(emp) * 1000, left = Math.max(0, emp.moveUntil - now);
+    h += '<div class="craft-item move-item" role="button" tabindex="0" onclick="showEmpInfoModal(' + emp.id + ')"><span class="craft-emoji">' + getIngEmoji(emp.assignedIng) + '</span><div class="craft-progress-wrap"><div class="craft-progress" style="width:' + Math.floor((1 - left / Math.max(1, total)) * 100) + '%"></div>';
+    h += '<span class="craft-label">' + escH(emp.name) + '</span></div><span class="craft-left">' + fmtTime(left / 1000) + '</span></div>';
   });
   setHTML(el, h);
+  fitDock();
+}
+
+function fitDock() {
+  var d = document.getElementById('dock');
+  if (d) document.documentElement.style.setProperty('--dock-h', d.offsetHeight + 'px');
+}
+
+// Jeter une preparation : les ingredients reviennent, d'autant moins que la barre a monte
+function showDiscardCraft(uid) {
+  var c = null;
+  G.crafting.forEach(function(x) { if (x.uid === uid) c = x; });
+  if (!c) return;
+  var back = craftRefund(c), parts = [];
+  for (var k in back) parts.push(getIngEmoji(k) + ' ' + fmt(back[k]) + ' ' + t('i.' + k));
+  var data = c.isIngCraft ? findIng(c.ingId) : findRec(c.recId);
+  var h = '<h2>' + data.e + ' ' + (c.isIngCraft ? t('i.' + c.ingId) : recShortName(data)) + '</h2>';
+  h += '<p>' + t('craft.progress', { v: Math.floor(craftProgress(c) * 100) }) + '</p>';
+  h += '<p class="set-help">' + t('craft.discardHelp') + '</p>';
+  h += '<p>' + (parts.length ? t('craft.youGet', { v: parts.join(', ') }) : t('craft.youGetNothing')) + '</p>';
+  h += '<div class="modal-btns"><button class="btn btn-danger" onclick="doDiscardCraft(\'' + uid + '\')">' + t('craft.discard') + '</button>';
+  h += '<button class="btn" onclick="hideModal()">' + t('common.cancel') + '</button></div>';
+  showModal(h);
+}
+function doDiscardCraft(uid) {
+  var back = discardCraft(uid);
+  hideModal();
+  if (back) { toast(t('craft.discarded')); renderCraftingBar(); renderIngredients(); renderSpaceBar(); renderMainPanel(); }
 }
 
 // ============ FENETRES ============
@@ -807,6 +873,10 @@ function showChangelog() {
   h += '<div class="modal-btns"><button class="btn" onclick="hideModal()">' + t('common.close') + '</button></div>';
   showModal(h, 'modal-changelog');
   fetch('CHANGELOG.md', { cache: 'no-cache' }).then(function(r) { if (!r.ok) throw 0; return r.text(); }).then(function(md) {
+    // /changelog max : on lit aussi ce qui est normalement secret
+    if (!(G.settings && G.settings.changelogMax)) return md;
+    return fetch('CHANGELOG-SECRET.md', { cache: 'no-cache' }).then(function(r) { return r.ok ? r.text() : ''; }).then(function(extra) { return md + '\n' + extra; }, function() { return md; });
+  }).then(function(md) {
     var el = document.getElementById('changelog-body');
     if (el) el.innerHTML = iconify(markdownLite(md));
   }).catch(function() {
@@ -830,8 +900,42 @@ function markdownLite(md) {
   return out + (inList ? '</ul>' : '');
 }
 
+// /pause : le temps s'arrete, mais on peut toujours acheter, ouvrir les menus... et on ne perd rien
+var softPause = { on: false, last: 0 };
+function setSoftPause(on) {
+  if (on === softPause.on) return;
+  if (on) {
+    endMenuPause();
+    softPause.on = true;
+    softPause.last = Date.now();
+  } else {
+    tickSoftPause();
+    softPause.on = false;
+  }
+  document.body.classList.toggle('soft-paused', softPause.on);
+  var badge = document.getElementById('soft-pause');
+  if (softPause.on && !badge) {
+    badge = document.createElement('button');
+    badge.id = 'soft-pause';
+    badge.type = 'button';
+    badge.onclick = function() { setSoftPause(false); };
+    document.body.appendChild(badge);
+  }
+  if (badge) {
+    if (softPause.on) badge.textContent = '\u23F8 ' + t('pause.soft');
+    else badge.remove();
+  }
+}
+// Tant que la pause douce dure, tout ce qui compte le temps est repousse d'autant
+function tickSoftPause() {
+  if (!softPause.on) return;
+  var now = Date.now(), ms = now - softPause.last;
+  softPause.last = now;
+  if (ms > 0) { shiftGameTimers(ms); shiftAllBakeries(ms); }
+}
+
 function beginMenuPause() {
-  if (G.paused || menuPause.on) return;
+  if (G.paused || menuPause.on || softPause.on) return;
   menuPause.on = true;
   menuPause.since = Date.now();
 }

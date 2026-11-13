@@ -2,6 +2,52 @@
 
 Tout ce qui a été ajouté à Pâtisserie 2D Simulator, de la plus récente à la plus ancienne. Pour comprendre les règles du jeu, va voir le [wiki](REGLES.md).
 
+## Release 1.1 (13 novembre 2026)
+
+Des employés bien plus profonds, une préparation qui gère enfin la place, et plein de réglages en plus.
+
+**Préparer et vendre**
+- Tu peux préparer même quand il reste très peu de place : la barre gèle jusqu'à ce que tu en libères.
+- La place se remplit petit à petit, à mesure que la barre de préparation avance.
+- Clique sur une barre de préparation pour la jeter : tu récupères une partie des ingrédients, de moins en moins à mesure que la barre a avancé.
+- Les préparations identiques se regroupent dans la barre du bas, avec un petit « x2 », « x3 »…
+- L'argent d'une vente arrive petit à petit, à mesure que la barre avance.
+- Quand tu ne peux pas préparer, la carte de la recette affiche tout ce qui manque en même temps : ingrédients et place.
+- La barre du bas est enfin visible sur téléphone.
+- Les ingrédients et recettes en cours de déblocage ont leur barre de progression en bas.
+
+**Employés**
+- 10 niveaux au lieu de 5. Plus tu montes, moins les niveaux élevés sont rares. Juste après avoir débloqué les employés, seuls les niveaux 1 et 2 existent.
+- Les apprentis n'ont plus de niveau.
+- Avant le niveau 10, personne ne se présente tout seul : il faut lancer une recherche.
+- Tu peux chercher deux métiers à la fois.
+- Un nouveau type d'employé, le touche-à-tout : jusqu'à 3 métiers (niveau 3 au maximum), un niveau à lui, et un métier sur lequel il se concentre. Changer de métier prend de 10 secondes à 1 minute.
+- Le manager choisit quels métiers il embauche, lesquels passent en premier, et à quels niveaux.
+- Le chef pâtissier a un budget par heure, et ne prépare rien sous un montant que tu choisis.
+- Tu peux changer le salaire d'un employé, de −50 % à +50 %. Moins payé, il est moins motivé au maximum. Payé trop peu, il démissionne presque toujours.
+- Les femmes ont leur titre au féminin : cueilleuse, boulangère, pâtissière…
+- Des visages plus réalistes, avec plus de détails.
+
+**Cueilleurs**
+- Deux niveaux : l'efficacité, et la perte (de 0 % à 100 % de ce qu'ils cueillent). Les candidats perdent en général de 1 à 20 %. Moins il perd, plus il coûte cher.
+- Des limites : ne cueillir que s'il y en a moins de N, ou produire N par heure.
+- Quand tu changes l'ingrédient d'un cueilleur, son compte à rebours se voit dans sa fiche et dans la barre du bas.
+- Les cueilleurs très rares de haut niveau peuvent être spécialisés dans un ingrédient : formation très rapide, mais plus de changement possible.
+
+**Bob**
+- Bob a de nouveaux habits et un nouveau visage dans chaque thème.
+
+**Réglages**
+- Une pause automatique : si tu ne touches plus à rien pendant le temps choisi, le jeu se met en pause.
+- La sauvegarde se fait par fichier ou par copier-coller, au choix.
+- De belles animations à l'ouverture et à la fermeture des réglages.
+
+**Petits changements**
+- Un bouton pour remonter tout en haut de la liste des ingrédients.
+- Le sucre a une nouvelle icône : un cube de sucre.
+- 5 nouvelles musiques, à débloquer en montant de niveau.
+- Le jeu n'affiche plus que « 1.1 » comme numéro de version.
+
 ## Release 1.0 (9 novembre 2026)
 
 La première version complète du jeu.

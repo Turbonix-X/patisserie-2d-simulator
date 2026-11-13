@@ -20,7 +20,7 @@ Un jeu de gestion de pâtisserie : achète tes ingrédients, prépare tes gâtea
 - **Recettes :** 60 pâtisseries à débloquer et à préparer, du cookie au gâteau infini.
 - **Ventes :** les prix bougent selon ce que tu vends, et la demande revient avec le temps.
 - **Bâtiments :** au niveau 40, 59 bâtiments qui livrent une énorme quantité d'ingrédients une fois par heure.
-- **Employés :** cueilleurs, boulangers, vendeurs, managers, chefs pâtissiers, maîtres d'hôtel, transporteurs, intendants et apprentis, avec leur moral et leur salaire.
+- **Employés :** cueilleurs, boulangers, vendeurs, managers, chefs pâtissiers, maîtres d'hôtel, transporteurs, intendants, touche-à-tout et apprentis, sur 10 niveaux, avec leur moral et leur salaire réglable.
 - **Espace et loyer :** agrandis ta boutique, mais gare aux dettes.
 - **Banque :** à ta première dette, Bob t'ouvre un compte et t'explique les prêts, de 10 € à 10 000 €.
 - **Commandes :** au niveau 30, des clients passent commande. Plus c'est compliqué, plus la prime est grosse.
@@ -28,11 +28,11 @@ Un jeu de gestion de pâtisserie : achète tes ingrédients, prépare tes gâtea
 - **Événements :** rush, soldes, passage à la télé, contrôle sanitaire…
 - **Succès et statistiques :** 1000 succès à débloquer. Chacun augmente tes prix de vente.
 - **Plusieurs pâtisseries :** dès la deuxième, des graphiques et les totaux de toutes tes boutiques.
-- **Thèmes :** clair, sombre, un par saison avec ses décors (fleurs, plage, neige, feuilles), un pour ton anniversaire, la boulangerie au niveau 100, la fête au niveau 500, l'espace au niveau 1000, un thème cookie pour le million de cookies vendus, et des thèmes cachés.
+- **Thèmes :** clair, sombre, un par saison avec ses décors (fleurs, plage, neige, feuilles), un pour ton anniversaire, la fête au niveau 500, l'espace au niveau 1000, et des thèmes cachés à découvrir.
 - **Langues :** anglais, français, espagnol, portugais, allemand, arabe, mandarin, japonais, coréen et russe.
-- **Musique :** des morceaux composés pour le jeu, joués en direct par le navigateur.
+- **Musique :** des morceaux composés pour le jeu, joués en direct par le navigateur, dont certains à débloquer en montant de niveau.
 - **Bob :** ton chef pâtissier t'explique le jeu, te conseille, te lance des défis et adore le sucre. Évite de trop l'embêter.
-- **Sauvegarde :** automatique, avec export et import d'un code, et gains pendant ton absence.
+- **Sauvegarde :** automatique, avec export et import par fichier ou par copier-coller, une pause automatique, et des gains pendant ton absence.
 
 ## Lancer le jeu sur ton ordi
 

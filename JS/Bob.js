@@ -261,6 +261,13 @@ function tickBobChat(now) {
 
 function tickIdle() {
   var now = Date.now();
+  // Pause automatique : plus aucun clic ni touche depuis le temps choisi
+  var autoMin = (G.settings && G.settings.autoPause) || 0;
+  if (autoMin > 0 && !G.paused && !G.gameOver && !introActive && G.introDone && now - bobLastInput >= autoMin * 60000) {
+    toast(t('settings.autoPaused'));
+    togglePause();
+    return;
+  }
   tickBobChat(now);
   maybeAskNotifications();
   tickAwayReminder();
@@ -509,6 +516,18 @@ function pickLine(key) {
 
 function bobPoke() {
   var bob = document.getElementById('bob');
+  // En or, 10 clics suffisent pour le faire redevenir normal
+  if ((G.bobGold || 0) > 0) {
+    G.bobGoldClicks = (G.bobGoldClicks || 0) + 1;
+    if (G.bobGoldClicks >= 10) {
+      G.bobGold = 0; G.bobGoldClicks = 0;
+      fxBurstOn(bob, 22, ['#FFD54F', '#FFC107', '#FFF8E1'], true);
+      bobMood('wow', 1500);
+      bobSay(t('bob.goldOff'));
+      renderBob(); save();
+      return;
+    }
+  }
   if (!G.cheatUnlocked) {
     G.bobPokes = (G.bobPokes || 0) + 1;
     if (G.bobPokes >= TECH_CLICKS && !G.unlockedThemes.tech) { G.unlockedThemes.tech = true; toast(t('theme.techUnlocked')); save(); }
@@ -516,8 +535,8 @@ function bobPoke() {
     if ((G.bobGold || 0) >= 5) {
       bobMood('joy', 1500);
       fxBurstOn(bob, 20, ['#FFD54F', '#FFC107', '#FFF8E1'], true);
-      bobSay(t('bob.goldGive'));
-      setTimeout(showAdminPopup, 1200);
+      if (G.bobGoldClicks === 1) { bobSay(t('bob.goldGive')); setTimeout(showAdminPopup, 1200); }
+      else if (G.bobGoldClicks === 5) bobSay(t('bob.goldHalf'));
       return;
     }
   }

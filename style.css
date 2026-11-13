@@ -2555,3 +2555,58 @@ body.bob-can-wasabi .ing-card[data-ing="wasabi"], body.bob-can-gold .ing-card[da
 :root[data-theme="techgold"] .bob-apron-pocket { fill: #3A3214; stroke: #FACC15; }
 :root[data-theme="techgold"] .bob-kerchief { fill: #FACC15; stroke: #A16207; }
 :root[data-theme="techgold"] .bob-toque-band { fill: #A16207; stroke: #FACC15; }
+
+/* ---------- Version 1.1 ---------- */
+
+/* Une préparation gelée : plus de place. Un clic permet de la jeter. */
+.craft-item { cursor: pointer; }
+.craft-item.frozen { border-color: #7FD3FF; }
+.craft-item.frozen .craft-progress { filter: grayscale(.4) hue-rotate(160deg) brightness(1.15); animation: none; }
+.craft-item.frozen .craft-emoji { animation: none; filter: drop-shadow(0 0 4px #7FD3FF); }
+.craft-x { font-size: .72em; font-weight: 700; opacity: .85; }
+.move-item { border-color: var(--mauve-light); }
+.rec-reason { display: flex; flex-wrap: wrap; gap: 2px 10px; }
+
+/* Sur téléphone, la barre du bas est collée en bas de l'écran, toujours visible */
+@media (max-width: 899px) {
+  #dock {
+    position: fixed; left: 8px; right: 8px; bottom: calc(env(safe-area-inset-bottom, 0px) + 20px);
+    width: auto; margin: 0; z-index: 900;
+  }
+  #main-panel { margin-bottom: calc(var(--dock-h, 90px) + 30px); }
+  #toast-area { bottom: calc(var(--dock-h, 90px) + 40px); }
+}
+
+/* Employés : niveau or, perte, spécialiste, métiers du touche-à-tout */
+.emp-skill-badge.gold { background: linear-gradient(135deg, #FFE58A, #E0A800); color: #4A3300; border-color: #B8860B; box-shadow: 0 0 8px rgba(255,200,40,.6); font-weight: 800; }
+.applicant-card.gold { box-shadow: 0 0 0 2px #FFD54F, 0 0 18px rgba(255,200,40,.7); background-image: linear-gradient(135deg, rgba(255,229,138,.18), transparent 60%); }
+.emp-loss-badge, .emp-spec-badge, .emp-job-chip { display: inline-block; padding: 1px 7px; border-radius: 99px; font-size: .68rem; font-weight: 700; background: var(--surface-2); border: 1px solid var(--border); white-space: nowrap; }
+.emp-spec-badge { background: var(--mauve-soft); }
+.recruit-section .search-go { margin-top: 8px; }
+.cfg-sub { margin: 10px 0 4px; font-size: .85rem; color: var(--mauve-deep); }
+.cfg-pair { display: inline-flex; align-items: center; gap: 6px; }
+.cfg-row input[type="number"] { width: 130px; }
+.emp-face { filter: drop-shadow(0 1px 1px rgba(0,0,0,.18)); }
+
+/* Retour en haut des ingrédients, barres de déblocage */
+.ing-top { display: none; position: sticky; bottom: 8px; margin: 10px auto 0; padding: 7px 16px; border-radius: 99px; border: 1px solid var(--border); background: var(--surface); box-shadow: var(--shadow-md, 0 4px 14px rgba(0,0,0,.2)); font: inherit; font-weight: 700; cursor: pointer; color: var(--text); z-index: 3; }
+#ingredients.at-bottom .ing-top { display: block; }
+.unlock-item .craft-progress { background: linear-gradient(90deg, #7E57C2, #B39DDB); }
+
+/* Les réglages et la console : une entrée et une sortie bien à eux */
+.modal.modal-settings { animation: set-in .46s var(--spring) both; transform-origin: 50% 40%; }
+.modal-overlay.closing .modal.modal-settings { animation: set-out .2s ease forwards; }
+@keyframes set-in { 0% { opacity: 0; transform: translateY(24px) scale(.92) rotateX(8deg); filter: blur(6px); } 60% { filter: blur(0); } 100% { opacity: 1; transform: none; filter: none; } }
+@keyframes set-out { to { opacity: 0; transform: translateY(18px) scale(.94); filter: blur(4px); } }
+.modal.modal-console { animation: console-in .42s cubic-bezier(.2,.9,.25,1) both; transform-origin: 50% 0; }
+.modal-overlay.closing .modal.modal-console { animation: console-out .2s ease-in forwards; }
+@keyframes console-in { 0% { opacity: 0; transform: translateY(-42px) scaleY(.6); clip-path: inset(0 0 100% 0); } 55% { opacity: 1; clip-path: inset(0 0 0 0); } 100% { opacity: 1; transform: none; clip-path: inset(0 0 0 0); } }
+@keyframes console-out { to { opacity: 0; transform: translateY(-36px) scaleY(.5); } }
+@media (prefers-reduced-motion: reduce) { .modal.modal-settings, .modal.modal-console, .modal-overlay.closing .modal { animation-duration: .01s; } }
+
+/* Pause douce (/pause) */
+#soft-pause { position: fixed; top: 10px; left: 50%; transform: translateX(-50%); z-index: 1900; padding: 6px 16px; border-radius: 99px; border: 2px solid var(--mauve); background: var(--surface-solid); color: var(--text); font: inherit; font-weight: 800; cursor: pointer; box-shadow: 0 6px 22px rgba(0,0,0,.3); animation: soft-pulse 2s ease-in-out infinite; }
+@keyframes soft-pulse { 50% { box-shadow: 0 6px 22px rgba(0,0,0,.3), 0 0 0 6px rgba(150,110,220,.22); } }
+body.soft-paused #main-panel, body.soft-paused #dock { filter: saturate(.55); }
+
+.save-area { width: 100%; margin: 6px 0 8px; padding: 8px 10px; border: 1.5px solid var(--border); border-radius: 10px; background: var(--surface-2); color: var(--text); font: .75rem/1.3 ui-monospace, Consolas, monospace; resize: vertical; }

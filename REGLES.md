@@ -1,6 +1,6 @@
 # Le wiki de Pâtisserie 2D Simulator
 
-Tout ce qu'il faut savoir pour comprendre le jeu. Ce wiki décrit la **Release 1.0**.
+Tout ce qu'il faut savoir pour comprendre le jeu. Ce wiki décrit la **Release 1.1**.
 
 > **À savoir :** les recettes du jeu sont fausses. Les quantités et les ingrédients servent juste à donner un parcours au jeu. Ne les cuisine pas chez toi !
 
@@ -53,11 +53,21 @@ Les recettes sont rangées de la plus simple à la plus rare. Ce qui reste à d�
 
 Pour avoir plus de places, achète et améliore le **Four** dans l'onglet Machines.
 
-Préparer demande aussi de la place pour ranger ce qui sort du four. Si la place manque à la fin de la cuisson, les ingrédients te sont rendus.
+**La place se remplit petit à petit.** Une préparation ne prend pas toute sa place d'un coup : plus la barre avance, plus la place est occupée. Si la place manque, tu peux quand même préparer, mais la barre **gèle** (❄) jusqu'à ce que tu libères de la place, en vendant ou en agrandissant.
+
+**Jeter une préparation :** clique sur sa barre dans la barre du bas. Tu récupères une partie des ingrédients : moins il t'en revient, plus la barre a avancé.
+
+**Les mêmes préparations se regroupent** dans la barre, avec un petit « x2 », « x3 »…
+
+Quand tu ne peux pas préparer, la carte de la recette te dit tout ce qui manque en même temps : les ingrédients, et la place.
+
+**Le coût d'une recette** est la somme du prix de chacun de ses ingrédients, en quantité.
+
+Les ingrédients et les recettes que tu es en train de débloquer ont leur barre de progression en bas.
 
 ## Vendre et les prix
 
-- Vendre prend 2 secondes : le stock part tout de suite, et l'argent arrive après.
+- Vendre prend 2 secondes : le stock part tout de suite, et l'argent arrive petit à petit, à mesure que la barre avance.
 - Plus tu vends le même gâteau, plus son prix baisse, jusqu'à 30 % du prix normal au pire.
 - Préparer trop souvent la même recette fait aussi baisser son prix de vente, jusqu'à 70 % du prix normal. La carte de la recette te prévient, et ça s'oublie avec le temps.
 - À l'inverse, une recette que tu n'as pas préparée depuis plus de 10 minutes se vend petit à petit plus cher, jusqu'à +20 % au bout d'une heure.
@@ -133,9 +143,9 @@ En plus de celles-ci, **80 autres machines** arrivent entre les niveaux 20 et 10
 
 ## Les employés
 
-Lance une **recherche** dans l'onglet Employés : elle prend du temps et ne marche pas toujours. Plus ton niveau est haut, plus tu as de chances. Des candidats se présentent aussi tout seuls, rarement au début, puis de plus en plus souvent.
+Lance une **recherche** dans l'onglet Employés : elle prend du temps et ne marche pas toujours. Plus ton niveau est haut, plus tu as de chances. Tu peux chercher **deux métiers à la fois** : quelqu'un qui a les deux peut se présenter, ou quelqu'un qui n'en a qu'un. Avant le **niveau 10**, personne ne se présente tout seul : il faut chercher. Ensuite, des candidats arrivent aussi tout seuls, de plus en plus souvent.
 
-**Les candidatures :** la plupart des candidats débutent au niveau 1, mais il arrive, rarement, qu'un candidat soit déjà formé (jusqu'au niveau 5). Il coûte alors bien plus cher. Clique sur une candidature pour voir à quoi sert le métier et ce que veut dire son niveau.
+**Les candidatures :** la plupart des candidats débutent au niveau 1, mais il arrive, rarement, qu'un candidat soit déjà formé (jusqu'au niveau 10). Plus tu montes de niveau, moins les niveaux élevés sont rares. Juste après avoir débloqué les employés, il n'y a que des niveaux 1 et 2 ; les niveaux 3 à 10 demandent d'avoir atteint les niveaux 15, 25, 35, 50, 65, 80, 95 et 110. Un employé déjà formé coûte bien plus cher. Clique sur une candidature pour voir à quoi sert le métier et ce que veut dire son niveau.
 
 **Clique sur un employé** pour ouvrir sa fiche : ses réglages, sa formation, sa prime.
 
@@ -147,17 +157,26 @@ Lance une **recherche** dans l'onglet Employés : elle prend du temps et ne marc
 
 | Employé | Niveau | Ce qu'il fait | Réglages |
 |---|---|---|---|
-| Apprenti | 5 | Rien pour l'instant : paie-lui un métier, c'est moins cher qu'embaucher | Son futur métier |
-| Cueilleur | 5 | Produit un ingrédient à chaque seconde. Quand tu changes son ingrédient, il met de 10 s (niveau 1) à 2 min (niveau max) à s'y mettre | Quel ingrédient |
+| Apprenti | 5 | Rien pour l'instant : paie-lui un métier, c'est moins cher qu'embaucher. Il n'a pas de niveau | Son futur métier |
+| Cueilleur | 5 | Produit un ingrédient à chaque seconde, moins ce qu'il perd. Quand tu changes son ingrédient, il met de 10 s (niveau 1) à 2 min (niveau max) à s'y mettre, et son compte à rebours se voit dans sa fiche et dans la barre du bas | Quel ingrédient, et une limite |
+| Touche-à-tout | 20, par recherche à deux métiers | Fait jusqu'à 3 métiers (niveau 3 au maximum chacun). Son niveau à lui lui fait garder plus de niveaux quand il fait tout en même temps | Sur quel métier il se concentre (changer prend de 10 s à 1 min), et les réglages de chacun de ses métiers |
 | Boulanger | 10 | Fait baisser le temps de préparation | Aucun |
 | Transporteur | 20, avec 2 pâtisseries | Emmène de l'argent ou du stock vers une autre pâtisserie. Un trajet dure de 10 s à 10 min, peut être en retard, ou avoir un accident et perdre son chargement | Où, quoi et combien |
-| Manager | 25 | Remonte le moral de l'équipe, et peut embaucher à ta place | Embauche automatique, compétence minimum |
+| Manager | 25 | Remonte le moral de l'équipe, et peut embaucher à ta place | Embauche automatique, compétence minimum, les métiers qu'il embauche, ceux qu'il regarde en premier, et les niveaux |
 | Maître d'hôtel | 30 | Livre les commandes à ta place | Aucun |
 | Vendeur | 35 | Vend tout seul, les gâteaux les plus chers d'abord | La part du stock qu'il peut vendre |
-| Chef pâtissier | 65 | Prépare tout seul avec ce qu'il y a en stock | Tout, seulement ce qui manque pour les commandes, seulement certaines recettes, ou des priorités |
+| Chef pâtissier | 65 | Prépare tout seul avec ce qu'il y a en stock | Tout, seulement ce qui manque pour les commandes, seulement certaines recettes, ou des priorités. Un budget maximum par heure, et un montant sous lequel il ne prépare rien |
 | Intendant | 90 | Commande ce qui manque pour tes favoris, livré après 30 secondes | Aucun |
 
-**Les niveaux :** chaque employé a 5 niveaux. Chaque niveau double ses capacités, mais coûte 8 fois plus cher que le précédent. Pendant sa formation, il ne travaille pas.
+**Les niveaux :** chaque employé a 10 niveaux (sauf l'apprenti, qui n'en a pas). Chaque niveau double ses capacités, mais coûte 8 fois plus cher que le précédent. Pendant sa formation, il ne travaille pas. Les cueilleurs ont deux niveaux : l'efficacité (combien ils cueillent) et la perte (voir plus bas).
+
+**Les cueilleurs et leur perte :** un cueilleur perd une part de ce qu'il cueille, de 0 % (rien) à 100 % (tout). Les candidats perdent en général de 1 à 20 %, et c'est très rare d'être près de 0 % ou près de 100 %. Moins il perd, plus il coûte cher.
+
+**Leur limite :** tu peux dire à un cueilleur de ne cueillir que s'il y en a moins de N, ou de produire N par heure. Dans ce cas sa vitesse change, sans jamais dépasser son maximum.
+
+**Le salaire :** depuis sa fiche, tu peux changer le salaire de −50 %, −20 %, −10 %, −5 %, +5 %, +10 %, +20 % ou +50 %. Moins payé, son moral maximum baisse. Payé trop peu, il démissionne presque toujours.
+
+**Au féminin :** les employées ont leur titre au féminin : cueilleuse, boulangère, pâtissière…
 
 **Les vendeurs :** seul, un vendeur est très lent. Plus il y en a, plus chacun va vite. Avec un maître d'hôtel, ils ne touchent pas à ce qui est réservé pour les commandes.
 
@@ -216,12 +235,10 @@ D'autres événements ne touchent qu'**un seul ingrédient** (pénurie : il coû
 | Printemps, Été, Automne, Hiver | Pendant leur saison, et ils se bloquent quand elle se termine |
 | Anniversaire | Le jour de ton anniversaire, si tu as indiqué ta date |
 | Horreur | Seulement en octobre : noir et orange, avec citrouilles, chauves-souris et fantômes |
-| Boulangerie | Pour toujours dès le niveau 100 |
 | Fête | Pour toujours dès le niveau 500. Caché avant |
 | Espace | Pour toujours dès le niveau 1000. Caché avant |
-| Cookie | Pour toujours, une fois 1 million de cookies vendus |
 
-D'autres thèmes sont cachés : à toi de les trouver.
+D'autres thèmes sont cachés : à toi de les trouver. Dans les thèmes spéciaux, Bob change de tenue et de visage.
 
 Tu peux choisir un thème pour tout le jeu, ou seulement pour la pâtisserie où tu es. Dans les thèmes spéciaux, Bob change de tenue.
 
@@ -235,11 +252,12 @@ Ils sont dans les **réglages**. Il y a 1000 succès. Un succès pas encore obte
 
 - **Les nouveautés :** clique sur le numéro de version, en haut à côté du logo, pour voir tout ce qui a changé à chaque mise à jour.
 - **Le bouton pause** ou la touche **Échap** arrêtent le jeu. Ouvrir les réglages ou la liste des pâtisseries l'arrête aussi.
+- **La pause automatique :** dans les réglages, choisis un temps : si tu ne touches plus à rien pendant ce temps, le jeu se met en pause tout seul.
 - Le jeu se sauvegarde tout seul toutes les 30 secondes, dans ton navigateur.
 - Quand tu reviens, tes boutiques ont travaillé pendant 5 heures au maximum : cueilleurs, bâtiments, vendeurs, loyers, salaires et prêts. Aucune dette n'est créée pendant ton absence. Le transporteur, lui, attend ton retour.
-- Tu peux télécharger ta partie dans un fichier, et l'ouvrir ailleurs pour la retrouver.
+- Tu peux exporter ta partie dans un fichier ou sous forme de code à copier-coller, et l'importer ailleurs de la même façon.
 - **Trop de clics :** plus de 15 clics par seconde déclenchent une pause de 3 secondes. Après 3 pauses, une petite addition vérifie que tu n'es pas un robot. Après 3 mauvaises réponses, tu es bloqué 5 minutes.
 
 ## Sur téléphone
 
-Le jeu marche aussi sur téléphone et sur tablette. Les ingrédients sont en haut, au-dessus des onglets. Le jeu existe en français, en anglais, en espagnol, en portugais, en allemand, en arabe, en mandarin, en japonais, en coréen et en russe : il prend la langue de ton navigateur au départ, et tu peux la changer dans les réglages.
+Le jeu marche aussi sur téléphone et sur tablette. Les ingrédients sont en haut, au-dessus des onglets, et la barre du bas reste toujours visible. Le jeu existe en français, en anglais, en espagnol, en portugais, en allemand, en arabe, en mandarin, en japonais, en coréen et en russe : il prend la langue de ton navigateur au départ, et tu peux la changer dans les réglages.

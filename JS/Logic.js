@@ -56,7 +56,7 @@ function birthdayBonus() {
 function empTraining(emp) { return !!emp.trainingUntil && emp.trainingUntil > Date.now(); }
 
 // Un employe en pause ne fait rien, mais son salaire continue de tomber
-function empWorking(emp) { return (emp.status === 'working' || emp.status === 'poor') && !empTraining(emp) && !emp.paused; }
+function empWorking(emp) { return (emp.status === 'working' || emp.status === 'poor') && !empTraining(emp) && !emp.paused && !empSwitching(emp); }
 
 // L'ordre des metiers dans l'onglet : de base, le meilleur metier en haut et les apprentis en bas
 function empGroupOrder() {
@@ -81,16 +81,57 @@ function empDashboard() {
     if (e.paused) d.paused++;
     else if (e.status === 'striking') d.striking++;
     else if (empWorking(e)) d.working++;
-    if (e.type === 'collector' && e.assignedIng) d.collectors[e.assignedIng] = (d.collectors[e.assignedIng] || 0) + 1;
+    if (hasJob(e,'collector') && e.assignedIng) d.collectors[e.assignedIng] = (d.collectors[e.assignedIng] || 0) + 1;
   });
   return d;
 }
 
-// Chaque niveau double ce que sait faire un employe
-function empLevelMult(emp) { return Math.pow(2, Math.min(EMP_MAX_LVL, emp.level || 1) - 1); }
+// Chaque niveau double ce que sait faire un employe. Le niveau or (11) fait 10 fois le niveau 10.
+function empLvl(emp) { return emp.type === 'novice' ? 1 : Math.max(1, Math.min(EMP_GOLD_LVL, emp.level || 1)); }
+function lvlMultOf(L) { return L >= EMP_GOLD_LVL ? 10 * Math.pow(2, EMP_MAX_LVL - 1) : Math.pow(2, L - 1); }
+function empSwitching(emp) { return !!emp.switchUntil && Date.now() < emp.switchUntil; }
+function jobRec(emp, type) { var j = null; (emp.jobs || []).forEach(function(x) { if (x.type === type) j = x; }); return j; }
 
-function empPower(emp) {
-  return empLevelMult(emp) * empSkillMult(emp) * (emp.status === 'poor' ? 0.5 : 1);
+// Le niveau avec lequel cet employe fait ce metier tout de suite (0 : il ne le fait pas)
+function jobLevel(emp, type) {
+  if (emp.type !== 'versatile') return emp.type === type ? empLvl(emp) : 0;
+  var j = jobRec(emp, type);
+  if (!j) return 0;
+  var f = emp.focus || 'all';
+  if (f !== 'all' && f !== type) return 0;
+  if (f === type) return j.level;
+  // Tous les metiers en meme temps : son propre niveau decide de ce qu'il garde
+  var keep = 0.25 + 0.075 * Math.max(1, Math.min(EMP_MAX_LVL, emp.level || 1));
+  return Math.max(1, Math.round(j.level * keep));
+}
+function hasJob(emp, type) { return jobLevel(emp, type) > 0 && !empSwitching(emp); }
+
+function empLevelMult(emp, type) {
+  var L = emp.type === 'versatile' ? Math.max(1, jobLevel(emp, type)) : empLvl(emp);
+  return lvlMultOf(L);
+}
+
+function empPower(emp, type) {
+  // Un employe tres motive (bien paye) travaille mieux
+  var boost = emp.morale > 100 ? 1 + (emp.morale - 100) / 100 : 1;
+  return empLevelMult(emp, type) * empSkillMult(emp) * (emp.status === 'poor' ? 0.5 : 1) * boost;
+}
+
+// Le cueilleur : son efficacite, sa perte, et sa limite de production
+function collectorLoss(emp) { return emp.lossPct === undefined ? 10 : Math.max(0, Math.min(100, emp.lossPct)); }
+function collectorOutput(emp, ingId) {
+  var r = empPower(emp, 'collector') * (1 - collectorLoss(emp) / 100);
+  if (emp.limitMode === 'below' && (G.ing[ingId] || 0) >= (emp.limitN || 0)) return 0;
+  if (emp.limitMode === 'hour') r = Math.min(r, (emp.limitN || 0) / 3600);
+  return r;
+}
+// Moins il perd, plus il est cher
+function lossCostMult(loss) { var l = Math.max(0, Math.min(100, loss)) / 100; return (0.4 + 1.2 * Math.pow(1 - l, 2)) / 1.37; }
+function sampleLoss() {
+  var r = Math.random();
+  if (r < 0.04) return Math.floor(Math.random() * 2);
+  if (r < 0.07) return Math.round(40 + 60 * Math.pow(Math.random(), 3));
+  return 1 + Math.floor(Math.random() * 20);
 }
 
 function empCount(type) {
@@ -126,7 +167,7 @@ function autoRate(ingId) {
   var r = 0;
   for (var e = 0; e < G.employees.length; e++) {
     var emp = G.employees[e];
-    if (emp.type === 'collector' && emp.assignedIng === ingId && empWorking(emp) && !collectorMoving(emp)) r += empPower(emp);
+    if (hasJob(emp,'collector') && emp.assignedIng === ingId && empWorking(emp) && !collectorMoving(emp)) r += collectorOutput(emp, ingId);
   }
   if (G.eventAutoBonus) r *= (1 + G.eventAutoBonus);
   return r * birthdayBonus();
@@ -233,8 +274,20 @@ function usedSpace() {
   return Math.round(s * 100) / 100;
 }
 
-// Place deja promise aux fournees en cours ou en attente
+// La place prise petit a petit : plus la barre de preparation monte, plus l'espace se remplit
 function reservedSpace() {
+  var s = 0;
+  for (var i = 0; i < G.crafting.length; i++) {
+    var c = G.crafting[i];
+    if (c.isIngCraft || c.startTime === null) continue;
+    var rec = findRec(c.recId);
+    if (rec) s += rec.space * rec.qty * (c.sp || 0);
+  }
+  return s;
+}
+
+// La place que toutes les fournees en cours ou en attente finiront par prendre
+function committedSpace() {
   var s = 0;
   for (var i = 0; i < G.crafting.length; i++) {
     if (G.crafting[i].isIngCraft) continue;
@@ -250,7 +303,7 @@ function maxSpaceNow() { return G.creative ? Infinity : G.maxSpace * (1 + machin
 function batchSpace(rec) { return rec.space * rec.qty; }
 
 function canFitRecipe(rec) {
-  return usedSpace() + reservedSpace() + batchSpace(rec) <= maxSpaceNow();
+  return usedSpace() + committedSpace() + batchSpace(rec) <= maxSpaceNow();
 }
 
 function nextSpaceUpgrade() {
@@ -276,6 +329,7 @@ function startQueuedCrafts() {
   for (var i = 0; i < G.crafting.length && free > 0; i++) {
     if (G.crafting[i].startTime === null) {
       G.crafting[i].startTime = Date.now();
+      if (G.crafting[i].sp === undefined) G.crafting[i].sp = 0;
       free--;
     }
   }
@@ -290,13 +344,14 @@ function canMake(rec) {
   return true;
 }
 
-// Une raison lisible quand on ne peut pas preparer
-function craftBlockReason(rec) {
-  if (!canMake(rec)) return 'ing';
-  if (!canFitRecipe(rec)) return 'space';
-  if (G.crafting.length >= OVEN_CONFIG.maxQueue) return 'queue';
-  return null;
+// Ce qui empeche de preparer. Le manque de place n'en fait pas partie : on prepare quand meme, la barre gele.
+function craftBlockers(rec) {
+  var b = [];
+  if (!canMake(rec)) b.push('ing');
+  if (G.crafting.length >= OVEN_CONFIG.maxQueue) b.push('queue');
+  return b;
 }
+function craftBlockReason(rec) { var b = craftBlockers(rec); return b.length ? b[0] : null; }
 
 function recipeCost(rec) {
   var c = 0;
@@ -316,7 +371,7 @@ function missingCost(rec) {
 // Le boulanger fait baisser le temps de preparation, et ses machines aussi
 function craftSpeedMult() {
   var bakers = 0;
-  G.employees.forEach(function(e) { if (e.type === 'baker' && empWorking(e)) bakers += 0.05 * empLevelMult(e); });
+  G.employees.forEach(function(e) { if (hasJob(e,'baker') && empWorking(e)) bakers += 0.05 * empLevelMult(e, 'baker'); });
   if (G.creative) bakers = 1;
   return Math.max(0.05, Math.max(0.2, 1 - bakers) * (1 - Math.min(80, machineBonus('prep')) / 100));
 }
@@ -325,10 +380,38 @@ function getCraftDuration(rec) {
   return Math.max(0.5, rec.prepTime * craftSpeedMult());
 }
 
+function newCraftUid() { return Math.random().toString(36).slice(2, 10); }
+
+// Ce que tu recuperes si tu jettes une preparation : plus la barre a monte, moins il en reste
+function craftProgress(c) {
+  if (c.startTime === null) return 0;
+  var p = Math.max(0, Math.min(1, (Date.now() - c.startTime) / c.duration));
+  if (!c.isIngCraft && c.cap !== undefined) p = Math.min(p, c.cap);
+  return p;
+}
+function craftRefund(c) {
+  var req = c.isIngCraft ? (findIng(c.ingId) || {}).craftReq : (findRec(c.recId) || {}).req;
+  var out = {}, p = craftProgress(c);
+  for (var k in (req || {})) { var n = Math.floor(req[k] * (1 - p)); if (n > 0) out[k] = n; }
+  return out;
+}
+function discardCraft(uid) {
+  for (var i = 0; i < G.crafting.length; i++) {
+    var c = G.crafting[i];
+    if (c.uid !== uid) continue;
+    var back = craftRefund(c);
+    for (var k in back) G.ing[k] = (G.ing[k] || 0) + back[k];
+    G.crafting.splice(i, 1);
+    startQueuedCrafts();
+    return back;
+  }
+  return null;
+}
+
 function startCraft(rec) {
   if (craftBlockReason(rec)) return false;
   for (var k in rec.req) G.ing[k] -= rec.req[k];
-  G.crafting.push({ recId: rec.id, startTime: null, duration: getCraftDuration(rec) * 1000 });
+  G.crafting.push({ recId: rec.id, startTime: null, duration: getCraftDuration(rec) * 1000, sp: 0, uid: newCraftUid() });
   startQueuedCrafts();
   return true;
 }
@@ -341,12 +424,35 @@ function startCraftMax(rec) {
 
 function tickCrafting() {
   var now = Date.now();
+  // La place libre : les gateaux et les fournees deja a moitie faites comptent
+  var room = maxSpaceNow() - usedSpace() - reservedSpace();
   var finished = [];
   var remaining = [];
   for (var i = 0; i < G.crafting.length; i++) {
     var c = G.crafting[i];
-    if (c.startTime !== null && now - c.startTime >= c.duration) finished.push(c);
-    else remaining.push(c);
+    if (!c.uid) c.uid = newCraftUid();
+    if (c.startTime === null) { remaining.push(c); continue; }
+    var pT = Math.max(0, Math.min(1, (now - c.startTime) / c.duration));
+    if (c.isIngCraft) { if (pT >= 1) finished.push(c); else remaining.push(c); continue; }
+    var rec = findRec(c.recId);
+    if (!rec) { remaining.push(c); continue; }
+    var full = rec.space * rec.qty;
+    if (c.sp === undefined) c.sp = pT;
+    var want = (pT - c.sp) * full;
+    if (want <= room + 1e-9) {
+      room -= want;
+      c.sp = pT;
+      c.frozen = false;
+    } else {
+      // Plus de place : la barre gele, et reprend quand tu en liberes
+      var give = Math.max(0, room);
+      c.sp += give / full;
+      room -= give;
+      c.startTime = now - c.sp * c.duration;
+      c.frozen = true;
+    }
+    c.cap = Math.min(1, c.sp + Math.max(0, room) / full);
+    if (c.sp >= 1 - 1e-9) finished.push(c); else remaining.push(c);
   }
   G.crafting = remaining;
   for (var f = 0; f < finished.length; f++) {
@@ -358,23 +464,18 @@ function tickCrafting() {
       if (ing && typeof toast === 'function') toast(ing.e + ' +' + made + ' ' + t('i.' + ing.id));
       continue;
     }
-    var rec = findRec(done.recId);
-    if (!rec) continue;
-    if (usedSpace() + batchSpace(rec) + reservedSpace() <= maxSpaceNow()) {
-      G.cakes[rec.id] += rec.qty;
-      G.stats.totalCakesMade += rec.qty;
-      G.stats.cakesMadeById[rec.id] = (G.stats.cakesMadeById[rec.id] || 0) + rec.qty;
-      if (!G.madeCount) G.madeCount = {};
-      G.madeCount[rec.id] = (G.madeCount[rec.id] || 0) + 1;
-      if (!G.lastMadeAt) G.lastMadeAt = {};
-      G.lastMadeAt[rec.id] = Date.now();
-      addXP(rec.xp);
-      if (typeof toast === 'function') toast(rec.e + ' ' + t('rec.ready', { q: rec.qty, n: recShortName(rec) }));
-    } else {
-      // Plus de place : les ingredients sont rendus
-      for (var k in rec.req) G.ing[k] = (G.ing[k] || 0) + rec.req[k];
-      if (typeof toast === 'function') toast(t('space.refund'));
-    }
+    var rec2 = findRec(done.recId);
+    if (!rec2) continue;
+    // Sa place etait deja reservee, petit a petit
+    G.cakes[rec2.id] += rec2.qty;
+    G.stats.totalCakesMade += rec2.qty;
+    G.stats.cakesMadeById[rec2.id] = (G.stats.cakesMadeById[rec2.id] || 0) + rec2.qty;
+    if (!G.madeCount) G.madeCount = {};
+    G.madeCount[rec2.id] = (G.madeCount[rec2.id] || 0) + 1;
+    if (!G.lastMadeAt) G.lastMadeAt = {};
+    G.lastMadeAt[rec2.id] = Date.now();
+    addXP(rec2.xp);
+    if (typeof toast === 'function') toast(rec2.e + ' ' + t('rec.ready', { q: rec2.qty, n: recShortName(rec2) }));
   }
   startQueuedCrafts();
   return finished.length > 0;
@@ -438,6 +539,7 @@ function startIngredientCraft(ing) {
     recId: '_ing_' + ing.id,
     ingId: ing.id,
     isIngCraft: true,
+    uid: newCraftUid(),
     startTime: null,
     duration: (ing.craftTime || 3) * craftSpeedMult() * 1000,
   });
@@ -520,10 +622,11 @@ function getEmpName() {
 function collectorMoving(emp) { return !!emp.moveUntil && Date.now() < emp.moveUntil; }
 function collectorMoveSec(emp) {
   var lv = Math.min(EMP_MAX_LVL, emp.level || 1);
+  if (emp.type === 'versatile') lv = 1;
   return Math.round(COLLECTOR_MOVE_SEC[0] + (COLLECTOR_MOVE_SEC[1] - COLLECTOR_MOVE_SEC[0]) * (lv - 1) / (EMP_MAX_LVL - 1));
 }
 function moveCollector(emp, ingId) {
-  if (!emp || emp.assignedIng === ingId) return false;
+  if (!emp || emp.assignedIng === ingId || emp.specialty) return false; // Un specialiste ne change pas d'ingredient
   emp.assignedIng = ingId;
   emp.moveUntil = Date.now() + collectorMoveSec(emp) * 1000;
   return true;
@@ -540,18 +643,29 @@ function empGender(name) {
   return h % 2 ? 'f' : 'm';
 }
 
-function newEmployee(typeId, name, skill, level) {
-  return {
+function newEmployee(typeId, name, skill, level, extra) {
+  extra = extra || {};
+  var e = {
     id: G.nextEmployeeId++,
     name: name,
     type: typeId,
     morale: 70 + Math.floor(Math.random() * 20),
     status: 'working',
     skill: skill,
-    level: Math.max(1, Math.min(EMP_MAX_LVL, level || 1)),
+    level: typeId === 'novice' ? 1 : Math.max(1, Math.min(EMP_GOLD_LVL, level || 1)),
     assignedIng: typeId === 'collector' ? bestCollectorTarget() : null,
     unpaidTime: 0,
   };
+  if (typeId === 'collector' || typeId === 'versatile') {
+    e.lossPct = extra.lossPct !== undefined ? extra.lossPct : sampleLoss();
+    if (extra.specialty) { e.specialty = extra.specialty; e.assignedIng = extra.specialty; }
+  }
+  if (typeId === 'versatile') {
+    e.jobs = (extra.jobs && extra.jobs.length) ? extra.jobs.map(function(j) { return { type: j.type, level: Math.max(1, Math.min(VERSATILE_MAX_JOB_LVL, j.level || 1)) }; }) : [{ type: 'collector', level: 1 }, { type: 'baker', level: 1 }];
+    e.focus = 'all';
+    if (!e.assignedIng) e.assignedIng = bestCollectorTarget();
+  }
+  return e;
 }
 
 function baseSkill() {
@@ -570,9 +684,23 @@ function hireEmployee(typeId, applicant) {
   G.money -= cost;
   G.stats.totalInvested += cost;
   var skill = applicant ? applicant.skill : Math.max(1, baseSkill() - 15 + Math.floor(Math.random() * 20));
-  G.employees.push(newEmployee(typeId, applicant ? applicant.name : getEmpName(), skill, applicant ? applicant.level : 1));
+  G.employees.push(newEmployee(typeId, applicant ? applicant.name : getEmpName(), skill, applicant ? applicant.level : 1, applicant));
   G.stats.totalEmployeesHired++;
   startQueuedCrafts();
+  return true;
+}
+
+// Un touche-a-tout change de metier : 10 s a 1 min, selon le niveau de l'ancien et du nouveau
+function switchFocusSec(emp, toType) {
+  var from = emp.focus && emp.focus !== 'all' ? (jobRec(emp, emp.focus) || { level: 1 }).level : 1;
+  var to = toType === 'all' ? 1 : (jobRec(emp, toType) || { level: 1 }).level;
+  return Math.round(10 + 50 * ((from + to - 2) / (2 * (VERSATILE_MAX_JOB_LVL - 1))));
+}
+function setFocus(emp, toType) {
+  if (!emp || emp.type !== 'versatile' || (emp.focus || 'all') === toType) return false;
+  if (toType !== 'all' && !jobRec(emp, toType)) return false;
+  emp.switchUntil = Date.now() + switchFocusSec(emp, toType) * 1000;
+  emp.focus = toType;
   return true;
 }
 
@@ -592,11 +720,11 @@ function getTrainCost(emp) {
 }
 
 // Pendant sa formation, il ne travaille pas
-function trainDuration(emp) { return 30 * (emp.level || 1); }
+function trainDuration(emp) { return 30 * (emp.level || 1) * (emp.specialty ? 0.1 : 1); }
 
 function trainEmployee(empId) {
   var emp = findEmp(empId);
-  if (!emp || (emp.level || 1) >= EMP_MAX_LVL || empTraining(emp)) return false;
+  if (!emp || emp.type === 'novice' || (emp.level || 1) >= EMP_MAX_LVL || empTraining(emp)) return false;
   var cost = getTrainCost(emp);
   if (G.money < cost) return false;
   G.money -= cost;
@@ -620,11 +748,23 @@ function giveBonus(empId) {
   return true;
 }
 
-// Euros par seconde. Mieux forme, mieux paye.
+// Euros par seconde. Mieux forme, mieux paye. Le reglage de paie monte ou baisse le tout.
 function getEmpSalary(emp) {
   var empType = findEmpType(emp.type);
   if (!empType) return 0;
-  return empType.baseSalary * (1 + 0.5 * ((emp.level || 1) - 1)) * (1 - machineBonus('salary') / 100);
+  var lvl = emp.type === 'novice' ? 1 : (emp.level || 1);
+  return empType.baseSalary * (1 + 0.5 * (lvl - 1)) * (1 - machineBonus('salary') / 100) * (1 + (emp.payAdj || 0) / 100);
+}
+function maxMorale(emp) { return 100 + (emp.payAdj || 0); }
+
+// Changer la paie : trop bas, et il demissionne presque toujours
+function setPay(emp, adj) {
+  if (!emp || PAY_STEPS.indexOf(adj) < 0) return 'none';
+  emp.payAdj = adj;
+  var quitChance = adj <= -50 ? 0.9 : adj <= -20 ? 0.3 : 0;
+  if (quitChance > 0 && Math.random() < quitChance) { fireEmployee(emp.id); return 'quit'; }
+  emp.morale = Math.min(emp.morale, maxMorale(emp));
+  return 'ok';
 }
 
 function totalSalary() {
@@ -644,43 +784,77 @@ function giveJob(empId, typeId) {
   G.money -= cost;
   G.stats.totalInvested += cost;
   emp.type = typeId;
-  if (typeId === 'collector') emp.assignedIng = bestCollectorTarget();
+  if (typeId === 'collector') { emp.assignedIng = bestCollectorTarget(); emp.lossPct = sampleLoss(); }
   return true;
 }
 
 // ---------- Candidatures et recherche ----------
-// Peu de monde vient au debut. Plus ton niveau monte, plus ta boutique attire.
-function applicantChance() { return Math.min(0.6, 0.05 + G.level / 150); }
+// Avant le niveau 10, personne ne se presente tout seul : il faut chercher. Ensuite, de plus en plus de monde vient.
+function applicantChance() { return G.level < 10 ? 0 : Math.min(0.6, 0.05 + G.level / 150); }
 function searchChance() { return Math.min(0.95, 0.25 + G.level / 150); }
 
-// La plupart des candidats debutent. Les candidats deja formes sont rares, et tres rares au niveau max.
-function applicantLevel() {
-  var r = Math.random();
-  if (r < 0.005) return 5;
-  if (r < 0.025) return 4;
-  if (r < 0.08) return 3;
-  if (r < 0.22) return 2;
+// Le niveau d'un candidat : au debut, jamais plus que 2. Plus tu montes, moins les hauts niveaux sont rares.
+function applicantLevelWeights() {
+  var w = {};
+  for (var L = 1; L <= EMP_GOLD_LVL; L++) {
+    var req = APPLICANT_LVL_REQ[L];
+    if (G.level < req) continue;
+    var base = L === EMP_GOLD_LVL ? 0.00005 : Math.pow(0.42, L - 1);
+    w[L] = base * (1 + (G.level - req) / (L <= 2 ? 200 : 60));
+  }
+  return w;
+}
+function applicantLevel(maxLvl) {
+  var w = applicantLevelWeights(), tot = 0, L;
+  for (L in w) { if (!maxLvl || +L <= maxLvl) tot += w[L]; }
+  var r = Math.random() * tot;
+  for (L in w) {
+    if (maxLvl && +L > maxLvl) continue;
+    r -= w[L];
+    if (r <= 0) return +L;
+  }
   return 1;
 }
 
-function generateApplicant(typeId) {
+function generateApplicant(typeId, opts) {
   if (G.applicants.length >= 5) return false;
-  var open = EMP_TYPES.filter(empTypeOpen);
+  opts = opts || {};
+  var open = EMP_TYPES.filter(function(et) { return empTypeOpen(et) && !et.hidden; });
   if (open.length === 0) return false;
   var empType = typeId ? findEmpType(typeId) : open[Math.floor(Math.random() * open.length)];
   var skill = Math.max(1, Math.min(100, baseSkill() + Math.floor(Math.random() * 30) - 15));
-  var level = applicantLevel();
-  G.applicants.push({
+  // Les apprentis n'ont pas de niveau, le niveau or ne se trouve qu'a partir du niveau 120
+  var level = empType.id === 'novice' ? 1 : applicantLevel(empType.id === 'versatile' ? EMP_MAX_LVL : 0);
+  var app = {
     id: Date.now() + Math.floor(Math.random() * 1000),
     name: getEmpName(),
     type: empType.id,
     skill: skill,
     level: level,
-    // Un employe deja forme coute bien plus cher
-    hireCost: Math.floor(empType.hireCost * (0.5 + skill * 0.01) * Math.pow(4, level - 1)),
     expiresAt: Date.now() + 180000,
-  });
-  if (typeof toast === 'function') toast(level >= 3 ? t('emp.rareApplicant', { v: level }) : t('emp.applicant'));
+  };
+  var mult = 1;
+  if (empType.id === 'collector') {
+    app.lossPct = sampleLoss();
+    mult *= lossCostMult(app.lossPct);
+    // Les tres hauts niveaux peuvent etre specialises dans un ingredient : formation express, mais pas de changement
+    if (level >= 6 && Math.random() < 0.4) {
+      var pool = ING.filter(ingUnlocked);
+      if (pool.length) app.specialty = pool[Math.floor(Math.random() * pool.length)].id;
+    }
+  }
+  if (empType.id === 'versatile') {
+    var types = (opts.types || []).slice(0, 3);
+    var open2 = EMP_TYPES.filter(function(et) { return empTypeOpen(et) && !et.hidden && et.id !== 'novice' && types.indexOf(et.id) < 0; });
+    if (types.length < 3 && open2.length && Math.random() < 0.3) types.push(open2[Math.floor(Math.random() * open2.length)].id);
+    app.jobs = types.map(function(tp) { var r = Math.random(); return { type: tp, level: r < 0.5 ? 1 : r < 0.8 ? 2 : 3 }; });
+    app.lossPct = sampleLoss();
+    mult *= 1 + app.jobs.reduce(function(a, j) { return a + j.level; }, 0) * 0.3;
+  }
+  // Un employe deja forme coute bien plus cher
+  app.hireCost = Math.floor(empType.hireCost * (0.5 + skill * 0.01) * Math.pow(4, level - 1) * mult);
+  G.applicants.push(app);
+  if (typeof toast === 'function') toast(level >= EMP_GOLD_LVL ? t('emp.goldApplicant') : level >= 3 ? t('emp.rareApplicant', { v: level }) : t('emp.applicant'));
   return true;
 }
 
@@ -708,15 +882,20 @@ function rejectApplicant(appId) {
 
 function searchFor(typeId) {
   var s = null;
-  G.searches.forEach(function(x) { if (x.type === typeId) s = x; });
+  G.searches.forEach(function(x) { if ((x.types || [x.type]).indexOf(typeId) >= 0) s = x; });
   return s;
 }
 
-// Chercher un metier precis prend du temps, et ca ne marche pas toujours
-function startSearch(typeId) {
-  var et = findEmpType(typeId);
-  if (!et || !empTypeOpen(et) || searchFor(typeId)) return false;
-  G.searches.push({ type: typeId, doneAt: Date.now() + (20 + Math.random() * 40) * 1000 });
+// Chercher un ou deux metiers : ca prend du temps, et ca ne marche pas toujours
+function startSearch(typeIds) {
+  var ids = Array.isArray(typeIds) ? typeIds.slice(0, 2) : [typeIds];
+  if (ids.length === 0) return false;
+  for (var i = 0; i < ids.length; i++) {
+    var et = findEmpType(ids[i]);
+    if (!et || et.hidden || !empTypeOpen(et) || searchFor(ids[i])) return false;
+  }
+  if (ids.length === 2 && ids[0] === ids[1]) return false;
+  G.searches.push({ type: ids[0], types: ids, doneAt: Date.now() + (20 + Math.random() * 40) * 1000 });
   return true;
 }
 
@@ -724,11 +903,15 @@ function tickSearches() {
   var now = Date.now();
   G.searches = G.searches.filter(function(job) {
     if (job.doneAt > now) return true;
-    if (Math.random() < searchChance() && generateApplicant(job.type)) {
-      if (typeof toast === 'function') toast(t('emp.searchFound', { n: t('emp.' + job.type) }));
-    } else if (typeof toast === 'function') {
-      toast(t('emp.searchNone', { n: t('emp.' + job.type) }));
+    var types = job.types || [job.type];
+    var ok = false, label = types.map(function(x) { return t('emp.' + x); }).join(' + ');
+    if (Math.random() < searchChance()) {
+      var vOpen = empTypeOpen(findEmpType('versatile'));
+      // Quelqu'un qui a les deux metiers cherches peut se presenter, ou quelqu'un qui n'en a qu'un
+      if (types.length === 2 && vOpen && Math.random() < 0.4) ok = generateApplicant('versatile', { types: types });
+      else ok = generateApplicant(types[Math.floor(Math.random() * types.length)]);
     }
+    if (typeof toast === 'function') toast(ok ? t('emp.searchFound', { n: label }) : t('emp.searchNone', { n: label }));
     return false;
   });
 }
@@ -737,8 +920,8 @@ function tickSearches() {
 // Plus il y a de vendeurs, plus ca vend vite. Seul, un vendeur est tres lent.
 function sellerRate(emp) {
   var n = 0;
-  G.employees.forEach(function(e) { if (e.type === 'seller' && empWorking(e)) n++; });
-  return 0.08 * (1 + 0.25 * Math.max(0, n - 1)) * empPower(emp) * (1 + machineBonus('sellers') / 100);
+  G.employees.forEach(function(e) { if (hasJob(e,'seller') && empWorking(e)) n++; });
+  return 0.08 * (1 + 0.25 * Math.max(0, n - 1)) * empPower(emp, 'seller') * (1 + machineBonus('sellers') / 100);
 }
 
 // Le stock reserve aux commandes quand un maitre d'hotel peut les livrer
@@ -798,7 +981,7 @@ function moraleDecay() {
 
 function managerBoost() {
   var b = 0;
-  G.employees.forEach(function(e) { if (e.type === 'manager' && empWorking(e)) b += 0.1 * empLevelMult(e); });
+  G.employees.forEach(function(e) { if (hasJob(e,'manager') && empWorking(e)) b += 0.1 * empLevelMult(e, 'manager'); });
   return b;
 }
 
@@ -816,9 +999,9 @@ function tickEmployees(dtSec) {
     } else {
       emp.unpaidTime = (emp.unpaidTime || 0) + dtSec;
     }
-    var change = -decay + (emp.type === 'manager' ? 0 : boost);
+    var change = -decay + (hasJob(emp,'manager') ? 0 : boost);
     if (emp.unpaidTime > 5) change = -2;
-    emp.morale = Math.max(0, Math.min(100, emp.morale + change * dtSec));
+    emp.morale = Math.max(0, Math.min(maxMorale(emp), emp.morale + change * dtSec));
     // Trop bas : il demissionne
     if (emp.morale < MORALE_QUIT) {
       if (typeof toast === 'function') toast(t('emp.event.quit', { n: emp.name }));
@@ -833,7 +1016,7 @@ function tickEmployees(dtSec) {
     } else {
       emp.status = 'working';
     }
-    if (emp.type === 'seller' && empWorking(emp)) sellOneBatchAuto(emp, dtSec);
+    if (hasJob(emp,'seller') && empWorking(emp)) sellOneBatchAuto(emp, dtSec);
   }
 }
 
@@ -857,12 +1040,19 @@ function ordersToBake() {
 
 function tickChefs(dtSec) {
   G.employees.forEach(function(emp) {
-    if (emp.type !== 'chef' || !empWorking(emp)) return;
-    emp.chefCd = (emp.chefCd || 0) + dtSec * empPower(emp);
+    if (!hasJob(emp,'chef') || !empWorking(emp)) return;
+    emp.chefCd = (emp.chefCd || 0) + dtSec * empPower(emp, 'chef');
     if (emp.chefCd < 6 || activeCrafts() >= ovenSlots()) return;
+    // Il ne prepare rien tant que tu es sous un certain montant
+    if (emp.chefMinMoney > 0 && G.money < emp.chefMinMoney) { emp.chefCd = 6; return; }
+    var nowMs = Date.now();
+    if (emp.chefBudget > 0 && (!emp.chefWinT || nowMs - emp.chefWinT > 3600000)) { emp.chefWinT = nowMs; emp.chefSpent = 0; }
     var queue = chefQueue(emp);
     for (var i = 0; i < queue.length; i++) {
-      if (startCraft(queue[i])) { emp.chefCd = 0; return; }
+      var price = recipeCost(queue[i]);
+      // Une limite d'argent par heure pour les ingredients qu'il utilise
+      if (emp.chefBudget > 0 && (emp.chefSpent || 0) + price > emp.chefBudget) continue;
+      if (startCraft(queue[i])) { emp.chefCd = 0; if (emp.chefBudget > 0) emp.chefSpent = (emp.chefSpent || 0) + price; return; }
     }
     emp.chefCd = 6;
   });
@@ -882,8 +1072,8 @@ function buyerTarget() {
 
 function tickBuyers(dtSec) {
   G.employees.forEach(function(emp) {
-    if (emp.type !== 'buyer' || !empWorking(emp)) return;
-    emp.buyCd = (emp.buyCd || 0) + dtSec * empPower(emp);
+    if (!hasJob(emp,'buyer') || !empWorking(emp)) return;
+    emp.buyCd = (emp.buyCd || 0) + dtSec * empPower(emp, 'buyer');
     if (emp.buyCd < 20) return;
     var rec = buyerTarget();
     if (!rec) { emp.buyCd = 20; return; }
@@ -922,14 +1112,25 @@ function bestCollectorTarget() {
 
 function tickManagers(dtSec) {
   G.employees.forEach(function(emp) {
-    if (emp.type !== 'manager' || !empWorking(emp) || !emp.mgrAuto) return;
+    if (!hasJob(emp,'manager') || !empWorking(emp) || !emp.mgrAuto) return;
     emp.mgrCd = (emp.mgrCd || 0) + dtSec;
     if (emp.mgrCd < 5) return;
     emp.mgrCd = 0;
     var min = emp.mgrMin === undefined ? 50 : emp.mgrMin;
-    // Le moins cher parmi ceux qui ont le niveau demande
-    var picks = G.applicants.filter(function(a) { return a.skill >= min && G.money >= a.hireCost * 5; });
-    picks.sort(function(a, b) { return a.hireCost - b.hireCost; });
+    var jobs = emp.mgrJobs && emp.mgrJobs.length ? emp.mgrJobs : null;
+    var lmin = emp.mgrLvlMin || 1, lmax = emp.mgrLvlMax || EMP_GOLD_LVL;
+    var prio = emp.mgrPrio || [];
+    var picks = G.applicants.filter(function(a) {
+      if (a.skill < min || G.money < a.hireCost * 5) return false;
+      var lv = a.type === 'novice' ? 1 : (a.level || 1);
+      if (lv < lmin || lv > lmax) return false;
+      if (!jobs) return true;
+      if (jobs.indexOf(a.type) >= 0) return true;
+      return a.type === 'versatile' && (a.jobs || []).some(function(j) { return jobs.indexOf(j.type) >= 0; });
+    });
+    function rank(a) { var i = prio.indexOf(a.type); return i < 0 ? 999 : i; }
+    // Les metiers prioritaires d'abord, puis le moins cher
+    picks.sort(function(a, b) { return rank(a) - rank(b) || a.hireCost - b.hireCost; });
     if (picks.length > 0 && acceptApplicant(picks[0].id) && typeof toast === 'function') toast(t('emp.mgrHired', { n: emp.name }));
   });
 }
@@ -1215,9 +1416,11 @@ function queueSale(items) {
 function tickSales() {
   var now = Date.now(), done = 0;
   G.sales = G.sales.filter(function(s) {
+    // L'argent arrive petit a petit, a mesure que la barre avance
+    var frac = s.at <= now ? 1 : Math.max(0, Math.min(1, (now - s.start) / Math.max(1, s.at - s.start)));
+    var part = s.total * (frac - (s.pf || 0));
+    if (part > 0) { G.money += part; G.totalEarned += part; s.pf = frac; }
     if (s.at > now) return true;
-    G.money += s.total;
-    G.totalEarned += s.total;
     G.stats.totalSold += s.units;
     s.list.forEach(function(x) { addCakeEarning(x.id, x.earned); addSoldStat(x.id, x.qty || 0); });
     addXP(Math.floor(s.total * 0.3));
@@ -1336,6 +1539,7 @@ function themeLockReason(theme) {
 
 // Le theme a l'ecran : celui de cette patisserie s'il y en a un, sinon celui de tout le jeu
 function activeThemeId() {
+  if (typeof ui !== 'undefined' && ui.seeTheme && findTheme(ui.seeTheme)) return ui.seeTheme; // /theme see : juste pour voir
   var own = G.bakeryTheme && findTheme(G.bakeryTheme);
   if (own && !themeLockReason(own)) return own.id;
   var main = G.settings && findTheme(G.settings.theme);
@@ -1523,7 +1727,7 @@ function calcOfflineProgress(elapsedSec) {
   // Ventes des vendeurs
   var capacity = 0;
   G.employees.forEach(function(e) {
-    if (e.type === 'seller' && empWorking(e)) capacity += sellerRate(e) * dt;
+    if (hasJob(e,'seller') && empWorking(e)) capacity += sellerRate(e) * dt;
   });
   var byValue = REC.slice().sort(function(a, b) { return b.val - a.val; });
   for (var s = 0; s < byValue.length && capacity >= 1; s++) {
@@ -1625,7 +1829,7 @@ function switchToBakery(index) {
   target.currentBakeryIndex = index;
   // Ce qui appartient au joueur, et pas a une patisserie
   ['settings','birthday','birthdaySetOn','birthdayBoostYear','birthdayBoostUntil','achievements','tutorialDone','tutorialStep',
-   'introDone','cheatUnlocked','bobClicks','bobSad','bobGold','bobChoke','bobPokes','logoClicks','unlockedThemes','favRecipes','lvl1000Shown','wentBankrupt',
+   'introDone','cheatUnlocked','bobClicks','bobSad','bobGold','bobGoldClicks','bobChoke','bobPokes','logoClicks','unlockedThemes','favRecipes','lvl1000Shown','wentBankrupt',
    'secondBakery','bankUnlocked','loans','nextLoanId','cmdUsage','challenge','nextChallengeAt','sugarFed','explained','creative'].forEach(function(k) {
     target[k] = G[k];
   });
@@ -1895,8 +2099,8 @@ function tickOrders(dtSec) {
   }
   // Le maitre d'hotel livre tout seul ce qui est pret
   G.employees.forEach(function(emp) {
-    if (emp.type !== 'maitre' || !empWorking(emp)) return;
-    emp.orderCd = (emp.orderCd || 0) + dtSec * empPower(emp);
+    if (!hasJob(emp,'maitre') || !empWorking(emp)) return;
+    emp.orderCd = (emp.orderCd || 0) + dtSec * empPower(emp, 'maitre');
     if (emp.orderCd < ORDER_CONFIG.butlerSec) return;
     var todo = null;
     G.orders.forEach(function(o) { if (!todo && orderReady(o)) todo = o; });
@@ -2171,7 +2375,7 @@ function carrierTrip(emp, from, to) {
   var s = bakeryStateAt(from);
   var what = emp.carryWhat || 'money';
   var asked = emp.carryQty > 0 ? emp.carryQty : Infinity;
-  var power = empLevelMult(emp);
+  var power = empLevelMult(emp, 'carrier');
   if (what.indexOf('cake:') === 0) return transferStock(from, to, 'cake', what.slice(5), Math.min(asked, 10 * power), emp);
   if (what.indexOf('ing:') === 0) return transferStock(from, to, 'ing', what.slice(4), Math.min(asked, 100 * power), emp);
   if (what === 'cakes') {
@@ -2197,9 +2401,9 @@ function tickCarriers(dtSec) {
     var s = bakeryStateAt(i);
     if (!s) continue;
     s.employees.forEach(function(emp) {
-      if (emp.type !== 'carrier' || !empWorking(emp)) return;
+      if (!hasJob(emp,'carrier') || !empWorking(emp)) return;
       if (emp.tripUntil && Date.now() < emp.tripUntil) return; // Il est sur la route
-      emp.carryCd = (emp.carryCd || 0) + dtSec * empPower(emp);
+      emp.carryCd = (emp.carryCd || 0) + dtSec * empPower(emp, 'carrier');
       if (emp.carryCd < CARRIER_TRIP_SEC) return;
       var to = carrierTarget(emp, i);
       if (to < 0) return;

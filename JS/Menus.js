@@ -104,7 +104,11 @@ function settingsGeneral() {
     curr += '<option value="' + c.id + '"' + (G.settings.currency === c.id ? ' selected' : '') + '>' + c.symbol + ' · ' + currencyName(c) + '</option>';
   });
   curr += '</select>';
-  var h = setCard('', setRow(t('settings.lang'), t('settings.langHelp'), lang) + setRow(t('settings.currency'), t('settings.currencyHelp'), curr) + bobRow +
+  var ap = G.settings.autoPause || 0;
+  var autoSel = '<select class="set-select" aria-label="' + escH(t('settings.autoPause')) + '" onchange="G.settings.autoPause=parseInt(this.value,10);save()">';
+  [0, 1, 2, 5, 10, 15, 30, 60].forEach(function(m) { autoSel += '<option value="' + m + '"' + (ap === m ? ' selected' : '') + '>' + (m ? t('settings.autoPauseMin', { v: m }) : t('settings.autoPauseOff')) + '</option>'; });
+  autoSel += '</select>';
+  var h = setCard('', setRow(t('settings.lang'), t('settings.langHelp'), lang) + setRow(t('settings.currency'), t('settings.currencyHelp'), curr) + bobRow + setRow(t('settings.autoPause'), t('settings.autoPauseHelp'), autoSel) +
     (typeof Notification !== 'undefined' ? setRow(t('settings.notifs'), t('settings.notifsHelp'), setSwitch(!!G.settings.notifs, 'toggleNotifications()', t('settings.notifs'))) : '') +
     (G.cheatUnlocked ? '<div class="only-phone">' + setRow(t('settings.console'), '', '<button class="btn btn-small" onclick="closeMenu();showCommandConsole()">' + t('settings.openConsole') + '</button>') + '</div>' : ''));
   var bday;
@@ -172,9 +176,12 @@ function settingsAudio() {
 
 function settingsSave() {
   var h = setCard('', setRow(t('settings.saveNowTitle'), t('settings.saveHelp'), '<button class="btn btn-small btn-primary" onclick="doManualSave()">' + t('settings.saveNow') + '</button>'));
-  // La sauvegarde dans un fichier, plus de code a copier-coller
-  h += setCard('', setRow(t('settings.export'), t('settings.exportHelp'), '<button class="btn btn-small btn-primary" onclick="downloadSave()">' + t('settings.exportFile') + '</button>'));
-  h += setCard('', setRow(t('settings.import'), t('settings.importHelp'), '<label class="btn btn-small file-pick">' + t('settings.importFile') + '<input type="file" accept=".p2ds,.txt,text/plain" onchange="importSaveFile(this)"></label>'));
+  // Exporter : un fichier, ou un code a copier
+  h += setCard('', setRow(t('settings.export'), t('settings.exportHelp2'), '<button class="btn btn-small btn-primary" onclick="downloadSave()">' + t('settings.exportFile') + '</button><button class="btn btn-small" onclick="copyExport()">' + t('settings.exportBtn') + '</button>') +
+    '<textarea id="export-area" class="save-area" readonly rows="3" onclick="this.select()">' + escH(exportSave()) + '</textarea>');
+  // Importer : un fichier, ou un code colle
+  h += setCard('', setRow(t('settings.import'), t('settings.importHelp2'), '<label class="btn btn-small file-pick">' + t('settings.importFile') + '<input type="file" accept=".p2ds,.txt,text/plain" onchange="importSaveFile(this)"></label>') +
+    '<textarea id="import-area" class="save-area" rows="3" placeholder="' + escH(t('settings.importPlaceholder')) + '"></textarea><button class="btn btn-small btn-primary" onclick="doImportSave()">' + t('settings.importBtn') + '</button>');
   h += setCard('', setRow(t('settings.reset'), t('settings.resetHelp'), '<button class="btn btn-small btn-danger" onclick="confirmResetGame()">' + t('settings.resetBtn') + '</button>'), 'danger');
   return h;
 }
@@ -308,6 +315,7 @@ function confirmResetGame() {
 
 // ============ PAUSE ============
 function togglePause() {
+  setSoftPause(false);
   endMenuPause();
   G.paused = !G.paused;
   if (G.paused) {
@@ -327,6 +335,7 @@ function togglePause() {
 // Le temps passe en pause ne compte pas : tout est decale d'autant
 function shiftGameTimers(ms) {
   G.crafting.forEach(function(c) { if (c.startTime !== null) c.startTime += ms; });
+  (G.employees || []).forEach(function(e) { if (e.moveUntil) e.moveUntil += ms; });
   if (G.activeEvent) G.eventEndTime += ms;
   G.lastEventTime += ms;
   G.applicants.forEach(function(a) { a.expiresAt += ms; });

@@ -78,8 +78,8 @@ function handleConsoleAutocomplete() {
   var val = inp.value.trim().toLowerCase();
   var matches = [];
   var allCmds = CONSOLE_COMMANDS.slice();
-  for (var i = 0; i < ING.length; i++) allCmds.push('/' + ING[i].id);
-  for (var r = 0; r < REC.length; r++) allCmds.push('/' + REC[r].id);
+  for (var i = 0; i < ING.length; i++) allCmds.push('/ingredient ' + slugOf(ING[i].id, 'i.'));
+  for (var r = 0; r < REC.length; r++) allCmds.push('/recipe ' + slugOf(REC[r].id, 'r.'));
   if (!val) {
     // Rien de tape : tes favorites seulement
     matches = allCmds.filter(function(c) { return commandCount(c) > 0; });
@@ -140,10 +140,81 @@ function execConsoleCmd() {
   fullRender();
 }
 
+// ============ NOMS : on peut ecrire le nom en anglais, ou dans ta langue ============
+function normName(s) { return String(s || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[\s_\-']+/g, ''); }
+var CMD_WORDS = /^(all|max|set|add|remove|infinite|off|level|skill|[0-9.,]+)$/;
+// "dark chocolate 10" : le nom, puis le reste
+function takeName(parts, from) {
+  var i = from, name = [];
+  while (i < parts.length && !CMD_WORDS.test(parts[i])) { name.push(parts[i]); i++; }
+  return { name: name.join(''), rest: parts.slice(i) };
+}
+// Le singulier, le pluriel : strawberry, strawberries
+function nameVariants(s) { return [s, s.replace(/ies$/, 'y'), s.replace(/es$/, ''), s.replace(/s$/, '')]; }
+function nameKeys(id, prefix) {
+  var out = [normName(id)];
+  [LANGS.en, LANGS.fr, LANGS[currentLang]].forEach(function(l) {
+    if (!l) return;
+    [prefix, prefix === 'i.' ? 'is.' : null].forEach(function(p) { if (p && l[p + id]) out.push(normName(String(l[p + id]).replace(/ x\d+$/, ''))); });
+  });
+  return out;
+}
+function nameMatches(keys, n) {
+  var want = nameVariants(n);
+  return keys.some(function(k) { return nameVariants(k).some(function(v) { return want.indexOf(v) >= 0; }); });
+}
+function findIngByName(n) {
+  n = normName(n);
+  for (var i = 0; i < ING.length; i++) { if (nameKeys(ING[i].id, 'i.').indexOf(n) >= 0) return ING[i]; }
+  for (var j = 0; j < ING.length; j++) { if (nameMatches(nameKeys(ING[j].id, 'i.'), n)) return ING[j]; }
+  return null;
+}
+function findRecByName(n) {
+  n = normName(n);
+  for (var i = 0; i < REC.length; i++) { if (nameKeys(REC[i].id, 'r.').indexOf(n) >= 0) return REC[i]; }
+  for (var j = 0; j < REC.length; j++) { if (nameMatches(nameKeys(REC[j].id, 'r.'), n)) return REC[j]; }
+  return null;
+}
+function findMachineByName(n) {
+  n = normName(n);
+  for (var i = 0; i < MACHINES.length; i++) {
+    var m = MACHINES[i], keys = nameKeys(m.id, 'mach.');
+    if (m.family) [LANGS.en, LANGS.fr, LANGS[currentLang]].forEach(function(l) { if (l && l['machf.' + m.family]) keys.push(normName(l['machf.' + m.family] + ' ' + ROMAN[m.tier])); });
+    if (keys.indexOf(n) >= 0) return m;
+  }
+  return findMachine(n);
+}
+function slugOf(id, prefix) { return String((LANGS.en && LANGS.en[prefix + id]) || id).toLowerCase().replace(/ x\d+$/, '').replace(/[\s']+/g, '-'); }
+
 function processCommand(cmd) {
   var parts = cmd.toLowerCase().replace(/^\//, '').split(/\s+/);
   if (parts.length === 0) return '<span class="cmd-err">' + L('Commande vide', 'Empty command') + '</span>';
   var action = parts[0];
+  var forceKind = null; // /ingredient NAME ... ou /recipe NAME ...
+  if (action === 'ingredient' || action === 'recipe') {
+    var isIng = action === 'ingredient';
+    var nmc = takeName(parts, 1);
+    if (!nmc.name) return '<span class="cmd-err">Usage: /' + action + ' NAME set|add|remove|max N' + (isIng ? ' | /ingredient NAME infinite [off]' : '') + '</span>';
+    var found0 = isIng ? findIngByName(nmc.name) : findRecByName(nmc.name);
+    if (!found0) return '<span class="cmd-err">' + (isIng ? L('Ingrédient inconnu : ', 'Unknown ingredient: ') : L('Recette inconnue : ', 'Unknown recipe: ')) + escH(nmc.name) + '</span>';
+    forceKind = isIng ? 'ing' : 'rec';
+    action = found0.id;
+    parts = [found0.id].concat(nmc.rest);
+  }
+
+  // /pause [off] : le temps s'arrete, mais tu peux toujours jouer avec tes ingredients
+  if (action === 'pause') {
+    var want = parts[1] === 'off' ? false : parts[1] === 'on' ? true : !softPause.on;
+    setSoftPause(want);
+    return '<span class="cmd-ok">' + t(want ? 'console.softPauseOn' : 'console.softPauseOff') + '</span>';
+  }
+
+  // /changelog max|unmax : voir aussi ce qui est secret
+  if (action === 'changelog') {
+    if (parts[1] !== 'max' && parts[1] !== 'unmax') return '<span class="cmd-err">Usage: /changelog max|unmax</span>';
+    G.settings.changelogMax = parts[1] === 'max';
+    return '<span class="cmd-ok">' + t(G.settings.changelogMax ? 'console.changelogMax' : 'console.changelogUnmax') + '</span>';
+  }
 
   // /help
   if (action === 'help') {
@@ -240,9 +311,10 @@ function processCommand(cmd) {
 
   // /machine set|add NOM N | /machine set NOM max | /machine remove NOM N|all
   if (action === 'machine' || action === 'machines') {
-    var mOp = parts[1], mach = findMachine(parts[2]), mVal = parts[3];
+    var mnm = takeName(parts, 2);
+    var mOp = parts[1], mach = mnm.name ? findMachineByName(mnm.name) : null, mVal = mnm.rest[0];
     var mNames = MACHINES.map(function(x) { return x.id; }).join(', ');
-    if (['set', 'add', 'remove'].indexOf(mOp) < 0 || !parts[2]) return '<span class="cmd-err">Usage: /machine set|add|remove ' + t('console.machineName') + ' N|max|all. ' + mNames + '</span>';
+    if (['set', 'add', 'remove'].indexOf(mOp) < 0 || !mnm.name) return '<span class="cmd-err">Usage: /machine set|add|remove NAME N|max|all. ' + mNames + '</span>';
     if (!mach) return '<span class="cmd-err">' + t('console.machineUnknown') + mNames + '</span>';
     var mNow = machineLevel(mach.id), mN = parseInt(mVal, 10), mNew;
     if (mOp === 'set' && mVal === 'max') mNew = mach.max;
@@ -281,61 +353,53 @@ function processCommand(cmd) {
     return '<span class="cmd-ok">' + L('Bâtiments changés (', 'Buildings updated (') + '' + op + ' ' + n + ')</span>';
   }
 
-  // /employee ... (multiple sub-commands)
+  // /employee add|remove|set|max N | upgrade N | NAME skill|level set N
   if (action === 'employee' || action === 'employees') {
     var sub = parts[1];
-    // /employee upgrade N - upgrade all employees skill
+    function mkEmp(skill, lvl, morale) {
+      var et = EMP_TYPES[Math.floor(Math.random() * EMP_TYPES.length)];
+      var e = newEmployee(et.id, getEmpName(), skill, lvl);
+      e.morale = morale;
+      G.employees.push(e);
+    }
     if (sub === 'upgrade') {
-      var lvl = parseInt(parts[2]);
-      if (isNaN(lvl)) return '<span class="cmd-err">Usage: /employee upgrade N</span>';
-      lvl = Math.min(100, Math.max(1, lvl));
-      G.employees.forEach(function(e) { e.skill = lvl; });
-      return '<span class="cmd-ok">' + L('Compétence de tous les employés = ', 'All employees skill = ') + '' + lvl + '</span>';
+      var sk = parseInt(parts[2]);
+      if (isNaN(sk)) return '<span class="cmd-err">Usage: /employee upgrade N</span>';
+      sk = Math.min(100, Math.max(1, sk));
+      G.employees.forEach(function(e) { e.skill = sk; });
+      return '<span class="cmd-ok">' + L('Compétence de tous les employés = ', 'All employees skill = ') + sk + '</span>';
     }
-    // /employee <name> level set <N>
-    if (parts.length >= 4 && parts[2] === 'level' && parts[3] === 'set') {
-      var empName = sub;
-      var lvl = parseInt(parts[4]);
-      if (isNaN(lvl)) return '<span class="cmd-err">Usage: /employee &lt;name&gt; level set N</span>';
-      lvl = Math.min(100, Math.max(1, lvl));
-      var found = false;
-      for (var i = 0; i < G.employees.length; i++) {
-        if (G.employees[i].name.toLowerCase() === empName) {
-          G.employees[i].skill = lvl; found = true; break;
-        }
-      }
-      if (found) return '<span class="cmd-ok">' + empName + ' skill = ' + lvl + '</span>';
-      return '<span class="cmd-err">' + L('Employé introuvable : ', 'Employee not found: ') + '' + empName + '</span>';
+    // /employee <name> skill|level set <N>
+    if (parts.length >= 5 && (parts[2] === 'skill' || parts[2] === 'level') && parts[3] === 'set') {
+      var empName = sub, what = parts[2], val = parseInt(parts[4]);
+      if (isNaN(val)) return '<span class="cmd-err">Usage: /employee NAME skill|level set N</span>';
+      var target = null;
+      G.employees.forEach(function(e) { if (!target && e.name.toLowerCase() === empName) target = e; });
+      if (!target) return '<span class="cmd-err">' + L('Employé introuvable : ', 'Employee not found: ') + escH(empName) + '</span>';
+      if (what === 'skill') target.skill = Math.min(100, Math.max(1, val));
+      else if (target.type === 'novice') return '<span class="cmd-err">' + t('emp.noviceNoLevel') + '</span>';
+      else target.level = Math.min(EMP_GOLD_LVL, Math.max(1, val));
+      return '<span class="cmd-ok">' + escH(target.name) + ' ' + what + ' = ' + (what === 'skill' ? target.skill : target.level) + '</span>';
     }
-    // /employee set|add|remove|max N
     var n = parseInt(parts[2]);
     if (sub === 'max') {
-      for (var i = 0; i < 50; i++) {
-        var typeIdx = Math.floor(Math.random() * EMP_TYPES.length);
-        G.employees.push({ id: G.nextEmployeeId++, name: getEmpName(), type: EMP_TYPES[typeIdx].id, morale: 100, status: 'working', level: 1, unpaidTime: 0, assignedIng: 'farine', skill: 90 + Math.floor(Math.random() * 11) });
-      }
+      for (var i = 0; i < 50; i++) mkEmp(90 + Math.floor(Math.random() * 11), EMP_MAX_LVL, 100);
       return '<span class="cmd-ok">' + L('50 employés très compétents ajoutés !', '50 max-skill employees added!') + '</span>';
     }
     if (isNaN(n)) return '<span class="cmd-err">Usage: /employee set|add|remove|max|upgrade N</span>';
     if (sub === 'add') {
-      for (var i = 0; i < n; i++) {
-        var typeIdx = Math.floor(Math.random() * EMP_TYPES.length);
-        G.employees.push({ id: G.nextEmployeeId++, name: getEmpName(), type: EMP_TYPES[typeIdx].id, morale: 80, status: 'working', level: 1, unpaidTime: 0, assignedIng: 'farine', skill: 50 + Math.floor(Math.random() * 50) });
-      }
+      for (var i = 0; i < n; i++) mkEmp(50 + Math.floor(Math.random() * 50), 1 + Math.floor(Math.random() * 3), 80);
     } else if (sub === 'remove') {
       G.employees.splice(Math.max(0, G.employees.length - n), n);
     } else if (sub === 'set') {
       while (G.employees.length > n) G.employees.pop();
-      while (G.employees.length < n) {
-        var typeIdx = Math.floor(Math.random() * EMP_TYPES.length);
-        G.employees.push({ id: G.nextEmployeeId++, name: getEmpName(), type: EMP_TYPES[typeIdx].id, morale: 80, status: 'working', level: 1, unpaidTime: 0, assignedIng: 'farine', skill: 50 });
-      }
+      while (G.employees.length < n) mkEmp(50, 1, 80);
     }
-    return '<span class="cmd-ok">' + L('Employés = ', 'Employees = ') + '' + G.employees.length + '</span>';
+    return '<span class="cmd-ok">' + L('Employés = ', 'Employees = ') + G.employees.length + '</span>';
   }
 
   // /stats max | /stats <stat> set N
-  if (action === 'stats') {
+  if (action === 'stats' || action === 'stat') {
     if (parts[1] === 'max') {
       G.stats.totalClicks = 999999; G.stats.totalCakesMade = 999999; G.stats.totalSold = 999999;
       return '<span class="cmd-ok">' + L('Toutes les stats au maximum !', 'All stats maxed!') + '</span>';
@@ -351,7 +415,7 @@ function processCommand(cmd) {
       else return '<span class="cmd-err">Stats: clicks, cakes, sold, salary, rent</span>';
       return '<span class="cmd-ok">' + statName + ' = ' + n + '</span>';
     }
-    return '<span class="cmd-err">Usage: /stats max | /stats &lt;stat&gt; set N</span>';
+    return '<span class="cmd-err">Usage: /stat max | /stat &lt;stat&gt; set N</span>';
   }
 
   // /xp add|set N
@@ -408,6 +472,14 @@ function processCommand(cmd) {
     var themeName = parts[1];
     var names = THEME_LIST.map(function(th) { return th.id; }).join(', ');
     if (!themeName) return '<span class="cmd-err">Usage: /theme &lt;' + names + '&gt; | /theme unlock all|spring|summer|fall|winter|birthday|horror|bakery|party|space|cookie|tech|techgold</span>';
+    if (themeName === 'see') {
+      var seeId = parts[2];
+      if (!seeId || seeId === 'off') { ui.seeTheme = null; applyTheme(); fullRender(); return '<span class="cmd-ok">' + t('console.seeOff') + '</span>'; }
+      var seen = findTheme(seeId);
+      if (!seen) return '<span class="cmd-err">' + t('console.unknownTheme', { n: escH(seeId) }) + '</span>';
+      ui.seeTheme = seeId; applyTheme(); fullRender();
+      return '<span class="cmd-ok">' + t('console.seeOn', { n: t(seen.langKey) }) + '</span>';
+    }
     if (themeName === 'unlock') {
       var what = parts[2];
       var lockable = THEME_LIST.filter(function(th) { return th.season || th.birthday || th.level || th.month || th.secret || th.sold; });
@@ -443,10 +515,9 @@ function processCommand(cmd) {
 
   // /buy <ingredient> all|N
   if (action === 'buy') {
-    var ingName = parts[1]; var amount = parts[2];
+    var nmx = takeName(parts, 1); var ingName = nmx.name; var amount = nmx.rest[0];
     if (!ingName) return '<span class="cmd-err">Usage: /buy &lt;ingredient&gt; all|N</span>';
-    var ing = null;
-    for (var i = 0; i < ING.length; i++) { if (ING[i].id === ingName) { ing = ING[i]; break; } }
+    var ing = findIngByName(ingName);
     if (!ing) return '<span class="cmd-err">' + L('Ingrédient inconnu : ', 'Unknown ingredient: ') + '' + ingName + '</span>';
     if (amount === 'all') {
       var bought = 0;
@@ -461,10 +532,9 @@ function processCommand(cmd) {
 
   // /sell <ingredient> all|N
   if (action === 'sell') {
-    var ingName = parts[1]; var amount = parts[2];
+    var nmx = takeName(parts, 1); var ingName = nmx.name; var amount = nmx.rest[0];
     if (!ingName) return '<span class="cmd-err">Usage: /sell &lt;ingredient&gt; all|N</span>';
-    var ing = null;
-    for (var i = 0; i < ING.length; i++) { if (ING[i].id === ingName) { ing = ING[i]; break; } }
+    var ing = findIngByName(ingName);
     if (!ing) return '<span class="cmd-err">' + L('Ingrédient inconnu : ', 'Unknown ingredient: ') + '' + ingName + '</span>';
     var have = G.ing[ing.id] || 0;
     if (amount === 'all') {
@@ -539,7 +609,7 @@ function processCommand(cmd) {
   // Check if it's an ingredient name (with liquid unit support)
   var ingMatch = null;
   for (var i = 0; i < ING.length; i++) {
-    if (ING[i].id === action) { ingMatch = ING[i]; break; }
+    if (forceKind !== 'rec' && ING[i].id === action) { ingMatch = ING[i]; break; }
   }
   if (ingMatch) {
     var op = parts[1];
@@ -572,7 +642,7 @@ function processCommand(cmd) {
   // Check if it's a recipe name
   var recMatch = null;
   for (var i = 0; i < REC.length; i++) {
-    if (REC[i].id === action) { recMatch = REC[i]; break; }
+    if (forceKind !== 'ing' && REC[i].id === action) { recMatch = REC[i]; break; }
   }
   if (recMatch) {
     var op = parts[1]; var n = parseInt(parts[2]);
@@ -664,9 +734,9 @@ var COMMAND_DOCS = [
       cmdCase('/money infinite', 'Ton argent reste au maximum, comme en mode créatif.', 'Your money stays at the maximum, like in creative mode.', 'Tu dinero se queda al máximo, como en el modo creativo.'),
       cmdCase('/money infinite off', 'Arrête l’argent infini.', 'Stops infinite money.', 'Detiene el dinero infinito.'),
     ]},
-    { name:'/stats', fr:'Change tes statistiques.', en:'Changes your statistics.', es:'Cambia tus estadísticas.', cases:[
-      cmdCase('/stats max', 'Met les clics, les gâteaux préparés et vendus au maximum.', 'Maxes clicks, cakes baked and sold.', 'Pone al máximo los clics y los pasteles preparados y vendidos.'),
-      cmdCase('/stats clicks set N', 'Change une stat : clicks, cakes, sold, salary ou rent.', 'Changes one stat: clicks, cakes, sold, salary or rent.', 'Cambia una estadística: clicks, cakes, sold, salary o rent.', '/stats sold set 1000'),
+    { name:'/stat', fr:'Change tes statistiques.', en:'Changes your statistics.', es:'Cambia tus estadísticas.', cases:[
+      cmdCase('/stat max', 'Met les clics, les gâteaux préparés et vendus au maximum.', 'Maxes clicks, cakes baked and sold.', 'Pone al máximo los clics y los pasteles preparados y vendidos.'),
+      cmdCase('/stat clicks set N', 'Change une stat : clicks, cakes, sold, salary ou rent.', 'Changes one stat: clicks, cakes, sold, salary or rent.', 'Cambia una estadística: clicks, cakes, sold, salary o rent.', '/stat sold set 1000'),
     ]},
   ]},
   { id:'bank', fr:'Argent et banque', en:'Money and bank', es:'Dinero y banco', list:[
@@ -685,7 +755,7 @@ var COMMAND_DOCS = [
     { name:'/max', fr:'Met tout au maximum : niveau 1000, argent, stock, bâtiments, machines, employés, succès et thèmes. Plus un ingrédient est rare, moins tu en as.', en:'Maxes everything: level 1000, money, stock, buildings, machines, employees, achievements and themes. The rarer an ingredient, the less you get.', es:'Lo pone todo al máximo: nivel 1000, dinero, stock, edificios, máquinas, empleados, logros y temas. Cuanto más raro es un ingrediente, menos tienes.', cases:[
       cmdCase('/max', 'Dans la pâtisserie où tu es.', 'In the bakery you are in.', 'En la pastelería donde estás.'),
       cmdCase('/max all', 'Dans toutes tes pâtisseries.', 'In all your bakeries.', 'En todas tus pastelerías.'),
-      cmdCase('/max NOM', 'Dans la pâtisserie qui porte ce nom.', 'In the bakery with this name.', 'En la pastelería con ese nombre.', '/max Chez Bob'),
+      cmdCase('/max NAME', 'Dans la pâtisserie qui porte ce nom.', 'In the bakery with this name.', 'En la pastelería con ese nombre.', '/max Chez Bob'),
     ]},
     { name:'/unmax', fr:'Revient à l’état d’avant /max.', en:'Goes back to before /max.', es:'Vuelve a como estaba antes de /max.', cases:[cmdCase('/unmax', 'Annule le dernier /max.', 'Undoes the last /max.', 'Anula el último /max.')] },
     { name:'/creative', fr:'Le mode créatif : tout à l’infini, des employés à l’infini et tous les thèmes.', en:'Creative mode: everything infinite, infinite employees and all themes.', es:'Modo creativo: todo infinito, empleados infinitos y todos los temas.', cases:[
@@ -698,14 +768,14 @@ var COMMAND_DOCS = [
   ]},
   { id:'shop', fr:'Boutique', en:'Shop', es:'Tienda', list:[
     { name:'/machine', fr:'Change le niveau d’une machine, entre 0 et son maximum (de 5 à 10 selon la machine).', en:'Changes a machine’s level, between 0 and its maximum (5 to 10 depending on the machine).', es:'Cambia el nivel de una máquina, entre 0 y su máximo (de 5 a 10 según la máquina).', cases:[
-      cmdCase('/machine set NOM N', 'Met la machine au niveau N.', 'Sets the machine to level N.', 'Pone la máquina en el nivel N.', '/machine set four 3'),
-      cmdCase('/machine set NOM max', 'La met à son niveau maximum.', 'Sets it to its maximum level.', 'La pone en su nivel máximo.', '/machine set four max'),
-      cmdCase('/machine add NOM N', 'Ajoute N niveaux.', 'Adds N levels.', 'Añade N niveles.', '/machine add fouet 2'),
-      cmdCase('/machine remove NOM N', 'Enlève N niveaux.', 'Removes N levels.', 'Quita N niveles.', '/machine remove four 5'),
-      cmdCase('/machine remove NOM all', 'Enlève tous ses niveaux.', 'Removes all its levels.', 'Quita todos sus niveles.', '/machine remove four all'),
+      cmdCase('/machine set NAME N', 'Met la machine au niveau N.', 'Sets the machine to level N.', 'Pone la máquina en el nivel N.', '/machine set oven 3'),
+      cmdCase('/machine set NAME max', 'La met à son niveau maximum.', 'Sets it to its maximum level.', 'La pone en su nivel máximo.', '/machine set oven max'),
+      cmdCase('/machine add NAME N', 'Ajoute N niveaux.', 'Adds N levels.', 'Añade N niveles.', '/machine add whisk 2'),
+      cmdCase('/machine remove NAME N', 'Enlève N niveaux.', 'Removes N levels.', 'Quita N niveles.', '/machine remove oven 5'),
+      cmdCase('/machine remove NAME all', 'Enlève tous ses niveaux.', 'Removes all its levels.', 'Quita todos sus niveles.', '/machine remove oven all'),
     ]},
     { name:'/bakery', fr:'Crée ou supprime des pâtisseries.', en:'Creates or deletes bakeries.', es:'Crea o elimina pastelerías.', cases:[
-      cmdCase('/bakery create NOM', 'Crée une pâtisserie gratuitement. Le nom est facultatif.', 'Creates a bakery for free. The name is optional.', 'Crea una pastelería gratis. El nombre es opcional.', '/bakery create Chez Bob'),
+      cmdCase('/bakery create NAME', 'Crée une pâtisserie gratuitement. Le nom est facultatif.', 'Creates a bakery for free. The name is optional.', 'Crea una pastelería gratis. El nombre es opcional.', '/bakery create Chez Bob'),
       cmdCase('/bakery delete', 'Supprime la pâtisserie où tu es, sans la revendre.', 'Deletes the bakery you are in, without selling it.', 'Elimina la pastelería donde estás, sin venderla.'),
       cmdCase('/bakery delete N', 'Supprime la pâtisserie numéro N.', 'Deletes bakery number N.', 'Elimina la pastelería número N.', '/bakery delete 2'),
       cmdCase('/bakery list', 'Liste tes pâtisseries et leurs numéros.', 'Lists your bakeries and their numbers.', 'Lista tus pastelerías y sus números.'),
@@ -722,7 +792,8 @@ var COMMAND_DOCS = [
       cmdCase('/employee set N', 'Fixe leur nombre à N.', 'Sets their number to N.', 'Fija su número en N.', '/employee set 5'),
       cmdCase('/employee max', 'Ajoute 50 employés très compétents.', 'Adds 50 very skilled employees.', 'Añade 50 empleados muy hábiles.'),
       cmdCase('/employee upgrade N', 'Met la compétence de tous à N.', 'Sets everyone’s skill to N.', 'Pone la habilidad de todos en N.', '/employee upgrade 80'),
-      cmdCase('/employee NOM level set N', 'Met la compétence d’un employé à N.', 'Sets one employee’s skill to N.', 'Pone la habilidad de un empleado en N.', '/employee Emma level set 90'),
+      cmdCase('/employee NAME skill set N', 'Met la compétence d’un employé à N.', 'Sets one employee’s skill to N.', 'Pone la habilidad de un empleado en N.', '/employee Emma skill set 90'),
+      cmdCase('/employee NAME level set N', 'Met le niveau d’un employé à N (de 1 à 11).', 'Sets one employee’s level to N (1 to 11).', 'Pone el nivel de un empleado en N (de 1 a 11).', '/employee Emma level set 10'),
     ]},
     { name:'/space', fr:'Change ton espace, en m².', en:'Changes your space, in m².', es:'Cambia tu espacio, en m².', cases:[
       cmdCase('/space set N', 'Fixe l’espace à N m².', 'Sets the space to N m².', 'Fija el espacio en N m².', '/space set 100'),
@@ -732,26 +803,26 @@ var COMMAND_DOCS = [
   ]},
   { id:'stock', fr:'Stock', en:'Stock', es:'Stock', list:[
     { name:'/buy', fr:'Achète un ingrédient, avec ton argent.', en:'Buys an ingredient, with your money.', es:'Compra un ingrediente, con tu dinero.', cases:[
-      cmdCase('/buy INGRÉDIENT N', 'En achète N.', 'Buys N.', 'Compra N.', '/buy farine 10'),
-      cmdCase('/buy INGRÉDIENT all', 'Avec tout ton argent.', 'With all your money.', 'Con todo tu dinero.', '/buy sucre all'),
+      cmdCase('/buy INGREDIENT N', 'En achète N.', 'Buys N.', 'Compra N.', '/buy flour 10'),
+      cmdCase('/buy INGREDIENT all', 'Avec tout ton argent.', 'With all your money.', 'Con todo tu dinero.', '/buy sugar all'),
     ]},
     { name:'/sell', fr:'Revend un ingrédient.', en:'Resells an ingredient.', es:'Revende un ingrediente.', cases:[
-      cmdCase('/sell INGRÉDIENT N', 'En revend N.', 'Resells N.', 'Revende N.', '/sell farine 10'),
-      cmdCase('/sell INGRÉDIENT all', 'Revend tout.', 'Resells it all.', 'Lo revende todo.', '/sell sucre all'),
+      cmdCase('/sell INGREDIENT N', 'En revend N.', 'Resells N.', 'Revende N.', '/sell flour 10'),
+      cmdCase('/sell INGREDIENT all', 'Revend tout.', 'Resells it all.', 'Lo revende todo.', '/sell sugar all'),
     ]},
-    { name:'/INGRÉDIENT', generic:true, fr:'Change un ingrédient directement.', en:'Changes an ingredient directly.', es:'Cambia un ingrediente directamente.', cases:[
-      cmdCase('/farine add N', 'En ajoute N.', 'Adds N.', 'Añade N.', '/farine add 100'),
-      cmdCase('/farine remove N', 'En enlève N.', 'Removes N.', 'Quita N.', '/farine remove 10'),
-      cmdCase('/farine set N', 'Fixe la quantité à N.', 'Sets the amount to N.', 'Fija la cantidad en N.', '/farine set 100'),
-      cmdCase('/farine max', 'Sa limite : plus c’est rare, moins tu en as.', 'Its limit: the rarer, the less you get.', 'Su límite: cuanto más raro, menos tienes.'),
-      cmdCase('/farine infinite', 'Cet ingrédient ne s’épuise plus jamais. Marche avec tous les ingrédients.', 'This ingredient never runs out. Works with every ingredient.', 'Este ingrediente ya no se acaba nunca. Funciona con todos los ingredientes.', '/chocolat infinite'),
-      cmdCase('/farine infinite off', 'Il redevient normal.', 'Back to normal.', 'Vuelve a la normalidad.'),
-      cmdCase('/lait set N cl', 'Lait, crème et rhum acceptent ml, cl et l.', 'Milk, cream and rum accept ml, cl and l.', 'Leche, nata y ron aceptan ml, cl y l.', '/lait set 50 cl'),
+    { name:'/ingredient', fr:'Change un ingrédient directement.', en:'Changes an ingredient directly.', es:'Cambia un ingrediente directamente.', cases:[
+      cmdCase('/ingredient NAME add N', 'En ajoute N.', 'Adds N.', 'Añade N.', '/ingredient flour add 100'),
+      cmdCase('/ingredient NAME remove N', 'En enlève N.', 'Removes N.', 'Quita N.', '/ingredient flour remove 10'),
+      cmdCase('/ingredient NAME set N', 'Fixe la quantité à N.', 'Sets the amount to N.', 'Fija la cantidad en N.', '/ingredient strawberry set 4'),
+      cmdCase('/ingredient NAME max', 'Sa limite : plus c’est rare, moins tu en as.', 'Its limit: the rarer, the less you get.', 'Su límite: cuanto más raro, menos tienes.'),
+      cmdCase('/ingredient NAME infinite', 'Cet ingrédient ne s’épuise plus jamais. Marche avec tous les ingrédients.', 'This ingredient never runs out. Works with every ingredient.', 'Este ingrediente ya no se acaba nunca. Funciona con todos los ingredientes.', '/ingredient chocolate infinite'),
+      cmdCase('/ingredient NAME infinite off', 'Il redevient normal.', 'Back to normal.', 'Vuelve a la normalidad.'),
+      cmdCase('/ingredient NAME set N cl', 'Lait, crème et rhum acceptent ml, cl et l.', 'Milk, cream and rum accept ml, cl and l.', 'Leche, nata y ron aceptan ml, cl y l.', '/ingredient milk set 50 cl'),
     ]},
-    { name:'/RECETTE', generic:true, fr:'Change le stock d’un gâteau.', en:'Changes the stock of a cake.', es:'Cambia el stock de un pastel.', cases:[
-      cmdCase('/cookie add N', 'En ajoute N.', 'Adds N.', 'Añade N.', '/cookie add 10'),
-      cmdCase('/cookie set N', 'Fixe le stock à N.', 'Sets the stock to N.', 'Fija el stock en N.', '/cookie set 10'),
-      cmdCase('/cookie max', 'En met 9999.', 'Sets 9999.', 'Pone 9999.'),
+    { name:'/recipe', fr:'Change le stock d’un gâteau.', en:'Changes the stock of a cake.', es:'Cambia el stock de un pastel.', cases:[
+      cmdCase('/recipe NAME add N', 'En ajoute N.', 'Adds N.', 'Añade N.', '/recipe cookie add 10'),
+      cmdCase('/recipe NAME set N', 'Fixe le stock à N.', 'Sets the stock to N.', 'Fija el stock en N.', '/recipe cookie set 10'),
+      cmdCase('/recipe NAME max', 'En met 9999.', 'Sets 9999.', 'Pone 9999.'),
     ]},
   ]},
   { id:'world', fr:'Monde', en:'World', es:'Mundo', list:[
@@ -759,19 +830,39 @@ var COMMAND_DOCS = [
       cmdCase('/time set N', 'De 0.1 à 10. 1 est la vitesse normale.', 'From 0.1 to 10. 1 is normal speed.', 'De 0.1 a 10. 1 es la velocidad normal.', '/time set 5'),
     ]},
     { name:'/theme', fr:'Change de thème, ou en débloque.', en:'Changes theme, or unlocks themes.', es:'Cambia de tema o los desbloquea.', cases:[
-      cmdCase('/theme NOM', 'Met ce thème : light, dark, spring, summer, fall, winter, birthday, horror, bakery, party, space, cookie, tech ou techgold.', 'Applies this theme: light, dark, spring, summer, fall, winter, birthday, horror, bakery, party, space, cookie, tech or techgold.', 'Pone este tema: light, dark, spring, summer, fall, winter, birthday, horror, bakery, party, space, cookie, tech o techgold.', '/theme winter'),
+      cmdCase('/theme NAME', 'Met ce thème : light, dark, spring, summer, fall, winter, birthday, horror, bakery, party, space, cookie, tech ou techgold.', 'Applies this theme: light, dark, spring, summer, fall, winter, birthday, horror, bakery, party, space, cookie, tech or techgold.', 'Pone este tema: light, dark, spring, summer, fall, winter, birthday, horror, bakery, party, space, cookie, tech o techgold.', '/theme winter'),
+      cmdCase('/theme see NAME', 'Te montre ce thème une seule fois, sans le débloquer ni l’ajouter aux réglages. Il disparaît quand tu relances le jeu.', 'Shows you this theme once, without unlocking it or adding it to the settings. It goes away when you restart the game.', 'Te muestra este tema una sola vez, sin desbloquearlo ni añadirlo a los ajustes. Desaparece al reiniciar el juego.', '/theme see horror'),
+      cmdCase('/theme see off', 'Revient à ton vrai thème.', 'Goes back to your real theme.', 'Vuelve a tu tema real.'),
       cmdCase('/theme unlock all', 'Débloque tous les thèmes pour toujours.', 'Unlocks all themes forever.', 'Desbloquea todos los temas para siempre.'),
-      cmdCase('/theme unlock NOM', 'Débloque ce thème pour toujours.', 'Unlocks this theme forever.', 'Desbloquea este tema para siempre.', '/theme unlock party'),
+      cmdCase('/theme unlock NAME', 'Débloque ce thème pour toujours.', 'Unlocks this theme forever.', 'Desbloquea este tema para siempre.', '/theme unlock party'),
     ]},
     { name:'/birthday', fr:'Change ta date d’anniversaire.', en:'Changes your birthday.', es:'Cambia tu fecha de cumpleaños.', cases:[
-      cmdCase('/birthday JJ MM', 'Jour, puis mois.', 'Day, then month.', 'Día y luego mes.', '/birthday 14 7'),
+      cmdCase('/birthday DD MM', 'Jour, puis mois.', 'Day, then month.', 'Día y luego mes.', '/birthday 14 7'),
     ]},
     { name:'/bob', fr:'Parle à Bob.', en:'Talk to Bob.', es:'Habla con Bob.', cases:[
       cmdCase('/bob challenge', 'Il te propose son défi tout de suite.', 'He offers you his challenge right away.', 'Te propone su reto ahora mismo.'),
     ]},
+    { name:'/pause', fr:'Met le jeu en pause, mais tu peux encore jouer avec tes ingrédients.', en:'Pauses the game, but you can still play with your ingredients.', es:'Pone el juego en pausa, pero aún puedes jugar con tus ingredientes.', cases:[
+      cmdCase('/pause', 'Le temps s’arrête, tu ne perds rien. Tape /pause une seconde fois (ou clique sur la pastille) pour reprendre.', 'Time stops and you lose nothing. Type /pause again (or click the badge) to resume.', 'El tiempo se detiene y no pierdes nada. Escribe /pause otra vez (o pulsa la insignia) para reanudar.'),
+      cmdCase('/pause off', 'Reprend tout de suite.', 'Resumes right away.', 'Reanuda ahora mismo.'),
+    ]},
+    { name:'/changelog', fr:'Montre aussi les secrets dans le journal des versions.', en:'Also shows the secrets in the changelog.', es:'Muestra también los secretos en el registro de versiones.', cases:[
+      cmdCase('/changelog max', 'Le journal des versions montre aussi ce que tu n’es pas censé savoir.', 'The changelog also shows what you are not supposed to know.', 'El registro de versiones muestra también lo que no deberías saber.'),
+      cmdCase('/changelog unmax', 'Le journal redevient normal.', 'The changelog goes back to normal.', 'El registro vuelve a la normalidad.'),
+    ]},
     { name:'/help', fr:'Ouvre ce guide.', en:'Opens this guide.', es:'Abre esta guía.', cases:[cmdCase('/help', 'Le guide s’ouvre à côté de la console.', 'The guide opens next to the console.', 'La guía se abre junto a la consola.')] },
   ]},
 ];
+
+// Avant la 1.1, les commandes avaient des noms francais : on retrouve leurs anciens textes traduits
+function legacyDocName(n) { return { '/stat': '/stats', '/ingredient': '/INGRÉDIENT', '/recipe': '/RECETTE' }[n] || n; }
+function legacyDocUse(u) {
+  if (/^\/ingredient NAME set N cl$/.test(u)) return '/lait set N cl';
+  u = u.replace(/^\/stat /, '/stats ').replace(/INGREDIENT/g, 'INGRÉDIENT').replace(/\bNAME\b/g, 'NOM').replace(/\bRECIPE\b/g, 'RECETTE').replace(/\bDD\b/, 'JJ');
+  u = u.replace(/^\/ingredient NOM /, '/farine ').replace(/^\/recipe NOM /, '/cookie ');
+  if (u === '/employee NOM skill set N') return '/employee NOM level set N';
+  return u;
+}
 
 // Portugais et allemand : leurs textes du guide viennent de leur fichier de langue
 Object.keys(I18N_EXTRA).forEach(function(lang) {
@@ -779,8 +870,8 @@ Object.keys(I18N_EXTRA).forEach(function(lang) {
   COMMAND_DOCS.forEach(function(g) {
     g[lang] = d['g:' + g.id];
     g.list.forEach(function(c) {
-      c[lang] = d[c.name];
-      c.cases.forEach(function(x) { x[lang] = d['c:' + x.use]; });
+      c[lang] = d[c.name] || d[legacyDocName(c.name)];
+      c.cases.forEach(function(x) { x[lang] = d['c:' + x.use] || d['c:' + legacyDocUse(x.use)]; });
     });
   });
 });
@@ -812,7 +903,7 @@ function toggleCommandHelp() {
 
 // Met en valeur ce qu'il faut remplacer (N, NOM...)
 function commandUsage(use) {
-  return escH(use).replace(/\b(N|NOM|INGRÉDIENT|RECETTE|JJ|MM)\b/g, '<i class="cg-arg">$1</i>');
+  return escH(use).replace(/\b(N|NAME|INGREDIENT|RECIPE|DD|MM)\b/g, '<i class="cg-arg">$1</i>');
 }
 
 function renderCommandList() {

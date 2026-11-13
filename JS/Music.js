@@ -41,6 +41,21 @@ var MUSIC_TRACKS = [
   { id:'birthday', name:'Joyeux Anniversaire', unlockLvl:0, birthday:true, bpm:112, beats:3, step:1, wave:'triangle',
     chords:['C','C','G','G','C','C','F','C','G','C'],
     melody:'. . g4 | g4 a4 g4 | c5 b4 g4 | g4 a4 g4 | d5 c5 g4 | g4 g5 e5 | c5 b4 a4 | f5 f5 e5 | c5 d5 c5 | - - .' },
+  { id:'zen', name:'Jardin Zen', unlockLvl:100, bpm:70, beats:4, step:0.5, wave:'sine',
+    chords:['C','Am','F','G','C','Am','Dm','G'],
+    melody:'e5 - g5 - a5 - g5 - | e5 - c5 - a4 - c5 - | f5 - a5 - c6 - a5 - | g5 - d5 - b4 - d5 - | e5 - g5 - c6 - g5 - | a5 - e5 - c5 - e5 - | d5 - f5 - a5 - f5 - | g5 - b4 - c5 - - .' },
+  { id:'jazz', name:'Café Jazz', unlockLvl:300, bpm:104, beats:4, step:0.5, wave:'triangle',
+    chords:['Dm','G','C','Am','Dm','G','C','C'],
+    melody:'f5 - a5 g5 f5 - d5 - | g5 - b5 a5 g5 - d5 - | e5 - g5 e5 c5 - e5 - | a4 - c5 e5 a5 - e5 - | f5 a5 d6 - c6 a5 f5 - | g5 b5 d6 - b5 g5 d5 - | e5 g5 c6 b5 g5 e5 c5 - | c5 - e5 - g5 - - .' },
+  { id:'epic', name:'Four Sacré', unlockLvl:500, bpm:96, beats:4, step:0.5, wave:'square',
+    chords:['Am','F','C','G','Am','F','G','E'],
+    melody:'a5 - - c6 e6 - c6 - | a5 - - c6 f6 - c6 - | g5 - - c6 e6 - c6 - | g5 - b5 d6 g6 - d6 - | e6 - - c6 a5 - c6 - | f6 - e6 c6 a5 - f5 - | d6 - b5 g5 d6 - b5 - | g#5 - b5 - e6 - - .' },
+  { id:'lullaby', name:'Berceuse Étoilée', unlockLvl:700, bpm:58, beats:3, step:1, wave:'sine',
+    chords:['G','Em','C','D','G','Em','Am','D'],
+    melody:'b5 g5 d5 | e5 g5 b5 | c6 b5 g5 | f#5 a5 d6 | b5 d6 g6 | e6 b5 g5 | c6 a5 e5 | d5 - .' },
+  { id:'finale', name:'Grand Gâteau', unlockLvl:900, bpm:128, beats:4, step:0.5, wave:'triangle',
+    chords:['D','A','Bm','G','D','A','G','A'],
+    melody:'f#5 a5 d6 - f#6 - d6 - | e6 - c#6 a5 e6 - a5 - | d6 - f#6 - b5 - d6 - | b5 d6 g6 - d6 b5 g5 - | f#6 d6 a5 d6 f#6 - a6 - | e6 c#6 a5 c#6 e6 - a5 - | d6 b5 g5 b5 d6 - g6 - | a5 c#6 e6 - a6 - - .' },
 ];
 
 var NOTE_INDEX = { c:0, 'c#':1, db:1, d:2, 'd#':3, eb:3, e:4, f:5, 'f#':6, gb:6, g:7, 'g#':8, ab:8, a:9, 'a#':10, bb:10, b:11 };

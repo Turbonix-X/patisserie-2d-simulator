@@ -58,7 +58,7 @@ document.addEventListener('DOMContentLoaded', function() {
   // Boucle de jeu (chaque seconde)
   setInterval(function() {
     // En pause ou pendant l'intro, le temps ne s'accumule pas
-    if (G.paused || introActive || menuPause.on) { lastTick = Date.now(); return; }
+    if (G.paused || introActive || menuPause.on || softPause.on) { lastTick = Date.now(); return; }
     if (G.gameOver) return;
 
     var now = Date.now();
@@ -118,16 +118,18 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // Affichage fluide
   setInterval(function() {
+    tickSoftPause();
     if (G.paused || G.gameOver || introActive || menuPause.on) return;
     tickSalesUI();
     renderIngredients();
     renderCraftingBar();
     renderMainPanel();
+    tickMoveLabels();
   }, 250);
 
   // Candidatures (une toutes les minutes environ)
   setInterval(function() {
-    if (G.paused || G.gameOver || introActive || menuPause.on) return;
+    if (G.paused || G.gameOver || introActive || menuPause.on || softPause.on) return;
     // Peu de candidats au debut, de plus en plus ensuite
     if (G.level >= 5 && Math.random() < applicantChance()) {
       generateApplicant();
