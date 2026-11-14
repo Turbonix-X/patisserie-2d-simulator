@@ -10,7 +10,7 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 REPO = 'Turbonix-X/patisserie-2d-simulator'
 version = sys.argv[1].lstrip('v')
 notes = sys.argv[2] if len(sys.argv) > 2 else 'Voir CHANGELOG.md'
-setup = glob.glob(os.path.join(ROOT, 'src-tauri', 'target', 'release', 'bundle', 'nsis', '*-setup.exe'))[0]
+setup = glob.glob(os.path.join(ROOT, 'src-tauri', 'target', 'release', 'bundle', 'nsis', '*_' + version + '_*-setup.exe'))[0]
 sig = open(setup + '.sig', encoding='utf-8').read().strip()
 name = os.path.basename(setup)
 latest = {
