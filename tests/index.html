@@ -26,6 +26,7 @@
 <script>document.write('<script src="../JS/LangRU.js?t=' + Date.now() + '"><\/script>');</script>
 <script>document.write('<script src="../JS/Lang11.js?t=' + Date.now() + '"><\/script>');</script>
 <script>document.write('<script src="../JS/Lang111.js?t=' + Date.now() + '"><\/script>');</script>
+<script>document.write('<script src="../JS/Lang112.js?t=' + Date.now() + '"><\/script>');</script>
 <script>document.write('<script src="../JS/PlayerData.js?t=' + Date.now() + '"><\/script>');</script>
 <script>document.write('<script src="../JS/Logic.js?t=' + Date.now() + '"><\/script>');</script>
 <script>document.write('<script src="../JS/Achievements.js?t=' + Date.now() + '"><\/script>');</script>
@@ -453,7 +454,7 @@ check('Un succes compte les niveaux de machines', ACHIEVEMENTS.filter(function(a
 check('Bob connait 30 anecdotes', LANGS.fr['bob.facts'].split('|').length === 30);
 
 // --- Release 1.0 ---
-check('La version s appelle Release 1.1.1', GAME_VERSION === 'Release 1.1.1');
+check('La version s appelle Release 1.1.2', GAME_VERSION === 'Release 1.1.2');
 G = createFreshState(); G.level = 499;
 check('La fete et l espace sont caches avant leur niveau', findTheme('party').hidden && findTheme('space').hidden && themeLockReason(findTheme('party')) === 'level');
 check('Les themes Tech sont secrets', themeLockReason(findTheme('tech')) === 'secret' && themeLockReason(findTheme('techgold')) === 'secret');
@@ -787,7 +788,7 @@ processCommand('/employee fire zed');
 check('/employee fire NOM', !G.employees.some(function(e) { return e.name === 'Zed'; }));
 G.applicants = [{ id: 1, name: 'Lola', type: 'baker', skill: 50, level: 2, hireCost: 99999999, expiresAt: Date.now() + 60000 }, { id: 2, name: 'Tom', type: 'seller', skill: 50, level: 1, hireCost: 100, expiresAt: Date.now() + 60000 }];
 var mBefore = G.money;
-processCommand('/employee hire lola'); processCommand('/employee reject tom');
+processCommand('/employee hire lola free'); processCommand('/employee reject tom');
 check('/employee hire et reject avec des candidats', G.employees.some(function(e) { return e.name === 'Lola'; }) && G.applicants.length === 0 && G.money === mBefore);
 G = createFreshState(); processCommand('/max');
 check('/max met tous les employes au niveau 10', G.employees.length > 3 && G.employees.every(function(e) { return e.type === 'novice' || e.level === EMP_MAX_LVL; }));
@@ -809,6 +810,33 @@ var carr = newEmployee('carrier', 'Ben', 50, 1); G.employees = [carr]; carr.carr
 check('Un transporteur reguler : le bouton commence, puis arrete', carrierGo(carr) === 'started' && carr.carryActive === true && carr.carryNextAt > Date.now() && (carr.tripUntil = 0, carrierGo(carr) === 'stopped') && carr.carryActive === false);
 carr.carryEvery = 0;
 check('... une seule fois : le bouton transfere tout de suite', carrierGo(carr) === 'sent' && !carr.carryActive);
+
+// --- Release 1.1.2 ---
+G = createFreshState(); G.level = 200; G.money = 1e6; G.applicants = [{ id: 1, name: 'Lola', type: 'baker', skill: 50, level: 1, hireCost: 5e9, expiresAt: Date.now() + 60000 }, { id: 2, name: 'Tom', type: 'seller', skill: 50, level: 1, hireCost: 100, expiresAt: Date.now() + 60000 }];
+check('/employee hire sans free coute le prix de base, et refuse si on n a pas assez', /cmd-err/.test(processCommand('/employee hire lola')) && G.applicants.length === 2 && G.employees.length === 0);
+processCommand('/employee hire tom'); var mHire = G.money;
+check('... et le paie', G.employees.length === 1 && G.employees[0].name === 'Tom' && G.money < 1e6);
+processCommand('/employee hire lola free');
+check('/employee hire NOM free est gratuit', G.employees.some(function(e) { return e.name === 'Lola'; }) && G.money === mHire);
+G = createFreshState(); G.level = 200; G.applicants = [{ id: 1, name: 'Lola', type: 'baker', skill: 50, level: 1, hireCost: 5, expiresAt: Date.now() + 60000 }];
+check('La suggestion de /employee hire ne propose que les candidats, puis free', consoleChoices('/employee hire ').words.join() === 'lola' && consoleChoices('/employee hire lola ').words.join() === 'free');
+G = createFreshState(); G.level = 200;
+check('Pas de transporteur avec une seule patisserie', !empTypeOpen(findEmpType('carrier')) && /cmd-err/.test(processCommand('/employee create carrier Ben 3')));
+processCommand('/max');
+check('... meme avec /max', !G.employees.some(function(e) { return e.type === 'carrier'; }));
+G = createFreshState(); G.level = 200; G.money = 1e6; openNewBakery(true, 'Autre');
+check('Avec deux patisseries, les transporteurs sont permis', empTypeOpen(findEmpType('carrier')) && !/cmd-err/.test(processCommand('/employee create carrier Ben 3')));
+G = createFreshState(); G.level = 449;
+check('Les onglets ne se deplacent qu a partir du niveau 450', !tabsCustomAvailable() && (G.level = 450, tabsCustomAvailable()));
+G.level = 100; processCommand('/tabs customization activate');
+check('/tabs customization activate l active avant le niveau 450', tabsCustomAvailable() === true);
+moveTab('machines', 'rec');
+check('Deplacer un onglet', visibleTabs()[0] === 'machines');
+processCommand('/tabs customization deactivate');
+check('/tabs customization deactivate remet l ordre normal', !tabsCustomAvailable() && visibleTabs()[0] === 'rec');
+processCommand('/tabs customization activate'); processCommand('/tabs customization reset');
+check('/tabs customization reset efface l ordre', !G.settings.tabOrder && G.settings.tabsCustom === undefined && visibleTabs()[0] === 'rec');
+check('Les anciens noms de la commande marchent aussi', !/cmd-err/.test(processCommand('/tabs personnalisation activate')) && !/cmd-err/.test(processCommand('/tabs personnalisation reinitialise')));
 
 var ko = results.filter(function(r) { return !r.ok; }).length;
 document.getElementById('total').textContent = (results.length - ko) + ' / ' + results.length + ' tests reussis';

@@ -32,7 +32,7 @@ Un jeu de gestion de pâtisserie : achète tes ingrédients, prépare tes gâtea
 - **Langues :** anglais, français, espagnol, portugais, allemand, arabe, mandarin, japonais, coréen et russe.
 - **Musique :** des morceaux composés pour le jeu, joués en direct par le navigateur, dont certains à débloquer en montant de niveau.
 - **Bob :** ton chef pâtissier t'explique le jeu, te conseille, te lance des défis et adore le sucre. Évite de trop l'embêter.
-- **Sauvegarde :** automatique, avec export et import par fichier ou par copier-coller, une pause automatique, et des gains pendant ton absence.
+- **Sauvegarde :** automatique, avec export et import par fichier ou par copier-coller, une pause automatique, des mises à jour sans recharger la page, et des gains pendant ton absence.
 
 ## Lancer le jeu sur ton ordi
 

@@ -131,7 +131,8 @@ function renderHeader() {
   h += '<div class="hdr-brand">';
   h += '<img class="game-logo" src="logo.svg" alt="" width="40" height="40" onclick="logoClick()">';
   h += '<h1 class="game-name">P2DS</h1>';
-  h += '<button type="button" class="version-badge" onclick="showChangelog()" title="' + escH(t('changelog.title')) + '">' + GAME_VERSION + '</button>';
+  var hasUpdate = typeof updateState !== 'undefined' && updateState.newVersion;
+  h += '<button type="button" class="version-badge' + (hasUpdate ? ' has-update' : '') + '" onclick="showChangelog()" title="' + escH(hasUpdate ? t('update.available', { v: updateState.newVersion }) : t('changelog.title')) + '">' + GAME_VERSION + '</button>';
   h += '<button class="bakery-name" onclick="showRenameModal()" title="' + escH(t('rename.title')) + '"><span>' + escH(G.bakeryName) + '</span>' + uiIcon('pencil') + '</button>';
   h += '</div>';
   h += '<div class="hdr-stats">';
@@ -192,8 +193,56 @@ function visibleTabs() {
   if (G.level >= ORDER_CONFIG.lvl) tabs.push('orders');
   tabs.push('machines');
   if (G.bankUnlocked) tabs.push('bank');
+  // Au niveau 450, tu ranges les onglets comme tu veux
+  if (tabsCustomAvailable() && G.settings.tabOrder) {
+    var order = G.settings.tabOrder;
+    tabs.sort(function(a, b) {
+      var ia = order.indexOf(a), ib = order.indexOf(b);
+      return (ia < 0 ? 999 : ia) - (ib < 0 ? 999 : ib);
+    });
+  }
   return tabs;
 }
+
+var TABS_CUSTOM_LVL = 450;
+function tabsCustomAvailable() {
+  if (G.settings.tabsCustom === false) return false;
+  return G.settings.tabsCustom === true || G.level >= TABS_CUSTOM_LVL;
+}
+function moveTab(id, toId) {
+  var tabs = visibleTabs();
+  var from = tabs.indexOf(id), to = tabs.indexOf(toId);
+  if (from < 0 || to < 0 || from === to) return;
+  tabs.splice(to, 0, tabs.splice(from, 1)[0]);
+  G.settings.tabOrder = tabs;
+  renderTabs();
+}
+// Glisser un onglet a gauche ou a droite, a la souris comme au doigt
+var tabDrag = null, tabDragEndedAt = 0;
+document.addEventListener('pointerdown', function(e) {
+  var b = e.target.closest && e.target.closest('#tabs .gtab');
+  if (!b || !tabsCustomAvailable()) return;
+  tabDrag = { id: b.getAttribute('data-tab'), x: e.clientX, moved: false, el: b };
+});
+document.addEventListener('pointermove', function(e) {
+  if (!tabDrag) return;
+  if (!tabDrag.moved && Math.abs(e.clientX - tabDrag.x) < 12) return;
+  tabDrag.moved = true;
+  tabDrag.el.classList.add('dragging');
+  var over = null;
+  [].slice.call(document.querySelectorAll('#tabs .gtab')).forEach(function(btn) {
+    var r = btn.getBoundingClientRect();
+    if (e.clientX >= r.left && e.clientX <= r.right) over = btn;
+  });
+  if (over && over.getAttribute('data-tab') !== tabDrag.id) moveTab(tabDrag.id, over.getAttribute('data-tab'));
+});
+['pointerup', 'pointercancel'].forEach(function(ev) {
+  document.addEventListener(ev, function() {
+    if (!tabDrag) return;
+    if (tabDrag.moved) { tabDragEndedAt = Date.now(); save(); renderTabs(); }
+    tabDrag = null;
+  });
+});
 
 function renderTabs() {
   var el = document.getElementById('tabs');
@@ -202,12 +251,18 @@ function renderTabs() {
   if (tabs.indexOf(currentTab) < 0) currentTab = 'rec';
   el.style.setProperty('--tabs', tabs.length);
   el.classList.toggle('many', tabs.length >= 7);
+  el.classList.toggle('tabs-custom', tabsCustomAvailable());
+  if (tabsCustomAvailable() && G.level >= TABS_CUSTOM_LVL && !G.settings.tabsHint && !introActive) { G.settings.tabsHint = true; toast(t('tabs.hint')); }
   var h = '<div class="gtab-track"><span class="gtab-ind" style="--i:' + tabs.indexOf(currentTab) + '"></span></div>';
   for (var i = 0; i < tabs.length; i++) {
     var active = currentTab === tabs[i];
-    h += '<button class="gtab' + (active ? ' active' : '') + '" onclick="switchTab(\'' + tabs[i] + '\')" title="' + escH(t('tab.key', { v: i + 1 })) + '"' + (active ? ' aria-current="page"' : '') + '>' + uiIcon(tabs[i]) + '<span>' + t('tab.' + tabs[i]) + '</span>';
+    h += '<button class="gtab' + (active ? ' active' : '') + '" data-tab="' + tabs[i] + '" onclick="if(Date.now()-tabDragEndedAt>300)switchTab(\'' + tabs[i] + '\')" title="' + escH(t('tab.key', { v: i + 1 })) + '"' + (active ? ' aria-current="page"' : '') + '>' + uiIcon(tabs[i]) + '<span>' + t('tab.' + tabs[i]) + '</span>';
     if (tabs[i] === 'emp' && G.applicants && G.applicants.length > 0) {
       h += '<span class="applicant-badge">' + G.applicants.length + '</span>';
+    }
+    if (tabs[i] === 'machines') {
+      var brokenM = Object.keys(G.broken || {}).filter(function(k) { return k.indexOf('m:') === 0; }).length;
+      if (brokenM > 0) h += '<span class="applicant-badge" title="' + escH(t('mach.brokenTip')) + '">' + brokenM + '</span>';
     }
     if (tabs[i] === 'orders' && G.orders.length > 0) {
       h += '<span class="applicant-badge">' + G.orders.length + '</span>';
@@ -874,7 +929,7 @@ function toggleNotifications() {
 
 // ============ LE CHANGELOG ============
 function showChangelog() {
-  var h = '<h2>' + t('changelog.title') + '</h2><div class="changelog" id="changelog-body">…</div>';
+  var h = '<h2>' + t('changelog.title') + '</h2>' + (typeof updateBoxHTML === 'function' ? updateBoxHTML() : '') + '<div class="changelog" id="changelog-body">…</div>';
   h += '<div class="modal-btns"><button class="btn" onclick="hideModal()">' + t('common.close') + '</button></div>';
   showModal(h, 'modal-changelog');
   fetch('CHANGELOG.md', { cache: 'no-cache' }).then(function(r) { if (!r.ok) throw 0; return r.text(); }).then(function(md) {

@@ -1,6 +1,6 @@
 # Le wiki de Pâtisserie 2D Simulator
 
-Tout ce qu'il faut savoir pour comprendre le jeu. Ce wiki décrit la **Release 1.1.1**.
+Tout ce qu'il faut savoir pour comprendre le jeu. Ce wiki décrit la **Release 1.1.2**.
 
 > **À savoir :** les recettes du jeu sont fausses. Les quantités et les ingrédients servent juste à donner un parcours au jeu. Ne les cuisine pas chez toi !
 
@@ -161,7 +161,7 @@ Lance une **recherche** dans l'onglet Employés : elle prend du temps et ne marc
 | Cueilleur | 5 | Produit un ingrédient à chaque seconde, moins ce qu'il perd. Quand tu changes son ingrédient, il met de 10 s (niveau 1) à 2 min (niveau max) à s'y mettre, et son compte à rebours se voit dans sa fiche et dans la barre du bas | Quel ingrédient, et une limite |
 | Touche-à-tout | 20, par recherche à deux métiers | Fait jusqu'à 3 métiers (niveau 3 au maximum chacun). Son niveau à lui lui fait garder plus de niveaux quand il fait tout en même temps | Sur quel métier il se concentre (changer prend de 10 s à 1 min), et les réglages de chacun de ses métiers |
 | Boulanger | 10 | Fait baisser le temps de préparation | Aucun |
-| Transporteur | 20, avec 2 pâtisseries | Emmène de l'argent ou du stock vers une autre pâtisserie. Un trajet dure de 10 s à 10 min, peut être en retard, ou avoir un accident et perdre son chargement | Où, quoi, combien, et le rythme : en continu, une seule fois, ou toutes les 1, 2, 5, 10, 30 ou 60 minutes, avec un bouton pour transférer tout de suite ou commencer |
+| Transporteur | 20, et au moins 2 pâtisseries | Emmène de l'argent ou du stock vers une autre pâtisserie. Un trajet dure de 10 s à 10 min, peut être en retard, ou avoir un accident et perdre son chargement | Où, quoi, combien, et le rythme : en continu, une seule fois, ou toutes les 1, 2, 5, 10, 30 ou 60 minutes, avec un bouton pour transférer tout de suite ou commencer |
 | Manager | 25 | Remonte le moral de l'équipe, et peut embaucher à ta place | Embauche automatique, compétence minimum, les métiers qu'il embauche, ceux qu'il regarde en premier, et les niveaux |
 | Maître d'hôtel | 30 | Livre les commandes à ta place | Aucun |
 | Vendeur | 35 | Vend tout seul, les gâteaux les plus chers d'abord | La part du stock qu'il peut vendre |
@@ -244,6 +244,10 @@ Tu peux choisir un thème pour tout le jeu, ou seulement pour la pâtisserie où
 
 **L'anniversaire :** indique ta date dans les réglages. Le jour J, tu as le thème et un bonus ×2 pendant 24 heures, une fois par an. Corriger ta date coûte 50 €.
 
+## Les onglets
+
+L'onglet **Machines** affiche une pastille rouge avec le nombre de machines en panne. Dès le **niveau 450**, tu peux faire glisser les onglets à gauche ou à droite pour les ranger comme tu veux.
+
 ## Les succès et les statistiques
 
 Ils sont dans les **réglages**. Il y a 1000 succès. Un succès pas encore obtenu montre son nom, mais pas ce qu'il demande.
@@ -254,11 +258,12 @@ Ils sont dans les **réglages**. Il y a 1000 succès. Un succès pas encore obte
 - **Le bouton pause** ou la touche **Échap** arrêtent le jeu. Ouvrir les réglages ou la liste des pâtisseries l'arrête aussi.
 - **La pause automatique :** dans les réglages, choisis un temps : si tu ne touches plus à rien pendant ce temps, le jeu se met en pause tout seul.
 - Le jeu se sauvegarde tout seul toutes les 30 secondes, dans ton navigateur.
-- **Hors ligne :** une fois chargé, le jeu marche sans internet, et ta partie reste dans ton navigateur. Pour recevoir une mise à jour, il faut être connecté et recharger la page.
+- **Hors ligne :** une fois chargé, le jeu marche sans internet, mais ta partie n'est pas sauvegardée tant que tu es hors ligne. Elle l'est de nouveau dès que la connexion revient.
+- **Les mises à jour :** de temps en temps, le jeu vérifie s'il existe une nouvelle version. Si oui, Bob te prévient et le numéro de version devient vert : clique dessus, puis sur le bouton, et le jeu se met à jour sans recharger la page.
 - Quand tu reviens, tes boutiques ont travaillé pendant 5 heures au maximum : cueilleurs, bâtiments, vendeurs, loyers, salaires et prêts. Aucune dette n'est créée pendant ton absence. Le transporteur, lui, attend ton retour.
 - Tu peux exporter ta partie dans un fichier ou sous forme de code à copier-coller, et l'importer ailleurs de la même façon.
 - **Trop de clics :** plus de 15 clics par seconde déclenchent une pause de 3 secondes. Après 3 pauses, une petite addition vérifie que tu n'es pas un robot. Après 3 mauvaises réponses, tu es bloqué 5 minutes.
 
 ## Sur téléphone
 
-Le jeu marche aussi sur téléphone et sur tablette. Les ingrédients sont en haut, au-dessus des onglets, et la barre du bas reste toujours visible. Le jeu existe en français, en anglais, en espagnol, en portugais, en allemand, en arabe, en mandarin, en japonais, en coréen et en russe : il prend la langue de ton navigateur au départ, et tu peux la changer dans les réglages.
+Le jeu marche aussi sur téléphone et sur tablette. Les ingrédients sont en haut, au-dessus des onglets, et la barre du bas reste toujours visible, sans cacher le bas de la liste. S'il y a plusieurs jauges de temps dans la barre du bas, fais-les défiler à gauche ou à droite. Le jeu existe en français, en anglais, en espagnol, en portugais, en allemand, en arabe, en mandarin, en japonais, en coréen et en russe : il prend la langue de ton navigateur au départ, et tu peux la changer dans les réglages.

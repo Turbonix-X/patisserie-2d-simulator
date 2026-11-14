@@ -187,6 +187,7 @@ function settingsSave() {
 }
 
 function doManualSave() {
+  if (navigator.onLine === false) { toast(t('offline.noSave')); return; }
   save();
   toast(t('settings.saved'));
   playClickSound();

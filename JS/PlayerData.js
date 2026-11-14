@@ -237,6 +237,8 @@ function migrateSave(data) {
 var saveWarningShown = false;
 
 function save() {
+  // Hors ligne, le jeu ne sauvegarde pas ta partie
+  if (typeof navigator !== 'undefined' && navigator.onLine === false) return;
   if (typeof capMoney === 'function') capMoney();
   G.lastTick = Date.now();
   try {

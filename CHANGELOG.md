@@ -2,6 +2,26 @@
 
 Tout ce qui a été ajouté à Pâtisserie 2D Simulator, de la plus récente à la plus ancienne. Pour comprendre les règles du jeu, va voir le [wiki](REGLES.md).
 
+## Release 1.1.2 (15 novembre 2026)
+
+Le jeu se met à jour sans te faire quitter ta partie, et les onglets se rangent comme tu veux.
+
+**Mises à jour**
+- Le jeu vérifie de temps en temps, sans lag, s'il existe une nouvelle version. Si oui, Bob te le dit, et le numéro de version devient vert.
+- Dans les nouveautés, un bouton met le jeu à jour sans recharger la page. Ta partie est sauvegardée juste avant.
+- Hors ligne, la partie n'est plus sauvegardée. Le jeu te le dit, et reprend dès que la connexion revient.
+
+**Onglets**
+- Au niveau 450, tu peux faire glisser les onglets à gauche ou à droite pour les ranger comme tu veux.
+- L'onglet Machines affiche une pastille rouge avec le nombre de machines en panne.
+
+**Employés**
+- Il faut au moins deux pâtisseries pour avoir des transporteurs.
+
+**Téléphone**
+- Quand il y a plusieurs jauges de temps dans la barre du bas, tu peux les faire défiler à gauche et à droite pour toutes les voir.
+- La barre du bas ne cache plus le bas des onglets : tu peux aller jusqu'au bout de la liste.
+
 ## Release 1.1.1 (14 novembre 2026)
 
 Un jeu plus fluide, des employés plus riches, et la possibilité de jouer sans connexion.

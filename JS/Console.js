@@ -96,7 +96,7 @@ function consoleTree() {
     bakery: { create: { '#': 'NAME' }, delete: { '#': 'N' }, list: null },
     building: words(['set', 'add', 'remove'], N),
     employee: {
-      add: N, remove: N, set: N, max: null, upgrade: N, fire: empNames, hire: appNames, reject: appNames, create: jobs
+      add: N, remove: N, set: N, max: null, upgrade: N, fire: empNames, hire: (function() { var o = {}; Object.keys(appNames).forEach(function(k) { o[k] = { free: null }; }); return o; })(), reject: appNames, create: jobs
     },
     space: words(['set', 'add', 'remove'], N),
     stat: { max: null, clicks: { set: N }, cakes: { set: N }, sold: { set: N }, salary: { set: N }, rent: { set: N } },
@@ -105,6 +105,7 @@ function consoleTree() {
     recipe: withOps(REC, 'r.', { set: N, add: N, max: null }),
     time: { set: { '#': '0.1 - 10' } },
     theme: (function() { var o = words(themeIds); o.unlock = (function() { var u = words(themeIds); u.all = null; return u; })(); o.see = (function() { var s = words(themeIds); s.off = null; return s; })(); return o; })(),
+    tabs: { customization: words(['activate', 'deactivate', 'reset']) },
     birthday: { '#': 'DD MM' }, bob: { challenge: null }, pause: { off: null }, changelog: words(['max', 'unmax'])
   };
 }
@@ -262,6 +263,20 @@ function processCommand(cmd) {
     parts = [found0.id].concat(nmc.rest);
   }
 
+  // /tabs customization activate|deactivate|reset : ranger les onglets
+  if (action === 'tabs') {
+    var what = parts[1], how = parts[2];
+    if (what === 'personnalisation') what = 'customization';
+    if (how === 'desactivate') how = 'deactivate';
+    if (how === 'reinitialise' || how === 'reinitialize') how = 'reset';
+    if (what !== 'customization' || ['activate', 'deactivate', 'reset'].indexOf(how) < 0) return '<span class="cmd-err">Usage: /tabs customization activate|deactivate|reset</span>';
+    if (how === 'activate') G.settings.tabsCustom = true;
+    else if (how === 'deactivate') G.settings.tabsCustom = false;
+    else { delete G.settings.tabOrder; delete G.settings.tabsCustom; }
+    renderTabs();
+    return '<span class="cmd-ok">' + t('console.tabs.' + how) + '</span>';
+  }
+
   // /pause [off] : le temps s'arrete, mais tu peux toujours jouer avec tes ingredients
   if (action === 'pause') {
     var want = parts[1] === 'off' ? false : parts[1] === 'on' ? true : !softPause.on;
@@ -417,7 +432,8 @@ function processCommand(cmd) {
   if (action === 'employee' || action === 'employees') {
     var sub = parts[1];
     function mkEmp(skill, lvl, morale) {
-      var et = EMP_TYPES[Math.floor(Math.random() * EMP_TYPES.length)];
+      var pool = EMP_TYPES.filter(function(x) { return !x.needsBakeries || bakeryTotal() >= x.needsBakeries; });
+      var et = pool[Math.floor(Math.random() * pool.length)];
       var e = newEmployee(et.id, getEmpName(), skill, lvl);
       e.morale = morale;
       G.employees.push(e);
@@ -431,7 +447,8 @@ function processCommand(cmd) {
     }
     // /employee fire NAME | hire NAME | reject NAME
     if (sub === 'fire' || sub === 'hire' || sub === 'reject') {
-      var wanted = parts.slice(2).join(' ');
+      var freeHire = sub === 'hire' && parts[parts.length - 1] === 'free' && parts.length > 3;
+      var wanted = parts.slice(2, freeHire ? parts.length - 1 : parts.length).join(' ');
       if (!wanted) return '<span class="cmd-err">Usage: /employee ' + sub + ' NAME</span>';
       if (sub === 'fire') {
         var gone = null;
@@ -444,10 +461,13 @@ function processCommand(cmd) {
       G.applicants.forEach(function(a) { if (!app && a.name.toLowerCase() === wanted) app = a; });
       if (!app) return '<span class="cmd-err">' + t('console.appUnknown', { n: escH(wanted) }) + '</span>';
       if (sub === 'reject') { rejectApplicant(app.id); return '<span class="cmd-ok">' + t('console.appRejected', { n: escH(app.name) }) + '</span>'; }
-      var before = G.money; G.money += app.hireCost; // En console, l'embauche est gratuite
+      // Sans free, c'est le prix normal de la candidature
+      var before = G.money, price = app.hireCost;
+      if (freeHire) G.money += price;
       var hired = acceptApplicant(app.id);
-      G.money = before;
-      return hired ? '<span class="cmd-ok">' + t('console.appHired', { n: escH(app.name) }) + '</span>' : '<span class="cmd-err">' + t('console.appFailed') + '</span>';
+      if (freeHire) G.money = before;
+      if (!hired && !freeHire && G.money < price) return '<span class="cmd-err">' + t('console.appPrice', { n: escH(app.name), v: fmtMoney(price) }) + '</span>';
+      return hired ? '<span class="cmd-ok">' + t(freeHire ? 'console.appHired' : 'console.appHiredPaid', { n: escH(app.name), v: fmtMoney(price) }) + '</span>' : '<span class="cmd-err">' + t('console.appFailed') + '</span>';
     }
     // /employee create JOB NAME LEVEL [INGREDIENT LOSS]
     if (sub === 'create') {
@@ -455,6 +475,7 @@ function processCommand(cmd) {
       var jobTxt = (raw[2] || '').toLowerCase(), job = null;
       EMP_TYPES.forEach(function(et) { if (et.id === jobTxt || normName(t('emp.' + et.id)) === normName(jobTxt) || normName(LANGS.en['emp.' + et.id] || '') === normName(jobTxt)) job = et; });
       if (!job || !raw[3]) return '<span class="cmd-err">Usage: /employee create JOB NAME LEVEL' + ' | /employee create collector NAME LEVEL INGREDIENT LOSS</span>';
+      if (job.needsBakeries && bakeryTotal() < job.needsBakeries) return '<span class="cmd-err">' + t('console.needBakeries', { n: job.needsBakeries }) + '</span>';
       var lvlNum = job.id === 'novice' ? 1 : parseInt(raw[4], 10);
       if (isNaN(lvlNum) || lvlNum < 1 || lvlNum > EMP_GOLD_LVL) return '<span class="cmd-err">' + t('console.empLevelRange', { v: EMP_GOLD_LVL }) + '</span>';
       var extra = {}, ingPick = null;
@@ -799,7 +820,7 @@ function maxThisBakery() {
   G.employees = [];
   G.nextEmployeeId = 1;
   EMP_TYPES.forEach(function(et) {
-    if (et.id === 'novice') return;
+    if (et.id === 'novice' || (et.needsBakeries && bakeryTotal() < et.needsBakeries)) return;
     var e = newEmployee(et.id, getEmpName(), 50, EMP_MAX_LVL);
     e.morale = 100;
     G.employees.push(e);
@@ -897,7 +918,8 @@ var COMMAND_DOCS = [
       cmdCase('/employee max', 'Ajoute 50 employés très compétents.', 'Adds 50 very skilled employees.', 'Añade 50 empleados muy hábiles.'),
       cmdCase('/employee upgrade N', 'Met la compétence de tous à N.', 'Sets everyone’s skill to N.', 'Pone la habilidad de todos en N.', '/employee upgrade 80'),
       cmdCase('/employee fire NAME', 'Renvoie l’employé qui porte ce nom.', 'Fires the employee with this name.', 'Despide al empleado con este nombre.', '/employee fire emma'),
-      cmdCase('/employee hire NAME', 'Embauche gratuitement le candidat qui porte ce nom.', 'Hires the applicant with this name for free.', 'Contrata gratis al candidato con este nombre.', '/employee hire emma'),
+      cmdCase('/employee hire NAME', 'Embauche le candidat qui porte ce nom, à son prix.', 'Hires the applicant with this name, at their price.', 'Contrata al candidato con este nombre, a su precio.', '/employee hire emma'),
+      cmdCase('/employee hire NAME free', 'Embauche le candidat qui porte ce nom, gratuitement.', 'Hires the applicant with this name for free.', 'Contrata gratis al candidato con este nombre.', '/employee hire emma free'),
       cmdCase('/employee reject NAME', 'Refuse le candidat qui porte ce nom.', 'Rejects the applicant with this name.', 'Rechaza al candidato con este nombre.', '/employee reject emma'),
       cmdCase('/employee create JOB NAME LEVEL', 'Crée un employé : son métier, son nom, et son niveau de 1 à 11.', 'Creates an employee: their job, name, and a level from 1 to 11.', 'Crea un empleado: su oficio, su nombre y un nivel de 1 a 11.', '/employee create baker Emma 5'),
       cmdCase('/employee create collector NAME LEVEL INGREDIENT LOSS', 'Crée un cueilleur : son niveau, l’ingrédient qu’il cueille, et sa perte en pourcentage.', 'Creates a collector: their level, the ingredient they pick, and their loss in percent.', 'Crea un recolector: su nivel, el ingrediente que recoge y su pérdida en porcentaje.', '/employee create collector Emma 8 flour 2'),
@@ -950,6 +972,11 @@ var COMMAND_DOCS = [
     ]},
     { name:'/bob', fr:'Parle à Bob.', en:'Talk to Bob.', es:'Habla con Bob.', cases:[
       cmdCase('/bob challenge', 'Il te propose son défi tout de suite.', 'He offers you his challenge right away.', 'Te propone su reto ahora mismo.'),
+    ]},
+    { name:'/tabs', fr:'Range les onglets comme tu veux.', en:'Arrange the tabs the way you want.', es:'Ordena las pestañas como quieras.', cases:[
+      cmdCase('/tabs customization activate', 'Active le rangement des onglets, même avant le niveau 450. Fais-les glisser à gauche ou à droite.', 'Turns tab arranging on, even before level 450. Drag them left or right.', 'Activa el orden de las pestañas, incluso antes del nivel 450. Arrástralas a izquierda o derecha.'),
+      cmdCase('/tabs customization deactivate', 'Désactive le rangement : les onglets reviennent à leur ordre normal.', 'Turns it off: the tabs go back to their normal order.', 'Lo desactiva: las pestañas vuelven a su orden normal.'),
+      cmdCase('/tabs customization reset', 'Remet l’ordre et le réglage d’origine.', 'Resets the order and the setting to their defaults.', 'Restablece el orden y el ajuste originales.'),
     ]},
     { name:'/pause', fr:'Met le jeu en pause, mais tu peux encore jouer avec tes ingrédients.', en:'Pauses the game, but you can still play with your ingredients.', es:'Pone el juego en pausa, pero aún puedes jugar con tus ingredientes.', cases:[
       cmdCase('/pause', 'Le temps s’arrête, tu ne perds rien. Tape /pause une seconde fois (ou clique sur la pastille) pour reprendre.', 'Time stops and you lose nothing. Type /pause again (or click the badge) to resume.', 'El tiempo se detiene y no pierdes nada. Escribe /pause otra vez (o pulsa la insignia) para reanudar.'),

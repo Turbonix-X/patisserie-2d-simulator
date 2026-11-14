@@ -2,6 +2,13 @@
 
 Ce fichier ne s'affiche que si tu sais comment le demander. Il garde ce qui est secret dans chaque version.
 
+## Release 1.1.2
+
+**La console**
+- `/employee hire NOM` embauche au prix de la candidature (et refuse si tu n'as pas assez d'argent). `/employee hire NOM free` l'embauche gratuitement. Seuls les candidats sont proposés.
+- `/tabs customization activate` permet de ranger les onglets même avant le niveau 450, `/tabs customization deactivate` le retire, et `/tabs customization reset` remet l'ordre d'origine.
+- `/max`, `/employee add` et `/employee create` ne créent plus de transporteurs avec une seule pâtisserie.
+
 ## Release 1.1.1
 
 **La console**

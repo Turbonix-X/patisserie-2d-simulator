@@ -686,7 +686,7 @@ function baseSkill() {
 }
 
 function empTypeOpen(et) {
-  return G.level >= et.unlockLvl && (!et.needsBakeries || G.bakeries.length >= et.needsBakeries);
+  return G.level >= et.unlockLvl && (!et.needsBakeries || bakeryTotal() >= et.needsBakeries);
 }
 
 function hireEmployee(typeId, applicant) {
@@ -2137,11 +2137,15 @@ function tickOrders(dtSec) {
 var bgTick = false;
 
 // Fait tourner du code comme si on etait dans une autre patisserie
+// La patisserie principale, quand on travaille dans une autre : le nombre de patisseries est le sien
+var MAIN_G = null;
+function bakeryTotal() { return Math.max(1, ((MAIN_G || G).bakeries || []).length); }
 function withBakery(state, fn) {
   var main = G;
   bgTick = true;
+  MAIN_G = main;
   G = state;
-  try { fn(); } finally { G = main; bgTick = false; }
+  try { fn(); } finally { G = main; bgTick = false; MAIN_G = null; }
 }
 
 // Tout le travail d'une patisserie, qu'on y soit ou non
