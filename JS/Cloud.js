@@ -155,7 +155,13 @@ function cloudIsAdmin(pid) {
   }, function() { return !!cloud.adminOf[pid]; });
 }
 function cloudAdminKnown(pid) { if (cloud.adminOf[pid] === undefined && cloudSessions()[pid] && lsGet('p2ds_adm_' + pid) === '1') cloud.adminOf[pid] = true; return !!cloud.adminOf[pid]; }
-function adminListPlayers(pid) { return cloudCall(pid, '/rest/v1/profiles?select=id,pseudo,email,created_at,instances(count),presence(status,bakery_name,level,platform,last_seen)&order=created_at.desc'); }
+// Sans la table de presence (SQL pas encore relance), on liste quand meme les joueurs : ils apparaissent "fermes"
+function adminListPlayers(pid) {
+  return cloudCall(pid, '/rest/v1/profiles?select=id,pseudo,email,created_at,instances(count),presence(status,bakery_name,level,platform,last_seen)&order=created_at.desc').catch(function(e) {
+    if (e && /relationship|presence|PGRST20/i.test(String(e.message))) return cloudCall(pid, '/rest/v1/profiles?select=id,pseudo,email,created_at,instances(count)&order=created_at.desc');
+    throw e;
+  });
+}
 function adminListInstances(pid, uid) { return cloudCall(pid, '/rest/v1/instances?user_id=eq.' + encodeURIComponent(uid) + '&select=id,bakery_name,updated_at,save_data&order=updated_at.desc'); }
 function adminDeleteInstance(pid, id) { return cloudDeleteInstance(pid, id); }
 function adminDeleteUser(pid, uid) { return cloudCall(pid, '/rest/v1/rpc/admin_delete_user', { method: 'POST', body: { target: uid } }); }

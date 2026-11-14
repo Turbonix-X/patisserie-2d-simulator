@@ -151,3 +151,6 @@ grant execute on function public.admin_delete_user(uuid) to authenticated;
 
 -- ---------- À FAIRE : ton adresse d'administrateur ----------
 insert into public.admins (email) values ('abi.2014.perso@gmail.com') on conflict do nothing;
+
+-- Dit a Supabase de relire la structure (sinon la nouvelle table peut ne pas etre vue tout de suite)
+notify pgrst, 'reload schema';
