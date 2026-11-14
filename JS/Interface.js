@@ -299,7 +299,8 @@ function ingToTop() { var el = document.getElementById('ingredients'); if (el) e
 function updateIngTop() {
   var el = document.getElementById('ingredients');
   if (!el) return;
-  var low = el.scrollHeight - el.clientHeight - el.scrollTop < 40 && el.scrollTop > 60;
+  var max = el.scrollHeight - el.clientHeight;
+  var low = max > 150 && el.scrollTop / max > 0.7;
   el.classList.toggle('at-bottom', low);
 }
 document.addEventListener('scroll', function(e) { if (e.target && e.target.id === 'ingredients') updateIngTop(); }, true);
@@ -377,6 +378,10 @@ function doCraftIngredient(ingId) {
 
 // ============ PANNEAU PRINCIPAL ============
 function renderMainPanel() {
+  priceMemo = {};
+  try { renderMainPanelNow(); } finally { priceMemo = null; }
+}
+function renderMainPanelNow() {
   switch (currentTab) {
     case 'rec': renderRecipes(); break;
     case 'sell': renderSell(); break;
@@ -403,7 +408,7 @@ function visibleRecipes() {
     return true;
   });
   if (ui.recSort === 'new') list.reverse();
-  else if (ui.recSort === 'profit') list.sort(function(a, b) { return recipeProfit(b) - recipeProfit(a); });
+  else if (ui.recSort === 'profit') { var pr = {}; list.forEach(function(r) { pr[r.id] = recipeProfit(r); }); list.sort(function(a, b) { return pr[b.id] - pr[a.id]; }); }
   // Les favoris d'abord
   list.sort(function(a, b) { return (G.favRecipes[b.id] ? 1 : 0) - (G.favRecipes[a.id] ? 1 : 0); });
   return list;

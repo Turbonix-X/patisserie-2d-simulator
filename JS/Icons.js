@@ -108,6 +108,9 @@ function uiIcon(name) {
 // les memes : les barres glissent au lieu de sauter, et les animations ne
 // redemarrent pas a chaque rafraichissement.
 function setHTML(el, html) {
+  // Le meme texte qu'avant : rien a faire, et on evite meme de le retraiter
+  if (el._rawHTML === html) return;
+  el._rawHTML = html;
   html = iconify(html);
   if (el._lastHTML === html) return;
   el._lastHTML = html;

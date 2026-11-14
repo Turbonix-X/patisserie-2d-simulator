@@ -4,7 +4,7 @@
    employes, espace, evenements, themes
    ============================================ */
 
-var GAME_VERSION = '1.1';
+var GAME_VERSION = 'Release 1.1.1';
 
 // ============ CURRENCIES ============
 var CURRENCIES = [

@@ -315,6 +315,7 @@ function renderSugar() {
   document.body.classList.toggle('bob-wants-sugar', bobWantsSugar());
   document.body.classList.toggle('bob-can-wasabi', canFeedBob('wasabi'));
   document.body.classList.toggle('bob-can-gold', canFeedBob('orfeuille'));
+  document.body.classList.toggle('bob-can-milk', canFeedBob('lait'));
   var bob = document.getElementById('bob');
   if (!bob) return;
   // Le wasabi ne passe pas tout seul : il faut du sucre
@@ -324,10 +325,11 @@ function renderSugar() {
 }
 
 // Ce qu'on peut glisser sur Bob : le sucre quand il est triste, le wasabi et l'or quand on en a
-var FEEDABLE = ['sucre', 'wasabi', 'orfeuille'];
+var FEEDABLE = ['sucre', 'wasabi', 'orfeuille', 'lait'];
 function canFeedBob(id) {
   if (introActive || (G.ing[id] || 0) < 1) return false;
   if (id === 'sucre') return bobWantsSugar();
+  if (id === 'lait') return (G.bobGold || 0) > 0; // Le lait lave l'or
   return ingUnlocked(findIng(id));
 }
 
@@ -336,7 +338,12 @@ function feedBobWith(id) {
   if (!canFeedBob(id)) return false;
   G.ing[id] -= 1;
   var bob = document.getElementById('bob');
-  if (id === 'wasabi') {
+  if (id === 'lait') {
+    G.bobGold = 0; G.bobGoldClicks = 0;
+    fxBurstOn(bob, 22, ['#FFFFFF', '#E3F2FD', '#BBDEFB'], true);
+    bobMood('wow', 1500);
+    bobSay(t('bob.goldOff'));
+  } else if (id === 'wasabi') {
     var before = G.bobChoke || 0;
     G.bobChoke = Math.min(3, before + 1);
     G.bobChokeAt = Date.now();
@@ -516,18 +523,6 @@ function pickLine(key) {
 
 function bobPoke() {
   var bob = document.getElementById('bob');
-  // En or, 10 clics suffisent pour le faire redevenir normal
-  if ((G.bobGold || 0) > 0) {
-    G.bobGoldClicks = (G.bobGoldClicks || 0) + 1;
-    if (G.bobGoldClicks >= 10) {
-      G.bobGold = 0; G.bobGoldClicks = 0;
-      fxBurstOn(bob, 22, ['#FFD54F', '#FFC107', '#FFF8E1'], true);
-      bobMood('wow', 1500);
-      bobSay(t('bob.goldOff'));
-      renderBob(); save();
-      return;
-    }
-  }
   if (!G.cheatUnlocked) {
     G.bobPokes = (G.bobPokes || 0) + 1;
     if (G.bobPokes >= TECH_CLICKS && !G.unlockedThemes.tech) { G.unlockedThemes.tech = true; toast(t('theme.techUnlocked')); save(); }
@@ -535,8 +530,8 @@ function bobPoke() {
     if ((G.bobGold || 0) >= 5) {
       bobMood('joy', 1500);
       fxBurstOn(bob, 20, ['#FFD54F', '#FFC107', '#FFF8E1'], true);
-      if (G.bobGoldClicks === 1) { bobSay(t('bob.goldGive')); setTimeout(showAdminPopup, 1200); }
-      else if (G.bobGoldClicks === 5) bobSay(t('bob.goldHalf'));
+      bobSay(t('bob.goldGive'));
+      setTimeout(showAdminPopup, 1200);
       return;
     }
   }

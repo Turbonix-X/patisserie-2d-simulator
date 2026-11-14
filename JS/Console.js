@@ -58,11 +58,7 @@ function handleConsoleKey(e) {
     e.preventDefault();
     var ac = document.getElementById('console-autocomplete');
     var firstItem = ac && ac.querySelector('.console-autocomplete-item');
-    if (firstItem) {
-      var inp = document.getElementById('console-cmd-input');
-      if (inp) inp.value = firstItem.getAttribute('data-cmd') + ' ';
-      ac.style.display = 'none';
-    }
+    if (firstItem) selectAutocomplete(firstItem.getAttribute('data-cmd'));
   }
 }
 
@@ -70,32 +66,98 @@ function commandCount(cmd) {
   return (G.cmdUsage && G.cmdUsage[cmd.replace(/^\//, '')]) || 0;
 }
 
-// Les suggestions : d'abord les commandes que tu utilises le plus
+// ---- L'arbre des commandes : a chaque mot, ce qu'on peut ecrire ensuite (comme dans Minecraft) ----
+// Un objet = des choix. '*' = n'importe quelle valeur. '#' = une indication. Une fonction donne les choix du moment.
+function slugList(list, prefix) { var o = {}; list.forEach(function(x) { o[slugOf(x.id, prefix)] = true; }); return o; }
+function withOps(list, prefix, ops) { var o = {}; list.forEach(function(x) { o[slugOf(x.id, prefix)] = ops; }); return o; }
+function words(arr, next) { var o = {}; arr.forEach(function(w) { o[w] = next === undefined ? null : next; }); return o; }
+function numHint(h) { return { '#': h }; }
+function consoleTree() {
+  var N = numHint('N');
+  var ingOps = { set: N, add: N, remove: N, max: null, infinite: { off: null } };
+  var themeIds = THEME_LIST.map(function(x) { return x.id; });
+  var empNames = {}, appNames = {};
+  G.employees.forEach(function(e) { empNames[e.name.toLowerCase()] = true; });
+  G.applicants.forEach(function(a) { appNames[a.name.toLowerCase()] = true; });
+  var lvlKeys = {}; for (var l = 1; l <= EMP_GOLD_LVL; l++) lvlKeys[l] = null;
+  var machines = {}; MACHINES.forEach(function(m) { machines[slugOf(m.id, 'mach.')] = null; });
+  var jobs = {}; EMP_TYPES.forEach(function(et) { jobs[et.id] = function(path) {
+    // /employee create JOB NAME LEVEL [INGREDIENT LOSS]
+    var lv = {}; for (var k in lvlKeys) lv[k] = et.id === 'collector' ? withOps(ING, 'i.', { '#': 'LOSS %' }) : null;
+    return { '#': 'NAME', '*': et.id === 'novice' ? null : lv };
+  }; });
+  var bakeries = { all: null }; G.bakeries.forEach(function(b, i) { bakeries[(i === G.currentBakeryIndex ? G.bakeryName : b.name).toLowerCase()] = null; });
+  return {
+    help: null, level: words(['add', 'set', 'remove'], N), xp: words(['add', 'set'], N),
+    money: { set: { '#': 'N [currency]' }, infinite: { off: null } },
+    debt: { cancel: { all: null, '#': 'N' }, set: N, add: N }, bank: words(['unlock', 'clear']),
+    max: bakeries, unmax: null, undo: null, random: null, reset: null, creative: { off: null },
+    machine: { set: withOps(MACHINES, 'mach.', { max: null, '#': 'N' }), add: withOps(MACHINES, 'mach.', N), remove: withOps(MACHINES, 'mach.', { all: null, '#': 'N' }) },
+    bakery: { create: { '#': 'NAME' }, delete: { '#': 'N' }, list: null },
+    building: words(['set', 'add', 'remove'], N),
+    employee: {
+      add: N, remove: N, set: N, max: null, upgrade: N, fire: empNames, hire: appNames, reject: appNames, create: jobs
+    },
+    space: words(['set', 'add', 'remove'], N),
+    stat: { max: null, clicks: { set: N }, cakes: { set: N }, sold: { set: N }, salary: { set: N }, rent: { set: N } },
+    buy: withOps(ING, 'i.', { all: null, '#': 'N' }), sell: withOps(ING, 'i.', { all: null, '#': 'N' }),
+    ingredient: withOps(ING, 'i.', ingOps),
+    recipe: withOps(REC, 'r.', { set: N, add: N, max: null }),
+    time: { set: { '#': '0.1 - 10' } },
+    theme: (function() { var o = words(themeIds); o.unlock = (function() { var u = words(themeIds); u.all = null; return u; })(); o.see = (function() { var s = words(themeIds); s.off = null; return s; })(); return o; })(),
+    birthday: { '#': 'DD MM' }, bob: { challenge: null }, pause: { off: null }, changelog: words(['max', 'unmax'])
+  };
+}
+
+// Les mots possibles apres ce qui est deja ecrit
+function consoleChoices(typed) {
+  var trailing = /\s$/.test(typed);
+  var toks = typed.replace(/^\s*\//, '').split(/\s+/).filter(function(x) { return x.length; });
+  var partial = trailing ? '' : (toks.pop() || '');
+  var node = consoleTree(), hint = null, path = [];
+  for (var i = 0; i < toks.length; i++) {
+    if (typeof node === 'function') node = node(path);
+    if (!node || typeof node !== 'object') { node = null; break; }
+    var key = toks[i].toLowerCase();
+    path.push(key);
+    node = (key in node) ? node[key] : ('*' in node ? node['*'] : null);
+  }
+  if (typeof node === 'function') node = node(path);
+  var out = [];
+  if (node && typeof node === 'object') {
+    hint = node['#'] || null;
+    Object.keys(node).forEach(function(k) { if (k !== '*' && k !== '#' && k.indexOf(partial.toLowerCase()) === 0) out.push(k); });
+    if (!hint && node['*']) hint = '…';
+  }
+  return { words: out, hint: hint, base: typed.slice(0, typed.length - partial.length), partial: partial };
+}
+
+// Les suggestions : a chaque mot, ce qu'on peut ecrire. Tout seul, d'abord les commandes que tu utilises le plus.
 function handleConsoleAutocomplete() {
   var inp = document.getElementById('console-cmd-input');
   var ac = document.getElementById('console-autocomplete');
   if (!inp || !ac) return;
-  var val = inp.value.trim().toLowerCase();
-  var matches = [];
-  var allCmds = CONSOLE_COMMANDS.slice();
-  for (var i = 0; i < ING.length; i++) allCmds.push('/ingredient ' + slugOf(ING[i].id, 'i.'));
-  for (var r = 0; r < REC.length; r++) allCmds.push('/recipe ' + slugOf(REC[r].id, 'r.'));
-  if (!val) {
-    // Rien de tape : tes favorites seulement
-    matches = allCmds.filter(function(c) { return commandCount(c) > 0; });
-  } else {
-    matches = allCmds.filter(function(c) { return c.indexOf(val) === 0 || c.indexOf('/' + val) === 0; });
+  var typed = inp.value.replace(/^\s+/, '');
+  var html = '', items = [];
+  if (!typed.replace('/', '')) {
+    // Rien de tape : tes favorites, sinon toutes les commandes
+    var favs = CONSOLE_COMMANDS.filter(function(c) { return commandCount(c) > 0; }).sort(function(a, b) { return commandCount(b) - commandCount(a); }).slice(0, 5);
+    if (favs.length) html += '<div class="console-autocomplete-title">' + t('console.mostUsed') + '</div>';
+    items = (favs.length ? favs : CONSOLE_COMMANDS.slice(0, 12)).map(function(c) { return { cmd: c, label: c, n: commandCount(c) }; });
+  } else if (typed.indexOf(' ') < 0) {
+    var v = typed.replace(/^\//, '').toLowerCase();
+    items = CONSOLE_COMMANDS.concat(['/ingredient', '/recipe']).filter(function(c, i, a) { return a.indexOf(c) === i && c.indexOf('/' + v) === 0; })
+      .sort(function(a, b) { return commandCount(b) - commandCount(a); }).slice(0, 10).map(function(c) { return { cmd: c, label: c, n: commandCount(c) }; });
+    if (items.length === 1 && items[0].cmd === '/' + v) items = [];
   }
-  matches.sort(function(a, b) { return commandCount(b) - commandCount(a); });
-  if (matches.length === 0 || (matches.length === 1 && matches[0] === val)) {
-    ac.style.display = 'none';
-    return;
+  if (typed.indexOf(' ') >= 0) {
+    var ch = consoleChoices(typed);
+    items = ch.words.slice(0, 30).map(function(w) { return { cmd: ch.base + w, label: w, n: 0 }; });
+    if (ch.hint && !ch.partial) html += '<div class="console-autocomplete-title">' + escH(ch.hint) + '</div>';
   }
-  var html = '';
-  if (!val || commandCount(matches[0]) > 0) html += '<div class="console-autocomplete-title">' + t('console.mostUsed') + '</div>';
-  matches.slice(0, val ? 8 : 5).forEach(function(m) {
-    var n = commandCount(m);
-    html += '<div class="console-autocomplete-item" data-cmd="' + m + '" onmousedown="event.preventDefault();selectAutocomplete(\'' + m + '\')">' + m + (n > 0 ? '<small>×' + n + '</small>' : '') + '</div>';
+  if (!items.length && !html) { ac.style.display = 'none'; return; }
+  items.forEach(function(m) {
+    html += '<div class="console-autocomplete-item" data-cmd="' + escH(m.cmd) + '" onmousedown="event.preventDefault();selectAutocomplete(this.getAttribute(\'data-cmd\'))">' + escH(m.label) + (m.n > 0 ? '<small>×' + m.n + '</small>' : '') + '</div>';
   });
   ac.innerHTML = html;
   ac.style.display = 'block';
@@ -103,9 +165,7 @@ function handleConsoleAutocomplete() {
 
 function selectAutocomplete(cmd) {
   var inp = document.getElementById('console-cmd-input');
-  if (inp) { inp.value = cmd + (/\s/.test(cmd) ? '' : ' '); inp.focus(); }
-  var ac = document.getElementById('console-autocomplete');
-  if (ac) ac.style.display = 'none';
+  if (inp) { inp.value = cmd + ' '; inp.focus(); handleConsoleAutocomplete(); }
 }
 
 function execConsoleCmd() {
@@ -368,6 +428,50 @@ function processCommand(cmd) {
       sk = Math.min(100, Math.max(1, sk));
       G.employees.forEach(function(e) { e.skill = sk; });
       return '<span class="cmd-ok">' + L('Compétence de tous les employés = ', 'All employees skill = ') + sk + '</span>';
+    }
+    // /employee fire NAME | hire NAME | reject NAME
+    if (sub === 'fire' || sub === 'hire' || sub === 'reject') {
+      var wanted = parts.slice(2).join(' ');
+      if (!wanted) return '<span class="cmd-err">Usage: /employee ' + sub + ' NAME</span>';
+      if (sub === 'fire') {
+        var gone = null;
+        G.employees.forEach(function(e) { if (!gone && e.name.toLowerCase() === wanted) gone = e; });
+        if (!gone) return '<span class="cmd-err">' + L('Employé introuvable : ', 'Employee not found: ') + escH(wanted) + '</span>';
+        fireEmployee(gone.id);
+        return '<span class="cmd-ok">' + t('console.empFired', { n: escH(gone.name) }) + '</span>';
+      }
+      var app = null;
+      G.applicants.forEach(function(a) { if (!app && a.name.toLowerCase() === wanted) app = a; });
+      if (!app) return '<span class="cmd-err">' + t('console.appUnknown', { n: escH(wanted) }) + '</span>';
+      if (sub === 'reject') { rejectApplicant(app.id); return '<span class="cmd-ok">' + t('console.appRejected', { n: escH(app.name) }) + '</span>'; }
+      var before = G.money; G.money += app.hireCost; // En console, l'embauche est gratuite
+      var hired = acceptApplicant(app.id);
+      G.money = before;
+      return hired ? '<span class="cmd-ok">' + t('console.appHired', { n: escH(app.name) }) + '</span>' : '<span class="cmd-err">' + t('console.appFailed') + '</span>';
+    }
+    // /employee create JOB NAME LEVEL [INGREDIENT LOSS]
+    if (sub === 'create') {
+      var raw = cmd.trim().replace(/^\//, '').split(/\s+/);
+      var jobTxt = (raw[2] || '').toLowerCase(), job = null;
+      EMP_TYPES.forEach(function(et) { if (et.id === jobTxt || normName(t('emp.' + et.id)) === normName(jobTxt) || normName(LANGS.en['emp.' + et.id] || '') === normName(jobTxt)) job = et; });
+      if (!job || !raw[3]) return '<span class="cmd-err">Usage: /employee create JOB NAME LEVEL' + ' | /employee create collector NAME LEVEL INGREDIENT LOSS</span>';
+      var lvlNum = job.id === 'novice' ? 1 : parseInt(raw[4], 10);
+      if (isNaN(lvlNum) || lvlNum < 1 || lvlNum > EMP_GOLD_LVL) return '<span class="cmd-err">' + t('console.empLevelRange', { v: EMP_GOLD_LVL }) + '</span>';
+      var extra = {}, ingPick = null;
+      if (job.id === 'collector' && raw[5]) {
+        ingPick = findIngByName(raw[5]);
+        if (!ingPick) return '<span class="cmd-err">' + L('Ingrédient inconnu : ', 'Unknown ingredient: ') + escH(raw[5]) + '</span>';
+        if (raw[6] !== undefined) {
+          var lossNum = parseFloat(raw[6]);
+          if (isNaN(lossNum) || lossNum < 0 || lossNum > 100) return '<span class="cmd-err">' + t('console.empLossRange') + '</span>';
+          extra.lossPct = lossNum;
+        }
+      }
+      var made = newEmployee(job.id, raw[3], 70, lvlNum, extra);
+      if (ingPick) made.assignedIng = ingPick.id;
+      made.morale = 100;
+      G.employees.push(made);
+      return '<span class="cmd-ok">' + t('console.empCreated', { n: escH(made.name), j: t('emp.' + job.id), v: made.level }) + '</span>';
     }
     // /employee <name> skill|level set <N>
     if (parts.length >= 5 && (parts[2] === 'skill' || parts[2] === 'level') && parts[3] === 'set') {
@@ -696,7 +800,7 @@ function maxThisBakery() {
   G.nextEmployeeId = 1;
   EMP_TYPES.forEach(function(et) {
     if (et.id === 'novice') return;
-    var e = newEmployee(et.id, getEmpName(), 50);
+    var e = newEmployee(et.id, getEmpName(), 50, EMP_MAX_LVL);
     e.morale = 100;
     G.employees.push(e);
   });
@@ -792,6 +896,11 @@ var COMMAND_DOCS = [
       cmdCase('/employee set N', 'Fixe leur nombre à N.', 'Sets their number to N.', 'Fija su número en N.', '/employee set 5'),
       cmdCase('/employee max', 'Ajoute 50 employés très compétents.', 'Adds 50 very skilled employees.', 'Añade 50 empleados muy hábiles.'),
       cmdCase('/employee upgrade N', 'Met la compétence de tous à N.', 'Sets everyone’s skill to N.', 'Pone la habilidad de todos en N.', '/employee upgrade 80'),
+      cmdCase('/employee fire NAME', 'Renvoie l’employé qui porte ce nom.', 'Fires the employee with this name.', 'Despide al empleado con este nombre.', '/employee fire emma'),
+      cmdCase('/employee hire NAME', 'Embauche gratuitement le candidat qui porte ce nom.', 'Hires the applicant with this name for free.', 'Contrata gratis al candidato con este nombre.', '/employee hire emma'),
+      cmdCase('/employee reject NAME', 'Refuse le candidat qui porte ce nom.', 'Rejects the applicant with this name.', 'Rechaza al candidato con este nombre.', '/employee reject emma'),
+      cmdCase('/employee create JOB NAME LEVEL', 'Crée un employé : son métier, son nom, et son niveau de 1 à 11.', 'Creates an employee: their job, name, and a level from 1 to 11.', 'Crea un empleado: su oficio, su nombre y un nivel de 1 a 11.', '/employee create baker Emma 5'),
+      cmdCase('/employee create collector NAME LEVEL INGREDIENT LOSS', 'Crée un cueilleur : son niveau, l’ingrédient qu’il cueille, et sa perte en pourcentage.', 'Creates a collector: their level, the ingredient they pick, and their loss in percent.', 'Crea un recolector: su nivel, el ingrediente que recoge y su pérdida en porcentaje.', '/employee create collector Emma 8 flour 2'),
       cmdCase('/employee NAME skill set N', 'Met la compétence d’un employé à N.', 'Sets one employee’s skill to N.', 'Pone la habilidad de un empleado en N.', '/employee Emma skill set 90'),
       cmdCase('/employee NAME level set N', 'Met le niveau d’un employé à N (de 1 à 11).', 'Sets one employee’s level to N (1 to 11).', 'Pone el nivel de un empleado en N (de 1 a 11).', '/employee Emma level set 10'),
     ]},

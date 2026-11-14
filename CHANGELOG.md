@@ -2,7 +2,26 @@
 
 Tout ce qui a été ajouté à Pâtisserie 2D Simulator, de la plus récente à la plus ancienne. Pour comprendre les règles du jeu, va voir le [wiki](REGLES.md).
 
-## Release 1.1 (13 novembre 2026)
+## Release 1.1.1 (14 novembre 2026)
+
+Un jeu plus fluide, des employés plus riches, et la possibilité de jouer sans connexion.
+
+**Fluidité**
+- Le jeu lague beaucoup moins : le chef pâtissier, les prix et les listes de recettes se calculent bien plus vite, et rien n'est redessiné quand l'onglet est caché ou qu'une fenêtre est ouverte.
+
+**Jouer sans connexion**
+- Une fois le jeu chargé, tu peux y jouer sans internet. Ta partie reste sauvegardée dans ton navigateur. Pour recevoir une mise à jour, il faut être connecté et recharger la page.
+
+**Employés**
+- Des visages encore plus travaillés, avec plus de coiffures et de détails. Plus de moustache pour les femmes.
+- Les comptes à rebours de la fiche d'un employé (formation, changement de poste, prochain transfert) descendent tout seuls.
+- Les transporteurs choisissent leur rythme : en continu, une seule fois, ou toutes les 1, 2, 5, 10, 30 ou 60 minutes. Un bouton lance un transfert tout de suite ou commence les transferts réguliers.
+
+**Petits changements**
+- Le bouton pour remonter les ingrédients apparaît dès qu'on a passé les deux tiers de la liste, sans clignoter.
+- Le jeu affiche maintenant « Release 1.1.1 » comme numéro de version.
+
+## Release 1.1.0 (13 novembre 2026)
 
 Des employés bien plus profonds, une préparation qui gère enfin la place, et plein de réglages en plus.
 

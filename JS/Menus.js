@@ -335,7 +335,7 @@ function togglePause() {
 // Le temps passe en pause ne compte pas : tout est decale d'autant
 function shiftGameTimers(ms) {
   G.crafting.forEach(function(c) { if (c.startTime !== null) c.startTime += ms; });
-  (G.employees || []).forEach(function(e) { if (e.moveUntil) e.moveUntil += ms; });
+  (G.employees || []).forEach(function(e) { if (e.moveUntil) e.moveUntil += ms; if (e.carryNextAt) e.carryNextAt += ms; });
   if (G.activeEvent) G.eventEndTime += ms;
   G.lastEventTime += ms;
   G.applicants.forEach(function(a) { a.expiresAt += ms; });

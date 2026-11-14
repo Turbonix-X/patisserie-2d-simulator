@@ -2,7 +2,18 @@
 
 Ce fichier ne s'affiche que si tu sais comment le demander. Il garde ce qui est secret dans chaque version.
 
-## Release 1.1
+## Release 1.1.1
+
+**La console**
+- Les suggestions marchent comme dans Minecraft : tape `/ingredient`, tous les ingrédients s'affichent, clique sur l'un d'eux, puis ajoute un espace pour voir ce qu'on peut faire ensuite.
+- `/max` met maintenant tous les employés au niveau 10.
+- `/employee fire NOM` renvoie un employé, `/employee hire NOM` embauche gratuitement un candidat, et `/employee reject NOM` le refuse.
+- `/employee create METIER NOM NIVEAU` crée un employé (niveau de 1 à 11). Pour un cueilleur : `/employee create collector NOM NIVEAU INGREDIENT PERTE`.
+
+**Bob**
+- L'or de Bob ne part plus avec 10 clics : glisse du lait sur lui, et il redevient mauve.
+
+## Release 1.1.0
 
 **La console**
 - Toutes les commandes sont maintenant en anglais et au singulier. Un ingrédient se change avec `/ingredient strawberry set 4`, une recette avec `/recipe cookie set 3`, et `/buy flour 10` ou `/machine set oven 3` marchent aussi avec des noms anglais.

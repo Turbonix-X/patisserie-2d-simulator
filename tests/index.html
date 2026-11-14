@@ -25,6 +25,7 @@
 <script>document.write('<script src="../JS/LangKO.js?t=' + Date.now() + '"><\/script>');</script>
 <script>document.write('<script src="../JS/LangRU.js?t=' + Date.now() + '"><\/script>');</script>
 <script>document.write('<script src="../JS/Lang11.js?t=' + Date.now() + '"><\/script>');</script>
+<script>document.write('<script src="../JS/Lang111.js?t=' + Date.now() + '"><\/script>');</script>
 <script>document.write('<script src="../JS/PlayerData.js?t=' + Date.now() + '"><\/script>');</script>
 <script>document.write('<script src="../JS/Logic.js?t=' + Date.now() + '"><\/script>');</script>
 <script>document.write('<script src="../JS/Achievements.js?t=' + Date.now() + '"><\/script>');</script>
@@ -452,7 +453,7 @@ check('Un succes compte les niveaux de machines', ACHIEVEMENTS.filter(function(a
 check('Bob connait 30 anecdotes', LANGS.fr['bob.facts'].split('|').length === 30);
 
 // --- Release 1.0 ---
-check('La version s appelle 1.1', GAME_VERSION === '1.1');
+check('La version s appelle Release 1.1.1', GAME_VERSION === 'Release 1.1.1');
 G = createFreshState(); G.level = 499;
 check('La fete et l espace sont caches avant leur niveau', findTheme('party').hidden && findTheme('space').hidden && themeLockReason(findTheme('party')) === 'level');
 check('Les themes Tech sont secrets', themeLockReason(findTheme('tech')) === 'secret' && themeLockReason(findTheme('techgold')) === 'secret');
@@ -773,6 +774,41 @@ check('Chaque musique a des accords valides et des mesures completes', MUSIC_TRA
 }));
 check('Le sucre a son cube', findIng('sucre').e === '[[sugar_cube]]' && CUSTOM_ICONS.sugar_cube);
 check('Titres au feminin pour les femmes', empTitle('collector', 'Marie') === 'Cueilleuse' && empTitle('collector', 'Pierre') === 'Cueilleur' && empTitle('chef', 'Marie') === 'Cheffe pâtissière');
+
+// --- Release 1.1.1 ---
+G = createFreshState(); G.level = 200; G.money = 1e6;
+processCommand('/employee create baker Emma 5');
+check('/employee create METIER NOM NIVEAU', G.employees.length === 1 && G.employees[0].type === 'baker' && G.employees[0].level === 5 && G.employees[0].name === 'Emma');
+processCommand('/employee create collector Zed 8 flour 2');
+var zed = G.employees[1];
+check('/employee create collector avec ingredient et perte', zed && zed.type === 'collector' && zed.level === 8 && zed.assignedIng === 'farine' && zed.lossPct === 2);
+check('Le niveau d un employe cree va de 1 a 11', /cmd-err/.test(processCommand('/employee create baker Bad 12')) && !/cmd-err/.test(processCommand('/employee create seller Gold 11')) && G.employees[2].level === 11);
+processCommand('/employee fire zed');
+check('/employee fire NOM', !G.employees.some(function(e) { return e.name === 'Zed'; }));
+G.applicants = [{ id: 1, name: 'Lola', type: 'baker', skill: 50, level: 2, hireCost: 99999999, expiresAt: Date.now() + 60000 }, { id: 2, name: 'Tom', type: 'seller', skill: 50, level: 1, hireCost: 100, expiresAt: Date.now() + 60000 }];
+var mBefore = G.money;
+processCommand('/employee hire lola'); processCommand('/employee reject tom');
+check('/employee hire et reject avec des candidats', G.employees.some(function(e) { return e.name === 'Lola'; }) && G.applicants.length === 0 && G.money === mBefore);
+G = createFreshState(); processCommand('/max');
+check('/max met tous les employes au niveau 10', G.employees.length > 3 && G.employees.every(function(e) { return e.type === 'novice' || e.level === EMP_MAX_LVL; }));
+G = createFreshState(); G.maxSpace = 100;
+check('Les suggestions : /ingredient liste les ingredients', consoleChoices('/ingredient ').words.indexOf('flour') >= 0 && consoleChoices('/ingredient fl').words.join() === 'flour');
+check('... puis ce qu on peut faire avec', consoleChoices('/ingredient flour ').words.join() === 'set,add,remove,max,infinite' && consoleChoices('/ingredient flour infinite ').words.join() === 'off');
+check('... et /employee create propose les metiers, puis les niveaux, puis les ingredients', consoleChoices('/employee create ').words.indexOf('collector') >= 0 && consoleChoices('/employee create collector Emma ').words.length === 11 && consoleChoices('/employee create collector Emma 8 ').words.indexOf('flour') >= 0);
+check('... et les noms d employes pour /employee fire', (function() { G.employees = [newEmployee('baker', 'Nina', 50, 1)]; return consoleChoices('/employee fire ').words.join() === 'nina'; })());
+G = createFreshState(); G.level = 60; G.bobGold = 3; G.ing.lait = 2; introActive = false;
+check('On peut glisser du lait sur Bob quand il est en or', canFeedBob('lait') && FEEDABLE.indexOf('lait') >= 0);
+G.bobGold = 0;
+check('... mais pas quand il ne l est pas', !canFeedBob('lait'));
+G = createFreshState(); G.level = 200;
+var priceA = REC.map(function(r) { return batchPrice(r, r.qty); }); priceMemo = {}; var priceB = REC.map(function(r) { return batchPrice(r, r.qty); }); var priceC = REC.map(function(r) { return batchPrice(r, r.qty); }); priceMemo = null;
+check('Le cache de prix ne change aucun prix', priceA.every(function(v, i) { return v === priceB[i] && v === priceC[i]; }));
+check('Les cueilleurs : le rythme du transporteur', CARRIER_EVERY_MIN.join() === '1,2,5,10,30,60' && carrierGo(newEmployee('carrier', 'Ben', 50, 1)) === 'noShop');
+G = createFreshState(); G.level = 200; G.money = 1e6; openNewBakery(true, 'Autre');
+var carr = newEmployee('carrier', 'Ben', 50, 1); G.employees = [carr]; carr.carryEvery = 5; carr.carryWhat = 'money';
+check('Un transporteur reguler : le bouton commence, puis arrete', carrierGo(carr) === 'started' && carr.carryActive === true && carr.carryNextAt > Date.now() && (carr.tripUntil = 0, carrierGo(carr) === 'stopped') && carr.carryActive === false);
+carr.carryEvery = 0;
+check('... une seule fois : le bouton transfere tout de suite', carrierGo(carr) === 'sent' && !carr.carryActive);
 
 var ko = results.filter(function(r) { return !r.ok; }).length;
 document.getElementById('total').textContent = (results.length - ko) + ' / ' + results.length + ' tests reussis';

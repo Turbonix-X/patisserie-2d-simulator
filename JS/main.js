@@ -117,14 +117,20 @@ document.addEventListener('DOMContentLoaded', function() {
   setInterval(save, 30000);
 
   // Affichage fluide
+  // Pour que ca ne lague pas : on ne dessine rien quand l'onglet est cache ou qu'une fenetre est ouverte,
+  // et les ingredients et le panneau se redessinent un tour sur deux
+  var fastTick = 0;
   setInterval(function() {
     tickSoftPause();
     if (G.paused || G.gameOver || introActive || menuPause.on) return;
-    tickSalesUI();
-    renderIngredients();
-    renderCraftingBar();
-    renderMainPanel();
     tickMoveLabels();
+    if (document.hidden) return;
+    var ov = document.getElementById('modal-overlay');
+    if (ov && ov.style.display === 'flex' && !softPause.on) return;
+    fastTick++;
+    tickSalesUI();
+    renderCraftingBar();
+    if (fastTick % 2) renderIngredients(); else renderMainPanel();
   }, 250);
 
   // Candidatures (une toutes les minutes environ)

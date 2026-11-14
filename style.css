@@ -2440,7 +2440,7 @@ button.version-badge { cursor: pointer; appearance: none; -webkit-appearance: no
 .changelog ul { margin: 4px 0 8px; padding-inline-start: 20px; }
 .changelog p { margin: 4px 0; }
 
-body.bob-can-wasabi .ing-card[data-ing="wasabi"], body.bob-can-gold .ing-card[data-ing="orfeuille"] { touch-action: none; }
+body.bob-can-wasabi .ing-card[data-ing="wasabi"], body.bob-can-gold .ing-card[data-ing="orfeuille"], body.bob-can-milk .ing-card[data-ing="lait"] { touch-action: none; }
 
 /* Sur téléphone : annonces plus petites, et la console passe dans les réglages */
 .only-phone { display: none; }
@@ -2589,8 +2589,8 @@ body.bob-can-wasabi .ing-card[data-ing="wasabi"], body.bob-can-gold .ing-card[da
 .emp-face { filter: drop-shadow(0 1px 1px rgba(0,0,0,.18)); }
 
 /* Retour en haut des ingrédients, barres de déblocage */
-.ing-top { display: none; position: sticky; bottom: 8px; margin: 10px auto 0; padding: 7px 16px; border-radius: 99px; border: 1px solid var(--border); background: var(--surface); box-shadow: var(--shadow-md, 0 4px 14px rgba(0,0,0,.2)); font: inherit; font-weight: 700; cursor: pointer; color: var(--text); z-index: 3; }
-#ingredients.at-bottom .ing-top { display: block; }
+.ing-top { display: block; visibility: hidden; opacity: 0; transition: opacity .2s; position: sticky; bottom: 8px; margin: 10px auto 0; padding: 7px 16px; border-radius: 99px; border: 1px solid var(--border); background: var(--surface); box-shadow: var(--shadow-md, 0 4px 14px rgba(0,0,0,.2)); font: inherit; font-weight: 700; cursor: pointer; color: var(--text); z-index: 3; }
+#ingredients.at-bottom .ing-top { visibility: visible; opacity: 1; }
 .unlock-item .craft-progress { background: linear-gradient(90deg, #7E57C2, #B39DDB); }
 
 /* Les réglages et la console : une entrée et une sortie bien à eux */

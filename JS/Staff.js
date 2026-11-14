@@ -28,7 +28,7 @@ function empAvatar(type, name, gender) {
   var hair = ['#2B1B12', '#5A3418', '#8A5A2B', '#C9A15A', '#A33A1E', '#3B3B3B', '#E8DFC8'][(h >>> 3) % 7];
   var hairLight = shadeHex(hair, 0.35), hairDark = shadeHex(hair, -0.3);
   // Femmes : cheveux longs, boucles ou chignon. Hommes : courts, boucles ou tres courts, parfois barbe ou moustache.
-  var style = female ? [1, 2, 3][(h >>> 6) % 3] : [0, 2, 4][(h >>> 6) % 3];
+  var style = female ? [1, 2, 3, 5, 6][(h >>> 6) % 5] : [0, 2, 4, 7][(h >>> 6) % 4];
   var beard = !female && (h >>> 9) % 4 === 0;
   var stache = !female && !beard && (h >>> 9) % 4 === 1;
   var eye = ['#5B3A1E', '#2F5F8A', '#3E7A3E', '#4A3626'][(h >>> 11) % 4];
@@ -37,6 +37,8 @@ function empAvatar(type, name, gender) {
   var s = '<svg class="emp-face" viewBox="0 0 40 40" aria-hidden="true">';
   // Derriere la tete : cheveux longs ou chignon
   if (style === 1) s += '<path d="M8.300 22C7.800 11 13 7.200 20 7.200S32.200 11 31.700 22c.300 6-1 10.500-3.200 12.500V21H11.500v13.500C9.300 32.500 8 28 8.300 22z" fill="' + hair + '"/><path d="M9.500 24c.2 4 1 7 2.500 9" stroke="' + hairDark + '" stroke-width=".8" fill="none" opacity=".6"/>';
+  if (style === 5) s += '<path d="M9 24C8 12 13 7.500 20 7.500S32 12 31 24c-.3 4-1.300 7-3 8.500-1.500.5-3 .2-4-1V19H16v12.500c-1 1.200-2.500 1.500-4 1C10.300 31 9.300 28 9 24z" fill="' + hair + '"/>';
+  if (style === 6) s += '<path d="M29.500 12c5 1 8 5 6.500 11-.8 3-2.500 5-4.500 6 1-3 1-6-.5-9z" fill="' + hair + '"/><path d="M33 14c1.200 3 1 6-.4 9" stroke="' + hairLight + '" stroke-width=".7" fill="none" opacity=".6"/><circle cx="30" cy="11.500" r="1.400" fill="#E91E63"/>';
   if (style === 3) s += '<circle cx="20" cy="7.300" r="4.200" fill="' + hair + '"/><path d="M17.500 6.200c1.300-1 3.200-1 4.600 0" stroke="' + hairLight + '" stroke-width=".8" fill="none"/>';
   // Cou, ombre sous le menton, epaules et col
   s += '<path d="M16.200 26.500h7.600v6h-7.600z" fill="' + skin + '"/><path d="M16.200 28.200c2.500 1.800 5.100 1.800 7.600 0v-1.700h-7.600z" fill="' + deep + '" opacity=".45"/>';
@@ -56,6 +58,12 @@ function empAvatar(type, name, gender) {
   if (style === 2) {
     [11.500, 14.500, 17.500, 20.500, 23.500, 26.500, 28.500].forEach(function(x, i) { s += '<circle cx="' + x + '" cy="' + (i === 0 || i === 6 ? 15 : 11.300) + '" r="3.300" fill="' + hair + '"/>'; });
     [13, 18.500, 24].forEach(function(x) { s += '<path d="M' + (x - 1.200) + ' 10.600q1.200-1.300 2.400 0" stroke="' + hairLight + '" stroke-width=".8" fill="none" stroke-linecap="round"/>'; });
+  } else if (style === 5) {
+    s += '<path d="M10.600 20C10 11.500 14.500 8.300 20 8.300S30 11.500 29.400 20c-1.200-4-3.500-6.800-6.500-8.200-3.500 3-8 4.500-12.300 8.200z" fill="' + hair + '"/><path d="M14 11.800c2.500-1.800 6-2.300 9.200-1.300" stroke="' + hairLight + '" stroke-width=".9" fill="none" stroke-linecap="round" opacity=".7"/>';
+  } else if (style === 6) {
+    s += '<path d="M10.800 19C10.200 11 14.500 8.200 20 8.200S29.800 11 29.200 19c-1.500-3.800-4-5.800-6.600-6.200-3.200 1.700-8 2-11.800 6.200z" fill="' + hair + '"/><path d="M14 11.500c2.300-1.500 5.500-2 8.500-1.200" stroke="' + hairLight + '" stroke-width=".9" fill="none" stroke-linecap="round" opacity=".7"/>';
+  } else if (style === 7) {
+    s += '<path d="M10.500 19C9.800 11 14 8 20 8s10.200 3 9.500 11c-.6-3-2-5-4-6.200-4 1.800-9.500 1.500-14.300 4.700 1-1.600 1-3 1.300-4.500C11.500 14 10.800 16 10.500 19z" fill="' + hair + '"/><path d="M16 9.500c2-.8 4.800-.8 7.500.2M13 13.500c3.500-.3 8-1.500 11-3.500" stroke="' + hairLight + '" stroke-width=".9" fill="none" stroke-linecap="round" opacity=".7"/>';
   } else if (style === 4) {
     s += '<path d="M11.100 16.800C11.400 11.300 15 8.800 20 8.800s8.600 2.500 8.900 8c-2-2.600-5-3.600-8.900-3.600S13.100 14.200 11.100 16.800z" fill="' + hair + '"/><path d="M14 11.500c2-1.200 4.500-1.600 7-1.200" stroke="' + hairLight + '" stroke-width=".8" fill="none" stroke-linecap="round" opacity=".7"/>';
   } else {
@@ -74,6 +82,7 @@ function empAvatar(type, name, gender) {
   // Nez : arete, ombre et narines
   s += '<path d="M19.600 19.800c-.1 1.700-.4 3-.9 3.800.6.5 1.500.7 2.600.1" fill="none" stroke="' + shade + '" stroke-width=".9" stroke-linecap="round" stroke-linejoin="round"/><path d="M18.600 23.700c.4.300.8.3 1.200.1M20.800 23.800c.4.200.8.100 1.100-.1" stroke="' + deep + '" stroke-width=".6" fill="none" stroke-linecap="round"/>';
   s += '<ellipse cx="14" cy="23.200" rx="2" ry="1.100" fill="#E57373" opacity="' + (female ? '.32' : '.2') + '"/><ellipse cx="26" cy="23.200" rx="2" ry="1.100" fill="#E57373" opacity="' + (female ? '.32' : '.2') + '"/>';
+  if ((h >>> 15) % 4 === 0) s += '<g fill="' + deep + '" opacity=".55"><circle cx="14.500" cy="22.200" r=".45"/><circle cx="16" cy="23" r=".45"/><circle cx="13.600" cy="23.600" r=".45"/><circle cx="25.500" cy="22.200" r=".45"/><circle cx="24" cy="23" r=".45"/><circle cx="26.400" cy="23.600" r=".45"/></g>';
   if (beard) s += '<path d="M11.100 20.500c.4 5.500 4.300 9 8.900 9s8.500-3.500 8.900-9c-1 3.200-2.700 4.700-4.300 5-1.100-.8-2.800-1.100-4.600-1.100s-3.500.3-4.600 1.100c-1.600-.3-3.300-1.800-4.300-5z" fill="' + hair + '" opacity=".92"/><path d="M14 27c1.800 1.700 3.800 2.400 6 2.400" stroke="' + hairLight + '" stroke-width=".6" fill="none" opacity=".5"/>';
   if (stache) s += '<path d="M15.400 24.600c1.400-1.300 3.200-1.200 4.600 0 1.400-1.200 3.200-1.300 4.600 0-1.400.5-3.200.9-4.600.1-1.400.8-3.200.4-4.600-.1z" fill="' + hairDark + '"/>';
   // Bouche : levres haute et basse, reflet
@@ -85,7 +94,7 @@ function empAvatar(type, name, gender) {
   else if (type === 'baker') s += '<path d="M11 14c-3-3-1-8 3-7 1-3 11-3 12 0 4-1 6 4 3 7z" fill="#fff" stroke="#D8D0C5"/><circle cx="26" cy="19" r="1.300" fill="#fff"/><circle cx="13" cy="26" r="1.200" fill="#fff"/>';
   else if (type === 'seller') s += '<path d="M10 13c1-6 5-8 10-8s9 2 10 8z" fill="#D81B3C"/><path d="M8 13h24c1 1 0 2-1 2H9c-1 0-2-1-1-2z" fill="#A31330"/>';
   else if (type === 'manager') s += '<rect x="12.500" y="17.800" width="7" height="4.600" rx="1.500" fill="rgba(180,220,255,.12)" stroke="#222" stroke-width="1.100"/><rect x="20.500" y="17.800" width="7" height="4.600" rx="1.500" fill="rgba(180,220,255,.12)" stroke="#222" stroke-width="1.100"/><path d="M19.500 19.800h1" stroke="#222" stroke-width="1.100"/><path d="M18 33l2 6 2-6-2-1.500z" fill="#1C74C4"/>';
-  else if (type === 'maitre') s += '<path d="M15.500 24.700c1.600-1.600 3.200-1.200 4.500 0 1.300-1.200 2.900-1.600 4.500 0-1.600.800-3 .800-4.500 0-1.500.800-2.900.800-4.500 0z" fill="#2C1B10"/><path d="M14 33l6 2 6-2v5l-6-2-6 2z" fill="#222"/>';
+  else if (type === 'maitre') s += (female ? '' : '<path d="M15.500 24.700c1.600-1.600 3.200-1.200 4.500 0 1.300-1.200 2.900-1.600 4.500 0-1.600.800-3 .800-4.500 0-1.500.800-2.900.800-4.500 0z" fill="#2C1B10"/>') + '<path d="M14 33l6 2 6-2v5l-6-2-6 2z" fill="#222"/>';
   else if (type === 'carrier') s += '<path d="M10 14c0-6 5-9 10-9s10 3 10 9z" fill="#1E88E5"/><path d="M6 14h28l-3 2.500H9z" fill="#125EA8"/><path d="M17 8h6v3h-6z" fill="#FFD54F"/>';
   else if (type === 'chef') s += '<path d="M11 14c-5-2-5-9 0-10 1-4 17-4 18 0 5 1 5 8 0 10z" fill="#fff" stroke="#D8D0C5"/><path d="M11 12h18v4H11z" fill="#fff" stroke="#D8D0C5"/><path d="M16 5v7M20 4v8M24 5v7" stroke="#E0D9CE" stroke-width="1"/>';
   else if (type === 'buyer') s += '<circle cx="16" cy="19.800" r="3" fill="rgba(180,220,255,.12)" stroke="#6D4C41" stroke-width="1.100"/><circle cx="24" cy="19.800" r="3" fill="rgba(180,220,255,.12)" stroke="#6D4C41" stroke-width="1.100"/><path d="M19 19.800h2" stroke="#6D4C41" stroke-width="1.100"/><path d="M12 12c1-5 4-7 8-7s7 2 8 7z" fill="#3F8F2B"/><path d="M28 28h7v9h-7z" fill="#fff" stroke="#6D4C41"/><path d="M29.500 31h4M29.500 33.500h4" stroke="#6D4C41" stroke-width=".8"/>';
@@ -357,7 +366,7 @@ function showEmpInfoModal(empId) {
   h += '<p class="set-help">' + t('emp.desc.' + emp.type) + '</p>';
   h += '<div class="emp-facts">' + levelBadge(emp) + '<span>' + t('emp.skill', { v: emp.skill }) + '</span><span>' + t('emp.morale') + ' : ' + Math.floor(emp.morale) + ' / ' + maxMorale(emp) + ' %</span><span>' + t('emp.salary', { v: fmtMoney(getEmpSalary(emp) * 3600) }) + '</span>' + empExtraBadges(emp) + '</div>';
   if (emp.type !== 'novice' && emp.level >= EMP_GOLD_LVL) h += '<p class="set-help">' + t('emp.goldHelp') + '</p>';
-  if (empTraining(emp)) h += '<p class="warning">' + t('emp.training', { v: fmtTime((emp.trainingUntil - Date.now()) / 1000) }) + '</p>';
+  if (empTraining(emp)) h += '<p class="warning js-count" data-key="emp.training" data-p="v" data-until="' + emp.trainingUntil + '">' + t('emp.training', { v: fmtTime((emp.trainingUntil - Date.now()) / 1000) }) + '</p>';
   if (emp.paused) h += '<p class="warning">' + t('emp.pauseHelp') + '</p>';
   // Les comptes a rebours se mettent a jour tout seuls (voir tickMoveLabels)
   if (hasJob(emp, 'collector') && collectorMoving(emp)) h += '<p class="warning js-move" data-emp="' + emp.id + '" data-until="' + emp.moveUntil + '" data-ing="' + emp.assignedIng + '">' + t('emp.moving', { n: t('i.' + emp.assignedIng), t: fmtTime((emp.moveUntil - Date.now()) / 1000) }) + '</p>';
@@ -393,6 +402,12 @@ function setEmpPay(empId, adj) {
 
 // Le compte a rebours d'un cueilleur ou d'un touche-a-tout qui change de poste, mis a jour en direct dans sa fiche
 function tickMoveLabels() {
+  document.querySelectorAll('.js-count').forEach(function(el) {
+    var left = (+el.getAttribute('data-until') - Date.now()) / 1000;
+    if (left <= 0) { el.remove(); return; }
+    var p = {}; p[el.getAttribute('data-p')] = fmtTime(left);
+    el.textContent = t(el.getAttribute('data-key'), p);
+  });
   document.querySelectorAll('.js-move').forEach(function(el) {
     var left = (+el.getAttribute('data-until') - Date.now()) / 1000;
     if (left <= 0) { el.remove(); return; }
@@ -641,6 +656,16 @@ function carrierConfig(emp) {
   ING.forEach(function(i) { if (ingUnlocked(i)) h += '<option value="ing:' + i.id + '"' + (what === 'ing:' + i.id ? ' selected' : '') + '>' + t('i.' + i.id) + '</option>'; });
   h += '</optgroup></select></label>';
   h += '<label class="cfg-row">' + t('carry.qty') + '<input type="number" min="0" step="any" value="' + (emp.carryQty || '') + '" placeholder="' + escH(t('carry.max')) + '" onchange="assignCarrier(' + emp.id + ',\'qty\',this.value)"></label>';
+  // Le rythme : en continu comme avant, une seule fois, ou toutes les N minutes
+  var ev = emp.carryEvery === undefined ? 'auto' : String(emp.carryEvery);
+  h += '<label class="cfg-row">' + t('carry.every') + '<select class="set-select" onchange="assignCarrier(' + emp.id + ',\'every\',this.value)"><option value="auto"' + (ev === 'auto' ? ' selected' : '') + '>' + t('carry.everyAuto') + '</option><option value="0"' + (ev === '0' ? ' selected' : '') + '>' + t('carry.once') + '</option>';
+  CARRIER_EVERY_MIN.forEach(function(mn) { h += '<option value="' + mn + '"' + (ev === String(mn) ? ' selected' : '') + '>' + t('carry.everyMin', { v: mn }) + '</option>'; });
+  h += '</select></label>';
+  if (emp.carryEvery !== undefined) {
+    var label = emp.carryEvery === 0 ? t('carry.goNow') : emp.carryActive ? t('carry.stop') : t('carry.start');
+    h += '<button class="btn btn-primary carry-go" onclick="doCarrierGo(' + emp.id + ')">' + label + '</button>';
+    if (emp.carryEvery > 0 && emp.carryActive && emp.carryNextAt) h += '<p class="set-help js-count" data-key="carry.next" data-p="t" data-until="' + emp.carryNextAt + '">' + t('carry.next', { t: fmtTime(Math.max(0, (emp.carryNextAt - Date.now()) / 1000)) }) + '</p>';
+  }
   h += '<p class="set-help">' + t('carry.help') + '</p>';
   var road = [];
   for (var i = 0; i < G.bakeries.length; i++) {
@@ -660,7 +685,22 @@ function assignCarrier(empId, field, value) {
   if (!emp) return;
   if (field === 'to') emp.carryTo = value;
   else if (field === 'what') emp.carryWhat = value;
+  else if (field === 'every') {
+    if (value === 'auto') { delete emp.carryEvery; delete emp.carryActive; delete emp.carryNextAt; }
+    else { emp.carryEvery = parseFloat(value) || 0; emp.carryActive = false; emp.carryNextAt = 0; }
+    showEmpInfoModal(empId);
+  }
   else emp.carryQty = parseFloat(value) || 0;
+}
+
+function doCarrierGo(empId) {
+  var emp = findEmp(empId);
+  var r = carrierGo(emp);
+  if (r === 'noShop') toast(t('carry.noShop'));
+  else if (r === 'busy') toast(t('carry.busy'));
+  else if (r !== 'no') toast(t('carry.' + r));
+  save();
+  showEmpInfoModal(empId);
 }
 
 function doTrainEmployee(empId) {

@@ -149,9 +149,12 @@ function empSkillMult(emp) {
 }
 
 function achievementBonus() {
+  if (priceMemo && priceMemo.__ach !== undefined) return priceMemo.__ach;
   var n = 0;
   for (var k in G.achievements) { if (G.achievements[k]) n++; }
-  return 1 + n * ACH_BONUS;
+  var r = 1 + n * ACH_BONUS;
+  if (priceMemo) priceMemo.__ach = r;
+  return r;
 }
 
 // Unites achetees par clic. Le bonus fait gagner du temps : chaque unite se paie.
@@ -229,8 +232,18 @@ function inflatedPrice(rec) {
 }
 
 // Prix total d'un lot : le prix baisse au fil de la vente, meme en gros
+// Pendant qu'on dessine un panneau, un meme prix n'est calcule qu'une fois
+var priceMemo = null;
 function batchPrice(rec, qty) {
   if (qty <= 0) return 0;
+  if (priceMemo) {
+    var mk = rec.id + '|' + qty;
+    if (mk in priceMemo) return priceMemo[mk];
+    return (priceMemo[mk] = batchPriceRaw(rec, qty));
+  }
+  return batchPriceRaw(rec, qty);
+}
+function batchPriceRaw(rec, qty) {
   var samples = Math.min(qty, 8);
   var sum = 0;
   for (var i = 0; i < samples; i++) sum += demandMult(rec, (i + 0.5) * qty / samples);
@@ -1027,8 +1040,11 @@ function chefQueue(emp) {
   var list = (emp.chefList || []).map(findRec).filter(function(r) { return r && recUnlocked(r); });
   if (mode === 'only') return list;
   var rest = REC.filter(function(r) { return recUnlocked(r) && list.indexOf(r) < 0; });
-  rest.sort(function(a, b) { return (batchPrice(b, b.qty) - recipeCost(b)) - (batchPrice(a, a.qty) - recipeCost(a)); });
-  return mode === 'priority' ? list.concat(rest) : list.concat(rest).sort(function(a, b) { return (batchPrice(b, b.qty) - recipeCost(b)) - (batchPrice(a, a.qty) - recipeCost(a)); });
+  // Le gain de chaque recette, calcule une seule fois (le tri le recalculait des centaines de fois)
+  var gain = {};
+  list.concat(rest).forEach(function(r) { gain[r.id] = batchPrice(r, r.qty) - recipeCost(r); });
+  rest.sort(function(a, b) { return gain[b.id] - gain[a.id]; });
+  return mode === 'priority' ? list.concat(rest) : list.concat(rest).sort(function(a, b) { return gain[b.id] - gain[a.id]; });
 }
 
 // Ce qui manque pour livrer les commandes en cours
@@ -1947,6 +1963,12 @@ function machineCost(m) { return m.cost * Math.pow(m.growth, machineLevel(m.id))
 
 // La somme de ce que donnent les machines pour un effet
 function machineBonus(effect) {
+  if (priceMemo && ('mb|' + effect) in priceMemo) return priceMemo['mb|' + effect];
+  var r = machineBonusRaw(effect);
+  if (priceMemo) priceMemo['mb|' + effect] = r;
+  return r;
+}
+function machineBonusRaw(effect) {
   var b = 0;
   for (var i = 0; i < MACHINES.length; i++) {
     if (MACHINES[i].effect !== effect || isBroken('m', MACHINES[i].id)) continue; // En panne, elle ne sert a rien
@@ -2403,6 +2425,15 @@ function tickCarriers(dtSec) {
     s.employees.forEach(function(emp) {
       if (!hasJob(emp,'carrier') || !empWorking(emp)) return;
       if (emp.tripUntil && Date.now() < emp.tripUntil) return; // Il est sur la route
+      // Un rythme choisi : toutes les N minutes, une fois lance avec le bouton
+      if (emp.carryEvery !== undefined) {
+        if (!emp.carryActive || Date.now() < (emp.carryNextAt || 0)) return;
+        var dest = carrierTarget(emp, i);
+        if (dest < 0) return;
+        emp.carryNextAt = Date.now() + emp.carryEvery * 60000;
+        carrierTrip(emp, i, dest);
+        return;
+      }
       emp.carryCd = (emp.carryCd || 0) + dtSec * empPower(emp, 'carrier');
       if (emp.carryCd < CARRIER_TRIP_SEC) return;
       var to = carrierTarget(emp, i);
@@ -2413,6 +2444,20 @@ function tickCarriers(dtSec) {
   }
 }
 var CARRIER_TRIP_SEC = 20;
+var CARRIER_EVERY_MIN = [1, 2, 5, 10, 30, 60];
+
+// Le bouton du transporteur : un transfert tout de suite (une seule fois), ou commencer / arreter les transferts reguliers
+function carrierGo(emp) {
+  if (!emp || !hasJob(emp, 'carrier')) return 'no';
+  var to = carrierTarget(emp, G.currentBakeryIndex);
+  if (to < 0) return 'noShop';
+  var once = emp.carryEvery === 0;
+  if (emp.carryEvery > 0 && emp.carryActive) { emp.carryActive = false; return 'stopped'; }
+  if (!empWorking(emp) || (emp.tripUntil && Date.now() < emp.tripUntil)) return 'busy';
+  if (emp.carryEvery > 0) { emp.carryActive = true; emp.carryNextAt = Date.now() + emp.carryEvery * 60000; }
+  carrierTrip(emp, G.currentBakeryIndex, to);
+  return once ? 'sent' : 'started';
+}
 
 // ============ MODE CREATIF ============
 function tickCreative() {

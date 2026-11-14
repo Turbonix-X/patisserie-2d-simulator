@@ -12,7 +12,7 @@ Un jeu de gestion de pâtisserie : achète tes ingrédients, prépare tes gâtea
 
 **À savoir :** les recettes du jeu sont fausses. Elles servent juste à donner un parcours au jeu : ne les cuisine pas chez toi.
 
-Ça marche sur ordi, tablette et téléphone, et il n'y a rien à installer.
+Ça marche sur ordi, tablette et téléphone, il n'y a rien à installer, et une fois chargé le jeu marche aussi sans connexion.
 
 ## Ce qu'on peut faire
 
