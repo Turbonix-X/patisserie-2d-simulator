@@ -1,6 +1,6 @@
 # Le wiki de Pâtisserie 2D Simulator
 
-Tout ce qu'il faut savoir pour comprendre le jeu. Ce wiki décrit la **Release 1.1.2**.
+Tout ce qu'il faut savoir pour comprendre le jeu. Ce wiki décrit la **Release 1.2**.
 
 > **À savoir :** les recettes du jeu sont fausses. Les quantités et les ingrédients servent juste à donner un parcours au jeu. Ne les cuisine pas chez toi !
 
@@ -28,6 +28,17 @@ Tout ce qu'il faut savoir pour comprendre le jeu. Ce wiki décrit la **Release 1
 ## Le but
 
 Tu ouvres une pâtisserie avec 50 €. Tu achètes des ingrédients, tu prépares des gâteaux, tu les vends, et tu fais grandir ta boutique jusqu'au niveau 1000. Le niveau 1000 est la fin du parcours, mais tu peux continuer à monter après.
+
+## La page d'accueil et tes parties
+
+Le jeu commence par une page d'accueil : le logo, « P2DS », et tes parties. Chaque partie est une **pâtisserie**, et tu peux en avoir **10 au maximum** (deux lignes de 5). Un seul bouton + ouvre une fenêtre pour créer une nouvelle partie (sans nom à donner : Bob te le demande en jeu), coller un code de sauvegarde ou ouvrir un fichier de sauvegarde ; à 10 parties, le + disparaît.
+
+- **Dans chaque case :** le nom, le niveau et la date. Un clic sur la case ouvre la partie ; deux boutons exportent (code à copier-coller ou fichier) ou suppriment (corbeille).
+- **En haut :** à gauche le numéro de version (les nouveautés), à droite le compte, les réglages (langue et thème clair ou sombre) et le téléchargement de l'appli Windows. Le menu est clair, sombre ou automatique (celui du navigateur), quel que soit le thème de ta partie. Chaque partie a sa propre langue : une nouvelle partie prend celle du menu.
+- **Retour au menu :** dans le jeu, la flèche en haut te ramène tout de suite au menu.
+- **Comptes :** un compte est facultatif. Avec un compte, tes parties se synchronisent en ligne dès que tu as internet (la plus récente gagne), et tu peux jouer hors ligne entre-temps. Tu peux garder plusieurs comptes et passer de l'un à l'autre dans la fenêtre des comptes.
+- **Sans compte (« Local ») :** tes parties restent dans l'appli Windows ou dans ton navigateur. Si tu désinstalles l'un ou si tu changes de navigateur, tu les perds, sauf si tu les exportes.
+- **L'appli Windows :** un bouton (seulement sur un PC Windows, dans un navigateur) l'installe en un clic. Elle marche sans internet et se met à jour toute seule.
 
 ## Tes premières minutes
 
@@ -162,7 +173,7 @@ Lance une **recherche** dans l'onglet Employés : elle prend du temps et ne marc
 | Touche-à-tout | 20, par recherche à deux métiers | Fait jusqu'à 3 métiers (niveau 3 au maximum chacun). Son niveau à lui lui fait garder plus de niveaux quand il fait tout en même temps | Sur quel métier il se concentre (changer prend de 10 s à 1 min), et les réglages de chacun de ses métiers |
 | Boulanger | 10 | Fait baisser le temps de préparation | Aucun |
 | Transporteur | 20, et au moins 2 pâtisseries | Emmène de l'argent ou du stock vers une autre pâtisserie. Un trajet dure de 10 s à 10 min, peut être en retard, ou avoir un accident et perdre son chargement | Où, quoi, combien, et le rythme : en continu, une seule fois, ou toutes les 1, 2, 5, 10, 30 ou 60 minutes, avec un bouton pour transférer tout de suite ou commencer |
-| Manager | 25 | Remonte le moral de l'équipe, et peut embaucher à ta place | Embauche automatique, compétence minimum, les métiers qu'il embauche, ceux qu'il regarde en premier, et les niveaux |
+| Manager | 25 | Remonte le moral de l'équipe, et peut embaucher à ta place | Embauche automatique, compétence minimum, les métiers qu'il embauche, ceux qu'il regarde en premier, les niveaux, et un réglage pour refuser tout seul les candidatures de niveau trop bas |
 | Maître d'hôtel | 30 | Livre les commandes à ta place | Aucun |
 | Vendeur | 35 | Vend tout seul, les gâteaux les plus chers d'abord | La part du stock qu'il peut vendre |
 | Chef pâtissier | 65 | Prépare tout seul avec ce qu'il y a en stock | Tout, seulement ce qui manque pour les commandes, seulement certaines recettes, ou des priorités. Un budget maximum par heure, et un montant sous lequel il ne prépare rien |
@@ -246,7 +257,7 @@ Tu peux choisir un thème pour tout le jeu, ou seulement pour la pâtisserie où
 
 ## Les onglets
 
-L'onglet **Machines** affiche une pastille rouge avec le nombre de machines en panne. Dès le **niveau 450**, tu peux faire glisser les onglets à gauche ou à droite pour les ranger comme tu veux.
+Les pastilles des onglets sont jaunes (candidatures, commandes). Seules les pannes sont rouges : l'onglet **Machines** et l'onglet **Bâtiments** affichent le nombre d'éléments en panne. Dès le **niveau 450**, tu peux faire glisser les onglets à gauche ou à droite pour les ranger comme tu veux.
 
 ## Les succès et les statistiques
 

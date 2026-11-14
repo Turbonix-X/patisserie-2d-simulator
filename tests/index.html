@@ -27,7 +27,12 @@
 <script>document.write('<script src="../JS/Lang11.js?t=' + Date.now() + '"><\/script>');</script>
 <script>document.write('<script src="../JS/Lang111.js?t=' + Date.now() + '"><\/script>');</script>
 <script>document.write('<script src="../JS/Lang112.js?t=' + Date.now() + '"><\/script>');</script>
+<script>document.write('<script src="../JS/Lang12.js?t=' + Date.now() + '"><\/script>');</script>
+<script>document.write('<script src="../JS/Lang13.js?t=' + Date.now() + '"><\/script>');</script>
+<script>document.write('<script src="../JS/Config.js?t=' + Date.now() + '"><\/script>');</script>
 <script>document.write('<script src="../JS/PlayerData.js?t=' + Date.now() + '"><\/script>');</script>
+<script>document.write('<script src="../JS/Instances.js?t=' + Date.now() + '"><\/script>');</script>
+<script>document.write('<script src="../JS/Cloud.js?t=' + Date.now() + '"><\/script>');</script>
 <script>document.write('<script src="../JS/Logic.js?t=' + Date.now() + '"><\/script>');</script>
 <script>document.write('<script src="../JS/Achievements.js?t=' + Date.now() + '"><\/script>');</script>
 <script>document.write('<script src="../JS/Staff.js?t=' + Date.now() + '"><\/script>');</script>
@@ -454,15 +459,15 @@ check('Un succes compte les niveaux de machines', ACHIEVEMENTS.filter(function(a
 check('Bob connait 30 anecdotes', LANGS.fr['bob.facts'].split('|').length === 30);
 
 // --- Release 1.0 ---
-check('La version s appelle Release 1.1.2', GAME_VERSION === 'Release 1.1.2');
+check('La version s appelle Release 1.2', GAME_VERSION === 'Release 1.2');
 G = createFreshState(); G.level = 499;
 check('La fete et l espace sont caches avant leur niveau', findTheme('party').hidden && findTheme('space').hidden && themeLockReason(findTheme('party')) === 'level');
 check('Les themes Tech sont secrets', themeLockReason(findTheme('tech')) === 'secret' && themeLockReason(findTheme('techgold')) === 'secret');
-check('Le theme Cookie attend un million de cookies', themeLockReason(findTheme('cookie')) === 'sold');
-addSoldStat('cookie', 999999);
-check('... pas encore a 999 999', themeLockReason(findTheme('cookie')) === 'sold');
+check('Le theme Cookie attend 100 000 cookies', themeLockReason(findTheme('cookie')) === 'sold');
+addSoldStat('cookie', 99999);
+check('... pas encore a 99 999', themeLockReason(findTheme('cookie')) === 'sold');
 addSoldStat('cookie', 1);
-check('... et se debloque a un million', themeLockReason(findTheme('cookie')) === null && G.unlockedThemes.cookie);
+check('... et se debloque a 100 000', themeLockReason(findTheme('cookie')) === null && G.unlockedThemes.cookie);
 check('Les prenoms d hommes et de femmes', empGender('Pierre') === 'm' && empGender('Marie') === 'f' && empGender('Анна') === 'f' && empGender('Иван') === 'm' && empGender('ユイ') === 'f');
 var fem = empAvatar('chef', 'Marie'), mal = empAvatar('chef', 'Pierre');
 check('Les femmes ont leur visage', fem !== mal && /#B83A5C/.test(fem) && !/#B83A5C/.test(mal));
@@ -837,6 +842,57 @@ check('/tabs customization deactivate remet l ordre normal', !tabsCustomAvailabl
 processCommand('/tabs customization activate'); processCommand('/tabs customization reset');
 check('/tabs customization reset efface l ordre', !G.settings.tabOrder && G.settings.tabsCustom === undefined && visibleTabs()[0] === 'rec');
 check('Les anciens noms de la commande marchent aussi', !/cmd-err/.test(processCommand('/tabs personnalisation activate')) && !/cmd-err/.test(processCommand('/tabs personnalisation reinitialise')));
+
+// --- Release 1.2 : instances et comptes ---
+(function() {
+  var keep = {}; Object.keys(localStorage).forEach(function(k) { if (/^p2ds_/.test(k)) { keep[k] = localStorage.getItem(k); localStorage.removeItem(k); } });
+  var okCode = btoa(unescape(encodeURIComponent(JSON.stringify(Object.assign(createFreshState(), { money: 123, bakeryName: 'Chez Test', level: 7 })))));
+  check('Un profil local existe toujours', getProfiles().list[0].id === 'local');
+  var inst = createInstance('local', 'Une', 'normal');
+  check('Creer une instance', inst && instanceCount('local') === 1 && findInstance('local', inst.id).type === 'normal');
+  check('Importer un code 32/64 bits', importInstance('local', okCode) === 'ok' && instanceCount('local') === 2 && listInstances('local')[1].name === 'Chez Test' && listInstances('local')[1].level === 7);
+  check('... et refuser un code invalide', importInstance('local', 'abc') === 'invalid' && importInstance('local', btoa('{"money":"x"}')) === 'invalid' && instanceCount('local') === 2);
+  check('Le code exporte se reimporte tel quel', (function() { var c = instanceExportCode('local', listInstances('local')[1].id); return decodeSaveText(c) === decodeSaveText(okCode); })());
+  check('L import accepte aussi le texte d un fichier (JSON)', importInstance('local', JSON.stringify(Object.assign(createFreshState(), { money: 5 }))) === 'ok' && instanceCount('local') === 3);
+  for (var q = 0; q < 7; q++) createInstance('local', 'N' + q, q === 0 ? 'max' : q === 1 ? 'creative' : 'normal');
+  check('Dix instances au maximum', instanceCount('local') === 10 && instancesFull('local') && createInstance('local', 'Six', 'normal') === null && importInstance('local', okCode) === 'full');
+  deleteInstance('local', inst.id);
+  check('Supprimer en libere une place, et efface sa sauvegarde', instanceCount('local') === 9 && !instancesFull('local') && lsGet(saveKeyOf('local', inst.id)) === null);
+  CUR.profile = 'local'; CUR.inst = listInstances('local')[0].id; G = createFreshState(); G.money = 777; G.level = 12; save();
+  var back = createFreshState(); G = back; load();
+  check('Chaque instance a sa propre sauvegarde', G.money === 777 && listInstances('local')[0].level === 12 && lsGet('p2ds_save') === null);
+  CUR.inst = null;
+  Object.keys(localStorage).forEach(function(k) { if (/^p2ds_/.test(k)) localStorage.removeItem(k); });
+  Object.keys(keep).forEach(function(k) { localStorage.setItem(k, keep[k]); });
+  localStorage.setItem('p2ds_save', JSON.stringify(Object.assign(createFreshState(), { money: 42 })));
+  localStorage.removeItem('p2ds_legacy_done'); localStorage.removeItem('p2ds_p_local_index');
+  migrateLegacySave();
+  check('L ancienne sauvegarde unique devient la premiere instance', instanceCount('local') === 1 && JSON.parse(instanceRaw('local', listInstances('local')[0].id)).money === 42);
+  Object.keys(localStorage).forEach(function(k) { if (/^p2ds_/.test(k)) localStorage.removeItem(k); });
+  Object.keys(keep).forEach(function(k) { localStorage.setItem(k, keep[k]); });
+  check('Sans cles Supabase, les comptes en ligne sont desactives', !cloudEnabled() || (P2DS_CONFIG.SUPABASE_URL && P2DS_CONFIG.SUPABASE_ANON_KEY));
+  check('Le maximum est de 10', P2DS_CONFIG.MAX_INSTANCES === 10);
+  currentLang = 'fr';
+  check('Les langues gardent toujours le meme ordre', LANG_LIST.map(function(l) { return l.code; }).join() === 'en,fr,es,pt,de,ar,zh,ja,ko,ru');
+  var hk = Object.keys(LANGS.fr).filter(function(k) { return /^home\./.test(k); });
+  check('Les textes de la page d accueil existent dans les 10 langues', hk.length > 40 && Object.keys(LANGS).every(function(l) { return hk.every(function(k) { return LANGS[l][k]; }); }));
+})();
+
+// --- Release 1.2 (snapshot 2) ---
+G = createFreshState(); G.level = 200; G.money = 1e9;
+var mgr = newEmployee('manager', 'Boss', 80, 3); mgr.mgrReject = true; mgr.mgrLvlMin = 4; G.employees = [mgr];
+G.applicants = [
+  { id: 1, name: 'Bas', type: 'baker', skill: 50, level: 2, hireCost: 100, expiresAt: Date.now() + 60000 },
+  { id: 2, name: 'Haut', type: 'baker', skill: 50, level: 5, hireCost: 100, expiresAt: Date.now() + 60000 },
+  { id: 3, name: 'Appr', type: 'novice', skill: 50, level: 1, hireCost: 100, expiresAt: Date.now() + 60000 }
+];
+tickManagers(1);
+check('Le manager refuse les candidatures de niveau trop bas, meme sans embauche auto', G.applicants.map(function(a) { return a.name; }).join() === 'Haut,Appr');
+mgr.mgrReject = false; G.applicants.push({ id: 4, name: 'Bas2', type: 'baker', skill: 50, level: 1, hireCost: 100, expiresAt: Date.now() + 60000 });
+tickManagers(1);
+check('... et rien si l option est coupee', G.applicants.length === 3);
+check('Le theme cookie se debloque a 100 000 cookies', findTheme('cookie').sold.n === 100000);
+check('Les types max et creative viennent de createInstance (pas de verrou cache)', (function() { var k = {}; Object.keys(localStorage).forEach(function(x) { if (/^p2ds_/.test(x)) { k[x] = localStorage.getItem(x); localStorage.removeItem(x); } }); var i = createInstance('local', 'M', 'max'); var ok = i && i.type === 'max'; Object.keys(localStorage).forEach(function(x) { if (/^p2ds_/.test(x)) localStorage.removeItem(x); }); Object.keys(k).forEach(function(x) { localStorage.setItem(x, k[x]); }); return ok; })());
 
 var ko = results.filter(function(r) { return !r.ok; }).length;
 document.getElementById('total').textContent = (results.length - ko) + ' / ' + results.length + ' tests reussis';

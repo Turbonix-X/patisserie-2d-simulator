@@ -8,9 +8,14 @@
   document.addEventListener(ev, function(e) { e.preventDefault(); }, { passive: false });
 });
 
-document.addEventListener('DOMContentLoaded', function() {
+// La page d'accueil choisit la partie, puis lance le jeu
+function bootGame() {
+  var homeEl = document.getElementById('home');
+  if (homeEl) homeEl.style.display = 'none';
+  document.body.classList.remove('home-open');
 
   load();
+  if (typeof applyInstanceType === 'function') applyInstanceType();
   checkDesktopSync();
 
   currentLang = LANGS[G.settings.lang] ? G.settings.lang : detectLang();
@@ -51,6 +56,7 @@ document.addEventListener('DOMContentLoaded', function() {
   if (G.gameOver) setTimeout(function() { showGameOverModal(); }, 300);
 
   armMusicAutostart();
+  if (typeof changelogPrefetch === 'function') changelogPrefetch();
 
   var lastTick = Date.now();
   var totalsCounter = 0;
@@ -144,6 +150,15 @@ document.addEventListener('DOMContentLoaded', function() {
   }, 30000);
 
   window.addEventListener('beforeunload', function() {
-    if (!skipSaveOnUnload) save();
+    if (!skipSaveOnUnload && CUR.inst !== null) save();
   });
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  // Une mise a jour a chaud reprend la partie en cours, sinon on commence par la page d'accueil
+  var resume = null;
+  try { resume = JSON.parse(sessionStorage.getItem('p2ds_resume')); sessionStorage.removeItem('p2ds_resume'); } catch (e) { resume = null; }
+  if (resume && resume.inst) { CUR.profile = resume.profile; CUR.inst = resume.inst; bootGame(); }
+  else if (typeof showHome === 'function') showHome();
+  else bootGame();
 });

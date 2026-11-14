@@ -29,13 +29,13 @@ function settingsPaneHTML() {
   else if (ui.settingsTab === 'audio') h = settingsAudio();
   else if (ui.settingsTab === 'ach') h = settingsAchievements();
   else if (ui.settingsTab === 'stats') h = statsPane();
-  else h = settingsSave();
+  else h = settingsGeneral();
   return h + '<p class="set-version">P2DS ' + GAME_VERSION + ' · Turbonix Entertainment</p>';
 }
 
 function showSettingsModal() {
   beginMenuPause();
-  var tabs = [['general', 'settings.tabGeneral', 'globe'], ['look', 'settings.tabLook', 'palette'], ['audio', 'settings.tabAudio', 'music'], ['ach', 'settings.tabAch', 'ach'], ['stats', 'settings.tabStats', 'stats'], ['save', 'settings.tabSave', 'save']];
+  var tabs = [['general', 'settings.tabGeneral', 'globe'], ['look', 'settings.tabLook', 'palette'], ['audio', 'settings.tabAudio', 'music'], ['ach', 'settings.tabAch', 'ach'], ['stats', 'settings.tabStats', 'stats']];
   var h = '<div class="set-head"><h2>' + uiIcon('settings') + t('settings.title') + '</h2>';
   h += '<button class="icon-btn" onclick="closeMenu()" aria-label="' + escH(t('common.close')) + '" title="' + escH(t('common.close')) + '">' + uiIcon('close') + '</button></div>';
   h += '<div class="set-body"><nav class="set-nav">';
@@ -182,7 +182,6 @@ function settingsSave() {
   // Importer : un fichier, ou un code colle
   h += setCard('', setRow(t('settings.import'), t('settings.importHelp2'), '<label class="btn btn-small file-pick">' + t('settings.importFile') + '<input type="file" accept=".p2ds,.txt,text/plain" onchange="importSaveFile(this)"></label>') +
     '<textarea id="import-area" class="save-area" rows="3" placeholder="' + escH(t('settings.importPlaceholder')) + '"></textarea><button class="btn btn-small btn-primary" onclick="doImportSave()">' + t('settings.importBtn') + '</button>');
-  h += setCard('', setRow(t('settings.reset'), t('settings.resetHelp'), '<button class="btn btn-small btn-danger" onclick="confirmResetGame()">' + t('settings.resetBtn') + '</button>'), 'danger');
   return h;
 }
 

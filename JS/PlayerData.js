@@ -234,6 +234,10 @@ function migrateSave(data) {
 }
 
 // ============ SAUVEGARDE ============
+// Chaque instance (partie) a sa propre cle. Sans instance choisie, on garde l'ancienne cle unique.
+var CUR = { profile: 'local', inst: null };
+function saveKeyOf(pid, id) { return 'p2ds_p_' + pid + '_i_' + id; }
+function curSaveKey() { return CUR.inst ? saveKeyOf(CUR.profile, CUR.inst) : 'p2ds_save'; }
 var saveWarningShown = false;
 
 function save() {
@@ -244,10 +248,13 @@ function save() {
   try {
     var json = JSON.stringify(G);
     // On garde la sauvegarde precedente en secours
-    var previous = localStorage.getItem('p2ds_save');
-    if (previous) localStorage.setItem('p2ds_save_backup', previous);
-    localStorage.setItem('p2ds_save', json);
+    var key = curSaveKey();
+    var previous = localStorage.getItem(key);
+    if (previous) localStorage.setItem(key + '_backup', previous);
+    localStorage.setItem(key, json);
     saveWarningShown = false;
+    if (typeof touchInstanceMeta === 'function') touchInstanceMeta();
+    if (typeof cloudQueuePush === 'function') cloudQueuePush();
   } catch (e) {
     if (!saveWarningShown && typeof toast === 'function') toast(t('settings.saveFull'));
     saveWarningShown = true;
@@ -260,17 +267,18 @@ var loadNotice = null;
 
 function load() {
   var raw = null;
-  try { raw = localStorage.getItem('p2ds_save'); } catch (e) { return; }
+  var key = curSaveKey();
+  try { raw = localStorage.getItem(key); } catch (e) { return; }
   if (!raw) return;
   try {
     Object.assign(G, migrateSave(JSON.parse(raw)));
     return;
   } catch (e) {
     // Sauvegarde abimee : on ne l'ecrase pas, on la met de cote
-    try { localStorage.setItem('p2ds_save_corrupt', raw); } catch (e2) { /* stockage plein */ }
+    try { localStorage.setItem(key + '_corrupt', raw); } catch (e2) { /* stockage plein */ }
   }
   try {
-    var backup = localStorage.getItem('p2ds_save_backup');
+    var backup = localStorage.getItem(key + '_backup');
     if (backup) {
       Object.assign(G, migrateSave(JSON.parse(backup)));
       loadNotice = 'saveError';
@@ -329,9 +337,10 @@ function syncToDesktop() {
 
 // ============ TOUT EFFACER ============
 function resetGame() {
-  localStorage.removeItem('p2ds_save');
-  localStorage.removeItem('p2ds_save_backup');
-  localStorage.removeItem('p2ds_save_corrupt');
+  var rk = curSaveKey();
+  localStorage.removeItem(rk);
+  localStorage.removeItem(rk + '_backup');
+  localStorage.removeItem(rk + '_corrupt');
   skipSaveOnUnload = true;
   location.reload();
 }

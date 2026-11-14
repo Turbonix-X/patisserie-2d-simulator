@@ -1,0 +1,153 @@
+/* ============================================
+   PATISSERIE 2D SIMULATOR - COMPTES EN LIGNE (Supabase)
+   Ecrit sans la bibliotheque Supabase : de simples requetes, donc rien
+   ne bloque hors ligne. Tout reste utilisable avec les sauvegardes locales.
+   ============================================ */
+
+var cloud = { pushTimer: null, busy: false, adminOf: {}, lastError: '' };
+
+function cloudEnabled() { return !!(P2DS_CONFIG.SUPABASE_URL && P2DS_CONFIG.SUPABASE_ANON_KEY); }
+function cloudOnline() { return cloudEnabled() && navigator.onLine !== false; }
+function cloudSessions() { return lsJSON('p2ds_sessions', {}); }
+function cloudSaveSessions(s) { lsSet('p2ds_sessions', JSON.stringify(s)); }
+
+// Une requete vers Supabase. Renvoie le JSON, ou lance { status, message }.
+function cloudFetch(path, opts, token) {
+  opts = opts || {};
+  var headers = { apikey: P2DS_CONFIG.SUPABASE_ANON_KEY };
+  // Les nouvelles cles "publishable" (sb_publishable_...) ne sont pas des jetons : on n'envoie que le jeton du joueur connecte
+  if (token) headers.Authorization = 'Bearer ' + token;
+  else if (/^eyJ/.test(P2DS_CONFIG.SUPABASE_ANON_KEY)) headers.Authorization = 'Bearer ' + P2DS_CONFIG.SUPABASE_ANON_KEY;
+  if (opts.body) headers['Content-Type'] = 'application/json';
+  if (opts.prefer) headers.Prefer = opts.prefer;
+  return fetch(P2DS_CONFIG.SUPABASE_URL.replace(/\/$/, '') + path, { method: opts.method || 'GET', headers: headers, body: opts.body ? JSON.stringify(opts.body) : undefined }).then(function(r) {
+    return r.text().then(function(txt) {
+      var data = null;
+      try { data = txt ? JSON.parse(txt) : null; } catch (e) { data = null; }
+      if (!r.ok) {
+        var err = { status: r.status, message: (data && (data.msg || data.error_description || data.message || data.error)) || ('HTTP ' + r.status) };
+        throw err;
+      }
+      return data;
+    });
+  });
+}
+
+function cloudStoreSession(data) {
+  var u = data.user || {};
+  var pseudo = (u.user_metadata && (u.user_metadata.pseudo || u.user_metadata.full_name || u.user_metadata.name)) || (u.email ? u.email.split('@')[0] : '');
+  var s = cloudSessions();
+  s[u.id] = { email: u.email, pseudo: pseudo, access: data.access_token, refresh: data.refresh_token, exp: Date.now() + (data.expires_in || 3600) * 1000 };
+  cloudSaveSessions(s);
+  addCloudProfile(u.id, pseudo, u.email);
+  return u.id;
+}
+
+// Inscription : renvoie 'ok' (connecte), 'confirm' (un mail de confirmation a ete envoye) ou lance une erreur
+function cloudSignUp(pseudo, email, password) {
+  return cloudFetch('/auth/v1/signup', { method: 'POST', body: { email: email, password: password, data: { pseudo: pseudo } } }).then(function(d) {
+    if (d && d.access_token) { cloudStoreSession(d); return 'ok'; }
+    return 'confirm';
+  });
+}
+function cloudSignIn(email, password) {
+  return cloudFetch('/auth/v1/token?grant_type=password', { method: 'POST', body: { email: email, password: password } }).then(function(d) { return cloudStoreSession(d); });
+}
+// Google : la page part chez Google, puis revient avec la session dans l'adresse
+function cloudGoogle() {
+  var back = location.origin + location.pathname;
+  location.href = P2DS_CONFIG.SUPABASE_URL.replace(/\/$/, '') + '/auth/v1/authorize?provider=google&redirect_to=' + encodeURIComponent(back);
+}
+function cloudHandleRedirect() {
+  if (!cloudEnabled() || location.hash.indexOf('access_token=') < 0) return Promise.resolve(null);
+  var params = {};
+  location.hash.slice(1).split('&').forEach(function(kv) { var p = kv.split('='); params[p[0]] = decodeURIComponent(p[1] || ''); });
+  history.replaceState(null, '', location.pathname + location.search);
+  if (!params.access_token) return Promise.resolve(null);
+  return cloudFetch('/auth/v1/user', {}, params.access_token).then(function(u) {
+    return cloudStoreSession({ user: u, access_token: params.access_token, refresh_token: params.refresh_token, expires_in: +params.expires_in || 3600 });
+  }).catch(function() { return null; });
+}
+function cloudSignOut(pid) {
+  var s = cloudSessions();
+  delete s[pid];
+  cloudSaveSessions(s);
+  removeProfile(pid);
+}
+
+// Un jeton valable : on le rafraichit s'il va expirer
+function cloudToken(pid) {
+  var s = cloudSessions()[pid];
+  if (!s) return Promise.reject({ status: 401, message: 'no session' });
+  if (s.exp > Date.now() + 60000) return Promise.resolve(s.access);
+  return cloudFetch('/auth/v1/token?grant_type=refresh_token', { method: 'POST', body: { refresh_token: s.refresh } }).then(function(d) {
+    cloudStoreSession(d);
+    return d.access_token;
+  });
+}
+function cloudCall(pid, path, opts) { return cloudToken(pid).then(function(tok) { return cloudFetch(path, opts, tok); }); }
+
+// ---------- Synchronisation des instances ----------
+function cloudPushInstance(pid, id) {
+  var inst = findInstance(pid, id), raw = instanceRaw(pid, id);
+  if (!inst || !raw) return Promise.resolve();
+  return cloudCall(pid, '/rest/v1/instances?on_conflict=id', { method: 'POST', prefer: 'resolution=merge-duplicates,return=minimal', body: {
+    id: id, user_id: pid, bakery_name: inst.name || '', save_data: raw, updated_at: new Date(inst.updated || Date.now()).toISOString()
+  } });
+}
+
+// Pousse la partie en cours, au plus une fois toutes les 20 secondes
+function cloudQueuePush() {
+  var prof = findProfile(CUR.profile);
+  if (!prof || prof.kind !== 'cloud' || !cloudOnline() || !CUR.inst || cloud.pushTimer) return;
+  cloud.pushTimer = setTimeout(function() {
+    cloud.pushTimer = null;
+    cloudPushInstance(CUR.profile, CUR.inst).catch(function(e) { cloud.lastError = e && e.message; });
+  }, 20000);
+}
+
+// Fusionne ce qu'il y a en ligne et ce qu'il y a ici : le plus recent gagne
+function cloudSync(pid) {
+  if (!cloudOnline() || cloud.busy) return Promise.resolve(false);
+  cloud.busy = true;
+  return cloudCall(pid, '/rest/v1/instances?select=id,bakery_name,save_data,updated_at&order=updated_at.desc').then(function(remote) {
+    var jobs = [];
+    var remoteIds = {};
+    remote.forEach(function(r) {
+      remoteIds[r.id] = true;
+      var local = findInstance(pid, r.id), rt = Date.parse(r.updated_at) || 0;
+      if (!local) {
+        if (!instancesFull(pid)) createInstance(pid, r.bakery_name, 'normal', r.save_data, r.id);
+      } else if (rt > (local.updated || 0) + 2000 && !(CUR.inst === r.id && CUR.profile === pid)) {
+        lsSet(saveKeyOf(pid, r.id), r.save_data);
+        local.updated = rt; local.name = r.bakery_name || local.name;
+        var list = listInstances(pid);
+        list.forEach(function(x) { if (x.id === r.id) { x.updated = rt; x.name = local.name; try { x.level = JSON.parse(r.save_data).level || x.level; } catch (e) { /* ok */ } } });
+        saveInstanceList(pid, list);
+      } else if ((local.updated || 0) > rt + 2000) {
+        jobs.push(cloudPushInstance(pid, r.id));
+      }
+    });
+    listInstances(pid).forEach(function(x) { if (!remoteIds[x.id]) jobs.push(cloudPushInstance(pid, x.id)); });
+    return Promise.all(jobs.map(function(j) { return j.catch(function() {}); }));
+  }).then(function() { cloud.busy = false; return true; }, function(e) { cloud.busy = false; cloud.lastError = e && e.message; return false; });
+}
+
+function cloudDeleteInstance(pid, id) { return cloudCall(pid, '/rest/v1/instances?id=eq.' + encodeURIComponent(id), { method: 'DELETE' }); }
+
+// Des que la connexion revient, on synchronise
+window.addEventListener('online', function() {
+  var prof = findProfile(getProfiles().current);
+  if (prof && prof.kind === 'cloud') cloudSync(prof.id);
+});
+
+// ---------- Administration (la base verifie toute seule que tu es l'administrateur) ----------
+function cloudIsAdmin(pid) {
+  if (!cloudOnline() || !cloudSessions()[pid]) return Promise.resolve(false);
+  if (cloud.adminOf[pid] !== undefined) return Promise.resolve(cloud.adminOf[pid]);
+  return cloudCall(pid, '/rest/v1/rpc/is_admin', { method: 'POST', body: {} }).then(function(r) { cloud.adminOf[pid] = r === true; return cloud.adminOf[pid]; }, function() { return false; });
+}
+function adminListPlayers(pid) { return cloudCall(pid, '/rest/v1/profiles?select=id,pseudo,email,created_at,instances(count)&order=created_at.desc'); }
+function adminListInstances(pid, uid) { return cloudCall(pid, '/rest/v1/instances?user_id=eq.' + encodeURIComponent(uid) + '&select=id,bakery_name,updated_at,save_data&order=updated_at.desc'); }
+function adminDeleteInstance(pid, id) { return cloudDeleteInstance(pid, id); }
+function adminDeleteUser(pid, uid) { return cloudCall(pid, '/rest/v1/rpc/admin_delete_user', { method: 'POST', body: { target: uid } }); }

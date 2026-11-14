@@ -8,6 +8,8 @@ var updateState = { newVersion: null, checking: false, told: false, applying: fa
 
 // Une petite requete de temps en temps, jamais quand l'onglet est cache ou hors ligne : aucun lag
 function checkForUpdate() {
+  // Dans l'appli Windows, c'est elle qui se met a jour toute seule
+  if (window.__TAURI_INTERNALS__) return;
   if (updateState.checking || updateState.applying || document.hidden || navigator.onLine === false) return;
   updateState.checking = true;
   fetch('JS/GameData.js', { cache: 'no-store' }).then(function(r) { return r.ok ? r.text() : ''; }).then(function(txt) {
@@ -58,6 +60,7 @@ function applyUpdate() {
       T.timers = []; T.listeners = [];
     }
     softPause.on = false;
+    try { sessionStorage.setItem('p2ds_resume', JSON.stringify(CUR)); } catch (e) { /* pas grave */ }
     var loadNext = function(i) {
       if (i >= scripts.length) return finish();
       var s = document.createElement('script');

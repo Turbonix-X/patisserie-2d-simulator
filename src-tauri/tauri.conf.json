@@ -1,0 +1,72 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "productName": "P2DS",
+  "version": "1.2.0",
+  "identifier": "com.turbonix.p2ds",
+  "build": {
+    "frontendDist": "../web"
+  },
+  "app": {
+    "withGlobalTauri": false,
+    "windows": [
+      {
+        "label": "main",
+        "title": "Pâtisserie 2D Simulator",
+        "width": 1280,
+        "height": 820,
+        "minWidth": 900,
+        "minHeight": 620,
+        "center": true,
+        "resizable": true,
+        "decorations": true,
+        "fullscreen": false,
+        "zoomHotkeysEnabled": false,
+        "backgroundColor": "#FFF6EC"
+      }
+    ],
+    "security": {
+      "csp": null
+    }
+  },
+  "bundle": {
+    "active": true,
+    "targets": [
+      "nsis"
+    ],
+    "createUpdaterArtifacts": true,
+    "publisher": "Turbonix Entertainment",
+    "copyright": "Turbonix Entertainment",
+    "shortDescription": "Pâtisserie 2D Simulator",
+    "icon": [
+      "icons/32x32.png",
+      "icons/128x128.png",
+      "icons/128x128@2x.png",
+      "icons/icon.icns",
+      "icons/icon.ico"
+    ],
+    "windows": {
+      "nsis": {
+        "languages": [
+          "French"
+        ],
+        "displayLanguageSelector": false,
+        "installMode": "currentUser",
+        "installerIcon": "icons/icon.ico",
+        "installerHooks": "installer/hooks.nsh",
+        "sidebarImage": "installer/bob-side.bmp",
+        "headerImage": "installer/header.bmp"
+      }
+    }
+  },
+  "plugins": {
+    "updater": {
+      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IEE4NjFDQkU5NEVBNTdCNTkKUldSWmU2Vk82Y3RocUFPKzNheWFmR1ZFQjZoc0JoUUdRK092RzJ2K2NrSXMrdWh4S3BJSEw5SHAK",
+      "endpoints": [
+        "https://github.com/Turbonix-X/patisserie-2d-simulator/releases/latest/download/latest.json"
+      ],
+      "windows": {
+        "installMode": "passive"
+      }
+    }
+  }
+}

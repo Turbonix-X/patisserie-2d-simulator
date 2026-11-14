@@ -1,1 +1,8 @@
 .claude/
+# Compilation de l'appli Windows
+web/
+src-tauri/target/
+src-tauri/gen/
+node_modules/
+Installer-P2DS.exe
+*.key

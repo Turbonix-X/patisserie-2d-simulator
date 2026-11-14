@@ -1128,7 +1128,13 @@ function bestCollectorTarget() {
 
 function tickManagers(dtSec) {
   G.employees.forEach(function(emp) {
-    if (!hasJob(emp,'manager') || !empWorking(emp) || !emp.mgrAuto) return;
+    if (!hasJob(emp,'manager') || !empWorking(emp)) return;
+    // Il refuse tout seul les candidatures dont le niveau est sous le minimum (meme sans embauche automatique)
+    if (emp.mgrReject && (emp.mgrLvlMin || 1) > 1) {
+      var floor = emp.mgrLvlMin;
+      G.applicants = G.applicants.filter(function(a) { return a.type === 'novice' || (a.level || 1) >= floor; });
+    }
+    if (!emp.mgrAuto) return;
     emp.mgrCd = (emp.mgrCd || 0) + dtSec;
     if (emp.mgrCd < 5) return;
     emp.mgrCd = 0;

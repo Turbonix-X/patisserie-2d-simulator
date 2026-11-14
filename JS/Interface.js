@@ -142,6 +142,9 @@ function renderHeader() {
   h += '<span class="xp-bar-text">' + t('xp.text', { c: fmt(Math.floor(G.xp)), n: fmt(xpNeeded) }) + '</span></div>';
   h += '</div>';
   h += '<div class="header-right">';
+  // Installer l'appli Windows (seulement dans un navigateur, sur un PC Windows), puis les comptes
+  if (typeof installBtnHTML === 'function') h += installBtnHTML();
+  h += headerBtn('backToHome()', t('home.backHome'), 'back');
   h += headerBtn('showBakeriesModal()', t('bakery.title'), 'store', false, G.bakeries.length >= 2 ? G.bakeries.length : 0);
   var pauseLabel = G.paused ? t('pause.resume') : t('pause.title');
   h += headerBtn('togglePause()', pauseLabel, G.paused ? 'play' : 'pause');
@@ -262,7 +265,11 @@ function renderTabs() {
     }
     if (tabs[i] === 'machines') {
       var brokenM = Object.keys(G.broken || {}).filter(function(k) { return k.indexOf('m:') === 0; }).length;
-      if (brokenM > 0) h += '<span class="applicant-badge" title="' + escH(t('mach.brokenTip')) + '">' + brokenM + '</span>';
+      if (brokenM > 0) h += '<span class="applicant-badge red" title="' + escH(t('mach.brokenTip')) + '">' + brokenM + '</span>';
+    }
+    if (tabs[i] === 'bld') {
+      var brokenB = Object.keys(G.broken || {}).filter(function(k) { return k.indexOf('b:') === 0; }).length;
+      if (brokenB > 0) h += '<span class="applicant-badge red" title="' + escH(t('bld.brokenTip')) + '">' + brokenB + '</span>';
     }
     if (tabs[i] === 'orders' && G.orders.length > 0) {
       h += '<span class="applicant-badge">' + G.orders.length + '</span>';
@@ -928,21 +935,47 @@ function toggleNotifications() {
 }
 
 // ============ LE CHANGELOG ============
+// Le texte des nouveautes est gardé : la fenetre s'ouvre tout de suite, puis se met a jour si le fichier a change
+var changelogCache = { md: null, secret: null };
+function changelogLoad() {
+  if (changelogCache.md === null) { try { changelogCache.md = localStorage.getItem('p2ds_cl') || ''; changelogCache.secret = localStorage.getItem('p2ds_cl_secret') || ''; } catch (e) { changelogCache.md = ''; changelogCache.secret = ''; } }
+  var wantSecret = !!(G.settings && G.settings.changelogMax);
+  var jobs = [fetch('CHANGELOG.md').then(function(r) { return r.ok ? r.text() : null; }).catch(function() { return null; })];
+  if (wantSecret) jobs.push(fetch('CHANGELOG-SECRET.md').then(function(r) { return r.ok ? r.text() : null; }).catch(function() { return null; }));
+  return Promise.all(jobs).then(function(res) {
+    if (res[0]) { changelogCache.md = res[0]; try { localStorage.setItem('p2ds_cl', res[0]); } catch (e) { /* tant pis */ } }
+    if (res[1]) { changelogCache.secret = res[1]; try { localStorage.setItem('p2ds_cl_secret', res[1]); } catch (e) { /* tant pis */ } }
+  });
+}
+// En arriere-plan, des que le jeu est calme : la fenetre sera deja prete
+function changelogPrefetch() { (window.requestIdleCallback || function(f) { setTimeout(f, 3000); })(function() { changelogLoad(); }); }
+
+var CHANGELOG_FIRST = 3; // les 3 versions les plus recentes d'abord, le reste a la demande
+function changelogHTML(showAll) {
+  var md = (changelogCache.md || '') + ((G.settings && G.settings.changelogMax && changelogCache.secret) ? '\n' + changelogCache.secret : '');
+  if (!md) return '';
+  var parts = md.split(/\r?\n(?=## )/), head = parts.shift(), keep = parts;
+  var secretIdx = -1;
+  if (!showAll && keep.length > CHANGELOG_FIRST + 1) keep = keep.slice(0, CHANGELOG_FIRST);
+  var html = markdownLite([head].concat(keep).join('\n'));
+  if (!showAll && parts.length > keep.length) html += '<button class="btn btn-small" onclick="changelogShowAll()">' + t('changelog.older') + '</button>';
+  return html;
+}
+function changelogShowAll() { var el = document.getElementById('changelog-body'); if (el) el.innerHTML = iconify(changelogHTML(true)); }
+
 function showChangelog() {
   var h = '<h2>' + t('changelog.title') + '</h2>' + (typeof updateBoxHTML === 'function' ? updateBoxHTML() : '') + '<div class="changelog" id="changelog-body">…</div>';
   h += '<div class="modal-btns"><button class="btn" onclick="hideModal()">' + t('common.close') + '</button></div>';
   showModal(h, 'modal-changelog');
-  fetch('CHANGELOG.md', { cache: 'no-cache' }).then(function(r) { if (!r.ok) throw 0; return r.text(); }).then(function(md) {
-    // /changelog max : on lit aussi ce qui est normalement secret
-    if (!(G.settings && G.settings.changelogMax)) return md;
-    return fetch('CHANGELOG-SECRET.md', { cache: 'no-cache' }).then(function(r) { return r.ok ? r.text() : ''; }).then(function(extra) { return md + '\n' + extra; }, function() { return md; });
-  }).then(function(md) {
+  var draw = function() {
     var el = document.getElementById('changelog-body');
-    if (el) el.innerHTML = iconify(markdownLite(md));
-  }).catch(function() {
-    var el = document.getElementById('changelog-body');
-    if (el) el.textContent = t('changelog.error');
-  });
+    if (!el) return;
+    var html = changelogHTML(false);
+    if (html) el.innerHTML = iconify(html); else el.textContent = t('changelog.error');
+  };
+  if (changelogCache.md === null) { try { changelogCache.md = localStorage.getItem('p2ds_cl') || ''; changelogCache.secret = localStorage.getItem('p2ds_cl_secret') || ''; } catch (e) { changelogCache.md = ''; } }
+  if (changelogCache.md) draw();
+  changelogLoad().then(draw);
 }
 
 // Juste ce qu'il faut de Markdown pour le changelog : titres, listes, gras

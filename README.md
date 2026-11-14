@@ -34,6 +34,22 @@ Un jeu de gestion de pâtisserie : achète tes ingrédients, prépare tes gâtea
 - **Bob :** ton chef pâtissier t'explique le jeu, te conseille, te lance des défis et adore le sucre. Évite de trop l'embêter.
 - **Sauvegarde :** automatique, avec export et import par fichier ou par copier-coller, une pause automatique, des mises à jour sans recharger la page, et des gains pendant ton absence.
 
+## Appli Windows (Tauri)
+
+L'appli embarque le jeu et marche sans internet. Les fichiers sont dans `src-tauri/` (Rust) ; `web/` est une copie du jeu refaite à chaque compilation par `tools/sync_web.py`.
+
+- **Compiler :** `python tools/sync_web.py`, puis `cargo tauri build` (avec `TAURI_SIGNING_PRIVATE_KEY` qui pointe vers la clé de signature). L'installeur est `src-tauri/target/release/bundle/nsis/*-setup.exe`.
+- **Publier une version :** pousse une étiquette (`git tag v1.2.1 && git push --tags`) et le workflow `tools/release-workflow.yml` (à copier dans `.github/workflows/release.yml` : GitHub exige un droit en plus pour le pousser depuis un terminal) compile, signe et publie `Installer-P2DS.exe` et `latest.json` sur la Release. Ou, depuis ce PC : `update-app.bat 1.2.1`.
+- **Mises à jour :** au lancement, avec internet, l'appli vérifie `latest.json` sur la dernière Release et propose d'installer. Sans internet, elle démarre sans rien dire.
+- **Installeur :** trois pages avec Bob (langue, sauvegardes, compte) ; le résultat est écrit dans `%APPDATA%\com.turbonix.p2ds\init_config.json`.
+
+## Comptes en ligne (Supabase)
+
+1. Crée un projet gratuit sur supabase.com, puis colle `supabase_setup.sql` dans *SQL Editor* (après avoir remplacé `ADMIN_EMAIL` par ton adresse).
+2. Remplis `SUPABASE_URL` et `SUPABASE_ANON_KEY` dans `JS/Config.js` (la clé « anon » est publique par conception).
+3. Pour Google : *Authentication > Providers > Google*, avec ton identifiant et ton secret OAuth, et ajoute l'adresse du jeu dans *URL Configuration*.
+4. `admin.html` ne montre rien tant que tu n'es pas connecté avec le compte administrateur. On y accède avec le bouton « Panneau admin » de la fenêtre des comptes (visible seulement pour l'administrateur) ou directement à l'adresse `…/admin.html`.
+
 ## Lancer le jeu sur ton ordi
 
 Ouvre `index.html` dans ton navigateur, ou lance un petit serveur dans le dossier :

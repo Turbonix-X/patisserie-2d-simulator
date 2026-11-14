@@ -558,6 +558,7 @@ function managerConfig(emp) {
   var min = emp.mgrMin === undefined ? 50 : emp.mgrMin;
   var h = setRow(t('emp.mgrAuto'), t('emp.mgrHelp'), setSwitch(on, 'toggleManager(' + emp.id + ')', t('emp.mgrAuto')));
   h += '<div class="cfg-row">' + t('emp.mgrMin') + '<div class="volume-row"><input type="range" min="1" max="100" value="' + min + '" oninput="document.getElementById(\'mgr-min\').textContent=this.value" onchange="setManagerMin(' + emp.id + ',this.value)"><span id="mgr-min">' + min + '</span></div></div>';
+  h += setRow(t('emp.mgrReject'), t('emp.mgrRejectHelp'), setSwitch(!!emp.mgrReject, 'toggleMgrReject(' + emp.id + ')', t('emp.mgrReject')));
   // Quels metiers il embauche, dans quel ordre, et a quels niveaux
   var jobs = emp.mgrJobs || [], prio = emp.mgrPrio || [];
   var types = EMP_TYPES.filter(function(et) { return empTypeOpen(et) && !et.hidden; });
@@ -574,11 +575,19 @@ function managerConfig(emp) {
   var lmin = emp.mgrLvlMin || 1, lmax = emp.mgrLvlMax || EMP_GOLD_LVL;
   function lvlSelect(which, cur) {
     var o = '<select class="set-select" onchange="setMgrLvl(' + emp.id + ',\'' + which + '\',this.value)">';
-    for (var L = 1; L <= EMP_GOLD_LVL; L++) o += '<option value="' + L + '"' + (cur === L ? ' selected' : '') + '>' + (L >= EMP_GOLD_LVL ? '★ ' + t('emp.levelGold') : L) + '</option>';
+    // Le niveau or n'apparait qu'une fois debloque
+    var top = G.level >= APPLICANT_LVL_REQ[EMP_GOLD_LVL] ? EMP_GOLD_LVL : EMP_MAX_LVL;
+    for (var L = 1; L <= top; L++) o += '<option value="' + L + '"' + (Math.min(cur, top) === L ? ' selected' : '') + '>' + (L >= EMP_GOLD_LVL ? '★ ' + t('emp.levelGold') : L) + '</option>';
     return o + '</select>';
   }
   h += '<div class="cfg-row">' + t('emp.mgrLvl') + '<span class="cfg-pair">' + lvlSelect('min', lmin) + ' → ' + lvlSelect('max', lmax) + '</span></div>';
   return h;
+}
+function toggleMgrReject(empId) {
+  var emp = findEmp(empId);
+  if (!emp) return;
+  emp.mgrReject = !emp.mgrReject;
+  showEmpInfoModal(empId);
 }
 function toggleMgrJob(empId, type) {
   var emp = findEmp(empId);

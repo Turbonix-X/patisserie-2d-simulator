@@ -4,6 +4,8 @@
    ============================================ */
 // La langue du navigateur choisit au depart, et l'anglais pour tout le reste
 function detectLang() {
+  // La langue choisie une fois (installeur, reglages) passe avant celle du navigateur
+  try { var chosen = localStorage.getItem('p2ds_lang'); if (chosen && ['en', 'fr', 'es', 'pt', 'de', 'ar', 'zh', 'ja', 'ko', 'ru'].indexOf(chosen) >= 0) return chosen; } catch (e) { /* pas grave */ }
   var list = (navigator.languages && navigator.languages.length) ? navigator.languages : [navigator.language || 'fr'];
   if (/^fr/i.test(list[0])) return 'fr';
   if (/^es/i.test(list[0])) return 'es';

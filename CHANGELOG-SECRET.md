@@ -2,6 +2,11 @@
 
 Ce fichier ne s'affiche que si tu sais comment le demander. Il garde ce qui est secret dans chaque version.
 
+## Release 1.2
+
+- Les parties « max » (tout débloqué dès le début, comme `/max`) et « créative » (comme `/creative`) ne sont proposées qu'au compte administrateur, dans la fenêtre du +.
+- Le compte administrateur voit un bouton « Panneau admin » dans la fenêtre des comptes. Il ouvre `admin.html`, qui liste tous les joueurs, montre leurs parties avec leur code de sauvegarde et permet de supprimer une sauvegarde ou un compte (avec trois confirmations).
+
 ## Release 1.1.2
 
 **La console**

@@ -1,0 +1,59 @@
+# Publie l'appli Windows : à chaque nouvelle version (une étiquette "v1.2.0" par exemple),
+# GitHub compile l'installeur, le signe, crée latest.json et dépose le tout sur la Release.
+# Les joueurs déjà installés reçoivent alors la mise à jour automatiquement.
+#
+# À faire une seule fois : dans GitHub > Settings > Secrets and variables > Actions, ajoute
+#   TAURI_SIGNING_PRIVATE_KEY           le contenu de C:\Users\<toi>\.tauri\p2ds.key
+#   TAURI_SIGNING_PRIVATE_KEY_PASSWORD  (laisse vide : la clé n'a pas de mot de passe)
+name: Publier l'appli Windows
+
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: swatinem/rust-cache@v2
+        with:
+          workspaces: src-tauri
+
+      - name: Préparer le dossier web/ (copie propre du jeu, police en local)
+        run: python tools/sync_web.py
+
+      - name: Installer l'outil Tauri
+        run: cargo install tauri-cli --version "^2" --locked
+
+      - name: Compiler, signer et publier (installeur + latest.json)
+        uses: tauri-apps/tauri-action@v0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
+          TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}
+        with:
+          tauriScript: cargo tauri
+          projectPath: .
+          tagName: ${{ github.ref_name }}
+          releaseName: 'P2DS ${{ github.ref_name }}'
+          releaseBody: 'Voir CHANGELOG.md pour les nouveautés.'
+          releaseDraft: false
+          prerelease: false
+          uploadUpdaterJson: true
+          updaterJsonPreferNsis: true
+
+      - name: Déposer l'installeur sous un nom fixe (pour le bouton du site)
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          $setup = Get-ChildItem src-tauri/target/release/bundle/nsis/*-setup.exe | Select-Object -First 1
+          Copy-Item $setup.FullName Installer-P2DS.exe
+          gh release upload "${{ github.ref_name }}" Installer-P2DS.exe --clobber

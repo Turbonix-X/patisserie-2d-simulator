@@ -13,7 +13,7 @@
   <link rel="icon" href="logo.svg?v=3" type="image/svg+xml" sizes="any">
   <link rel="alternate icon" href="favicon.png?v=3" type="image/png">
   <link rel="apple-touch-icon" href="favicon.png?v=3">
-  <meta name="p2ds-markup" content="1.1.2">
+  <meta name="p2ds-markup" content="1.2">
   <script>
     // On garde la trace des minuteurs et des ecouteurs : une mise a jour peut ainsi remplacer le jeu sans recharger la page
     (function () {
@@ -31,8 +31,8 @@
     (function () {
       var theme = "light";
       try {
-        var save = JSON.parse(localStorage.getItem("p2ds_save"));
-        if (save && save.settings && save.settings.theme) theme = save.bakeryTheme || save.settings.theme;
+        var pref = localStorage.getItem("p2ds_home_theme");
+        theme = pref === "dark" || (pref === "auto" && window.matchMedia && matchMedia("(prefers-color-scheme: dark)").matches) ? "dark" : "light";
       } catch (e) {}
       document.documentElement.dataset.theme = theme;
     })();
@@ -40,8 +40,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="turbonix.css?v=3.14">
-  <link rel="stylesheet" href="style.css?v=3.14">
+  <link rel="stylesheet" href="turbonix.css?v=3.25">
+  <link rel="stylesheet" href="style.css?v=3.25">
 </head>
 <body>
   <div class="bg-blobs" aria-hidden="true"><span></span><span></span><span></span></div>
@@ -252,6 +252,9 @@
   <!-- Modal container -->
   <div id="modal-overlay" class="modal-overlay" style="display:none"></div>
 
+  <!-- Page d'accueil : les profils, les parties (5 au maximum) et les comptes -->
+  <div id="home" class="home" style="display:none"></div>
+
   <!-- Console button (bottom-right, shown when cheat unlocked) -->
   <div id="console-btn-wrap" style="display:none"></div>
 
@@ -263,38 +266,45 @@
   <script>document.getElementById("year").textContent = new Date().getFullYear();</script>
 
   <!-- Game scripts (order matters) -->
-  <script src="JS/GameData.js?v=3.14"></script>
-  <script src="JS/Icons.js?v=3.14"></script>
-  <script src="JS/Languages.js?v=3.14"></script>
-  <script src="JS/LangES.js?v=3.14"></script>
-  <script src="JS/LangPT.js?v=3.14"></script>
-  <script src="JS/LangDE.js?v=3.14"></script>
-  <script src="JS/LangAR.js?v=3.14"></script>
-  <script src="JS/LangZH.js?v=3.14"></script>
-  <script src="JS/LangJA.js?v=3.14"></script>
-  <script src="JS/LangKO.js?v=3.14"></script>
-  <script src="JS/LangRU.js?v=3.14"></script>
-  <script src="JS/Lang11.js?v=3.14"></script>
-  <script src="JS/Lang111.js?v=3.14"></script>
-  <script src="JS/Lang112.js?v=3.14"></script>
-  <script src="JS/PlayerData.js?v=3.14"></script>
-  <script src="JS/Logic.js?v=3.14"></script>
-  <script src="JS/Achievements.js?v=3.14"></script>
-  <script src="JS/Music.js?v=3.14"></script>
-  <script src="JS/Decor.js?v=3.14"></script>
-  <script src="JS/Interface.js?v=3.14"></script>
-  <script src="JS/Menus.js?v=3.14"></script>
-  <script src="JS/Bank.js?v=3.14"></script>
-  <script src="JS/Orders.js?v=3.14"></script>
-  <script src="JS/Staff.js?v=3.14"></script>
-  <script src="JS/Charts.js?v=3.14"></script>
-  <script src="JS/Console.js?v=3.14"></script>
-  <script src="JS/Bob.js?v=3.14"></script>
-  <script src="JS/Update.js?v=3.14"></script>
-  <script src="JS/main.js?v=3.14"></script>
+  <script src="JS/GameData.js?v=3.25"></script>
+  <script src="JS/Icons.js?v=3.25"></script>
+  <script src="JS/Languages.js?v=3.25"></script>
+  <script src="JS/LangES.js?v=3.25"></script>
+  <script src="JS/LangPT.js?v=3.25"></script>
+  <script src="JS/LangDE.js?v=3.25"></script>
+  <script src="JS/LangAR.js?v=3.25"></script>
+  <script src="JS/LangZH.js?v=3.25"></script>
+  <script src="JS/LangJA.js?v=3.25"></script>
+  <script src="JS/LangKO.js?v=3.25"></script>
+  <script src="JS/LangRU.js?v=3.25"></script>
+  <script src="JS/Lang11.js?v=3.25"></script>
+  <script src="JS/Lang111.js?v=3.25"></script>
+  <script src="JS/Lang112.js?v=3.25"></script>
+  <script src="JS/Lang12.js?v=3.25"></script>
+  <script src="JS/Lang13.js?v=3.25"></script>
+  <script src="JS/Config.js?v=3.25"></script>
+  <script src="JS/PlayerData.js?v=3.25"></script>
+  <script src="JS/Logic.js?v=3.25"></script>
+  <script src="JS/Achievements.js?v=3.25"></script>
+  <script src="JS/Music.js?v=3.25"></script>
+  <script src="JS/Decor.js?v=3.25"></script>
+  <script src="JS/Interface.js?v=3.25"></script>
+  <script src="JS/Menus.js?v=3.25"></script>
+  <script src="JS/Bank.js?v=3.25"></script>
+  <script src="JS/Orders.js?v=3.25"></script>
+  <script src="JS/Staff.js?v=3.25"></script>
+  <script src="JS/Charts.js?v=3.25"></script>
+  <script src="JS/Console.js?v=3.25"></script>
+  <script src="JS/Bob.js?v=3.25"></script>
+  <script src="JS/Update.js?v=3.25"></script>
+  <script src="JS/Instances.js?v=3.25"></script>
+  <script src="JS/Cloud.js?v=3.25"></script>
+  <script src="JS/Admin.js?v=3.25"></script>
+  <script src="JS/Home.js?v=3.25"></script>
+  <script src="JS/main.js?v=3.25"></script>
   <script>
     // Le jeu marche hors ligne une fois chargé (pas sur ton ordi, sauf avec ?sw)
-    if ("serviceWorker" in navigator && location.protocol.indexOf("http") === 0 && (!/^(localhost|127\.|\[::1\])/.test(location.hostname) || /[?&]sw\b/.test(location.search))) {
+    if (!window.__TAURI_INTERNALS__ && "serviceWorker" in navigator && location.protocol.indexOf("http") === 0 && (!/^(localhost|127\.|\[::1\])/.test(location.hostname) || /[?&]sw\b/.test(location.search))) {
       window.addEventListener("load", function() { navigator.serviceWorker.register("sw.js").catch(function() {}); });
     }
   </script>

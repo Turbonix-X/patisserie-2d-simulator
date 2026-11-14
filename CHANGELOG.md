@@ -2,6 +2,44 @@
 
 Tout ce qui a été ajouté à Pâtisserie 2D Simulator, de la plus récente à la plus ancienne. Pour comprendre les règles du jeu, va voir le [wiki](REGLES.md).
 
+## Release 1.2 (17 novembre 2026)
+
+Une vraie page d'accueil, plusieurs parties, des comptes, et une appli Windows.
+
+**Page d'accueil**
+- Le jeu commence maintenant par une page d'accueil épurée : le logo et « P2DS » en haut, tes parties en dessous, et le même petit pied de page que dans le jeu.
+- Le numéro de version, avec les nouveautés, est en haut à gauche. En haut à droite : le compte, les réglages (la langue et le thème clair ou sombre) et le téléchargement de l'appli.
+- Chaque case contient le nom, le niveau et la date de ta partie, tout centré. Un clic sur la case ouvre la partie ; deux petits boutons exportent ou suppriment (corbeille).
+- Tu peux avoir jusqu'à 10 pâtisseries, rangées sur deux lignes de 5.
+- Un seul bouton + ouvre une fenêtre : nouvelle partie (un gros bouton Créer animé, sans nom à donner : c'est Bob qui le demande), coller un code de sauvegarde, ou ouvrir un fichier de sauvegarde. Quand tu as 10 parties, le + disparaît et le jeu te dit que le maximum est atteint.
+- Le menu ne change jamais de look selon ton thème de jeu : il est clair, sombre ou automatique (celui de ton navigateur), au choix dans ses réglages.
+- Chaque partie garde sa propre langue, différente de celle du menu. Une nouvelle partie commence dans la langue du menu.
+- Ton ancienne partie devient automatiquement ta première case : rien n'est perdu.
+- Dans le jeu, une flèche en haut te ramène tout de suite au menu, sans fenêtre.
+
+**Comptes en ligne**
+- Tu peux créer un compte (pseudo, e-mail, mot de passe) ou continuer avec Google, mais ce n'est pas obligatoire. Tes parties se synchronisent avec ton compte dès que tu as internet, et tu peux jouer hors ligne avec les sauvegardes locales.
+- Pas de compte : ta partie reste dans l'appli ou dans le navigateur. Si tu désinstalles l'un ou si tu changes de navigateur, tu la perds, sauf si tu l'exportes.
+
+**Appli Windows**
+- Un bouton, en haut à gauche de celui des pâtisseries, installe l'appli Windows en un clic. Il n'apparaît que dans un navigateur, sur un PC Windows.
+- L'appli marche entièrement hors ligne, se met à jour toute seule quand tu as internet, et ne touche jamais à tes sauvegardes.
+- L'installeur te pose trois questions : ta langue, tes sauvegardes et ton compte.
+
+**Jeu**
+- Les pastilles des onglets sont jaunes, sauf celles des pannes, qui restent rouges.
+- Un bâtiment en panne affiche maintenant une pastille rouge sur l'onglet Bâtiments, comme les machines.
+- Le manager peut refuser tout seul les candidatures dont le niveau est trop bas.
+- Le thème Cookie se débloque à 100 000 cookies vendus au lieu d'un million.
+- Les nouveautés s'ouvrent beaucoup plus vite : elles sont gardées d'une fois sur l'autre et les versions les plus anciennes ne s'affichent qu'à la demande.
+- Sur téléphone, changer de thème ne décale plus la barre du bas.
+- La partie « Sauvegarde » a quitté les réglages du jeu : tu exportes et tu supprimes tes parties depuis l'accueil.
+- Dans les réglages, les langues gardent toujours le même ordre (anglais, français, espagnol…).
+- Dans le manager, le niveau or n'apparaît dans les choix qu'une fois débloqué (niveau 120).
+
+**Petits changements**
+- Le jeu affiche « Release 1.2 » comme numéro de version.
+
 ## Release 1.1.2 (15 novembre 2026)
 
 Le jeu se met à jour sans te faire quitter ta partie, et les onglets se rangent comme tu veux.
