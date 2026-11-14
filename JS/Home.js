@@ -54,7 +54,7 @@ function applyTauriInit() {
 function homeProfile() { return findProfile(getProfiles().current) || findProfile('local'); }
 function homePid() { return homeProfile().id; }
 function profileLabel(p) { return p.kind === 'local' ? t('home.profileLocal') : (p.name || p.email || '?'); }
-function homeIsAdmin() { return !!cloud.adminOf[homePid()]; }
+function homeIsAdmin() { return cloudAdminKnown(homePid()); }
 
 function showHome() {
   migrateLegacySave();
@@ -70,6 +70,7 @@ function showHome() {
     if (homeState.openLogin) { homeState.openLogin = false; showAccountModal(); }
     else if (/[?&]signup/.test(location.search)) showAccountModal('up');
     homeAutoSync();
+    cloudPresence('open');
   });
 }
 
@@ -79,14 +80,8 @@ function homeAutoSync() {
   homeFlushDeletes(p.id).then(function() { return cloudSync(p.id); }).then(function() { renderHome(); });
 }
 
-function renderHome() {
-  var el = document.getElementById('home');
-  if (!el || el.style.display === 'none') return;
-  var cur = homeProfile(), pid = cur.id, list = listInstances(pid), max = P2DS_CONFIG.MAX_INSTANCES;
-  var h = '<div class="home-top"><button type="button" class="version-badge' + (typeof updateState !== 'undefined' && updateState.newVersion ? ' has-update' : '') + '" onclick="showChangelog()" title="' + escH(t('changelog.title')) + '">' + GAME_VERSION + '</button>';
-  h += '<div class="home-top-right"><button class="hbtn" onclick="showAccountModal()" title="' + escH(t('home.accountsTitle')) + '" aria-label="' + escH(t('home.accountsTitle')) + '">' + uiIcon('user') + '</button>';
-  h += '<button class="hbtn" onclick="showHomeSettings()" title="' + escH(t('settings.title')) + '" aria-label="' + escH(t('settings.title')) + '">' + uiIcon('settings') + '</button>' + installBtnHTML() + '</div></div>';
-  h += '<div class="home-center"><img class="home-logo" src="logo.svg" alt="" width="104" height="104"><h1 class="game-name home-name">P2DS</h1>';
+function homeGridHTML(list, max) {
+  var h = '';
   h += '<div class="inst-grid">';
   list.forEach(function(x) {
     // Toute la case ouvre la partie, sauf l'export et la corbeille
@@ -96,18 +91,45 @@ function renderHome() {
     h += '<div class="inst-actions"><button class="btn btn-small icon-only" onclick="event.stopPropagation();homeExport(\'' + x.id + '\')" title="' + escH(t('home.export')) + '" aria-label="' + escH(t('home.export')) + '">' + uiIcon('save') + '</button>';
     h += '<button class="btn btn-small btn-danger icon-only" onclick="event.stopPropagation();homeAskDelete(\'' + x.id + '\')" title="' + escH(t('home.delete')) + '" aria-label="' + escH(t('home.delete')) + '">' + uiIcon('trash') + '</button></div></div>';
   });
-  // Un seul bouton +, et plus du tout quand les 5 cases sont prises
-  if (list.length < max) h += '<button class="inst-slot empty" onclick="homeAdd()" title="' + escH(t('home.new')) + '" aria-label="' + escH(t('home.new')) + '"><span>+</span></button>';
-  h += '</div>';
+  // Un seul bouton +, et plus du tout quand le maximum est atteint (l'administrateur n'a pas de maximum)
+  if (homeIsAdmin() || list.length < max) h += '<button class="inst-slot empty" onclick="homeAdd()" title="' + escH(t('home.new')) + '" aria-label="' + escH(t('home.new')) + '"><span>+</span></button>';
+  return h + '</div>';
+}
+
+function renderHome(force) {
+  var el = document.getElementById('home');
+  if (!el || el.style.display === 'none') return;
+  var cur = homeProfile(), pid = cur.id, list = listInstances(pid), max = P2DS_CONFIG.MAX_INSTANCES, isAdmin = homeIsAdmin();
+  // La base de donnees est en direct : on ne la redessine pas a chaque petit rafraichissement
+  if (isAdmin && homeState.admTab === 'db' && !force && adminUI.box && document.body.contains(adminUI.box)) return;
+  var h = '<div class="home-top"><button type="button" class="version-badge' + (typeof updateState !== 'undefined' && updateState.newVersion ? ' has-update' : '') + '" onclick="showChangelog()" title="' + escH(t('changelog.title')) + '">' + GAME_VERSION + '</button>';
+  h += '<div class="home-top-right"><button class="hbtn" onclick="showAccountModal()" title="' + escH(t('home.accountsTitle')) + '" aria-label="' + escH(t('home.accountsTitle')) + '">' + uiIcon('user') + '</button>';
+  h += '<button class="hbtn" onclick="showHomeSettings()" title="' + escH(t('settings.title')) + '" aria-label="' + escH(t('settings.title')) + '">' + uiIcon('settings') + '</button>' + installBtnHTML() + '</div></div>';
+  if (isAdmin) {
+    // Le compte administrateur n'a que le panneau admin : ses parties, et la base de donnees des joueurs
+    var tab = homeState.admTab === 'db' ? 'db' : 'games';
+    h += '<div class="home-center adm-home"><img class="home-logo small" src="logo.svg" alt="" width="64" height="64"><h1 class="game-name home-name">P2DS <span class="adm-badge">ADMIN</span></h1>';
+    h += '<div class="adm-tabs"><button class="' + (tab === 'games' ? 'active' : '') + '" onclick="homeAdmTab(\'games\')">🧁 ' + adminTr('Parties', 'Games') + '</button><button class="' + (tab === 'db' ? 'active' : '') + '" onclick="homeAdmTab(\'db\')">🗄️ ' + adminTr('Base de données', 'Database') + '</button></div>';
+    h += tab === 'games' ? homeGridHTML(list, max) : '<div id="adm-box" class="adm-box"></div>';
+    h += '</div>';
+  } else {
+  h += '<div class="home-center"><img class="home-logo" src="logo.svg" alt="" width="104" height="104"><h1 class="game-name home-name">P2DS</h1>';
+  h += homeGridHTML(list, max);
   if (list.length >= max) h += '<p class="home-limit">' + t('home.limit', { v: list.length, n: max }) + '</p>';
   if (homeState.note) h += '<p class="home-note">' + escH(homeState.note) + '</p>';
+  h += '</div>';
+  }
   // Le meme pied de page que dans le jeu
-  h += '</div><footer class="home-footer">' + new Date().getFullYear() + ' ' + t('footer.rights') + ' ' + t('footer.icons') + ' <a href="https://github.com/jdecked/twemoji" target="_blank" rel="noopener">Twemoji</a> (CC-BY 4.0).</footer>';
+  h += '<footer class="home-footer">' + new Date().getFullYear() + ' ' + t('footer.rights') + ' ' + t('footer.icons') + ' <a href="https://github.com/jdecked/twemoji" target="_blank" rel="noopener">Twemoji</a> (CC-BY 4.0).</footer>';
   setHTML(el, iconify(h));
-  if (cur.kind === 'cloud' && cloud.adminOf[cur.id] === undefined) {
-    cloudIsAdmin(cur.id).then(function(a) { if (a) renderHome(); });
+  if (isAdmin && homeState.admTab === 'db') { var box = document.getElementById('adm-box'); if (box && adminUI.box !== box) renderAdminDb(box, pid); }
+  else if (typeof adminStopLive === 'function') adminStopLive();
+  if (cur.kind === 'cloud' && !homeState.adminChecked) {
+    homeState.adminChecked = true;
+    cloudIsAdmin(cur.id).then(function(a) { if (a !== isAdmin) renderHome(true); });
   }
 }
+function homeAdmTab(tab) { homeState.admTab = tab; adminUI.box = null; renderHome(true); }
 
 // ---------- Ajouter une partie : nouvelle, code colle, ou fichier ----------
 function homeAdd(mode) {
@@ -281,26 +303,31 @@ function showAccountModal(mode) {
     h += '<div class="acc-modes"><button class="' + (mode === 'in' ? 'active' : '') + '" onclick="showAccountModal(\'in\')">' + t('home.signIn') + '</button><button class="' + (mode === 'up' ? 'active' : '') + '" onclick="showAccountModal(\'up\')">' + t('home.signUp') + '</button>';
     if (!IN_APP) h += '<button class="google-btn" onclick="cloudGoogle()" title="' + escH(t('home.google')) + '">' + GOOGLE_LOGO + '<span>' + t('home.google') + '</span></button>';
     h += '</div>';
+    if (mode === 'up' && IN_APP) {
+      // Dans l'appli, l'inscription se fait sur le site
+      h += '<p class="set-help">' + t('home.signUpWebHelp') + '</p><div class="modal-btns"><button class="btn btn-primary" onclick="openExternal(SITE_URL + \'?signup\')">' + t('home.signUpWeb') + '</button></div>';
+    } else {
     if (mode === 'up') h += '<input id="acc-pseudo" maxlength="24" placeholder="' + escH(t('home.pseudo')) + '" autocomplete="nickname">';
     h += '<input id="acc-email" type="email" placeholder="' + escH(t('home.email')) + '" autocomplete="email"><input id="acc-pass" type="password" placeholder="' + escH(t('home.password')) + '" autocomplete="' + (mode === 'up' ? 'new-password' : 'current-password') + '" onkeydown="if(event.key===\'Enter\')submitAccount(\'' + mode + '\')">';
     h += '<p class="warning" id="acc-error"></p><div class="modal-btns"><button class="btn btn-primary" onclick="submitAccount(\'' + mode + '\')">' + t(mode === 'up' ? 'home.signUp' : 'home.signIn') + '</button></div>';
+    }
   }
   h += '<p class="set-help">' + t(IN_APP ? 'home.storageApp' : 'home.storageBrowser') + '</p><div class="modal-btns"><button class="btn" onclick="hideModal()">' + t('common.close') + '</button></div>';
   showModal(h);
 }
-function homeUseProfile(pid) { setCurrentProfile(pid); hideModal(); renderHome(); homeAutoSync(); }
+function homeUseProfile(pid) { setCurrentProfile(pid); homeState.adminChecked = false; adminUI.box = null; hideModal(); renderHome(true); homeAutoSync(); cloudPresence('open'); }
 function submitAccount(mode) {
   var email = (document.getElementById('acc-email').value || '').trim(), pass = document.getElementById('acc-pass').value || '';
   var pseudoEl = document.getElementById('acc-pseudo'), pseudo = pseudoEl ? pseudoEl.value.trim() : '';
   var err = document.getElementById('acc-error');
   err.textContent = '';
   if (!email || pass.length < 6 || (mode === 'up' && !pseudo)) { err.textContent = t('home.authFill'); return; }
-  var done = function() { hideModal(); renderHome(); homeAutoSync(); };
+  var done = function() { homeState.adminChecked = false; adminUI.box = null; hideModal(); renderHome(true); homeAutoSync(); cloudPresence('open'); };
   var fail = function(e) { err.textContent = t('home.authError', { v: (e && e.message) || '' }); };
-  if (mode === 'up') cloudSignUp(pseudo, email, pass).then(function(r) { if (r === 'confirm') { err.className = 'set-help'; err.textContent = t('home.confirmMail'); } else done(); }, fail);
+  if (mode === 'up') cloudSignUp(pseudo, email, pass).then(done, fail);
   else cloudSignIn(email, pass).then(done, fail);
 }
-function homeSignOut(pid) { cloudSignOut(pid); showAccountModal(); renderHome(); }
+function homeSignOut(pid) { cloudSignOut(pid); homeState.adminChecked = false; adminUI.box = null; showAccountModal(); renderHome(true); }
 
 // ---------- Dans le jeu : le bouton Comptes du haut ----------
 function showAccountsModal() {

@@ -76,4 +76,19 @@
 
   var auto = { fr: `Automatique`, en: `Automatic`, es: `Automático`, pt: `Automático`, de: `Automatisch`, ar: `تلقائي`, zh: `自动`, ja: `自動`, ko: `자동`, ru: `Автоматически` };
   Object.keys(auto).forEach(function(l) { LANGS[l]['settings.themeAuto'] = auto[l]; });
+
+  // Version 1.2.1
+  var v121 = {
+    fr: { 'home.signUpWeb':`S’inscrire sur le site`, 'home.signUpWebHelp':`Dans l’appli, l’inscription se fait sur le site. Crée ton compte là-bas, puis reviens te connecter ici avec le même e-mail.`, 'console.broke':`{{n}} élément(s) en panne.`, 'emp.carrierQuit':`{{n}} démissionne : il faut au moins 2 pâtisseries pour avoir des transporteurs.` },
+    en: { 'home.signUpWeb':`Sign up on the website`, 'home.signUpWebHelp':`In the app, signing up is done on the website. Create your account there, then come back and sign in here with the same email.`, 'console.broke':`{{n}} broken.`, 'emp.carrierQuit':`{{n}} quits: you need at least 2 bakeries to have carriers.` },
+    es: { 'home.signUpWeb':`Registrarse en la web`, 'home.signUpWebHelp':`En la aplicación, el registro se hace en la web. Crea tu cuenta allí y vuelve a iniciar sesión aquí con el mismo correo.`, 'console.broke':`{{n}} averiado(s).`, 'emp.carrierQuit':`{{n}} dimite: hacen falta al menos 2 pastelerías para tener transportistas.` },
+    pt: { 'home.signUpWeb':`Registar no site`, 'home.signUpWebHelp':`Na aplicação, o registo faz-se no site. Cria lá a tua conta e volta a iniciar sessão aqui com o mesmo e-mail.`, 'console.broke':`{{n}} avariado(s).`, 'emp.carrierQuit':`{{n}} demite-se: são precisas pelo menos 2 pastelarias para ter transportadores.` },
+    de: { 'home.signUpWeb':`Auf der Website registrieren`, 'home.signUpWebHelp':`In der App erfolgt die Registrierung auf der Website. Erstelle dort dein Konto und melde dich dann hier mit derselben E-Mail an.`, 'console.broke':`{{n}} defekt.`, 'emp.carrierQuit':`{{n}} kündigt: Für Fahrer braucht man mindestens 2 Bäckereien.` },
+    ar: { 'home.signUpWeb':`أنشئ حسابًا على الموقع`, 'home.signUpWebHelp':`في التطبيق، يتم إنشاء الحساب على الموقع. أنشئ حسابك هناك ثم عد وسجّل الدخول هنا بالبريد نفسه.`, 'console.broke':`{{n}} معطّل.`, 'emp.carrierQuit':`{{n}} يستقيل: تحتاج إلى مخبزين على الأقل لامتلاك ناقلين.` },
+    zh: { 'home.signUpWeb':`在网站上注册`, 'home.signUpWebHelp':`在应用里，注册要在网站上完成。先在那里创建账号，再回到这里用同一个邮箱登录。`, 'console.broke':`{{n}} 个已损坏。`, 'emp.carrierQuit':`{{n}} 辞职了：至少要有 2 家面包店才能有运输员。` },
+    ja: { 'home.signUpWeb':`サイトで新規登録`, 'home.signUpWebHelp':`アプリでは、新規登録はサイトで行います。そこでアカウントを作り、同じメールアドレスでここからログインしてください。`, 'console.broke':`{{n}} 件が故障しました。`, 'emp.carrierQuit':`{{n}} が辞めました：運送係を雇うにはパン屋が2軒以上必要です。` },
+    ko: { 'home.signUpWeb':`웹사이트에서 가입`, 'home.signUpWebHelp':`앱에서는 가입을 웹사이트에서 합니다. 거기서 계정을 만든 뒤 같은 이메일로 여기서 로그인하세요.`, 'console.broke':`{{n}}개가 고장 났습니다.`, 'emp.carrierQuit':`{{n}}님이 그만두었습니다: 운송원을 두려면 제과점이 2개 이상 필요합니다.` },
+    ru: { 'home.signUpWeb':`Зарегистрироваться на сайте`, 'home.signUpWebHelp':`В приложении регистрация проходит на сайте. Создай аккаунт там, потом войди здесь с той же почтой.`, 'console.broke':`Сломано: {{n}}.`, 'emp.carrierQuit':`{{n}} увольняется: для перевозчиков нужно минимум 2 кондитерские.` }
+  };
+  Object.keys(v121).forEach(function(l) { Object.assign(LANGS[l], v121[l]); });
 })();

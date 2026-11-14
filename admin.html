@@ -6,21 +6,13 @@
   <meta name="robots" content="noindex, nofollow">
   <title>Administration — P2DS</title>
   <link rel="icon" href="logo.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="turbonix.css?v=3.25">
-  <link rel="stylesheet" href="style.css?v=3.25">
+  <link rel="stylesheet" href="turbonix.css?v=3.26">
+  <link rel="stylesheet" href="style.css?v=3.26">
   <style>
     body { display: block; padding: 24px 16px; min-height: 100vh; }
     .adm-wrap { max-width: 760px; margin: 0 auto; }
     .adm-wrap h1 { display: flex; align-items: center; gap: 10px; }
     .adm-login input { display: block; width: 100%; margin-bottom: 8px; }
-    .adm-list { display: grid; gap: 8px; margin-top: 10px; }
-    .adm-row { display: grid; grid-template-columns: 1fr 1fr auto; gap: 8px; align-items: center; text-align: start; padding: 10px 12px; border: 1px solid var(--border); border-radius: 12px; background: var(--surface); color: var(--text); font: inherit; cursor: pointer; }
-    .adm-row:hover { border-color: var(--mauve); }
-    .adm-n { font-weight: 700; color: var(--mauve-deep); }
-    .adm-inst { margin: 10px 0; }
-    #adm-modal { position: fixed; inset: 0; z-index: 3000; display: grid; place-items: center; background: rgba(8,7,12,.65); }
-    .adm-modal-card { width: min(420px, 92vw); padding: 22px; border-radius: 18px; background: var(--surface-solid, #fff); color: var(--text); border: 2px solid #C62828; }
-    @media (max-width: 560px) { .adm-row { grid-template-columns: 1fr; } }
   </style>
 </head>
 <body>
@@ -30,11 +22,11 @@
     <div id="adm-root"></div>
   </div>
 
-  <script src="JS/Config.js?v=3.25"></script>
+  <script src="JS/Config.js?v=3.26"></script>
   <script>var CUR = { profile: "local", inst: null }; function saveKeyOf(p, i) { return "p2ds_p_" + p + "_i_" + i; }</script>
-  <script src="JS/Instances.js?v=3.25" defer></script>
-  <script src="JS/Cloud.js?v=3.25" defer></script>
-  <script src="JS/Admin.js?v=3.25" defer></script>
+  <script src="JS/Instances.js?v=3.26" defer></script>
+  <script src="JS/Cloud.js?v=3.26" defer></script>
+  <script src="JS/Admin.js?v=3.26" defer></script>
   <script defer>
     window.addEventListener('DOMContentLoaded', function() {
       // PlayerData a besoin de GameData pour se charger : on n'en utilise ici que les petites fonctions de stockage.
@@ -55,7 +47,8 @@
           if (!ok) { cloudSignOut(uid); loginForm('Ce compte n’est pas administrateur.'); return; }
           root.innerHTML = '<div id="adm-panel"></div><p><button class="btn btn-small" id="a-out">Se déconnecter</button></p>';
           document.getElementById('a-out').onclick = function() { cloudSignOut(uid); location.reload(); };
-          renderPlayersPanel(document.getElementById('adm-panel'), uid, function(fr) { return fr; });
+          window.__admFr = true;
+          renderAdminDb(document.getElementById('adm-panel'), uid);
         });
       }
       loginForm('');

@@ -459,7 +459,7 @@ check('Un succes compte les niveaux de machines', ACHIEVEMENTS.filter(function(a
 check('Bob connait 30 anecdotes', LANGS.fr['bob.facts'].split('|').length === 30);
 
 // --- Release 1.0 ---
-check('La version s appelle Release 1.2', GAME_VERSION === 'Release 1.2');
+check('La version s appelle Release 1.2.1', GAME_VERSION === 'Release 1.2.1');
 G = createFreshState(); G.level = 499;
 check('La fete et l espace sont caches avant leur niveau', findTheme('party').hidden && findTheme('space').hidden && themeLockReason(findTheme('party')) === 'level');
 check('Les themes Tech sont secrets', themeLockReason(findTheme('tech')) === 'secret' && themeLockReason(findTheme('techgold')) === 'secret');
@@ -826,11 +826,21 @@ check('/employee hire NOM free est gratuit', G.employees.some(function(e) { retu
 G = createFreshState(); G.level = 200; G.applicants = [{ id: 1, name: 'Lola', type: 'baker', skill: 50, level: 1, hireCost: 5, expiresAt: Date.now() + 60000 }];
 check('La suggestion de /employee hire ne propose que les candidats, puis free', consoleChoices('/employee hire ').words.join() === 'lola' && consoleChoices('/employee hire lola ').words.join() === 'free');
 G = createFreshState(); G.level = 200;
-check('Pas de transporteur avec une seule patisserie', !empTypeOpen(findEmpType('carrier')) && /cmd-err/.test(processCommand('/employee create carrier Ben 3')));
-processCommand('/max');
-check('... meme avec /max', !G.employees.some(function(e) { return e.type === 'carrier'; }));
+check('Pas de transporteur a embaucher avec une seule patisserie', !empTypeOpen(findEmpType('carrier')));
+processCommand('/employee create carrier Ben 3');
+check('... sauf par commande', G.employees.some(function(e) { return e.type === 'carrier' && e.cmd; }));
+tickCarriers(1);
+check('... et celui-la ne demissionne pas', G.employees.some(function(e) { return e.type === 'carrier'; }));
+G.employees.push(newEmployee('carrier', 'Zoe', 50, 1));
+tickCarriers(1);
+check('Un transporteur normal demissionne quand il n y a plus 2 patisseries', !G.employees.some(function(e) { return e.name === 'Zoe'; }) && G.employees.some(function(e) { return e.name === 'Ben'; }));
 G = createFreshState(); G.level = 200; G.money = 1e6; openNewBakery(true, 'Autre');
 check('Avec deux patisseries, les transporteurs sont permis', empTypeOpen(findEmpType('carrier')) && !/cmd-err/.test(processCommand('/employee create carrier Ben 3')));
+G.employees = [newEmployee('carrier', 'Zed', 50, 1)]; tickCarriers(1);
+check('... et ils restent', G.employees.length === 1);
+G = createFreshState(); G.level = 200; G.money = 1e6;
+processCommand('/machine four break');
+check('/machine NOM break casse la machine, /building break les batiments', isBroken('m', 'four') === true && (G.buildings[BUILDINGS[0].id] = { qty: 1 }, processCommand('/building break'), isBroken('b', BUILDINGS[0].id) === true));
 G = createFreshState(); G.level = 449;
 check('Les onglets ne se deplacent qu a partir du niveau 450', !tabsCustomAvailable() && (G.level = 450, tabsCustomAvailable()));
 G.level = 100; processCommand('/tabs customization activate');

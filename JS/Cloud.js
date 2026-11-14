@@ -47,7 +47,8 @@ function cloudStoreSession(data) {
 function cloudSignUp(pseudo, email, password) {
   return cloudFetch('/auth/v1/signup', { method: 'POST', body: { email: email, password: password, data: { pseudo: pseudo } } }).then(function(d) {
     if (d && d.access_token) { cloudStoreSession(d); return 'ok'; }
-    return 'confirm';
+    // Pas de session tout de suite : on se connecte directement (aucun e-mail de confirmation n'est demande)
+    return cloudSignIn(email, password).then(function() { return 'ok'; });
   });
 }
 function cloudSignIn(email, password) {
@@ -142,12 +143,44 @@ window.addEventListener('online', function() {
 });
 
 // ---------- Administration (la base verifie toute seule que tu es l'administrateur) ----------
+// Le resultat est garde : l'accueil de l'administrateur s'affiche tout de suite (la base re-verifie tout de toute facon)
 function cloudIsAdmin(pid) {
-  if (!cloudOnline() || !cloudSessions()[pid]) return Promise.resolve(false);
-  if (cloud.adminOf[pid] !== undefined) return Promise.resolve(cloud.adminOf[pid]);
-  return cloudCall(pid, '/rest/v1/rpc/is_admin', { method: 'POST', body: {} }).then(function(r) { cloud.adminOf[pid] = r === true; return cloud.adminOf[pid]; }, function() { return false; });
+  if (!cloudSessions()[pid]) return Promise.resolve(false);
+  if (cloud.adminOf[pid] === undefined && lsGet('p2ds_adm_' + pid) === '1') cloud.adminOf[pid] = true;
+  if (!cloudOnline()) return Promise.resolve(!!cloud.adminOf[pid]);
+  return cloudCall(pid, '/rest/v1/rpc/is_admin', { method: 'POST', body: {} }).then(function(r) {
+    cloud.adminOf[pid] = r === true;
+    if (r === true) lsSet('p2ds_adm_' + pid, '1'); else lsDel('p2ds_adm_' + pid);
+    return cloud.adminOf[pid];
+  }, function() { return !!cloud.adminOf[pid]; });
 }
-function adminListPlayers(pid) { return cloudCall(pid, '/rest/v1/profiles?select=id,pseudo,email,created_at,instances(count)&order=created_at.desc'); }
+function cloudAdminKnown(pid) { if (cloud.adminOf[pid] === undefined && cloudSessions()[pid] && lsGet('p2ds_adm_' + pid) === '1') cloud.adminOf[pid] = true; return !!cloud.adminOf[pid]; }
+function adminListPlayers(pid) { return cloudCall(pid, '/rest/v1/profiles?select=id,pseudo,email,created_at,instances(count),presence(status,bakery_name,level,platform,last_seen)&order=created_at.desc'); }
 function adminListInstances(pid, uid) { return cloudCall(pid, '/rest/v1/instances?user_id=eq.' + encodeURIComponent(uid) + '&select=id,bakery_name,updated_at,save_data&order=updated_at.desc'); }
 function adminDeleteInstance(pid, id) { return cloudDeleteInstance(pid, id); }
 function adminDeleteUser(pid, uid) { return cloudCall(pid, '/rest/v1/rpc/admin_delete_user', { method: 'POST', body: { target: uid } }); }
+
+// ---------- Presence : l'administrateur voit qui a le jeu ouvert, qui joue, qui est parti ----------
+function presenceInfo() {
+  var inGame = !document.body.classList.contains('home-open') && !!CUR.inst;
+  return { status: inGame ? 'playing' : 'open', bakery_name: inGame && typeof G !== 'undefined' ? (G.bakeryName || '') : '', level: inGame && typeof G !== 'undefined' ? (G.level || 0) : 0 };
+}
+function cloudPresence(status, keepalive) {
+  var prof = findProfile(getProfiles().current);
+  if (!prof || prof.kind !== 'cloud' || !cloudOnline()) return Promise.resolve();
+  var info = presenceInfo();
+  if (status) info.status = status;
+  var body = { user_id: prof.id, status: info.status, bakery_name: info.bakery_name, level: info.level, platform: window.__TAURI_INTERNALS__ ? 'app' : 'web', last_seen: new Date().toISOString() };
+  if (keepalive) {
+    // A la fermeture de la page : on n'a pas le temps de rafraichir le jeton, on utilise celui qu'on a
+    var s = cloudSessions()[prof.id];
+    if (!s) return Promise.resolve();
+    try {
+      fetch(P2DS_CONFIG.SUPABASE_URL.replace(/\/$/, '') + '/rest/v1/presence?on_conflict=user_id', { method: 'POST', keepalive: true, headers: { apikey: P2DS_CONFIG.SUPABASE_ANON_KEY, Authorization: 'Bearer ' + s.access, 'Content-Type': 'application/json', Prefer: 'resolution=merge-duplicates,return=minimal' }, body: JSON.stringify(body) });
+    } catch (e) { /* tant pis */ }
+    return Promise.resolve();
+  }
+  return cloudCall(prof.id, '/rest/v1/presence?on_conflict=user_id', { method: 'POST', prefer: 'resolution=merge-duplicates,return=minimal', body: body }).catch(function() { /* hors ligne ou pas de table : tant pis */ });
+}
+setInterval(function() { cloudPresence(); }, 25000);
+window.addEventListener('pagehide', function() { cloudPresence('closed', true); });

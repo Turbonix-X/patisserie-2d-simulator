@@ -48,7 +48,8 @@ L'appli embarque le jeu et marche sans internet. Les fichiers sont dans `src-tau
 1. Crée un projet gratuit sur supabase.com, puis colle `supabase_setup.sql` dans *SQL Editor* (après avoir remplacé `ADMIN_EMAIL` par ton adresse).
 2. Remplis `SUPABASE_URL` et `SUPABASE_ANON_KEY` dans `JS/Config.js` (la clé « anon » est publique par conception).
 3. Pour Google : *Authentication > Providers > Google*, avec ton identifiant et ton secret OAuth, et ajoute l'adresse du jeu dans *URL Configuration*.
-4. `admin.html` ne montre rien tant que tu n'es pas connecté avec le compte administrateur. On y accède avec le bouton « Panneau admin » de la fenêtre des comptes (visible seulement pour l'administrateur) ou directement à l'adresse `…/admin.html`.
+4. Pour la base de données en direct des joueurs, relance tout `supabase_setup.sql` après chaque mise à jour du fichier (il est fait pour pouvoir être relancé sans risque). Dans *Authentication > Providers > Email*, désactive *Confirm email* pour que l'inscription soit immédiate.
+5. `admin.html` ne montre rien tant que tu n'es pas connecté avec le compte administrateur. On y accède avec le bouton « Panneau admin » de la fenêtre des comptes (visible seulement pour l'administrateur) ou directement à l'adresse `…/admin.html`.
 
 ## Lancer le jeu sur ton ordi
 

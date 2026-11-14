@@ -2,6 +2,13 @@
 
 Ce fichier ne s'affiche que si tu sais comment le demander. Il garde ce qui est secret dans chaque version.
 
+## Release 1.2.1
+
+- `/machine NOM break` (ou `/machine break NOM`) casse une machine, et `/machine break` les casse toutes. `/building break` casse tous tes bâtiments, et `/building NOM break` un seul.
+- Les transporteurs créés par commande (`/employee create carrier …`, `/employee add`, `/max`) ne démissionnent pas, même avec une seule pâtisserie.
+- Le compte administrateur n'a que le panneau admin à l'accueil, en deux onglets : **Parties** (ses parties, sans limite, avec le choix normale, max ou créative) et **Base de données** (tous les joueurs en direct : jeu ouvert, en jeu ou fermé, avec leur partie en cours, et la gestion de leurs sauvegardes et de leur compte).
+- Les mots de passe ne peuvent pas être lus, même par l'administrateur : Supabase ne garde qu'une version chiffrée. L'administrateur peut envoyer un lien de réinitialisation à un joueur.
+
 ## Release 1.2
 
 - Les parties « max » (tout débloqué dès le début, comme `/max`) et « créative » (comme `/creative`) ne sont proposées qu'au compte administrateur, dans la fenêtre du +.

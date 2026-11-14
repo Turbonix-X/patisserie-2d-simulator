@@ -57,6 +57,7 @@ function bootGame() {
 
   armMusicAutostart();
   if (typeof changelogPrefetch === 'function') changelogPrefetch();
+  if (typeof cloudPresence === 'function') cloudPresence('playing');
 
   var lastTick = Date.now();
   var totalsCounter = 0;

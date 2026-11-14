@@ -566,7 +566,7 @@ function managerConfig(emp) {
   types.forEach(function(et) {
     h += '<button type="button" class="chef-rec' + (jobs.indexOf(et.id) >= 0 ? ' on' : '') + '" onclick="toggleMgrJob(' + emp.id + ',\'' + et.id + '\')">' + empAvatar(et.id, et.id) + '<span>' + t('emp.' + et.id) + '</span></button>';
   });
-  h += '</div><p class="set-help"><b>' + t('emp.mgrPrio') + '</b> ' + t('emp.mgrPrioHelp') + '</p><div class="chef-list">';
+  h += '</div><p class="set-help mgr-gap"><b>' + t('emp.mgrPrio') + '</b> ' + t('emp.mgrPrioHelp') + '</p><div class="chef-list">';
   types.forEach(function(et) {
     var pos = prio.indexOf(et.id);
     h += '<button type="button" class="chef-rec' + (pos >= 0 ? ' on' : '') + '" onclick="toggleMgrPrio(' + emp.id + ',\'' + et.id + '\')">' + empAvatar(et.id, et.id) + '<span>' + t('emp.' + et.id) + '</span>' + (pos >= 0 ? '<b>' + (pos + 1) + '</b>' : '') + '</button>';

@@ -2,6 +2,24 @@
 
 Tout ce qui a été ajouté à Pâtisserie 2D Simulator, de la plus récente à la plus ancienne. Pour comprendre les règles du jeu, va voir le [wiki](REGLES.md).
 
+## Release 1.2.1 (18 novembre 2026)
+
+Des corrections, une inscription plus simple, et un vrai panneau d'administration.
+
+**Jeu**
+- Les transporteurs demandent maintenant au moins 2 pâtisseries : avec une seule, ils démissionnent et tu ne peux plus en embaucher.
+- Le bouton de fermeture des réglages ne clignote plus quand la souris passe entre le bouton et le fond : seule son icône tourne.
+- Dans les réglages du manager, la partie « Priorité » est séparée de « Métiers à embaucher ».
+
+**Menu et comptes**
+- Le titre « P2DS » du menu est blanc en mode sombre.
+- Le bouton « Continuer avec Google » s'anime quand la souris passe dessus, comme les autres boutons.
+- S'inscrire n'envoie plus d'e-mail de confirmation : le compte est prêt tout de suite. Dans l'appli, « S'inscrire » ouvre le site.
+- Tu peux te connecter dans l'appli Windows avec ton compte.
+
+**Appli Windows**
+- L'installeur ne pose plus que la question de la langue. Les sauvegardes et le compte se règlent dans le jeu, sur la page d'accueil.
+
 ## Release 1.2 (17 novembre 2026)
 
 Une vraie page d'accueil, plusieurs parties, des comptes, et une appli Windows.

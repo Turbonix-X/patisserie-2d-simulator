@@ -2427,6 +2427,14 @@ function carrierTrip(emp, from, to) {
 
 // Tous les transporteurs de toutes les patisseries
 function tickCarriers(dtSec) {
+  // Avec moins de 2 patisseries, un transporteur n'a rien a transporter : il demissionne (sauf ceux crees par commande)
+  if (bakeryTotal() < 2) {
+    G.employees = G.employees.filter(function(e) {
+      if (e.type !== 'carrier' || e.cmd) return true;
+      if (typeof toast === 'function') toast(t('emp.carrierQuit', { n: e.name }));
+      return false;
+    });
+  }
   for (var j = 0; j < G.bakeries.length; j++) { var st = bakeryStateAt(j); if (st) tickShipments(st); }
   if (G.bakeries.length < 2) return;
   for (var i = 0; i < G.bakeries.length; i++) {

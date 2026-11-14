@@ -92,9 +92,9 @@ function consoleTree() {
     money: { set: { '#': 'N [currency]' }, infinite: { off: null } },
     debt: { cancel: { all: null, '#': 'N' }, set: N, add: N }, bank: words(['unlock', 'clear']),
     max: bakeries, unmax: null, undo: null, random: null, reset: null, creative: { off: null },
-    machine: { set: withOps(MACHINES, 'mach.', { max: null, '#': 'N' }), add: withOps(MACHINES, 'mach.', N), remove: withOps(MACHINES, 'mach.', { all: null, '#': 'N' }) },
+    machine: Object.assign({ set: withOps(MACHINES, 'mach.', { max: null, '#': 'N' }), add: withOps(MACHINES, 'mach.', N), remove: withOps(MACHINES, 'mach.', { all: null, '#': 'N' }), 'break': (function() { var o = {}; MACHINES.forEach(function(m) { o[slugOf(m.id, 'mach.')] = null; }); return o; })() }, withOps(MACHINES, 'mach.', { 'break': null })),
     bakery: { create: { '#': 'NAME' }, delete: { '#': 'N' }, list: null },
-    building: words(['set', 'add', 'remove'], N),
+    building: Object.assign(words(['set', 'add', 'remove'], N), { 'break': (function() { var o = {}; BUILDINGS.forEach(function(b) { o[slugOf(b.id, 'b.')] = null; }); return o; })() }, withOps(BUILDINGS, 'b.', { 'break': null })),
     employee: {
       add: N, remove: N, set: N, max: null, upgrade: N, fire: empNames, hire: (function() { var o = {}; Object.keys(appNames).forEach(function(k) { o[k] = { free: null }; }); return o; })(), reject: appNames, create: jobs
     },
@@ -386,6 +386,16 @@ function processCommand(cmd) {
 
   // /machine set|add NOM N | /machine set NOM max | /machine remove NOM N|all
   if (action === 'machine' || action === 'machines') {
+    // /machine NOM break | /machine break [NOM] : la machine tombe en panne
+    if (parts[parts.length - 1] === 'break' || parts[1] === 'break') {
+      var bn = parts.slice(1).filter(function(w) { return w !== 'break'; }).join('');
+      var victims = bn ? [findMachineByName(bn)].filter(Boolean) : MACHINES.filter(function(x) { return machineLevel(x.id) > 0; });
+      if (bn && !victims.length) return '<span class="cmd-err">' + t('console.machineUnknown') + MACHINES.map(function(x) { return x.id; }).join(', ') + '</span>';
+      if (!G.broken) G.broken = {};
+      victims.forEach(function(x) { G.broken['m:' + x.id] = { since: Date.now(), until: 0 }; });
+      syncOvens();
+      return '<span class="cmd-ok">' + t('console.broke', { n: victims.length }) + '</span>';
+    }
     var mnm = takeName(parts, 2);
     var mOp = parts[1], mach = mnm.name ? findMachineByName(mnm.name) : null, mVal = mnm.rest[0];
     var mNames = MACHINES.map(function(x) { return x.id; }).join(', ');
@@ -417,6 +427,14 @@ function processCommand(cmd) {
 
   // /building set|add|remove|max N
   if (action === 'building' || action === 'buildings') {
+    if (parts[parts.length - 1] === 'break' || parts[1] === 'break') {
+      var bq = normName(parts.slice(1).filter(function(w) { return w !== 'break'; }).join(''));
+      var hit = BUILDINGS.filter(function(x) { return (G.buildings[x.id] || { qty: 0 }).qty > 0 && (!bq || nameKeys(x.id, 'b.').indexOf(bq) >= 0); });
+      if (bq && !hit.length) return '<span class="cmd-err">' + L('Bâtiment inconnu (ou pas encore acheté) : ', 'Unknown building (or none owned): ') + escH(bq) + '</span>';
+      if (!G.broken) G.broken = {};
+      hit.forEach(function(x) { G.broken['b:' + x.id] = { since: Date.now(), until: 0 }; });
+      return '<span class="cmd-ok">' + t('console.broke', { n: hit.length }) + '</span>';
+    }
     var op = parts[1]; var n = parseInt(parts[2]);
     if (op === 'max') { BUILDINGS.forEach(function(b) { G.buildings[b.id] = { qty: 999 }; }); return '<span class="cmd-ok">' + L('Tous les bâtiments = 999', 'All buildings = 999') + '</span>'; }
     if (isNaN(n)) return '<span class="cmd-err">Usage: /building set|add|remove|max N</span>';
@@ -432,9 +450,9 @@ function processCommand(cmd) {
   if (action === 'employee' || action === 'employees') {
     var sub = parts[1];
     function mkEmp(skill, lvl, morale) {
-      var pool = EMP_TYPES.filter(function(x) { return !x.needsBakeries || bakeryTotal() >= x.needsBakeries; });
-      var et = pool[Math.floor(Math.random() * pool.length)];
+      var et = EMP_TYPES[Math.floor(Math.random() * EMP_TYPES.length)];
       var e = newEmployee(et.id, getEmpName(), skill, lvl);
+      e.cmd = true; // cree par commande : il ne demissionne pas
       e.morale = morale;
       G.employees.push(e);
     }
@@ -475,7 +493,6 @@ function processCommand(cmd) {
       var jobTxt = (raw[2] || '').toLowerCase(), job = null;
       EMP_TYPES.forEach(function(et) { if (et.id === jobTxt || normName(t('emp.' + et.id)) === normName(jobTxt) || normName(LANGS.en['emp.' + et.id] || '') === normName(jobTxt)) job = et; });
       if (!job || !raw[3]) return '<span class="cmd-err">Usage: /employee create JOB NAME LEVEL' + ' | /employee create collector NAME LEVEL INGREDIENT LOSS</span>';
-      if (job.needsBakeries && bakeryTotal() < job.needsBakeries) return '<span class="cmd-err">' + t('console.needBakeries', { n: job.needsBakeries }) + '</span>';
       var lvlNum = job.id === 'novice' ? 1 : parseInt(raw[4], 10);
       if (isNaN(lvlNum) || lvlNum < 1 || lvlNum > EMP_GOLD_LVL) return '<span class="cmd-err">' + t('console.empLevelRange', { v: EMP_GOLD_LVL }) + '</span>';
       var extra = {}, ingPick = null;
@@ -489,6 +506,7 @@ function processCommand(cmd) {
         }
       }
       var made = newEmployee(job.id, raw[3], 70, lvlNum, extra);
+      made.cmd = true;
       if (ingPick) made.assignedIng = ingPick.id;
       made.morale = 100;
       G.employees.push(made);
@@ -820,8 +838,9 @@ function maxThisBakery() {
   G.employees = [];
   G.nextEmployeeId = 1;
   EMP_TYPES.forEach(function(et) {
-    if (et.id === 'novice' || (et.needsBakeries && bakeryTotal() < et.needsBakeries)) return;
+    if (et.id === 'novice') return;
     var e = newEmployee(et.id, getEmpName(), 50, EMP_MAX_LVL);
+    e.cmd = true;
     e.morale = 100;
     G.employees.push(e);
   });

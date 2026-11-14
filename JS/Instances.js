@@ -48,7 +48,11 @@ function indexKeyOf(pid) { return 'p2ds_p_' + pid + '_index'; }
 function listInstances(pid) { return lsJSON(indexKeyOf(pid), { list: [] }).list || []; }
 function saveInstanceList(pid, list) { lsSet(indexKeyOf(pid), JSON.stringify({ list: list })); }
 function instanceCount(pid) { return listInstances(pid).length; }
-function instancesFull(pid) { return instanceCount(pid) >= P2DS_CONFIG.MAX_INSTANCES; }
+function instancesFull(pid) {
+  // L'administrateur n'a pas de limite (la base le permet aussi)
+  if (typeof cloudAdminKnown === 'function' && cloudAdminKnown(pid)) return false;
+  return instanceCount(pid) >= P2DS_CONFIG.MAX_INSTANCES;
+}
 function findInstance(pid, id) { var r = null; listInstances(pid).forEach(function(x) { if (x.id === id) r = x; }); return r; }
 
 // Cree une instance. type : 'normal', 'max' ou 'creative'. raw : une sauvegarde deja ecrite (JSON), ou rien pour une nouvelle partie.

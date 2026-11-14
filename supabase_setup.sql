@@ -76,7 +76,9 @@ returns trigger
 language plpgsql
 as $$
 begin
-  if (select count(*) from public.instances where user_id = new.user_id and id <> new.id) >= 10 then
+  -- L'administrateur n'a pas de limite
+  if not public.is_admin()
+     and (select count(*) from public.instances where user_id = new.user_id and id <> new.id) >= 10 then
     raise exception 'max_instances: 10 pâtisseries au maximum par compte';
   end if;
   return new;
@@ -111,6 +113,26 @@ create policy instances_update on public.instances for update to authenticated
 drop policy if exists instances_delete on public.instances;
 create policy instances_delete on public.instances for delete to authenticated
   using (user_id = auth.uid() or public.is_admin());
+
+-- ---------- Qui a le jeu ouvert, qui joue, qui est parti (vu par l'administrateur) ----------
+create table if not exists public.presence (
+  user_id     uuid primary key references public.profiles(id) on delete cascade,
+  status      text not null default 'closed',      -- 'open' (menu), 'playing' ou 'closed'
+  bakery_name text not null default '',
+  level       integer not null default 0,
+  platform    text not null default 'web',         -- 'web' ou 'app'
+  last_seen   timestamptz not null default now()
+);
+alter table public.presence enable row level security;
+drop policy if exists presence_select on public.presence;
+create policy presence_select on public.presence for select to authenticated
+  using (user_id = auth.uid() or public.is_admin());
+drop policy if exists presence_insert on public.presence;
+create policy presence_insert on public.presence for insert to authenticated
+  with check (user_id = auth.uid());
+drop policy if exists presence_update on public.presence;
+create policy presence_update on public.presence for update to authenticated
+  using (user_id = auth.uid()) with check (user_id = auth.uid());
 
 -- ---------- Supprimer un compte entier (administrateur seulement) ----------
 create or replace function public.admin_delete_user(target uuid)
