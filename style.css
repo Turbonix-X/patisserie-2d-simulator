@@ -2908,3 +2908,28 @@ body.home-open > #header, body.home-open > #tabs, body.home-open > #game-area, b
 .changelog h3 .ver-link { font-size: .72rem; font-weight: 600; margin-inline-start: 8px; padding: 2px 8px; border-radius: 999px; border: 1px solid currentColor; text-decoration: none; opacity: .85; white-space: nowrap; }
 .changelog h3 .ver-link:hover { opacity: 1; }
 .set-select { padding: 6px 8px; border-radius: 10px; font: inherit; border: 1px solid var(--border); background: var(--surface); color: var(--text); }
+
+/* 1.3 Snapshot 2 : theme sombre plus complet */
+:root[data-theme="dark"] { color-scheme: dark; }
+:root[data-theme="dark"] a { color: var(--mauve-light); }
+:root[data-theme="dark"] .cfg-sub,
+:root[data-theme="dark"] .inst-slot.empty,
+:root[data-theme="dark"] .set-card h3,
+:root[data-theme="dark"] .changelog h3 { color: var(--text); }
+:root[data-theme="dark"] .changelog h3 .ver-link,
+:root[data-theme="dark"] .changelog a { color: var(--mauve-light); }
+:root[data-theme="dark"] .update-box { background: rgba(129,199,132,.14); border-color: #81C784; color: var(--text); }
+:root[data-theme="dark"] .update-box b { color: #A5D6A7; }
+:root[data-theme="dark"] .update-box p { color: var(--text); }
+:root[data-theme="dark"] .version-badge.has-update { background: #43A047; }
+:root[data-theme="dark"] .inst-slot, :root[data-theme="dark"] .inst-name, :root[data-theme="dark"] .inst-meta { color: var(--text); }
+:root[data-theme="dark"] .inst-slot .inst-meta { opacity: .85; }
+:root[data-theme="dark"] .modal, :root[data-theme="dark"] .modal h2, :root[data-theme="dark"] .modal h3, :root[data-theme="dark"] .modal p, :root[data-theme="dark"] .modal label { color: var(--text); }
+:root[data-theme="dark"] .modal input:not([type="range"]), :root[data-theme="dark"] .modal textarea, :root[data-theme="dark"] .modal select,
+:root[data-theme="dark"] .set-select, :root[data-theme="dark"] .ach-search, :root[data-theme="dark"] .adm-search { background: var(--surface-2); color: var(--text); border-color: var(--border); }
+:root[data-theme="dark"] .adm-overlay-card, :root[data-theme="dark"] #adm-bob-bubble, :root[data-theme="dark"] .adm-modal-card { background: var(--surface-solid); color: var(--text); }
+:root[data-theme="dark"] .adm-card, :root[data-theme="dark"] .adm-tr, :root[data-theme="dark"] .adm-stat, :root[data-theme="dark"] .adm-kpi { color: var(--text); }
+:root[data-theme="dark"] .adm-kpi { background: rgba(255,255,255,.07); }
+.alpha-pick { margin: 16px 0 4px; display: flex; flex-direction: column; gap: 6px; }
+.alpha-pick label { font-weight: 700; font-size: .9rem; }
+.alpha-pick select { padding: 8px 10px; border-radius: 10px; font: inherit; border: 1px solid var(--border); background: var(--surface); color: var(--text); }

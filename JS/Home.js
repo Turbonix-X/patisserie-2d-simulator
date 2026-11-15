@@ -103,7 +103,7 @@ function renderHome(force) {
   var cur = homeProfile(), pid = cur.id, list = listInstances(pid), max = P2DS_CONFIG.MAX_INSTANCES, isAdmin = homeIsAdmin();
   // La base de donnees est en direct : on ne la redessine pas a chaque petit rafraichissement
   if (isAdmin && homeState.admTab === 'db' && !force && adminUI.box && document.body.contains(adminUI.box)) return;
-  var h = '<div class="home-top"><button type="button" class="version-badge' + (typeof updateState !== 'undefined' && updateState.newVersion ? ' has-update' : '') + '" onclick="showChangelog()" title="' + escH(t('changelog.title')) + '">' + versionLabel(GAME_VERSION) + '</button>';
+  var h = '<div class="home-top"><button type="button" class="version-badge' + (typeof updateState !== 'undefined' && updateState.newVersion ? ' has-update' : '') + '" onclick="showChangelog(\'home\')" title="' + escH(t('changelog.title')) + '">' + versionLabel(GAME_VERSION) + '</button>';
   h += '<div class="home-top-right"><button class="hbtn" onclick="showAccountModal()" title="' + escH(t('home.accountsTitle')) + '" aria-label="' + escH(t('home.accountsTitle')) + '">' + uiIcon('user') + '</button>';
   h += '<button class="hbtn" onclick="showHomeSettings()" title="' + escH(t('settings.title')) + '" aria-label="' + escH(t('settings.title')) + '">' + uiIcon('settings') + '</button>' + installBtnHTML() + '</div></div>';
   if (isAdmin) {

@@ -984,6 +984,15 @@ function changelogVerLink(heading) {
   var url = changelogVers[changelogVersKey(String(heading).replace(/\s*\(.*$/, ''))];
   return url ? ' <a class="ver-link" href="' + escH(url) + '" target="_blank" rel="noopener">🌐 ' + escH(t('changelog.play')) + '</a>' : '';
 }
+// Sous la premiere publication : les versions Alpha, jouables dans le navigateur
+function changelogAlphaHTML() {
+  if (!changelogVers) return '';
+  var keys = Object.keys(changelogVers).filter(function(k) { return /^alpha /.test(k); }).sort();
+  if (!keys.length) return '';
+  var h = '<div class="alpha-pick"><label>🧪 ' + escH(t('changelog.alpha')) + '</label><select onchange="if(this.value){window.open(this.value,\'_blank\',\'noopener\');this.selectedIndex=0}"><option value="">' + escH(t('changelog.alphaPick')) + '</option>';
+  keys.forEach(function(k) { h += '<option value="' + escH(changelogVers[k]) + '">' + escH(k.replace(/^alpha/, 'Alpha')) + '</option>'; });
+  return h + '</select></div>';
+}
 function changelogLoad() {
   var n = changelogNames(), jobs = [changelogFetch(n.main), changelogLoadPrivate(), changelogVersLoad()];
   if (currentLang !== 'fr' && currentLang !== 'en') jobs.push(changelogFetch(n.en));
@@ -1025,12 +1034,13 @@ function changelogHTML(showAll) {
   var md = [main.head].concat(shown).join('\n') + (secret ? '\n' + [secret.head].concat(secret.list).join('\n') : '');
   var html = markdownLite(md);
   if (!showAll && shown.length < list.length) html += '<button class="btn btn-small" onclick="changelogShowAll()">' + t('changelog.older') + '</button>';
+  else html += changelogAlphaHTML();
   return html;
 }
 function changelogShowAll() { var el = document.getElementById('changelog-body'); if (el) el.innerHTML = iconify(changelogHTML(true)); }
 
-function showChangelog() {
-  var h = '<h2>' + t('changelog.title') + '</h2>' + (typeof updateBoxHTML === 'function' ? updateBoxHTML() : '') + '<div class="changelog" id="changelog-body">…</div>';
+function showChangelog(from) {
+  var h = '<h2>' + t('changelog.title') + '</h2>' + (from === 'home' && typeof updateBoxHTML === 'function' ? updateBoxHTML() : '') + '<div class="changelog" id="changelog-body">…</div>';
   h += '<div class="modal-btns"><button class="btn" onclick="hideModal()">' + t('common.close') + '</button></div>';
   showModal(h, 'modal-changelog');
   var draw = function() {

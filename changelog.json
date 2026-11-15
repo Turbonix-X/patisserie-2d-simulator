@@ -4,6 +4,21 @@
   "intro": "كل ما أُضيف إلى Pâtisserie 2D Simulator، من الأحدث إلى الأقدم. تظهر الإصدارات الأقدم بالإنجليزية. لفهم قواعد اللعبة، راجع [الويكي](REGLES.md).",
   "versions": [
    {
+    "title": "Release 1.3 Snapshot 2 (16 نوفمبر 2026)",
+    "name": "Release 1.3 Snapshot 2",
+    "intro": "ثيم داكن أنظف، ونسخ ألفا على بُعد نقرة.",
+    "groups": [
+     {
+      "name": "اللعبة",
+      "items": [
+       "تحسّن الثيم الداكن: القوائم المنسدلة والحقول وأشرطة التمرير والروابط والنوافذ تتبع الثيم أخيرًا، ولا يبقى شيء أبيض أو داكنًا جدًا.",
+       "في سجل التغييرات، يظهر مربع «تحديث متاح» من القائمة فقط، ويُقرأ جيدًا في الثيم الداكن. وكذلك روابط «العب هذه النسخة».",
+       "في أسفل سجل التغييرات قائمة منسدلة تتيح لك لعب نسخ ألفا في المتصفح."
+      ]
+     }
+    ]
+   },
+   {
     "title": "Release 1.3 Snapshot 1 (16 نوفمبر 2026)",
     "name": "Release 1.3 Snapshot 1",
     "intro": "نسخة احتياطية تُنزَّل تلقائيًا، وثيم الكوكيز أسهل، ونسخ قديمة يمكنك لعبها من جديد.",
@@ -239,6 +254,21 @@
   "intro": "Alles, was zu Pâtisserie 2D Simulator hinzugekommen ist, von der neuesten bis zur ältesten Version. Ältere Versionen werden auf Englisch angezeigt. Die Spielregeln findest du im [Wiki](REGLES.md).",
   "versions": [
    {
+    "title": "Release 1.3 Snapshot 2 (16. November 2026)",
+    "name": "Release 1.3 Snapshot 2",
+    "intro": "Ein saubereres dunkles Thema und die Alpha-Versionen nur einen Klick entfernt.",
+    "groups": [
+     {
+      "name": "Spiel",
+      "items": [
+       "Das dunkle Thema ist besser: Auswahllisten, Felder, Scrollleisten, Links und Fenster folgen jetzt dem Thema, und nichts bleibt mehr weiß oder zu dunkel.",
+       "Im Changelog erscheint der Kasten „Update verfügbar“ nur noch im Menü und ist im dunklen Thema gut lesbar. Die Links „Diese Version spielen“ auch.",
+       "Ganz unten im Changelog kannst du über eine Auswahlliste die Alpha-Versionen im Browser spielen."
+      ]
+     }
+    ]
+   },
+   {
     "title": "Release 1.3 Snapshot 1 (16. November 2026)",
     "name": "Release 1.3 Snapshot 1",
     "intro": "Eine Sicherung, die sich selbst herunterlädt, ein leichteres Keks-Thema und alte Versionen zum Nachspielen.",
@@ -473,6 +503,21 @@
   "title": "Update history",
   "intro": "Everything that was added to Pâtisserie 2D Simulator, from the newest to the oldest. To understand the rules of the game, see the [wiki](REGLES.md).",
   "versions": [
+   {
+    "title": "Release 1.3 Snapshot 2 (November 16, 2026)",
+    "name": "Release 1.3 Snapshot 2",
+    "intro": "A cleaner dark theme, and the Alpha versions one click away.",
+    "groups": [
+     {
+      "name": "Game",
+      "items": [
+       "The dark theme is improved: drop-down lists, fields, scrollbars, links and windows finally follow the theme, and nothing stays white or too dark.",
+       "In the changelog, the \"update available\" box only shows from the menu, and it reads well in the dark theme. So do the \"Play this version\" links.",
+       "At the very bottom of the changelog, a drop-down lets you play the Alpha versions in your browser."
+      ]
+     }
+    ]
+   },
    {
     "title": "Release 1.3 Snapshot 1 (November 16, 2026)",
     "name": "Release 1.3 Snapshot 1",
@@ -1183,6 +1228,21 @@
   "intro": "Todo lo que se ha añadido a Pâtisserie 2D Simulator, de la más reciente a la más antigua. Las versiones más antiguas se muestran en inglés. Para entender las reglas del juego, mira la [wiki](REGLES.md).",
   "versions": [
    {
+    "title": "Release 1.3 Snapshot 2 (16 de noviembre de 2026)",
+    "name": "Release 1.3 Snapshot 2",
+    "intro": "Un tema oscuro más limpio y las versiones Alpha a un clic.",
+    "groups": [
+     {
+      "name": "Juego",
+      "items": [
+       "El tema oscuro mejora: las listas desplegables, los campos, las barras de desplazamiento, los enlaces y las ventanas siguen por fin el tema, y nada se queda blanco ni demasiado oscuro.",
+       "En el registro de cambios, el bloque de «actualización disponible» solo aparece desde el menú y se lee bien en el tema oscuro. Los enlaces «Jugar esta versión» también.",
+       "Al final del registro de cambios, una lista desplegable te deja jugar a las versiones Alpha en el navegador."
+      ]
+     }
+    ]
+   },
+   {
     "title": "Release 1.3 Snapshot 1 (16 de noviembre de 2026)",
     "name": "Release 1.3 Snapshot 1",
     "intro": "Una copia que se descarga sola, un tema Galleta más fácil y versiones antiguas para volver a jugar.",
@@ -1417,6 +1477,21 @@
   "title": "更新履歴",
   "intro": "Pâtisserie 2D Simulator に追加されたすべての内容を、新しいものから古いものの順に載せています。古いバージョンは英語で表示されます。ゲームのルールは[ウィキ](REGLES.md)を見てください。",
   "versions": [
+   {
+    "title": "Release 1.3 Snapshot 2（2026年11月16日）",
+    "name": "Release 1.3 Snapshot 2（2026年11月16日）",
+    "intro": "すっきりしたダークテーマと、ワンクリックで遊べるアルファ版。",
+    "groups": [
+     {
+      "name": "ゲーム",
+      "items": [
+       "ダークテーマを改善しました：プルダウン、入力欄、スクロールバー、リンク、ウィンドウがテーマに合い、白いままや暗すぎる部分がなくなりました。",
+       "更新履歴の「アップデートあり」ボックスはメニューからのみ表示され、ダークテーマでも読みやすくなりました。「このバージョンを遊ぶ」リンクも同様です。",
+       "更新履歴の一番下のプルダウンから、アルファ版をブラウザで遊べます。"
+      ]
+     }
+    ]
+   },
    {
     "title": "Release 1.3 Snapshot 1（2026年11月16日）",
     "name": "Release 1.3 Snapshot 1（2026年11月16日）",
@@ -1653,6 +1728,21 @@
   "intro": "Pâtisserie 2D Simulator에 추가된 모든 내용을 최신순으로 적었습니다. 오래된 버전은 영어로 표시됩니다. 게임 규칙은 [위키](REGLES.md)를 참고하세요.",
   "versions": [
    {
+    "title": "Release 1.3 Snapshot 2 (2026년 11월 16일)",
+    "name": "Release 1.3 Snapshot 2",
+    "intro": "더 깔끔해진 어두운 테마, 클릭 한 번으로 즐기는 알파 버전.",
+    "groups": [
+     {
+      "name": "게임",
+      "items": [
+       "어두운 테마가 좋아졌습니다. 드롭다운, 입력란, 스크롤바, 링크, 창이 모두 테마를 따르고, 하얗게 남거나 너무 어두운 곳이 없습니다.",
+       "변경 내역의 “업데이트 있음” 상자는 메뉴에서만 보이고, 어두운 테마에서도 잘 읽힙니다. “이 버전 플레이” 링크도 마찬가지입니다.",
+       "변경 내역 맨 아래의 드롭다운에서 알파 버전을 브라우저로 플레이할 수 있습니다."
+      ]
+     }
+    ]
+   },
+   {
     "title": "Release 1.3 Snapshot 1 (2026년 11월 16일)",
     "name": "Release 1.3 Snapshot 1",
     "intro": "저절로 내려받아지는 백업, 더 쉬워진 쿠키 테마, 다시 즐길 수 있는 옛 버전.",
@@ -1887,6 +1977,21 @@
   "title": "Historique des mises à jour",
   "intro": "Tout ce qui a été ajouté à Pâtisserie 2D Simulator, de la plus récente à la plus ancienne. Pour comprendre les règles du jeu, va voir le [wiki](REGLES.md).",
   "versions": [
+   {
+    "title": "Release 1.3 Snapshot 2 (16 novembre 2026)",
+    "name": "Release 1.3 Snapshot 2",
+    "intro": "Un thème sombre plus propre, et les versions Alpha à portée de clic.",
+    "groups": [
+     {
+      "name": "Jeu",
+      "items": [
+       "Le thème sombre est amélioré : les listes déroulantes, les champs, les barres de défilement, les liens et les fenêtres suivent enfin le thème, et plus rien ne reste blanc ou trop foncé.",
+       "Dans le changelog, le bloc « mise à jour disponible » n'apparaît que depuis le menu, et il se lit bien en thème sombre. Les liens « Jouer à cette version » aussi.",
+       "Tout en bas du changelog, un menu déroulant te laisse jouer aux versions Alpha dans ton navigateur."
+      ]
+     }
+    ]
+   },
    {
     "title": "Release 1.3 Snapshot 1 (16 novembre 2026)",
     "name": "Release 1.3 Snapshot 1",
@@ -2597,6 +2702,21 @@
   "intro": "Tudo o que foi acrescentado ao Pâtisserie 2D Simulator, da mais recente à mais antiga. As versões mais antigas aparecem em inglês. Para perceber as regras do jogo, vê a [wiki](REGLES.md).",
   "versions": [
    {
+    "title": "Release 1.3 Snapshot 2 (16 de novembro de 2026)",
+    "name": "Release 1.3 Snapshot 2",
+    "intro": "Um tema escuro mais limpo e as versões Alpha a um clique.",
+    "groups": [
+     {
+      "name": "Jogo",
+      "items": [
+       "O tema escuro melhorou: as listas, os campos, as barras de deslocamento, as ligações e as janelas seguem finalmente o tema, e nada fica branco nem demasiado escuro.",
+       "No registo de alterações, o bloco de «atualização disponível» só aparece a partir do menu e lê-se bem no tema escuro. As ligações «Jogar esta versão» também.",
+       "No fim do registo de alterações, uma lista permite jogar as versões Alpha no navegador."
+      ]
+     }
+    ]
+   },
+   {
     "title": "Release 1.3 Snapshot 1 (16 de novembro de 2026)",
     "name": "Release 1.3 Snapshot 1",
     "intro": "Uma cópia que se descarrega sozinha, um tema Bolacha mais fácil e versões antigas para voltar a jogar.",
@@ -2832,6 +2952,21 @@
   "intro": "Всё, что добавили в Pâtisserie 2D Simulator, от самого нового к самому старому. Более старые версии показываются на английском. Чтобы понять правила игры, загляни в [вики](REGLES.md).",
   "versions": [
    {
+    "title": "Release 1.3 Snapshot 2 (16 ноября 2026)",
+    "name": "Release 1.3 Snapshot 2",
+    "intro": "Более чистая тёмная тема и Alpha-версии в один клик.",
+    "groups": [
+     {
+      "name": "Игра",
+      "items": [
+       "Тёмная тема стала лучше: выпадающие списки, поля, полосы прокрутки, ссылки и окна наконец следуют теме, и ничего не остаётся белым или слишком тёмным.",
+       "В списке изменений блок «доступно обновление» показывается только из меню и хорошо читается в тёмной теме. Ссылки «Играть в эту версию» тоже.",
+       "В самом низу списка изменений выпадающий список позволяет играть в Alpha-версии в браузере."
+      ]
+     }
+    ]
+   },
+   {
     "title": "Release 1.3 Snapshot 1 (16 ноября 2026)",
     "name": "Release 1.3 Snapshot 1",
     "intro": "Резервная копия, которая скачивается сама, более доступная тема «Печенье» и старые версии, в которые можно сыграть снова.",
@@ -3066,6 +3201,21 @@
   "title": "更新记录",
   "intro": "Pâtisserie 2D Simulator 新增的所有内容，从最新到最旧。更早的版本以英文显示。想了解游戏规则，请看[百科](REGLES.md)。",
   "versions": [
+   {
+    "title": "Release 1.3 Snapshot 2（2026年11月16日）",
+    "name": "Release 1.3 Snapshot 2（2026年11月16日）",
+    "intro": "更干净的深色主题，Alpha 版本一键可玩。",
+    "groups": [
+     {
+      "name": "游戏",
+      "items": [
+       "深色主题改进了：下拉列表、输入框、滚动条、链接和窗口终于都跟随主题，不再有留白或过暗的地方。",
+       "更新日志里的“有可用更新”框只在菜单里出现，在深色主题下也清晰可读，“玩这个版本”链接也是。",
+       "更新日志的最底部有一个下拉菜单，可以在浏览器里玩 Alpha 版本。"
+      ]
+     }
+    ]
+   },
    {
     "title": "Release 1.3 Snapshot 1（2026年11月16日）",
     "name": "Release 1.3 Snapshot 1（2026年11月16日）",

@@ -2,6 +2,15 @@
 
 Tudo o que foi acrescentado ao Pâtisserie 2D Simulator, da mais recente à mais antiga. As versões mais antigas aparecem em inglês. Para perceber as regras do jogo, vê a [wiki](REGLES.md).
 
+## Release 1.3 Snapshot 2 (16 de novembro de 2026)
+
+Um tema escuro mais limpo e as versões Alpha a um clique.
+
+**Jogo**
+- O tema escuro melhorou: as listas, os campos, as barras de deslocamento, as ligações e as janelas seguem finalmente o tema, e nada fica branco nem demasiado escuro.
+- No registo de alterações, o bloco de «atualização disponível» só aparece a partir do menu e lê-se bem no tema escuro. As ligações «Jogar esta versão» também.
+- No fim do registo de alterações, uma lista permite jogar as versões Alpha no navegador.
+
 ## Release 1.3 Snapshot 1 (16 de novembro de 2026)
 
 Uma cópia que se descarrega sozinha, um tema Bolacha mais fácil e versões antigas para voltar a jogar.

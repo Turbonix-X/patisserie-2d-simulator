@@ -32,6 +32,7 @@
 <script>document.write('<script src="../JS/Lang122.js?t=' + Date.now() + '"><\/script>');</script>
 <script>document.write('<script src="../JS/Lang123.js?t=' + Date.now() + '"><\/script>');</script>
 <script>document.write('<script src="../JS/Lang13s1.js?t=' + Date.now() + '"><\/script>');</script>
+<script>document.write('<script src="../JS/Lang13s2.js?t=' + Date.now() + '"><\/script>');</script>
 <script>document.write('<script src="../JS/Config.js?t=' + Date.now() + '"><\/script>');</script>
 <script>document.write('<script src="../JS/PlayerData.js?t=' + Date.now() + '"><\/script>');</script>
 <script>document.write('<script src="../JS/Instances.js?t=' + Date.now() + '"><\/script>');</script>
@@ -463,7 +464,7 @@ check('Un succes compte les niveaux de machines', ACHIEVEMENTS.filter(function(a
 check('Bob connait 30 anecdotes', LANGS.fr['bob.facts'].split('|').length === 30);
 
 // --- Release 1.0 ---
-check('La version s appelle Release 1.3 Snapshot 1', GAME_VERSION === 'Release 1.3 Snapshot 1');
+check('La version s appelle Release 1.3 Snapshot 2', GAME_VERSION === 'Release 1.3 Snapshot 2');
 G = createFreshState(); G.level = 499;
 check('La fete et l espace sont caches avant leur niveau', findTheme('party').hidden && findTheme('space').hidden && themeLockReason(findTheme('party')) === 'level');
 check('Les themes Tech sont secrets', themeLockReason(findTheme('tech')) === 'secret' && themeLockReason(findTheme('techgold')) === 'secret');
@@ -971,6 +972,14 @@ check('On choisit l intervalle de la sauvegarde automatique', autoBackupMinutes(
 changelogVers = { 'beta 1.9': 'https://exemple.test/beta-1.9/index.html' };
 check('Le changelog lie une version qu on a (sans tenir compte des accents)', /ver-link/.test(changelogVerLink('Bêta 1.9 (12 mars)')) && changelogVerLink('Release 9.9') === '');
 changelogVers = null;
+
+// --- Release 1.3 Snapshot 2 ---
+check('Les textes de la 1.3 Snapshot 2 existent dans les 10 langues', ['changelog.alpha', 'changelog.alphaPick'].every(function(k) { return Object.keys(LANGS).every(function(l) { return LANGS[l][k]; }); }));
+changelogVers = { 'alpha 1.2': 'https://exemple.test/a/index.html', 'beta 1.0': 'https://exemple.test/b/index.html' };
+check('Le menu Alpha ne liste que les versions Alpha', /alpha-pick/.test(changelogAlphaHTML()) && /Alpha 1\.2/.test(changelogAlphaHTML()) && !/Beta/.test(changelogAlphaHTML()));
+changelogVers = null;
+check('Sans versions.json, pas de menu Alpha', changelogAlphaHTML() === '');
+check('Le nom affiche n a pas de Snapshot', versionLabel('Release 1.3 Snapshot 2') === 'Release 1.3' && versionLabel('Release 1.2.3') === 'Release 1.2.3');
 
 var ko = results.filter(function(r) { return !r.ok; }).length;
 document.getElementById('total').textContent = (results.length - ko) + ' / ' + results.length + ' tests reussis';
