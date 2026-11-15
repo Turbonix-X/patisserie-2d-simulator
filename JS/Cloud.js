@@ -188,5 +188,5 @@ function cloudPresence(status, keepalive) {
   }
   return cloudCall(prof.id, '/rest/v1/presence?on_conflict=user_id', { method: 'POST', prefer: 'resolution=merge-duplicates,return=minimal', body: body }).catch(function() { /* hors ligne ou pas de table : tant pis */ });
 }
-setInterval(function() { cloudPresence(); }, 25000);
+setInterval(function() { cloudPresence(); }, 15000);
 window.addEventListener('pagehide', function() { cloudPresence('closed', true); });

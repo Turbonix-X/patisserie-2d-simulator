@@ -2,7 +2,22 @@
 
 Tout ce qui a été ajouté à Pâtisserie 2D Simulator, de la plus récente à la plus ancienne. Pour comprendre les règles du jeu, va voir le [wiki](REGLES.md).
 
-## Release 1.2.1 (18 novembre 2026)
+## Release 1.2.1.1 (15 novembre 2026)
+
+Petites corrections.
+
+**Panneau admin**
+- Le badge « ADMIN » est maintenant sous « P2DS ».
+- Le bouton « Panneau admin » a quitté la fenêtre des comptes : ton compte administrateur n'a que le panneau.
+- La base de données indique quand un joueur est hors ligne (fenêtre, onglet ou appli fermés) et depuis quand, en moins d'une minute.
+
+**Appli Windows**
+- Le bouton « S'inscrire sur le site » ouvre vraiment le site dans ton navigateur.
+
+**Nouveautés**
+- Les nouveautés sont traduites dans toutes les langues. Les versions plus anciennes restent en anglais en dehors du français et de l'anglais.
+
+## Release 1.2.1 (14 novembre 2026)
 
 Des corrections, une inscription plus simple, et un vrai panneau d'administration.
 
@@ -20,7 +35,7 @@ Des corrections, une inscription plus simple, et un vrai panneau d'administratio
 **Appli Windows**
 - L'installeur ne pose plus que la question de la langue. Les sauvegardes et le compte se règlent dans le jeu, sur la page d'accueil.
 
-## Release 1.2 (17 novembre 2026)
+## Release 1.2 (14 novembre 2026)
 
 Une vraie page d'accueil, plusieurs parties, des comptes, et une appli Windows.
 
@@ -58,7 +73,7 @@ Une vraie page d'accueil, plusieurs parties, des comptes, et une appli Windows.
 **Petits changements**
 - Le jeu affiche « Release 1.2 » comme numéro de version.
 
-## Release 1.1.2 (15 novembre 2026)
+## Release 1.1.2 (14 novembre 2026)
 
 Le jeu se met à jour sans te faire quitter ta partie, et les onglets se rangent comme tu veux.
 

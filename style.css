@@ -2833,3 +2833,7 @@ body.home-open > #header, body.home-open > #tabs, body.home-open > #game-area, b
   .adm-tr { grid-template-columns: 1fr auto; row-gap: 6px; }
   .adm-tr .adm-game, .adm-tr .adm-seen, .adm-tr .adm-n { grid-column: auto; }
 }
+
+/* Version 1.2.1.1 */
+.adm-badge { display: block; margin: -4px auto 12px; width: max-content; }
+.adm-home .home-name { margin-bottom: 6px; }

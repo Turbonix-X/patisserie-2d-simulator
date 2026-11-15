@@ -1,6 +1,7 @@
 use std::fs;
 use tauri::Manager;
 use tauri_plugin_dialog::{DialogExt, MessageDialogButtons};
+use tauri_plugin_opener::OpenerExt;
 use tauri_plugin_updater::UpdaterExt;
 
 /// Ce que l'installeur a noté : la langue, le compte, et le fichier de sauvegarde à importer.
@@ -18,6 +19,16 @@ fn get_init_config(app: tauri::AppHandle) -> Option<serde_json::Value> {
         }
     }
     Some(cfg)
+}
+
+/// Ouvre un lien dans le navigateur du joueur (par exemple l'inscription sur le site).
+/// Seuls les liens web sont acceptes.
+#[tauri::command]
+fn open_external(app: tauri::AppHandle, url: String) -> Result<(), String> {
+    if !(url.starts_with("https://") || url.starts_with("http://")) {
+        return Err("lien refusé".into());
+    }
+    app.opener().open_url(url, None::<&str>).map_err(|e| e.to_string())
 }
 
 /// Au lancement : si internet est là, on regarde sans bruit s'il existe une mise à jour.
@@ -56,7 +67,7 @@ pub fn run() {
         .plugin(tauri_plugin_dialog::init())
         .plugin(tauri_plugin_opener::init())
         .plugin(tauri_plugin_updater::Builder::new().build())
-        .invoke_handler(tauri::generate_handler![get_init_config])
+        .invoke_handler(tauri::generate_handler![get_init_config, open_external])
         .setup(|app| {
             // Un jeu : pas de barre de menu
             if let Some(win) = app.get_webview_window("main") {

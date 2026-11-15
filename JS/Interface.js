@@ -935,30 +935,46 @@ function toggleNotifications() {
 }
 
 // ============ LE CHANGELOG ============
-// Le texte des nouveautes est gardé : la fenetre s'ouvre tout de suite, puis se met a jour si le fichier a change
-var changelogCache = { md: null, secret: null };
-function changelogLoad() {
-  if (changelogCache.md === null) { try { changelogCache.md = localStorage.getItem('p2ds_cl') || ''; changelogCache.secret = localStorage.getItem('p2ds_cl_secret') || ''; } catch (e) { changelogCache.md = ''; changelogCache.secret = ''; } }
-  var wantSecret = !!(G.settings && G.settings.changelogMax);
-  var jobs = [fetch('CHANGELOG.md').then(function(r) { return r.ok ? r.text() : null; }).catch(function() { return null; })];
-  if (wantSecret) jobs.push(fetch('CHANGELOG-SECRET.md').then(function(r) { return r.ok ? r.text() : null; }).catch(function() { return null; }));
-  return Promise.all(jobs).then(function(res) {
-    if (res[0]) { changelogCache.md = res[0]; try { localStorage.setItem('p2ds_cl', res[0]); } catch (e) { /* tant pis */ } }
-    if (res[1]) { changelogCache.secret = res[1]; try { localStorage.setItem('p2ds_cl_secret', res[1]); } catch (e) { /* tant pis */ } }
+// Les nouveautes, dans la langue du joueur. Le texte est garde : la fenetre s'ouvre tout de suite, puis se met a jour.
+// Pour les langues qui n'ont que les versions recentes traduites, les plus anciennes viennent de l'anglais.
+var changelogCache = {};
+function changelogNames() {
+  var l = currentLang;
+  return { main: l === 'fr' ? 'CHANGELOG.md' : 'CHANGELOG.' + l + '.md', en: 'CHANGELOG.en.md', secret: l === 'fr' ? 'CHANGELOG-SECRET.md' : 'CHANGELOG-SECRET.en.md' };
+}
+function changelogText(file) {
+  if (changelogCache[file] === undefined) { try { changelogCache[file] = localStorage.getItem('p2ds_cl_' + file) || ''; } catch (e) { changelogCache[file] = ''; } }
+  return changelogCache[file];
+}
+function changelogFetch(file) {
+  return fetch(file).then(function(r) { return r.ok ? r.text() : null; }).catch(function() { return null; }).then(function(txt) {
+    if (txt) { changelogCache[file] = txt; try { localStorage.setItem('p2ds_cl_' + file, txt); } catch (e) { /* tant pis */ } }
   });
+}
+function changelogLoad() {
+  var n = changelogNames(), jobs = [changelogFetch(n.main)];
+  if (currentLang !== 'fr' && currentLang !== 'en') jobs.push(changelogFetch(n.en));
+  if (G.settings && G.settings.changelogMax) jobs.push(changelogFetch(n.secret));
+  return Promise.all(jobs);
 }
 // En arriere-plan, des que le jeu est calme : la fenetre sera deja prete
 function changelogPrefetch() { (window.requestIdleCallback || function(f) { setTimeout(f, 3000); })(function() { changelogLoad(); }); }
 
+function changelogSplit(md) { var p = String(md || '').split(/\r?\n(?=## )/); return { head: p.shift() || '', list: p }; }
 var CHANGELOG_FIRST = 3; // les 3 versions les plus recentes d'abord, le reste a la demande
 function changelogHTML(showAll) {
-  var md = (changelogCache.md || '') + ((G.settings && G.settings.changelogMax && changelogCache.secret) ? '\n' + changelogCache.secret : '');
-  if (!md) return '';
-  var parts = md.split(/\r?\n(?=## )/), head = parts.shift(), keep = parts;
-  var secretIdx = -1;
-  if (!showAll && keep.length > CHANGELOG_FIRST + 1) keep = keep.slice(0, CHANGELOG_FIRST);
-  var html = markdownLite([head].concat(keep).join('\n'));
-  if (!showAll && parts.length > keep.length) html += '<button class="btn btn-small" onclick="changelogShowAll()">' + t('changelog.older') + '</button>';
+  var n = changelogNames();
+  var main = changelogSplit(changelogText(n.main)), en = changelogSplit(changelogText(n.en));
+  if (!main.list.length) main = en; // pas de fichier dans cette langue : l'anglais
+  var list = main.list.slice();
+  // Les versions plus anciennes que celles traduites : en anglais
+  if (currentLang !== 'fr' && currentLang !== 'en' && main !== en && en.list.length > list.length) list = list.concat(en.list.slice(list.length));
+  var secret = (G.settings && G.settings.changelogMax) ? changelogSplit(changelogText(n.secret)) : null;
+  if (!main.head && !list.length) return '';
+  var shown = showAll || list.length <= CHANGELOG_FIRST + 1 ? list : list.slice(0, CHANGELOG_FIRST);
+  var md = [main.head].concat(shown).join('\n') + (secret ? '\n' + [secret.head].concat(secret.list).join('\n') : '');
+  var html = markdownLite(md);
+  if (!showAll && shown.length < list.length) html += '<button class="btn btn-small" onclick="changelogShowAll()">' + t('changelog.older') + '</button>';
   return html;
 }
 function changelogShowAll() { var el = document.getElementById('changelog-body'); if (el) el.innerHTML = iconify(changelogHTML(true)); }
@@ -973,8 +989,7 @@ function showChangelog() {
     var html = changelogHTML(false);
     if (html) el.innerHTML = iconify(html); else el.textContent = t('changelog.error');
   };
-  if (changelogCache.md === null) { try { changelogCache.md = localStorage.getItem('p2ds_cl') || ''; changelogCache.secret = localStorage.getItem('p2ds_cl_secret') || ''; } catch (e) { changelogCache.md = ''; } }
-  if (changelogCache.md) draw();
+  if (changelogText(changelogNames().main) || changelogText(changelogNames().en)) draw();
   changelogLoad().then(draw);
 }
 

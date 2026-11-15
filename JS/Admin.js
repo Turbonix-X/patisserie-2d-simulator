@@ -10,8 +10,8 @@ var adminUI = { pid: null, box: null, rows: [], q: '', filter: 'all', open: null
 function aesc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function(c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
 function adminTr(fr, en) { return (typeof currentLang !== 'undefined' && currentLang === 'fr') || window.__admFr ? fr : en; }
 
-// Presence : "ouvert" (menu), "en jeu" ou "ferme". Sans signe de vie depuis 2 minutes et demie, le joueur est ferme.
-var PRESENCE_STALE_MS = 150000;
+// Presence : "ouvert" (menu), "en jeu" ou "ferme". Sans signe de vie depuis 45 secondes (fenetre, onglet ou appli fermes), le joueur est hors ligne.
+var PRESENCE_STALE_MS = 45000;
 function adminPresence(r) {
   var p = Array.isArray(r.presence) ? r.presence[0] : r.presence;
   if (!p) return { status: 'closed', seen: null, p: null };
@@ -28,7 +28,7 @@ function adminAgo(ts) {
   return Math.round(s / 86400) + adminTr(' j', ' d');
 }
 function adminCount(r) { return (r.instances && r.instances[0] && r.instances[0].count) || 0; }
-function adminLabel(status) { return { playing: adminTr('En jeu', 'Playing'), open: adminTr('Jeu ouvert', 'Game open'), closed: adminTr('Fermé', 'Closed') }[status]; }
+function adminLabel(status) { return { playing: adminTr('En jeu', 'Playing'), open: adminTr('Jeu ouvert', 'Game open'), closed: adminTr('Hors ligne', 'Offline') }[status]; }
 
 function adminStopLive() { if (adminUI.timer) { clearInterval(adminUI.timer); adminUI.timer = null; } }
 
@@ -67,17 +67,17 @@ function adminDrawList(keepFocus) {
     h += '<div class="adm-stat ' + s[3] + '"><span class="adm-stat-ico">' + s[0] + '</span><b>' + s[1] + '</b><small>' + s[2] + '</small></div>';
   });
   h += '</div><div class="adm-tools"><input class="adm-search" type="search" placeholder="' + aesc(adminTr('Chercher un joueur…', 'Search a player…')) + '" value="' + aesc(adminUI.q) + '" oninput="adminUI.q=this.value;adminDrawList(true)">';
-  [['all', adminTr('Tous', 'All')], ['playing', adminTr('En jeu', 'Playing')], ['open', adminTr('Ouvert', 'Open')], ['closed', adminTr('Fermé', 'Closed')]].forEach(function(f) {
+  [['all', adminTr('Tous', 'All')], ['playing', adminTr('En jeu', 'Playing')], ['open', adminTr('Ouvert', 'Open')], ['closed', adminTr('Hors ligne', 'Offline')]].forEach(function(f) {
     h += '<button class="adm-chip' + (adminUI.filter === f[0] ? ' active' : '') + '" onclick="adminUI.filter=\'' + f[0] + '\';adminDrawList()">' + f[1] + '</button>';
   });
   h += '<span class="adm-live" title="' + aesc(adminTr('Mise à jour automatique toutes les 8 secondes', 'Auto refresh every 8 seconds')) + '"><i></i>' + adminTr('En direct', 'Live') + '</span></div>';
-  h += '<div class="adm-table"><div class="adm-th"><span>' + adminTr('Joueur', 'Player') + '</span><span>' + adminTr('État', 'Status') + '</span><span>' + adminTr('Partie en cours', 'Current game') + '</span><span>' + adminTr('Vu', 'Seen') + '</span><span>' + adminTr('Parties', 'Games') + '</span></div>';
+  h += '<div class="adm-table"><div class="adm-th"><span>' + adminTr('Joueur', 'Player') + '</span><span>' + adminTr('État', 'Status') + '</span><span>' + adminTr('Partie en cours', 'Current game') + '</span><span>' + adminTr('Dernière activité', 'Last activity') + '</span><span>' + adminTr('Parties', 'Games') + '</span></div>';
   shown.forEach(function(x) {
     var r = x.r, p = x.pr.p;
     h += '<button class="adm-tr" onclick="adminOpenPlayer(\'' + r.id + '\')"><span class="adm-who"><i class="adm-avatar">' + aesc((r.pseudo || '?').charAt(0).toUpperCase()) + '</i><span><b>' + aesc(r.pseudo || '?') + '</b><small>' + aesc(r.email) + '</small></span></span>';
     h += '<span><em class="adm-pill ' + x.pr.status + '"><i></i>' + adminLabel(x.pr.status) + '</em></span>';
     h += '<span class="adm-game">' + (x.pr.status === 'playing' && p ? aesc(p.bakery_name || adminTr('Sans nom', 'Unnamed')) + ' <small>' + adminTr('niv. ', 'lv. ') + (p.level || 1) + ' · ' + (p.platform === 'app' ? 'App' : 'Web') + '</small>' : (p && x.pr.status !== 'closed' ? '<small>' + (p.platform === 'app' ? 'App' : 'Web') + '</small>' : '<small>—</small>')) + '</span>';
-    h += '<span class="adm-seen">' + (x.pr.status === 'closed' ? adminAgo(x.pr.seen) : adminTr('maintenant', 'now')) + '</span><span class="adm-n">' + adminCount(r) + '</span></button>';
+    h += '<span class="adm-seen">' + (x.pr.status === 'closed' ? (x.pr.seen ? adminTr('depuis ', 'for ') + adminAgo(x.pr.seen) : adminTr('jamais vu', 'never seen')) : adminTr('maintenant', 'now')) + '</span><span class="adm-n">' + adminCount(r) + '</span></button>';
   });
   if (!shown.length) h += '<p class="home-empty">' + adminTr('Aucun joueur ne correspond.', 'No matching player.') + '</p>';
   h += '</div><p class="adm-note">🔒 ' + adminTr('Les mots de passe sont chiffrés par Supabase : personne, pas même toi, ne peut les lire. Pour aider un joueur, ouvre sa fiche et envoie-lui un lien de réinitialisation.', 'Passwords are hashed by Supabase: nobody, not even you, can read them. To help a player, open their card and send them a reset link.') + '</p></div>';
@@ -124,7 +124,7 @@ function adminTickDetail() {
     var r = adminUI.rows.filter(function(x) { return x.id === adminUI.open; })[0];
     if (!r || !document.getElementById('adm-state')) return;
     var pr = adminPresence(r), p = pr.p;
-    document.getElementById('adm-state').innerHTML = '<em class="adm-pill ' + pr.status + '"><i></i>' + adminLabel(pr.status) + '</em>' + (pr.status === 'playing' && p ? '<small>' + aesc(p.bakery_name || '') + ' · ' + adminTr('niv. ', 'lv. ') + (p.level || 1) + '</small>' : '') + '<small>' + adminTr('Vu : ', 'Seen: ') + (pr.status === 'closed' ? adminAgo(pr.seen) : adminTr('maintenant', 'now')) + '</small>';
+    document.getElementById('adm-state').innerHTML = '<em class="adm-pill ' + pr.status + '"><i></i>' + adminLabel(pr.status) + '</em>' + (pr.status === 'playing' && p ? '<small>' + aesc(p.bakery_name || '') + ' · ' + adminTr('niv. ', 'lv. ') + (p.level || 1) + '</small>' : '') + '<small>' + (pr.status === 'closed' ? adminTr('Hors ligne depuis ', 'Offline for ') + adminAgo(pr.seen) : adminTr('Vu : maintenant', 'Seen: now')) + '</small>';
   }, function() { /* tant pis */ });
 }
 function adminCopy(btn) {

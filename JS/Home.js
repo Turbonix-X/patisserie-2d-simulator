@@ -34,7 +34,7 @@ function installBtnHTML() {
 // ---------- Tauri : ce que l'installeur a note ----------
 function tauriInvoke(cmd, args) { return window.__TAURI_INTERNALS__.invoke(cmd, args || {}); }
 function openExternal(url) {
-  if (IN_APP) return tauriInvoke('plugin:opener|open_url', { url: url }).catch(function() { window.open(url, '_blank'); });
+  if (IN_APP) return tauriInvoke('open_external', { url: url }).catch(function() { return tauriInvoke('plugin:opener|open_url', { url: url }); }).catch(function() { window.open(url, '_blank'); });
   window.open(url, '_blank', 'noopener');
   return Promise.resolve();
 }
@@ -108,7 +108,7 @@ function renderHome(force) {
   if (isAdmin) {
     // Le compte administrateur n'a que le panneau admin : ses parties, et la base de donnees des joueurs
     var tab = homeState.admTab === 'db' ? 'db' : 'games';
-    h += '<div class="home-center adm-home"><img class="home-logo small" src="logo.svg" alt="" width="64" height="64"><h1 class="game-name home-name">P2DS <span class="adm-badge">ADMIN</span></h1>';
+    h += '<div class="home-center adm-home"><img class="home-logo small" src="logo.svg" alt="" width="64" height="64"><h1 class="game-name home-name">P2DS</h1><span class="adm-badge">ADMIN</span>';
     h += '<div class="adm-tabs"><button class="' + (tab === 'games' ? 'active' : '') + '" onclick="homeAdmTab(\'games\')">🧁 ' + adminTr('Parties', 'Games') + '</button><button class="' + (tab === 'db' ? 'active' : '') + '" onclick="homeAdmTab(\'db\')">🗄️ ' + adminTr('Base de données', 'Database') + '</button></div>';
     h += tab === 'games' ? homeGridHTML(list, max) : '<div id="adm-box" class="adm-box"></div>';
     h += '</div>';
@@ -296,7 +296,6 @@ function showAccountModal(mode) {
     h += '</div>';
   });
   h += '</div>';
-  if (homeIsAdmin()) h += '<p><a class="btn btn-small" href="admin.html">' + t('home.adminPanel') + '</a></p>';
   if (!cloudEnabled()) h += '<p class="warning">' + t('home.cloudOff') + '</p>';
   else {
     // Se connecter, s'inscrire, ou continuer avec Google : tout sur la meme ligne

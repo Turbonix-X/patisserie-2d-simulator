@@ -2,6 +2,11 @@
 
 Ce fichier ne s'affiche que si tu sais comment le demander. Il garde ce qui est secret dans chaque version.
 
+## Release 1.2.1.1
+
+- `/changelog max` ajoute aussi ce fichier dans la langue des nouveautés (en anglais pour toutes les langues autres que le français).
+- Le panneau du compte administrateur indique qui est hors ligne et depuis quand : un joueur est considéré hors ligne après environ 45 secondes sans signe de vie.
+
 ## Release 1.2.1
 
 - `/machine NOM break` (ou `/machine break NOM`) casse une machine, et `/machine break` les casse toutes. `/building break` casse tous tes bâtiments, et `/building NOM break` un seul.

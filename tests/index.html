@@ -459,7 +459,7 @@ check('Un succes compte les niveaux de machines', ACHIEVEMENTS.filter(function(a
 check('Bob connait 30 anecdotes', LANGS.fr['bob.facts'].split('|').length === 30);
 
 // --- Release 1.0 ---
-check('La version s appelle Release 1.2.1', GAME_VERSION === 'Release 1.2.1');
+check('La version s appelle Release 1.2.1.1', GAME_VERSION === 'Release 1.2.1.1');
 G = createFreshState(); G.level = 499;
 check('La fete et l espace sont caches avant leur niveau', findTheme('party').hidden && findTheme('space').hidden && themeLockReason(findTheme('party')) === 'level');
 check('Les themes Tech sont secrets', themeLockReason(findTheme('tech')) === 'secret' && themeLockReason(findTheme('techgold')) === 'secret');
