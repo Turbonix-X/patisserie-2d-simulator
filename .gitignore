@@ -9,3 +9,4 @@ Installer-P2DS.exe
 private/
 dist/
 archive-dist/
+.wrangler/
