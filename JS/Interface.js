@@ -951,8 +951,18 @@ function changelogFetch(file) {
     if (txt) { changelogCache[file] = txt; try { localStorage.setItem('p2ds_cl_' + file, txt); } catch (e) { /* tant pis */ } }
   });
 }
+// Les notes privees de l'administrateur : lues depuis sa base, jamais depuis un fichier public, et gardees seulement en memoire
+var changelogPrivate = '';
+function changelogLoadPrivate() {
+  changelogPrivate = '';
+  var prof = typeof getProfiles === 'function' ? findProfile(getProfiles().current) : null;
+  if (!prof || prof.kind !== 'cloud' || !cloudAdminKnown(prof.id) || !cloudOnline()) return Promise.resolve();
+  return cloudCall(prof.id, '/rest/v1/admin_notes?select=version,body_fr,body_en&order=id.desc').then(function(rows) {
+    changelogPrivate = (rows || []).map(function(r) { return '## 🔒 Admin · ' + r.version + '\n' + (currentLang === 'fr' ? r.body_fr : r.body_en || r.body_fr); }).join('\n');
+  }, function() { /* pas de table ou hors ligne : tant pis */ });
+}
 function changelogLoad() {
-  var n = changelogNames(), jobs = [changelogFetch(n.main)];
+  var n = changelogNames(), jobs = [changelogFetch(n.main), changelogLoadPrivate()];
   if (currentLang !== 'fr' && currentLang !== 'en') jobs.push(changelogFetch(n.en));
   if (G.settings && G.settings.changelogMax) jobs.push(changelogFetch(n.secret));
   return Promise.all(jobs);
@@ -972,7 +982,7 @@ function changelogHTML(showAll) {
   var secret = (G.settings && G.settings.changelogMax) ? changelogSplit(changelogText(n.secret)) : null;
   if (!main.head && !list.length) return '';
   var shown = showAll || list.length <= CHANGELOG_FIRST + 1 ? list : list.slice(0, CHANGELOG_FIRST);
-  var md = [main.head].concat(shown).join('\n') + (secret ? '\n' + [secret.head].concat(secret.list).join('\n') : '');
+  var md = [main.head].concat(changelogPrivate ? [changelogPrivate] : [], shown).join('\n') + (secret ? '\n' + [secret.head].concat(secret.list).join('\n') : '');
   var html = markdownLite(md);
   if (!showAll && shown.length < list.length) html += '<button class="btn btn-small" onclick="changelogShowAll()">' + t('changelog.older') + '</button>';
   return html;

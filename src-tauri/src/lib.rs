@@ -43,11 +43,17 @@ async fn check_for_update(app: tauri::AppHandle) {
         Ok(Some(u)) => u,
         _ => return, // pas de mise à jour, ou pas de connexion : on ne dit rien
     };
+    // Le nom du jeu (« Release 1.2.1.2 ») est dans les notes de latest.json ; le numéro x.y.z de Tauri n'est qu'interne
+    let name = update
+        .body
+        .clone()
+        .filter(|b| !b.trim().is_empty())
+        .unwrap_or_else(|| update.version.clone());
     let ask = app
         .dialog()
         .message(format!(
-            "La version {} de Pâtisserie 2D Simulator est disponible.\n\nTes sauvegardes ne seront pas touchées.",
-            update.version
+            "Une mise à jour est disponible : {}.\n\nTes sauvegardes ne seront pas touchées.",
+            name
         ))
         .title("Mise à jour disponible")
         .buttons(MessageDialogButtons::OkCancelCustom("Installer".into(), "Plus tard".into()));

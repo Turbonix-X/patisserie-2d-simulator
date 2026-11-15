@@ -5,18 +5,11 @@ This file only shows if you know how to ask for it. It keeps what is secret in e
 ## Release 1.2.1.1
 
 - `/changelog max` now also shows this file in the language of the changelog (English here).
-- The admin account's panel shows who is offline and since when; a player is considered offline after about 45 seconds without a sign of life.
 
 ## Release 1.2.1
 
 - `/machine NAME break` (or `/machine break NAME`) breaks a machine, and `/machine break` breaks them all. `/building break` breaks all your buildings, and `/building NAME break` just one.
 - Carriers created by command (`/employee create carrier …`, `/employee add`, `/max`) do not quit, even with a single bakery.
-- The administrator account only has the admin panel on the home page, in two tabs: **Games** (their own games, with no limit, choosing normal, max or creative) and **Database** (all players live: game open, playing or closed, with their current game, and management of their saves and account).
-- Passwords cannot be read, even by the administrator: Supabase only keeps an encrypted version. The administrator can send a player a reset link.
-
-## Release 1.2
-
-- "Max" games (everything unlocked from the start, like `/max`) and "creative" games (like `/creative`) are only offered to the administrator account, in the + window.
 
 ## Release 1.1.2
 

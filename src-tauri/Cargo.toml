@@ -1,6 +1,6 @@
 [package]
 name = "p2ds"
-version = "1.2.2"
+version = "1.2.3"
 description = "Pâtisserie 2D Simulator"
 authors = ["Turbonix Entertainment"]
 edition = "2021"

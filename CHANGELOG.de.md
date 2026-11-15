@@ -2,14 +2,16 @@
 
 Alles, was zu Pâtisserie 2D Simulator hinzugekommen ist, von der neuesten bis zur ältesten Version. Ältere Versionen werden auf Englisch angezeigt. Die Spielregeln findest du im [Wiki](REGLES.md).
 
+## Release 1.2.1.2 (15. November 2026)
+
+Ein kleines Detail für die App-Updates.
+
+**Windows-App**
+- Das Update-Fenster zeigt jetzt den echten Namen der Version („Release 1.2.1.2“) und nicht mehr eine interne Nummer.
+
 ## Release 1.2.1.1 (15. November 2026)
 
 Kleine Korrekturen.
-
-**Admin-Bereich**
-- Das Abzeichen „ADMIN“ steht jetzt unter „P2DS“.
-- Der Button „Admin-Bereich“ ist aus dem Konten-Fenster verschwunden: Dein Administratorkonto hat nur den Bereich.
-- Die Datenbank zeigt jetzt, wann ein Spieler offline ist (Fenster, Tab oder App geschlossen) und seit wann, innerhalb einer Minute.
 
 **Windows-App**
 - Der Button „Auf der Website registrieren“ öffnet die Website jetzt wirklich in deinem Browser.
@@ -19,7 +21,7 @@ Kleine Korrekturen.
 
 ## Release 1.2.1 (14. November 2026)
 
-Korrekturen, eine einfachere Registrierung und ein echter Admin-Bereich.
+Korrekturen und eine einfachere Registrierung.
 
 **Spiel**
 - Fahrer brauchen jetzt mindestens 2 Bäckereien: Mit nur einer kündigen sie und du kannst keine mehr einstellen.

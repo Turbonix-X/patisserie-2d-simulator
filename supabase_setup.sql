@@ -152,5 +152,16 @@ grant execute on function public.admin_delete_user(uuid) to authenticated;
 -- ---------- À FAIRE : ton adresse d'administrateur ----------
 insert into public.admins (email) values ('abi.2014.perso@gmail.com') on conflict do nothing;
 
+-- ---------- Notes de version privees : seul l'administrateur les lit (elles ne sont pas dans les nouveautés publiques) ----------
+create table if not exists public.admin_notes (
+  id      serial primary key,
+  version text not null unique,
+  body_fr text not null default '',
+  body_en text not null default ''
+);
+alter table public.admin_notes enable row level security;
+drop policy if exists admin_notes_select on public.admin_notes;
+create policy admin_notes_select on public.admin_notes for select to authenticated using (public.is_admin());
+
 -- Dit a Supabase de relire la structure (sinon la nouvelle table peut ne pas etre vue tout de suite)
 notify pgrst, 'reload schema';

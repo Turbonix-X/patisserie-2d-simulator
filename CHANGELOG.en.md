@@ -2,14 +2,16 @@
 
 Everything that was added to Pâtisserie 2D Simulator, from the newest to the oldest. To understand the rules of the game, see the [wiki](REGLES.md).
 
+## Release 1.2.1.2 (November 15, 2026)
+
+A small detail for app updates.
+
+**Windows app**
+- The update window now shows the real name of the version ("Release 1.2.1.2"), and no longer an internal number.
+
 ## Release 1.2.1.1 (November 15, 2026)
 
 Small fixes.
-
-**Admin panel**
-- The "ADMIN" badge is now under "P2DS".
-- The "Admin panel" button left the accounts window: your administrator account only has the panel.
-- The database now shows when a player is offline (window, tab or app closed), and since when, within a minute.
 
 **Windows app**
 - The "Sign up on the website" button now really opens the website in your browser.
@@ -19,7 +21,7 @@ Small fixes.
 
 ## Release 1.2.1 (November 14, 2026)
 
-Fixes, a simpler sign-up, and a real admin panel.
+Fixes and a simpler sign-up.
 
 **Game**
 - Carriers now need at least 2 bakeries: with only one, they quit and you can't hire more.

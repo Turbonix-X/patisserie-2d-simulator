@@ -5,19 +5,11 @@ Ce fichier ne s'affiche que si tu sais comment le demander. Il garde ce qui est 
 ## Release 1.2.1.1
 
 - `/changelog max` ajoute aussi ce fichier dans la langue des nouveautés (en anglais pour toutes les langues autres que le français).
-- Le panneau du compte administrateur indique qui est hors ligne et depuis quand : un joueur est considéré hors ligne après environ 45 secondes sans signe de vie.
 
 ## Release 1.2.1
 
 - `/machine NOM break` (ou `/machine break NOM`) casse une machine, et `/machine break` les casse toutes. `/building break` casse tous tes bâtiments, et `/building NOM break` un seul.
 - Les transporteurs créés par commande (`/employee create carrier …`, `/employee add`, `/max`) ne démissionnent pas, même avec une seule pâtisserie.
-- Le compte administrateur n'a que le panneau admin à l'accueil, en deux onglets : **Parties** (ses parties, sans limite, avec le choix normale, max ou créative) et **Base de données** (tous les joueurs en direct : jeu ouvert, en jeu ou fermé, avec leur partie en cours, et la gestion de leurs sauvegardes et de leur compte).
-- Les mots de passe ne peuvent pas être lus, même par l'administrateur : Supabase ne garde qu'une version chiffrée. L'administrateur peut envoyer un lien de réinitialisation à un joueur.
-
-## Release 1.2
-
-- Les parties « max » (tout débloqué dès le début, comme `/max`) et « créative » (comme `/creative`) ne sont proposées qu'au compte administrateur, dans la fenêtre du +.
-- Le compte administrateur voit un bouton « Panneau admin » dans la fenêtre des comptes. Il ouvre `admin.html`, qui liste tous les joueurs, montre leurs parties avec leur code de sauvegarde et permet de supprimer une sauvegarde ou un compte (avec trois confirmations).
 
 ## Release 1.1.2
 

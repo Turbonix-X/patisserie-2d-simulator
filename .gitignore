@@ -6,3 +6,4 @@ src-tauri/gen/
 node_modules/
 Installer-P2DS.exe
 *.key
+private/

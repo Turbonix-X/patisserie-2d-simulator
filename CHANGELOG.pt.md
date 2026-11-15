@@ -2,14 +2,16 @@
 
 Tudo o que foi acrescentado ao Pâtisserie 2D Simulator, da mais recente à mais antiga. As versões mais antigas aparecem em inglês. Para perceber as regras do jogo, vê a [wiki](REGLES.md).
 
+## Release 1.2.1.2 (15 de novembro de 2026)
+
+Um pequeno detalhe para as atualizações da aplicação.
+
+**Aplicação do Windows**
+- A janela de atualização mostra agora o nome real da versão («Release 1.2.1.2») e já não um número interno.
+
 ## Release 1.2.1.1 (15 de novembro de 2026)
 
 Pequenas correções.
-
-**Painel de administração**
-- O distintivo «ADMIN» fica agora por baixo de «P2DS».
-- O botão «Painel de administração» saiu da janela das contas: a tua conta de administrador só tem o painel.
-- A base de dados indica quando um jogador está offline (janela, separador ou aplicação fechados) e desde quando, em menos de um minuto.
 
 **Aplicação do Windows**
 - O botão «Registar no site» abre mesmo o site no teu navegador.
@@ -19,7 +21,7 @@ Pequenas correções.
 
 ## Release 1.2.1 (14 de novembro de 2026)
 
-Correções, um registo mais simples e um verdadeiro painel de administração.
+Correções e um registo mais simples.
 
 **Jogo**
 - Os transportadores precisam agora de pelo menos 2 pastelarias: com apenas uma, demitem-se e não podes contratar mais.
