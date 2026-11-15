@@ -1,6 +1,5 @@
 use std::fs;
 use tauri::Manager;
-use tauri_plugin_dialog::{DialogExt, MessageDialogButtons};
 use tauri_plugin_opener::OpenerExt;
 use tauri_plugin_updater::UpdaterExt;
 
@@ -31,40 +30,40 @@ fn open_external(app: tauri::AppHandle, url: String) -> Result<(), String> {
     app.opener().open_url(url, None::<&str>).map_err(|e| e.to_string())
 }
 
-/// Au lancement : si internet est là, on regarde sans bruit s'il existe une mise à jour.
-/// Sans internet, rien ne s'affiche et le jeu démarre tout de suite. Les sauvegardes sont dans le
-/// stockage du navigateur intégré, que la mise à jour ne touche jamais.
-async fn check_for_update(app: tauri::AppHandle) {
-    let updater = match app.updater() {
-        Ok(u) => u,
-        Err(_) => return,
-    };
-    let update = match updater.check().await {
-        Ok(Some(u)) => u,
-        _ => return, // pas de mise à jour, ou pas de connexion : on ne dit rien
-    };
-    // Le nom du jeu (« Release 1.2.1.2 ») est dans les notes de latest.json ; le numéro x.y.z de Tauri n'est qu'interne
-    let name = update
+/// Le nom du jeu (« Release 1.2.2 ») est dans les notes de latest.json ; le numéro x.y.z de Tauri n'est qu'interne.
+fn update_name(update: &tauri_plugin_updater::Update) -> String {
+    update
         .body
         .clone()
         .filter(|b| !b.trim().is_empty())
-        .unwrap_or_else(|| update.version.clone());
-    let ask = app
-        .dialog()
-        .message(format!(
-            "Une mise à jour est disponible : {}.\n\nTes sauvegardes ne seront pas touchées.",
-            name
-        ))
-        .title("Mise à jour disponible")
-        .buttons(MessageDialogButtons::OkCancelCustom("Installer".into(), "Plus tard".into()));
-    let yes = tauri::async_runtime::spawn_blocking(move || ask.blocking_show())
-        .await
-        .unwrap_or(false);
-    if yes {
-        if update.download_and_install(|_, _| {}, || {}).await.is_ok() {
-            app.restart();
-        }
+        .unwrap_or_else(|| update.version.clone())
+}
+
+/// Le jeu demande, sans bruit, s'il existe une mise à jour. Renvoie son nom, ou rien (pas de mise à jour, ou pas de connexion).
+#[tauri::command]
+async fn check_update(app: tauri::AppHandle) -> Option<String> {
+    let updater = app.updater().ok()?;
+    match updater.check().await {
+        Ok(Some(u)) => Some(update_name(&u)),
+        _ => None,
     }
+}
+
+/// Le joueur a cliqué sur « Mettre à jour » : on télécharge, on installe, puis l'appli se relance toute seule.
+/// Les sauvegardes sont dans le stockage du navigateur intégré, que la mise à jour ne touche jamais.
+#[tauri::command]
+async fn install_update(app: tauri::AppHandle) -> Result<(), String> {
+    let updater = app.updater().map_err(|e| e.to_string())?;
+    let update = updater
+        .check()
+        .await
+        .map_err(|e| e.to_string())?
+        .ok_or_else(|| "aucune mise à jour".to_string())?;
+    update
+        .download_and_install(|_, _| {}, || {})
+        .await
+        .map_err(|e| e.to_string())?;
+    app.restart();
 }
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
@@ -73,14 +72,12 @@ pub fn run() {
         .plugin(tauri_plugin_dialog::init())
         .plugin(tauri_plugin_opener::init())
         .plugin(tauri_plugin_updater::Builder::new().build())
-        .invoke_handler(tauri::generate_handler![get_init_config, open_external])
+        .invoke_handler(tauri::generate_handler![get_init_config, open_external, check_update, install_update])
         .setup(|app| {
             // Un jeu : pas de barre de menu
             if let Some(win) = app.get_webview_window("main") {
                 let _ = win.remove_menu();
             }
-            let handle = app.handle().clone();
-            tauri::async_runtime::spawn(async move { check_for_update(handle).await });
             Ok(())
         })
         .run(tauri::generate_context!())

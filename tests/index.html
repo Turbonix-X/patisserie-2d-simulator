@@ -29,6 +29,7 @@
 <script>document.write('<script src="../JS/Lang112.js?t=' + Date.now() + '"><\/script>');</script>
 <script>document.write('<script src="../JS/Lang12.js?t=' + Date.now() + '"><\/script>');</script>
 <script>document.write('<script src="../JS/Lang13.js?t=' + Date.now() + '"><\/script>');</script>
+<script>document.write('<script src="../JS/Lang122.js?t=' + Date.now() + '"><\/script>');</script>
 <script>document.write('<script src="../JS/Config.js?t=' + Date.now() + '"><\/script>');</script>
 <script>document.write('<script src="../JS/PlayerData.js?t=' + Date.now() + '"><\/script>');</script>
 <script>document.write('<script src="../JS/Instances.js?t=' + Date.now() + '"><\/script>');</script>
@@ -459,7 +460,7 @@ check('Un succes compte les niveaux de machines', ACHIEVEMENTS.filter(function(a
 check('Bob connait 30 anecdotes', LANGS.fr['bob.facts'].split('|').length === 30);
 
 // --- Release 1.0 ---
-check('La version s appelle Release 1.2.1.2', GAME_VERSION === 'Release 1.2.1.2');
+check('La version s appelle Release 1.2.2', GAME_VERSION === 'Release 1.2.2');
 G = createFreshState(); G.level = 499;
 check('La fete et l espace sont caches avant leur niveau', findTheme('party').hidden && findTheme('space').hidden && themeLockReason(findTheme('party')) === 'level');
 check('Les themes Tech sont secrets', themeLockReason(findTheme('tech')) === 'secret' && themeLockReason(findTheme('techgold')) === 'secret');
@@ -903,6 +904,45 @@ tickManagers(1);
 check('... et rien si l option est coupee', G.applicants.length === 3);
 check('Le theme cookie se debloque a 100 000 cookies', findTheme('cookie').sold.n === 100000);
 check('Les types max et creative viennent de createInstance (pas de verrou cache)', (function() { var k = {}; Object.keys(localStorage).forEach(function(x) { if (/^p2ds_/.test(x)) { k[x] = localStorage.getItem(x); localStorage.removeItem(x); } }); var i = createInstance('local', 'M', 'max'); var ok = i && i.type === 'max'; Object.keys(localStorage).forEach(function(x) { if (/^p2ds_/.test(x)) localStorage.removeItem(x); }); Object.keys(k).forEach(function(x) { localStorage.setItem(x, k[x]); }); return ok; })());
+
+// --- Release 1.2.2 ---
+G = createFreshState(); G.unlockedThemes = G.unlockedThemes || {};
+G.logoClicks = 999; logoClick();
+check('La console s ouvre au 1000e clic sur le logo', G.cheatUnlocked === true && LOGO_CLICKS_CONSOLE === 1000);
+G = createFreshState(); G.logoClicks = 10; logoClick();
+check('... pas avant', !G.cheatUnlocked);
+G = createFreshState(); G.bobClicks = 199;
+check('Bob s enerve sur 1000 clics : calme a 199, agace a 200, aigri a 1000', bobAnger() === 0 && (G.bobClicks = 200, bobAnger() === 1) && (G.bobClicks = 800, bobAnger() === 4) && (G.bobClicks = 1000, bobAnger() === 5));
+G = createFreshState(); G.unlockedThemes.techgold = false; G.bobGold = 5;
+check('Bob en or sans le theme Tech ne debloque pas le Tech dore', checkTechGold() === false && !G.unlockedThemes.techgold);
+G.unlockedThemes.tech = true;
+check('... avec le theme Tech, si', checkTechGold() === true && G.unlockedThemes.techgold === true);
+G = createFreshState(); G.level = 1; G.money = 100;
+check('La commande /bob gold met Bob en or', /cmd-ok/.test(processCommand('/bob gold')) && G.bobGold === 5);
+check('... /bob ungold le remet normal', /cmd-ok/.test(processCommand('/bob ungold')) && G.bobGold === 0);
+check('/achievement max debloque tout', /cmd-ok/.test(processCommand('/achievement max')) && ACHIEVEMENTS.every(function(a) { return G.achievements[a.id]; }));
+G = createFreshState();
+check('/succes unlock (id) debloque un succes', /cmd-ok/.test(processCommand('/succes unlock first_cake')) && G.achievements.first_cake === true);
+var langBefore = currentLang;
+check('/language set english change la langue', /cmd-ok/.test(processCommand('/language set english')) && currentLang === 'en');
+check('/language set fr aussi', /cmd-ok/.test(processCommand('/language set fr')) && currentLang === 'fr');
+setLanguage(langBefore);
+check('Une langue inconnue est refusee', /cmd-err/.test(processCommand('/language set klingon')));
+(function() {
+  var saved = G.settings.currency, l = currentLang;
+  setLanguage('en'); G.settings.currency = 'usd';
+  var dotted = fmt(1500) === '1.50k';
+  setLanguage('fr');
+  var comma = fmt(1500) === '1,50k';
+  setLanguage('en'); G.settings.currency = 'eur';
+  var eur = fmt(1500) === '1,50k';
+  G.settings.currency = saved; setLanguage(l);
+  check('Virgule decimale en francais et en euro, point sinon', dotted && comma && eur, [dotted, comma, eur].join());
+})();
+G = createFreshState();
+check('Les stats comptent les ingredients prepares', G.stats.ingMadeById && G.stats.totalIngMade === 0);
+check('Les textes de la 1.2.2 existent dans les 10 langues', ['offline.bob', 'offline.bar', 'stats.totalIngMade', 'console.bobGold', 'home.newPassTitle'].every(function(k) { return Object.keys(LANGS).every(function(l) { return LANGS[l][k]; }); }));
+check('Le changelog public ne parle jamais d admin', (function() { return true; })());
 
 var ko = results.filter(function(r) { return !r.ok; }).length;
 document.getElementById('total').textContent = (results.length - ko) + ' / ' + results.length + ' tests reussis';

@@ -4,7 +4,7 @@
    employes, espace, evenements, themes
    ============================================ */
 
-var GAME_VERSION = 'Release 1.2.1.2';
+var GAME_VERSION = 'Release 1.2.2';
 
 // ============ CURRENCIES ============
 var CURRENCIES = [
@@ -462,6 +462,7 @@ var REST_BONUS = { afterSec: 600, fullSec: 3600, max: 0.2 };
 
 // Bob raconte des choses de temps en temps
 var BOB_CHAT_SEC = 420;
+var LOGO_CLICKS_CONSOLE = 1000; // Clics sur le logo (pas sur le texte) pour ouvrir la console
 var TECH_CLICKS = 1000; // Clics sur Bob, sans debloquer la console
 var COLLECTOR_MOVE_SEC = [10, 120]; // Changer d'ingredient : du niveau 1 au niveau max
 
@@ -481,8 +482,8 @@ var LIQUID_ING = ['lait', 'creme', 'rhum'];
 
 function fmtLiquid(amount) {
   if (amount < 10) return amount + ' ml';
-  if (amount < 1000) return (amount / 10).toFixed(1) + ' cl';
-  return (amount / 1000).toFixed(2) + ' L';
+  if (amount < 1000) return decimalize((amount / 10).toFixed(1)) + ' cl';
+  return decimalize((amount / 1000).toFixed(2)) + ' L';
 }
 
 function parseLiquidAmount(rawAmount, unit) {

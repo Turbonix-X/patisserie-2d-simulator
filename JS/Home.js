@@ -67,6 +67,7 @@ function showHome() {
   renderHome();
   applyTauriInit().then(function() { return cloudHandleRedirect(); }).then(function() {
     renderHome();
+    if (typeof cloudRecovery !== 'undefined' && cloudRecovery) { showRecoveryModal(); return; }
     if (homeState.openLogin) { homeState.openLogin = false; showAccountModal(); }
     else if (/[?&]signup/.test(location.search)) showAccountModal('up');
     homeAutoSync();
@@ -110,7 +111,7 @@ function renderHome(force) {
     var tab = homeState.admTab === 'db' ? 'db' : 'games';
     h += '<div class="home-center adm-home"><img class="home-logo small" src="logo.svg" alt="" width="64" height="64"><h1 class="game-name home-name">P2DS</h1><span class="adm-badge">ADMIN</span>';
     h += '<div class="adm-tabs"><button class="' + (tab === 'games' ? 'active' : '') + '" onclick="homeAdmTab(\'games\')">🧁 ' + adminTr('Parties', 'Games') + '</button><button class="' + (tab === 'db' ? 'active' : '') + '" onclick="homeAdmTab(\'db\')">🗄️ ' + adminTr('Base de données', 'Database') + '</button></div>';
-    h += tab === 'games' ? homeGridHTML(list, max) : '<div id="adm-box" class="adm-box"></div>';
+    h += tab === 'games' ? '<h3 class="adm-sec">🧁 ' + adminTr('Mes parties', 'My games') + '</h3>' + homeGridHTML(list, max) + '<hr class="adm-split"><div id="adm-others" class="adm-others"></div>' : '<div id="adm-box" class="adm-box"></div>';
     h += '</div>';
   } else {
   h += '<div class="home-center"><img class="home-logo" src="logo.svg" alt="" width="104" height="104"><h1 class="game-name home-name">P2DS</h1>';
@@ -124,6 +125,10 @@ function renderHome(force) {
   setHTML(el, iconify(h));
   if (isAdmin && homeState.admTab === 'db') { var box = document.getElementById('adm-box'); if (box && adminUI.box !== box) renderAdminDb(box, pid); }
   else if (typeof adminStopLive === 'function') adminStopLive();
+  if (isAdmin) {
+    if (homeState.admTab !== 'db') adminOthersStart(pid); else adminOthersStop();
+    adminBobStart(pid, el);
+  } else if (typeof adminBobStop === 'function') { adminBobStop(); adminOthersStop(); }
   if (cur.kind === 'cloud' && !homeState.adminChecked) {
     homeState.adminChecked = true;
     cloudIsAdmin(cur.id).then(function(a) { if (a !== isAdmin) renderHome(true); });
@@ -361,3 +366,24 @@ function applyInstanceType() {
 }
 
 window.addEventListener('online', function() { if (document.body.classList.contains('home-open')) renderHome(); });
+
+
+// Apres un lien "mot de passe oublie" : on choisit un nouveau mot de passe
+function showRecoveryModal() {
+  var h = '<h2>' + t('home.newPassTitle') + '</h2><p>' + t('home.newPassHelp') + '</p>' +
+    '<input id="rec-pass" type="password" autocomplete="new-password" placeholder="' + escH(t('home.password')) + '" style="width:100%;margin:8px 0">' +
+    '<p class="warning" id="rec-err"></p>' +
+    '<div class="modal-btns"><button class="btn" onclick="cloudRecovery=null;hideModal()">' + t('common.close') + '</button>' +
+    '<button class="btn btn-primary" id="rec-go" onclick="submitRecovery()">' + t('home.newPassBtn') + '</button></div>';
+  showModal(h);
+}
+function submitRecovery() {
+  var v = (document.getElementById('rec-pass') || {}).value || '';
+  var err = document.getElementById('rec-err');
+  if (v.length < 6) { if (err) err.textContent = t('home.passShort'); return; }
+  cloudSetPassword(cloudRecovery.token, v).then(function() {
+    cloudRecovery = null;
+    hideModal();
+    toast(t('home.newPassDone'));
+  }, function(e) { if (err) err.textContent = (e && e.message) || 'Error'; });
+}

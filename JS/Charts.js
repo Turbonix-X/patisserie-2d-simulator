@@ -27,8 +27,30 @@ function statsPane() {
 
 function statRows(rows) {
   var h = '<section class="set-card stat-rows">';
-  rows.forEach(function(r) { h += '<div class="set-row"><span class="set-label"><b>' + t(r[0]) + '</b></span><span class="set-value">' + r[1] + '</span></div>'; });
+  rows.forEach(function(r) {
+    if (r[2]) {
+      // Une ligne avec un menu deroulant : le detail de chaque ingredient ou recette
+      var open = ui.statOpen && ui.statOpen[r[0]];
+      h += '<details class="stat-more"' + (open ? ' open' : '') + ' ontoggle="statToggle(this.dataset.k, this.open)" data-k="' + r[0] + '"><summary class="set-row"><span class="set-label"><b>' + t(r[0]) + '</b></span><span class="set-value">' + r[1] + '</span></summary>' + r[2] + '</details>';
+    } else h += '<div class="set-row"><span class="set-label"><b>' + t(r[0]) + '</b></span><span class="set-value">' + r[1] + '</span></div>';
+  });
   return h + '</section>';
+}
+
+function statToggle(key, isOpen) {
+  if (!ui.statOpen) ui.statOpen = {};
+  ui.statOpen[key] = !!isOpen;
+}
+
+// La liste des quantites preparees, de la plus grande a la plus petite
+function statBreakdown(counts, label) {
+  var items = [];
+  for (var id in counts) if (counts[id] > 0) items.push({ id: id, n: counts[id] });
+  if (!items.length) return '<div class="stat-list"><p class="hint-note">' + t('stats.nothingYet') + '</p></div>';
+  items.sort(function(a, b) { return b.n - a.n; });
+  var h = '<div class="stat-list">';
+  items.forEach(function(it) { h += '<div class="stat-item"><span>' + escH(label(it.id)) + '</span><b>' + fmt(it.n) + '</b></div>'; });
+  return h + '</div>';
 }
 
 function fmtPlay(ms) {
@@ -41,7 +63,8 @@ function statsHere(open) {
   var ac = achCounts();
   var rows = [
     ['stats.totalEarned', fmtMoney(G.totalEarned)],
-    ['stats.totalCakes', fmt(G.stats.totalCakesMade)],
+    ['stats.totalCakes', fmt(G.stats.totalCakesMade), statBreakdown(G.stats.cakesMadeById, function(id) { var r = findRec(id); return r ? r.e + ' ' + recShortName(r) : id; })],
+    ['stats.totalIngMade', fmt(G.stats.totalIngMade || 0), statBreakdown(G.stats.ingMadeById || {}, function(id) { var g = findIng(id); return g ? g.e + ' ' + t('i.' + id) : id; })],
     ['stats.totalSold', fmt(G.stats.totalSold)],
     ['stats.totalClicks', fmt(G.stats.totalClicks)],
     ['stats.playTime', fmtPlay(G.playTimeMs)],

@@ -26,7 +26,7 @@ Un jeu de gestion de pâtisserie : achète tes ingrédients, prépare tes gâtea
 - **Commandes :** au niveau 30, des clients passent commande. Plus c'est compliqué, plus la prime est grosse.
 - **Machines :** four, fouet, pétrin… des améliorations permanentes, propres à chaque pâtisserie.
 - **Événements :** rush, soldes, passage à la télé, contrôle sanitaire…
-- **Succès et statistiques :** 1000 succès à débloquer. Chacun augmente tes prix de vente.
+- **Succès et statistiques :** 1000 succès à débloquer. Chacun augmente tes prix de vente. Les statistiques détaillent chaque recette et chaque ingrédient préparés dans un menu déroulant.
 - **Plusieurs pâtisseries :** dès la deuxième, des graphiques et les totaux de toutes tes boutiques.
 - **Thèmes :** clair, sombre, un par saison avec ses décors (fleurs, plage, neige, feuilles), un pour ton anniversaire, la fête au niveau 500, l'espace au niveau 1000, et des thèmes cachés à découvrir.
 - **Langues :** anglais, français, espagnol, portugais, allemand, arabe, mandarin, japonais, coréen et russe.

@@ -211,7 +211,7 @@ function tierName(tier) {
 
   // ---------- Les 5 secrets : rien n'est affiche tant qu'ils ne sont pas trouves ----------
   add('secret_bob', 'secret', '\u{1F62D}', 'Souffre-douleur', 'Punching bag', 'Tu as poussé Bob à bout. Il ne s’en remettra pas.', 'You pushed Bob over the edge. He will never recover.',
-    function(g) { return (g.bobClicks || 0) >= 50; }, true);
+    function(g) { return (g.bobClicks || 0) >= 1000; }, true);
   add('secret_name', 'secret', '\u{1F9D9}', 'Usurpation d’identité', 'Identity theft', 'Tu as appelé ta pâtisserie « Bob ». Il n’a rien dit, mais il l’a noté.', 'You named your bakery "Bob". He said nothing, but he took note.',
     function(g) { return (g.bakeryName || '').trim().toLowerCase() === 'bob'; }, true);
   add('secret_night', 'secret', '\u{1F634}', 'Boulanger de nuit', 'Night baker', 'Jouer entre 3 h et 4 h du matin. Va dormir.', 'Play between 3 and 4 a.m. Go to bed.',

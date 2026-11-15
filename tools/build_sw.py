@@ -2,7 +2,7 @@ import os, re, sys, json
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 version = sys.argv[1]
 idx = open(os.path.join(ROOT, 'index.html'), encoding='utf-8').read()
-core = ['./', 'index.html', 'logo.svg', 'favicon.png', 'turbonix.css'] + [f for f in os.listdir(ROOT) if f.startswith('CHANGELOG') and f.endswith('.md')]
+core = ['./', 'index.html', 'logo.svg', 'favicon.png', 'turbonix.css', 'manifest.webmanifest', 'icon-192.png', 'icon-512.png', 'apple-touch-icon.png'] + [f for f in os.listdir(ROOT) if f.startswith('CHANGELOG') and f.endswith('.md')]
 for m in re.finditer(r'(?:src|href)="((?:JS/|style\.css)[^"]*)"', idx):
     core.append(m.group(1))
 assets = []

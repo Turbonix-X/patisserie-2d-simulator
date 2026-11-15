@@ -185,6 +185,14 @@ function headerBtn(action, label, icon, off, count) {
 function logoClick() {
   G.logoClicks = (G.logoClicks || 0) + 1;
   fxBump(document.querySelector('.game-logo'), 1.15);
+  if (G.logoClicks >= LOGO_CLICKS_CONSOLE && !G.cheatUnlocked) {
+    G.cheatUnlocked = true;
+    save();
+    toast(t('settings.cheatUnlocked'));
+    renderConsoleButton();
+    renderBob();
+    bobSay(t('bob.unlocked'));
+  }
   checkAchievements();
 }
 
@@ -720,7 +728,7 @@ function renderSpaceBar() {
   var max = maxSpaceNow();
   var pct = max > 0 ? Math.min(100, Math.floor(used / max * 100)) : 0;
   var h = '<div class="space-row"><div class="space-usage-wrap">';
-  h += '<span>' + t('space.label') + ' : ' + t('space.text', { u: used < 1000 ? used.toFixed(1) : fmt(used), m: fmt(max) }) + '</span>';
+  h += '<span>' + t('space.label') + ' : ' + t('space.text', { u: used < 1000 ? decimalize(used.toFixed(1)) : fmt(used), m: fmt(max) }) + '</span>';
   h += '<div class="space-bar-bg"><div class="space-bar-fill" style="width:' + pct + '%"></div></div></div>';
   h += '<span class="space-rent">' + t('space.rent', { v: fmtMoney(getRentPerHour()) }) + '</span>';
   var su = nextSpaceUpgrade();
@@ -952,13 +960,13 @@ function changelogFetch(file) {
   });
 }
 // Les notes privees de l'administrateur : lues depuis sa base, jamais depuis un fichier public, et gardees seulement en memoire
-var changelogPrivate = '';
+var changelogPrivate = [];   // les notes privees : { version, text }
 function changelogLoadPrivate() {
-  changelogPrivate = '';
+  changelogPrivate = [];
   var prof = typeof getProfiles === 'function' ? findProfile(getProfiles().current) : null;
   if (!prof || prof.kind !== 'cloud' || !cloudAdminKnown(prof.id) || !cloudOnline()) return Promise.resolve();
   return cloudCall(prof.id, '/rest/v1/admin_notes?select=version,body_fr,body_en&order=id.desc').then(function(rows) {
-    changelogPrivate = (rows || []).map(function(r) { return '## 🔒 Admin · ' + r.version + '\n' + (currentLang === 'fr' ? r.body_fr : r.body_en || r.body_fr); }).join('\n');
+    changelogPrivate = (rows || []).map(function(r) { return { version: r.version, text: currentLang === 'fr' ? r.body_fr : r.body_en || r.body_fr }; });
   }, function() { /* pas de table ou hors ligne : tant pis */ });
 }
 function changelogLoad() {
@@ -972,6 +980,22 @@ function changelogPrefetch() { (window.requestIdleCallback || function(f) { setT
 
 function changelogSplit(md) { var p = String(md || '').split(/\r?\n(?=## )/); return { head: p.shift() || '', list: p }; }
 var CHANGELOG_FIRST = 3; // les 3 versions les plus recentes d'abord, le reste a la demande
+// Les notes privees se glissent dans la section de leur version, chaque ligne avec un cadenas
+function changelogMergePrivate(list) {
+  if (!changelogPrivate.length) return list;
+  return list.map(function(sec) {
+    var head = (sec.split(/\r?\n/)[0] || '');
+    var extra = [];
+    changelogPrivate.forEach(function(p) {
+      var v = String(p.version || '').trim();
+      if (!v || head.indexOf('## ' + v) !== 0 || !/^[ (]?$/.test(head.slice(3 + v.length, 4 + v.length))) return;
+      String(p.text || '').split(/\r?\n/).forEach(function(line) {
+        if (/^\s*[-*] /.test(line)) extra.push('- \u{1F512} ' + line.replace(/^\s*[-*] /, ''));
+      });
+    });
+    return extra.length ? sec.replace(/\s*$/, '') + '\n' + extra.join('\n') + '\n' : sec;
+  });
+}
 function changelogHTML(showAll) {
   var n = changelogNames();
   var main = changelogSplit(changelogText(n.main)), en = changelogSplit(changelogText(n.en));
@@ -981,8 +1005,9 @@ function changelogHTML(showAll) {
   if (currentLang !== 'fr' && currentLang !== 'en' && main !== en && en.list.length > list.length) list = list.concat(en.list.slice(list.length));
   var secret = (G.settings && G.settings.changelogMax) ? changelogSplit(changelogText(n.secret)) : null;
   if (!main.head && !list.length) return '';
+  list = changelogMergePrivate(list);
   var shown = showAll || list.length <= CHANGELOG_FIRST + 1 ? list : list.slice(0, CHANGELOG_FIRST);
-  var md = [main.head].concat(changelogPrivate ? [changelogPrivate] : [], shown).join('\n') + (secret ? '\n' + [secret.head].concat(secret.list).join('\n') : '');
+  var md = [main.head].concat(shown).join('\n') + (secret ? '\n' + [secret.head].concat(secret.list).join('\n') : '');
   var html = markdownLite(md);
   if (!showAll && shown.length < list.length) html += '<button class="btn btn-small" onclick="changelogShowAll()">' + t('changelog.older') + '</button>';
   return html;

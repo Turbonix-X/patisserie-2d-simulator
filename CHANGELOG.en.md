@@ -2,6 +2,26 @@
 
 Everything that was added to Pâtisserie 2D Simulator, from the newest to the oldest. To understand the rules of the game, see the [wiki](REGLES.md).
 
+## Release 1.2.2 (November 15, 2026)
+
+More detail in the stats, updates without reloading, and a Bob who warns you when the wifi drops.
+
+**Game**
+- In the stats, recipes prepared and ingredients prepared each have a drop-down menu: you can see the number of each recipe and each ingredient.
+- In French, Spanish, Portuguese, German, Russian or when using euros, decimal numbers are written with a comma (1,50 instead of 1.50).
+- Bob gets angry much more slowly: it takes far more clicks to push him over the edge.
+- Without wifi, Bob tells you: your game is not saved until the connection is back. Your other games can still be played, but they are not saved either.
+
+**Updates**
+- When a new version exists, the version button turns green, in the browser and in the Windows app.
+- The "Update" button in what's new updates the game without reloading the page. In the Windows app, it restarts by itself.
+
+**Accounts**
+- After a "forgot password" link, you can choose a new password right in the game.
+
+**Shortcut**
+- When you install P2DS as an app (shortcut), its logo is smaller and well centered: it no longer touches the bottom of the icon.
+
 ## Release 1.2.1.2 (November 15, 2026)
 
 A small detail for app updates.

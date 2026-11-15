@@ -2,6 +2,15 @@
 
 This file only shows if you know how to ask for it. It keeps what is secret in each version.
 
+## Release 1.2.2
+
+- The console now opens after **1000 clicks on the logo** (the image, not the "P2DS" text). No need to turn Bob gold or give him a code any more.
+- Bob gets angry little by little during the **1000 clicks** that unlock the Tech theme. Sugar calms him by one step (200 clicks).
+- The Gold Tech theme unlocks when you have the Tech theme **and** Bob is gold (with gold leaf or `/bob gold`). Milk washes the gold off.
+- `/bob gold` and `/bob ungold` turn Bob gold or back to normal.
+- `/achievement max` unlocks every achievement, `/achievement unlock NAME` unlocks one (by name or id). `/succes` and `/success` work too.
+- `/language set LANGUAGE` changes the language of the game (code or name: fr, english, español…).
+
 ## Release 1.2.1.1
 
 - `/changelog max` now also shows this file in the language of the changelog (English here).

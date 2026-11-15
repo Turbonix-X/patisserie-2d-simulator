@@ -117,6 +117,8 @@ function createFreshState() {
       totalCakesMade: 0,
       totalSold: 0,
       cakesMadeById: {},
+      ingMadeById: {},
+      totalIngMade: 0,
       totalBuildingsBought: 0,
       totalEmployeesHired: 0,
       totalRentPaid: 0,
@@ -214,7 +216,7 @@ function migrateSave(data) {
       ACHIEVEMENTS.forEach(function(a) { ids[a.id] = true; });
       Object.keys(data.achievements).forEach(function(id) { if (!ids[id]) delete data.achievements[id]; });
     }
-    if (data.bobClicks >= 50) data.bobSad = 4;
+    if (data.bobClicks >= 1000) data.bobSad = 4;
     data.saveVersion = 11;
   }
   // Avant la Beta 1.4 : ce que tu avais deja reste debloque, et les fours deviennent une machine

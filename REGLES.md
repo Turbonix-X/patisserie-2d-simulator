@@ -222,7 +222,8 @@ Dès le niveau 40. **La différence avec les employés :** un cueilleur produit 
 Bob est ton chef pâtissier. Il t'accueille, t'apprend les bases, et t'explique chaque nouveauté.
 
 - **Ses conseils :** il te dit quand un gâteau se vend mal, quand ton stock déborde, quand ton loyer est trop cher, quand une commande va expirer ou qu'un employé va faire grève.
-- **Ne l'embête pas :** clique trop sur lui et il s'énerve. Énervé, il refuse même de t'expliquer les choses.
+- **Ne l'embête pas :** clique beaucoup sur lui (des centaines de fois) et il s'énerve petit à petit. Énervé, il refuse même de t'expliquer les choses.
+- **Sans wifi, il te prévient :** ta partie n'est pas sauvegardée tant que la connexion ne revient pas, et tes autres parties non plus (tu peux quand même y jouer).
 - **Il adore le sucre.** Quand il ne va pas bien, qu'il soit triste, énervé ou malade, à toi de trouver comment lui faire plaisir. Quand il est heureux, il n'en veut pas.
 - **Son humeur compte :** le tutoriel du début change selon son humeur. S'il est trop énervé, il refuse même de l'expliquer, jusqu'à ce qu'il se calme.
 - **Il bavarde :** de temps en temps, quand il est de bonne humeur, il te donne un conseil, te rappelle de sauvegarder ou te raconte une anecdote sur les pâtisseries. Tu peux le couper dans les réglages.

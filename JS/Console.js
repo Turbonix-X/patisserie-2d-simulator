@@ -106,7 +106,7 @@ function consoleTree() {
     time: { set: { '#': '0.1 - 10' } },
     theme: (function() { var o = words(themeIds); o.unlock = (function() { var u = words(themeIds); u.all = null; return u; })(); o.see = (function() { var s = words(themeIds); s.off = null; return s; })(); return o; })(),
     tabs: { customization: words(['activate', 'deactivate', 'reset']) },
-    birthday: { '#': 'DD MM' }, bob: { challenge: null }, pause: { off: null }, changelog: words(['max', 'unmax'])
+    birthday: { '#': 'DD MM' }, bob: { challenge: null, gold: null, ungold: null }, achievement: (function() { var o = { max: null, unlock: {} }; ACHIEVEMENTS.forEach(function(a) { o.unlock[a.id.toLowerCase()] = null; }); return o; })(), language: { set: (function() { var o = {}; LANG_LIST.forEach(function(l) { o[l.code] = null; }); return o; })() }, pause: { off: null }, changelog: words(['max', 'unmax'])
   };
 }
 
@@ -744,7 +744,66 @@ function processCommand(cmd) {
       setTimeout(offerChallenge, 50);
       return '<span class="cmd-ok">' + t('console.challengeStarted') + '</span>';
     }
-    return '<span class="cmd-err">Usage: /bob challenge</span>';
+    if (parts[1] === 'gold') {
+      G.bobGold = 5;
+      renderBob();
+      if (typeof checkTechGold === 'function') checkTechGold();
+      save();
+      return '<span class="cmd-ok">' + t('console.bobGold') + '</span>';
+    }
+    if (parts[1] === 'ungold') {
+      G.bobGold = 0; G.bobGoldClicks = 0;
+      renderBob();
+      save();
+      return '<span class="cmd-ok">' + t('console.bobUngold') + '</span>';
+    }
+    return '<span class="cmd-err">Usage: /bob challenge|gold|ungold</span>';
+  }
+
+  // /achievement max | /achievement unlock NAME  (aussi : /succes, /success)
+  if (action === 'succes' || action === 'success' || action === 'achievements') action = 'achievement';
+  if (action === 'achievement') {
+    if (parts[1] === 'max') {
+      var nAch = 0;
+      ACHIEVEMENTS.forEach(function(a) { if (!G.achievements[a.id]) { G.achievements[a.id] = true; nAch++; } });
+      if (typeof onAchievementUnlocked === 'function') onAchievementUnlocked();
+      save();
+      return '<span class="cmd-ok">' + t('console.achMax', { n: nAch }) + '</span>';
+    }
+    if (parts[1] === 'unlock') {
+      var want = normName(parts.slice(2).join(''));
+      if (!want) return '<span class="cmd-err">Usage: /achievement unlock NAME</span>';
+      var found = null;
+      ACHIEVEMENTS.forEach(function(a) {
+        if (found) return;
+        var names = [a.id, a.fr, a.en, achName(a)];
+        for (var k = 0; k < names.length; k++) if (normName(String(names[k])) === want) { found = a; return; }
+      });
+      if (!found) return '<span class="cmd-err">' + t('console.achUnknown') + '</span>';
+      if (!G.achievements[found.id]) {
+        G.achievements[found.id] = true;
+        if (typeof onAchievementUnlocked === 'function') onAchievementUnlocked();
+        save();
+      }
+      return '<span class="cmd-ok">' + t('console.achUnlocked', { n: achName(found) }) + '</span>';
+    }
+    return '<span class="cmd-err">Usage: /achievement max | /achievement unlock NAME</span>';
+  }
+
+  // /language set NAME : le code (fr), ou le nom (francais, french)
+  if (action === 'language' || action === 'langue') {
+    if (parts[1] !== 'set' || !parts[2]) return '<span class="cmd-err">Usage: /language set ' + LANG_LIST.map(function(l) { return l.code; }).join('|') + '</span>';
+    var wl = normName(parts.slice(2).join(''));
+    var EN_NAMES = { en: 'english anglais', fr: 'french francais', es: 'spanish espanol', pt: 'portuguese portugais portugues', de: 'german allemand deutsch', ar: 'arabic arabe', zh: 'chinese chinois', ja: 'japanese japonais', ko: 'korean coreen', ru: 'russian russe' };
+    var lf = null;
+    LANG_LIST.forEach(function(l) {
+      var keys = [l.code, normName(l.name)].concat(EN_NAMES[l.code].split(' '));
+      if (!lf && keys.indexOf(wl) >= 0) lf = l;
+    });
+    if (!lf) return '<span class="cmd-err">' + t('console.langUnknown') + '</span>';
+    setLanguage(lf.code);
+    save();
+    return '<span class="cmd-ok">' + t('console.langSet', { n: lf.name }) + '</span>';
   }
 
   if (action === 'oeufs') action = 'oeuf';
@@ -991,6 +1050,15 @@ var COMMAND_DOCS = [
     ]},
     { name:'/bob', fr:'Parle à Bob.', en:'Talk to Bob.', es:'Habla con Bob.', cases:[
       cmdCase('/bob challenge', 'Il te propose son défi tout de suite.', 'He offers you his challenge right away.', 'Te propone su reto ahora mismo.'),
+      cmdCase('/bob gold', 'Bob devient en or massif. Si tu as déjà le thème Tech, tu débloques le thème Tech doré.', 'Bob turns solid gold. If you already have the Tech theme, you unlock the Gold Tech theme.', 'Bob se vuelve de oro macizo. Si ya tienes el tema Tech, desbloqueas el tema Tech dorado.'),
+      cmdCase('/bob ungold', 'Bob redevient normal.', 'Bob goes back to normal.', 'Bob vuelve a ser normal.'),
+    ]},
+    { name:'/achievement', fr:'Débloque des succès.', en:'Unlocks achievements.', es:'Desbloquea logros.', cases:[
+      cmdCase('/achievement max', 'Débloque tous les succès d’un coup.', 'Unlocks every achievement at once.', 'Desbloquea todos los logros de golpe.'),
+      cmdCase('/achievement unlock NAME', 'Débloque ce succès (son nom ou son identifiant).', 'Unlocks this achievement (its name or its id).', 'Desbloquea este logro (su nombre o su id).', '/achievement unlock first_cake'),
+    ]},
+    { name:'/language', fr:'Change la langue de cette partie.', en:'Changes the language of this game.', es:'Cambia el idioma de esta partida.', cases:[
+      cmdCase('/language set NAME', 'Met la partie dans cette langue (code ou nom : fr, english, español…).', 'Switches the game to this language (code or name: fr, english, español…).', 'Pone la partida en este idioma (código o nombre: fr, english, español…).', '/language set english'),
     ]},
     { name:'/tabs', fr:'Range les onglets comme tu veux.', en:'Arrange the tabs the way you want.', es:'Ordena las pestañas como quieras.', cases:[
       cmdCase('/tabs customization activate', 'Active le rangement des onglets, même avant le niveau 450. Fais-les glisser à gauche ou à droite.', 'Turns tab arranging on, even before level 450. Drag them left or right.', 'Activa el orden de las pestañas, incluso antes del nivel 450. Arrástralas a izquierda o derecha.'),
@@ -1025,8 +1093,8 @@ Object.keys(I18N_EXTRA).forEach(function(lang) {
   COMMAND_DOCS.forEach(function(g) {
     g[lang] = d['g:' + g.id];
     g.list.forEach(function(c) {
-      c[lang] = d[c.name] || d[legacyDocName(c.name)];
-      c.cases.forEach(function(x) { x[lang] = d['c:' + x.use] || d['c:' + legacyDocUse(x.use)]; });
+      c[lang] = d[c.name] || d[legacyDocName(c.name)] || c.en;
+      c.cases.forEach(function(x) { x[lang] = d['c:' + x.use] || d['c:' + legacyDocUse(x.use)] || x.en; });
     });
   });
 });

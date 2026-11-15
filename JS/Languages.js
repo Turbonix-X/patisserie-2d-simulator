@@ -379,7 +379,7 @@ function fmtMoney(amount) {
   var abs = Math.abs(converted);
   if (abs >= 1000) return bidiIsolate(fmt(converted) + curr.symbol);
   var txt = converted.toFixed(2).replace(/\.00$/, '');
-  if (['fr', 'es', 'pt', 'de', 'ru'].indexOf(currentLang) >= 0) txt = txt.replace('.', ',');
+  txt = decimalize(txt);
   return bidiIsolate(txt + curr.symbol);
 }
 

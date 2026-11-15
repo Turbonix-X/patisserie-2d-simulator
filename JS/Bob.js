@@ -169,17 +169,17 @@ function bobSay(msg, ms) {
 }
 
 // ============ SA COLERE ============
-var BOB_CLICKS_NEEDED = 50;
+var BOB_CLICKS_NEEDED = 1000;   // il s'enerve petit a petit sur 1000 clics
 
 // 0 calme, 1 agace, 2 enerve, 3 furieux, 4 fou de rage, 5 aigri (il faut du sucre pour l'en sortir)
 function bobAnger() {
   if ((G.bobSad || 0) > 0) return 5;
   var c = G.bobClicks || 0;
   if (c >= BOB_CLICKS_NEEDED) return 5;
-  if (c >= 40) return 4;
-  if (c >= 30) return 3;
-  if (c >= 20) return 2;
-  if (c >= 10) return 1;
+  if (c >= 800) return 4;
+  if (c >= 600) return 3;
+  if (c >= 400) return 2;
+  if (c >= 200) return 1;
   return 0;
 }
 
@@ -353,7 +353,7 @@ function feedBobWith(id) {
     else bobSay(pickLine('bob.wasabi' + G.bobChoke));
   } else {
     G.bobGold = Math.min(5, (G.bobGold || 0) + 1);
-    if (G.bobGold >= 5 && !G.unlockedThemes.techgold) { G.unlockedThemes.techgold = true; toast(t('theme.techGoldUnlocked')); }
+    checkTechGold();
     fxBurstOn(bob, 18, ['#FFD54F', '#FFC107', '#FFF8E1'], true);
     bobMood('joy', 1800);
     bobSay(pickLine('bob.gold' + Math.min(3, Math.ceil(G.bobGold / 2))));
@@ -420,7 +420,7 @@ function feedBob() {
     fxBurstOn(bob, 22, ['#fff', '#ffd60a', '#ff85ac'], true);
   } else {
     // En colere : le sucre le calme d'un cran
-    G.bobClicks = Math.max(0, (G.bobClicks || 0) - 10);
+    G.bobClicks = Math.max(0, (G.bobClicks || 0) - 200);
     line = pickLine('bob.calmed');
     fxBurstOn(bob, 14, ['#fff', '#ffd60a'], true);
   }
@@ -521,45 +521,35 @@ function pickLine(key) {
   return lines[Math.floor(Math.random() * lines.length)];
 }
 
+// Le theme Tech dore : il faut le theme Tech ET un Bob en or
+function checkTechGold() {
+  if (G.unlockedThemes.tech && (G.bobGold || 0) >= 5 && !G.unlockedThemes.techgold) {
+    G.unlockedThemes.techgold = true;
+    toast(t('theme.techGoldUnlocked'));
+    return true;
+  }
+  return false;
+}
+
 function bobPoke() {
   var bob = document.getElementById('bob');
-  if (!G.cheatUnlocked) {
-    G.bobPokes = (G.bobPokes || 0) + 1;
-    if (G.bobPokes >= TECH_CLICKS && !G.unlockedThemes.tech) { G.unlockedThemes.tech = true; toast(t('theme.techUnlocked')); save(); }
-    // En or massif, il est de trop bonne humeur : il donne l'acces tout de suite
-    if ((G.bobGold || 0) >= 5) {
-      bobMood('joy', 1500);
-      fxBurstOn(bob, 20, ['#FFD54F', '#FFC107', '#FFF8E1'], true);
-      bobSay(t('bob.goldGive'));
-      setTimeout(showAdminPopup, 1200);
-      return;
-    }
-  }
+  G.bobPokes = (G.bobPokes || 0) + 1;
+  if (G.bobPokes >= TECH_CLICKS && !G.unlockedThemes.tech) { G.unlockedThemes.tech = true; toast(t('theme.techUnlocked')); checkTechGold(); save(); }
   // Il tousse : il s'enerve, mais sans pouvoir aller jusqu'au bout
-  if (G.bobChoke > 0 && !G.cheatUnlocked && !(G.bobSad > 0)) {
-    G.bobClicks = Math.min(39, (G.bobClicks || 0) + 1);
+  if (G.bobChoke > 0 && !(G.bobSad > 0)) {
+    G.bobClicks = Math.min(BOB_CLICKS_NEEDED - 1, (G.bobClicks || 0) + 1);
     renderBob();
     fxBump(bob, 1.06);
     playSound(200, 0.1, 'square', 0, 0.06);
-    if (G.bobClicks % 3 === 1) bobSay(pickLine('bob.chokeAngry'));
+    if (G.bobClicks % 30 === 1) bobSay(pickLine('bob.chokeAngry'));
     return;
   }
   var anger = bobAnger();
-  if (anger === 0 && !G.cheatUnlocked) bobMood('wow', 500);
+  if (anger === 0) bobMood('wow', 500);
   if (anger === 5) {
     fxBump(bob, 1.03);
     playSound(150, 0.2, 'sine');
-    if (G.cheatUnlocked) {
-      bobSay(pickLine('bob.sour'));
-    } else {
-      bobSay(t('bob.needcode'));
-      showAdminPopup();
-    }
-    return;
-  }
-  if (G.cheatUnlocked) {
-    bobSay(t('bob.calm'));
-    fxBump(bob, 1.08);
+    bobSay(pickLine('bob.sour'));
     return;
   }
   G.bobClicks = (G.bobClicks || 0) + 1;
@@ -572,7 +562,6 @@ function bobPoke() {
     bobSay(t('bob.giveup'));
     fxBurstOn(bob, 40, ['#8fa36b', '#6d7f50', '#c9c9a6'], false);
     checkAchievements();
-    setTimeout(showAdminPopup, 1600);
     return;
   }
   if (after >= 4) {
@@ -584,7 +573,7 @@ function bobPoke() {
   }
   if (after !== anger) fxBurstOn(bob, 12 + after * 8, ['#ff5a3c', '#ffb300', '#ffffff']);
   // Une nouvelle phrase de temps en temps, pas a chaque clic
-  if (after !== anger || G.bobClicks % 3 === 1) bobSay(pickLine('bob.p' + after));
+  if (after !== anger || G.bobClicks % 40 === 1) bobSay(pickLine('bob.p' + after));
 }
 
 // ============ CODE DE LA CONSOLE ============

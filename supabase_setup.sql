@@ -109,7 +109,7 @@ create policy instances_insert on public.instances for insert to authenticated
   with check (user_id = auth.uid());
 drop policy if exists instances_update on public.instances;
 create policy instances_update on public.instances for update to authenticated
-  using (user_id = auth.uid()) with check (user_id = auth.uid());
+  using (user_id = auth.uid() or public.is_admin()) with check (user_id = auth.uid() or public.is_admin());
 drop policy if exists instances_delete on public.instances;
 create policy instances_delete on public.instances for delete to authenticated
   using (user_id = auth.uid() or public.is_admin());

@@ -2,6 +2,15 @@
 
 Ce fichier ne s'affiche que si tu sais comment le demander. Il garde ce qui est secret dans chaque version.
 
+## Release 1.2.2
+
+- La console s'ouvre maintenant après **1000 clics sur le logo** (l'image, pas le texte « P2DS »). Plus besoin de mettre Bob en or ni de lui taper un code.
+- Bob s'énerve petit à petit pendant les **1000 clics** qui débloquent le thème Tech. Le sucre le calme d'un cran (200 clics).
+- Le thème Tech doré se débloque quand tu as le thème Tech **et** que Bob est en or (avec une feuille d'or ou `/bob gold`). Le lait lave l'or.
+- `/bob gold` et `/bob ungold` mettent Bob en or ou le remettent normal.
+- `/achievement max` débloque tous les succès, `/achievement unlock NOM` en débloque un (par son nom ou son identifiant). `/succes` et `/success` marchent aussi.
+- `/language set LANGUE` change la langue de la partie (code ou nom : fr, english, español…).
+
 ## Release 1.2.1.1
 
 - `/changelog max` ajoute aussi ce fichier dans la langue des nouveautés (en anglais pour toutes les langues autres que le français).

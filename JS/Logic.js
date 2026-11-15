@@ -19,6 +19,13 @@ var NUM_SUFFIXES = (function() {
 
 var MAX_MONEY_SHOWN = 9.99e289; // Au-dela, fmt affiche le signe infini
 
+// Virgule decimale : en francais, espagnol, portugais, allemand, russe, ou quand la monnaie est l'euro
+function decimalComma() {
+  if (typeof currentLang !== 'undefined' && ['fr', 'es', 'pt', 'de', 'ru'].indexOf(currentLang) >= 0) return true;
+  return typeof G !== 'undefined' && !!G && !!G.settings && G.settings.currency === 'eur';
+}
+function decimalize(txt) { return decimalComma() ? String(txt).replace('.', ',') : String(txt); }
+
 function fmt(n) {
   if (n < 0) return '-' + fmt(-n);
   if (n >= 1e290) return '\u221E'; // Mode creatif : l'infini
@@ -27,8 +34,8 @@ function fmt(n) {
   if (idx >= NUM_SUFFIXES.length) idx = NUM_SUFFIXES.length - 1;
   var val = n / Math.pow(10, idx * 3);
   if (val >= 100) return Math.floor(val) + NUM_SUFFIXES[idx];
-  if (val >= 10) return val.toFixed(1) + NUM_SUFFIXES[idx];
-  return val.toFixed(2) + NUM_SUFFIXES[idx];
+  if (val >= 10) return decimalize(val.toFixed(1)) + NUM_SUFFIXES[idx];
+  return decimalize(val.toFixed(2)) + NUM_SUFFIXES[idx];
 }
 
 function capMoney() {
@@ -474,6 +481,9 @@ function tickCrafting() {
       var ing = findIng(done.ingId);
       var made = (ing && ing.craftQty) || 1;
       G.ing[done.ingId] = (G.ing[done.ingId] || 0) + made;
+      if (!G.stats.ingMadeById) G.stats.ingMadeById = {};
+      G.stats.ingMadeById[done.ingId] = (G.stats.ingMadeById[done.ingId] || 0) + made;
+      G.stats.totalIngMade = (G.stats.totalIngMade || 0) + made;
       if (ing && typeof toast === 'function') toast(ing.e + ' +' + made + ' ' + t('i.' + ing.id));
       continue;
     }

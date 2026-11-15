@@ -2837,3 +2837,43 @@ body.home-open > #header, body.home-open > #tabs, body.home-open > #game-area, b
 /* Version 1.2.1.1 */
 .adm-badge { display: block; margin: -4px auto 12px; width: max-content; }
 .adm-home .home-name { margin-bottom: 6px; }
+
+/* Stats : menus deroulants des ingredients et recettes prepares */
+.stat-more > summary { list-style: none; cursor: pointer; }
+.stat-more > summary::-webkit-details-marker { display: none; }
+.stat-more > summary .set-value::after { content: ' \25BE'; opacity: .6; }
+.stat-more[open] > summary .set-value::after { content: ' \25B4'; }
+.stat-list { padding: 4px 12px 10px; display: grid; gap: 2px; max-height: 240px; overflow: auto; }
+.stat-item { display: flex; justify-content: space-between; gap: 12px; font-size: .9em; padding: 2px 0; border-bottom: 1px dashed rgba(128,128,128,.25); }
+
+/* Pas de wifi : la partie n'est pas sauvegardee */
+#offline-bar { position: fixed; left: 0; right: 0; top: 0; z-index: 9000; padding: 6px 12px; text-align: center; font-size: .85rem; font-weight: 600; background: #b3261e; color: #fff; }
+
+/* Pas de wifi : la partie n'est pas sauvegardee */
+#offline-bar { position: fixed; left: 0; right: 0; top: 0; z-index: 9000; padding: 6px 12px; text-align: center; font-size: .85rem; font-weight: 600; background: #b3261e; color: #fff; }
+
+/* Panneau admin : parties en deux moities, fiche d'une partie, Bob */
+.adm-sec { margin: 14px 0 8px; font-size: 1.05rem; text-align: center; }
+.adm-split { border: 0; border-top: 2px dashed rgba(128,128,128,.4); margin: 22px auto 6px; width: min(720px, 92%); }
+.adm-others-grid { justify-content: center; }
+.adm-slot { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; text-align: center; cursor: pointer; }
+.adm-slot small { opacity: .7; font-size: .75rem; }
+.adm-slots { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 8px; }
+.adm-overlay { position: fixed; inset: 0; z-index: 3000; background: rgba(0,0,0,.55); display: flex; align-items: center; justify-content: center; padding: 12px; }
+.adm-overlay-card { background: var(--surface-solid, #fff); color: var(--text, #333); border-radius: 18px; width: min(760px, 100%); max-height: 92vh; overflow-y: auto; padding: 18px; box-shadow: 0 10px 40px rgba(0,0,0,.4); }
+.adm-game-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; flex-wrap: wrap; }
+.adm-game-head h3 { margin: 0; }
+.adm-kpis { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 8px; margin: 12px 0; }
+.adm-kpi { display: flex; flex-direction: column; align-items: center; padding: 8px; border-radius: 12px; background: rgba(128,128,128,.12); text-align: center; }
+.adm-kpi b { font-size: 1.05rem; word-break: break-word; }
+.adm-kpi small { opacity: .7; }
+.adm-det { margin: 6px 0; border: 1px solid rgba(128,128,128,.3); border-radius: 10px; padding: 4px 10px; }
+.adm-det > summary { cursor: pointer; font-weight: 700; padding: 6px 0; }
+#adm-bob-wrap { position: fixed; right: 14px; bottom: 10px; z-index: 2000; display: flex; flex-direction: column; align-items: flex-end; gap: 8px; pointer-events: none; }
+#adm-bob-wrap > * { pointer-events: auto; }
+#adm-bob { width: 76px; padding: 0; border: none; background: none; cursor: pointer; }
+#adm-bob svg { display: block; width: 100%; overflow: visible; }
+#adm-bob * { transform-box: view-box; }
+.adm-bob-emoji { font-size: 3rem; }
+#adm-bob-bubble { position: relative; max-width: min(320px, 80vw); padding: 12px 14px 10px; background: var(--surface-solid, #fff); color: var(--text, #333); border: 2px solid var(--mauve, #9b6dff); border-radius: 16px; box-shadow: 0 6px 22px rgba(0,0,0,.22); }
+#adm-bob-bubble p { font-weight: 600; font-size: .9rem; line-height: 1.35; margin: 0; }

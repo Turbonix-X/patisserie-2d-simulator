@@ -2,6 +2,26 @@
 
 Tudo o que foi acrescentado ao Pâtisserie 2D Simulator, da mais recente à mais antiga. As versões mais antigas aparecem em inglês. Para perceber as regras do jogo, vê a [wiki](REGLES.md).
 
+## Release 1.2.2 (15 de novembro de 2026)
+
+Mais detalhe nas estatísticas, atualizações sem recarregar e um Bob que avisa quando o wifi cai.
+
+**Jogo**
+- Nas estatísticas, as receitas preparadas e os ingredientes preparados têm cada um um menu suspenso: vês a quantidade de cada receita e de cada ingrediente.
+- Em francês, espanhol, português, alemão, russo ou com euros, os números com decimais escrevem-se com vírgula (1,50 em vez de 1.50).
+- O Bob zanga-se muito mais devagar: são precisos muitos mais cliques para o levar ao limite.
+- Sem wifi, o Bob avisa-te: o teu jogo não é guardado enquanto a ligação não voltar. Os teus outros jogos continuam jogáveis, mas também não são guardados.
+
+**Atualizações**
+- Quando existe uma versão nova, o botão da versão fica verde, no navegador e na aplicação Windows.
+- O botão «Atualizar» das novidades atualiza o jogo sem recarregar a página. Na aplicação Windows, reinicia-se sozinha.
+
+**Contas**
+- Depois de um link de «palavra-passe esquecida», podes escolher uma nova palavra-passe diretamente no jogo.
+
+**Atalho**
+- Quando instalas o P2DS como aplicação (atalho), o logo é mais pequeno e bem centrado: já não toca na parte de baixo do ícone.
+
 ## Release 1.2.1.2 (15 de novembro de 2026)
 
 Um pequeno detalhe para as atualizações da aplicação.

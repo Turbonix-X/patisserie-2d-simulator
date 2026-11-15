@@ -12,7 +12,7 @@ import shutil
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 WEB = os.path.join(ROOT, 'web')
 
-FILES = ['index.html', 'style.css', 'turbonix.css', 'logo.svg', 'favicon.png'] + [f for f in os.listdir(ROOT) if f.startswith('CHANGELOG') and f.endswith('.md')]
+FILES = ['index.html', 'style.css', 'turbonix.css', 'logo.svg', 'favicon.png', 'manifest.webmanifest', 'icon-192.png', 'icon-512.png', 'icon-maskable-512.png', 'apple-touch-icon.png'] + [f for f in os.listdir(ROOT) if f.startswith('CHANGELOG') and f.endswith('.md')]
 DIRS = ['JS', 'assets']
 
 if os.path.isdir(WEB):

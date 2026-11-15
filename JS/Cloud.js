@@ -59,6 +59,10 @@ function cloudGoogle() {
   var back = location.origin + location.pathname;
   location.href = P2DS_CONFIG.SUPABASE_URL.replace(/\/$/, '') + '/auth/v1/authorize?provider=google&redirect_to=' + encodeURIComponent(back);
 }
+var cloudRecovery = null;
+function cloudSetPassword(token, password) {
+  return cloudFetch('/auth/v1/user', { method: 'PUT', body: { password: password } }, token);
+}
 function cloudHandleRedirect() {
   if (!cloudEnabled() || location.hash.indexOf('access_token=') < 0) return Promise.resolve(null);
   var params = {};
@@ -66,6 +70,8 @@ function cloudHandleRedirect() {
   history.replaceState(null, '', location.pathname + location.search);
   if (!params.access_token) return Promise.resolve(null);
   return cloudFetch('/auth/v1/user', {}, params.access_token).then(function(u) {
+    // Le lien d'un e-mail "mot de passe oublie" : on proposera d'en choisir un nouveau
+    if (params.type === 'recovery') cloudRecovery = { token: params.access_token };
     return cloudStoreSession({ user: u, access_token: params.access_token, refresh_token: params.refresh_token, expires_in: +params.expires_in || 3600 });
   }).catch(function() { return null; });
 }
@@ -97,14 +103,14 @@ function cloudPushInstance(pid, id) {
   } });
 }
 
-// Pousse la partie en cours, au plus une fois toutes les 20 secondes
+// Pousse la partie en cours, au plus une fois toutes les 6 secondes
 function cloudQueuePush() {
   var prof = findProfile(CUR.profile);
   if (!prof || prof.kind !== 'cloud' || !cloudOnline() || !CUR.inst || cloud.pushTimer) return;
   cloud.pushTimer = setTimeout(function() {
     cloud.pushTimer = null;
     cloudPushInstance(CUR.profile, CUR.inst).catch(function(e) { cloud.lastError = e && e.message; });
-  }, 20000);
+  }, 6000);
 }
 
 // Fusionne ce qu'il y a en ligne et ce qu'il y a ici : le plus recent gagne
