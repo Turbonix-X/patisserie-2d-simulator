@@ -353,10 +353,15 @@ function backToHome() {
 // ---------- Type d'instance : max ou creative des le debut ----------
 function applyInstanceType() {
   var inst = findInstance(CUR.profile, CUR.inst);
+  if (inst && inst.name && G.companyName !== inst.name) G.companyName = inst.name;   // le nom de la partie fait foi
+  if (!G.companyName) G.companyName = G.introDone ? (G.bakeryName || '') : '';
   if (CUR.fresh) { G.settings.lang = CUR.menuLang || G.settings.lang; CUR.fresh = false; }
   if (!inst || G.instInit) return;
   G.instInit = true;
-  if (inst.name) G.bakeryName = inst.name;
+  if (inst.name) {
+    G.companyName = inst.name;
+    if (inst.type === 'max' || inst.type === 'creative') G.bakeryName = inst.name;
+  }
   if (inst.type === 'max' || inst.type === 'creative') {
     G.introDone = true;
     G.tutorialDone = true;

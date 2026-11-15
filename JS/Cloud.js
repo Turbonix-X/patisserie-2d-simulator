@@ -95,12 +95,18 @@ function cloudToken(pid) {
 function cloudCall(pid, path, opts) { return cloudToken(pid).then(function(tok) { return cloudFetch(path, opts, tok); }); }
 
 // ---------- Synchronisation des instances ----------
+// Une partie "synchronisee" existe en ligne : si elle y disparait (supprimee ailleurs), on la retire aussi ici
+function markSynced(pid, id) {
+  var list = listInstances(pid), changed = false;
+  list.forEach(function(x) { if (x.id === id && !x.synced) { x.synced = true; changed = true; } });
+  if (changed) saveInstanceList(pid, list);
+}
 function cloudPushInstance(pid, id) {
   var inst = findInstance(pid, id), raw = instanceRaw(pid, id);
   if (!inst || !raw) return Promise.resolve();
   return cloudCall(pid, '/rest/v1/instances?on_conflict=id', { method: 'POST', prefer: 'resolution=merge-duplicates,return=minimal', body: {
     id: id, user_id: pid, bakery_name: inst.name || '', save_data: raw, updated_at: new Date(inst.updated || Date.now()).toISOString()
-  } });
+  } }).then(function(r) { markSynced(pid, id); return r; });
 }
 
 // Pousse la partie en cours, au plus une fois toutes les 6 secondes
@@ -124,7 +130,7 @@ function cloudSync(pid) {
       remoteIds[r.id] = true;
       var local = findInstance(pid, r.id), rt = Date.parse(r.updated_at) || 0;
       if (!local) {
-        if (!instancesFull(pid)) createInstance(pid, r.bakery_name, 'normal', r.save_data, r.id);
+        if (!instancesFull(pid) || cloudAdminKnown(pid)) { createInstance(pid, r.bakery_name, 'normal', r.save_data, r.id); markSynced(pid, r.id); }
       } else if (rt > (local.updated || 0) + 2000 && !(CUR.inst === r.id && CUR.profile === pid)) {
         lsSet(saveKeyOf(pid, r.id), r.save_data);
         local.updated = rt; local.name = r.bakery_name || local.name;
@@ -135,12 +141,27 @@ function cloudSync(pid) {
         jobs.push(cloudPushInstance(pid, r.id));
       }
     });
-    listInstances(pid).forEach(function(x) { if (!remoteIds[x.id]) jobs.push(cloudPushInstance(pid, x.id)); });
+    listInstances(pid).forEach(function(x) {
+      if (remoteIds[x.id]) { markSynced(pid, x.id); return; }
+      // Supprimee en ligne (par exemple depuis le navigateur) : on la retire d'ici, sauf si c'est la partie ouverte
+      if (x.synced && !(CUR.inst === x.id && CUR.profile === pid && !document.body.classList.contains('home-open'))) { deleteInstance(pid, x.id); cloud.removed = true; return; }
+      jobs.push(cloudPushInstance(pid, x.id));
+    });
     return Promise.all(jobs.map(function(j) { return j.catch(function() {}); }));
   }).then(function() { cloud.busy = false; return true; }, function(e) { cloud.busy = false; cloud.lastError = e && e.message; return false; });
 }
 
 function cloudDeleteInstance(pid, id) { return cloudCall(pid, '/rest/v1/instances?id=eq.' + encodeURIComponent(id), { method: 'DELETE' }); }
+
+// Menu ouvert : on regarde regulierement ce qui a change en ligne (parties supprimees, renommees, ajoutees)
+function cloudBackgroundSync() {
+  var prof = findProfile(getProfiles().current);
+  if (!prof || prof.kind !== 'cloud' || !cloudOnline() || document.hidden) return;
+  if (!document.body.classList.contains('home-open')) return;
+  cloudSync(prof.id).then(function() { if (typeof renderHome === 'function' && document.body.classList.contains('home-open')) renderHome(); });
+}
+setInterval(cloudBackgroundSync, 15000);
+document.addEventListener('visibilitychange', function() { if (!document.hidden) setTimeout(cloudBackgroundSync, 800); });
 
 // Des que la connexion revient, on synchronise
 window.addEventListener('online', function() {
@@ -169,13 +190,15 @@ function adminListPlayers(pid) {
   });
 }
 function adminListInstances(pid, uid) { return cloudCall(pid, '/rest/v1/instances?user_id=eq.' + encodeURIComponent(uid) + '&select=id,bakery_name,updated_at,save_data&order=updated_at.desc'); }
-function adminDeleteInstance(pid, id) { return cloudDeleteInstance(pid, id); }
+function adminDeleteInstance(pid, id) {
+  return cloudCall(pid, '/rest/v1/instances?id=eq.' + encodeURIComponent(id), { method: 'DELETE', prefer: 'return=representation' }).then(function(r) { if (!r || !r.length) throw { message: 'La base a refusé de supprimer / The database refused to delete' }; return r; });
+}
 function adminDeleteUser(pid, uid) { return cloudCall(pid, '/rest/v1/rpc/admin_delete_user', { method: 'POST', body: { target: uid } }); }
 
 // ---------- Presence : l'administrateur voit qui a le jeu ouvert, qui joue, qui est parti ----------
 function presenceInfo() {
   var inGame = !document.body.classList.contains('home-open') && !!CUR.inst;
-  return { status: inGame ? 'playing' : 'open', bakery_name: inGame && typeof G !== 'undefined' ? (G.bakeryName || '') : '', level: inGame && typeof G !== 'undefined' ? (G.level || 0) : 0 };
+  return { status: inGame ? 'playing' : 'open', bakery_name: inGame && typeof G !== 'undefined' ? (G.companyName || G.bakeryName || '') : '', level: inGame && typeof G !== 'undefined' ? (G.level || 0) : 0 };
 }
 function cloudPresence(status, keepalive) {
   var prof = findProfile(getProfiles().current);

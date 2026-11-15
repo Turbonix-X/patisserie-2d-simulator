@@ -102,7 +102,7 @@ function adminDrawPlayer() {
   h += '<div class="adm-card adm-profile"><i class="adm-avatar big">' + aesc((r.pseudo || '?').charAt(0).toUpperCase()) + '</i><div><h3>' + aesc(r.pseudo || '?') + '</h3><p>' + aesc(r.email) + '</p><p class="adm-muted">' + adminTr('Inscrit le ', 'Joined ') + new Date(r.created_at).toLocaleString() + '</p></div>';
   h += '<div class="adm-profile-state" id="adm-state"></div></div>';
   h += '<div class="adm-actions"><button class="btn btn-small" onclick="adminSendReset()">✉️ ' + adminTr('Envoyer un lien de mot de passe', 'Send a password reset link') + '</button><button class="btn btn-small btn-danger" onclick="adminAskDeleteUser()">🗑 ' + adminTr('Supprimer le compte', 'Delete the account') + '</button></div>';
-  h += '<h4 class="adm-h4">' + adminTr('Parties', 'Games') + ' (' + list.length + ')</h4><div class="adm-insts adm-slots">';
+  h += '<h4 class="adm-h4">' + adminTr('Parties', 'Games') + ' (' + list.length + ')</h4><div class="inst-grid adm-insts adm-slots">';
   list.forEach(function(x) {
     var lvl = ''; try { lvl = JSON.parse(x.save_data).level; } catch (e) { /* pas lisible */ }
     h += '<button class="inst-slot adm-slot" onclick="adminOpenGame(\'' + r.id + '\',\'' + x.id + '\')"><b>' + aesc(x.bakery_name || adminTr('Sans nom', 'Unnamed')) + '</b><small>' + (lvl ? adminTr('Niv. ', 'Lv. ') + lvl + ' · ' : '') + new Date(x.updated_at).toLocaleString() + '</small></button>';
@@ -200,51 +200,131 @@ function adminPairs(list, kind, withN) {
   return h + '</div>';
 }
 
-// Tout ce qu'on sait de la partie, a partir de sa sauvegarde
-function adminGameHTML(d) {
-  var bakeries = (d.bakeries && d.bakeries.length) || 1;
-  var themes = Object.keys(d.unlockedThemes || {}).filter(function(k) { return d.unlockedThemes[k]; });
-  var achs = Object.keys(d.achievements || {}).filter(function(k) { return d.achievements[k]; });
-  var st = d.stats || {};
-  var kpi = [
-    ['🏪', adminTr('Pâtisseries', 'Bakeries'), bakeries],
-    ['⭐', adminTr('Niveau', 'Level'), d.level || 1],
-    ['💰', adminTr('Argent', 'Money'), adminMoney(d.money)],
-    ['📈', adminTr('Total gagné', 'Total earned'), adminMoney(d.totalEarned)],
-    ['⏱️', adminTr('Temps de jeu', 'Play time'), Math.floor((d.playTimeMs || 0) / 3600000) + 'h ' + Math.floor(((d.playTimeMs || 0) % 3600000) / 60000) + 'm'],
-    ['🌍', adminTr('Langue', 'Language'), aesc(adminLangName(d.settings && d.settings.lang))],
-    ['🖥️', 'Console', d.cheatUnlocked ? adminTr('Débloquée', 'Unlocked') : adminTr('Non', 'No')],
-    ['🎨', adminTr('Thèmes', 'Themes'), themes.length],
-    ['🏆', adminTr('Succès', 'Achievements'), achs.length + (typeof ACHIEVEMENTS !== 'undefined' ? ' / ' + ACHIEVEMENTS.length : '')],
-    ['👩‍🍳', adminTr('Employés', 'Employees'), (d.employees || []).length],
-    ['🤖', 'Bob', (d.bobGold >= 5 ? adminTr('en or', 'gold') : adminTr('normal', 'normal')) + ' · ' + (d.bobPokes || 0) + ' ' + adminTr('clics', 'clicks')],
-    ['🖱️', adminTr('Clics sur le logo', 'Logo clicks'), d.logoClicks || 0],
-  ];
+// ---------- Les chiffres d'une patisserie (s = son etat) ----------
+function adminSum(maps) {
+  var out = {};
+  maps.forEach(function(m) { for (var k in (m || {})) { var v = +m[k] || 0; if (v) out[k] = (out[k] || 0) + v; } });
+  return out;
+}
+function adminTotal(map) { var n = 0; for (var k in map) n += +map[k] || 0; return n; }
+function adminLost(s) {
+  var st = s.stats || {};
+  return (st.totalIngredientCost || 0) + (st.totalRentPaid || 0) + (st.totalSalaryPaid || 0) + (st.totalInvested || 0) + (st.totalInterestPaid || 0);
+}
+function adminEmpByJob(emps) {
+  var out = {};
+  (emps || []).forEach(function(e) { var k = e.type || e.job || '?'; out[k] = (out[k] || 0) + 1; });
+  return out;
+}
+function adminJobName(id) {
+  try { var k = 'emp.' + id; if (typeof LANGS !== 'undefined' && LANGS[currentLang] && LANGS[currentLang][k]) return t(k); } catch (e) { /* nom pas trouve */ }
+  return adminPretty(id);
+}
+function adminOwnedMachines(s) { var n = 0; for (var k in (s.machines || {})) if (s.machines[k] > 0) n++; return n; }
+function adminBuildingTotal(s) { var n = 0; for (var k in (s.buildings || {})) n += (s.buildings[k] && s.buildings[k].qty) || 0; return n; }
+function adminKpi(list) {
   var h = '<div class="adm-kpis">';
-  kpi.forEach(function(k) { h += '<div class="adm-kpi"><span>' + k[0] + '</span><b>' + k[2] + '</b><small>' + k[1] + '</small></div>'; });
-  h += '</div>';
-  if (d.bakeries && d.bakeries.length > 1) {
-    var bl = '<div class="stat-list">';
-    d.bakeries.forEach(function(b, i) {
-      var s = i === d.currentBakeryIndex ? d : (b.state || {});
-      bl += '<div class="stat-item"><span>' + aesc(i === d.currentBakeryIndex ? d.bakeryName : b.name) + ' <small>' + adminTr('niv. ', 'lv. ') + (s.level || 1) + '</small></span><b>' + adminMoney(s.money) + '</b></div>';
-    });
-    h += adminDetails('bak', '🏪 ' + adminTr('Les pâtisseries', 'The bakeries'), d.bakeries.length, bl + '</div>');
-  }
-  h += adminDetails('theme', '🎨 ' + adminTr('Thèmes débloqués', 'Unlocked themes'), themes.length, adminPairs(themes.map(function(x) { return [x, 1]; }), 'theme', false));
-  h += adminDetails('ing', '🥚 ' + adminTr('Ingrédients en stock', 'Ingredients in stock'), null, adminPairs(adminCountMap(d.ing), 'ing'));
-  h += adminDetails('rec', '🍰 ' + adminTr('Recettes (en stock)', 'Recipes (in stock)'), null, adminPairs(adminCountMap(d.cakes), 'rec'));
-  h += adminDetails('made', '👩‍🍳 ' + adminTr('Recettes préparées', 'Recipes prepared'), st.totalCakesMade || 0, adminPairs(adminCountMap(st.cakesMadeById), 'rec'));
-  h += adminDetails('imade', '🧂 ' + adminTr('Ingrédients préparés', 'Ingredients prepared'), st.totalIngMade || 0, adminPairs(adminCountMap(st.ingMadeById), 'ing'));
-  h += adminDetails('ach', '🏆 ' + adminTr('Succès débloqués', 'Unlocked achievements'), achs.length, adminPairs(achs.map(function(x) { return [x, 1]; }), 'ach', false));
-  var stRows = [];
-  for (var k in st) if (typeof st[k] === 'number') stRows.push([k, st[k]]);
-  h += adminDetails('stats', '📊 ' + adminTr('Statistiques', 'Stats'), null, adminPairs(stRows));
-  h += adminDetails('mach', '⚙️ ' + adminTr('Machines', 'Machines'), null, adminPairs(adminCountMap(d.machines)));
-  h += adminDetails('bld', '🏢 ' + adminTr('Bâtiments', 'Buildings'), null, adminPairs(adminCountMap(d.buildings, function(b) { return b && b.qty; })));
-  var emps = '<div class="stat-list">';
-  (d.employees || []).forEach(function(e) { emps += '<div class="stat-item"><span>' + aesc(e.name || '?') + ' <small>' + aesc(adminPretty(e.type || e.job || '')) + '</small></span><b>' + (e.level || e.skill || '') + '</b></div>'; });
-  h += adminDetails('emp', '👥 ' + adminTr('Employés', 'Employees'), (d.employees || []).length, emps + '</div>');
+  list.forEach(function(k) { h += '<div class="adm-kpi"><span>' + k[0] + '</span><b>' + k[2] + '</b><small>' + k[1] + '</small></div>'; });
+  return h + '</div>';
+}
+function adminStatesOf(d) {
+  // La patisserie ouverte est l'etat de la sauvegarde elle-meme ; les autres sont rangees dans bakeries
+  var list = [];
+  var bl = d.bakeries && d.bakeries.length ? d.bakeries : [{ name: d.bakeryName }];
+  bl.forEach(function(b, i) {
+    var cur = i === (d.currentBakeryIndex || 0);
+    list.push({ index: i, name: cur ? d.bakeryName : b.name, current: cur, s: cur ? d : (b.state || {}) });
+  });
+  return list;
+}
+
+// Une liste qui se deplie : machines et batiments avec leur niveau et leur etat
+function adminItemList(map, kind, brokenKey, qtyOf) {
+  var rows = [];
+  for (var id in (map || {})) { var q = qtyOf(map[id]); if (q > 0) rows.push([id, q]); }
+  return rows;
+}
+function adminBrokenList(s, kind) {
+  var map = kind === 'm' ? s.machines : s.buildings;
+  var list = adminCountMap(map, function(v) { return kind === 'm' ? v : (v && v.qty); });
+  if (!list.length) return '<p class="adm-muted">' + adminTr('Rien pour l’instant.', 'Nothing yet.') + '</p>';
+  var h = '<div class="stat-list">';
+  list.forEach(function(p) {
+    var broken = !!(s.broken && s.broken[kind + ':' + p[0]]);
+    var name = adminPretty(p[0]);
+    try { if (typeof t === 'function') { var key = (kind === 'm' ? 'mach.' : 'b.') + p[0]; if (LANGS[currentLang][key]) name = t(key); } } catch (e) { /* tant pis */ }
+    h += '<div class="stat-item"><span>' + aesc(name) + (broken ? ' <em class="adm-broken">' + adminTr('cassée', 'broken') + '</em>' : '') + '</span><b>' + adminTr('niv. ', 'lv. ') + adminNum(p[1]) + '</b></div>';
+  });
+  return h + '</div>';
+}
+
+// Les chiffres d'une seule patisserie
+function adminBakeryHTML(s, d, key) {
+  var st = s.stats || {};
+  var got = st.ingGotById || {}, made = st.cakesMadeById || {};
+  var h = adminKpi([
+    ['💰', adminTr('Argent', 'Money'), adminMoney(s.money)],
+    ['📈', adminTr('Argent gagné', 'Money earned'), adminMoney(s.totalEarned)],
+    ['📉', adminTr('Argent perdu', 'Money lost'), adminMoney(adminLost(s))],
+    ['🖱️', adminTr('Clics', 'Clicks'), adminNum(st.totalClicks)],
+    ['⭐', adminTr('Niveau', 'Level'), s.level || 1],
+    ['✨', 'XP', adminNum(s.xp)],
+  ]);
+  h += adminDetails(key + 'got', '🥚 ' + adminTr('Ingrédients obtenus', 'Ingredients obtained'), adminNum(adminTotal(got)), adminPairs(adminCountMap(got), 'ing'));
+  h += adminDetails(key + 'made', '🍰 ' + adminTr('Recettes préparées', 'Recipes prepared'), adminNum(st.totalCakesMade || adminTotal(made)), adminPairs(adminCountMap(made), 'rec'));
+  h += adminDetails(key + 'ing', '📦 ' + adminTr('Ingrédients en stock', 'Ingredients in stock'), adminNum(adminTotal(s.ing)), adminPairs(adminCountMap(s.ing), 'ing'));
+  h += adminDetails(key + 'rec', '🎂 ' + adminTr('Recettes en stock', 'Recipes in stock'), adminNum(adminTotal(s.cakes)), adminPairs(adminCountMap(s.cakes), 'rec'));
+  var jobs = adminEmpByJob(s.employees);
+  var jl = '<div class="stat-list">';
+  Object.keys(jobs).forEach(function(j) { jl += '<div class="stat-item"><span>' + aesc(adminJobName(j)) + '</span><b>' + jobs[j] + '</b></div>'; });
+  h += adminDetails(key + 'emp', '👥 ' + adminTr('Employés', 'Employees'), (s.employees || []).length, jl + '</div>');
+  var achs = Object.keys(d.achievements || {}).filter(function(k) { return d.achievements[k]; });
+  h += adminDetails(key + 'ach', '🏆 ' + adminTr('Succès débloqués', 'Unlocked achievements'), achs.length, adminPairs(achs.map(function(x) { return [x, 1]; }), 'ach', false));
+  h += adminDetails(key + 'bld', '🏢 ' + adminTr('Bâtiments', 'Buildings'), adminBuildingTotal(s), adminBrokenList(s, 'b'));
+  h += adminDetails(key + 'mach', '⚙️ ' + adminTr('Machines', 'Machines'), adminOwnedMachines(s), adminBrokenList(s, 'm'));
+  return h;
+}
+
+// Tout ce qu'on sait de la partie (l'entreprise), a partir de sa sauvegarde
+function adminGameHTML(d) {
+  var list = adminStatesOf(d), states = list.map(function(x) { return x.s; });
+  var sts = states.map(function(s) { return s.stats || {}; });
+  var got = adminSum(sts.map(function(x) { return x.ingGotById; }));
+  var made = adminSum(sts.map(function(x) { return x.cakesMadeById; }));
+  var ing = adminSum(states.map(function(s) { return s.ing; }));
+  var rec = adminSum(states.map(function(s) { return s.cakes; }));
+  var emps = []; states.forEach(function(s) { emps = emps.concat(s.employees || []); });
+  var achs = Object.keys(d.achievements || {}).filter(function(k) { return d.achievements[k]; });
+  var sum = function(fn) { var n = 0; states.forEach(function(s) { n += fn(s) || 0; }); return n; };
+  var h = adminKpi([
+    ['🖥️', 'Console', d.cheatUnlocked ? adminTr('Débloquée', 'Unlocked') : adminTr('Non', 'No')],
+    ['🏪', adminTr('Pâtisseries', 'Bakeries'), list.length],
+    ['💰', adminTr('Argent total', 'Total money'), adminMoney(sum(function(s) { return s.money; }))],
+    ['⭐', adminTr('Niveau de l’entreprise', 'Company level'), sum(function(s) { return s.level || 1; })],
+    ['🖱️', adminTr('Clics', 'Clicks'), adminNum(sum(function(s) { return (s.stats || {}).totalClicks; }))],
+    ['📈', adminTr('Argent gagné', 'Money earned'), adminMoney(sum(function(s) { return s.totalEarned; }))],
+    ['📉', adminTr('Argent perdu', 'Money lost'), adminMoney(sum(adminLost))],
+    ['👥', adminTr('Employés', 'Employees'), emps.length],
+    ['⚙️', adminTr('Machines', 'Machines'), sum(adminOwnedMachines)],
+    ['🏢', adminTr('Bâtiments', 'Buildings'), sum(adminBuildingTotal)],
+    ['🏆', adminTr('Succès', 'Achievements'), achs.length + (typeof ACHIEVEMENTS !== 'undefined' ? ' / ' + ACHIEVEMENTS.length : '')],
+    ['🌍', adminTr('Langue', 'Language'), aesc(adminLangName(d.settings && d.settings.lang))],
+    ['🎨', adminTr('Thèmes', 'Themes'), Object.keys(d.unlockedThemes || {}).filter(function(k) { return d.unlockedThemes[k]; }).length],
+  ]);
+  h += adminDetails('cgot', '🥚 ' + adminTr('Ingrédients obtenus', 'Ingredients obtained'), adminNum(adminTotal(got)), adminPairs(adminCountMap(got), 'ing'));
+  h += adminDetails('cmade', '🍰 ' + adminTr('Recettes préparées', 'Recipes prepared'), adminNum(adminTotal(made)), adminPairs(adminCountMap(made), 'rec'));
+  h += adminDetails('cing', '📦 ' + adminTr('Ingrédients en stock', 'Ingredients in stock'), adminNum(adminTotal(ing)), adminPairs(adminCountMap(ing), 'ing'));
+  h += adminDetails('crec', '🎂 ' + adminTr('Recettes en stock', 'Recipes in stock'), adminNum(adminTotal(rec)), adminPairs(adminCountMap(rec), 'rec'));
+  h += adminDetails('cach', '🏆 ' + adminTr('Succès débloqués', 'Unlocked achievements'), achs.length, adminPairs(achs.map(function(x) { return [x, 1]; }), 'ach', false));
+
+  // En bas : le menu pour choisir une patisserie
+  var idx = Math.min(adminGame.bak || 0, list.length - 1);
+  adminGame.bak = idx;
+  var pick = list[idx];
+  h += '<h4 class="adm-h4">🏪 ' + adminTr('Une pâtisserie', 'One bakery') + '</h4><div class="adm-bak-bar"><select id="adm-bak" onchange="adminGame.bak=+this.value;adminDrawGame()">';
+  list.forEach(function(x) { h += '<option value="' + x.index + '"' + (x.index === idx ? ' selected' : '') + '>' + aesc(x.name || adminTr('Sans nom', 'Unnamed')) + (x.current ? ' ★' : '') + '</option>'; });
+  h += '</select><button class="btn btn-small icon-only" title="' + aesc(adminTr('Renommer', 'Rename')) + '" onclick="adminBakeryRename()">✏️</button><button class="btn btn-small btn-danger icon-only" title="' + aesc(adminTr('Supprimer', 'Delete')) + '" onclick="adminBakeryDelete()">🗑️</button></div>';
+  h += adminBakeryHTML(pick.s, d, 'b' + idx + '-');
   return h;
 }
 
@@ -286,13 +366,15 @@ function adminDrawGame() {
   var d = {}; try { d = JSON.parse(row.save_data) || {}; } catch (e) { d = {}; }
   var owner = adminUI.rows.filter(function(r) { return r.id === row.user_id; })[0];
   var scroller = ov.querySelector('.adm-overlay-card'), top = scroller ? scroller.scrollTop : 0;
-  var h = '<div class="adm-overlay-card"><div class="adm-game-head"><div><h3>' + aesc(row.bakery_name || adminTr('Sans nom', 'Unnamed')) + '</h3><p class="adm-muted">' + (owner ? aesc(owner.pseudo) + ' · ' + aesc(owner.email) : '') + '</p></div>' +
-    '<span class="adm-live"><i></i>' + adminTr('En direct', 'Live') + ' <small id="adm-live-at"></small></span></div>';
-  h += '<div class="adm-actions"><button class="btn btn-small" onclick="adminGameCopy(this)">📋 ' + adminTr('Copier la sauvegarde', 'Copy the save') + '</button>' +
-    '<button class="btn btn-small" onclick="adminGameExport()">💾 ' + adminTr('Exporter la sauvegarde', 'Export the save') + '</button>' +
-    '<button class="btn btn-small" onclick="adminGameRename()">✏️ ' + adminTr('Renommer', 'Rename') + '</button>' +
-    '<button class="btn btn-small btn-danger" onclick="adminGameDelete()">🗑️ ' + adminTr('Supprimer la partie', 'Delete the game') + '</button></div>';
-  h += adminGameHTML(d) + '<div class="modal-btns"><button class="btn" onclick="adminCloseGame()">' + adminTr('Fermer', 'Close') + '</button></div></div>';
+  // Une petite barre en haut : le nom de l'entreprise, et ses boutons
+  var h = '<div class="adm-overlay-card"><div class="adm-game-bar"><div class="adm-game-title"><b>' + aesc(row.bakery_name || d.companyName || adminTr('Sans nom', 'Unnamed')) + '</b><small>' + (owner ? aesc(owner.pseudo) + ' · ' + aesc(owner.email) : '') + '</small></div>' +
+    '<div class="adm-game-btns"><span class="adm-live"><i></i>' + adminTr('En direct', 'Live') + ' <small id="adm-live-at"></small></span>' +
+    '<button class="btn btn-small icon-only" title="' + aesc(adminTr('Exporter la sauvegarde (fichier)', 'Export the save (file)')) + '" onclick="adminGameExport()">💾</button>' +
+    '<button class="btn btn-small icon-only" title="' + aesc(adminTr('Copier la sauvegarde', 'Copy the save')) + '" onclick="adminGameCopy(this)">📋</button>' +
+    '<button class="btn btn-small icon-only" title="' + aesc(adminTr('Renommer', 'Rename')) + '" onclick="adminGameRename()">✏️</button>' +
+    '<button class="btn btn-small btn-danger icon-only" title="' + aesc(adminTr('Supprimer la partie', 'Delete the game')) + '" onclick="adminGameDelete()">🗑️</button>' +
+    '<button class="btn btn-small icon-only" title="' + aesc(adminTr('Fermer', 'Close')) + '" onclick="adminCloseGame()">✖</button></div></div>';
+  h += adminGameHTML(d) + '</div>';
   ov.innerHTML = h;
   var sc = ov.querySelector('.adm-overlay-card'); if (sc) sc.scrollTop = top;
   adminGameLiveBadge();
@@ -312,16 +394,22 @@ function adminGameExport() {
   document.body.appendChild(a); a.click();
   setTimeout(function() { URL.revokeObjectURL(a.href); a.remove(); }, 1000);
 }
+// Modifie la sauvegarde en ligne. La base ne dit rien quand une regle refuse (0 ligne changee) : on le verifie.
+function adminPatchSave(row, patch) {
+  return adminCall('/rest/v1/instances?id=eq.' + encodeURIComponent(row.id), { method: 'PATCH', prefer: 'return=representation', body: patch }).then(function(r) {
+    if (!r || !r.length) throw { message: adminTr('Refusé par la base : relance supabase_setup.sql dans Supabase (règle de modification pour l’administrateur).', 'Refused by the database: run supabase_setup.sql again in Supabase (update rule for the administrator).') };
+    return r;
+  });
+}
 function adminGameRename() {
   var row = adminGame.row;
-  var name = prompt(adminTr('Nouveau nom de la partie :', 'New name for this game:'), row.bakery_name || '');
+  var name = prompt(adminTr('Nouveau nom de la partie (de l’entreprise) :', 'New name for the game (the company):'), row.bakery_name || '');
   if (name == null) return;
   name = name.trim().slice(0, 40);
   if (!name) return;
   var d = {}; try { d = JSON.parse(row.save_data); } catch (e) { return; }
-  d.bakeryName = name;
-  if (d.bakeries && d.bakeries[d.currentBakeryIndex]) d.bakeries[d.currentBakeryIndex].name = name;
-  adminCall('/rest/v1/instances?id=eq.' + encodeURIComponent(row.id), { method: 'PATCH', prefer: 'return=minimal', body: { bakery_name: name, save_data: JSON.stringify(d), updated_at: new Date().toISOString() } }).then(function() {
+  d.companyName = name;
+  adminPatchSave(row, { bakery_name: name, save_data: JSON.stringify(d), updated_at: new Date().toISOString() }).then(function() {
     adminGameFetch(true);
     adminOthersRefresh();
   }, function(e) { alert((e && e.message) || 'Error'); });
@@ -329,11 +417,40 @@ function adminGameRename() {
 function adminGameDelete() {
   var row = adminGame.row;
   adminConfirm3(adminTr('Supprimer la sauvegarde « ' + (row.bakery_name || '') + ' »', 'Delete the save "' + (row.bakery_name || '') + '"'), function() {
-    adminDeleteInstance(adminUI.pid, row.id).then(function() {
+    adminCall('/rest/v1/instances?id=eq.' + encodeURIComponent(row.id), { method: 'DELETE', prefer: 'return=representation' }).then(function(r) {
+      if (!r || !r.length) throw { message: adminTr('La base a refusé de supprimer.', 'The database refused to delete.') };
       adminCloseGame();
       if (adminUI.open) adminOpenPlayer(adminUI.open);
       adminOthersRefresh();
-    }, function(e) { alert(e && e.message); });
+    }).catch(function(e) { alert((e && e.message) || 'Error'); });
+  });
+}
+function adminBakeryRename() {
+  var row = adminGame.row, d = {}; try { d = JSON.parse(row.save_data); } catch (e) { return; }
+  var list = adminStatesOf(d), pick = list[adminGame.bak || 0];
+  if (!pick) return;
+  var name = prompt(adminTr('Nouveau nom de la pâtisserie :', 'New name for the bakery:'), pick.name || '');
+  if (name == null) return;
+  name = name.trim().slice(0, 30);
+  if (!name) return;
+  if (pick.current) d.bakeryName = name;
+  if (d.bakeries && d.bakeries[pick.index]) {
+    d.bakeries[pick.index].name = name;
+    if (!pick.current && d.bakeries[pick.index].state) d.bakeries[pick.index].state.bakeryName = name;
+  }
+  adminPatchSave(row, { save_data: JSON.stringify(d), updated_at: new Date().toISOString() }).then(function() { adminGameFetch(true); }, function(e) { alert((e && e.message) || 'Error'); });
+}
+function adminBakeryDelete() {
+  var row = adminGame.row, d = {}; try { d = JSON.parse(row.save_data); } catch (e) { return; }
+  var list = adminStatesOf(d), pick = list[adminGame.bak || 0];
+  if (!pick) return;
+  if (list.length <= 1) { alert(adminTr('C’est la seule pâtisserie : supprime plutôt la partie.', 'This is the only bakery: delete the game instead.')); return; }
+  if (pick.current) { alert(adminTr('C’est la pâtisserie ouverte par le joueur : on ne peut pas la supprimer à sa place. Supprime-en une autre.', 'This is the bakery the player has open: it cannot be deleted for them. Delete another one.')); return; }
+  adminConfirm3(adminTr('Supprimer la pâtisserie « ' + pick.name + ' »', 'Delete the bakery "' + pick.name + '"'), function() {
+    d.bakeries.splice(pick.index, 1);
+    if (pick.index < (d.currentBakeryIndex || 0)) d.currentBakeryIndex--;
+    adminGame.bak = 0;
+    adminPatchSave(row, { save_data: JSON.stringify(d), updated_at: new Date().toISOString() }).then(function() { adminGameFetch(true); }, function(e) { alert((e && e.message) || 'Error'); });
   });
 }
 
@@ -346,7 +463,7 @@ function adminOthersHTML() {
   var h = '<h3 class="adm-sec">👥 ' + adminTr('Parties des autres joueurs', 'Other players’ games') + '</h3>';
   if (!rows) return h + '<p class="home-info">' + adminTr('Chargement…', 'Loading…') + '</p>';
   if (!rows.length) return h + '<p class="home-empty">' + adminTr('Aucune partie pour l’instant.', 'No games yet.') + '</p>';
-  h += '<div class="home-grid adm-others-grid">';
+  h += '<div class="inst-grid adm-others-grid">';
   rows.forEach(function(r) {
     var owner = adminUI.rows.filter(function(p) { return p.id === r.user_id; })[0];
     h += '<button class="inst-slot adm-slot" onclick="adminOpenGame(\'' + r.user_id + '\',\'' + r.id + '\')"><b>' + aesc(r.bakery_name || adminTr('Sans nom', 'Unnamed')) + '</b><small>' + aesc(owner ? owner.pseudo : '?') + '</small><small>' + new Date(r.updated_at).toLocaleString() + '</small></button>';

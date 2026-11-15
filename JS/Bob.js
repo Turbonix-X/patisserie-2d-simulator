@@ -27,10 +27,10 @@ function introStep(step) {
     h = '<p>' + t('intro.hello') + '</p><button class="btn btn-primary" onclick="introStep(1)">' + t('common.next') + '</button>';
   } else if (step === 1) {
     h = '<p>' + t('intro.name') + '</p>';
-    h += '<input id="intro-name" maxlength="30" placeholder="' + escH(t('intro.namePlaceholder')) + '" value="' + escH(G.bakeryName) + '" onkeydown="if(event.key===\'Enter\')introSubmitName()">';
+    h += '<input id="intro-name" maxlength="30" placeholder="' + escH(t('intro.namePlaceholder')) + '" value="' + escH(G.companyName || '') + '" onkeydown="if(event.key===\'Enter\')introSubmitName()">';
     h += '<button class="btn btn-primary" onclick="introSubmitName()">' + t('common.next') + '</button>';
   } else if (step === 2) {
-    h = '<p>' + t('intro.money', { n: escH(G.bakeryName) }) + '</p><button class="btn btn-primary" onclick="introGiveMoney()">' + t('common.next') + '</button>';
+    h = '<p>' + t('intro.money', { n: escH(G.companyName) }) + '</p><button class="btn btn-primary" onclick="introGiveMoney()">' + t('common.next') + '</button>';
   } else {
     h = '<p>' + t('intro.outfit') + '</p><button class="btn btn-primary" onclick="introFinish()">' + t('intro.go') + '</button>';
   }
@@ -57,7 +57,8 @@ function introSubmitName() {
     fxShake(input);
     return;
   }
-  G.bakeryName = val;
+  G.companyName = val;   // le nom de l'entreprise = le nom de la partie
+  G.bakeryName = '';     // la premiere patisserie n'a pas encore de nom : Bob le demandera
   renderHeader();
   introStep(2);
 }
@@ -80,6 +81,31 @@ function introFinish() {
   document.getElementById('intro').style.display = 'none';
   document.body.classList.remove('in-intro');
   fullRender();
+  checkAchievements();
+  save();
+  setTimeout(showFirstBakeryName, 500);
+}
+
+// Bob demande le nom de la premiere patisserie (gratuit, et obligatoire)
+function showFirstBakeryName() {
+  if (G.bakeryName || !G.introDone) return;
+  var h = '<div class="bob-talk">' + bobFigure() + '<div class="bob-talk-speech"><span class="bob-bubble-name">Bob</span>';
+  h += '<p>' + t('intro.firstBakery') + '</p>';
+  h += '<input id="first-bakery" maxlength="30" placeholder="' + escH(t('rename.placeholder')) + '" onkeydown="if(event.key===\'Enter\')submitFirstBakery()">';
+  h += '<div class="bob-talk-foot"><button class="btn btn-primary" onclick="submitFirstBakery()">' + t('common.next') + '</button></div></div></div>';
+  showModal(h, 'modal-bob');
+  var input = document.getElementById('first-bakery');
+  if (input) input.focus();
+}
+function submitFirstBakery() {
+  var input = document.getElementById('first-bakery');
+  var val = input ? input.value.trim() : '';
+  if (!val) { toast(t('intro.nameError')); if (input) fxShake(input); return; }
+  G.bakeryName = val;
+  ensureBakeryList();
+  if (G.bakeries[G.currentBakeryIndex]) G.bakeries[G.currentBakeryIndex].name = val;
+  hideModal();
+  renderHeader();
   checkAchievements();
   save();
 }

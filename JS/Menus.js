@@ -68,23 +68,37 @@ function settingsAchievements() {
   var h = '<section class="set-card"><div class="ach-head"><b>' + t('ach.title') + '</b><span>' + c.done + ' / ' + c.total + (c.secrets > 0 ? ' ' + t('ach.secretsFound', { v: c.secrets }) : '') + '</span></div>';
   h += '<div class="loan-bar"><div style="width:' + (c.done / c.total * 100).toFixed(1) + '%"></div></div>';
   h += '<p class="set-help">' + t('ach.bonus', { v: Math.round((achievementBonus() - 1) * 1000) / 10 }) + '</p></section>';
-  h += '<div class="list-tools">';
+  // Chercher, filtrer (tous / debloques / a faire) et choisir une categorie
+  var q = String(ui.achQ || '').trim().toLowerCase(), flt = ui.achFilter || 'all';
+  h += '<div class="list-tools ach-tools"><input class="ach-search" type="search" placeholder="' + escH(t('ach.search')) + '" value="' + escH(ui.achQ || '') + '" onchange="ui.achQ=this.value;refreshSettingsPane()">';
+  [['all', 'ach.fAll'], ['done', 'ach.fDone'], ['todo', 'ach.fTodo']].forEach(function(f) {
+    h += '<button class="chip' + (flt === f[0] ? ' active' : '') + '" onclick="ui.achFilter=\'' + f[0] + '\';refreshSettingsPane()">' + t(f[1]) + '</button>';
+  });
+  h += '</div><div class="list-tools">';
+  h += '<button class="chip' + (ui.achCat === 'all' ? ' active' : '') + '" onclick="ui.achCat=\'all\';refreshSettingsPane()">' + t('ach.fAll') + ' ' + c.done + '/' + c.total + '</button>';
   ACH_CATEGORIES.forEach(function(cat) {
     if (cat === 'secret' && c.secrets === 0) return;
     h += '<button class="chip' + (ui.achCat === cat ? ' active' : '') + '" onclick="ui.achCat=\'' + cat + '\';refreshSettingsPane()">' + t('ach.cat.' + cat) + ' ' + byCat[cat].done + '/' + byCat[cat].all + '</button>';
   });
-  h += '</div><div class="ach-grid">';
+  if (ui.achCat !== 'all' && byCat[ui.achCat] && byCat[ui.achCat].all) h += '</div><div class="loan-bar ach-cat-bar"><div style="width:' + (byCat[ui.achCat].done / byCat[ui.achCat].all * 100).toFixed(1) + '%"></div></div><div class="ach-grid">';
+  else h += '</div><div class="ach-grid">';
+  var shown = 0;
   ACHIEVEMENTS.forEach(function(a) {
-    if (a.cat !== ui.achCat) return;
+    if (ui.achCat !== 'all' && a.cat !== ui.achCat) return;
     var done = !!G.achievements[a.id];
     if (a.hidden && !done) return;
+    if (flt === 'done' && !done) return;
+    if (flt === 'todo' && done) return;
     // Tant qu'un succes n'est pas obtenu, on ne sait pas ce qu'il demande
     var desc = done ? achDesc(a) : t('ach.lockedDesc');
+    if (q && (achName(a) + ' ' + (done ? desc : '')).toLowerCase().indexOf(q) < 0) return;
+    shown++;
     h += '<div class="ach-item ' + (done ? 'unlocked' : 'locked') + '" title="' + escH(desc) + '">';
     h += '<div class="ach-icon">' + a.icon + '</div>';
     h += '<div class="ach-name">' + escH(achName(a)) + '</div>';
     h += '<div class="ach-desc">' + escH(desc) + '</div></div>';
   });
+  if (!shown) h += '<p class="home-empty">' + t('ach.none') + '</p>';
   return h + '</div>';
 }
 

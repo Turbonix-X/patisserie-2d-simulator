@@ -133,7 +133,7 @@ function renderHeader() {
   h += '<h1 class="game-name">P2DS</h1>';
   var hasUpdate = typeof updateState !== 'undefined' && updateState.newVersion;
   h += '<button type="button" class="version-badge' + (hasUpdate ? ' has-update' : '') + '" onclick="showChangelog()" title="' + escH(hasUpdate ? t('update.available', { v: updateState.newVersion }) : t('changelog.title')) + '">' + GAME_VERSION + '</button>';
-  h += '<button class="bakery-name" onclick="showRenameModal()" title="' + escH(t('rename.title')) + '"><span>' + escH(G.bakeryName) + '</span>' + uiIcon('pencil') + '</button>';
+  h += '<button class="bakery-name" onclick="showRenameModal()" title="' + escH(t('rename.title')) + '"><span>' + escH(G.bakeryName || t('home.unnamed')) + '</span>' + uiIcon('pencil') + '</button>';
   h += '</div>';
   h += '<div class="hdr-stats">';
   h += '<span class="money-display">' + fmtMoney(G.money) + '</span>';
@@ -1254,7 +1254,7 @@ function doGameOverSell() {
 }
 
 function doGameOverRestart() {
-  var keep = { settings: G.settings, achievements: G.achievements, birthday: G.birthday, unlockedThemes: G.unlockedThemes, cheatUnlocked: G.cheatUnlocked, bobClicks: G.bobClicks, bobSad: G.bobSad, wentBankrupt: true, logoClicks: G.logoClicks, birthdaySetOn: G.birthdaySetOn, birthdayBoostYear: G.birthdayBoostYear, machines: G.machines, cmdUsage: G.cmdUsage, sugarFed: G.sugarFed, challenge: G.challenge, nextChallengeAt: G.nextChallengeAt, bakeryTheme: G.bakeryTheme, bakeries: G.bakeries, currentBakeryIndex: G.currentBakeryIndex, secondBakery: G.secondBakery, bankUnlocked: G.bankUnlocked, achHere: G.achHere };
+  var keep = { companyName: G.companyName, settings: G.settings, achievements: G.achievements, birthday: G.birthday, unlockedThemes: G.unlockedThemes, cheatUnlocked: G.cheatUnlocked, bobClicks: G.bobClicks, bobSad: G.bobSad, wentBankrupt: true, logoClicks: G.logoClicks, birthdaySetOn: G.birthdaySetOn, birthdayBoostYear: G.birthdayBoostYear, machines: G.machines, cmdUsage: G.cmdUsage, sugarFed: G.sugarFed, challenge: G.challenge, nextChallengeAt: G.nextChallengeAt, bakeryTheme: G.bakeryTheme, bakeries: G.bakeries, currentBakeryIndex: G.currentBakeryIndex, secondBakery: G.secondBakery, bankUnlocked: G.bankUnlocked, achHere: G.achHere };
   G = createFreshState();
   Object.assign(G, keep);
   if (G.bakeries[G.currentBakeryIndex]) G.bakeries[G.currentBakeryIndex].name = G.bakeryName;

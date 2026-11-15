@@ -47,6 +47,8 @@ function bootGame() {
   // Premiere partie : Bob t'accueille
   if (!G.introDone) {
     showIntro();
+  } else if (!G.bakeryName) {
+    setTimeout(showFirstBakeryName, 800);
   } else if (!G.tutorialDone) {
     renderTutorial();
   }

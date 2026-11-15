@@ -55,6 +55,14 @@ function findRec(id) { for (var i = 0; i < REC.length; i++) { if (REC[i].id === 
 function findBld(id) { for (var i = 0; i < BUILDINGS.length; i++) { if (BUILDINGS[i].id === id) return BUILDINGS[i]; } return null; }
 function findEmpType(id) { for (var i = 0; i < EMP_TYPES.length; i++) { if (EMP_TYPES[i].id === id) return EMP_TYPES[i]; } return null; }
 
+// Combien d'un ingredient on a recu au total (achats, preparations, livraisons, production des batiments)
+function gotIng(id, n) {
+  if (!(n > 0)) return;
+  if (!G.stats.ingGotById) G.stats.ingGotById = {};
+  G.stats.ingGotById[id] = (G.stats.ingGotById[id] || 0) + n;
+  G.stats.totalIngGot = (G.stats.totalIngGot || 0) + n;
+}
+
 // ============ BONUS ============
 function birthdayBonus() {
   return (G.birthdayBoostUntil && Date.now() < G.birthdayBoostUntil) ? 2 : 1;
@@ -481,6 +489,7 @@ function tickCrafting() {
       var ing = findIng(done.ingId);
       var made = (ing && ing.craftQty) || 1;
       G.ing[done.ingId] = (G.ing[done.ingId] || 0) + made;
+      gotIng(done.ingId, made);
       if (!G.stats.ingMadeById) G.stats.ingMadeById = {};
       G.stats.ingMadeById[done.ingId] = (G.stats.ingMadeById[done.ingId] || 0) + made;
       G.stats.totalIngMade = (G.stats.totalIngMade || 0) + made;
@@ -528,6 +537,7 @@ function buyIngredient(ing, bulk) {
   var cost = unitCost * units;
   G.money -= cost;
   G.ing[ing.id] += units;
+  gotIng(ing.id, units);
   G.stats.totalClicks++;
   G.stats.totalIngredientCost += cost;
   addXP(1); // Un clic = 1 XP, quel que soit le lot
@@ -626,6 +636,7 @@ function advanceBuildings(dtSec) {
     while (left <= 0) {
       var amount = buildingDelivery(bld);
       G.ing[bld.produces] = (G.ing[bld.produces] || 0) + amount;
+      gotIng(bld.produces, amount);
       total += amount;
       left += BLD_CYCLE_SEC;
       if (typeof onBuildingDone === 'function') onBuildingDone(bld, amount);
@@ -1118,7 +1129,7 @@ function tickBuyers(dtSec) {
   var now = Date.now();
   G.deliveries = G.deliveries.filter(function(d) {
     if (d.at > now) return true;
-    for (var k in d.items) G.ing[k] = (G.ing[k] || 0) + d.items[k];
+    for (var k in d.items) { G.ing[k] = (G.ing[k] || 0) + d.items[k]; gotIng(k, d.items[k]); }
     if (typeof toast === 'function') toast(t('emp.buyerDone'));
     return false;
   });
@@ -1861,7 +1872,7 @@ function switchToBakery(index) {
   target.currentBakeryIndex = index;
   // Ce qui appartient au joueur, et pas a une patisserie
   ['settings','birthday','birthdaySetOn','birthdayBoostYear','birthdayBoostUntil','achievements','tutorialDone','tutorialStep',
-   'introDone','cheatUnlocked','bobClicks','bobSad','bobGold','bobGoldClicks','bobChoke','bobPokes','logoClicks','unlockedThemes','favRecipes','lvl1000Shown','wentBankrupt',
+   'introDone','companyName','cheatUnlocked','bobClicks','bobSad','bobGold','bobGoldClicks','bobChoke','bobPokes','logoClicks','unlockedThemes','favRecipes','lvl1000Shown','wentBankrupt',
    'secondBakery','bankUnlocked','loans','nextLoanId','cmdUsage','challenge','nextChallengeAt','sugarFed','explained','creative'].forEach(function(k) {
     target[k] = G[k];
   });

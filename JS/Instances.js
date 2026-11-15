@@ -88,7 +88,7 @@ function touchInstanceMeta() {
   var list = listInstances(CUR.profile), changed = false;
   list.forEach(function(x) {
     if (x.id !== CUR.inst) return;
-    x.name = G.bakeryName || x.name; x.level = G.level; x.money = G.money; x.updated = Date.now(); changed = true;
+    x.name = G.companyName || G.bakeryName || x.name; x.level = G.level; x.money = G.money; x.updated = Date.now(); changed = true;
   });
   if (changed) saveInstanceList(CUR.profile, list);
 }

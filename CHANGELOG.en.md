@@ -2,6 +2,17 @@
 
 Everything that was added to Pâtisserie 2D Simulator, from the newest to the oldest. To understand the rules of the game, see the [wiki](REGLES.md).
 
+## Release 1.2.3 (November 15, 2026)
+
+Your company has a name, so does your first bakery, and your game list stays up to date.
+
+**Game**
+- When you create a game, Bob asks for the name of your company: it will be the name of your game. Your first bakery has no name yet: Bob asks you to name it, for free.
+- The achievements page is handier: search, filters (all, unlocked, to do), "All" to see everything at once, and a progress bar for each category.
+
+**Accounts and app**
+- If you delete or rename a game from another device or the browser, the app's list updates by itself, with nothing to do.
+
 ## Release 1.2.2 (November 15, 2026)
 
 More detail in the stats, updates without reloading, and a Bob who warns you when the wifi drops.

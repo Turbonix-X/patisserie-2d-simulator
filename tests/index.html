@@ -30,10 +30,12 @@
 <script>document.write('<script src="../JS/Lang12.js?t=' + Date.now() + '"><\/script>');</script>
 <script>document.write('<script src="../JS/Lang13.js?t=' + Date.now() + '"><\/script>');</script>
 <script>document.write('<script src="../JS/Lang122.js?t=' + Date.now() + '"><\/script>');</script>
+<script>document.write('<script src="../JS/Lang123.js?t=' + Date.now() + '"><\/script>');</script>
 <script>document.write('<script src="../JS/Config.js?t=' + Date.now() + '"><\/script>');</script>
 <script>document.write('<script src="../JS/PlayerData.js?t=' + Date.now() + '"><\/script>');</script>
 <script>document.write('<script src="../JS/Instances.js?t=' + Date.now() + '"><\/script>');</script>
 <script>document.write('<script src="../JS/Cloud.js?t=' + Date.now() + '"><\/script>');</script>
+<script>document.write('<script src="../JS/Admin.js?t=' + Date.now() + '"><\/script>');</script>
 <script>document.write('<script src="../JS/Logic.js?t=' + Date.now() + '"><\/script>');</script>
 <script>document.write('<script src="../JS/Achievements.js?t=' + Date.now() + '"><\/script>');</script>
 <script>document.write('<script src="../JS/Staff.js?t=' + Date.now() + '"><\/script>');</script>
@@ -460,7 +462,7 @@ check('Un succes compte les niveaux de machines', ACHIEVEMENTS.filter(function(a
 check('Bob connait 30 anecdotes', LANGS.fr['bob.facts'].split('|').length === 30);
 
 // --- Release 1.0 ---
-check('La version s appelle Release 1.2.2', GAME_VERSION === 'Release 1.2.2');
+check('La version s appelle Release 1.2.3', GAME_VERSION === 'Release 1.2.3');
 G = createFreshState(); G.level = 499;
 check('La fete et l espace sont caches avant leur niveau', findTheme('party').hidden && findTheme('space').hidden && themeLockReason(findTheme('party')) === 'level');
 check('Les themes Tech sont secrets', themeLockReason(findTheme('tech')) === 'secret' && themeLockReason(findTheme('techgold')) === 'secret');
@@ -943,6 +945,21 @@ G = createFreshState();
 check('Les stats comptent les ingredients prepares', G.stats.ingMadeById && G.stats.totalIngMade === 0);
 check('Les textes de la 1.2.2 existent dans les 10 langues', ['offline.bob', 'offline.bar', 'stats.totalIngMade', 'console.bobGold', 'home.newPassTitle'].every(function(k) { return Object.keys(LANGS).every(function(l) { return LANGS[l][k]; }); }));
 check('Le changelog public ne parle jamais d admin', (function() { return true; })());
+
+// --- Release 1.2.3 ---
+G = createFreshState(); G.stats.ingGotById = {}; G.ing.farine = 0; G.money = 1000;
+gotIng('farine', 5); gotIng('farine', 2);
+check('gotIng compte les ingredients obtenus', G.stats.ingGotById.farine === 7 && G.stats.totalIngGot === 7);
+G = createFreshState(); G.introDone = true; G.bakeryName = '';
+check('Une pâtisserie sans nom : Bob la fait nommer', typeof showFirstBakeryName === 'function' && G.companyName === '');
+check('Les textes de la 1.2.3 existent dans les 10 langues', ['intro.firstBakery', 'ach.search', 'ach.fAll', 'ach.fDone', 'ach.fTodo'].every(function(k) { return Object.keys(LANGS).every(function(l) { return LANGS[l][k]; }); }));
+(function() {
+  var d = { bakeryName: 'A', currentBakeryIndex: 0, bakeries: [{ name: 'A' }, { name: 'B', state: { money: 5, level: 3, ing: { farine: 2 }, employees: [{ type: 'baker' }], machines: { four: 2 }, buildings: { x: { qty: 1 } }, broken: { 'm:four': {} }, stats: {} } }], money: 10, level: 2, achievements: { a: true }, stats: { ingGotById: { farine: 1 } } };
+  var list = adminStatesOf(d);
+  check('Le panneau lit les patisseries de la partie', list.length === 2 && list[0].current && !list[1].current && list[1].s.money === 5);
+  var html = adminGameHTML(d);
+  check('La fiche affiche l entreprise et le menu des patisseries', /adm-bak/.test(html) && /<details/.test(html) && adminTotal(adminSum([{ a: 1 }, { a: 2 }])) === 3);
+})();
 
 var ko = results.filter(function(r) { return !r.ok; }).length;
 document.getElementById('total').textContent = (results.length - ko) + ' / ' + results.length + ' tests reussis';

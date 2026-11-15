@@ -2,6 +2,17 @@
 
 Tout ce qui a été ajouté à Pâtisserie 2D Simulator, de la plus récente à la plus ancienne. Pour comprendre les règles du jeu, va voir le [wiki](REGLES.md).
 
+## Release 1.2.3 (15 novembre 2026)
+
+Ton entreprise a un nom, ta première pâtisserie aussi, et la liste de tes parties reste à jour.
+
+**Jeu**
+- Quand tu crées une partie, Bob te demande le nom de ton entreprise : ce sera le nom de ta partie. Ta première pâtisserie n'a pas encore de nom : Bob te demande de la nommer, gratuitement.
+- La page des succès est plus pratique : recherche, filtres (tous, débloqués, à faire), « Tous » pour tout voir d'un coup, et une barre de progression par catégorie.
+
+**Comptes et appli**
+- Si tu supprimes ou renommes une partie depuis un autre appareil ou le navigateur, la liste de l'appli se met à jour toute seule, sans rien faire.
+
 ## Release 1.2.2 (15 novembre 2026)
 
 Plus de détails dans les statistiques, des mises à jour sans rechargement et un Bob qui te prévient quand le wifi disparaît.
