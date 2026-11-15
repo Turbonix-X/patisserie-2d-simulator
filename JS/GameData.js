@@ -5,6 +5,8 @@
    ============================================ */
 
 var GAME_VERSION = 'Release 1.3 Snapshot 1';
+// Le nom affiche : sans « Snapshot N » (il ne sert qu'a nous et aux fichiers)
+function versionLabel(v) { return String(v || '').replace(/\s+Snapshot\s+\d+$/i, ''); }
 
 // ============ CURRENCIES ============
 var CURRENCIES = [

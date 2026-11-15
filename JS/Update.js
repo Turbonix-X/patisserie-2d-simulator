@@ -33,14 +33,14 @@ function announceUpdate() {
   if (typeof renderHome === 'function') renderHome(true);
   if (updateState.told || !G || introActive) return;
   updateState.told = true;
-  if (typeof toast === 'function') toast(t('update.toast', { v: updateState.newVersion }));
+  if (typeof toast === 'function') toast(t('update.toast', { v: versionLabel(updateState.newVersion) }));
   if (typeof bobTell === 'function') bobTell(t('update.bob'));
 }
 
 // La boite de mise a jour, en haut du changelog
 function updateBoxHTML() {
   if (!updateState.newVersion) return '';
-  return '<div class="update-box"><b>' + t('update.available', { v: escH(updateState.newVersion) }) + '</b><p>' + t('update.help') + '</p><button class="btn btn-primary" id="update-btn" onclick="applyUpdate()">' + t('update.btn') + '</button></div>';
+  return '<div class="update-box"><b>' + t('update.available', { v: escH(versionLabel(updateState.newVersion)) }) + '</b><p>' + t('update.help') + '</p><button class="btn btn-primary" id="update-btn" onclick="applyUpdate()">' + t('update.btn') + '</button></div>';
 }
 
 // Recharge les scripts et le style sans recharger la page. Si la page elle-meme a change, on la recharge.

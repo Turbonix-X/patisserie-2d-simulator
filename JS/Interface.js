@@ -132,7 +132,7 @@ function renderHeader() {
   h += '<img class="game-logo" src="logo.svg" alt="" width="40" height="40" onclick="logoClick()">';
   h += '<h1 class="game-name">P2DS</h1>';
   var hasUpdate = typeof updateState !== 'undefined' && updateState.newVersion;
-  h += '<button type="button" class="version-badge' + (hasUpdate ? ' has-update' : '') + '" onclick="showChangelog()" title="' + escH(hasUpdate ? t('update.available', { v: updateState.newVersion }) : t('changelog.title')) + '">' + GAME_VERSION + '</button>';
+  h += '<button type="button" class="version-badge' + (hasUpdate ? ' has-update' : '') + '" onclick="showChangelog()" title="' + escH(hasUpdate ? t('update.available', { v: versionLabel(updateState.newVersion) }) : t('changelog.title')) + '">' + versionLabel(GAME_VERSION) + '</button>';
   h += '<button class="bakery-name" onclick="showRenameModal()" title="' + escH(t('rename.title')) + '"><span>' + escH(G.bakeryName || t('home.unnamed')) + '</span>' + uiIcon('pencil') + '</button>';
   h += '</div>';
   h += '<div class="hdr-stats">';

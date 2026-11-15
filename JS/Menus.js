@@ -30,7 +30,7 @@ function settingsPaneHTML() {
   else if (ui.settingsTab === 'ach') h = settingsAchievements();
   else if (ui.settingsTab === 'stats') h = statsPane();
   else h = settingsGeneral();
-  return h + '<p class="set-version">P2DS ' + GAME_VERSION + ' · Turbonix Entertainment</p>';
+  return h + '<p class="set-version">P2DS ' + versionLabel(GAME_VERSION) + ' · Turbonix Entertainment</p>';
 }
 
 function showSettingsModal() {
