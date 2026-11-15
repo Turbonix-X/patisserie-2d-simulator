@@ -124,6 +124,7 @@ function bootGame() {
 
   // Sauvegarde automatique
   setInterval(save, 30000);
+  setInterval(autoBackupTick, 20000);
 
   // Affichage fluide
   // Pour que ca ne lague pas : on ne dessine rien quand l'onglet est cache ou qu'une fenetre est ouverte,

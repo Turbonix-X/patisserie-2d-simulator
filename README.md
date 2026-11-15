@@ -34,6 +34,14 @@ Un jeu de gestion de pâtisserie : achète tes ingrédients, prépare tes gâtea
 - **Bob :** ton chef pâtissier t'explique le jeu, te conseille, te lance des défis et adore le sucre. Évite de trop l'embêter.
 - **Sauvegarde :** automatique, avec export et import par fichier ou par copier-coller, une pause automatique, des mises à jour sans recharger la page, et des gains pendant ton absence.
 
+## Site en ligne (Cloudflare Pages)
+
+- `python tools/build_web.py` prépare `dist/` : le jeu avec son JavaScript brouillé (les noms globaux sont gardés), sans l'installeur, les notes privées ni les tests, et vérifie la limite de 25 Mo par fichier.
+- `python tools/build_archive.py` prépare `archive-dist/` (les anciennes versions jouables, sur un autre projet pour ne jamais toucher à ta sauvegarde actuelle) et `versions.json`, qui donne les liens « Jouer à cette version » du changelog.
+- `python tools/build_changelog_json.py` refait `changelog.json` à partir des `CHANGELOG*.md`.
+- `presentation.html` (présentation, comment jouer, changelog) et `archives.html` (anciennes versions et téléchargements, listés dans `downloads.json`).
+- Les réglages (noms des projets et du bucket R2) sont dans `tools/cloudflare.json`.
+
 ## Appli Windows (Tauri)
 
 L'appli embarque le jeu et marche sans internet. Les fichiers sont dans `src-tauri/` (Rust) ; `web/` est une copie du jeu refaite à chaque compilation par `tools/sync_web.py`.

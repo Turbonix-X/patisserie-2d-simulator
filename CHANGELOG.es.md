@@ -2,6 +2,18 @@
 
 Todo lo que se ha añadido a Pâtisserie 2D Simulator, de la más reciente a la más antigua. Las versiones más antiguas se muestran en inglés. Para entender las reglas del juego, mira la [wiki](REGLES.md).
 
+## Release 1.3 Snapshot 1 (16 de noviembre de 2026)
+
+Una copia que se descarga sola, un tema Galleta más fácil y versiones antiguas para volver a jugar.
+
+**Juego**
+- **Copia automática:** en los ajustes elige un intervalo (de 5 minutos a 4 horas): se descarga solo un archivo de tu partida para no perderla nunca.
+- El tema Galleta se desbloquea con 50 000 galletas vendidas (antes 100 000).
+- En el registro de cambios, cada versión de la que guardamos copia tiene un enlace «Jugar esta versión», y los títulos son blancos en el tema oscuro.
+
+**Web**
+- Una página «Presentación, cómo jugar y cambios» y otra de «Versiones antiguas» para jugar o descargar versiones pasadas.
+
 ## Release 1.2.3 (15 de noviembre de 2026)
 
 Tu empresa tiene nombre, tu primera pastelería también, y la lista de tus partidas se mantiene al día.

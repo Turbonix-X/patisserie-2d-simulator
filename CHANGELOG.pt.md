@@ -2,6 +2,18 @@
 
 Tudo o que foi acrescentado ao Pâtisserie 2D Simulator, da mais recente à mais antiga. As versões mais antigas aparecem em inglês. Para perceber as regras do jogo, vê a [wiki](REGLES.md).
 
+## Release 1.3 Snapshot 1 (16 de novembro de 2026)
+
+Uma cópia que se descarrega sozinha, um tema Bolacha mais fácil e versões antigas para voltar a jogar.
+
+**Jogo**
+- **Cópia automática:** nas definições escolhe um intervalo (de 5 minutos a 4 horas): um ficheiro do teu jogo é descarregado sozinho para nunca o perderes.
+- O tema Bolacha desbloqueia-se com 50 000 bolachas vendidas (antes 100 000).
+- No registo de alterações, cada versão de que guardamos cópia tem uma ligação «Jogar esta versão», e os títulos são brancos no tema escuro.
+
+**Site**
+- Uma página «Apresentação, como jogar e alterações» e uma de «Versões antigas» para jogar ou descarregar versões passadas.
+
 ## Release 1.2.3 (15 de novembro de 2026)
 
 A tua empresa tem nome, a tua primeira pastelaria também, e a lista de jogos fica sempre atualizada.

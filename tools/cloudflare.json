@@ -1,0 +1,8 @@
+{
+  "siteProject": "p2ds",
+  "siteUrl": "https://p2ds.pages.dev",
+  "archiveProject": "p2ds-archive",
+  "archiveUrl": "https://p2ds-archive.pages.dev",
+  "bucket": "p2ds-releases",
+  "releasesUrl": "https://pub-REMPLACE-MOI.r2.dev"
+}

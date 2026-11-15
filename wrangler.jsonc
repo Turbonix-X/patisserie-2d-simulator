@@ -1,0 +1,6 @@
+{
+  // Site du jeu sur Cloudflare Pages : python tools/build_web.py, puis npx wrangler pages deploy
+  "name": "p2ds",
+  "pages_build_output_dir": "./dist",
+  "compatibility_date": "2026-11-01"
+}

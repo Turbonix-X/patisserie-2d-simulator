@@ -7,3 +7,5 @@ node_modules/
 Installer-P2DS.exe
 *.key
 private/
+dist/
+archive-dist/

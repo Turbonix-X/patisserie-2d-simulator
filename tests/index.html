@@ -31,6 +31,7 @@
 <script>document.write('<script src="../JS/Lang13.js?t=' + Date.now() + '"><\/script>');</script>
 <script>document.write('<script src="../JS/Lang122.js?t=' + Date.now() + '"><\/script>');</script>
 <script>document.write('<script src="../JS/Lang123.js?t=' + Date.now() + '"><\/script>');</script>
+<script>document.write('<script src="../JS/Lang13s1.js?t=' + Date.now() + '"><\/script>');</script>
 <script>document.write('<script src="../JS/Config.js?t=' + Date.now() + '"><\/script>');</script>
 <script>document.write('<script src="../JS/PlayerData.js?t=' + Date.now() + '"><\/script>');</script>
 <script>document.write('<script src="../JS/Instances.js?t=' + Date.now() + '"><\/script>');</script>
@@ -462,15 +463,15 @@ check('Un succes compte les niveaux de machines', ACHIEVEMENTS.filter(function(a
 check('Bob connait 30 anecdotes', LANGS.fr['bob.facts'].split('|').length === 30);
 
 // --- Release 1.0 ---
-check('La version s appelle Release 1.2.3', GAME_VERSION === 'Release 1.2.3');
+check('La version s appelle Release 1.3 Snapshot 1', GAME_VERSION === 'Release 1.3 Snapshot 1');
 G = createFreshState(); G.level = 499;
 check('La fete et l espace sont caches avant leur niveau', findTheme('party').hidden && findTheme('space').hidden && themeLockReason(findTheme('party')) === 'level');
 check('Les themes Tech sont secrets', themeLockReason(findTheme('tech')) === 'secret' && themeLockReason(findTheme('techgold')) === 'secret');
-check('Le theme Cookie attend 100 000 cookies', themeLockReason(findTheme('cookie')) === 'sold');
-addSoldStat('cookie', 99999);
-check('... pas encore a 99 999', themeLockReason(findTheme('cookie')) === 'sold');
+check('Le theme Cookie attend 50 000 cookies', themeLockReason(findTheme('cookie')) === 'sold');
+addSoldStat('cookie', 49999);
+check('... pas encore a 49 999', themeLockReason(findTheme('cookie')) === 'sold');
 addSoldStat('cookie', 1);
-check('... et se debloque a 100 000', themeLockReason(findTheme('cookie')) === null && G.unlockedThemes.cookie);
+check('... et se debloque a 50 000', themeLockReason(findTheme('cookie')) === null && G.unlockedThemes.cookie);
 check('Les prenoms d hommes et de femmes', empGender('Pierre') === 'm' && empGender('Marie') === 'f' && empGender('Анна') === 'f' && empGender('Иван') === 'm' && empGender('ユイ') === 'f');
 var fem = empAvatar('chef', 'Marie'), mal = empAvatar('chef', 'Pierre');
 check('Les femmes ont leur visage', fem !== mal && /#B83A5C/.test(fem) && !/#B83A5C/.test(mal));
@@ -904,7 +905,7 @@ check('Le manager refuse les candidatures de niveau trop bas, meme sans embauche
 mgr.mgrReject = false; G.applicants.push({ id: 4, name: 'Bas2', type: 'baker', skill: 50, level: 1, hireCost: 100, expiresAt: Date.now() + 60000 });
 tickManagers(1);
 check('... et rien si l option est coupee', G.applicants.length === 3);
-check('Le theme cookie se debloque a 100 000 cookies', findTheme('cookie').sold.n === 100000);
+check('Le theme cookie se debloque a 50 000 cookies', findTheme('cookie').sold.n === 50000);
 check('Les types max et creative viennent de createInstance (pas de verrou cache)', (function() { var k = {}; Object.keys(localStorage).forEach(function(x) { if (/^p2ds_/.test(x)) { k[x] = localStorage.getItem(x); localStorage.removeItem(x); } }); var i = createInstance('local', 'M', 'max'); var ok = i && i.type === 'max'; Object.keys(localStorage).forEach(function(x) { if (/^p2ds_/.test(x)) localStorage.removeItem(x); }); Object.keys(k).forEach(function(x) { localStorage.setItem(x, k[x]); }); return ok; })());
 
 // --- Release 1.2.2 ---
@@ -960,6 +961,16 @@ check('Les textes de la 1.2.3 existent dans les 10 langues', ['intro.firstBakery
   var html = adminGameHTML(d);
   check('La fiche affiche l entreprise et le menu des patisseries', /adm-bak/.test(html) && /<details/.test(html) && adminTotal(adminSum([{ a: 1 }, { a: 2 }])) === 3);
 })();
+
+// --- Release 1.3 Snapshot 1 ---
+check('Les textes de la 1.3 Snapshot 1 existent dans les 10 langues', ['backup.title', 'backup.help', 'backup.off', 'backup.minutes', 'backup.hours', 'backup.done', 'changelog.play'].every(function(k) { return Object.keys(LANGS).every(function(l) { return LANGS[l][k]; }); }));
+G = createFreshState();
+check('La sauvegarde automatique est coupee au depart', autoBackupMinutes() === 0 && AUTO_BACKUP_CHOICES.indexOf(0) === 0);
+setAutoBackup(30);
+check('On choisit l intervalle de la sauvegarde automatique', autoBackupMinutes() === 30 && G.settings.autoBackupLast > 0);
+changelogVers = { 'beta 1.9': 'https://exemple.test/beta-1.9/index.html' };
+check('Le changelog lie une version qu on a (sans tenir compte des accents)', /ver-link/.test(changelogVerLink('Bêta 1.9 (12 mars)')) && changelogVerLink('Release 9.9') === '');
+changelogVers = null;
 
 var ko = results.filter(function(r) { return !r.ok; }).length;
 document.getElementById('total').textContent = (results.length - ko) + ' / ' + results.length + ' tests reussis';

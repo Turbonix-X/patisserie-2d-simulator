@@ -2,6 +2,18 @@
 
 Everything that was added to Pâtisserie 2D Simulator, from the newest to the oldest. To understand the rules of the game, see the [wiki](REGLES.md).
 
+## Release 1.3 Snapshot 1 (November 16, 2026)
+
+A save that downloads itself, an easier Cookie theme, and old versions you can play again.
+
+**Game**
+- **Automatic backup:** in the settings, pick an interval (from 5 minutes to 4 hours): a file of your save is downloaded by itself so you never lose it.
+- The Cookie theme unlocks at 50,000 cookies sold (instead of 100,000).
+- In the changelog, every version we keep a copy of has a "Play this version" link, and the titles are properly white in the dark theme.
+
+**Website**
+- A "About, How to play and Changelog" page, and an "Old versions" page to play or download past versions again.
+
 ## Release 1.2.3 (November 15, 2026)
 
 Your company has a name, so does your first bakery, and your game list stays up to date.

@@ -2,6 +2,18 @@
 
 Tout ce qui a été ajouté à Pâtisserie 2D Simulator, de la plus récente à la plus ancienne. Pour comprendre les règles du jeu, va voir le [wiki](REGLES.md).
 
+## Release 1.3 Snapshot 1 (16 novembre 2026)
+
+Une sauvegarde qui se télécharge toute seule, un thème Cookie plus accessible, et les anciennes versions rejouables.
+
+**Jeu**
+- **Sauvegarde automatique :** dans les réglages, choisis un intervalle (de 5 minutes à 4 heures) : un fichier de ta sauvegarde est téléchargé tout seul pour ne jamais la perdre.
+- Le thème Cookie se débloque dès 50 000 cookies vendus (au lieu de 100 000).
+- Dans le changelog, chaque version dont on garde une copie a un lien « Jouer à cette version », et les titres sont bien blancs en thème sombre.
+
+**Site**
+- Une page « Présentation, Comment jouer et Changelog », et une page « Anciennes versions » pour rejouer ou télécharger les versions passées.
+
 ## Release 1.2.3 (15 novembre 2026)
 
 Ton entreprise a un nom, ta première pâtisserie aussi, et la liste de tes parties reste à jour.

@@ -4,7 +4,7 @@
    employes, espace, evenements, themes
    ============================================ */
 
-var GAME_VERSION = 'Release 1.2.3';
+var GAME_VERSION = 'Release 1.3 Snapshot 1';
 
 // ============ CURRENCIES ============
 var CURRENCIES = [
@@ -510,7 +510,7 @@ var THEME_LIST = [
   { id:'bakery',   langKey:'settings.themeBakery', level:100, hidden:true },
   { id:'party',    langKey:'settings.themeParty', level:500, hidden:true },
   { id:'space',    langKey:'settings.themeSpace', level:1000, hidden:true },
-  { id:'cookie',   langKey:'settings.themeCookie', sold:{ rec:'cookie', n:100000 }, hidden:true }, // 100 000 cookies vendus
+  { id:'cookie',   langKey:'settings.themeCookie', sold:{ rec:'cookie', n:50000 }, hidden:true }, // 50 000 cookies vendus
   { id:'tech',     langKey:'settings.themeTech', secret:true },     // 1000 clics sur Bob sans la console
   { id:'techgold', langKey:'settings.themeTechGold', secret:true }, // Bob en or massif
 ];

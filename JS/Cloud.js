@@ -123,7 +123,7 @@ function cloudQueuePush() {
 function cloudSync(pid) {
   if (!cloudOnline() || cloud.busy) return Promise.resolve(false);
   cloud.busy = true;
-  return cloudCall(pid, '/rest/v1/instances?select=id,bakery_name,save_data,updated_at&order=updated_at.desc').then(function(remote) {
+  return cloudCall(pid, '/rest/v1/instances?user_id=eq.' + encodeURIComponent(pid) + '&select=id,bakery_name,save_data,updated_at&order=updated_at.desc').then(function(remote) {
     var jobs = [];
     var remoteIds = {};
     remote.forEach(function(r) {

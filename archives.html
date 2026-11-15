@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>P2DS - Anciennes versions</title>
+<link rel="icon" href="favicon.png">
+<style>
+:root { --bg:#FFF8F0; --card:#fff; --text:#2D1B10; --muted:#5D4037; --border:#E0C8B0; --accent:#D4956B; --deep:#5D4037; --yellow:#FFD700; }
+@media (prefers-color-scheme: dark) { :root { --bg:#1A1210; --card:#2A201A; --text:#F5E6D3; --muted:#D7CCC8; --border:#4E342E; --deep:#F5E6D3; } }
+* { box-sizing: border-box; }
+body { margin:0; font-family: Outfit, system-ui, -apple-system, "Segoe UI", sans-serif; background:var(--bg); color:var(--text); line-height:1.5; }
+header { background:var(--accent); color:#fff; padding:14px 16px; display:flex; align-items:center; gap:12px; flex-wrap:wrap; }
+header h1 { margin:0; font-size:1.2rem; flex:1; }
+header a { background:rgba(255,255,255,.2); color:#fff; border-radius:999px; padding:6px 14px; text-decoration:none; font-size:.9rem; }
+main { max-width:860px; margin:0 auto; padding:20px 16px 60px; }
+h2 { color:var(--deep); margin:28px 0 8px; }
+.note { color:var(--muted); font-size:.9rem; }
+.row { display:flex; align-items:center; gap:10px; justify-content:space-between; background:var(--card); border:1px solid var(--border); border-radius:12px; padding:10px 14px; margin:6px 0; flex-wrap:wrap; }
+.row b { flex:1; min-width:140px; }
+.row a { background:var(--yellow); color:#3E2723; font-weight:700; border-radius:999px; padding:5px 14px; text-decoration:none; font-size:.85rem; }
+.row a.dl { background:var(--accent); color:#fff; }
+.row small { color:var(--muted); }
+</style>
+</head>
+<body>
+<header><h1 id="t">Anciennes versions</h1><a href="presentation.html" id="back">← Présentation</a><a href="./" id="play">▶ Jouer</a></header>
+<main>
+  <p class="note" id="warn">Chaque ancienne version est jouable sur une adresse à part : elle ne touche jamais à ta sauvegarde actuelle. Les anciennes versions peuvent avoir des défauts corrigés depuis.</p>
+  <h2 id="h-web">🌐 Jouer en ligne</h2><div id="web">…</div>
+  <h2 id="h-dl">💾 Télécharger l'appli Windows</h2><div id="dl">…</div>
+</main>
+<script>
+(function() {
+  var fr = (localStorage.getItem('p2ds_site_lang') || navigator.language || 'fr').slice(0, 2) === 'fr';
+  var L = fr ? { t:'Anciennes versions', back:'← Présentation', play:'▶ Jouer', warn:document.getElementById('warn').textContent, web:'🌐 Jouer en ligne', dl:'💾 Télécharger l\'appli Windows', open:'Jouer', get:'Télécharger', none:'Aucun fichier pour l\'instant.' }
+    : { t:'Old versions', back:'← About', play:'▶ Play', warn:'Each old version is playable at its own address: it never touches your current save. Old versions may have flaws fixed since.', web:'🌐 Play online', dl:'💾 Download the Windows app', open:'Play', get:'Download', none:'No file yet.' };
+  document.documentElement.lang = fr ? 'fr' : 'en';
+  document.getElementById('t').textContent = L.t; document.getElementById('back').textContent = L.back; document.getElementById('play').textContent = L.play;
+  document.getElementById('warn').textContent = L.warn; document.getElementById('h-web').textContent = L.web; document.getElementById('h-dl').textContent = L.dl;
+  function esc(s) { return String(s).replace(/[&<>"]/g, function(c) { return { '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;' }[c]; }); }
+  function ok(u) { return /^https:\/\//.test(u) ? u : '#'; }
+  function key(s) { var m = String(s).match(/(\d+(?:\.\d+)*)/); return m ? m[1].split('.').map(function(n) { return ('0000' + n).slice(-4); }).join('') : s; }
+  fetch('versions.json').then(function(r) { return r.json(); }).then(function(j) {
+    var names = Object.keys(j).reverse();
+    document.getElementById('web').innerHTML = names.length ? names.map(function(n) { return '<div class="row"><b>' + esc(n) + '</b><a href="' + esc(ok(j[n])) + '" target="_blank" rel="noopener">' + L.open + '</a></div>'; }).join('') : '<p class="note">' + L.none + '</p>';
+  }, function() { document.getElementById('web').innerHTML = '<p class="note">' + L.none + '</p>'; });
+  fetch('downloads.json').then(function(r) { return r.json(); }).then(function(j) {
+    document.getElementById('dl').innerHTML = j.length ? j.map(function(d) { return '<div class="row"><b>' + esc(d.version) + '</b><small>' + esc(d.size || '') + '</small><a class="dl" href="' + esc(ok(d.url)) + '">' + L.get + '</a></div>'; }).join('') : '<p class="note">' + L.none + '</p>';
+  }, function() { document.getElementById('dl').innerHTML = '<p class="note">' + L.none + '</p>'; });
+})();
+</script>
+</body>
+</html>

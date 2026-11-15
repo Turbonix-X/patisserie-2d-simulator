@@ -61,7 +61,7 @@ function adminDrawList(keepFocus) {
     return !q || (x.r.pseudo + ' ' + x.r.email).toLowerCase().indexOf(q) >= 0;
   });
   var order = { playing: 0, open: 1, closed: 2 };
-  shown.sort(function(a, b) { return order[a.pr.status] - order[b.pr.status] || (b.pr.seen || 0) - (a.pr.seen || 0); });
+  shown.sort(function(a, b) { return (b.r.id === adminUI.pid) - (a.r.id === adminUI.pid) || order[a.pr.status] - order[b.pr.status] || (b.pr.seen || 0) - (a.pr.seen || 0); });
   var h = '<div class="adm-db"><div class="adm-stats">';
   [['👥', total, adminTr('Joueurs', 'Players'), ''], ['🎮', playing, adminTr('En jeu', 'Playing'), 'playing'], ['🟡', open, adminTr('Jeu ouvert', 'Game open'), 'open'], ['🧁', games, adminTr('Parties', 'Games'), '']].forEach(function(s) {
     h += '<div class="adm-stat ' + s[3] + '"><span class="adm-stat-ico">' + s[0] + '</span><b>' + s[1] + '</b><small>' + s[2] + '</small></div>';
@@ -74,7 +74,7 @@ function adminDrawList(keepFocus) {
   h += '<div class="adm-table"><div class="adm-th"><span>' + adminTr('Joueur', 'Player') + '</span><span>' + adminTr('État', 'Status') + '</span><span>' + adminTr('Partie en cours', 'Current game') + '</span><span>' + adminTr('Dernière activité', 'Last activity') + '</span><span>' + adminTr('Parties', 'Games') + '</span></div>';
   shown.forEach(function(x) {
     var r = x.r, p = x.pr.p;
-    h += '<button class="adm-tr" onclick="adminOpenPlayer(\'' + r.id + '\')"><span class="adm-who"><i class="adm-avatar">' + aesc((r.pseudo || '?').charAt(0).toUpperCase()) + '</i><span><b>' + aesc(r.pseudo || '?') + '</b><small>' + aesc(r.email) + '</small></span></span>';
+    h += '<button class="adm-tr" onclick="adminOpenPlayer(\'' + r.id + '\')"><span class="adm-who"><i class="adm-avatar">' + aesc((r.pseudo || '?').charAt(0).toUpperCase()) + '</i><span><b>' + aesc(r.pseudo || '?') + (r.id === adminUI.pid ? ' <em class="adm-admin-tag">ADMIN</em>' : '') + '</b><small>' + aesc(r.email) + '</small></span></span>';
     h += '<span><em class="adm-pill ' + x.pr.status + '"><i></i>' + adminLabel(x.pr.status) + '</em></span>';
     h += '<span class="adm-game">' + (x.pr.status === 'playing' && p ? aesc(p.bakery_name || adminTr('Sans nom', 'Unnamed')) + ' <small>' + adminTr('niv. ', 'lv. ') + (p.level || 1) + ' · ' + (p.platform === 'app' ? 'App' : 'Web') + '</small>' : (p && x.pr.status !== 'closed' ? '<small>' + (p.platform === 'app' ? 'App' : 'Web') + '</small>' : '<small>—</small>')) + '</span>';
     h += '<span class="adm-seen">' + (x.pr.status === 'closed' ? (x.pr.seen ? adminTr('depuis ', 'for ') + adminAgo(x.pr.seen) : adminTr('jamais vu', 'never seen')) : adminTr('maintenant', 'now')) + '</span><span class="adm-n">' + adminCount(r) + '</span></button>';
@@ -99,7 +99,7 @@ function adminDrawPlayer() {
   if (!r) { adminUI.open = null; adminDrawList(); return; }
   var pr = adminPresence(r), list = adminUI.openList || [];
   var h = '<div class="adm-db"><button class="adm-back" onclick="adminUI.open=null;adminDrawList()">← ' + adminTr('Retour', 'Back') + '</button>';
-  h += '<div class="adm-card adm-profile"><i class="adm-avatar big">' + aesc((r.pseudo || '?').charAt(0).toUpperCase()) + '</i><div><h3>' + aesc(r.pseudo || '?') + '</h3><p>' + aesc(r.email) + '</p><p class="adm-muted">' + adminTr('Inscrit le ', 'Joined ') + new Date(r.created_at).toLocaleString() + '</p></div>';
+  h += '<div class="adm-card adm-profile"><i class="adm-avatar big">' + aesc((r.pseudo || '?').charAt(0).toUpperCase()) + '</i><div><h3>' + aesc(r.pseudo || '?') + (r.id === adminUI.pid ? ' <em class="adm-admin-tag">ADMIN</em>' : '') + '</h3><p>' + aesc(r.email) + '</p><p class="adm-muted">' + adminTr('Inscrit le ', 'Joined ') + new Date(r.created_at).toLocaleString() + '</p></div>';
   h += '<div class="adm-profile-state" id="adm-state"></div></div>';
   h += '<div class="adm-actions"><button class="btn btn-small" onclick="adminSendReset()">✉️ ' + adminTr('Envoyer un lien de mot de passe', 'Send a password reset link') + '</button><button class="btn btn-small btn-danger" onclick="adminAskDeleteUser()">🗑 ' + adminTr('Supprimer le compte', 'Delete the account') + '</button></div>';
   h += '<h4 class="adm-h4">' + adminTr('Parties', 'Games') + ' (' + list.length + ')</h4><div class="inst-grid adm-insts adm-slots">';
@@ -532,16 +532,17 @@ function adminBobStop() {
   var w = document.getElementById('adm-bob-wrap');
   if (w) w.remove();
 }
+function adminBobPlayers() { return adminUI.rows.filter(function(r) { return r.id !== adminUI.pid; }); }
 function adminBobTalk() {
-  var n = adminUI.rows.filter(function(r) { return adminPresence(r).status !== 'closed'; }).length;
-  adminBobSay(adminTr('Il y a ' + n + ' joueur(s) en ligne et ' + adminUI.rows.length + ' compte(s).', n + ' player(s) online, ' + adminUI.rows.length + ' account(s).'), 6000);
+  var rows = adminBobPlayers(), n = rows.filter(function(r) { return adminPresence(r).status !== 'closed'; }).length;
+  adminBobSay(adminTr('Il y a ' + n + ' joueur(s) en ligne et ' + rows.length + ' compte(s).', n + ' player(s) online, ' + rows.length + ' account(s).'), 6000);
 }
 function adminBobTick() {
   if (!adminBob.on) return;
   if (navigator.onLine === false) return;
   adminFetchPlayers().then(function() {
     var lines = [];
-    var rows = adminUI.rows;
+    var rows = adminBobPlayers();
     if (adminBob.first) {
       var online = rows.filter(function(r) { return adminPresence(r).status !== 'closed'; }).length;
       var playing = rows.filter(function(r) { return adminPresence(r).status === 'playing'; }).length;

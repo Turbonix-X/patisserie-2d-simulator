@@ -2,6 +2,18 @@
 
 Alles, was zu Pâtisserie 2D Simulator hinzugekommen ist, von der neuesten bis zur ältesten Version. Ältere Versionen werden auf Englisch angezeigt. Die Spielregeln findest du im [Wiki](REGLES.md).
 
+## Release 1.3 Snapshot 1 (16. November 2026)
+
+Eine Sicherung, die sich selbst herunterlädt, ein leichteres Keks-Thema und alte Versionen zum Nachspielen.
+
+**Spiel**
+- **Automatische Sicherung:** Wähle in den Einstellungen einen Abstand (5 Minuten bis 4 Stunden): Eine Datei deines Spielstands wird von selbst heruntergeladen, damit er nie verloren geht.
+- Das Keks-Thema wird ab 50.000 verkauften Keksen freigeschaltet (vorher 100.000).
+- Im Changelog hat jede Version, von der wir eine Kopie haben, einen Link „Diese Version spielen“, und die Titel sind im dunklen Thema weiß.
+
+**Website**
+- Eine Seite „Vorstellung, Spielanleitung und Changelog“ und eine Seite „Alte Versionen“ zum Spielen oder Herunterladen früherer Versionen.
+
 ## Release 1.2.3 (15. November 2026)
 
 Dein Unternehmen hat einen Namen, deine erste Konditorei auch, und deine Spieleliste bleibt aktuell.

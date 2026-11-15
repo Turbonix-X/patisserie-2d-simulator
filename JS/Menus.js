@@ -190,6 +190,9 @@ function settingsAudio() {
 
 function settingsSave() {
   var h = setCard('', setRow(t('settings.saveNowTitle'), t('settings.saveHelp'), '<button class="btn btn-small btn-primary" onclick="doManualSave()">' + t('settings.saveNow') + '</button>'));
+  // Un fichier tout seul, a intervalle regulier
+  var opts = AUTO_BACKUP_CHOICES.map(function(m) { return '<option value="' + m + '"' + (autoBackupMinutes() === m ? ' selected' : '') + '>' + (m === 0 ? t('backup.off') : m >= 60 ? t('backup.hours', { n: m / 60 }) : t('backup.minutes', { n: m })) + '</option>'; }).join('');
+  h += setCard('', setRow(t('backup.title'), t('backup.help'), '<select class="set-select" onchange="setAutoBackup(this.value)">' + opts + '</select>'));
   // Exporter : un fichier, ou un code a copier
   h += setCard('', setRow(t('settings.export'), t('settings.exportHelp2'), '<button class="btn btn-small btn-primary" onclick="downloadSave()">' + t('settings.exportFile') + '</button><button class="btn btn-small" onclick="copyExport()">' + t('settings.exportBtn') + '</button>') +
     '<textarea id="export-area" class="save-area" readonly rows="3" onclick="this.select()">' + escH(exportSave()) + '</textarea>');
@@ -280,16 +283,35 @@ function copyExport() {
   }
 }
 
-function downloadSave() {
+function downloadSave(silent) {
   save();
   var blob = new Blob([exportSave()], { type: 'text/plain' });
   var a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
-  a.download = 'p2ds-' + String(G.bakeryName || 'partie').replace(/[^A-Za-z0-9_-]+/g, '_').slice(0, 30) + '-' + new Date().toISOString().slice(0, 10) + '.p2ds';
+  a.download = 'p2ds-' + String(G.bakeryName || 'partie').replace(/[^A-Za-z0-9_-]+/g, '_').slice(0, 30) + '-' + new Date().toISOString().slice(0, 10) + (silent === true ? '-' + new Date().toTimeString().slice(0, 5).replace(':', 'h') : '') + '.p2ds';
   document.body.appendChild(a);
   a.click();
   setTimeout(function() { URL.revokeObjectURL(a.href); a.remove(); }, 1000);
-  toast(t('settings.exportDone'));
+  if (silent !== true) toast(t('settings.exportDone'));
+}
+
+// Un fichier de sauvegarde telecharge tout seul, a l'intervalle choisi
+var AUTO_BACKUP_CHOICES = [0, 5, 10, 15, 30, 60, 120, 240];
+function autoBackupMinutes() { return G && G.settings ? (+G.settings.autoBackup || 0) : 0; }
+function setAutoBackup(v) {
+  G.settings.autoBackup = Math.max(0, +v || 0);
+  G.settings.autoBackupLast = Date.now();
+  save();
+}
+function autoBackupTick() {
+  var m = autoBackupMinutes();
+  if (!m || G.gameOver || introActive) return;
+  var last = +G.settings.autoBackupLast || 0;
+  if (!last) { G.settings.autoBackupLast = Date.now(); return; }
+  if (Date.now() - last < m * 60000) return;
+  G.settings.autoBackupLast = Date.now();
+  downloadSave(true);
+  toast(t('backup.done'));
 }
 
 function importSaveFile(input) {

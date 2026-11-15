@@ -1,0 +1,3300 @@
+{
+ "ar": {
+  "title": "سجل التحديثات",
+  "intro": "كل ما أُضيف إلى Pâtisserie 2D Simulator، من الأحدث إلى الأقدم. تظهر الإصدارات الأقدم بالإنجليزية. لفهم قواعد اللعبة، راجع [الويكي](REGLES.md).",
+  "versions": [
+   {
+    "title": "Release 1.3 Snapshot 1 (16 نوفمبر 2026)",
+    "name": "Release 1.3 Snapshot 1",
+    "intro": "نسخة احتياطية تُنزَّل تلقائيًا، وثيم الكوكيز أسهل، ونسخ قديمة يمكنك لعبها من جديد.",
+    "groups": [
+     {
+      "name": "اللعبة",
+      "items": [
+       "**نسخ احتياطي تلقائي:** اختر في الإعدادات فترة (من 5 دقائق إلى 4 ساعات): يُنزَّل ملف من حفظك تلقائيًا حتى لا تفقده أبدًا.",
+       "يُفتح ثيم الكوكيز بعد بيع 50 ألف كوكيز (بدل 100 ألف).",
+       "في سجل التغييرات، لكل نسخة نحتفظ بها رابط «العب هذه النسخة»، والعناوين بيضاء في الثيم الداكن."
+      ]
+     },
+     {
+      "name": "الموقع",
+      "items": [
+       "صفحة «التعريف وطريقة اللعب وسجل التغييرات» وصفحة «النسخ القديمة» للعب النسخ السابقة أو تنزيلها."
+      ]
+     }
+    ]
+   },
+   {
+    "title": "Release 1.2.3 (15 نوفمبر 2026)",
+    "name": "Release 1.2.3",
+    "intro": "لشركتك اسم، ولأول مخبز لك اسم أيضًا، وتبقى قائمة ألعابك محدّثة.",
+    "groups": [
+     {
+      "name": "اللعبة",
+      "items": [
+       "عند إنشاء لعبة، يسألك بوب عن اسم شركتك: سيكون اسم لعبتك. أول مخبز لك بلا اسم بعد: يطلب منك بوب تسميته مجانًا.",
+       "صفحة الإنجازات أكثر عملية: بحث، ومرشّحات (الكل، المفتوحة، المتبقية)، و«الكل» لرؤية كل شيء دفعة واحدة، وشريط تقدّم لكل فئة."
+      ]
+     },
+     {
+      "name": "الحسابات والتطبيق",
+      "items": [
+       "إذا حذفت لعبة أو غيّرت اسمها من جهاز آخر أو من المتصفح، تتحدّث قائمة التطبيق من تلقاء نفسها."
+      ]
+     }
+    ]
+   },
+   {
+    "title": "Release 1.2.2 (15 نوفمبر 2026)",
+    "name": "Release 1.2.2",
+    "intro": "تفاصيل أكثر في الإحصائيات، وتحديثات بلا إعادة تحميل، وبوب يحذّرك عند انقطاع الواي فاي.",
+    "groups": [
+     {
+      "name": "اللعبة",
+      "items": [
+       "في الإحصائيات، لكل من الوصفات المحضّرة والمكوّنات المحضّرة قائمة منسدلة: ترى عدد كل وصفة وكل مكوّن.",
+       "بالفرنسية والإسبانية والبرتغالية والألمانية والروسية أو عند استخدام اليورو، تُكتب الأعداد العشرية بفاصلة (1,50 بدل 1.50).",
+       "يغضب بوب ببطء أكبر بكثير: يلزم عدد نقرات أكبر بكثير لإيصاله إلى أقصى غضبه.",
+       "عند انقطاع الواي فاي، يخبرك بوب: لا تُحفظ لعبتك حتى يعود الاتصال. تبقى ألعابك الأخرى قابلة للعب، لكنها لا تُحفظ أيضًا."
+      ]
+     },
+     {
+      "name": "التحديثات",
+      "items": [
+       "عندما يتوفر إصدار جديد، يتحول زر الإصدار إلى الأخضر، في المتصفح وفي تطبيق ويندوز.",
+       "زر «تحديث» في الجديد يحدّث اللعبة دون إعادة تحميل الصفحة. وفي تطبيق ويندوز يعيد التطبيق تشغيل نفسه."
+      ]
+     },
+     {
+      "name": "الحسابات",
+      "items": [
+       "بعد رابط «نسيت كلمة المرور»، يمكنك اختيار كلمة مرور جديدة مباشرة داخل اللعبة."
+      ]
+     },
+     {
+      "name": "الاختصار",
+      "items": [
+       "عند تثبيت P2DS كتطبيق (اختصار)، يصبح شعاره أصغر وفي الوسط تمامًا: لم يعد يلمس أسفل الأيقونة."
+      ]
+     }
+    ]
+   },
+   {
+    "title": "Release 1.2.1.2 (15 نوفمبر 2026)",
+    "name": "Release 1.2.1.2",
+    "intro": "تفصيل صغير لتحديثات التطبيق.",
+    "groups": [
+     {
+      "name": "تطبيق ويندوز",
+      "items": [
+       "تعرض نافذة التحديث الآن الاسم الحقيقي للإصدار («Release 1.2.1.2») وليس رقمًا داخليًا."
+      ]
+     }
+    ]
+   },
+   {
+    "title": "Release 1.2.1.1 (15 نوفمبر 2026)",
+    "name": "Release 1.2.1.1",
+    "intro": "إصلاحات صغيرة.",
+    "groups": [
+     {
+      "name": "تطبيق ويندوز",
+      "items": [
+       "زر «إنشاء حساب على الموقع» يفتح الآن الموقع فعلًا في متصفحك."
+      ]
+     },
+     {
+      "name": "الجديد",
+      "items": [
+       "قائمة الجديد مترجمة الآن إلى كل اللغات. تبقى الإصدارات الأقدم بالإنجليزية ما عدا الفرنسية والإنجليزية."
+      ]
+     }
+    ]
+   },
+   {
+    "title": "Release 1.2.1 (14 نوفمبر 2026)",
+    "name": "Release 1.2.1",
+    "intro": "إصلاحات وتسجيل أبسط.",
+    "groups": [
+     {
+      "name": "اللعبة",
+      "items": [
+       "يحتاج الناقلون الآن إلى مخبزين على الأقل: مع مخبز واحد يستقيلون ولا يمكنك توظيف المزيد.",
+       "زر إغلاق الإعدادات لم يعد يومض عندما يمر الفأر بين الزر والخلفية: تدور أيقونته فقط.",
+       "في إعدادات المدير، أصبح قسم «الأولوية» منفصلًا عن «المهن المراد توظيفها»."
+      ]
+     },
+     {
+      "name": "القائمة والحسابات",
+      "items": [
+       "عنوان «P2DS» في القائمة أبيض في الوضع الداكن.",
+       "زر «المتابعة باستخدام Google» يتحرك عند مرور الفأر، مثل الأزرار الأخرى.",
+       "لم يعد التسجيل يرسل رسالة تأكيد: الحساب جاهز فورًا. في التطبيق، يفتح «إنشاء حساب» الموقع.",
+       "يمكنك تسجيل الدخول في تطبيق ويندوز بحسابك."
+      ]
+     },
+     {
+      "name": "تطبيق ويندوز",
+      "items": [
+       "لم يعد المثبّت يسأل إلا عن اللغة. تُضبط الحفظات والحساب داخل اللعبة، في الصفحة الرئيسية."
+      ]
+     }
+    ]
+   },
+   {
+    "title": "Release 1.2 (14 نوفمبر 2026)",
+    "name": "Release 1.2",
+    "intro": "صفحة رئيسية حقيقية، وعدة ألعاب، وحسابات، وتطبيق ويندوز.",
+    "groups": [
+     {
+      "name": "الصفحة الرئيسية",
+      "items": [
+       "تبدأ اللعبة الآن بصفحة رئيسية مرتبة: الشعار و«P2DS» في الأعلى، وألعابك تحتهما، والتذييل الصغير نفسه الموجود في اللعبة.",
+       "رقم الإصدار مع الجديد في أعلى اليسار. وفي أعلى اليمين: الحساب والإعدادات (اللغة والمظهر الفاتح أو الداكن) وتنزيل التطبيق.",
+       "تعرض كل خانة اسم لعبتك ومستواها وتاريخها، كلها في الوسط. النقر على الخانة يفتح اللعبة؛ وزران صغيران للتصدير أو الحذف (سلة المهملات).",
+       "يمكنك امتلاك حتى 10 مخابز، في صفّين من 5.",
+       "زر + واحد يفتح نافذة: لعبة جديدة (زر «إنشاء» كبير متحرك، بلا اسم تعطيه: بوب هو من يطلبه)، أو لصق رمز حفظ، أو فتح ملف حفظ. عند وجود 10 ألعاب يختفي + وتخبرك اللعبة ببلوغ الحد الأقصى.",
+       "لا يتغير مظهر القائمة أبدًا بحسب مظهر لعبتك: هي فاتحة أو داكنة أو تلقائية (مثل متصفحك)، حسب اختيارك في إعداداتها.",
+       "تحتفظ كل لعبة بلغتها الخاصة، وقد تختلف عن لغة القائمة. تبدأ اللعبة الجديدة بلغة القائمة.",
+       "تصبح لعبتك السابقة تلقائيًا خانتك الأولى: لا يضيع شيء.",
+       "داخل اللعبة، يعيدك سهم في الأعلى مباشرة إلى القائمة، بلا نافذة."
+      ]
+     },
+     {
+      "name": "الحسابات عبر الإنترنت",
+      "items": [
+       "يمكنك إنشاء حساب (اسم مستخدم وبريد وكلمة مرور) أو المتابعة باستخدام Google، لكن ذلك غير إلزامي. تتزامن ألعابك مع حسابك بمجرد توفر الإنترنت، ويمكنك اللعب دون اتصال بالحفظات المحلية.",
+       "بلا حساب: تبقى لعبتك في التطبيق أو في المتصفح. إن حذفت أحدهما أو بدّلت المتصفح فقدتها، إلا إذا صدّرتها."
+      ]
+     },
+     {
+      "name": "تطبيق ويندوز",
+      "items": [
+       "زر، على يسار زر المخابز، يثبّت تطبيق ويندوز بنقرة واحدة. لا يظهر إلا في متصفح على جهاز ويندوز.",
+       "يعمل التطبيق دون اتصال تمامًا، ويحدّث نفسه عند توفر الإنترنت، ولا يلمس حفظاتك أبدًا.",
+       "يطرح عليك المثبّت ثلاثة أسئلة: لغتك وحفظاتك وحسابك."
+      ]
+     },
+     {
+      "name": "اللعبة",
+      "items": [
+       "شارات التبويبات صفراء، ما عدا شارات الأعطال فتبقى حمراء.",
+       "يعرض المبنى المعطّل الآن شارة حمراء على تبويب المباني، مثل الآلات.",
+       "يمكن للمدير أن يرفض تلقائيًا الطلبات ذات المستوى المنخفض جدًا.",
+       "يُفتح مظهر الكوكيز عند بيع 100 ألف كوكيز بدل مليون.",
+       "يفتح الجديد أسرع بكثير: يُحفظ من مرة إلى أخرى، ولا تظهر الإصدارات الأقدم إلا عند الطلب.",
+       "على الهاتف، لم يعد تغيير المظهر يزيح الشريط السفلي.",
+       "خرج قسم «الحفظ» من إعدادات اللعبة: تصدّر ألعابك وتحذفها من الصفحة الرئيسية.",
+       "في الإعدادات، تحتفظ اللغات دائمًا بالترتيب نفسه (الإنجليزية، الفرنسية، الإسبانية…).",
+       "عند المدير، لا يظهر المستوى الذهبي في الخيارات إلا بعد فتحه (المستوى 120)."
+      ]
+     },
+     {
+      "name": "تغييرات صغيرة",
+      "items": [
+       "تعرض اللعبة «Release 1.2» كرقم للإصدار."
+      ]
+     }
+    ]
+   },
+   {
+    "title": "Release 1.1.2 (14 نوفمبر 2026)",
+    "name": "Release 1.1.2",
+    "intro": "تتحدّث اللعبة دون أن تخرجك من لعبتك، ويمكن ترتيب التبويبات كما تشاء.",
+    "groups": [
+     {
+      "name": "التحديثات",
+      "items": [
+       "تتحقق اللعبة من وقت لآخر، دون أي بطء، من وجود إصدار جديد. إن وُجد، يخبرك بوب ويتحول رقم الإصدار إلى الأخضر.",
+       "في الجديد، يحدّث زر اللعبة دون إعادة تحميل الصفحة. تُحفظ لعبتك قبل ذلك مباشرة.",
+       "دون اتصال، لم تعد اللعبة تُحفظ. تخبرك اللعبة وتستأنف فور عودة الاتصال."
+      ]
+     },
+     {
+      "name": "التبويبات",
+      "items": [
+       "في المستوى 450، يمكنك سحب التبويبات يمينًا أو يسارًا لترتيبها كما تشاء.",
+       "يعرض تبويب الآلات شارة حمراء بعدد الآلات المعطّلة."
+      ]
+     },
+     {
+      "name": "الموظفون",
+      "items": [
+       "تحتاج إلى مخبزين على الأقل لامتلاك ناقلين."
+      ]
+     },
+     {
+      "name": "الهاتف",
+      "items": [
+       "عندما تكون هناك عدة مؤشرات للوقت في الشريط السفلي، يمكنك تمريرها يمينًا ويسارًا لرؤيتها كلها.",
+       "لم يعد الشريط السفلي يخفي نهاية التبويبات: يمكنك الوصول إلى نهاية القائمة."
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ "de": {
+  "title": "Änderungsverlauf",
+  "intro": "Alles, was zu Pâtisserie 2D Simulator hinzugekommen ist, von der neuesten bis zur ältesten Version. Ältere Versionen werden auf Englisch angezeigt. Die Spielregeln findest du im [Wiki](REGLES.md).",
+  "versions": [
+   {
+    "title": "Release 1.3 Snapshot 1 (16. November 2026)",
+    "name": "Release 1.3 Snapshot 1",
+    "intro": "Eine Sicherung, die sich selbst herunterlädt, ein leichteres Keks-Thema und alte Versionen zum Nachspielen.",
+    "groups": [
+     {
+      "name": "Spiel",
+      "items": [
+       "**Automatische Sicherung:** Wähle in den Einstellungen einen Abstand (5 Minuten bis 4 Stunden): Eine Datei deines Spielstands wird von selbst heruntergeladen, damit er nie verloren geht.",
+       "Das Keks-Thema wird ab 50.000 verkauften Keksen freigeschaltet (vorher 100.000).",
+       "Im Changelog hat jede Version, von der wir eine Kopie haben, einen Link „Diese Version spielen“, und die Titel sind im dunklen Thema weiß."
+      ]
+     },
+     {
+      "name": "Website",
+      "items": [
+       "Eine Seite „Vorstellung, Spielanleitung und Changelog“ und eine Seite „Alte Versionen“ zum Spielen oder Herunterladen früherer Versionen."
+      ]
+     }
+    ]
+   },
+   {
+    "title": "Release 1.2.3 (15. November 2026)",
+    "name": "Release 1.2.3",
+    "intro": "Dein Unternehmen hat einen Namen, deine erste Konditorei auch, und deine Spieleliste bleibt aktuell.",
+    "groups": [
+     {
+      "name": "Spiel",
+      "items": [
+       "Wenn du ein Spiel erstellst, fragt Bob nach dem Namen deines Unternehmens: Das wird der Name deines Spiels. Deine erste Konditorei hat noch keinen Namen: Bob bittet dich, ihr kostenlos einen zu geben.",
+       "Die Erfolgsseite ist praktischer: Suche, Filter (alle, freigeschaltet, offen), „Alle“ für den Gesamtüberblick und ein Fortschrittsbalken pro Kategorie."
+      ]
+     },
+     {
+      "name": "Konten und App",
+      "items": [
+       "Wenn du ein Spiel auf einem anderen Gerät oder im Browser löschst oder umbenennst, aktualisiert sich die Liste in der App von selbst."
+      ]
+     }
+    ]
+   },
+   {
+    "title": "Release 1.2.2 (15. November 2026)",
+    "name": "Release 1.2.2",
+    "intro": "Mehr Details in den Statistiken, Updates ohne Neuladen und ein Bob, der dich warnt, wenn das WLAN ausfällt.",
+    "groups": [
+     {
+      "name": "Spiel",
+      "items": [
+       "In den Statistiken haben zubereitete Rezepte und zubereitete Zutaten jeweils ein Aufklappmenü: Du siehst die Anzahl jedes Rezepts und jeder Zutat.",
+       "Auf Französisch, Spanisch, Portugiesisch, Deutsch, Russisch oder mit Euro werden Dezimalzahlen mit Komma geschrieben (1,50 statt 1.50).",
+       "Bob wird viel langsamer wütend: Es braucht viel mehr Klicks, um ihn an seine Grenze zu bringen.",
+       "Ohne WLAN sagt Bob es dir: Dein Spiel wird nicht gespeichert, bis die Verbindung zurück ist. Deine anderen Spiele kannst du weiterspielen, sie werden aber auch nicht gespeichert."
+      ]
+     },
+     {
+      "name": "Updates",
+      "items": [
+       "Wenn es eine neue Version gibt, wird der Versionsknopf grün, im Browser wie in der Windows-App.",
+       "Der Knopf „Aktualisieren“ in den Neuigkeiten aktualisiert das Spiel, ohne die Seite neu zu laden. In der Windows-App startet sie sich von selbst neu."
+      ]
+     },
+     {
+      "name": "Konten",
+      "items": [
+       "Nach einem Link „Passwort vergessen“ kannst du direkt im Spiel ein neues Passwort wählen."
+      ]
+     },
+     {
+      "name": "Verknüpfung",
+      "items": [
+       "Wenn du P2DS als App installierst (Verknüpfung), ist das Logo kleiner und gut zentriert: Es berührt den unteren Rand des Symbols nicht mehr."
+      ]
+     }
+    ]
+   },
+   {
+    "title": "Release 1.2.1.2 (15. November 2026)",
+    "name": "Release 1.2.1.2",
+    "intro": "Ein kleines Detail für die App-Updates.",
+    "groups": [
+     {
+      "name": "Windows-App",
+      "items": [
+       "Das Update-Fenster zeigt jetzt den echten Namen der Version („Release 1.2.1.2“) und nicht mehr eine interne Nummer."
+      ]
+     }
+    ]
+   },
+   {
+    "title": "Release 1.2.1.1 (15. November 2026)",
+    "name": "Release 1.2.1.1",
+    "intro": "Kleine Korrekturen.",
+    "groups": [
+     {
+      "name": "Windows-App",
+      "items": [
+       "Der Button „Auf der Website registrieren“ öffnet die Website jetzt wirklich in deinem Browser."
+      ]
+     },
+     {
+      "name": "Neuigkeiten",
+      "items": [
+       "Die Neuigkeiten sind jetzt in alle Sprachen übersetzt. Ältere Versionen bleiben außer in Französisch und Englisch auf Englisch."
+      ]
+     }
+    ]
+   },
+   {
+    "title": "Release 1.2.1 (14. November 2026)",
+    "name": "Release 1.2.1",
+    "intro": "Korrekturen und eine einfachere Registrierung.",
+    "groups": [
+     {
+      "name": "Spiel",
+      "items": [
+       "Fahrer brauchen jetzt mindestens 2 Bäckereien: Mit nur einer kündigen sie und du kannst keine mehr einstellen.",
+       "Der Schließen-Button der Einstellungen flackert nicht mehr, wenn die Maus zwischen Button und Hintergrund fährt: Nur sein Symbol dreht sich.",
+       "In den Manager-Einstellungen ist der Teil „Priorität“ jetzt von „Einzustellende Berufe“ getrennt."
+      ]
+     },
+     {
+      "name": "Menü und Konten",
+      "items": [
+       "Der Titel „P2DS“ im Menü ist im dunklen Modus weiß.",
+       "Der Button „Weiter mit Google“ animiert sich beim Darüberfahren, wie die anderen Buttons.",
+       "Die Registrierung sendet keine Bestätigungs-E-Mail mehr: Das Konto ist sofort bereit. In der App öffnet „Registrieren“ die Website.",
+       "Du kannst dich in der Windows-App mit deinem Konto anmelden."
+      ]
+     },
+     {
+      "name": "Windows-App",
+      "items": [
+       "Der Installer fragt jetzt nur noch nach der Sprache. Spielstände und Konto regelst du im Spiel, auf der Startseite."
+      ]
+     }
+    ]
+   },
+   {
+    "title": "Release 1.2 (14. November 2026)",
+    "name": "Release 1.2",
+    "intro": "Eine richtige Startseite, mehrere Spiele, Konten und eine Windows-App.",
+    "groups": [
+     {
+      "name": "Startseite",
+      "items": [
+       "Das Spiel beginnt jetzt auf einer aufgeräumten Startseite: das Logo und „P2DS“ oben, deine Spiele darunter und dieselbe kleine Fußzeile wie im Spiel.",
+       "Die Versionsnummer mit den Neuigkeiten steht oben links. Oben rechts: das Konto, die Einstellungen (Sprache und helles oder dunkles Design) und der App-Download.",
+       "Jedes Feld zeigt Name, Stufe und Datum deines Spiels, alles zentriert. Ein Klick auf das Feld öffnet das Spiel; zwei kleine Buttons exportieren oder löschen (Papierkorb).",
+       "Du kannst bis zu 10 Bäckereien haben, in zwei Reihen zu je 5.",
+       "Ein einziger +-Button öffnet ein Fenster: neues Spiel (ein großer animierter Erstellen-Button, kein Name nötig: Bob fragt danach), einen Spielstand-Code einfügen oder eine Spielstand-Datei öffnen. Bei 10 Spielen verschwindet das + und das Spiel sagt dir, dass das Maximum erreicht ist.",
+       "Das Menü ändert nie sein Aussehen je nach Spieldesign: Es ist hell, dunkel oder automatisch (das deines Browsers), nach Wahl in seinen Einstellungen.",
+       "Jedes Spiel behält seine eigene Sprache, die vom Menü abweichen kann. Ein neues Spiel startet in der Sprache des Menüs.",
+       "Dein bisheriges Spiel wird automatisch dein erstes Feld: Nichts geht verloren.",
+       "Im Spiel bringt dich ein Pfeil oben sofort zurück ins Menü, ohne Fenster."
+      ]
+     },
+     {
+      "name": "Online-Konten",
+      "items": [
+       "Du kannst ein Konto erstellen (Benutzername, E-Mail, Passwort) oder mit Google weitermachen, aber das ist nicht Pflicht. Deine Spiele werden mit deinem Konto synchronisiert, sobald du Internet hast, und du kannst offline mit den lokalen Spielständen spielen.",
+       "Ohne Konto: Dein Spiel bleibt in der App oder im Browser. Wenn du eins deinstallierst oder den Browser wechselst, verlierst du es, außer du exportierst es."
+      ]
+     },
+     {
+      "name": "Windows-App",
+      "items": [
+       "Ein Button links von dem der Bäckereien installiert die Windows-App mit einem Klick. Er erscheint nur in einem Browser auf einem Windows-PC.",
+       "Die App funktioniert komplett offline, aktualisiert sich selbst, wenn du Internet hast, und rührt deine Spielstände nie an.",
+       "Der Installer stellt dir drei Fragen: deine Sprache, deine Spielstände und dein Konto."
+      ]
+     },
+     {
+      "name": "Spiel",
+      "items": [
+       "Die Abzeichen der Tabs sind gelb, außer denen für Defekte, die rot bleiben.",
+       "Ein defektes Gebäude zeigt jetzt ein rotes Abzeichen am Tab Gebäude, wie die Maschinen.",
+       "Der Manager kann Bewerbungen mit zu niedriger Stufe automatisch ablehnen.",
+       "Das Cookie-Design wird bei 100.000 verkauften Keksen statt bei einer Million freigeschaltet.",
+       "Die Neuigkeiten öffnen sich viel schneller: Sie werden von einem Mal zum nächsten gespeichert, und die ältesten Versionen erscheinen nur auf Wunsch.",
+       "Auf dem Handy verschiebt ein Designwechsel die untere Leiste nicht mehr.",
+       "Der Teil „Speichern“ hat die Spieleinstellungen verlassen: Du exportierst und löschst deine Spiele von der Startseite aus.",
+       "In den Einstellungen behalten die Sprachen immer dieselbe Reihenfolge (Englisch, Französisch, Spanisch …).",
+       "Beim Manager erscheint die Goldstufe in den Auswahlen erst, wenn sie freigeschaltet ist (Stufe 120)."
+      ]
+     },
+     {
+      "name": "Kleine Änderungen",
+      "items": [
+       "Das Spiel zeigt „Release 1.2“ als Versionsnummer."
+      ]
+     }
+    ]
+   },
+   {
+    "title": "Release 1.1.2 (14. November 2026)",
+    "name": "Release 1.1.2",
+    "intro": "Das Spiel aktualisiert sich, ohne dass du dein Spiel verlassen musst, und die Tabs lassen sich beliebig ordnen.",
+    "groups": [
+     {
+      "name": "Aktualisierungen",
+      "items": [
+       "Das Spiel prüft von Zeit zu Zeit ohne Ruckeln, ob es eine neue Version gibt. Wenn ja, sagt Bob es dir und die Versionsnummer wird grün.",
+       "In den Neuigkeiten aktualisiert ein Button das Spiel, ohne die Seite neu zu laden. Dein Spiel wird kurz davor gespeichert.",
+       "Offline wird das Spiel nicht mehr gespeichert. Das Spiel sagt es dir und macht weiter, sobald die Verbindung zurück ist."
+      ]
+     },
+     {
+      "name": "Tabs",
+      "items": [
+       "Ab Stufe 450 kannst du die Tabs nach links oder rechts ziehen und beliebig ordnen.",
+       "Der Tab Maschinen zeigt ein rotes Abzeichen mit der Zahl der defekten Maschinen."
+      ]
+     },
+     {
+      "name": "Mitarbeiter",
+      "items": [
+       "Für Fahrer braucht man mindestens zwei Bäckereien."
+      ]
+     },
+     {
+      "name": "Handy",
+      "items": [
+       "Wenn die untere Leiste mehrere Zeitanzeigen hat, kannst du sie nach links und rechts verschieben, um alle zu sehen.",
+       "Die untere Leiste verdeckt das Ende der Tabs nicht mehr: Du kommst bis ans Ende der Liste."
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ "en": {
+  "title": "Update history",
+  "intro": "Everything that was added to Pâtisserie 2D Simulator, from the newest to the oldest. To understand the rules of the game, see the [wiki](REGLES.md).",
+  "versions": [
+   {
+    "title": "Release 1.3 Snapshot 1 (November 16, 2026)",
+    "name": "Release 1.3 Snapshot 1",
+    "intro": "A save that downloads itself, an easier Cookie theme, and old versions you can play again.",
+    "groups": [
+     {
+      "name": "Game",
+      "items": [
+       "**Automatic backup:** in the settings, pick an interval (from 5 minutes to 4 hours): a file of your save is downloaded by itself so you never lose it.",
+       "The Cookie theme unlocks at 50,000 cookies sold (instead of 100,000).",
+       "In the changelog, every version we keep a copy of has a \"Play this version\" link, and the titles are properly white in the dark theme."
+      ]
+     },
+     {
+      "name": "Website",
+      "items": [
+       "A \"About, How to play and Changelog\" page, and an \"Old versions\" page to play or download past versions again."
+      ]
+     }
+    ]
+   },
+   {
+    "title": "Release 1.2.3 (November 15, 2026)",
+    "name": "Release 1.2.3",
+    "intro": "Your company has a name, so does your first bakery, and your game list stays up to date.",
+    "groups": [
+     {
+      "name": "Game",
+      "items": [
+       "When you create a game, Bob asks for the name of your company: it will be the name of your game. Your first bakery has no name yet: Bob asks you to name it, for free.",
+       "The achievements page is handier: search, filters (all, unlocked, to do), \"All\" to see everything at once, and a progress bar for each category."
+      ]
+     },
+     {
+      "name": "Accounts and app",
+      "items": [
+       "If you delete or rename a game from another device or the browser, the app's list updates by itself, with nothing to do."
+      ]
+     }
+    ]
+   },
+   {
+    "title": "Release 1.2.2 (November 15, 2026)",
+    "name": "Release 1.2.2",
+    "intro": "More detail in the stats, updates without reloading, and a Bob who warns you when the wifi drops.",
+    "groups": [
+     {
+      "name": "Game",
+      "items": [
+       "In the stats, recipes prepared and ingredients prepared each have a drop-down menu: you can see the number of each recipe and each ingredient.",
+       "In French, Spanish, Portuguese, German, Russian or when using euros, decimal numbers are written with a comma (1,50 instead of 1.50).",
+       "Bob gets angry much more slowly: it takes far more clicks to push him over the edge.",
+       "Without wifi, Bob tells you: your game is not saved until the connection is back. Your other games can still be played, but they are not saved either."
+      ]
+     },
+     {
+      "name": "Updates",
+      "items": [
+       "When a new version exists, the version button turns green, in the browser and in the Windows app.",
+       "The \"Update\" button in what's new updates the game without reloading the page. In the Windows app, it restarts by itself."
+      ]
+     },
+     {
+      "name": "Accounts",
+      "items": [
+       "After a \"forgot password\" link, you can choose a new password right in the game."
+      ]
+     },
+     {
+      "name": "Shortcut",
+      "items": [
+       "When you install P2DS as an app (shortcut), its logo is smaller and well centered: it no longer touches the bottom of the icon."
+      ]
+     }
+    ]
+   },
+   {
+    "title": "Release 1.2.1.2 (November 15, 2026)",
+    "name": "Release 1.2.1.2",
+    "intro": "A small detail for app updates.",
+    "groups": [
+     {
+      "name": "Windows app",
+      "items": [
+       "The update window now shows the real name of the version (\"Release 1.2.1.2\"), and no longer an internal number."
+      ]
+     }
+    ]
+   },
+   {
+    "title": "Release 1.2.1.1 (November 15, 2026)",
+    "name": "Release 1.2.1.1",
+    "intro": "Small fixes.",
+    "groups": [
+     {
+      "name": "Windows app",
+      "items": [
+       "The \"Sign up on the website\" button now really opens the website in your browser."
+      ]
+     },
+     {
+      "name": "What's new",
+      "items": [
+       "The what's-new list is now translated into every language. Older versions stay in English outside French and English."
+      ]
+     }
+    ]
+   },
+   {
+    "title": "Release 1.2.1 (November 14, 2026)",
+    "name": "Release 1.2.1",
+    "intro": "Fixes and a simpler sign-up.",
+    "groups": [
+     {
+      "name": "Game",
+      "items": [
+       "Carriers now need at least 2 bakeries: with only one, they quit and you can't hire more.",
+       "The settings close button no longer flickers when the mouse passes between the button and the background: only its icon turns.",
+       "In the manager settings, the \"Priority\" part is now separated from \"Jobs to hire\"."
+      ]
+     },
+     {
+      "name": "Menu and accounts",
+      "items": [
+       "The \"P2DS\" title of the menu is white in dark mode.",
+       "The \"Continue with Google\" button animates when the mouse is over it, like the other buttons.",
+       "Signing up no longer sends a confirmation email: the account is ready right away. In the app, \"Sign up\" opens the website.",
+       "You can sign in to the Windows app with your account."
+      ]
+     },
+     {
+      "name": "Windows app",
+      "items": [
+       "The installer now only asks for your language. Saves and account are handled in the game, on the home page."
+      ]
+     }
+    ]
+   },
+   {
+    "title": "Release 1.2 (November 14, 2026)",
+    "name": "Release 1.2",
+    "intro": "A real home page, several games, accounts, and a Windows app.",
+    "groups": [
+     {
+      "name": "Home page",
+      "items": [
+       "The game now starts on a clean home page: the logo and \"P2DS\" at the top, your games below, and the same small footer as in the game.",
+       "The version number, with what's new, is at the top left. At the top right: the account, the settings (language and light or dark theme) and the app download.",
+       "Each slot shows the name, level and date of your game, all centered. Clicking the slot opens the game; two small buttons export or delete (trash).",
+       "You can have up to 10 bakeries, in two rows of 5.",
+       "A single + button opens a window: new game (a big animated Create button, no name to give: Bob asks for it), paste a save code, or open a save file. When you have 10 games, the + disappears and the game tells you the maximum is reached.",
+       "The menu never changes its look depending on your game theme: it is light, dark or automatic (your browser's), chosen in its settings.",
+       "Each game keeps its own language, which can differ from the menu's. A new game starts in the menu's language.",
+       "Your previous game automatically becomes your first slot: nothing is lost.",
+       "In the game, an arrow at the top takes you straight back to the menu, with no window."
+      ]
+     },
+     {
+      "name": "Online accounts",
+      "items": [
+       "You can create an account (username, email, password) or continue with Google, but it's not required. Your games sync with your account as soon as you have internet, and you can play offline with the local saves.",
+       "No account: your game stays in the app or in the browser. If you uninstall one or switch browsers, you lose it, unless you export it."
+      ]
+     },
+     {
+      "name": "Windows app",
+      "items": [
+       "A button, to the left of the bakeries one, installs the Windows app in one click. It only shows in a browser, on a Windows PC.",
+       "The app works completely offline, updates itself when you have internet, and never touches your saves.",
+       "The installer asks you three questions: your language, your saves and your account."
+      ]
+     },
+     {
+      "name": "Game",
+      "items": [
+       "Tab badges are yellow, except the breakdown ones, which stay red.",
+       "A broken building now shows a red badge on the Buildings tab, like machines.",
+       "The manager can automatically refuse applications whose level is too low.",
+       "The Cookie theme unlocks at 100,000 cookies sold instead of one million.",
+       "What's new opens much faster: it is kept from one time to the next and the oldest versions only show on request.",
+       "On phones, changing theme no longer shifts the bottom bar.",
+       "The \"Save\" part left the game settings: you export and delete your games from the home page.",
+       "In the settings, languages always keep the same order (English, French, Spanish…).",
+       "In the manager, the gold level only appears in the choices once unlocked (level 120)."
+      ]
+     },
+     {
+      "name": "Small changes",
+      "items": [
+       "The game shows \"Release 1.2\" as its version number."
+      ]
+     }
+    ]
+   },
+   {
+    "title": "Release 1.1.2 (November 14, 2026)",
+    "name": "Release 1.1.2",
+    "intro": "The game updates without making you leave your game, and tabs can be arranged as you like.",
+    "groups": [
+     {
+      "name": "Updates",
+      "items": [
+       "The game checks from time to time, with no lag, whether a new version exists. If so, Bob tells you, and the version number turns green.",
+       "In what's new, a button updates the game without reloading the page. Your game is saved right before.",
+       "Offline, the game is no longer saved. The game tells you, and resumes as soon as the connection is back."
+      ]
+     },
+     {
+      "name": "Tabs",
+      "items": [
+       "At level 450, you can drag the tabs left or right to arrange them as you like.",
+       "The Machines tab shows a red badge with the number of broken machines."
+      ]
+     },
+     {
+      "name": "Employees",
+      "items": [
+       "You need at least two bakeries to have carriers."
+      ]
+     },
+     {
+      "name": "Phone",
+      "items": [
+       "When there are several time gauges in the bottom bar, you can scroll them left and right to see them all.",
+       "The bottom bar no longer hides the end of the tabs: you can reach the very end of the list."
+      ]
+     }
+    ]
+   },
+   {
+    "title": "Release 1.1.1 (November 14, 2026)",
+    "name": "Release 1.1.1",
+    "intro": "A smoother game, richer employees, and the ability to play without a connection.",
+    "groups": [
+     {
+      "name": "Smoothness",
+      "items": [
+       "The game lags much less: the head chef, prices and recipe lists are computed much faster, and nothing is redrawn when the tab is hidden or a window is open."
+      ]
+     },
+     {
+      "name": "Playing offline",
+      "items": [
+       "Once the game is loaded, you can play without internet. Your game stays saved in your browser. To get an update, you must be connected and reload the page."
+      ]
+     },
+     {
+      "name": "Employees",
+      "items": [
+       "Even more detailed faces, with more hairstyles and details. No more mustache for women.",
+       "The countdowns in an employee's card (training, job change, next transfer) now tick down by themselves.",
+       "Carriers choose their rhythm: continuous, just once, or every 1, 2, 5, 10, 30 or 60 minutes. A button starts a transfer right away or starts the regular transfers."
+      ]
+     },
+     {
+      "name": "Small changes",
+      "items": [
+       "The button to go back to the top of the ingredients appears once you pass two thirds of the list, without flickering.",
+       "The game now shows \"Release 1.1.1\" as its version number."
+      ]
+     }
+    ]
+   },
+   {
+    "title": "Release 1.1.0 (November 13, 2026)",
+    "name": "Release 1.1.0",
+    "intro": "Much deeper employees, a preparation system that finally handles space, and plenty of extra settings.",
+    "groups": [
+     {
+      "name": "Preparing and selling",
+      "items": [
+       "You can prepare even when very little space is left: the bar freezes until you free some.",
+       "Space fills little by little, as the preparation bar advances.",
+       "Click a preparation bar to throw it away: you get back part of the ingredients, less and less as the bar has advanced.",
+       "Identical preparations group together in the bottom bar, with a small \"x2\", \"x3\"…",
+       "The money from a sale arrives little by little, as the bar advances.",
+       "When you can't prepare, the recipe card shows everything that is missing at once: ingredients and space.",
+       "The bottom bar is finally visible on phones.",
+       "Ingredients and recipes being unlocked have their progress bar at the bottom."
+      ]
+     },
+     {
+      "name": "Employees",
+      "items": [
+       "10 levels instead of 5. The higher you go, the less rare high levels are. Right after unlocking employees, only levels 1 and 2 exist.",
+       "Apprentices no longer have a level.",
+       "Before level 10, nobody shows up on their own: you have to start a search.",
+       "You can search for two jobs at once.",
+       "A new type of employee, the jack of all trades: up to 3 jobs (level 3 at most), a level of their own, and a job they focus on. Changing job takes 10 seconds to 1 minute.",
+       "The manager chooses which jobs they hire, which come first, and at which levels.",
+       "The head chef has an hourly budget, and prepares nothing below an amount you choose.",
+       "You can change an employee's salary from −50% to +50%. Paid less, their top morale is lower. Paid too little, they almost always quit.",
+       "Women have their job title in the feminine form: cueilleuse, boulangère, pâtissière…",
+       "More realistic faces, with more details."
+      ]
+     },
+     {
+      "name": "Collectors",
+      "items": [
+       "Two levels: efficiency, and loss (from 0% to 100% of what they pick). Applicants usually lose 1 to 20%. The less they lose, the more they cost.",
+       "Limits: only pick if there is less than N, or produce N per hour.",
+       "When you change a collector's ingredient, their countdown shows in their card and in the bottom bar.",
+       "Very rare high-level collectors can be specialized in one ingredient: very fast training, but no more changing."
+      ]
+     },
+     {
+      "name": "Bob",
+      "items": [
+       "Bob has new outfits and a new face in each theme."
+      ]
+     },
+     {
+      "name": "Settings",
+      "items": [
+       "An auto-pause: if you don't touch anything for the chosen time, the game pauses.",
+       "Saving can be done by file or by copy and paste, your choice.",
+       "Nice animations when opening and closing the settings."
+      ]
+     },
+     {
+      "name": "Small changes",
+      "items": [
+       "A button to go back to the top of the ingredient list.",
+       "Sugar has a new icon: a sugar cube.",
+       "5 new music tracks, to unlock as you level up.",
+       "The game only shows \"1.1\" as its version number."
+      ]
+     }
+    ]
+   },
+   {
+    "title": "Release 1.0 (November 9, 2026)",
+    "name": "Release 1.0",
+    "intro": "The first complete version of the game.",
+    "groups": [
+     {
+      "name": "Languages",
+      "items": [
+       "Russian, complete: the game now exists in 10 languages."
+      ]
+     },
+     {
+      "name": "Themes",
+      "items": [
+       "New Cookie theme, with cookies, chocolate chips, a glass of milk and a cookie jar, unlocked after 1 million cookies sold.",
+       "Hidden themes to discover.",
+       "The Party and Space themes stay hidden until you reach their level."
+      ]
+     },
+     {
+      "name": "Bob",
+      "items": [
+       "Sugar can be given to Bob as soon as he isn't well: sad, angry or sick. Not when he's happy.",
+       "The tutorial changes with his mood. If he's too angry, he waits until he calms down to explain it.",
+       "Bob has new expressions, and sometimes much stronger reactions. See which ones for yourself."
+      ]
+     },
+     {
+      "name": "Employees",
+      "items": [
+       "Faces of men and women, matching their first name.",
+       "A collector who changes ingredient takes time to get going: from 10 s at level 1 to 2 min at max level.",
+       "Rare applications from already trained employees, who cost more. You can click an application to see its job and level."
+      ]
+     },
+     {
+      "name": "Small changes",
+      "items": [
+       "The version number returns to its former look, while staying clickable to see what's new."
+      ]
+     }
+    ]
+   },
+   {
+    "title": "Beta 1.9 (November 8, 2026)",
+    "name": "Beta 1.9",
+    "intro": "",
+    "groups": [
+     {
+      "name": "Removed",
+      "items": [
+       "Rebirths no longer exist: no more banner, no more rebirth bonus. The 7 rebirth achievements are replaced by 7 machine level achievements."
+      ]
+     },
+     {
+      "name": "What's new",
+      "items": [
+       "The head chef can prepare only what is missing for the current orders.",
+       "Click the version number at the top to see these news in the game.",
+       "Bob knows 30 anecdotes about pastries instead of 15.",
+       "Bob reacts to other ingredients you give him. Find out which ones.",
+       "Near the start, Bob offers to send you notifications when you're not on the game: if your bakery runs without a pause, or if something important happens."
+      ]
+     },
+     {
+      "name": "Phone",
+      "items": [
+       "Event announcements are smaller and hide less of the screen.",
+       "Preparation and sale time is visible again, next to each bar."
+      ]
+     },
+     {
+      "name": "Small changes",
+      "items": [
+       "In the employee dashboard, \"working\", \"on break\" and \"on strike\" are written in their color, which changes with the theme."
+      ]
+     }
+    ]
+   },
+   {
+    "title": "Beta 1.8.1 (November 8, 2026)",
+    "name": "Beta 1.8.1",
+    "intro": "",
+    "groups": [
+     {
+      "name": "",
+      "items": [
+       "Two new complete languages: Japanese and Korean. The game now exists in 9 languages.",
+       "Orders speed up little by little with your level: one every 10 seconds only at level 1000."
+      ]
+     }
+    ]
+   },
+   {
+    "title": "Beta 1.8 (November 8, 2026)",
+    "name": "Beta 1.8",
+    "intro": "",
+    "groups": [
+     {
+      "name": "What's new",
+      "items": [
+       "Horror theme, only in October: black and orange, pumpkins, bats, ghosts, cobwebs and graves. Bob puts on his witch hat.",
+       "At least 100 machines: 80 more, in 16 families of 5 models, with new bonuses (morale, salaries, unlocks, breakdowns).",
+       "Machines sometimes break down (quick, cheap repair), and very rarely a building (long, expensive repair).",
+       "Big misfortunes, very rare, from level 30: flood, burglary, freezer failure, small fire.",
+       "The further you go, the more orders customers place.",
+       "A recipe you haven't prepared for a long time sells for more.",
+       "Bob gives advice, reminds you to save and tells anecdotes about pastries. It can be turned off in the settings."
+      ]
+     },
+     {
+      "name": "Settings",
+      "items": [
+       "The save is downloaded to a file and opened from a file, instead of a code to copy and paste.",
+       "English is first in the languages, then French.",
+       "The Save tab goes to the very bottom, under achievements and statistics."
+      ]
+     },
+     {
+      "name": "Employees",
+      "items": [
+       "The dashboard goes to the very top of the tab, with the employee search inside it."
+      ]
+     },
+     {
+      "name": "Balance",
+      "items": [
+       "The pure infinity source unlocks at level 1000: nothing unlocks after it."
+      ]
+     }
+    ]
+   },
+   {
+    "title": "Beta 1.7 (November 8, 2026)",
+    "name": "Beta 1.7",
+    "intro": "",
+    "groups": [
+     {
+      "name": "Employees",
+      "items": [
+       "A dashboard at the top of the tab, from level 20: the number of employees per job, those working, on break or on strike, deliveries on the road, and what each collector picks. Bob explains it.",
+       "Employees are sorted by job: the best at the top, apprentices at the bottom. You can drag a job, or use its arrows, to change the order.",
+       "More realistic faces: shoulders in the job's color, ears, eyebrows, real eyes, nose, several hairstyles and sometimes a beard."
+      ]
+     },
+     {
+      "name": "Transport",
+      "items": [
+       "A carrier's trip now lasts between 10 s and 10 min. It can be late, or have an accident and lose its load."
+      ]
+     },
+     {
+      "name": "Economy",
+      "items": [
+       "Preparing the same recipe too often lowers its selling price.",
+       "New events that only affect one ingredient (shortage, record harvest) or one recipe (trendy, snubbed)."
+      ]
+     },
+     {
+      "name": "Icons",
+      "items": [
+       "New icons for crêpes, madeleines, tiramisu and almonds. Hazelnuts change too, so they don't share the almonds' icon."
+      ]
+     }
+    ]
+   },
+   {
+    "title": "Beta 1.6.1 (November 8, 2026)",
+    "name": "Beta 1.6.1",
+    "intro": "",
+    "groups": [
+     {
+      "name": "",
+      "items": [
+       "Two new languages: Arabic, with the whole game reading right to left, and Mandarin (simplified Chinese).",
+       "The hidden theme is removed.",
+       "Sugar for Bob: no more button or hint, it's up to you to understand what pleases him.",
+       "Recipe icons are back as they were before Beta 1.6.",
+       "Fixed: a button or card that flickered when the mouse was right at the edge.",
+       "Fixed: with many languages, their buttons overflowed in the settings."
+      ]
+     }
+    ]
+   },
+   {
+    "title": "Beta 1.6 (November 7, 2026)",
+    "name": "Beta 1.6",
+    "intro": "",
+    "groups": [
+     {
+      "name": "",
+      "items": [
+       "The hidden theme turns green and brown: pixel blocks of grass, dirt, wood and stone, trees, torches and a little block pastry chef. Bob changes outfit with it.",
+       "On phones, you give sugar to Bob by dragging it from the sugar card, like with the mouse. The button next to Bob disappears.",
+       "8 new icons: no recipe shares its icon with another any more (crêpes, madeleines, fraisier, tiramisu, imperial tiramisu, fondant, saint-honoré and cardamom cake).",
+       "Eggs cost a tiny bit less: €0.28 instead of €0.30.",
+       "An employee can be put on break from their card. They stop working, but are still paid."
+      ]
+     }
+    ]
+   },
+   {
+    "title": "Beta 1.5 (November 7, 2026)",
+    "name": "Beta 1.5",
+    "intro": "",
+    "groups": [
+     {
+      "name": "Languages",
+      "items": [
+       "The game now exists in Portuguese and German, in addition to French, English and Spanish. Everything is translated, down to Bob's lines and the 1000 achievements.",
+       "The game picks these languages by itself if your browser uses them."
+      ]
+     },
+     {
+      "name": "Themes",
+      "items": [
+       "New Bakery theme at level 100: striped awning, baguettes, croissants, pretzels, wheat ears and flour sacks. Bob dresses as a baker.",
+       "A new hidden theme, to discover."
+      ]
+     },
+     {
+      "name": "On GitHub",
+      "items": [
+       "This update history."
+      ]
+     }
+    ]
+   },
+   {
+    "title": "Beta 1.4 (November 7, 2026)",
+    "name": "Beta 1.4",
+    "intro": "",
+    "groups": [
+     {
+      "name": "Employees",
+      "items": [
+       "Five levels per employee, with training to reach the next one.",
+       "Each employee has a face and their own settings.",
+       "You now start a search to hire, and it doesn't always succeed.",
+       "New: the apprentice, for whom you pay a job, the head chef, who prepares on their own, and the purveyor, who orders missing ingredients."
+      ]
+     },
+     {
+      "name": "Economy",
+      "items": [
+       "Machines are specific to each bakery, and there are more of them.",
+       "Buildings deliver a huge quantity once an hour instead of producing every second.",
+       "Ingredients and recipes unlock with a click, after a short wait.",
+       "Sales take a short delay."
+      ]
+     },
+     {
+      "name": "Bob",
+      "items": [
+       "He talks more and explains each new feature when it arrives.",
+       "He refuses to help you if you annoyed him."
+      ]
+     },
+     {
+      "name": "Phone and tablet",
+      "items": [
+       "No more accidental zoom or reload.",
+       "Bob's bubble and the bottom bar are reworked."
+      ]
+     }
+    ]
+   },
+   {
+    "title": "Beta 1.3 (November 7, 2026)",
+    "name": "Beta 1.3",
+    "intro": "",
+    "groups": [
+     {
+      "name": "",
+      "items": [
+       "New employee: the carrier, who takes money or stock to another of your bakeries.",
+       "Bob gives his advice in his bubble, and no longer has his own interface.",
+       "Complete Spanish.",
+       "1000 achievements, sorted in the settings with the statistics.",
+       "The bank becomes the last tab.",
+       "Buildings arrive at level 40 and the Party theme at level 500.",
+       "The Escape key pauses the game.",
+       "On small screens, ingredients go above the tabs.",
+       "Seasonal cakes are removed."
+      ]
+     }
+    ]
+   },
+   {
+    "title": "Beta 1.2 (November 7, 2026)",
+    "name": "Beta 1.2",
+    "intro": "",
+    "groups": [
+     {
+      "name": "Bakeries",
+      "items": [
+       "All your bakeries work at the same time.",
+       "Each bakery can have its own theme."
+      ]
+     },
+     {
+      "name": "What's new",
+      "items": [
+       "Customer orders and a head waiter to deliver them.",
+       "Machine shop.",
+       "40 seasonal cakes (removed in Beta 1.3).",
+       "Space and Party themes, and a new logo."
+      ]
+     },
+     {
+      "name": "Bob",
+      "items": [
+       "He changes face and outfit, likes sugar and sets you challenges."
+      ]
+     },
+     {
+      "name": "Balance",
+      "items": [
+       "Debt comes less easily.",
+       "The loan limit depends on your level.",
+       "Repaying a loan early costs less."
+      ]
+     }
+    ]
+   },
+   {
+    "title": "Beta 1.1 (November 6, 2026)",
+    "name": "Beta 1.1",
+    "intro": "",
+    "groups": [
+     {
+      "name": "",
+      "items": [
+       "Bank and loans, explained by Bob.",
+       "Illustrated seasonal themes: flowers, beach, leaves and snow.",
+       "New settings and pause menu.",
+       "Charts and totals from the second bakery.",
+       "Renaming your bakery costs €100."
+      ]
+     }
+    ]
+   },
+   {
+    "title": "Beta 1.0 (November 6, 2026)",
+    "name": "Beta 1.0",
+    "intro": "",
+    "groups": [
+     {
+      "name": "",
+      "items": [
+       "Introduction with Bob.",
+       "Music composed for the game.",
+       "708 achievements.",
+       "Rebalanced economy and fixes."
+      ]
+     }
+    ]
+   },
+   {
+    "title": "First release (November 5, 2026)",
+    "name": "First release",
+    "intro": "",
+    "groups": [
+     {
+      "name": "",
+      "items": [
+       "The game is online, with a new interface: new font, glassy header, animated background and fixed bottom bar.",
+       "New icons in place of system emojis.",
+       "Animations: particles, bounces and smooth bars."
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ "es": {
+  "title": "Historial de actualizaciones",
+  "intro": "Todo lo que se ha añadido a Pâtisserie 2D Simulator, de la más reciente a la más antigua. Las versiones más antiguas se muestran en inglés. Para entender las reglas del juego, mira la [wiki](REGLES.md).",
+  "versions": [
+   {
+    "title": "Release 1.3 Snapshot 1 (16 de noviembre de 2026)",
+    "name": "Release 1.3 Snapshot 1",
+    "intro": "Una copia que se descarga sola, un tema Galleta más fácil y versiones antiguas para volver a jugar.",
+    "groups": [
+     {
+      "name": "Juego",
+      "items": [
+       "**Copia automática:** en los ajustes elige un intervalo (de 5 minutos a 4 horas): se descarga solo un archivo de tu partida para no perderla nunca.",
+       "El tema Galleta se desbloquea con 50 000 galletas vendidas (antes 100 000).",
+       "En el registro de cambios, cada versión de la que guardamos copia tiene un enlace «Jugar esta versión», y los títulos son blancos en el tema oscuro."
+      ]
+     },
+     {
+      "name": "Web",
+      "items": [
+       "Una página «Presentación, cómo jugar y cambios» y otra de «Versiones antiguas» para jugar o descargar versiones pasadas."
+      ]
+     }
+    ]
+   },
+   {
+    "title": "Release 1.2.3 (15 de noviembre de 2026)",
+    "name": "Release 1.2.3",
+    "intro": "Tu empresa tiene nombre, tu primera pastelería también, y la lista de tus partidas se mantiene al día.",
+    "groups": [
+     {
+      "name": "Juego",
+      "items": [
+       "Al crear una partida, Bob te pregunta el nombre de tu empresa: será el nombre de tu partida. Tu primera pastelería aún no tiene nombre: Bob te pide que se lo pongas, gratis.",
+       "La página de logros es más cómoda: búsqueda, filtros (todos, desbloqueados, por hacer), «Todos» para verlo todo de golpe y una barra de progreso por categoría."
+      ]
+     },
+     {
+      "name": "Cuentas y aplicación",
+      "items": [
+       "Si borras o renombras una partida desde otro dispositivo o el navegador, la lista de la aplicación se actualiza sola."
+      ]
+     }
+    ]
+   },
+   {
+    "title": "Release 1.2.2 (15 de noviembre de 2026)",
+    "name": "Release 1.2.2",
+    "intro": "Más detalle en las estadísticas, actualizaciones sin recargar y un Bob que te avisa cuando se va el wifi.",
+    "groups": [
+     {
+      "name": "Juego",
+      "items": [
+       "En las estadísticas, las recetas preparadas y los ingredientes preparados tienen cada uno un menú desplegable: ves la cantidad de cada receta y de cada ingrediente.",
+       "En francés, español, portugués, alemán, ruso o con euros, los números con decimales se escriben con coma (1,50 en lugar de 1.50).",
+       "Bob se enfada mucho más despacio: hacen falta muchos más clics para sacarlo de quicio.",
+       "Sin wifi, Bob te avisa: tu partida no se guarda hasta que vuelva la conexión. Tus otras partidas se pueden jugar, pero tampoco se guardan."
+      ]
+     },
+     {
+      "name": "Actualizaciones",
+      "items": [
+       "Cuando hay una versión nueva, el botón de versión se pone verde, en el navegador y en la aplicación de Windows.",
+       "El botón «Actualizar» de las novedades actualiza el juego sin recargar la página. En la aplicación de Windows, se reinicia sola."
+      ]
+     },
+     {
+      "name": "Cuentas",
+      "items": [
+       "Tras un enlace de «contraseña olvidada», puedes elegir una contraseña nueva directamente en el juego."
+      ]
+     },
+     {
+      "name": "Acceso directo",
+      "items": [
+       "Cuando instalas P2DS como aplicación (acceso directo), su logo es más pequeño y está bien centrado: ya no toca la parte de abajo del icono."
+      ]
+     }
+    ]
+   },
+   {
+    "title": "Release 1.2.1.2 (15 de noviembre de 2026)",
+    "name": "Release 1.2.1.2",
+    "intro": "Un pequeño detalle para las actualizaciones de la aplicación.",
+    "groups": [
+     {
+      "name": "Aplicación de Windows",
+      "items": [
+       "La ventana de actualización muestra ahora el nombre real de la versión («Release 1.2.1.2») y ya no un número interno."
+      ]
+     }
+    ]
+   },
+   {
+    "title": "Release 1.2.1.1 (15 de noviembre de 2026)",
+    "name": "Release 1.2.1.1",
+    "intro": "Pequeñas correcciones.",
+    "groups": [
+     {
+      "name": "Aplicación de Windows",
+      "items": [
+       "El botón «Registrarse en la web» ahora abre de verdad la web en tu navegador."
+      ]
+     },
+     {
+      "name": "Novedades",
+      "items": [
+       "La lista de novedades está traducida a todos los idiomas. Las versiones más antiguas siguen en inglés, salvo en francés e inglés."
+      ]
+     }
+    ]
+   },
+   {
+    "title": "Release 1.2.1 (14 de noviembre de 2026)",
+    "name": "Release 1.2.1",
+    "intro": "Correcciones y un registro más sencillo.",
+    "groups": [
+     {
+      "name": "Juego",
+      "items": [
+       "Los transportistas ahora necesitan al menos 2 pastelerías: con una sola, dimiten y no puedes contratar más.",
+       "El botón de cerrar los ajustes ya no parpadea cuando el ratón pasa entre el botón y el fondo: solo gira su icono.",
+       "En los ajustes del gerente, la parte «Prioridad» está separada de «Oficios a contratar»."
+      ]
+     },
+     {
+      "name": "Menú y cuentas",
+      "items": [
+       "El título «P2DS» del menú es blanco en modo oscuro.",
+       "El botón «Continuar con Google» se anima al pasar el ratón, como los demás botones.",
+       "Registrarse ya no envía un correo de confirmación: la cuenta está lista al instante. En la aplicación, «Registrarse» abre la web.",
+       "Puedes iniciar sesión en la aplicación de Windows con tu cuenta."
+      ]
+     },
+     {
+      "name": "Aplicación de Windows",
+      "items": [
+       "El instalador solo pregunta ya el idioma. Las partidas y la cuenta se gestionan en el juego, en la página de inicio."
+      ]
+     }
+    ]
+   },
+   {
+    "title": "Release 1.2 (14 de noviembre de 2026)",
+    "name": "Release 1.2",
+    "intro": "Una verdadera página de inicio, varias partidas, cuentas y una aplicación de Windows.",
+    "groups": [
+     {
+      "name": "Página de inicio",
+      "items": [
+       "El juego empieza ahora en una página de inicio limpia: el logo y «P2DS» arriba, tus partidas debajo y el mismo pie de página pequeño que en el juego.",
+       "El número de versión, con las novedades, está arriba a la izquierda. Arriba a la derecha: la cuenta, los ajustes (idioma y tema claro u oscuro) y la descarga de la aplicación.",
+       "Cada casilla muestra el nombre, el nivel y la fecha de tu partida, todo centrado. Un clic en la casilla abre la partida; dos botones pequeños exportan o eliminan (papelera).",
+       "Puedes tener hasta 10 pastelerías, en dos filas de 5.",
+       "Un único botón + abre una ventana: nueva partida (un gran botón Crear animado, sin nombre que dar: lo pide Bob), pegar un código de partida o abrir un archivo de partida. Con 10 partidas, el + desaparece y el juego te avisa de que se alcanzó el máximo.",
+       "El menú nunca cambia de aspecto según el tema de tu partida: es claro, oscuro o automático (el de tu navegador), a tu elección en sus ajustes.",
+       "Cada partida conserva su propio idioma, que puede ser distinto del menú. Una partida nueva empieza en el idioma del menú.",
+       "Tu partida anterior pasa a ser automáticamente tu primera casilla: no se pierde nada.",
+       "En el juego, una flecha arriba te lleva directamente al menú, sin ventana."
+      ]
+     },
+     {
+      "name": "Cuentas en línea",
+      "items": [
+       "Puedes crear una cuenta (apodo, correo, contraseña) o continuar con Google, pero no es obligatorio. Tus partidas se sincronizan con tu cuenta en cuanto tienes internet, y puedes jugar sin conexión con las partidas locales.",
+       "Sin cuenta: tu partida se queda en la aplicación o en el navegador. Si desinstalas uno o cambias de navegador, la pierdes, salvo que la exportes."
+      ]
+     },
+     {
+      "name": "Aplicación de Windows",
+      "items": [
+       "Un botón, a la izquierda del de las pastelerías, instala la aplicación de Windows con un clic. Solo aparece en un navegador, en un PC con Windows.",
+       "La aplicación funciona totalmente sin conexión, se actualiza sola cuando tienes internet y nunca toca tus partidas.",
+       "El instalador te hace tres preguntas: tu idioma, tus partidas y tu cuenta."
+      ]
+     },
+     {
+      "name": "Juego",
+      "items": [
+       "Las insignias de las pestañas son amarillas, salvo las de averías, que siguen en rojo.",
+       "Un edificio averiado muestra ahora una insignia roja en la pestaña Edificios, como las máquinas.",
+       "El gerente puede rechazar automáticamente las candidaturas de nivel demasiado bajo.",
+       "El tema Cookie se desbloquea con 100 000 galletas vendidas en lugar de un millón.",
+       "Las novedades se abren mucho más rápido: se guardan de una vez para otra y las versiones más antiguas solo se muestran a petición.",
+       "En el móvil, cambiar de tema ya no desplaza la barra inferior.",
+       "La parte «Guardado» salió de los ajustes del juego: exportas y eliminas tus partidas desde la página de inicio.",
+       "En los ajustes, los idiomas conservan siempre el mismo orden (inglés, francés, español…).",
+       "En el gerente, el nivel oro solo aparece en las opciones una vez desbloqueado (nivel 120)."
+      ]
+     },
+     {
+      "name": "Pequeños cambios",
+      "items": [
+       "El juego muestra «Release 1.2» como número de versión."
+      ]
+     }
+    ]
+   },
+   {
+    "title": "Release 1.1.2 (14 de noviembre de 2026)",
+    "name": "Release 1.1.2",
+    "intro": "El juego se actualiza sin que salgas de tu partida, y las pestañas se ordenan como quieras.",
+    "groups": [
+     {
+      "name": "Actualizaciones",
+      "items": [
+       "El juego comprueba de vez en cuando, sin lag, si existe una versión nueva. Si es así, Bob te lo dice y el número de versión se pone verde.",
+       "En las novedades, un botón actualiza el juego sin recargar la página. Tu partida se guarda justo antes.",
+       "Sin conexión, la partida ya no se guarda. El juego te lo dice y reanuda en cuanto vuelve la conexión."
+      ]
+     },
+     {
+      "name": "Pestañas",
+      "items": [
+       "En el nivel 450 puedes arrastrar las pestañas a izquierda o derecha para ordenarlas como quieras.",
+       "La pestaña Máquinas muestra una insignia roja con el número de máquinas averiadas."
+      ]
+     },
+     {
+      "name": "Empleados",
+      "items": [
+       "Hacen falta al menos dos pastelerías para tener transportistas."
+      ]
+     },
+     {
+      "name": "Móvil",
+      "items": [
+       "Cuando hay varios indicadores de tiempo en la barra inferior, puedes desplazarlos a izquierda y derecha para verlos todos.",
+       "La barra inferior ya no oculta el final de las pestañas: puedes llegar hasta el final de la lista."
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ "ja": {
+  "title": "更新履歴",
+  "intro": "Pâtisserie 2D Simulator に追加されたすべての内容を、新しいものから古いものの順に載せています。古いバージョンは英語で表示されます。ゲームのルールは[ウィキ](REGLES.md)を見てください。",
+  "versions": [
+   {
+    "title": "Release 1.3 Snapshot 1（2026年11月16日）",
+    "name": "Release 1.3 Snapshot 1（2026年11月16日）",
+    "intro": "自動でダウンロードされるバックアップ、解放しやすくなったクッキーテーマ、遊び直せる過去のバージョン。",
+    "groups": [
+     {
+      "name": "ゲーム",
+      "items": [
+       "**自動バックアップ：**設定で間隔（5 分〜4 時間）を選ぶと、セーブのファイルが自動でダウンロードされ、失う心配がありません。",
+       "クッキーテーマは 5 万個売ると解放されます（以前は 10 万個）。",
+       "更新履歴では、コピーを残しているバージョンに「このバージョンを遊ぶ」リンクが付き、ダークテーマでも見出しは白で表示されます。"
+      ]
+     },
+     {
+      "name": "サイト",
+      "items": [
+       "「紹介・遊び方・更新履歴」ページと、過去のバージョンを遊んだりダウンロードしたりできる「過去のバージョン」ページを追加しました。"
+      ]
+     }
+    ]
+   },
+   {
+    "title": "Release 1.2.3（2026年11月15日）",
+    "name": "Release 1.2.3（2026年11月15日）",
+    "intro": "会社に名前が付き、最初のお店にも名前が付き、ゲーム一覧は常に最新になります。",
+    "groups": [
+     {
+      "name": "ゲーム",
+      "items": [
+       "ゲームを作ると、ボブが会社の名前を聞きます。それがゲームの名前になります。最初のお店はまだ名前がありません。ボブが無料で名前を付けるよう頼みます。",
+       "実績ページが使いやすくなりました：検索、絞り込み（すべて、解除済み、未達成）、全部を一度に見られる「すべて」、カテゴリごとの進捗バー。"
+      ]
+     },
+     {
+      "name": "アカウントとアプリ",
+      "items": [
+       "ほかの端末やブラウザでゲームを削除・名前変更しても、アプリの一覧が自動で更新されます。"
+      ]
+     }
+    ]
+   },
+   {
+    "title": "Release 1.2.2（2026年11月15日）",
+    "name": "Release 1.2.2（2026年11月15日）",
+    "intro": "統計がより詳しくなり、再読み込みなしで更新でき、Wi-Fiが切れるとボブが知らせます。",
+    "groups": [
+     {
+      "name": "ゲーム",
+      "items": [
+       "統計で、作ったレシピと作った材料にそれぞれプルダウンメニューが付き、レシピや材料ごとの数が見られます。",
+       "フランス語、スペイン語、ポルトガル語、ドイツ語、ロシア語、またはユーロの場合、小数はカンマで表示されます（1.50ではなく1,50）。",
+       "ボブはずっとゆっくり怒るようになりました。限界まで怒らせるには、もっとたくさんクリックが必要です。",
+       "Wi-Fiがないと、ボブが教えてくれます。接続が戻るまでゲームは保存されません。ほかのゲームも遊べますが、保存されません。"
+      ]
+     },
+     {
+      "name": "アップデート",
+      "items": [
+       "新しいバージョンがあると、バージョンのボタンが緑になります。ブラウザでもWindowsアプリでも同じです。",
+       "新着情報の「更新」ボタンで、ページを再読み込みせずにゲームを更新できます。Windowsアプリでは自動的に再起動します。"
+      ]
+     },
+     {
+      "name": "アカウント",
+      "items": [
+       "「パスワードを忘れた」のリンクを開いたあと、ゲームの中で新しいパスワードを決められます。"
+      ]
+     },
+     {
+      "name": "ショートカット",
+      "items": [
+       "P2DSをアプリ（ショートカット）として入れると、ロゴが小さく中央に収まり、アイコンの下に触れなくなりました。"
+      ]
+     }
+    ]
+   },
+   {
+    "title": "Release 1.2.1.2（2026年11月15日）",
+    "name": "Release 1.2.1.2（2026年11月15日）",
+    "intro": "アプリの更新に関する小さな修正です。",
+    "groups": [
+     {
+      "name": "Windowsアプリ",
+      "items": [
+       "更新のウィンドウに、内部の番号ではなく、バージョンの本当の名前（「Release 1.2.1.2」）が表示されるようになりました。"
+      ]
+     }
+    ]
+   },
+   {
+    "title": "Release 1.2.1.1（2026年11月15日）",
+    "name": "Release 1.2.1.1（2026年11月15日）",
+    "intro": "小さな修正です。",
+    "groups": [
+     {
+      "name": "Windowsアプリ",
+      "items": [
+       "「サイトで新規登録」ボタンが、ちゃんとブラウザでサイトを開くようになりました。"
+      ]
+     },
+     {
+      "name": "新着情報",
+      "items": [
+       "新着情報がすべての言語に翻訳されました。フランス語と英語以外では、古いバージョンは英語のままです。"
+      ]
+     }
+    ]
+   },
+   {
+    "title": "Release 1.2.1（2026年11月14日）",
+    "name": "Release 1.2.1（2026年11月14日）",
+    "intro": "修正と、かんたんになった登録。",
+    "groups": [
+     {
+      "name": "ゲーム",
+      "items": [
+       "運送係には最低2軒のパン屋が必要になりました。1軒だけだと辞めてしまい、新しく雇えません。",
+       "マウスがボタンと背景の間を通っても、設定の閉じるボタンが点滅しなくなりました。回るのはアイコンだけです。",
+       "マネージャーの設定で、「優先順位」の部分が「採用する職業」から離れました。"
+      ]
+     },
+     {
+      "name": "メニューとアカウント",
+      "items": [
+       "メニューの「P2DS」の文字が、ダークモードでは白になります。",
+       "「Googleで続ける」ボタンが、ほかのボタンと同じようにマウスを乗せると動きます。",
+       "登録しても確認メールは送られません。アカウントはすぐ使えます。アプリでは「新規登録」でサイトが開きます。",
+       "Windowsアプリでアカウントにログインできます。"
+      ]
+     },
+     {
+      "name": "Windowsアプリ",
+      "items": [
+       "インストーラーが聞くのは言語だけになりました。セーブとアカウントは、ゲームのホーム画面で設定します。"
+      ]
+     }
+    ]
+   },
+   {
+    "title": "Release 1.2（2026年11月14日）",
+    "name": "Release 1.2（2026年11月14日）",
+    "intro": "本格的なホーム画面、複数のゲーム、アカウント、そしてWindowsアプリ。",
+    "groups": [
+     {
+      "name": "ホーム画面",
+      "items": [
+       "ゲームがすっきりしたホーム画面から始まります。上にロゴと「P2DS」、その下にあなたのゲーム、そしてゲームと同じ小さなフッターがあります。",
+       "バージョン番号と新着情報は左上に、右上にはアカウント、設定（言語とライト／ダークのテーマ）、アプリのダウンロードがあります。",
+       "各枠には、ゲームの名前、レベル、日付が中央にそろって表示されます。枠をクリックするとゲームが開き、2つの小さなボタンでエクスポートや削除（ゴミ箱）ができます。",
+       "パティスリーは最大10軒、5軒ずつ2段に並びます。",
+       "+ボタンは1つだけで、ウィンドウが開きます。新しいゲーム（動く大きな「作成」ボタン。名前は不要で、ボブが聞いてくれます）、セーブコードの貼り付け、セーブファイルを開く、から選べます。10個になると+が消え、上限に達したことをゲームが伝えます。",
+       "メニューの見た目は、ゲームのテーマによって変わりません。ライト、ダーク、自動（ブラウザに合わせる）から、メニューの設定で選べます。",
+       "各ゲームは自分の言語を持ち、メニューの言語と違ってもかまいません。新しいゲームはメニューの言語で始まります。",
+       "以前のゲームは自動的に最初の枠になります。何も失われません。",
+       "ゲーム内では、上の矢印を押すとウィンドウなしですぐメニューに戻れます。"
+      ]
+     },
+     {
+      "name": "オンラインアカウント",
+      "items": [
+       "アカウント（ユーザー名、メール、パスワード）を作るか、Googleで続けることができますが、必須ではありません。インターネットがあればゲームはアカウントと同期され、なくてもローカルのセーブでオフラインで遊べます。",
+       "アカウントがない場合、ゲームはアプリかブラウザの中に残ります。どちらかをアンインストールしたりブラウザを変えたりすると、エクスポートしていない限り失われます。"
+      ]
+     },
+     {
+      "name": "Windowsアプリ",
+      "items": [
+       "パティスリーのボタンの左にあるボタンで、Windowsアプリをワンクリックでインストールできます。Windowsパソコンのブラウザでだけ表示されます。",
+       "アプリは完全にオフラインで動き、インターネットがあれば自動で更新され、セーブには決して触れません。",
+       "インストーラーは3つの質問をします。言語、セーブ、アカウントです。"
+      ]
+     },
+     {
+      "name": "ゲーム",
+      "items": [
+       "タブのバッジは黄色になりました。故障のバッジだけは赤のままです。",
+       "壊れた建物は、機械と同じように「建物」タブに赤いバッジが出ます。",
+       "マネージャーは、レベルが低すぎる応募を自動で断れます。",
+       "クッキーのテーマは、100万個ではなく10万個売ると解放されます。",
+       "新着情報の表示がずっと速くなりました。前回の内容が保存され、いちばん古いバージョンは求めたときだけ表示されます。",
+       "スマホで、テーマを変えても下のバーがずれなくなりました。",
+       "「セーブ」の項目がゲームの設定から消えました。ゲームのエクスポートと削除はホーム画面でします。",
+       "設定の言語は、いつも同じ順番（英語、フランス語、スペイン語…）で並びます。",
+       "マネージャーでは、金のレベルは解放後（レベル120）にだけ選択肢に出ます。"
+      ]
+     },
+     {
+      "name": "ちょっとした変更",
+      "items": [
+       "ゲームのバージョン番号が「Release 1.2」と表示されます。"
+      ]
+     }
+    ]
+   },
+   {
+    "title": "Release 1.1.2（2026年11月14日）",
+    "name": "Release 1.1.2（2026年11月14日）",
+    "intro": "ゲームから離れずに更新でき、タブも好きな順に並べられます。",
+    "groups": [
+     {
+      "name": "アップデート",
+      "items": [
+       "ゲームは、ときどき重くならずに新しいバージョンがあるか確認します。あればボブが教えてくれて、バージョン番号が緑になります。",
+       "新着情報のボタンで、ページを再読み込みせずにゲームを更新できます。直前にゲームが保存されます。",
+       "オフラインのときはゲームが保存されません。ゲームがそれを伝え、接続が戻ると再開します。"
+      ]
+     },
+     {
+      "name": "タブ",
+      "items": [
+       "レベル450になると、タブを左右にドラッグして好きな順に並べられます。",
+       "「機械」タブには、壊れた機械の数が赤いバッジで表示されます。"
+      ]
+     },
+     {
+      "name": "従業員",
+      "items": [
+       "運送係を雇うには、パン屋が2軒以上必要です。"
+      ]
+     },
+     {
+      "name": "スマホ",
+      "items": [
+       "下のバーに時間のゲージが複数あるときは、左右にスクロールして全部見られます。",
+       "下のバーがタブの最後を隠さなくなりました。リストの最後まで行けます。"
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ "ko": {
+  "title": "업데이트 기록",
+  "intro": "Pâtisserie 2D Simulator에 추가된 모든 내용을 최신순으로 적었습니다. 오래된 버전은 영어로 표시됩니다. 게임 규칙은 [위키](REGLES.md)를 참고하세요.",
+  "versions": [
+   {
+    "title": "Release 1.3 Snapshot 1 (2026년 11월 16일)",
+    "name": "Release 1.3 Snapshot 1",
+    "intro": "저절로 내려받아지는 백업, 더 쉬워진 쿠키 테마, 다시 즐길 수 있는 옛 버전.",
+    "groups": [
+     {
+      "name": "게임",
+      "items": [
+       "**자동 백업:** 설정에서 간격(5분~4시간)을 고르면 저장 파일이 저절로 내려받아져 절대 잃어버리지 않습니다.",
+       "쿠키 테마는 쿠키 5만 개를 팔면 열립니다(이전에는 10만 개).",
+       "변경 내역에서 사본이 남아 있는 버전마다 “이 버전 플레이” 링크가 생겼고, 어두운 테마에서도 제목이 흰색입니다."
+      ]
+     },
+     {
+      "name": "사이트",
+      "items": [
+       "“소개, 플레이 방법, 변경 내역” 페이지와 지난 버전을 다시 하거나 내려받는 “옛 버전” 페이지가 생겼습니다."
+      ]
+     }
+    ]
+   },
+   {
+    "title": "Release 1.2.3 (2026년 11월 15일)",
+    "name": "Release 1.2.3",
+    "intro": "회사에 이름이 생기고, 첫 제과점에도 이름이 생기며, 게임 목록은 항상 최신으로 유지됩니다.",
+    "groups": [
+     {
+      "name": "게임",
+      "items": [
+       "게임을 만들면 밥이 회사 이름을 물어봅니다. 그 이름이 게임 이름이 됩니다. 첫 제과점은 아직 이름이 없습니다. 밥이 무료로 이름을 지어 달라고 합니다.",
+       "업적 페이지가 더 편해졌습니다. 검색, 필터(전체, 해제됨, 남은 것), 한 번에 보는 “전체”, 분류별 진행 막대가 있습니다."
+      ]
+     },
+     {
+      "name": "계정과 앱",
+      "items": [
+       "다른 기기나 브라우저에서 게임을 삭제하거나 이름을 바꾸면 앱의 목록이 저절로 갱신됩니다."
+      ]
+     }
+    ]
+   },
+   {
+    "title": "Release 1.2.2 (2026년 11월 15일)",
+    "name": "Release 1.2.2",
+    "intro": "통계가 더 자세해지고, 새로고침 없이 업데이트하며, 와이파이가 끊기면 밥이 알려 줍니다.",
+    "groups": [
+     {
+      "name": "게임",
+      "items": [
+       "통계에서 만든 레시피와 만든 재료에 각각 펼침 메뉴가 생겨, 레시피와 재료별 개수를 볼 수 있습니다.",
+       "프랑스어, 스페인어, 포르투갈어, 독일어, 러시아어를 쓰거나 유로를 쓸 때는 소수를 쉼표로 씁니다(1.50 대신 1,50).",
+       "밥이 훨씬 천천히 화를 냅니다. 끝까지 화나게 하려면 훨씬 많이 눌러야 합니다.",
+       "와이파이가 없으면 밥이 알려 줍니다. 연결이 돌아올 때까지 게임이 저장되지 않습니다. 다른 게임도 할 수 있지만 저장되지 않습니다."
+      ]
+     },
+     {
+      "name": "업데이트",
+      "items": [
+       "새 버전이 있으면 버전 버튼이 초록색이 됩니다. 브라우저에서도 Windows 앱에서도 마찬가지입니다.",
+       "새로운 소식의 “업데이트” 버튼은 페이지를 새로고침하지 않고 게임을 업데이트합니다. Windows 앱에서는 저절로 다시 시작합니다."
+      ]
+     },
+     {
+      "name": "계정",
+      "items": [
+       "“비밀번호 찾기” 링크를 누른 뒤 게임 안에서 바로 새 비밀번호를 정할 수 있습니다."
+      ]
+     },
+     {
+      "name": "바로가기",
+      "items": [
+       "P2DS를 앱(바로가기)으로 설치하면 로고가 더 작고 가운데에 놓여 아이콘 아래쪽에 닿지 않습니다."
+      ]
+     }
+    ]
+   },
+   {
+    "title": "Release 1.2.1.2 (2026년 11월 15일)",
+    "name": "Release 1.2.1.2",
+    "intro": "앱 업데이트에 관한 작은 수정입니다.",
+    "groups": [
+     {
+      "name": "Windows 앱",
+      "items": [
+       "업데이트 창이 이제 내부 번호 대신 버전의 실제 이름(“Release 1.2.1.2”)을 보여 줍니다."
+      ]
+     }
+    ]
+   },
+   {
+    "title": "Release 1.2.1.1 (2026년 11월 15일)",
+    "name": "Release 1.2.1.1",
+    "intro": "작은 수정입니다.",
+    "groups": [
+     {
+      "name": "Windows 앱",
+      "items": [
+       "“웹사이트에서 가입” 버튼이 이제 정말로 브라우저에서 웹사이트를 엽니다."
+      ]
+     },
+     {
+      "name": "새로운 소식",
+      "items": [
+       "새로운 소식 목록이 모든 언어로 번역되었습니다. 프랑스어와 영어를 제외하면 오래된 버전은 영어로 남습니다."
+      ]
+     }
+    ]
+   },
+   {
+    "title": "Release 1.2.1 (2026년 11월 14일)",
+    "name": "Release 1.2.1",
+    "intro": "수정과 더 간단한 가입.",
+    "groups": [
+     {
+      "name": "게임",
+      "items": [
+       "운송원에게는 이제 제과점이 최소 2개 필요합니다. 하나뿐이면 그만두고, 더 고용할 수 없습니다.",
+       "마우스가 버튼과 배경 사이를 지나가도 설정의 닫기 버튼이 더 이상 깜빡이지 않습니다. 아이콘만 돕니다.",
+       "매니저 설정에서 “우선순위” 부분이 “고용할 직업”과 떨어졌습니다."
+      ]
+     },
+     {
+      "name": "메뉴와 계정",
+      "items": [
+       "메뉴의 “P2DS” 제목이 다크 모드에서 흰색입니다.",
+       "“Google로 계속” 버튼이 다른 버튼처럼 마우스를 올리면 움직입니다.",
+       "가입해도 확인 이메일이 오지 않습니다. 계정을 바로 쓸 수 있습니다. 앱에서는 “가입”이 웹사이트를 엽니다.",
+       "Windows 앱에서 계정으로 로그인할 수 있습니다."
+      ]
+     },
+     {
+      "name": "Windows 앱",
+      "items": [
+       "설치 프로그램은 이제 언어만 묻습니다. 저장과 계정은 게임의 홈 화면에서 설정합니다."
+      ]
+     }
+    ]
+   },
+   {
+    "title": "Release 1.2 (2026년 11월 14일)",
+    "name": "Release 1.2",
+    "intro": "진짜 홈 화면, 여러 게임, 계정, 그리고 Windows 앱.",
+    "groups": [
+     {
+      "name": "홈 화면",
+      "items": [
+       "게임이 이제 깔끔한 홈 화면에서 시작합니다. 위에는 로고와 “P2DS”, 그 아래에 내 게임들, 그리고 게임과 같은 작은 하단 문구가 있습니다.",
+       "버전 번호와 새로운 소식은 왼쪽 위에, 오른쪽 위에는 계정, 설정(언어와 라이트 또는 다크 테마), 앱 다운로드가 있습니다.",
+       "각 칸에는 게임의 이름, 레벨, 날짜가 가운데 정렬로 표시됩니다. 칸을 누르면 게임이 열리고, 작은 버튼 두 개로 내보내거나 삭제(휴지통)할 수 있습니다.",
+       "제과점은 최대 10개까지, 5개씩 두 줄로 놓입니다.",
+       "+ 버튼은 하나뿐이며 창을 엽니다. 새 게임(움직이는 큰 “만들기” 버튼, 이름은 필요 없고 밥이 물어봅니다), 저장 코드 붙여넣기, 저장 파일 열기 중에서 고릅니다. 게임이 10개가 되면 +가 사라지고 최대치에 도달했다고 알려 줍니다.",
+       "메뉴의 모습은 게임 테마에 따라 바뀌지 않습니다. 메뉴 설정에서 라이트, 다크, 자동(브라우저 설정)을 고를 수 있습니다.",
+       "각 게임은 자기만의 언어를 유지하며, 메뉴의 언어와 달라도 됩니다. 새 게임은 메뉴의 언어로 시작합니다.",
+       "예전 게임은 자동으로 첫 번째 칸이 됩니다. 아무것도 잃지 않습니다.",
+       "게임 안에서는 위쪽 화살표를 누르면 창 없이 바로 메뉴로 돌아갑니다."
+      ]
+     },
+     {
+      "name": "온라인 계정",
+      "items": [
+       "계정(닉네임, 이메일, 비밀번호)을 만들거나 Google로 계속할 수 있지만 필수는 아닙니다. 인터넷이 있으면 게임이 계정과 동기화되고, 없어도 로컬 저장으로 오프라인에서 할 수 있습니다.",
+       "계정이 없으면 게임은 앱이나 브라우저 안에 남습니다. 둘 중 하나를 삭제하거나 브라우저를 바꾸면 내보내지 않은 이상 잃게 됩니다."
+      ]
+     },
+     {
+      "name": "Windows 앱",
+      "items": [
+       "제과점 버튼 왼쪽의 버튼으로 Windows 앱을 한 번에 설치할 수 있습니다. Windows PC의 브라우저에서만 나타납니다.",
+       "앱은 완전히 오프라인으로 작동하고, 인터넷이 있으면 스스로 업데이트하며, 저장 파일은 절대 건드리지 않습니다.",
+       "설치 프로그램은 세 가지를 묻습니다. 언어, 저장, 계정입니다."
+      ]
+     },
+     {
+      "name": "게임",
+      "items": [
+       "탭의 배지는 노란색이고, 고장 배지만 계속 빨간색입니다.",
+       "고장 난 건물은 이제 기계처럼 “건물” 탭에 빨간 배지가 나타납니다.",
+       "매니저가 레벨이 너무 낮은 지원을 스스로 거절할 수 있습니다.",
+       "쿠키 테마는 백만 개가 아니라 쿠키 10만 개를 팔면 열립니다.",
+       "새로운 소식이 훨씬 빨리 열립니다. 지난번 내용이 저장되고 가장 오래된 버전은 요청할 때만 보입니다.",
+       "휴대폰에서 테마를 바꿔도 아래 막대가 밀리지 않습니다.",
+       "“저장” 부분이 게임 설정에서 빠졌습니다. 게임 내보내기와 삭제는 홈 화면에서 합니다.",
+       "설정에서 언어는 항상 같은 순서(영어, 프랑스어, 스페인어…)로 나옵니다.",
+       "매니저에서는 황금 레벨이 열린 뒤(레벨 120)에만 선택지에 나타납니다."
+      ]
+     },
+     {
+      "name": "작은 변경",
+      "items": [
+       "게임이 버전 번호로 “Release 1.2”를 표시합니다."
+      ]
+     }
+    ]
+   },
+   {
+    "title": "Release 1.1.2 (2026년 11월 14일)",
+    "name": "Release 1.1.2",
+    "intro": "게임을 떠나지 않고 업데이트하고, 탭도 원하는 대로 정렬합니다.",
+    "groups": [
+     {
+      "name": "업데이트",
+      "items": [
+       "게임이 가끔 렉 없이 새 버전이 있는지 확인합니다. 있으면 밥이 알려 주고 버전 번호가 초록색이 됩니다.",
+       "새로운 소식의 버튼으로 페이지를 새로고침하지 않고 게임을 업데이트합니다. 바로 전에 게임이 저장됩니다.",
+       "오프라인에서는 게임이 저장되지 않습니다. 게임이 알려 주고, 연결이 돌아오면 다시 저장합니다."
+      ]
+     },
+     {
+      "name": "탭",
+      "items": [
+       "450레벨에서 탭을 왼쪽이나 오른쪽으로 끌어 원하는 대로 정렬할 수 있습니다.",
+       "“기계” 탭에 고장 난 기계 수가 빨간 배지로 표시됩니다."
+      ]
+     },
+     {
+      "name": "직원",
+      "items": [
+       "운송원을 두려면 제과점이 최소 2개 필요합니다."
+      ]
+     },
+     {
+      "name": "휴대폰",
+      "items": [
+       "아래 막대에 시간 게이지가 여러 개 있을 때, 좌우로 밀어서 모두 볼 수 있습니다.",
+       "아래 막대가 더 이상 탭의 끝을 가리지 않습니다. 목록 끝까지 갈 수 있습니다."
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ "fr": {
+  "title": "Historique des mises à jour",
+  "intro": "Tout ce qui a été ajouté à Pâtisserie 2D Simulator, de la plus récente à la plus ancienne. Pour comprendre les règles du jeu, va voir le [wiki](REGLES.md).",
+  "versions": [
+   {
+    "title": "Release 1.3 Snapshot 1 (16 novembre 2026)",
+    "name": "Release 1.3 Snapshot 1",
+    "intro": "Une sauvegarde qui se télécharge toute seule, un thème Cookie plus accessible, et les anciennes versions rejouables.",
+    "groups": [
+     {
+      "name": "Jeu",
+      "items": [
+       "**Sauvegarde automatique :** dans les réglages, choisis un intervalle (de 5 minutes à 4 heures) : un fichier de ta sauvegarde est téléchargé tout seul pour ne jamais la perdre.",
+       "Le thème Cookie se débloque dès 50 000 cookies vendus (au lieu de 100 000).",
+       "Dans le changelog, chaque version dont on garde une copie a un lien « Jouer à cette version », et les titres sont bien blancs en thème sombre."
+      ]
+     },
+     {
+      "name": "Site",
+      "items": [
+       "Une page « Présentation, Comment jouer et Changelog », et une page « Anciennes versions » pour rejouer ou télécharger les versions passées."
+      ]
+     }
+    ]
+   },
+   {
+    "title": "Release 1.2.3 (15 novembre 2026)",
+    "name": "Release 1.2.3",
+    "intro": "Ton entreprise a un nom, ta première pâtisserie aussi, et la liste de tes parties reste à jour.",
+    "groups": [
+     {
+      "name": "Jeu",
+      "items": [
+       "Quand tu crées une partie, Bob te demande le nom de ton entreprise : ce sera le nom de ta partie. Ta première pâtisserie n'a pas encore de nom : Bob te demande de la nommer, gratuitement.",
+       "La page des succès est plus pratique : recherche, filtres (tous, débloqués, à faire), « Tous » pour tout voir d'un coup, et une barre de progression par catégorie."
+      ]
+     },
+     {
+      "name": "Comptes et appli",
+      "items": [
+       "Si tu supprimes ou renommes une partie depuis un autre appareil ou le navigateur, la liste de l'appli se met à jour toute seule, sans rien faire."
+      ]
+     }
+    ]
+   },
+   {
+    "title": "Release 1.2.2 (15 novembre 2026)",
+    "name": "Release 1.2.2",
+    "intro": "Plus de détails dans les statistiques, des mises à jour sans rechargement et un Bob qui te prévient quand le wifi disparaît.",
+    "groups": [
+     {
+      "name": "Jeu",
+      "items": [
+       "Dans les statistiques, les recettes préparées et les ingrédients préparés ont chacun un menu déroulant : tu vois le nombre de chaque recette et de chaque ingrédient.",
+       "En français, espagnol, portugais, allemand, russe ou en euros, les nombres à décimales s'écrivent avec une virgule (1,50 et non 1.50).",
+       "Bob s'énerve beaucoup plus lentement : il faut bien plus de clics pour le pousser à bout.",
+       "Sans wifi, Bob te le dit : ta partie n'est pas sauvegardée tant que la connexion ne revient pas. Tes autres parties restent jouables, mais elles ne sont pas sauvegardées non plus."
+      ]
+     },
+     {
+      "name": "Mises à jour",
+      "items": [
+       "Quand une nouvelle version existe, le bouton de version devient vert, dans le navigateur comme dans l'appli Windows.",
+       "Le bouton « Mettre à jour » des nouveautés met le jeu à jour sans recharger la page. Dans l'appli Windows, elle se relance toute seule."
+      ]
+     },
+     {
+      "name": "Comptes",
+      "items": [
+       "Après un lien « mot de passe oublié », tu peux choisir un nouveau mot de passe directement dans le jeu."
+      ]
+     },
+     {
+      "name": "Raccourci",
+      "items": [
+       "Quand tu installes P2DS comme application (raccourci), son logo est plus petit et bien centré : il ne touche plus le bas de l'icône."
+      ]
+     }
+    ]
+   },
+   {
+    "title": "Release 1.2.1.2 (15 novembre 2026)",
+    "name": "Release 1.2.1.2",
+    "intro": "Un petit détail pour les mises à jour de l'appli.",
+    "groups": [
+     {
+      "name": "Appli Windows",
+      "items": [
+       "La fenêtre de mise à jour affiche maintenant le vrai nom de la version (« Release 1.2.1.2 »), et plus un numéro interne."
+      ]
+     }
+    ]
+   },
+   {
+    "title": "Release 1.2.1.1 (15 novembre 2026)",
+    "name": "Release 1.2.1.1",
+    "intro": "Petites corrections.",
+    "groups": [
+     {
+      "name": "Appli Windows",
+      "items": [
+       "Le bouton « S'inscrire sur le site » ouvre vraiment le site dans ton navigateur."
+      ]
+     },
+     {
+      "name": "Nouveautés",
+      "items": [
+       "Les nouveautés sont traduites dans toutes les langues. Les versions plus anciennes restent en anglais en dehors du français et de l'anglais."
+      ]
+     }
+    ]
+   },
+   {
+    "title": "Release 1.2.1 (14 novembre 2026)",
+    "name": "Release 1.2.1",
+    "intro": "Des corrections et une inscription plus simple.",
+    "groups": [
+     {
+      "name": "Jeu",
+      "items": [
+       "Les transporteurs demandent maintenant au moins 2 pâtisseries : avec une seule, ils démissionnent et tu ne peux plus en embaucher.",
+       "Le bouton de fermeture des réglages ne clignote plus quand la souris passe entre le bouton et le fond : seule son icône tourne.",
+       "Dans les réglages du manager, la partie « Priorité » est séparée de « Métiers à embaucher »."
+      ]
+     },
+     {
+      "name": "Menu et comptes",
+      "items": [
+       "Le titre « P2DS » du menu est blanc en mode sombre.",
+       "Le bouton « Continuer avec Google » s'anime quand la souris passe dessus, comme les autres boutons.",
+       "S'inscrire n'envoie plus d'e-mail de confirmation : le compte est prêt tout de suite. Dans l'appli, « S'inscrire » ouvre le site.",
+       "Tu peux te connecter dans l'appli Windows avec ton compte."
+      ]
+     },
+     {
+      "name": "Appli Windows",
+      "items": [
+       "L'installeur ne pose plus que la question de la langue. Les sauvegardes et le compte se règlent dans le jeu, sur la page d'accueil."
+      ]
+     }
+    ]
+   },
+   {
+    "title": "Release 1.2 (14 novembre 2026)",
+    "name": "Release 1.2",
+    "intro": "Une vraie page d'accueil, plusieurs parties, des comptes, et une appli Windows.",
+    "groups": [
+     {
+      "name": "Page d'accueil",
+      "items": [
+       "Le jeu commence maintenant par une page d'accueil épurée : le logo et « P2DS » en haut, tes parties en dessous, et le même petit pied de page que dans le jeu.",
+       "Le numéro de version, avec les nouveautés, est en haut à gauche. En haut à droite : le compte, les réglages (la langue et le thème clair ou sombre) et le téléchargement de l'appli.",
+       "Chaque case contient le nom, le niveau et la date de ta partie, tout centré. Un clic sur la case ouvre la partie ; deux petits boutons exportent ou suppriment (corbeille).",
+       "Tu peux avoir jusqu'à 10 pâtisseries, rangées sur deux lignes de 5.",
+       "Un seul bouton + ouvre une fenêtre : nouvelle partie (un gros bouton Créer animé, sans nom à donner : c'est Bob qui le demande), coller un code de sauvegarde, ou ouvrir un fichier de sauvegarde. Quand tu as 10 parties, le + disparaît et le jeu te dit que le maximum est atteint.",
+       "Le menu ne change jamais de look selon ton thème de jeu : il est clair, sombre ou automatique (celui de ton navigateur), au choix dans ses réglages.",
+       "Chaque partie garde sa propre langue, différente de celle du menu. Une nouvelle partie commence dans la langue du menu.",
+       "Ton ancienne partie devient automatiquement ta première case : rien n'est perdu.",
+       "Dans le jeu, une flèche en haut te ramène tout de suite au menu, sans fenêtre."
+      ]
+     },
+     {
+      "name": "Comptes en ligne",
+      "items": [
+       "Tu peux créer un compte (pseudo, e-mail, mot de passe) ou continuer avec Google, mais ce n'est pas obligatoire. Tes parties se synchronisent avec ton compte dès que tu as internet, et tu peux jouer hors ligne avec les sauvegardes locales.",
+       "Pas de compte : ta partie reste dans l'appli ou dans le navigateur. Si tu désinstalles l'un ou si tu changes de navigateur, tu la perds, sauf si tu l'exportes."
+      ]
+     },
+     {
+      "name": "Appli Windows",
+      "items": [
+       "Un bouton, en haut à gauche de celui des pâtisseries, installe l'appli Windows en un clic. Il n'apparaît que dans un navigateur, sur un PC Windows.",
+       "L'appli marche entièrement hors ligne, se met à jour toute seule quand tu as internet, et ne touche jamais à tes sauvegardes.",
+       "L'installeur te pose trois questions : ta langue, tes sauvegardes et ton compte."
+      ]
+     },
+     {
+      "name": "Jeu",
+      "items": [
+       "Les pastilles des onglets sont jaunes, sauf celles des pannes, qui restent rouges.",
+       "Un bâtiment en panne affiche maintenant une pastille rouge sur l'onglet Bâtiments, comme les machines.",
+       "Le manager peut refuser tout seul les candidatures dont le niveau est trop bas.",
+       "Le thème Cookie se débloque à 100 000 cookies vendus au lieu d'un million.",
+       "Les nouveautés s'ouvrent beaucoup plus vite : elles sont gardées d'une fois sur l'autre et les versions les plus anciennes ne s'affichent qu'à la demande.",
+       "Sur téléphone, changer de thème ne décale plus la barre du bas.",
+       "La partie « Sauvegarde » a quitté les réglages du jeu : tu exportes et tu supprimes tes parties depuis l'accueil.",
+       "Dans les réglages, les langues gardent toujours le même ordre (anglais, français, espagnol…).",
+       "Dans le manager, le niveau or n'apparaît dans les choix qu'une fois débloqué (niveau 120)."
+      ]
+     },
+     {
+      "name": "Petits changements",
+      "items": [
+       "Le jeu affiche « Release 1.2 » comme numéro de version."
+      ]
+     }
+    ]
+   },
+   {
+    "title": "Release 1.1.2 (14 novembre 2026)",
+    "name": "Release 1.1.2",
+    "intro": "Le jeu se met à jour sans te faire quitter ta partie, et les onglets se rangent comme tu veux.",
+    "groups": [
+     {
+      "name": "Mises à jour",
+      "items": [
+       "Le jeu vérifie de temps en temps, sans lag, s'il existe une nouvelle version. Si oui, Bob te le dit, et le numéro de version devient vert.",
+       "Dans les nouveautés, un bouton met le jeu à jour sans recharger la page. Ta partie est sauvegardée juste avant.",
+       "Hors ligne, la partie n'est plus sauvegardée. Le jeu te le dit, et reprend dès que la connexion revient."
+      ]
+     },
+     {
+      "name": "Onglets",
+      "items": [
+       "Au niveau 450, tu peux faire glisser les onglets à gauche ou à droite pour les ranger comme tu veux.",
+       "L'onglet Machines affiche une pastille rouge avec le nombre de machines en panne."
+      ]
+     },
+     {
+      "name": "Employés",
+      "items": [
+       "Il faut au moins deux pâtisseries pour avoir des transporteurs."
+      ]
+     },
+     {
+      "name": "Téléphone",
+      "items": [
+       "Quand il y a plusieurs jauges de temps dans la barre du bas, tu peux les faire défiler à gauche et à droite pour toutes les voir.",
+       "La barre du bas ne cache plus le bas des onglets : tu peux aller jusqu'au bout de la liste."
+      ]
+     }
+    ]
+   },
+   {
+    "title": "Release 1.1.1 (14 novembre 2026)",
+    "name": "Release 1.1.1",
+    "intro": "Un jeu plus fluide, des employés plus riches, et la possibilité de jouer sans connexion.",
+    "groups": [
+     {
+      "name": "Fluidité",
+      "items": [
+       "Le jeu lague beaucoup moins : le chef pâtissier, les prix et les listes de recettes se calculent bien plus vite, et rien n'est redessiné quand l'onglet est caché ou qu'une fenêtre est ouverte."
+      ]
+     },
+     {
+      "name": "Jouer sans connexion",
+      "items": [
+       "Une fois le jeu chargé, tu peux y jouer sans internet. Ta partie reste sauvegardée dans ton navigateur. Pour recevoir une mise à jour, il faut être connecté et recharger la page."
+      ]
+     },
+     {
+      "name": "Employés",
+      "items": [
+       "Des visages encore plus travaillés, avec plus de coiffures et de détails. Plus de moustache pour les femmes.",
+       "Les comptes à rebours de la fiche d'un employé (formation, changement de poste, prochain transfert) descendent tout seuls.",
+       "Les transporteurs choisissent leur rythme : en continu, une seule fois, ou toutes les 1, 2, 5, 10, 30 ou 60 minutes. Un bouton lance un transfert tout de suite ou commence les transferts réguliers."
+      ]
+     },
+     {
+      "name": "Petits changements",
+      "items": [
+       "Le bouton pour remonter les ingrédients apparaît dès qu'on a passé les deux tiers de la liste, sans clignoter.",
+       "Le jeu affiche maintenant « Release 1.1.1 » comme numéro de version."
+      ]
+     }
+    ]
+   },
+   {
+    "title": "Release 1.1.0 (13 novembre 2026)",
+    "name": "Release 1.1.0",
+    "intro": "Des employés bien plus profonds, une préparation qui gère enfin la place, et plein de réglages en plus.",
+    "groups": [
+     {
+      "name": "Préparer et vendre",
+      "items": [
+       "Tu peux préparer même quand il reste très peu de place : la barre gèle jusqu'à ce que tu en libères.",
+       "La place se remplit petit à petit, à mesure que la barre de préparation avance.",
+       "Clique sur une barre de préparation pour la jeter : tu récupères une partie des ingrédients, de moins en moins à mesure que la barre a avancé.",
+       "Les préparations identiques se regroupent dans la barre du bas, avec un petit « x2 », « x3 »…",
+       "L'argent d'une vente arrive petit à petit, à mesure que la barre avance.",
+       "Quand tu ne peux pas préparer, la carte de la recette affiche tout ce qui manque en même temps : ingrédients et place.",
+       "La barre du bas est enfin visible sur téléphone.",
+       "Les ingrédients et recettes en cours de déblocage ont leur barre de progression en bas."
+      ]
+     },
+     {
+      "name": "Employés",
+      "items": [
+       "10 niveaux au lieu de 5. Plus tu montes, moins les niveaux élevés sont rares. Juste après avoir débloqué les employés, seuls les niveaux 1 et 2 existent.",
+       "Les apprentis n'ont plus de niveau.",
+       "Avant le niveau 10, personne ne se présente tout seul : il faut lancer une recherche.",
+       "Tu peux chercher deux métiers à la fois.",
+       "Un nouveau type d'employé, le touche-à-tout : jusqu'à 3 métiers (niveau 3 au maximum), un niveau à lui, et un métier sur lequel il se concentre. Changer de métier prend de 10 secondes à 1 minute.",
+       "Le manager choisit quels métiers il embauche, lesquels passent en premier, et à quels niveaux.",
+       "Le chef pâtissier a un budget par heure, et ne prépare rien sous un montant que tu choisis.",
+       "Tu peux changer le salaire d'un employé, de −50 % à +50 %. Moins payé, il est moins motivé au maximum. Payé trop peu, il démissionne presque toujours.",
+       "Les femmes ont leur titre au féminin : cueilleuse, boulangère, pâtissière…",
+       "Des visages plus réalistes, avec plus de détails."
+      ]
+     },
+     {
+      "name": "Cueilleurs",
+      "items": [
+       "Deux niveaux : l'efficacité, et la perte (de 0 % à 100 % de ce qu'ils cueillent). Les candidats perdent en général de 1 à 20 %. Moins il perd, plus il coûte cher.",
+       "Des limites : ne cueillir que s'il y en a moins de N, ou produire N par heure.",
+       "Quand tu changes l'ingrédient d'un cueilleur, son compte à rebours se voit dans sa fiche et dans la barre du bas.",
+       "Les cueilleurs très rares de haut niveau peuvent être spécialisés dans un ingrédient : formation très rapide, mais plus de changement possible."
+      ]
+     },
+     {
+      "name": "Bob",
+      "items": [
+       "Bob a de nouveaux habits et un nouveau visage dans chaque thème."
+      ]
+     },
+     {
+      "name": "Réglages",
+      "items": [
+       "Une pause automatique : si tu ne touches plus à rien pendant le temps choisi, le jeu se met en pause.",
+       "La sauvegarde se fait par fichier ou par copier-coller, au choix.",
+       "De belles animations à l'ouverture et à la fermeture des réglages."
+      ]
+     },
+     {
+      "name": "Petits changements",
+      "items": [
+       "Un bouton pour remonter tout en haut de la liste des ingrédients.",
+       "Le sucre a une nouvelle icône : un cube de sucre.",
+       "5 nouvelles musiques, à débloquer en montant de niveau.",
+       "Le jeu n'affiche plus que « 1.1 » comme numéro de version."
+      ]
+     }
+    ]
+   },
+   {
+    "title": "Release 1.0 (9 novembre 2026)",
+    "name": "Release 1.0",
+    "intro": "La première version complète du jeu.",
+    "groups": [
+     {
+      "name": "Langues",
+      "items": [
+       "Le russe, complet : le jeu existe maintenant en 10 langues."
+      ]
+     },
+     {
+      "name": "Thèmes",
+      "items": [
+       "Nouveau thème Cookie, avec cookies, pépites de chocolat, verre de lait et bocal à cookies, débloqué après 1 million de cookies vendus.",
+       "Des thèmes cachés à découvrir.",
+       "Les thèmes Fête et Espace restent cachés tant que tu n'as pas leur niveau."
+      ]
+     },
+     {
+      "name": "Bob",
+      "items": [
+       "Le sucre se donne à Bob dès qu'il ne va pas bien : triste, énervé ou malade. Plus quand il est heureux.",
+       "Le tutoriel change selon son humeur. S'il est trop énervé, il attend qu'il se calme pour l'expliquer.",
+       "Bob a de nouvelles expressions, et parfois des réactions bien plus fortes. À toi de voir lesquelles."
+      ]
+     },
+     {
+      "name": "Employés",
+      "items": [
+       "Des visages d'hommes et de femmes, qui vont avec leur prénom.",
+       "Un cueilleur qui change d'ingrédient met du temps à s'y mettre : de 10 s au niveau 1 à 2 min au niveau max.",
+       "Des candidatures rares d'employés déjà formés, plus chers. On peut cliquer sur une candidature pour voir son métier et son niveau."
+      ]
+     },
+     {
+      "name": "Petits changements",
+      "items": [
+       "Le numéro de version reprend son apparence d'avant, tout en restant cliquable pour voir les nouveautés."
+      ]
+     }
+    ]
+   },
+   {
+    "title": "Bêta 1.9 (8 novembre 2026)",
+    "name": "Bêta 1.9",
+    "intro": "",
+    "groups": [
+     {
+      "name": "Retiré",
+      "items": [
+       "Les rebirths n'existent plus : plus de bandeau, plus de bonus de rebirth. Les 7 succès de rebirth sont remplacés par 7 succès de niveaux de machines."
+      ]
+     },
+     {
+      "name": "Nouveautés",
+      "items": [
+       "Le chef pâtissier peut ne préparer que ce qui manque pour les commandes en cours.",
+       "Clique sur le numéro de version, en haut, pour voir ces nouveautés dans le jeu.",
+       "Bob connaît 30 anecdotes sur les pâtisseries au lieu de 15.",
+       "Bob réagit à d'autres ingrédients qu'on lui donne. À toi de découvrir lesquels.",
+       "Vers le début, Bob propose de t'envoyer des notifications quand tu n'es pas sur le jeu : si ta pâtisserie tourne sans pause, ou s'il se passe quelque chose d'important."
+      ]
+     },
+     {
+      "name": "Téléphone",
+      "items": [
+       "Les annonces d'événements sont plus petites et cachent moins l'écran.",
+       "Le temps de préparation et de vente est de nouveau visible, à côté de chaque barre."
+      ]
+     },
+     {
+      "name": "Petits changements",
+      "items": [
+       "Dans le tableau de bord des employés, « au travail », « en pause » et « en grève » sont écrits dans leur couleur, qui change avec le thème."
+      ]
+     }
+    ]
+   },
+   {
+    "title": "Bêta 1.8.1 (8 novembre 2026)",
+    "name": "Bêta 1.8.1",
+    "intro": "",
+    "groups": [
+     {
+      "name": "",
+      "items": [
+       "Deux nouvelles langues complètes : le japonais et le coréen. Le jeu existe maintenant en 9 langues.",
+       "Les commandes accélèrent petit à petit avec ton niveau : une toutes les 10 secondes seulement au niveau 1000."
+      ]
+     }
+    ]
+   },
+   {
+    "title": "Bêta 1.8 (8 novembre 2026)",
+    "name": "Bêta 1.8",
+    "intro": "",
+    "groups": [
+     {
+      "name": "Nouveautés",
+      "items": [
+       "Thème Horreur, seulement en octobre : noir et orange, citrouilles, chauves-souris, fantômes, toiles d'araignée et tombes. Bob met son chapeau de sorcier.",
+       "Au moins 100 machines : 80 de plus, en 16 familles de 5 modèles, avec de nouveaux bonus (moral, salaires, déblocages, pannes).",
+       "Les machines tombent parfois en panne (réparation rapide et pas chère), et très rarement un bâtiment (réparation longue et chère).",
+       "De gros malheurs, très rares, à partir du niveau 30 : inondation, cambriolage, panne de congélateur, petit incendie.",
+       "Plus tu avances, plus les clients passent de commandes.",
+       "Une recette que tu n'as pas préparée depuis longtemps se vend plus cher.",
+       "Bob donne des conseils, rappelle de sauvegarder et raconte des anecdotes sur les pâtisseries. Ça se coupe dans les réglages."
+      ]
+     },
+     {
+      "name": "Réglages",
+      "items": [
+       "La sauvegarde se télécharge dans un fichier et s'ouvre depuis un fichier, au lieu d'un code à copier-coller.",
+       "L'anglais est en premier dans les langues, puis le français.",
+       "L'onglet Sauvegarde passe tout en bas, sous les succès et les statistiques."
+      ]
+     },
+     {
+      "name": "Employés",
+      "items": [
+       "Le tableau de bord passe tout en haut de l'onglet, avec la recherche d'employés dedans."
+      ]
+     },
+     {
+      "name": "Équilibrage",
+      "items": [
+       "La source d'infini pur se débloque au niveau 1000 : plus rien ne se débloque après."
+      ]
+     }
+    ]
+   },
+   {
+    "title": "Bêta 1.7 (8 novembre 2026)",
+    "name": "Bêta 1.7",
+    "intro": "",
+    "groups": [
+     {
+      "name": "Employés",
+      "items": [
+       "Un tableau de bord en haut de l'onglet, dès le niveau 20 : le nombre d'employés par métier, ceux au travail, en pause ou en grève, les livraisons sur la route, et ce que ramasse chaque cueilleur. Bob l'explique.",
+       "Les employés sont rangés par métier : le meilleur en haut, les apprentis en bas. On peut glisser un métier, ou utiliser ses flèches, pour changer l'ordre.",
+       "Des visages plus réalistes : épaules à la couleur du métier, oreilles, sourcils, vrais yeux, nez, plusieurs coiffures et parfois une barbe."
+      ]
+     },
+     {
+      "name": "Transport",
+      "items": [
+       "Un trajet du transporteur dure maintenant entre 10 s et 10 min. Il peut être en retard, ou avoir un accident et perdre son chargement."
+      ]
+     },
+     {
+      "name": "Économie",
+      "items": [
+       "Préparer trop souvent la même recette fait baisser son prix de vente.",
+       "De nouveaux événements qui ne touchent qu'un ingrédient (pénurie, récolte record) ou qu'une recette (à la mode, boudée)."
+      ]
+     },
+     {
+      "name": "Icônes",
+      "items": [
+       "Nouvelles icônes pour les crêpes, les madeleines, le tiramisu et les amandes. Les noisettes changent aussi, pour ne pas avoir la même icône que les amandes."
+      ]
+     }
+    ]
+   },
+   {
+    "title": "Bêta 1.6.1 (8 novembre 2026)",
+    "name": "Bêta 1.6.1",
+    "intro": "",
+    "groups": [
+     {
+      "name": "",
+      "items": [
+       "Deux nouvelles langues : l'arabe, avec tout le jeu qui se lit de droite à gauche, et le mandarin (chinois simplifié).",
+       "Le thème caché est retiré.",
+       "Le sucre pour Bob : plus de bouton ni d'indice, c'est à toi de comprendre ce qui lui fait plaisir.",
+       "Les icônes des recettes reviennent comme avant la Bêta 1.6.",
+       "Corrigé : un bouton ou une carte qui clignotait quand la souris était tout au bord.",
+       "Corrigé : avec beaucoup de langues, leurs boutons débordaient dans les réglages."
+      ]
+     }
+    ]
+   },
+   {
+    "title": "Bêta 1.6 (7 novembre 2026)",
+    "name": "Bêta 1.6",
+    "intro": "",
+    "groups": [
+     {
+      "name": "",
+      "items": [
+       "Le thème caché passe en vert et marron : blocs d'herbe, de terre, de bois et de pierre en pixels, des arbres, des torches et un petit pâtissier en blocs. Bob change de tenue avec lui.",
+       "Sur téléphone, on donne le sucre à Bob en le glissant depuis la carte du sucre, comme à la souris. Le bouton à côté de Bob disparaît.",
+       "8 nouvelles icônes : plus aucune recette ne partage la sienne avec une autre (crêpes, madeleines, fraisier, tiramisu, tiramisu impérial, fondant, saint-honoré et gâteau à la cardamome).",
+       "Les œufs coûtent un tout petit peu moins cher : 0,28 € au lieu de 0,30 €.",
+       "Un employé peut être mis en pause depuis sa fiche. Il ne travaille plus, mais il est toujours payé."
+      ]
+     }
+    ]
+   },
+   {
+    "title": "Bêta 1.5 (7 novembre 2026)",
+    "name": "Bêta 1.5",
+    "intro": "",
+    "groups": [
+     {
+      "name": "Langues",
+      "items": [
+       "Le jeu existe maintenant en portugais et en allemand, en plus du français, de l'anglais et de l'espagnol. Tout est traduit, jusqu'aux répliques de Bob et aux 1000 succès.",
+       "Le jeu choisit ces langues tout seul si ton navigateur les utilise."
+      ]
+     },
+     {
+      "name": "Thèmes",
+      "items": [
+       "Nouveau thème Boulangerie au niveau 100 : auvent rayé, baguettes, croissants, bretzels, épis de blé et sacs de farine. Bob s'habille en boulanger.",
+       "Un nouveau thème caché, à découvrir."
+      ]
+     },
+     {
+      "name": "Sur GitHub",
+      "items": [
+       "Cet historique des mises à jour."
+      ]
+     }
+    ]
+   },
+   {
+    "title": "Bêta 1.4 (7 novembre 2026)",
+    "name": "Bêta 1.4",
+    "intro": "",
+    "groups": [
+     {
+      "name": "Employés",
+      "items": [
+       "Cinq niveaux par employé, avec une formation pour passer au suivant.",
+       "Chaque employé a une tête et ses propres réglages.",
+       "On lance maintenant une recherche pour embaucher, et elle ne réussit pas toujours.",
+       "Nouveaux : l'apprenti, à qui tu paies un métier, le chef pâtissier, qui prépare tout seul, et l'intendant, qui commande les ingrédients qui manquent."
+      ]
+     },
+     {
+      "name": "Économie",
+      "items": [
+       "Les machines sont propres à chaque pâtisserie, et il y en a plus.",
+       "Les bâtiments livrent une énorme quantité une fois par heure au lieu de produire chaque seconde.",
+       "Ingrédients et recettes se débloquent d'un clic, avec un petit temps d'attente.",
+       "Les ventes prennent un court délai."
+      ]
+     },
+     {
+      "name": "Bob",
+      "items": [
+       "Il parle plus et explique chaque nouveauté quand elle arrive.",
+       "Il refuse de t'aider si tu l'as énervé."
+      ]
+     },
+     {
+      "name": "Téléphone et tablette",
+      "items": [
+       "Plus de zoom ni de rechargement par accident.",
+       "La bulle de Bob et la barre du bas sont revues."
+      ]
+     }
+    ]
+   },
+   {
+    "title": "Bêta 1.3 (7 novembre 2026)",
+    "name": "Bêta 1.3",
+    "intro": "",
+    "groups": [
+     {
+      "name": "",
+      "items": [
+       "Nouvel employé : le transporteur, qui emmène de l'argent ou du stock vers une autre de tes pâtisseries.",
+       "Bob donne ses conseils dans sa bulle, et il n'a plus d'interface à lui.",
+       "Espagnol complet.",
+       "1000 succès, rangés dans les réglages avec les statistiques.",
+       "La banque passe en dernier onglet.",
+       "Les bâtiments arrivent au niveau 40 et le thème Fête au niveau 500.",
+       "La touche Échap met le jeu en pause.",
+       "Sur petit écran, les ingrédients passent au-dessus des onglets.",
+       "Les gâteaux de saison sont retirés."
+      ]
+     }
+    ]
+   },
+   {
+    "title": "Bêta 1.2 (7 novembre 2026)",
+    "name": "Bêta 1.2",
+    "intro": "",
+    "groups": [
+     {
+      "name": "Pâtisseries",
+      "items": [
+       "Toutes tes pâtisseries travaillent en même temps.",
+       "Chaque pâtisserie peut avoir son propre thème."
+      ]
+     },
+     {
+      "name": "Nouveautés",
+      "items": [
+       "Commandes de clients et maître d'hôtel pour les livrer.",
+       "Boutique de machines.",
+       "40 gâteaux de saison (retirés à la Bêta 1.3).",
+       "Thèmes Espace et Fête, et un nouveau logo."
+      ]
+     },
+     {
+      "name": "Bob",
+      "items": [
+       "Il change de visage et de tenue, aime le sucre et te lance des défis."
+      ]
+     },
+     {
+      "name": "Équilibrage",
+      "items": [
+       "La dette arrive moins facilement.",
+       "La limite de prêt dépend de ton niveau.",
+       "Rembourser un prêt en avance coûte moins cher."
+      ]
+     }
+    ]
+   },
+   {
+    "title": "Bêta 1.1 (6 novembre 2026)",
+    "name": "Bêta 1.1",
+    "intro": "",
+    "groups": [
+     {
+      "name": "",
+      "items": [
+       "Banque et prêts, expliqués par Bob.",
+       "Thèmes de saison illustrés : fleurs, plage, feuilles et neige.",
+       "Nouveaux réglages et menu de pause.",
+       "Graphiques et totaux dès la deuxième pâtisserie.",
+       "Renommer sa pâtisserie coûte 100 €."
+      ]
+     }
+    ]
+   },
+   {
+    "title": "Bêta 1.0 (6 novembre 2026)",
+    "name": "Bêta 1.0",
+    "intro": "",
+    "groups": [
+     {
+      "name": "",
+      "items": [
+       "Introduction avec Bob.",
+       "Musique composée pour le jeu.",
+       "708 succès.",
+       "Économie rééquilibrée et corrections."
+      ]
+     }
+    ]
+   },
+   {
+    "title": "Première publication (5 novembre 2026)",
+    "name": "Première publication",
+    "intro": "",
+    "groups": [
+     {
+      "name": "",
+      "items": [
+       "Le jeu est en ligne, avec une nouvelle interface : nouvelle police, en-tête vitré, fond animé et barre du bas fixe.",
+       "Nouvelles icônes à la place des emojis du système.",
+       "Animations : particules, rebonds et barres fluides."
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ "pt": {
+  "title": "Histórico de atualizações",
+  "intro": "Tudo o que foi acrescentado ao Pâtisserie 2D Simulator, da mais recente à mais antiga. As versões mais antigas aparecem em inglês. Para perceber as regras do jogo, vê a [wiki](REGLES.md).",
+  "versions": [
+   {
+    "title": "Release 1.3 Snapshot 1 (16 de novembro de 2026)",
+    "name": "Release 1.3 Snapshot 1",
+    "intro": "Uma cópia que se descarrega sozinha, um tema Bolacha mais fácil e versões antigas para voltar a jogar.",
+    "groups": [
+     {
+      "name": "Jogo",
+      "items": [
+       "**Cópia automática:** nas definições escolhe um intervalo (de 5 minutos a 4 horas): um ficheiro do teu jogo é descarregado sozinho para nunca o perderes.",
+       "O tema Bolacha desbloqueia-se com 50 000 bolachas vendidas (antes 100 000).",
+       "No registo de alterações, cada versão de que guardamos cópia tem uma ligação «Jogar esta versão», e os títulos são brancos no tema escuro."
+      ]
+     },
+     {
+      "name": "Site",
+      "items": [
+       "Uma página «Apresentação, como jogar e alterações» e uma de «Versões antigas» para jogar ou descarregar versões passadas."
+      ]
+     }
+    ]
+   },
+   {
+    "title": "Release 1.2.3 (15 de novembro de 2026)",
+    "name": "Release 1.2.3",
+    "intro": "A tua empresa tem nome, a tua primeira pastelaria também, e a lista de jogos fica sempre atualizada.",
+    "groups": [
+     {
+      "name": "Jogo",
+      "items": [
+       "Quando crias um jogo, o Bob pergunta o nome da tua empresa: será o nome do teu jogo. A tua primeira pastelaria ainda não tem nome: o Bob pede-te que lhe dês um, de graça.",
+       "A página de conquistas é mais prática: pesquisa, filtros (todas, desbloqueadas, por fazer), «Todas» para ver tudo de uma vez e uma barra de progresso por categoria."
+      ]
+     },
+     {
+      "name": "Contas e aplicação",
+      "items": [
+       "Se apagares ou mudares o nome de um jogo noutro dispositivo ou no navegador, a lista da aplicação atualiza-se sozinha."
+      ]
+     }
+    ]
+   },
+   {
+    "title": "Release 1.2.2 (15 de novembro de 2026)",
+    "name": "Release 1.2.2",
+    "intro": "Mais detalhe nas estatísticas, atualizações sem recarregar e um Bob que avisa quando o wifi cai.",
+    "groups": [
+     {
+      "name": "Jogo",
+      "items": [
+       "Nas estatísticas, as receitas preparadas e os ingredientes preparados têm cada um um menu suspenso: vês a quantidade de cada receita e de cada ingrediente.",
+       "Em francês, espanhol, português, alemão, russo ou com euros, os números com decimais escrevem-se com vírgula (1,50 em vez de 1.50).",
+       "O Bob zanga-se muito mais devagar: são precisos muitos mais cliques para o levar ao limite.",
+       "Sem wifi, o Bob avisa-te: o teu jogo não é guardado enquanto a ligação não voltar. Os teus outros jogos continuam jogáveis, mas também não são guardados."
+      ]
+     },
+     {
+      "name": "Atualizações",
+      "items": [
+       "Quando existe uma versão nova, o botão da versão fica verde, no navegador e na aplicação Windows.",
+       "O botão «Atualizar» das novidades atualiza o jogo sem recarregar a página. Na aplicação Windows, reinicia-se sozinha."
+      ]
+     },
+     {
+      "name": "Contas",
+      "items": [
+       "Depois de um link de «palavra-passe esquecida», podes escolher uma nova palavra-passe diretamente no jogo."
+      ]
+     },
+     {
+      "name": "Atalho",
+      "items": [
+       "Quando instalas o P2DS como aplicação (atalho), o logo é mais pequeno e bem centrado: já não toca na parte de baixo do ícone."
+      ]
+     }
+    ]
+   },
+   {
+    "title": "Release 1.2.1.2 (15 de novembro de 2026)",
+    "name": "Release 1.2.1.2",
+    "intro": "Um pequeno detalhe para as atualizações da aplicação.",
+    "groups": [
+     {
+      "name": "Aplicação do Windows",
+      "items": [
+       "A janela de atualização mostra agora o nome real da versão («Release 1.2.1.2») e já não um número interno."
+      ]
+     }
+    ]
+   },
+   {
+    "title": "Release 1.2.1.1 (15 de novembro de 2026)",
+    "name": "Release 1.2.1.1",
+    "intro": "Pequenas correções.",
+    "groups": [
+     {
+      "name": "Aplicação do Windows",
+      "items": [
+       "O botão «Registar no site» abre mesmo o site no teu navegador."
+      ]
+     },
+     {
+      "name": "Novidades",
+      "items": [
+       "A lista de novidades está traduzida em todas as línguas. As versões mais antigas ficam em inglês, exceto em francês e inglês."
+      ]
+     }
+    ]
+   },
+   {
+    "title": "Release 1.2.1 (14 de novembro de 2026)",
+    "name": "Release 1.2.1",
+    "intro": "Correções e um registo mais simples.",
+    "groups": [
+     {
+      "name": "Jogo",
+      "items": [
+       "Os transportadores precisam agora de pelo menos 2 pastelarias: com apenas uma, demitem-se e não podes contratar mais.",
+       "O botão de fechar as definições já não pisca quando o rato passa entre o botão e o fundo: só o ícone gira.",
+       "Nas definições do gerente, a parte «Prioridade» está separada de «Ofícios a contratar»."
+      ]
+     },
+     {
+      "name": "Menu e contas",
+      "items": [
+       "O título «P2DS» do menu é branco no modo escuro.",
+       "O botão «Continuar com o Google» anima-se quando passas o rato, como os outros botões.",
+       "Registar já não envia um e-mail de confirmação: a conta fica pronta logo. Na aplicação, «Registar» abre o site.",
+       "Podes iniciar sessão na aplicação do Windows com a tua conta."
+      ]
+     },
+     {
+      "name": "Aplicação do Windows",
+      "items": [
+       "O instalador só pergunta agora a língua. Os jogos e a conta tratam-se no jogo, na página inicial."
+      ]
+     }
+    ]
+   },
+   {
+    "title": "Release 1.2 (14 de novembro de 2026)",
+    "name": "Release 1.2",
+    "intro": "Uma verdadeira página inicial, vários jogos, contas e uma aplicação do Windows.",
+    "groups": [
+     {
+      "name": "Página inicial",
+      "items": [
+       "O jogo começa agora numa página inicial limpa: o logótipo e «P2DS» no topo, os teus jogos por baixo e o mesmo pequeno rodapé do jogo.",
+       "O número da versão, com as novidades, está no canto superior esquerdo. No canto superior direito: a conta, as definições (língua e tema claro ou escuro) e a transferência da aplicação.",
+       "Cada casa mostra o nome, o nível e a data do teu jogo, tudo centrado. Um clique na casa abre o jogo; dois botões pequenos exportam ou apagam (caixote).",
+       "Podes ter até 10 pastelarias, em duas filas de 5.",
+       "Um único botão + abre uma janela: novo jogo (um grande botão Criar animado, sem nome para dar: é o Bob que o pede), colar um código de gravação ou abrir um ficheiro de gravação. Com 10 jogos, o + desaparece e o jogo diz-te que o máximo foi atingido.",
+       "O menu nunca muda de aspeto consoante o tema do teu jogo: é claro, escuro ou automático (o do navegador), à tua escolha nas definições.",
+       "Cada jogo mantém a sua própria língua, que pode ser diferente da do menu. Um jogo novo começa na língua do menu.",
+       "O teu jogo anterior passa automaticamente a ser a tua primeira casa: nada se perde.",
+       "No jogo, uma seta no topo leva-te logo ao menu, sem janela."
+      ]
+     },
+     {
+      "name": "Contas online",
+      "items": [
+       "Podes criar uma conta (nome de utilizador, e-mail, palavra-passe) ou continuar com o Google, mas não é obrigatório. Os teus jogos sincronizam com a tua conta assim que tiveres internet, e podes jogar offline com as gravações locais.",
+       "Sem conta: o teu jogo fica na aplicação ou no navegador. Se desinstalares um ou mudares de navegador, perdes o jogo, a menos que o exportes."
+      ]
+     },
+     {
+      "name": "Aplicação do Windows",
+      "items": [
+       "Um botão, à esquerda do das pastelarias, instala a aplicação do Windows com um clique. Só aparece num navegador, num PC com Windows.",
+       "A aplicação funciona totalmente offline, atualiza-se sozinha quando tens internet e nunca mexe nas tuas gravações.",
+       "O instalador faz-te três perguntas: a tua língua, os teus jogos e a tua conta."
+      ]
+     },
+     {
+      "name": "Jogo",
+      "items": [
+       "Os distintivos dos separadores são amarelos, exceto os das avarias, que continuam vermelhos.",
+       "Um edifício avariado mostra agora um distintivo vermelho no separador Edifícios, como as máquinas.",
+       "O gerente pode recusar sozinho as candidaturas de nível demasiado baixo.",
+       "O tema Cookie desbloqueia-se com 100 000 bolachas vendidas em vez de um milhão.",
+       "As novidades abrem muito mais depressa: ficam guardadas de uma vez para a outra e as versões mais antigas só aparecem a pedido.",
+       "No telemóvel, mudar de tema já não desloca a barra de baixo.",
+       "A parte «Gravação» saiu das definições do jogo: exportas e apagas os teus jogos a partir da página inicial.",
+       "Nas definições, as línguas mantêm sempre a mesma ordem (inglês, francês, espanhol…).",
+       "No gerente, o nível ouro só aparece nas opções depois de desbloqueado (nível 120)."
+      ]
+     },
+     {
+      "name": "Pequenas alterações",
+      "items": [
+       "O jogo mostra «Release 1.2» como número de versão."
+      ]
+     }
+    ]
+   },
+   {
+    "title": "Release 1.1.2 (14 de novembro de 2026)",
+    "name": "Release 1.1.2",
+    "intro": "O jogo atualiza-se sem te fazer sair do jogo, e os separadores arrumam-se como quiseres.",
+    "groups": [
+     {
+      "name": "Atualizações",
+      "items": [
+       "O jogo verifica de vez em quando, sem lag, se existe uma versão nova. Se sim, o Bob avisa-te e o número da versão fica verde.",
+       "Nas novidades, um botão atualiza o jogo sem recarregar a página. O teu jogo é guardado mesmo antes.",
+       "Offline, o jogo já não é guardado. O jogo avisa-te e retoma assim que a ligação voltar."
+      ]
+     },
+     {
+      "name": "Separadores",
+      "items": [
+       "No nível 450, podes arrastar os separadores para a esquerda ou para a direita para os arrumar como quiseres.",
+       "O separador Máquinas mostra um distintivo vermelho com o número de máquinas avariadas."
+      ]
+     },
+     {
+      "name": "Funcionários",
+      "items": [
+       "São precisas pelo menos duas pastelarias para ter transportadores."
+      ]
+     },
+     {
+      "name": "Telemóvel",
+      "items": [
+       "Quando há vários indicadores de tempo na barra de baixo, podes deslizá-los para a esquerda e para a direita para os ver todos.",
+       "A barra de baixo já não esconde o fim dos separadores: podes chegar ao fim da lista."
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ "ru": {
+  "title": "История обновлений",
+  "intro": "Всё, что добавили в Pâtisserie 2D Simulator, от самого нового к самому старому. Более старые версии показываются на английском. Чтобы понять правила игры, загляни в [вики](REGLES.md).",
+  "versions": [
+   {
+    "title": "Release 1.3 Snapshot 1 (16 ноября 2026)",
+    "name": "Release 1.3 Snapshot 1",
+    "intro": "Резервная копия, которая скачивается сама, более доступная тема «Печенье» и старые версии, в которые можно сыграть снова.",
+    "groups": [
+     {
+      "name": "Игра",
+      "items": [
+       "**Автобэкап:** в настройках выбери интервал (от 5 минут до 4 часов): файл сохранения скачивается сам, и ты его не потеряешь.",
+       "Тема «Печенье» открывается после 50 000 проданных печений (раньше 100 000).",
+       "В списке изменений у каждой версии, копию которой мы храним, есть ссылка «Играть в эту версию», а заголовки в тёмной теме белые."
+      ]
+     },
+     {
+      "name": "Сайт",
+      "items": [
+       "Страница «О игре, как играть и список изменений» и страница «Старые версии», чтобы снова играть в прошлые версии или скачать их."
+      ]
+     }
+    ]
+   },
+   {
+    "title": "Release 1.2.3 (15 ноября 2026)",
+    "name": "Release 1.2.3",
+    "intro": "У твоей компании есть название, у первой кондитерской тоже, а список игр всегда актуален.",
+    "groups": [
+     {
+      "name": "Игра",
+      "items": [
+       "Когда ты создаёшь игру, Боб спрашивает название твоей компании: оно станет названием игры. У первой кондитерской пока нет названия: Боб просит дать его бесплатно.",
+       "Страница достижений стала удобнее: поиск, фильтры (все, открытые, осталось), «Все» для общего вида и полоса прогресса для каждой категории."
+      ]
+     },
+     {
+      "name": "Аккаунты и приложение",
+      "items": [
+       "Если ты удалишь или переименуешь игру на другом устройстве или в браузере, список в приложении обновится сам."
+      ]
+     }
+    ]
+   },
+   {
+    "title": "Release 1.2.2 (15 ноября 2026)",
+    "name": "Release 1.2.2",
+    "intro": "Больше подробностей в статистике, обновления без перезагрузки и Боб, который предупредит, если пропадёт Wi-Fi.",
+    "groups": [
+     {
+      "name": "Игра",
+      "items": [
+       "В статистике у приготовленных рецептов и приготовленных ингредиентов теперь есть выпадающее меню: видно количество каждого рецепта и каждого ингредиента.",
+       "На французском, испанском, португальском, немецком, русском или при евро дробные числа пишутся через запятую (1,50, а не 1.50).",
+       "Боб злится гораздо медленнее: чтобы довести его, нужно намного больше кликов.",
+       "Без Wi-Fi Боб скажет об этом: игра не сохраняется, пока не вернётся соединение. В другие игры можно играть, но они тоже не сохраняются."
+      ]
+     },
+     {
+      "name": "Обновления",
+      "items": [
+       "Когда есть новая версия, кнопка версии становится зелёной, в браузере и в приложении для Windows.",
+       "Кнопка «Обновить» в новостях обновляет игру без перезагрузки страницы. В приложении для Windows оно перезапускается само."
+      ]
+     },
+     {
+      "name": "Аккаунты",
+      "items": [
+       "После ссылки «забыли пароль» можно выбрать новый пароль прямо в игре."
+      ]
+     },
+     {
+      "name": "Ярлык",
+      "items": [
+       "Когда ты устанавливаешь P2DS как приложение (ярлык), логотип стал меньше и по центру: он больше не касается низа значка."
+      ]
+     }
+    ]
+   },
+   {
+    "title": "Release 1.2.1.2 (15 ноября 2026)",
+    "name": "Release 1.2.1.2",
+    "intro": "Небольшая деталь в обновлениях приложения.",
+    "groups": [
+     {
+      "name": "Приложение для Windows",
+      "items": [
+       "Окно обновления теперь показывает настоящее название версии («Release 1.2.1.2»), а не внутренний номер."
+      ]
+     }
+    ]
+   },
+   {
+    "title": "Release 1.2.1.1 (15 ноября 2026)",
+    "name": "Release 1.2.1.1",
+    "intro": "Небольшие исправления.",
+    "groups": [
+     {
+      "name": "Приложение для Windows",
+      "items": [
+       "Кнопка «Зарегистрироваться на сайте» теперь действительно открывает сайт в браузере."
+      ]
+     },
+     {
+      "name": "Новости",
+      "items": [
+       "Список новостей теперь переведён на все языки. Более старые версии остаются на английском, кроме французского и английского."
+      ]
+     }
+    ]
+   },
+   {
+    "title": "Release 1.2.1 (14 ноября 2026)",
+    "name": "Release 1.2.1",
+    "intro": "Исправления и более простая регистрация.",
+    "groups": [
+     {
+      "name": "Игра",
+      "items": [
+       "Перевозчикам теперь нужно минимум 2 кондитерские: с одной они увольняются, и нанять новых нельзя.",
+       "Кнопка закрытия настроек больше не мигает, когда мышь проходит между кнопкой и фоном: вращается только её значок.",
+       "В настройках менеджера часть «Приоритет» отделена от «Профессии для найма»."
+      ]
+     },
+     {
+      "name": "Меню и аккаунты",
+      "items": [
+       "Заголовок «P2DS» в меню белый в тёмном режиме.",
+       "Кнопка «Продолжить с Google» анимируется при наведении мыши, как и другие кнопки.",
+       "При регистрации больше не отправляется письмо с подтверждением: аккаунт готов сразу. В приложении «Зарегистрироваться» открывает сайт.",
+       "В приложении для Windows можно войти в свой аккаунт."
+      ]
+     },
+     {
+      "name": "Приложение для Windows",
+      "items": [
+       "Установщик теперь спрашивает только язык. Сохранения и аккаунт настраиваются в игре, на главной странице."
+      ]
+     }
+    ]
+   },
+   {
+    "title": "Release 1.2 (14 ноября 2026)",
+    "name": "Release 1.2",
+    "intro": "Настоящая главная страница, несколько игр, аккаунты и приложение для Windows.",
+    "groups": [
+     {
+      "name": "Главная страница",
+      "items": [
+       "Игра теперь начинается с аккуратной главной страницы: логотип и «P2DS» сверху, твои игры ниже и тот же маленький нижний колонтитул, что и в игре.",
+       "Номер версии с новостями находится вверху слева. Вверху справа: аккаунт, настройки (язык и светлая или тёмная тема) и загрузка приложения.",
+       "В каждой ячейке название, уровень и дата игры, всё по центру. Клик по ячейке открывает игру; две маленькие кнопки экспортируют или удаляют (корзина).",
+       "Можно иметь до 10 кондитерских в два ряда по 5.",
+       "Одна кнопка + открывает окно: новая игра (большая анимированная кнопка «Создать», название давать не нужно: его спросит Боб), вставить код сохранения или открыть файл сохранения. При 10 играх + исчезает, и игра сообщает, что достигнут максимум.",
+       "Меню никогда не меняет вид из-за темы твоей игры: оно светлое, тёмное или автоматическое (как в браузере), по выбору в его настройках.",
+       "У каждой игры свой язык, который может отличаться от языка меню. Новая игра начинается на языке меню.",
+       "Твоя прежняя игра автоматически становится первой ячейкой: ничего не потеряно.",
+       "В игре стрелка вверху сразу возвращает в меню, без окна."
+      ]
+     },
+     {
+      "name": "Онлайн-аккаунты",
+      "items": [
+       "Можно создать аккаунт (имя, почта, пароль) или продолжить с Google, но это необязательно. Игры синхронизируются с аккаунтом, как только появляется интернет, а без сети можно играть с локальными сохранениями.",
+       "Без аккаунта игра остаётся в приложении или в браузере. Если удалить одно или сменить браузер, она пропадёт, если не экспортировать её."
+      ]
+     },
+     {
+      "name": "Приложение для Windows",
+      "items": [
+       "Кнопка слева от кнопки кондитерских устанавливает приложение для Windows в один клик. Она появляется только в браузере на ПК с Windows.",
+       "Приложение полностью работает без интернета, обновляется само, когда есть сеть, и никогда не трогает твои сохранения.",
+       "Установщик задаёт три вопроса: язык, сохранения и аккаунт."
+      ]
+     },
+     {
+      "name": "Игра",
+      "items": [
+       "Значки на вкладках жёлтые, кроме значков поломок, которые остаются красными.",
+       "У сломанного здания теперь красный значок на вкладке «Здания», как у машин.",
+       "Менеджер может сам отклонять заявки со слишком низким уровнем.",
+       "Тема «Печенье» открывается после 100 000 проданного печенья вместо миллиона.",
+       "Новости открываются намного быстрее: они сохраняются между открытиями, а самые старые версии показываются по запросу.",
+       "На телефоне смена темы больше не сдвигает нижнюю панель.",
+       "Раздел «Сохранение» ушёл из настроек игры: игры экспортируются и удаляются с главной страницы.",
+       "В настройках языки всегда идут в одном порядке (английский, французский, испанский…).",
+       "У менеджера золотой уровень появляется в выборе только после открытия (уровень 120)."
+      ]
+     },
+     {
+      "name": "Мелкие изменения",
+      "items": [
+       "Игра показывает «Release 1.2» как номер версии."
+      ]
+     }
+    ]
+   },
+   {
+    "title": "Release 1.1.2 (14 ноября 2026)",
+    "name": "Release 1.1.2",
+    "intro": "Игра обновляется, не выгоняя тебя из игры, а вкладки можно расставить как угодно.",
+    "groups": [
+     {
+      "name": "Обновления",
+      "items": [
+       "Игра время от времени без лагов проверяет, есть ли новая версия. Если да, Боб сообщает об этом, а номер версии становится зелёным.",
+       "В новостях кнопка обновляет игру без перезагрузки страницы. Игра сохраняется прямо перед этим.",
+       "Без сети игра больше не сохраняется. Игра сообщает об этом и продолжает, как только связь вернётся."
+      ]
+     },
+     {
+      "name": "Вкладки",
+      "items": [
+       "На 450 уровне вкладки можно перетаскивать влево и вправо и расставлять как угодно.",
+       "На вкладке «Машины» красный значок показывает число сломанных машин."
+      ]
+     },
+     {
+      "name": "Сотрудники",
+      "items": [
+       "Для перевозчиков нужно минимум две кондитерские."
+      ]
+     },
+     {
+      "name": "Телефон",
+      "items": [
+       "Когда в нижней панели несколько шкал времени, их можно прокручивать влево и вправо, чтобы увидеть все.",
+       "Нижняя панель больше не закрывает конец вкладок: можно дойти до конца списка."
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ "zh": {
+  "title": "更新记录",
+  "intro": "Pâtisserie 2D Simulator 新增的所有内容，从最新到最旧。更早的版本以英文显示。想了解游戏规则，请看[百科](REGLES.md)。",
+  "versions": [
+   {
+    "title": "Release 1.3 Snapshot 1（2026年11月16日）",
+    "name": "Release 1.3 Snapshot 1（2026年11月16日）",
+    "intro": "会自动下载的存档备份、更容易解锁的饼干主题，以及可以重玩的旧版本。",
+    "groups": [
+     {
+      "name": "游戏",
+      "items": [
+       "**自动备份：**在设置里选一个间隔（5 分钟到 4 小时），存档文件会自动下载，永不丢档。",
+       "饼干主题现在卖出 5 万块饼干就能解锁（以前是 10 万）。",
+       "更新日志里，凡是留有副本的版本都有“玩这个版本”链接，深色主题下标题也是白色。"
+      ]
+     },
+     {
+      "name": "网站",
+      "items": [
+       "新增“介绍、玩法与更新日志”页面，以及“旧版本”页面，可重玩或下载过去的版本。"
+      ]
+     }
+    ]
+   },
+   {
+    "title": "Release 1.2.3（2026年11月15日）",
+    "name": "Release 1.2.3（2026年11月15日）",
+    "intro": "你的公司有了名字，第一家甜品店也有了，游戏列表也会保持最新。",
+    "groups": [
+     {
+      "name": "游戏",
+      "items": [
+       "创建游戏时，鲍勃会问你公司的名字：它就是这局游戏的名字。你的第一家甜品店还没有名字：鲍勃会请你免费给它起名。",
+       "成就页面更好用了：搜索、筛选（全部、已解锁、未完成）、一次看到全部的“全部”，以及每个分类的进度条。"
+      ]
+     },
+     {
+      "name": "账号和应用",
+      "items": [
+       "如果你在其他设备或浏览器上删除或重命名了游戏，应用里的列表会自动更新。"
+      ]
+     }
+    ]
+   },
+   {
+    "title": "Release 1.2.2（2026年11月15日）",
+    "name": "Release 1.2.2（2026年11月15日）",
+    "intro": "统计里有更多细节，更新无需重新加载，断网时鲍勃会提醒你。",
+    "groups": [
+     {
+      "name": "游戏",
+      "items": [
+       "在统计中，已制作的配方和已制作的原料各有一个下拉菜单：可以看到每个配方和每种原料的数量。",
+       "使用法语、西班牙语、葡萄牙语、德语、俄语或欧元时，小数用逗号书写（1,50，而不是 1.50）。",
+       "鲍勃生气得慢多了：要点很多下才能让他发火。",
+       "没有 Wi-Fi 时，鲍勃会告诉你：在网络恢复之前，你的游戏不会被保存。你的其他存档仍然可以玩，但同样不会被保存。"
+      ]
+     },
+     {
+      "name": "更新",
+      "items": [
+       "有新版本时，版本按钮会变绿，浏览器和 Windows 应用中都一样。",
+       "“新内容”里的“更新”按钮无需刷新页面就能更新游戏。在 Windows 应用中，它会自动重启。"
+      ]
+     },
+     {
+      "name": "账号",
+      "items": [
+       "点击“忘记密码”邮件里的链接后，可以直接在游戏里设置新密码。"
+      ]
+     },
+     {
+      "name": "快捷方式",
+      "items": [
+       "把 P2DS 安装为应用（快捷方式）时，标志更小并且居中：不再碰到图标的底部。"
+      ]
+     }
+    ]
+   },
+   {
+    "title": "Release 1.2.1.2（2026 年 11 月 15 日）",
+    "name": "Release 1.2.1.2（2026 年 11 月 15 日）",
+    "intro": "应用更新的一个小细节。",
+    "groups": [
+     {
+      "name": "Windows 应用",
+      "items": [
+       "更新窗口现在显示版本的真实名称（“Release 1.2.1.2”），不再显示内部编号。"
+      ]
+     }
+    ]
+   },
+   {
+    "title": "Release 1.2.1.1（2026 年 11 月 15 日）",
+    "name": "Release 1.2.1.1（2026 年 11 月 15 日）",
+    "intro": "一些小修复。",
+    "groups": [
+     {
+      "name": "Windows 应用",
+      "items": [
+       "“在网站上注册”按钮现在会真正在浏览器里打开网站。"
+      ]
+     },
+     {
+      "name": "新内容",
+      "items": [
+       "新内容列表现在已翻译成所有语言。除法语和英语外，更早的版本仍是英文。"
+      ]
+     }
+    ]
+   },
+   {
+    "title": "Release 1.2.1（2026 年 11 月 14 日）",
+    "name": "Release 1.2.1（2026 年 11 月 14 日）",
+    "intro": "修复和更简单的注册。",
+    "groups": [
+     {
+      "name": "游戏",
+      "items": [
+       "运输员现在需要至少 2 家面包店：只有一家时他们会辞职，也无法再雇用。",
+       "鼠标在设置的关闭按钮和背景之间移动时，按钮不再闪烁：只有它的图标会转动。",
+       "在经理设置里，“优先级”部分与“要雇用的职业”分开了。"
+      ]
+     },
+     {
+      "name": "菜单和账号",
+      "items": [
+       "菜单里的“P2DS”标题在深色模式下是白色的。",
+       "“使用 Google 继续”按钮在鼠标经过时会有动画，和其他按钮一样。",
+       "注册不再发送确认邮件：账号马上可用。在应用里，“注册”会打开网站。",
+       "你可以在 Windows 应用里用账号登录。"
+      ]
+     },
+     {
+      "name": "Windows 应用",
+      "items": [
+       "安装程序现在只问语言。存档和账号在游戏里的主页设置。"
+      ]
+     }
+    ]
+   },
+   {
+    "title": "Release 1.2（2026 年 11 月 14 日）",
+    "name": "Release 1.2（2026 年 11 月 14 日）",
+    "intro": "真正的主页、多个存档、账号，以及 Windows 应用。",
+    "groups": [
+     {
+      "name": "主页",
+      "items": [
+       "游戏现在从一个简洁的主页开始：顶部是标志和“P2DS”，下面是你的游戏，还有和游戏里一样的小页脚。",
+       "版本号和新内容在左上角。右上角是：账号、设置（语言和浅色或深色主题）和应用下载。",
+       "每个格子显示你游戏的名称、等级和日期，全部居中。点击格子打开游戏；两个小按钮用来导出或删除（垃圾桶）。",
+       "你最多可以有 10 家面包店，分两排，每排 5 个。",
+       "只有一个 + 按钮，会打开一个窗口：新游戏（一个会动的大“创建”按钮，不用起名字：鲍勃会问你）、粘贴存档代码，或打开存档文件。有 10 个游戏时，+ 会消失，游戏会告诉你已达上限。",
+       "菜单的外观不会随你的游戏主题而变：它是浅色、深色或自动（跟随浏览器），可在它的设置里选择。",
+       "每个游戏都保留自己的语言，可以和菜单的语言不同。新游戏从菜单的语言开始。",
+       "你之前的游戏会自动成为第一个格子：什么都不会丢。",
+       "在游戏里，顶部的箭头会立刻带你回到菜单，没有弹窗。"
+      ]
+     },
+     {
+      "name": "在线账号",
+      "items": [
+       "你可以创建账号（用户名、邮箱、密码）或用 Google 继续，但这不是必须的。有网络时，游戏会和账号同步，没有网络时也可以用本地存档离线游玩。",
+       "没有账号：游戏留在应用或浏览器里。卸载其中之一或换浏览器，你就会丢失它，除非先导出。"
+      ]
+     },
+     {
+      "name": "Windows 应用",
+      "items": [
+       "面包店按钮左边的一个按钮可以一键安装 Windows 应用。它只会出现在 Windows 电脑的浏览器里。",
+       "应用完全可以离线使用，有网络时会自动更新，而且绝不会动你的存档。",
+       "安装程序会问你三个问题：语言、存档和账号。"
+      ]
+     },
+     {
+      "name": "游戏",
+      "items": [
+       "标签页的徽章是黄色的，只有故障徽章仍是红色。",
+       "坏掉的建筑现在会在“建筑”标签页显示红色徽章，和机器一样。",
+       "经理可以自动拒绝等级过低的应聘。",
+       "饼干主题在卖出 10 万块饼干后解锁，而不是一百万块。",
+       "新内容打开得快多了：它会被保存下来，最旧的版本只在需要时显示。",
+       "在手机上，换主题不再让底部栏移位。",
+       "“存档”部分离开了游戏设置：你可以在主页导出和删除游戏。",
+       "在设置里，语言始终保持同样的顺序（英语、法语、西班牙语……）。",
+       "在经理那里，金色等级解锁后（120 级）才会出现在选项里。"
+      ]
+     },
+     {
+      "name": "小改动",
+      "items": [
+       "游戏显示“Release 1.2”作为版本号。"
+      ]
+     }
+    ]
+   },
+   {
+    "title": "Release 1.1.2（2026 年 11 月 14 日）",
+    "name": "Release 1.1.2（2026 年 11 月 14 日）",
+    "intro": "游戏更新时不用退出游戏，标签页可以随意排列。",
+    "groups": [
+     {
+      "name": "更新",
+      "items": [
+       "游戏会不时检查是否有新版本，而且不卡顿。如果有，鲍勃会告诉你，版本号会变成绿色。",
+       "在新内容里，有个按钮可以不刷新页面就更新游戏。更新前会先保存你的游戏。",
+       "离线时，游戏不再保存。游戏会告诉你，并在网络恢复后继续保存。"
+      ]
+     },
+     {
+      "name": "标签页",
+      "items": [
+       "到了 450 级，你可以把标签页向左或向右拖动，按自己喜欢的方式排列。",
+       "“机器”标签页会用红色徽章显示坏掉的机器数量。"
+      ]
+     },
+     {
+      "name": "员工",
+      "items": [
+       "至少要有两家面包店才能有运输员。"
+      ]
+     },
+     {
+      "name": "手机",
+      "items": [
+       "底部栏里有多个时间条时，你可以向左或向右滑动查看全部。",
+       "底部栏不再挡住标签页的末尾：你可以滑到列表的最后。"
+      ]
+     }
+    ]
+   }
+  ]
+ }
+}

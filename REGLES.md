@@ -223,6 +223,7 @@ Bob est ton chef pâtissier. Il t'accueille, t'apprend les bases, et t'explique 
 
 - **Ses conseils :** il te dit quand un gâteau se vend mal, quand ton stock déborde, quand ton loyer est trop cher, quand une commande va expirer ou qu'un employé va faire grève.
 - **Ne l'embête pas :** clique beaucoup sur lui (des centaines de fois) et il s'énerve petit à petit. Énervé, il refuse même de t'expliquer les choses.
+- **Sauvegarde automatique :** dans les réglages, tu choisis un intervalle (5 minutes à 4 heures) : un fichier de ta sauvegarde est téléchargé tout seul.
 - **Il te demande deux noms :** au début d'une partie, celui de ton entreprise (le nom de la partie), puis celui de ta première pâtisserie (gratuit).
 - **Sans wifi, il te prévient :** ta partie n'est pas sauvegardée tant que la connexion ne revient pas, et tes autres parties non plus (tu peux quand même y jouer).
 - **Il adore le sucre.** Quand il ne va pas bien, qu'il soit triste, énervé ou malade, à toi de trouver comment lui faire plaisir. Quand il est heureux, il n'en veut pas.

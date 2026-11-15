@@ -969,8 +969,23 @@ function changelogLoadPrivate() {
     changelogPrivate = (rows || []).map(function(r) { return { version: r.version, text: currentLang === 'fr' ? r.body_fr : r.body_en || r.body_fr }; });
   }, function() { /* pas de table ou hors ligne : tant pis */ });
 }
+// Les anciennes versions jouables en ligne (versions.json : nom de version -> adresse). Pas de fichier : pas de lien.
+var changelogVers = null;
+function changelogVersKey(s) { return String(s || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/\s+/g, ' ').trim(); }
+function changelogVersLoad() {
+  if (changelogVers) return Promise.resolve();
+  return fetch('versions.json', { cache: 'no-cache' }).then(function(r) { return r.ok ? r.json() : {}; }).then(function(j) {
+    changelogVers = {};
+    Object.keys(j || {}).forEach(function(k) { if (/^https:\/\//.test(j[k])) changelogVers[changelogVersKey(k)] = j[k]; });
+  }, function() { /* hors ligne ou pas de fichier : tant pis */ });
+}
+function changelogVerLink(heading) {
+  if (!changelogVers) return '';
+  var url = changelogVers[changelogVersKey(String(heading).replace(/\s*\(.*$/, ''))];
+  return url ? ' <a class="ver-link" href="' + escH(url) + '" target="_blank" rel="noopener">🌐 ' + escH(t('changelog.play')) + '</a>' : '';
+}
 function changelogLoad() {
-  var n = changelogNames(), jobs = [changelogFetch(n.main), changelogLoadPrivate()];
+  var n = changelogNames(), jobs = [changelogFetch(n.main), changelogLoadPrivate(), changelogVersLoad()];
   if (currentLang !== 'fr' && currentLang !== 'en') jobs.push(changelogFetch(n.en));
   if (G.settings && G.settings.changelogMax) jobs.push(changelogFetch(n.secret));
   return Promise.all(jobs);
@@ -1036,7 +1051,7 @@ function markdownLite(md) {
     var item = /^- /.test(line.trim());
     if (inList && !item) { out += '</ul>'; inList = false; }
     if (/^# /.test(line)) return;
-    if (/^## /.test(line)) out += '<h3>' + txt.slice(3) + '</h3>';
+    if (/^## /.test(line)) out += '<h3>' + txt.slice(3) + changelogVerLink(line.slice(3)) + '</h3>';
     else if (item) { if (!inList) { out += '<ul>'; inList = true; } out += '<li>' + txt.slice(2) + '</li>'; }
     else if (txt) out += '<p>' + txt + '</p>';
   });

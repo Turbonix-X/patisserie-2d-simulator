@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>P2DS - Présentation</title>
+<meta name="description" content="Pâtisserie 2D Simulator : présentation, comment jouer et historique des mises à jour.">
+<link rel="icon" href="favicon.png">
+<style>
+:root { --bg:#FFF8F0; --panel:#F5E6D3; --card:#fff; --text:#2D1B10; --muted:#5D4037; --border:#E0C8B0; --accent:#D4956B; --deep:#5D4037; --yellow:#FFD700; }
+@media (prefers-color-scheme: dark) { :root { --bg:#1A1210; --panel:#2F221B; --card:#2A201A; --text:#F5E6D3; --muted:#D7CCC8; --border:#4E342E; --deep:#F5E6D3; } }
+* { box-sizing: border-box; }
+body { margin:0; font-family: Outfit, system-ui, -apple-system, "Segoe UI", sans-serif; background:var(--bg); color:var(--text); line-height:1.55; }
+header { background:var(--accent); color:#fff; padding:14px 16px; display:flex; align-items:center; gap:12px; flex-wrap:wrap; }
+header img { width:40px; height:40px; }
+header h1 { margin:0; font-size:1.2rem; flex:1; }
+nav { display:flex; gap:8px; flex-wrap:wrap; }
+nav a, nav select, .play { background:rgba(255,255,255,.2); color:#fff; border:0; border-radius:999px; padding:6px 14px; text-decoration:none; font:inherit; font-size:.9rem; cursor:pointer; }
+nav select option { color:#000; }
+.play { background:var(--yellow); color:#3E2723; font-weight:700; }
+main { max-width:860px; margin:0 auto; padding:20px 16px 60px; }
+h2 { color:var(--deep); margin:34px 0 10px; scroll-margin-top:12px; }
+.card { background:var(--card); border:1px solid var(--border); border-radius:16px; padding:16px 18px; margin:12px 0; }
+.grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(230px,1fr)); gap:10px; }
+.grid .card { margin:0; }
+ol, ul { padding-inline-start:22px; }
+.ver h3 { margin:0 0 4px; color:var(--deep); }
+.ver h4 { margin:10px 0 2px; }
+.ver ul { margin:2px 0 6px; }
+.ver a { font-size:.8rem; }
+footer { text-align:center; color:var(--muted); font-size:.8rem; padding:20px; }
+.note { color:var(--muted); font-size:.9rem; }
+</style>
+</head>
+<body>
+<header>
+  <img src="logo.svg" alt="" width="40" height="40">
+  <h1>Pâtisserie 2D Simulator</h1>
+  <nav>
+    <a href="#presentation" data-t="nav.pres">Présentation</a>
+    <a href="#how" data-t="nav.how">Comment jouer</a>
+    <a href="#changelog" data-t="nav.log">Changelog</a>
+    <a href="archives.html" data-t="nav.arch">Anciennes versions</a>
+    <select id="lang" aria-label="Language"></select>
+    <a class="play" href="./" data-t="nav.play">▶ Jouer</a>
+  </nav>
+</header>
+<main>
+  <h2 id="presentation" data-t="pres.h">Présentation</h2>
+  <div class="card"><p data-t="pres.p1"></p><p data-t="pres.p2"></p></div>
+  <div class="grid" id="features"></div>
+
+  <h2 id="how" data-t="how.h">Comment jouer</h2>
+  <div class="card"><ol id="steps"></ol><p class="note" data-t="how.note"></p></div>
+
+  <h2 id="changelog" data-t="log.h">Changelog</h2>
+  <p class="note" id="log-intro"></p>
+  <div id="log">…</div>
+</main>
+<footer data-t="foot">Fait avec amour, et 100 % par Intelligence Artificielle.</footer>
+<script>
+(function() {
+  var T = {
+    fr: {
+      'nav.pres':'Présentation','nav.how':'Comment jouer','nav.log':'Changelog','nav.arch':'Anciennes versions','nav.play':'▶ Jouer',
+      'pres.h':'Présentation','how.h':'Comment jouer','log.h':'Changelog','foot':'Fait à 100 % par Intelligence Artificielle.',
+      'pres.p1':'Un jeu de gestion de pâtisserie : achète tes ingrédients, prépare tes gâteaux, vends-les, et fais grandir ta boutique.',
+      'pres.p2':'Ça marche sur ordi, tablette et téléphone, sans rien installer, et il existe aussi une appli Windows. Les recettes du jeu sont fausses : ne les cuisine pas chez toi.',
+      'how.note':'Bob, ton chef pâtissier, t\'explique tout pendant la partie. Évite de trop l\'embêter.',
+      'steps':['Crée une partie : Bob te demande le nom de ton entreprise, puis celui de ta première pâtisserie.','Achète des ingrédients (farine, sucre, œufs…).','Choisis une recette et lance sa préparation.','Vends tes gâteaux : les prix bougent selon ce que tu vends.','Monte de niveau pour débloquer de nouvelles recettes, des employés, des machines et des bâtiments.','Garde un œil sur ton espace, ton loyer et tes dettes.'],
+      'features':[['🥚 Ingrédients','47 ingrédients à acheter, revendre et parfois fabriquer.'],['🍰 Recettes','60 pâtisseries, du cookie au gâteau infini.'],['👩‍🍳 Employés','10 métiers, 10 niveaux, avec leur moral et leur salaire.'],['🏭 Bâtiments et machines','Des améliorations permanentes et des bâtiments qui livrent chaque heure.'],['🏆 Succès','1000 succès à débloquer, chacun augmente tes prix.'],['🌍 10 langues','Anglais, français, espagnol, portugais, allemand, arabe, mandarin, japonais, coréen, russe.'],['🎨 Thèmes','Clair, sombre, saisons, anniversaire, thèmes cachés…'],['☁️ Comptes','Retrouve tes parties partout, sur le web et dans l\'appli.']],
+      'log.intro':'Tout ce qui a changé à chaque mise à jour, de la plus récente à la plus ancienne.','log.play':'Jouer à cette version'
+    },
+    en: {
+      'nav.pres':'About','nav.how':'How to play','nav.log':'Changelog','nav.arch':'Old versions','nav.play':'▶ Play',
+      'pres.h':'About','how.h':'How to play','log.h':'Changelog','foot':'Made 100% by Artificial Intelligence.',
+      'pres.p1':'A pastry shop management game: buy your ingredients, bake your cakes, sell them, and grow your shop.',
+      'pres.p2':'It works on computer, tablet and phone with nothing to install, and there is also a Windows app. The recipes in the game are fake: do not cook them at home.',
+      'how.note':'Bob, your head pastry chef, explains everything during the game. Try not to annoy him too much.',
+      'steps':['Create a game: Bob asks for your company name, then for the name of your first bakery.','Buy ingredients (flour, sugar, eggs…).','Pick a recipe and start preparing it.','Sell your cakes: prices move depending on what you sell.','Level up to unlock new recipes, employees, machines and buildings.','Keep an eye on your space, your rent and your debts.'],
+      'features':[['🥚 Ingredients','47 ingredients to buy, resell and sometimes make.'],['🍰 Recipes','60 pastries, from the cookie to the infinite cake.'],['👩‍🍳 Employees','10 jobs, 10 levels, with their mood and salary.'],['🏭 Buildings and machines','Permanent upgrades and buildings that deliver every hour.'],['🏆 Achievements','1000 achievements to unlock, each one raises your prices.'],['🌍 10 languages','English, French, Spanish, Portuguese, German, Arabic, Mandarin, Japanese, Korean, Russian.'],['🎨 Themes','Light, dark, seasons, birthday, hidden themes…'],['☁️ Accounts','Find your games everywhere, on the web and in the app.']],
+      'log.intro':'Everything that changed in each update, from the newest to the oldest.','log.play':'Play this version'
+    }
+  };
+  var LANGS = { fr:'Français', en:'English', es:'Español', pt:'Português', de:'Deutsch', ar:'العربية', zh:'中文', ja:'日本語', ko:'한국어', ru:'Русский' };
+  var cur = (localStorage.getItem('p2ds_site_lang') || navigator.language || 'fr').slice(0, 2);
+  if (!LANGS[cur]) cur = 'en';
+  var sel = document.getElementById('lang');
+  Object.keys(LANGS).forEach(function(k) { var o = document.createElement('option'); o.value = k; o.textContent = LANGS[k]; sel.appendChild(o); });
+  var data = null, vers = {};
+  function tr(k) { return (T[cur] || T.en)[k] || T.en[k] || ''; }
+  function esc(s) { return String(s).replace(/[&<>"]/g, function(c) { return { '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;' }[c]; }); }
+  function norm(s) { return String(s || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/\s+/g, ' ').trim(); }
+  function bold(s) { return esc(s).replace(/\*\*(.+?)\*\*/g, '<b>$1</b>'); }
+  function draw() {
+    document.documentElement.lang = cur;
+    document.documentElement.dir = cur === 'ar' ? 'rtl' : 'ltr';
+    sel.value = cur;
+    document.querySelectorAll('[data-t]').forEach(function(el) { var v = tr(el.getAttribute('data-t')); if (v) el.textContent = v; });
+    document.getElementById('steps').innerHTML = tr('steps').map(function(s) { return '<li>' + esc(s) + '</li>'; }).join('');
+    document.getElementById('features').innerHTML = tr('features').map(function(f) { return '<div class="card"><b>' + esc(f[0]) + '</b><br>' + esc(f[1]) + '</div>'; }).join('');
+    document.getElementById('log-intro').textContent = tr('log.intro');
+    var box = document.getElementById('log');
+    if (!data) return;
+    var d = data[cur] || data.en || data.fr, en = data.en || d;
+    var list = d.versions.slice();
+    if (en.versions.length > list.length) list = list.concat(en.versions.slice(list.length));
+    box.innerHTML = list.map(function(v) {
+      var link = vers[norm(v.name)];
+      var h = '<div class="card ver"><h3>' + esc(v.title) + (link ? ' <a href="' + esc(link) + '" target="_blank" rel="noopener">🌐 ' + esc(tr('log.play')) + '</a>' : '') + '</h3>';
+      if (v.intro) h += '<p>' + bold(v.intro) + '</p>';
+      v.groups.forEach(function(g) { h += (g.name ? '<h4>' + esc(g.name) + '</h4>' : '') + '<ul>' + g.items.map(function(i) { return '<li>' + bold(i) + '</li>'; }).join('') + '</ul>'; });
+      return h + '</div>';
+    }).join('');
+  }
+  sel.onchange = function() { cur = sel.value; try { localStorage.setItem('p2ds_site_lang', cur); } catch (e) {} draw(); };
+  draw();
+  fetch('changelog.json').then(function(r) { return r.json(); }).then(function(j) { data = j; draw(); }, function() { document.getElementById('log').textContent = '—'; });
+  fetch('versions.json').then(function(r) { return r.json(); }).then(function(j) { Object.keys(j).forEach(function(k) { vers[norm(k)] = j[k]; }); draw(); }, function() {});
+})();
+</script>
+</body>
+</html>
