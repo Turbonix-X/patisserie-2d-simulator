@@ -1,53 +1,76 @@
 <!doctype html>
 <html lang="fr">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>P2DS - Anciennes versions</title>
-<link rel="icon" href="favicon.png">
-<style>
-:root { --bg:#FFF8F0; --card:#fff; --text:#2D1B10; --muted:#5D4037; --border:#E0C8B0; --accent:#D4956B; --deep:#5D4037; --yellow:#FFD700; }
-@media (prefers-color-scheme: dark) { :root { --bg:#1A1210; --card:#2A201A; --text:#F5E6D3; --muted:#D7CCC8; --border:#4E342E; --deep:#F5E6D3; } }
-* { box-sizing: border-box; }
-body { margin:0; font-family: Outfit, system-ui, -apple-system, "Segoe UI", sans-serif; background:var(--bg); color:var(--text); line-height:1.5; }
-header { background:var(--accent); color:#fff; padding:14px 16px; display:flex; align-items:center; gap:12px; flex-wrap:wrap; }
-header h1 { margin:0; font-size:1.2rem; flex:1; }
-header a { background:rgba(255,255,255,.2); color:#fff; border-radius:999px; padding:6px 14px; text-decoration:none; font-size:.9rem; }
-main { max-width:860px; margin:0 auto; padding:20px 16px 60px; }
-h2 { color:var(--deep); margin:28px 0 8px; }
-.note { color:var(--muted); font-size:.9rem; }
-.row { display:flex; align-items:center; gap:10px; justify-content:space-between; background:var(--card); border:1px solid var(--border); border-radius:12px; padding:10px 14px; margin:6px 0; flex-wrap:wrap; }
-.row b { flex:1; min-width:140px; }
-.row a { background:var(--yellow); color:#3E2723; font-weight:700; border-radius:999px; padding:5px 14px; text-decoration:none; font-size:.85rem; }
-.row a.dl { background:var(--accent); color:#fff; }
-.row small { color:var(--muted); }
-</style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>P2DS - Archives</title>
+  <meta name="description" content="Toutes les anciennes versions de Pâtisserie 2D Simulator.">
+  <link rel="icon" href="favicon.png">
+  <script>
+    // Le même thème que le jeu (clair, sombre ou automatique), appliqué avant l'affichage
+    (function () {
+      var theme = "light";
+      try {
+        var pref = localStorage.getItem("p2ds_home_theme");
+        theme = pref === "dark" || (pref === "auto" && window.matchMedia && matchMedia("(prefers-color-scheme: dark)").matches) ? "dark" : "light";
+      } catch (e) {}
+      document.documentElement.dataset.theme = theme;
+    })();
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="turbonix.css?v=3.34">
+  <link rel="stylesheet" href="style.css?v=3.34">
+  <style>
+    .arch-badge { display: inline-block; margin: 6px 0 14px; padding: 3px 14px; border-radius: 99px; background: linear-gradient(135deg, #FFD700, #FFB300); color: #3E2723; font-size: .8rem; font-weight: 900; letter-spacing: .14em; }
+    .arch-center { width: min(960px, 100%); }
+    .arch-grid { display: grid; grid-template-columns: repeat(5, 168px); gap: 10px; justify-content: center; width: 100%; }
+    .arch-tile { min-height: 110px; padding: 14px 10px; border-radius: 18px; border: 1px solid var(--border); background: var(--surface); color: var(--text); box-shadow: var(--shadow); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; text-align: center; font: inherit; cursor: pointer; transition: transform .2s ease, box-shadow .2s, border-color .2s; }
+    .arch-tile:hover { transform: translateY(-3px); box-shadow: 0 10px 26px rgba(0,0,0,.18); border-color: #FFB300; }
+    .arch-tile b { font-size: 1.02rem; overflow-wrap: anywhere; }
+    .arch-tile small { opacity: .75; font-size: .8rem; }
+    @media (max-width: 960px) { .arch-grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); } }
+    :root[data-theme="dark"] .arch-tile { color: var(--text); }
+  </style>
 </head>
 <body>
-<header><h1 id="t">Anciennes versions</h1><a href="presentation.html" id="back">← Présentation</a><a href="./" id="play">▶ Jouer</a></header>
-<main>
-  <p class="note" id="warn">Chaque ancienne version est jouable sur une adresse à part : elle ne touche jamais à ta sauvegarde actuelle. Les anciennes versions peuvent avoir des défauts corrigés depuis.</p>
-  <h2 id="h-web">🌐 Jouer en ligne</h2><div id="web">…</div>
-  <h2 id="h-dl">💾 Télécharger l'appli Windows</h2><div id="dl">…</div>
-</main>
+  <div class="bg-blobs" aria-hidden="true"><span></span><span></span><span></span></div>
+  <div class="home" id="home" style="display:flex">
+    <div class="home-top">
+      <a class="hbtn" id="back" href="./" title="Retour au jeu" aria-label="Retour au jeu"><svg class="uii" viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></a>
+    </div>
+    <div class="home-center arch-center">
+      <img class="home-logo small" src="logo.svg" alt="" width="64" height="64">
+      <h1 class="game-name home-name">P2DS</h1>
+      <span class="arch-badge">ARCHIVES</span>
+      <div class="arch-grid" id="grid"></div>
+      <p class="home-empty" id="empty" style="display:none"></p>
+    </div>
+    <footer class="home-footer" id="foot"></footer>
+  </div>
 <script>
 (function() {
-  var fr = (localStorage.getItem('p2ds_site_lang') || navigator.language || 'fr').slice(0, 2) === 'fr';
-  var L = fr ? { t:'Anciennes versions', back:'← Présentation', play:'▶ Jouer', warn:document.getElementById('warn').textContent, web:'🌐 Jouer en ligne', dl:'💾 Télécharger l\'appli Windows', open:'Jouer', get:'Télécharger', none:'Aucun fichier pour l\'instant.' }
-    : { t:'Old versions', back:'← About', play:'▶ Play', warn:'Each old version is playable at its own address: it never touches your current save. Old versions may have flaws fixed since.', web:'🌐 Play online', dl:'💾 Download the Windows app', open:'Play', get:'Download', none:'No file yet.' };
+  var lang = String(navigator.language || 'fr').slice(0, 2);
+  var fr = lang === 'fr';
+  var back = document.getElementById('back');
+  back.title = back.ariaLabel = fr ? 'Retour au jeu' : 'Back to the game';
   document.documentElement.lang = fr ? 'fr' : 'en';
-  document.getElementById('t').textContent = L.t; document.getElementById('back').textContent = L.back; document.getElementById('play').textContent = L.play;
-  document.getElementById('warn').textContent = L.warn; document.getElementById('h-web').textContent = L.web; document.getElementById('h-dl').textContent = L.dl;
+  document.title = 'P2DS - Archives';
+  document.getElementById('foot').textContent = new Date().getFullYear() + (fr ? ' Turbonix Entertainment. Tous droits réservés. Icônes : Twemoji (CC-BY 4.0).' : ' Turbonix Entertainment. All rights reserved. Icons: Twemoji (CC-BY 4.0).');
   function esc(s) { return String(s).replace(/[&<>"]/g, function(c) { return { '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;' }[c]; }); }
-  function ok(u) { return /^https:\/\//.test(u) ? u : '#'; }
-  function key(s) { var m = String(s).match(/(\d+(?:\.\d+)*)/); return m ? m[1].split('.').map(function(n) { return ('0000' + n).slice(-4); }).join('') : s; }
-  fetch('versions.json').then(function(r) { return r.json(); }).then(function(j) {
-    var names = Object.keys(j).reverse();
-    document.getElementById('web').innerHTML = names.length ? names.map(function(n) { return '<div class="row"><b>' + esc(n) + '</b><a href="' + esc(ok(j[n])) + '" target="_blank" rel="noopener">' + L.open + '</a></div>'; }).join('') : '<p class="note">' + L.none + '</p>';
-  }, function() { document.getElementById('web').innerHTML = '<p class="note">' + L.none + '</p>'; });
-  fetch('downloads.json').then(function(r) { return r.json(); }).then(function(j) {
-    document.getElementById('dl').innerHTML = j.length ? j.map(function(d) { return '<div class="row"><b>' + esc(d.version) + '</b><small>' + esc(d.size || '') + '</small><a class="dl" href="' + esc(ok(d.url)) + '">' + L.get + '</a></div>'; }).join('') : '<p class="note">' + L.none + '</p>';
-  }, function() { document.getElementById('dl').innerHTML = '<p class="note">' + L.none + '</p>'; });
+  function day(iso) {
+    var d = new Date(iso + 'T12:00:00');
+    try { return d.toLocaleDateString(fr ? 'fr-FR' : lang, { day: 'numeric', month: 'long', year: 'numeric' }); } catch (e) { return iso; }
+  }
+  fetch('archives.json', { cache: 'no-cache' }).then(function(r) { return r.json(); }).then(function(list) {
+    var g = document.getElementById('grid');
+    if (!list.length) { var e = document.getElementById('empty'); e.style.display = 'block'; e.textContent = fr ? 'Aucune version pour l\'instant.' : 'No version yet.'; return; }
+    g.innerHTML = list.map(function(v) {
+      var ok = /^https:\/\//.test(v.url) ? v.url : '#';
+      return '<button class="arch-tile" onclick="location.href=\'' + esc(ok) + '\'"><b>' + esc(v.name) + '</b><small>' + esc(day(v.date)) + '</small></button>';
+    }).join('');
+  }, function() { var e = document.getElementById('empty'); e.style.display = 'block'; e.textContent = '—'; });
 })();
 </script>
 </body>

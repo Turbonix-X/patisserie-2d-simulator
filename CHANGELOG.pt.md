@@ -2,6 +2,14 @@
 
 Tudo o que foi acrescentado ao Pâtisserie 2D Simulator, da mais recente à mais antiga. As versões mais antigas aparecem em inglês. Para perceber as regras do jogo, vê a [wiki](REGLES.md).
 
+## Release 1.3 Snapshot 3 (16 de novembro de 2026)
+
+Os arquivos têm a sua própria página, com as cores do menu do jogo.
+
+**Arquivo**
+- A página de arquivos reutiliza o menu do jogo: o logótipo, «P2DS», um distintivo amarelo «ARQUIVO» e um bloco por cada versão antiga, com o nome e a data de lançamento, 5 por linha. Uma seta leva-te de volta ao jogo.
+- No menu, o registo de alterações tem um botão «Arquivo» em cima à esquerda. Os botões azuis que levavam a uma versão desapareceram: passa-se pelo arquivo.
+
 ## Release 1.3 Snapshot 2 (16 de novembro de 2026)
 
 Um tema escuro mais limpo e as versões Alpha a um clique.

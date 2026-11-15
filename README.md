@@ -41,6 +41,7 @@ Un jeu de gestion de pâtisserie : achète tes ingrédients, prépare tes gâtea
 - `python tools/build_changelog_json.py` refait `changelog.json` à partir des `CHANGELOG*.md`.
 - `presentation.html` (présentation, comment jouer, changelog) et `archives.html` (anciennes versions et téléchargements, listés dans `downloads.json`).
 - Les réglages (noms des projets et du bucket R2) sont dans `tools/cloudflare.json`.
+- `python tools/supabase_sql.py <fichier.sql>` envoie un fichier SQL à Supabase sans copier-coller (jeton dans `private/supabase.env`, jamais dans git).
 
 ## Appli Windows (Tauri)
 

@@ -11,6 +11,12 @@ if (IN_APP) {
   document.addEventListener('contextmenu', function(e) { e.preventDefault(); });
 }
 var SITE_URL = 'https://turbonix-x.github.io/patisserie-2d-simulator/';
+var ARCHIVES_URL = 'https://p2ds.pages.dev/archives.html';
+// La page des anciennes versions : dans le meme onglet sur le web, dans le navigateur depuis l'appli
+function openArchives() {
+  if (typeof IN_APP !== 'undefined' && IN_APP) { openExternal(ARCHIVES_URL); return; }
+  location.href = 'archives.html';
+}
 
 // Le bouton d'installation : seulement dans un navigateur, sur un PC Windows
 function canOfferInstall() {

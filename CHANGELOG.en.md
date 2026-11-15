@@ -2,6 +2,14 @@
 
 Everything that was added to Pâtisserie 2D Simulator, from the newest to the oldest. To understand the rules of the game, see the [wiki](REGLES.md).
 
+## Release 1.3 Snapshot 3 (November 16, 2026)
+
+The archives have their own page, in the colors of the game menu.
+
+**Archives**
+- The archives page reuses the game menu: the logo, "P2DS", a yellow "ARCHIVES" badge and one tile per old version, with its name and release date, 5 per row. An arrow takes you back to the game.
+- In the menu, the changelog has an "Archives" button at the top left. The blue buttons that led to a version are gone: you go through the archives.
+
 ## Release 1.3 Snapshot 2 (November 16, 2026)
 
 A cleaner dark theme, and the Alpha versions one click away.

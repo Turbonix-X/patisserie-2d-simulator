@@ -504,6 +504,11 @@ function adminBobMarkup() {
       var id = m.slice(4, -1);
       svg = svg.split('id="' + id + '"').join('id="' + id + 'A"').split('url(#' + id + ')').join('url(#' + id + 'A)');
     });
+    // Pas de toque, de tablier ni de foulard : ce n'est pas un patissier ici
+    var tmp = document.createElement('div');
+    tmp.innerHTML = svg;
+    tmp.querySelectorAll('.bob-toque, .bob-toque-fold, .bob-toque-band, .bob-apron, .bob-apron-pocket, .bob-apron-heart, .bob-kerchief, .bob-acc').forEach(function(e) { e.remove(); });
+    svg = tmp.innerHTML;
   } else svg = '<span class="adm-bob-emoji">🤖</span>';
   return '<div id="adm-bob-bubble" role="status" aria-live="polite" style="display:none"></div><button id="adm-bob" class="bob-fig" type="button" data-anger="0" aria-label="Bob" title="Bob" onclick="adminBobTalk()">' + svg + '</button>';
 }

@@ -4,6 +4,20 @@
   "intro": "كل ما أُضيف إلى Pâtisserie 2D Simulator، من الأحدث إلى الأقدم. تظهر الإصدارات الأقدم بالإنجليزية. لفهم قواعد اللعبة، راجع [الويكي](REGLES.md).",
   "versions": [
    {
+    "title": "Release 1.3 Snapshot 3 (16 نوفمبر 2026)",
+    "name": "Release 1.3 Snapshot 3",
+    "intro": "للأرشيف صفحته الخاصة بألوان قائمة اللعبة.",
+    "groups": [
+     {
+      "name": "الأرشيف",
+      "items": [
+       "تستعير صفحة الأرشيف قائمة اللعبة: الشعار و«P2DS» وشارة صفراء «الأرشيف» وبلاطة لكل نسخة قديمة باسمها وتاريخ صدورها، 5 في كل صف. سهم يعيدك إلى اللعبة.",
+       "في القائمة، لسجل التغييرات زر «الأرشيف» أعلى اليسار. اختفت الأزرار الزرقاء التي كانت تقود إلى نسخة: الطريق عبر الأرشيف."
+      ]
+     }
+    ]
+   },
+   {
     "title": "Release 1.3 Snapshot 2 (16 نوفمبر 2026)",
     "name": "Release 1.3 Snapshot 2",
     "intro": "ثيم داكن أنظف، ونسخ ألفا على بُعد نقرة.",
@@ -254,6 +268,20 @@
   "intro": "Alles, was zu Pâtisserie 2D Simulator hinzugekommen ist, von der neuesten bis zur ältesten Version. Ältere Versionen werden auf Englisch angezeigt. Die Spielregeln findest du im [Wiki](REGLES.md).",
   "versions": [
    {
+    "title": "Release 1.3 Snapshot 3 (16. November 2026)",
+    "name": "Release 1.3 Snapshot 3",
+    "intro": "Das Archiv hat jetzt eine eigene Seite in den Farben des Spielmenüs.",
+    "groups": [
+     {
+      "name": "Archiv",
+      "items": [
+       "Die Archivseite übernimmt das Spielmenü: das Logo, „P2DS“, ein gelbes Abzeichen „ARCHIV“ und eine Kachel pro alter Version mit Name und Veröffentlichungsdatum, 5 pro Zeile. Ein Pfeil bringt dich zurück ins Spiel.",
+       "Im Menü hat das Changelog oben links einen Knopf „Archiv“. Die blauen Knöpfe, die zu einer Version führten, sind weg: Der Weg führt über das Archiv."
+      ]
+     }
+    ]
+   },
+   {
     "title": "Release 1.3 Snapshot 2 (16. November 2026)",
     "name": "Release 1.3 Snapshot 2",
     "intro": "Ein saubereres dunkles Thema und die Alpha-Versionen nur einen Klick entfernt.",
@@ -503,6 +531,20 @@
   "title": "Update history",
   "intro": "Everything that was added to Pâtisserie 2D Simulator, from the newest to the oldest. To understand the rules of the game, see the [wiki](REGLES.md).",
   "versions": [
+   {
+    "title": "Release 1.3 Snapshot 3 (November 16, 2026)",
+    "name": "Release 1.3 Snapshot 3",
+    "intro": "The archives have their own page, in the colors of the game menu.",
+    "groups": [
+     {
+      "name": "Archives",
+      "items": [
+       "The archives page reuses the game menu: the logo, \"P2DS\", a yellow \"ARCHIVES\" badge and one tile per old version, with its name and release date, 5 per row. An arrow takes you back to the game.",
+       "In the menu, the changelog has an \"Archives\" button at the top left. The blue buttons that led to a version are gone: you go through the archives."
+      ]
+     }
+    ]
+   },
    {
     "title": "Release 1.3 Snapshot 2 (November 16, 2026)",
     "name": "Release 1.3 Snapshot 2",
@@ -1228,6 +1270,20 @@
   "intro": "Todo lo que se ha añadido a Pâtisserie 2D Simulator, de la más reciente a la más antigua. Las versiones más antiguas se muestran en inglés. Para entender las reglas del juego, mira la [wiki](REGLES.md).",
   "versions": [
    {
+    "title": "Release 1.3 Snapshot 3 (16 de noviembre de 2026)",
+    "name": "Release 1.3 Snapshot 3",
+    "intro": "Los archivos tienen su propia página, con los colores del menú del juego.",
+    "groups": [
+     {
+      "name": "Archivo",
+      "items": [
+       "La página de archivos retoma el menú del juego: el logo, «P2DS», una insignia amarilla «ARCHIVOS» y una ficha por cada versión antigua, con su nombre y fecha de salida, 5 por fila. Una flecha te devuelve al juego.",
+       "En el menú, el registro de cambios tiene un botón «Archivo» arriba a la izquierda. Los botones azules que llevaban a una versión han desaparecido: se pasa por el archivo."
+      ]
+     }
+    ]
+   },
+   {
     "title": "Release 1.3 Snapshot 2 (16 de noviembre de 2026)",
     "name": "Release 1.3 Snapshot 2",
     "intro": "Un tema oscuro más limpio y las versiones Alpha a un clic.",
@@ -1477,6 +1533,20 @@
   "title": "更新履歴",
   "intro": "Pâtisserie 2D Simulator に追加されたすべての内容を、新しいものから古いものの順に載せています。古いバージョンは英語で表示されます。ゲームのルールは[ウィキ](REGLES.md)を見てください。",
   "versions": [
+   {
+    "title": "Release 1.3 Snapshot 3（2026年11月16日）",
+    "name": "Release 1.3 Snapshot 3（2026年11月16日）",
+    "intro": "アーカイブ専用のページができ、ゲームメニューと同じ色合いになりました。",
+    "groups": [
+     {
+      "name": "アーカイブ",
+      "items": [
+       "アーカイブのページはゲームのメニューを踏襲しています：ロゴ、「P2DS」、黄色の「ARCHIVES」バッジ、そして旧バージョンごとのタイル（名前と公開日付き、1 行に 5 つ）。矢印でゲームに戻れます。",
+       "メニューでは、更新履歴の左上に「アーカイブ」ボタンが付きました。バージョンへ直接飛ぶ青いボタンはなくなり、アーカイブ経由になります。"
+      ]
+     }
+    ]
+   },
    {
     "title": "Release 1.3 Snapshot 2（2026年11月16日）",
     "name": "Release 1.3 Snapshot 2（2026年11月16日）",
@@ -1728,6 +1798,20 @@
   "intro": "Pâtisserie 2D Simulator에 추가된 모든 내용을 최신순으로 적었습니다. 오래된 버전은 영어로 표시됩니다. 게임 규칙은 [위키](REGLES.md)를 참고하세요.",
   "versions": [
    {
+    "title": "Release 1.3 Snapshot 3 (2026년 11월 16일)",
+    "name": "Release 1.3 Snapshot 3",
+    "intro": "아카이브에 전용 페이지가 생기고, 게임 메뉴와 같은 색을 씁니다.",
+    "groups": [
+     {
+      "name": "아카이브",
+      "items": [
+       "아카이브 페이지는 게임 메뉴를 그대로 가져왔습니다. 로고, “P2DS”, 노란 “ARCHIVES” 배지, 그리고 옛 버전마다 이름과 출시일이 있는 타일이 한 줄에 5개씩 있습니다. 화살표로 게임으로 돌아갑니다.",
+       "메뉴의 변경 내역 왼쪽 위에 “아카이브” 버튼이 생겼습니다. 버전으로 바로 가던 파란 버튼은 없어졌고, 아카이브를 거쳐 가야 합니다."
+      ]
+     }
+    ]
+   },
+   {
     "title": "Release 1.3 Snapshot 2 (2026년 11월 16일)",
     "name": "Release 1.3 Snapshot 2",
     "intro": "더 깔끔해진 어두운 테마, 클릭 한 번으로 즐기는 알파 버전.",
@@ -1977,6 +2061,20 @@
   "title": "Historique des mises à jour",
   "intro": "Tout ce qui a été ajouté à Pâtisserie 2D Simulator, de la plus récente à la plus ancienne. Pour comprendre les règles du jeu, va voir le [wiki](REGLES.md).",
   "versions": [
+   {
+    "title": "Release 1.3 Snapshot 3 (16 novembre 2026)",
+    "name": "Release 1.3 Snapshot 3",
+    "intro": "Les archives ont leur propre page, aux couleurs du menu du jeu.",
+    "groups": [
+     {
+      "name": "Archives",
+      "items": [
+       "La page des archives reprend le menu du jeu : le logo, « P2DS », un badge jaune « ARCHIVES » et une tuile par ancienne version, avec son nom et sa date de sortie, 5 par ligne. Une flèche te ramène au jeu.",
+       "Dans le menu, le changelog a un bouton « Archives » en haut à gauche. Les boutons bleus qui menaient à une version ont disparu : on passe par les archives."
+      ]
+     }
+    ]
+   },
    {
     "title": "Release 1.3 Snapshot 2 (16 novembre 2026)",
     "name": "Release 1.3 Snapshot 2",
@@ -2702,6 +2800,20 @@
   "intro": "Tudo o que foi acrescentado ao Pâtisserie 2D Simulator, da mais recente à mais antiga. As versões mais antigas aparecem em inglês. Para perceber as regras do jogo, vê a [wiki](REGLES.md).",
   "versions": [
    {
+    "title": "Release 1.3 Snapshot 3 (16 de novembro de 2026)",
+    "name": "Release 1.3 Snapshot 3",
+    "intro": "Os arquivos têm a sua própria página, com as cores do menu do jogo.",
+    "groups": [
+     {
+      "name": "Arquivo",
+      "items": [
+       "A página de arquivos reutiliza o menu do jogo: o logótipo, «P2DS», um distintivo amarelo «ARQUIVO» e um bloco por cada versão antiga, com o nome e a data de lançamento, 5 por linha. Uma seta leva-te de volta ao jogo.",
+       "No menu, o registo de alterações tem um botão «Arquivo» em cima à esquerda. Os botões azuis que levavam a uma versão desapareceram: passa-se pelo arquivo."
+      ]
+     }
+    ]
+   },
+   {
     "title": "Release 1.3 Snapshot 2 (16 de novembro de 2026)",
     "name": "Release 1.3 Snapshot 2",
     "intro": "Um tema escuro mais limpo e as versões Alpha a um clique.",
@@ -2952,6 +3064,20 @@
   "intro": "Всё, что добавили в Pâtisserie 2D Simulator, от самого нового к самому старому. Более старые версии показываются на английском. Чтобы понять правила игры, загляни в [вики](REGLES.md).",
   "versions": [
    {
+    "title": "Release 1.3 Snapshot 3 (16 ноября 2026)",
+    "name": "Release 1.3 Snapshot 3",
+    "intro": "У архива теперь своя страница в цветах меню игры.",
+    "groups": [
+     {
+      "name": "Архив",
+      "items": [
+       "Страница архива повторяет меню игры: логотип, «P2DS», жёлтый значок «ARCHIVES» и плитка для каждой старой версии с названием и датой выхода, по 5 в ряд. Стрелка возвращает в игру.",
+       "В меню у списка изменений теперь есть кнопка «Архив» слева вверху. Синие кнопки, которые вели к версии, убраны: теперь путь через архив."
+      ]
+     }
+    ]
+   },
+   {
     "title": "Release 1.3 Snapshot 2 (16 ноября 2026)",
     "name": "Release 1.3 Snapshot 2",
     "intro": "Более чистая тёмная тема и Alpha-версии в один клик.",
@@ -3201,6 +3327,20 @@
   "title": "更新记录",
   "intro": "Pâtisserie 2D Simulator 新增的所有内容，从最新到最旧。更早的版本以英文显示。想了解游戏规则，请看[百科](REGLES.md)。",
   "versions": [
+   {
+    "title": "Release 1.3 Snapshot 3（2026年11月16日）",
+    "name": "Release 1.3 Snapshot 3（2026年11月16日）",
+    "intro": "存档有了自己的页面，沿用游戏菜单的配色。",
+    "groups": [
+     {
+      "name": "存档",
+      "items": [
+       "存档页面沿用游戏菜单：标志、“P2DS”、黄色的“存档”徽章，以及每个旧版本一块磁贴，显示名称和发布日期，每行 5 个。一个箭头可以返回游戏。",
+       "在菜单里，更新日志左上角有一个“存档”按钮。通往某个版本的蓝色按钮已经移除：请通过存档进入。"
+      ]
+     }
+    ]
+   },
    {
     "title": "Release 1.3 Snapshot 2（2026年11月16日）",
     "name": "Release 1.3 Snapshot 2（2026年11月16日）",

@@ -979,11 +979,6 @@ function changelogVersLoad() {
     Object.keys(j || {}).forEach(function(k) { if (/^https:\/\//.test(j[k])) changelogVers[changelogVersKey(k)] = j[k]; });
   }, function() { /* hors ligne ou pas de fichier : tant pis */ });
 }
-function changelogVerLink(heading) {
-  if (!changelogVers) return '';
-  var url = changelogVers[changelogVersKey(String(heading).replace(/\s*\(.*$/, ''))];
-  return url ? ' <a class="ver-link" href="' + escH(url) + '" target="_blank" rel="noopener">🌐 ' + escH(t('changelog.play')) + '</a>' : '';
-}
 // Sous la premiere publication : les versions Alpha, jouables dans le navigateur
 function changelogAlphaHTML() {
   if (!changelogVers) return '';
@@ -1040,7 +1035,7 @@ function changelogHTML(showAll) {
 function changelogShowAll() { var el = document.getElementById('changelog-body'); if (el) el.innerHTML = iconify(changelogHTML(true)); }
 
 function showChangelog(from) {
-  var h = '<h2>' + t('changelog.title') + '</h2>' + (from === 'home' && typeof updateBoxHTML === 'function' ? updateBoxHTML() : '') + '<div class="changelog" id="changelog-body">…</div>';
+  var h = (from === 'home' ? '<button type="button" class="btn btn-small changelog-arch" onclick="openArchives()">🗄️ ' + escH(t('changelog.archives')) + '</button>' : '') + '<h2>' + t('changelog.title') + '</h2>' + (from === 'home' && typeof updateBoxHTML === 'function' ? updateBoxHTML() : '') + '<div class="changelog" id="changelog-body">…</div>';
   h += '<div class="modal-btns"><button class="btn" onclick="hideModal()">' + t('common.close') + '</button></div>';
   showModal(h, 'modal-changelog');
   var draw = function() {
@@ -1061,7 +1056,7 @@ function markdownLite(md) {
     var item = /^- /.test(line.trim());
     if (inList && !item) { out += '</ul>'; inList = false; }
     if (/^# /.test(line)) return;
-    if (/^## /.test(line)) out += '<h3>' + txt.slice(3) + changelogVerLink(line.slice(3)) + '</h3>';
+    if (/^## /.test(line)) out += '<h3>' + txt.slice(3) + '</h3>';
     else if (item) { if (!inList) { out += '<ul>'; inList = true; } out += '<li>' + txt.slice(2) + '</li>'; }
     else if (txt) out += '<p>' + txt + '</p>';
   });

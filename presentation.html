@@ -106,8 +106,7 @@ footer { text-align:center; color:var(--muted); font-size:.8rem; padding:20px; }
     var list = d.versions.slice();
     if (en.versions.length > list.length) list = list.concat(en.versions.slice(list.length));
     box.innerHTML = list.map(function(v) {
-      var link = vers[norm(v.name)];
-      var h = '<div class="card ver"><h3>' + esc(v.title) + (link ? ' <a href="' + esc(link) + '" target="_blank" rel="noopener">🌐 ' + esc(tr('log.play')) + '</a>' : '') + '</h3>';
+            var h = '<div class="card ver"><h3>' + esc(v.title) + '</h3>';
       if (v.intro) h += '<p>' + bold(v.intro) + '</p>';
       v.groups.forEach(function(g) { h += (g.name ? '<h4>' + esc(g.name) + '</h4>' : '') + '<ul>' + g.items.map(function(i) { return '<li>' + bold(i) + '</li>'; }).join('') + '</ul>'; });
       return h + '</div>';

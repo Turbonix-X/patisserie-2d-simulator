@@ -19,7 +19,7 @@ DIST = os.path.join(ROOT, 'dist')
 LIMIT = 25 * 1024 * 1024
 
 FILES = ['index.html', 'admin.html', 'presentation.html', 'archives.html', 'style.css', 'turbonix.css', 'logo.svg', 'favicon.png', 'manifest.webmanifest',
-         'icon-192.png', 'icon-512.png', 'icon-maskable-512.png', 'apple-touch-icon.png', 'sw.js', 'versions.json', 'downloads.json', 'changelog.json', '_headers']
+         'icon-192.png', 'icon-512.png', 'icon-maskable-512.png', 'apple-touch-icon.png', 'sw.js', 'versions.json', 'archives.json', 'downloads.json', 'changelog.json', '_headers']
 FILES += [f for f in os.listdir(ROOT) if f.startswith('CHANGELOG') and f.endswith('.md')]
 DIRS = ['JS', 'assets']
 
@@ -38,7 +38,7 @@ def main():
         src = os.path.join(ROOT, f)
         if os.path.exists(src):
             shutil.copy2(src, os.path.join(DIST, f))
-        elif f not in ('presentation.html', 'archives.html', 'versions.json', 'downloads.json', 'changelog.json', '_headers', 'admin.html'):
+        elif f not in ('presentation.html', 'archives.html', 'versions.json', 'archives.json', 'downloads.json', 'changelog.json', '_headers', 'admin.html'):
             raise SystemExit('fichier manquant : ' + f)
     for d in DIRS:
         shutil.copytree(os.path.join(ROOT, d), os.path.join(DIST, d))
