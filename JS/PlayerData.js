@@ -45,6 +45,8 @@ function createFreshState() {
     paused: false,
     pausedAt: 0,
     activeEvent: null,
+    choiceEvent: null,
+    lastChoiceAt: 0,
     eventEndTime: 0,
     lastEventTime: 0,
     eventPriceBonus: 0,
@@ -353,6 +355,15 @@ function resetGame() {
 var skipSaveOnUnload = false;
 
 // ============ IMPORT / EXPORT ============
+// Nom du fichier : p2ds-<entreprise>-<sauvegarde dans la langue>-<HH>h<MM>-<JJ>-<MM>-<AAAA>.p2ds
+// (les « : » et « / » sont interdits dans un nom de fichier)
+function saveFileName(company) {
+  var d = new Date(), z = function(n) { return ('0' + n).slice(-2); };
+  var clean = function(s, fallback) { s = String(s || '').toLowerCase().replace(/[\\\/:*?"<>|\s.]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 30); return s || fallback; };
+  var word = clean(typeof t === 'function' ? t('save.word') : 'save', 'save');
+  return 'p2ds-' + clean(company, 'partie') + '-' + word + '-' + z(d.getHours()) + 'h' + z(d.getMinutes()) + '-' + z(d.getDate()) + '-' + z(d.getMonth() + 1) + '-' + d.getFullYear() + '.p2ds';
+}
+
 function exportSave() {
   try {
     return btoa(unescape(encodeURIComponent(JSON.stringify(G))));
@@ -361,7 +372,9 @@ function exportSave() {
 
 function importSave(code) {
   try {
+    if (String(code).length > P2DS_CONFIG.MAX_SAVE_CHARS * 1.4) return false;
     var data = JSON.parse(decodeURIComponent(escape(atob(code.trim()))));
+    if (JSON.stringify(data).length > P2DS_CONFIG.MAX_SAVE_CHARS) return false;
     if (!data || typeof data !== 'object' || typeof data.money !== 'number') return false;
     Object.assign(G, migrateSave(data));
     save();

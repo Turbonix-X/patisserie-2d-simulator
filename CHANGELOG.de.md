@@ -2,6 +2,41 @@
 
 Alles, was zu Pâtisserie 2D Simulator hinzugekommen ist, von der neuesten bis zur ältesten Version. Ältere Versionen werden auf Englisch angezeigt. Die Spielregeln findest du im [Wiki](REGLES.md).
 
+## Release 1.3 (16. November 2026)
+
+Ein flüssigeres Spiel, Entscheidungen, mehr Optionen für deine Angestellten und eine Oberfläche für Handy und Computer.
+
+**Spiel**
+- Kein Einfrieren mehr beim Levelaufstieg: Steigst du um mehrere Level auf einmal, gibt es nur noch eine Feier und eine Meldung.
+- Große Zahlen werden so geschrieben, wie es deine Sprache tut: im Französischen ist eine Milliarde „Md“, im Deutschen „Mrd“, und auf Chinesisch, Japanisch und Koreanisch zählt man in Vierergruppen.
+- Ereignisse mit Auswahl: In der Ereignisleiste gibt es manchmal einen oder zwei Knöpfe zum Antworten (ein Investor, ein Fernsehteam, ein Lieferant, ein Trinkgeld, ein Wettbewerb).
+- Die 5 versteckten Erfolge werden auch im Max-Modus, im Kreativmodus und mit dem Befehl freigeschaltet.
+- Wenn du die Musik ausschaltest, stoppt sie sofort und nicht erst am Ende des Stücks.
+
+**Bank**
+- Kredite bis 100.000.000: Die größten werden mit deiner Spielzeit nach und nach freigeschaltet.
+
+**Angestellte**
+- In der Mitarbeitersuche ist der Knopf grau und sagt „Wähle einen Beruf“, bis du einen gewählt hast.
+- Der Verkäufer kann nur über oder unter einem bestimmten Preis verkaufen.
+- Der Oberkellner kann nur Bestellungen liefern, die mehr oder weniger als einen Betrag einbringen (oder Gewinn lassen).
+- Der Einkäufer kann nur Zutaten kaufen, deren Preis über oder unter einem Betrag liegt.
+
+**Bob**
+- Hat Bob mehrere Dinge gleichzeitig zu sagen, schickt er nur eine einzige, etwas längere Sprechblase mit der ganzen Zusammenfassung.
+- Du kannst auf eine Sprechblase klicken, um sie zu schließen.
+- Auf Arabisch steht das Schild „Bob“ jetzt rechts an der Sprechblase.
+
+**Oberfläche**
+- Die Erfolge haben einen eigenen Knopf, einen Pokal in der Kopfzeile, und sind nicht mehr in den Einstellungen.
+- Auf dem Handy klappt die Zutatenliste ein, wenn du nicht bei den Rezepten bist, und du kannst sie jederzeit ein- oder ausklappen. Meldungen verdecken den Verkaufsknopf nicht mehr.
+- Am Computer kannst du die Größe der Zutatenliste und des rechten Bereichs ändern, indem du die Leiste dazwischen ziehst.
+- Am Computer öffnet R die Einstellungen, C das Changelog und M die Konditorei-Auswahl. Eine Seite „Steuerung“ in den Einstellungen listet sie auf (sie erscheint nur am Computer oder mit Tastatur).
+
+**Speicherstände**
+- Sicherungsdateien heißen jetzt „p2ds-unternehmen-spielstand-uhrzeit-datum.p2ds“, in deiner Sprache.
+- Ein Spielstand darf eine vernünftige Größe nicht mehr überschreiten: Eine von Hand aufgeblähte Datei wird beim Import abgelehnt.
+
 ## Release 1.3 Snapshot 3 (16. November 2026)
 
 Das Archiv hat jetzt eine eigene Seite in den Farben des Spielmenüs.

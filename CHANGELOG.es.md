@@ -2,6 +2,41 @@
 
 Todo lo que se ha añadido a Pâtisserie 2D Simulator, de la más reciente a la más antigua. Las versiones más antiguas se muestran en inglés. Para entender las reglas del juego, mira la [wiki](REGLES.md).
 
+## Release 1.3 (16 de noviembre de 2026)
+
+Un juego más fluido, decisiones que tomar, más opciones para tus empleados y una interfaz pensada para el móvil y el ordenador.
+
+**Juego**
+- Se acabó el bloqueo al subir de nivel: si subes varios niveles de golpe, el juego hace una sola fiesta y muestra un solo mensaje.
+- Los números grandes se escriben como en tu idioma: en español mil millones es «MM», en francés «Md», en alemán «Mrd», y en chino, japonés y coreano se cuenta por grupos de 4 cifras.
+- Eventos con decisión: en la barra de eventos a veces tienes uno o dos botones para responder (un inversor, un equipo de televisión, un proveedor, una propina, un concurso).
+- Los 5 logros ocultos también se desbloquean en modo máximo, en modo creativo y con el comando.
+- Si apagas la música, se detiene al instante, sin esperar al final de la pieza.
+
+**Banco**
+- Préstamos de hasta 100 000 000: los más grandes se abren poco a poco con tu tiempo de juego.
+
+**Empleados**
+- En la búsqueda de empleados, el botón está gris y dice «Elige un oficio» hasta que eliges uno.
+- El vendedor puede vender solo por encima o por debajo de un precio concreto.
+- El maître puede entregar solo los pedidos que pagan (o dejan de beneficio) más o menos que un importe.
+- El intendente puede comprar solo los ingredientes cuyo precio esté por encima o por debajo de un importe.
+
+**Bob**
+- Cuando Bob tiene varias cosas que decir a la vez, envía una sola burbuja, algo más larga, con todo el resumen.
+- Puedes hacer clic en una burbuja para cerrarla.
+- En árabe, la etiqueta «Bob» ahora está a la derecha de la burbuja.
+
+**Interfaz**
+- Los logros tienen su propio botón, un trofeo en la cabecera, y ya no están en los ajustes.
+- En el móvil, la lista de ingredientes se pliega cuando no estás en las recetas, y puedes plegarla o desplegarla cuando quieras. Las notificaciones ya no tapan el botón de vender.
+- En el ordenador, puedes cambiar el tamaño de la lista de ingredientes y del panel derecho arrastrando la barra entre ambos.
+- En el ordenador, R abre los ajustes, C el registro de cambios y M la elección de pastelería. Una página «Controles» en los ajustes los enumera (solo aparece en ordenador o con teclado).
+
+**Partidas guardadas**
+- Los archivos de guardado se llaman ahora «p2ds-empresa-guardado-hora-fecha.p2ds», en tu idioma.
+- Un guardado ya no puede superar un tamaño razonable: un archivo inflado a mano se rechaza al importar.
+
 ## Release 1.3 Snapshot 3 (16 de noviembre de 2026)
 
 Los archivos tienen su propia página, con los colores del menú del juego.

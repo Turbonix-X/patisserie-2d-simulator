@@ -362,7 +362,7 @@ function processCommand(cmd) {
     G.bankUnlocked = true;
     G.secondBakery = true;
     THEME_LIST.forEach(function(th) { if (th.season || th.birthday || th.level || th.month || th.secret || th.sold) G.unlockedThemes[th.id] = true; });
-    ACHIEVEMENTS.forEach(function(a) { if (!a.hidden) G.achievements[a.id] = true; });
+    ACHIEVEMENTS.forEach(function(a) { G.achievements[a.id] = true; });
     checkAchievements();
     return '<span class="cmd-ok">' + t('console.maxDone') + '</span>';
   }

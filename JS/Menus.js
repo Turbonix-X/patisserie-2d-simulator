@@ -27,7 +27,7 @@ function settingsPaneHTML() {
   if (ui.settingsTab === 'general') h = settingsGeneral();
   else if (ui.settingsTab === 'look') h = settingsLook();
   else if (ui.settingsTab === 'audio') h = settingsAudio();
-  else if (ui.settingsTab === 'ach') h = settingsAchievements();
+  else if (ui.settingsTab === 'keys') h = settingsKeys();
   else if (ui.settingsTab === 'stats') h = statsPane();
   else h = settingsGeneral();
   return h + '<p class="set-version">P2DS ' + versionLabel(GAME_VERSION) + ' · Turbonix Entertainment</p>';
@@ -35,7 +35,8 @@ function settingsPaneHTML() {
 
 function showSettingsModal() {
   beginMenuPause();
-  var tabs = [['general', 'settings.tabGeneral', 'globe'], ['look', 'settings.tabLook', 'palette'], ['audio', 'settings.tabAudio', 'music'], ['ach', 'settings.tabAch', 'ach'], ['stats', 'settings.tabStats', 'stats']];
+  var tabs = [['general', 'settings.tabGeneral', 'globe'], ['look', 'settings.tabLook', 'palette'], ['audio', 'settings.tabAudio', 'music'], ['stats', 'settings.tabStats', 'stats']];
+  if (hasKeyboard()) tabs.push(['keys', 'settings.tabKeys', 'terminal']);
   var h = '<div class="set-head"><h2>' + uiIcon('settings') + t('settings.title') + '</h2>';
   h += '<button class="icon-btn" onclick="closeMenu()" aria-label="' + escH(t('common.close')) + '" title="' + escH(t('common.close')) + '">' + uiIcon('close') + '</button></div>';
   h += '<div class="set-body"><nav class="set-nav">';
@@ -54,6 +55,33 @@ function refreshSettingsPane() {
 }
 
 // ============ SUCCES ============
+// Les succes ont leur propre fenetre, ouverte par le trophee de l'en-tete
+function showAchievementsModal() {
+  beginMenuPause();
+  var h = '<div class="set-head"><h2>' + uiIcon('ach') + t('ach.header') + '</h2>';
+  h += '<button class="icon-btn" onclick="closeMenu()" aria-label="' + escH(t('common.close')) + '" title="' + escH(t('common.close')) + '">' + uiIcon('close') + '</button></div>';
+  h += '<div class="set-body"><div class="set-pane" id="ach-pane">' + settingsAchievements() + '</div></div>';
+  showModal(h, 'modal-settings modal-ach');
+}
+function refreshAchPane() {
+  var el = document.getElementById('ach-pane');
+  if (el) setHTML(el, settingsAchievements());
+}
+
+// ============ COMMANDES DU CLAVIER ============
+// Seulement sur ordinateur, ou des qu'on a utilise un clavier
+var keyboardSeen = false;
+document.addEventListener('keydown', function() { keyboardSeen = true; }, true);
+function hasKeyboard() {
+  return keyboardSeen || !(window.matchMedia && matchMedia('(pointer: coarse)').matches);
+}
+function settingsKeys() {
+  var rows = [['1 – 9', 'keys.tabs'], ['R', 'keys.settings'], ['C', 'keys.changelog'], ['M', 'keys.bakeries'], ['Échap', 'keys.escape']];
+  var h = '<p class="set-help">' + t('keys.help') + '</p><section class="set-card"><h3>' + t('keys.title') + '</h3>';
+  rows.forEach(function(r) { h += setRow('<kbd class="kbd">' + (r[0] === 'Échap' ? 'Esc' : r[0]) + '</kbd>', '', t(r[1])); });
+  return h + '</section>';
+}
+
 function settingsAchievements() {
   var c = achCounts();
   var byCat = {};
@@ -70,15 +98,15 @@ function settingsAchievements() {
   h += '<p class="set-help">' + t('ach.bonus', { v: Math.round((achievementBonus() - 1) * 1000) / 10 }) + '</p></section>';
   // Chercher, filtrer (tous / debloques / a faire) et choisir une categorie
   var q = String(ui.achQ || '').trim().toLowerCase(), flt = ui.achFilter || 'all';
-  h += '<div class="list-tools ach-tools"><input class="ach-search" type="search" placeholder="' + escH(t('ach.search')) + '" value="' + escH(ui.achQ || '') + '" onchange="ui.achQ=this.value;refreshSettingsPane()">';
+  h += '<div class="list-tools ach-tools"><input class="ach-search" type="search" placeholder="' + escH(t('ach.search')) + '" value="' + escH(ui.achQ || '') + '" onchange="ui.achQ=this.value;refreshAchPane()">';
   [['all', 'ach.fAll'], ['done', 'ach.fDone'], ['todo', 'ach.fTodo']].forEach(function(f) {
-    h += '<button class="chip' + (flt === f[0] ? ' active' : '') + '" onclick="ui.achFilter=\'' + f[0] + '\';refreshSettingsPane()">' + t(f[1]) + '</button>';
+    h += '<button class="chip' + (flt === f[0] ? ' active' : '') + '" onclick="ui.achFilter=\'' + f[0] + '\';refreshAchPane()">' + t(f[1]) + '</button>';
   });
   h += '</div><div class="list-tools">';
-  h += '<button class="chip' + (ui.achCat === 'all' ? ' active' : '') + '" onclick="ui.achCat=\'all\';refreshSettingsPane()">' + t('ach.fAll') + ' ' + c.done + '/' + c.total + '</button>';
+  h += '<button class="chip' + (ui.achCat === 'all' ? ' active' : '') + '" onclick="ui.achCat=\'all\';refreshAchPane()">' + t('ach.fAll') + ' ' + c.done + '/' + c.total + '</button>';
   ACH_CATEGORIES.forEach(function(cat) {
     if (cat === 'secret' && c.secrets === 0) return;
-    h += '<button class="chip' + (ui.achCat === cat ? ' active' : '') + '" onclick="ui.achCat=\'' + cat + '\';refreshSettingsPane()">' + t('ach.cat.' + cat) + ' ' + byCat[cat].done + '/' + byCat[cat].all + '</button>';
+    h += '<button class="chip' + (ui.achCat === cat ? ' active' : '') + '" onclick="ui.achCat=\'' + cat + '\';refreshAchPane()">' + t('ach.cat.' + cat) + ' ' + byCat[cat].done + '/' + byCat[cat].all + '</button>';
   });
   if (ui.achCat !== 'all' && byCat[ui.achCat] && byCat[ui.achCat].all) h += '</div><div class="loan-bar ach-cat-bar"><div style="width:' + (byCat[ui.achCat].done / byCat[ui.achCat].all * 100).toFixed(1) + '%"></div></div><div class="ach-grid">';
   else h += '</div><div class="ach-grid">';
@@ -288,7 +316,7 @@ function downloadSave(silent) {
   var blob = new Blob([exportSave()], { type: 'text/plain' });
   var a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
-  a.download = 'p2ds-' + String(G.bakeryName || 'partie').replace(/[^A-Za-z0-9_-]+/g, '_').slice(0, 30) + '-' + new Date().toISOString().slice(0, 10) + (silent === true ? '-' + new Date().toTimeString().slice(0, 5).replace(':', 'h') : '') + '.p2ds';
+  a.download = saveFileName(G.companyName || G.bakeryName);
   document.body.appendChild(a);
   a.click();
   setTimeout(function() { URL.revokeObjectURL(a.href); a.remove(); }, 1000);

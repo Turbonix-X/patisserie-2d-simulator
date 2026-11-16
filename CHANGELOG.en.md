@@ -2,6 +2,41 @@
 
 Everything that was added to Pâtisserie 2D Simulator, from the newest to the oldest. To understand the rules of the game, see the [wiki](REGLES.md).
 
+## Release 1.3 (November 16, 2026)
+
+A smoother game, choices to make, more options for your employees, and an interface made for both phone and computer.
+
+**Game**
+- No more freezing when you level up: if you gain several levels at once, the game now throws one party and shows one message.
+- Big numbers are written the way your language does it: in French a billion is "Md", in German "Mrd", and in Chinese, Japanese and Korean numbers are counted in groups of 4 digits.
+- Choice events: in the event bar you sometimes get one or two buttons to answer (an investor, a TV crew, a supplier, a tip, a contest).
+- The 5 hidden achievements also unlock in max mode, creative mode and with the command.
+- When you turn the music off, it stops right away instead of at the end of the piece.
+
+**Bank**
+- Loans up to 100,000,000: the biggest ones open up little by little with your play time.
+
+**Employees**
+- In the employee search, the button is greyed out and says "Pick a job" until you pick one.
+- The seller can sell only above or below a set price.
+- The head waiter can deliver only the orders that pay (or leave a profit) more or less than an amount.
+- The buyer can buy only the ingredients whose price is above or below an amount.
+
+**Bob**
+- When Bob has several things to say at once, he sends a single, slightly longer bubble with the whole summary.
+- You can click a bubble to close it.
+- In Arabic, the "Bob" label is now on the right of the bubble.
+
+**Interface**
+- Achievements have their own button, a trophy in the header, and are no longer in the settings.
+- On a phone, the ingredients list folds away when you are not on the recipes, and you can fold or unfold it whenever you like. Notifications no longer hide the sell button.
+- On a computer, you can resize the ingredients list and the right panel by dragging the bar between them.
+- On a computer, R opens the settings, C the changelog and M the bakery picker. A "Controls" page in the settings lists them (it only shows on a computer or with a keyboard).
+
+**Saves**
+- Save files are now named "p2ds-company-save-time-date.p2ds", in your language.
+- A save can no longer exceed a reasonable size: a file inflated by hand is refused on import.
+
 ## Release 1.3 Snapshot 3 (November 16, 2026)
 
 The archives have their own page, in the colors of the game menu.

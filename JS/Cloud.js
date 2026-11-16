@@ -103,7 +103,7 @@ function markSynced(pid, id) {
 }
 function cloudPushInstance(pid, id) {
   var inst = findInstance(pid, id), raw = instanceRaw(pid, id);
-  if (!inst || !raw) return Promise.resolve();
+  if (!inst || !raw || raw.length > P2DS_CONFIG.MAX_SAVE_CHARS) return Promise.resolve();
   return cloudCall(pid, '/rest/v1/instances?on_conflict=id', { method: 'POST', prefer: 'resolution=merge-duplicates,return=minimal', body: {
     id: id, user_id: pid, bakery_name: inst.name || '', save_data: raw, updated_at: new Date(inst.updated || Date.now()).toISOString()
   } }).then(function(r) { markSynced(pid, id); return r; });
@@ -141,13 +141,25 @@ function cloudSync(pid) {
         jobs.push(cloudPushInstance(pid, r.id));
       }
     });
+    var pending = [];
     listInstances(pid).forEach(function(x) {
       if (remoteIds[x.id]) { markSynced(pid, x.id); return; }
       // Supprimee en ligne (par exemple depuis le navigateur) : on la retire d'ici, sauf si c'est la partie ouverte
       if (x.synced && !(CUR.inst === x.id && CUR.profile === pid && !document.body.classList.contains('home-open'))) { deleteInstance(pid, x.id); cloud.removed = true; return; }
-      jobs.push(cloudPushInstance(pid, x.id));
+      pending.push(x.id);
     });
-    return Promise.all(jobs.map(function(j) { return j.catch(function() {}); }));
+    if (!pending.length) return Promise.all(jobs.map(function(j) { return j.catch(function() {}); }));
+    // L'administrateur voit toutes les parties : une copie locale qui est en fait celle d'un autre joueur ne doit jamais lui appartenir
+    var check = cloudAdminKnown(pid) ? cloudCall(pid, '/rest/v1/instances?id=in.(' + pending.map(encodeURIComponent).join(',') + ')&select=id,user_id').catch(function() { return []; }) : Promise.resolve([]);
+    return check.then(function(rows) {
+      var foreign = {};
+      (rows || []).forEach(function(r) { if (r.user_id !== pid) foreign[r.id] = true; });
+      pending.forEach(function(id) {
+        if (foreign[id]) { if (!(CUR.inst === id && CUR.profile === pid)) { deleteInstance(pid, id); cloud.removed = true; } return; }
+        jobs.push(cloudPushInstance(pid, id));
+      });
+      return Promise.all(jobs.map(function(j) { return j.catch(function() {}); }));
+    });
   }).then(function() { cloud.busy = false; return true; }, function(e) { cloud.busy = false; cloud.lastError = e && e.message; return false; });
 }
 

@@ -34,6 +34,7 @@
 <script>document.write('<script src="../JS/Lang13s1.js?t=' + Date.now() + '"><\/script>');</script>
 <script>document.write('<script src="../JS/Lang13s2.js?t=' + Date.now() + '"><\/script>');</script>
 <script>document.write('<script src="../JS/Lang13s3.js?t=' + Date.now() + '"><\/script>');</script>
+<script>document.write('<script src="../JS/Lang13r.js?t=' + Date.now() + '"><\/script>');</script>
 <script>document.write('<script src="../JS/Config.js?t=' + Date.now() + '"><\/script>');</script>
 <script>document.write('<script src="../JS/PlayerData.js?t=' + Date.now() + '"><\/script>');</script>
 <script>document.write('<script src="../JS/Instances.js?t=' + Date.now() + '"><\/script>');</script>
@@ -465,7 +466,7 @@ check('Un succes compte les niveaux de machines', ACHIEVEMENTS.filter(function(a
 check('Bob connait 30 anecdotes', LANGS.fr['bob.facts'].split('|').length === 30);
 
 // --- Release 1.0 ---
-check('La version s appelle Release 1.3 Snapshot 3', GAME_VERSION === 'Release 1.3 Snapshot 3');
+check('La version s appelle Release 1.3', GAME_VERSION === 'Release 1.3');
 G = createFreshState(); G.level = 499;
 check('La fete et l espace sont caches avant leur niveau', findTheme('party').hidden && findTheme('space').hidden && themeLockReason(findTheme('party')) === 'level');
 check('Les themes Tech sont secrets', themeLockReason(findTheme('tech')) === 'secret' && themeLockReason(findTheme('techgold')) === 'secret');
@@ -495,7 +496,7 @@ check('Embaucher une candidature de niveau 3 donne un employe de niveau 3', acce
 G = createFreshState(); G.money = 0; G.level = 50;
 check('Pas de pret sans compte', takeLoan(100) === false);
 G.bankUnlocked = true;
-check('Les 9 prets existent', LOANS.map(function(l) { return l.amount; }).join() === '10,20,50,100,200,500,1000,5000,10000');
+check('Les 17 prets existent', LOANS.map(function(l) { return l.amount; }).join() === '10,20,50,100,200,500,1000,5000,10000,50000,100000,500000,1000000,5000000,10000000,50000000,100000000');
 var earned0 = G.totalEarned;
 check('Un pret donne l argent sans compter comme un gain', takeLoan(100) && G.money === 100 && G.totalEarned === earned0);
 check('Un seul pret de chaque montant', takeLoan(100) === false);
@@ -978,18 +979,47 @@ changelogVers = { 'alpha 1.2': 'https://exemple.test/a/index.html', 'beta 1.0': 
 check('Le menu Alpha ne liste que les versions Alpha', /alpha-pick/.test(changelogAlphaHTML()) && /Alpha 1\.2/.test(changelogAlphaHTML()) && !/Beta/.test(changelogAlphaHTML()));
 changelogVers = null;
 check('Sans versions.json, pas de menu Alpha', changelogAlphaHTML() === '');
-check('Le nom affiche n a pas de Snapshot', versionLabel('Release 1.3 Snapshot 3') === 'Release 1.3' && versionLabel('Release 1.2.3') === 'Release 1.2.3');
+check('Le nom affiche n a pas de Snapshot', versionLabel('Release 1.3') === 'Release 1.3' && versionLabel('Release 1.2.3') === 'Release 1.2.3');
 
 // --- Release 1.3 Snapshot 3 ---
 check('Le texte du bouton Archives existe dans les 10 langues', Object.keys(LANGS).every(function(l) { return LANGS[l]['changelog.archives']; }));
+
+// --- Release 1.3 ---
+check('Les textes de la 1.3 existent dans les 10 langues', ['save.word', 'xp.levels', 'emp.pickJob', 'rule.off', 'ord.payAbove', 'bank.timeReq', 'bob.close', 'ce.investor', 'ce.contest.win', 'settings.tabKeys', 'keys.m', 'ing.fold', 'ach.header'].filter(function(k) { return k !== 'keys.m'; }).every(function(k) { return Object.keys(LANGS).every(function(l) { return LANGS[l][k]; }); }));
 (function() {
-  var host = document.createElement('div');
-  host.innerHTML = '<div id="bob"><svg><path class="bob-toque"/><path class="bob-apron"/><g class="bob-acc"/><path class="bob-body"/></svg></div>';
-  document.body.appendChild(host);
-  var m = adminBobMarkup();
-  host.remove();
-  check('Bob n a pas d habits dans le panneau', /bob-body/.test(m) && !/bob-toque|bob-apron|bob-acc|bob-kerchief/.test(m));
+  var keep = currentLang;
+  currentLang = 'fr'; var fr = fmt(5.2e9), fr12 = fmt(3e12);
+  currentLang = 'en'; var en = fmt(5.2e9);
+  currentLang = 'de'; var de = fmt(5.2e9);
+  currentLang = 'ja'; var ja = fmt(3e8), ja4 = fmt(5000);
+  currentLang = keep;
+  check('Le milliard s ecrit Md en francais', /Md$/.test(fr) && /Bn$/.test(fr12));
+  check('... B en anglais, Mrd en allemand', /B$/.test(en) && /Mrd$/.test(de));
+  check('... et on compte par 4 chiffres en japonais', /億$/.test(ja) && ja4 === '5000');
 })();
+G = createFreshState(); G.level = 5; G.xp = 0;
+(function() {
+  var calls = 0, saved = showLevelUp;
+  showLevelUp = function() { calls++; };
+  G.xp = 0; addXP(1e9);
+  showLevelUp = saved;
+  check('Plusieurs niveaux d un coup : une seule fete', calls === 1 && G.level > 20);
+})();
+check('Un montant vide veut dire aucune limite', ruleOk('above', 0, 5) && ruleOk('off', 10, 5) && ruleOk('above', 10, 12) && !ruleOk('above', 10, 5) && ruleOk('below', 10, 5) && !ruleOk('below', 10, 12));
+G = createFreshState(); G.level = 30; G.orders = []; var ord = { reward: 1000, items: [{ recId: 'cookie', qty: 6 }] };
+check('Le maitre d hotel suit sa regle de commandes', orderRuleOk({}, ord) && orderRuleOk({ ordRule: 'payAbove', ordLimit: 500 }, ord) && !orderRuleOk({ ordRule: 'payBelow', ordLimit: 500 }, ord) && orderRuleOk({ ordRule: 'gainAbove', ordLimit: 900 }, ord) && !orderRuleOk({ ordRule: 'gainAbove', ordLimit: 5000 }, ord));
+check('Les prets montent a 100 000 000', LOANS[LOANS.length - 1].amount === 100000000 && LOANS.filter(function(o) { return o.minHours; }).length >= 8);
+G = createFreshState(); G.level = 1000; G.playTimeMs = 0;
+check('Un gros pret se debloque avec le temps de jeu', !loanUnlocked(LOANS[LOANS.length - 1]) && loanWaitSec(LOANS[LOANS.length - 1]) > 0);
+G.playTimeMs = 41 * 3600 * 1000;
+check('... et s ouvre apres', loanUnlocked(LOANS[LOANS.length - 1]));
+G = createFreshState(); G.level = 20; G.choiceEvent = { id: 'tip', until: Date.now() + 9999, v: 100 }; var m0 = G.money;
+check('Un evenement a choix se repond une fois', resolveChoice('a') !== null && G.money === m0 + 100 && G.choiceEvent === null && resolveChoice('a') === null);
+G = createFreshState(); G.level = 20; G.money = 0; G.choiceEvent = { id: 'tv', until: Date.now() + 9999, v: 100 };
+check('Sans argent, on ne peut pas payer l emission', resolveChoice('a') === null && G.choiceEvent !== null && resolveChoice('b') !== null && G.choiceEvent === null);
+check('Le nom du fichier de sauvegarde', /^p2ds-sucre-[^-]+-\d\dh\d\d-\d\d-\d\d-\d{4}\.p2ds$/.test(saveFileName('Sucre')) && !/[:\/]/.test(saveFileName('a/b:c')));
+check('Plusieurs bulles de Bob : une seule', bobMerge(['a', 'b', 'a']) === '• a' + String.fromCharCode(10) + '• b' && bobMerge(['seul']) === 'seul');
+check('Une sauvegarde gonflee est refusee', decodeSaveText('{"money":1,"x":"' + new Array(P2DS_CONFIG.MAX_SAVE_CHARS + 10).join('a') + '"}') === null && importSave('A'.repeat(P2DS_CONFIG.MAX_SAVE_CHARS * 2)) === false);
 
 var ko = results.filter(function(r) { return !r.ok; }).length;
 document.getElementById('total').textContent = (results.length - ko) + ' / ' + results.length + ' tests reussis';

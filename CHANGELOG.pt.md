@@ -2,6 +2,41 @@
 
 Tudo o que foi acrescentado ao Pâtisserie 2D Simulator, da mais recente à mais antiga. As versões mais antigas aparecem em inglês. Para perceber as regras do jogo, vê a [wiki](REGLES.md).
 
+## Release 1.3 (16 de novembro de 2026)
+
+Um jogo mais fluido, escolhas para fazer, mais opções para os teus funcionários e uma interface pensada para o telemóvel e o computador.
+
+**Jogo**
+- Acabou o bloqueio ao subir de nível: se subires vários níveis de uma vez, o jogo faz uma só festa e mostra uma só mensagem.
+- Os números grandes escrevem-se como na tua língua: em francês mil milhões é «Md», em alemão «Mrd», e em chinês, japonês e coreano conta-se por grupos de 4 algarismos.
+- Eventos com escolha: na barra de eventos tens por vezes um ou dois botões para responder (um investidor, uma equipa de televisão, um fornecedor, uma gorjeta, um concurso).
+- As 5 conquistas escondidas também se desbloqueiam no modo máximo, no modo criativo e com o comando.
+- Se desligares a música, ela pára logo, sem esperar pelo fim da peça.
+
+**Banco**
+- Empréstimos até 100 000 000: os maiores abrem aos poucos com o teu tempo de jogo.
+
+**Funcionários**
+- Na procura de funcionários, o botão fica cinzento e diz «Escolhe um ofício» até escolheres um.
+- O vendedor pode vender só acima ou abaixo de um preço certo.
+- O mestre-sala pode entregar só as encomendas que pagam (ou deixam de lucro) mais ou menos do que um montante.
+- O intendente pode comprar só os ingredientes cujo preço esteja acima ou abaixo de um montante.
+
+**Bob**
+- Quando o Bob tem várias coisas para dizer ao mesmo tempo, envia uma só bolha, um pouco mais longa, com o resumo todo.
+- Podes clicar numa bolha para a fechar.
+- Em árabe, a etiqueta «Bob» passa a ficar à direita da bolha.
+
+**Interface**
+- As conquistas têm o seu próprio botão, um troféu no cabeçalho, e já não estão nas definições.
+- No telemóvel, a lista de ingredientes recolhe-se quando não estás nas receitas, e podes recolhê-la ou expandi-la quando quiseres. As notificações já não tapam o botão de vender.
+- No computador, podes mudar o tamanho da lista de ingredientes e do painel da direita arrastando a barra entre os dois.
+- No computador, R abre as definições, C o registo de alterações e M a escolha da pastelaria. Uma página «Comandos» nas definições lista-os (só aparece no computador ou com teclado).
+
+**Jogos guardados**
+- Os ficheiros de salvamento chamam-se agora «p2ds-empresa-salvamento-hora-data.p2ds», na tua língua.
+- Um salvamento já não pode passar de um tamanho razoável: um ficheiro inchado à mão é recusado ao importar.
+
 ## Release 1.3 Snapshot 3 (16 de novembro de 2026)
 
 Os arquivos têm a sua própria página, com as cores do menu do jogo.

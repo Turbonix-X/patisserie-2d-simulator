@@ -26,16 +26,32 @@ function decimalComma() {
 }
 function decimalize(txt) { return decimalComma() ? String(txt).replace('.', ',') : String(txt); }
 
+// Les grands nombres s'ecrivent comme dans la langue : en francais le milliard est « Md » (et non « B » comme billion),
+// en allemand « Mrd », en chinois, japonais et coreen on compte par groupes de 4 chiffres (万, 億, 만...)
+var NUM_LANG = {
+  fr: { g: 3, s: ['', 'k', 'M', 'Md', 'Bn', 'Bd', 'Tn', 'Td', 'Qn', 'Qd', 'Qt'] },
+  es: { g: 3, s: ['', 'k', 'M', 'MM', 'B', 'MB', 'T', 'MT', 'Cu', 'MCu', 'Qi'] },
+  pt: { g: 3, s: ['', 'k', 'M', 'Bi', 'Tri', 'Qua', 'Qui', 'Sex', 'Sep', 'Oct', 'Non'] },
+  de: { g: 3, s: ['', 'Tsd', 'Mio', 'Mrd', 'Bio', 'Brd', 'Trio', 'Trd', 'Quad', 'Qdrd', 'Quint'] },
+  ru: { g: 3, s: ['', 'тыс', 'млн', 'млрд', 'трлн', 'квдрлн', 'квнтлн', 'сксл', 'сптл', 'октл', 'нонл'] },
+  ar: { g: 3, s: ['', 'ألف', 'م', 'مليار', 'ترليون', 'كواد', 'كوين', 'سكست', 'سبت', 'أوكت', 'نون'] },
+  zh: { g: 4, s: ['', '万', '亿', '万亿', '京', '垓', '秭', '穰', '沟'] },
+  ja: { g: 4, s: ['', '万', '億', '兆', '京', '垓', '秭', '穣', '溝'] },
+  ko: { g: 4, s: ['', '만', '억', '조', '경', '해', '자', '양', '구'] }
+};
 function fmt(n) {
   if (n < 0) return '-' + fmt(-n);
   if (n >= 1e290) return '\u221E'; // Mode creatif : l'infini
-  if (n < 1000) return Math.floor(n) + '';
-  var idx = Math.floor(Math.log10(n) / 3);
-  if (idx >= NUM_SUFFIXES.length) idx = NUM_SUFFIXES.length - 1;
-  var val = n / Math.pow(10, idx * 3);
-  if (val >= 100) return Math.floor(val) + NUM_SUFFIXES[idx];
-  if (val >= 10) return decimalize(val.toFixed(1)) + NUM_SUFFIXES[idx];
-  return decimalize(val.toFixed(2)) + NUM_SUFFIXES[idx];
+  var sc = NUM_LANG[typeof currentLang !== 'undefined' ? currentLang : 'en'] || null;
+  var g = sc ? sc.g : 3, names = sc ? sc.s : NUM_SUFFIXES;
+  if (n < Math.pow(10, g)) return Math.floor(n) + '';
+  var idx = Math.floor(Math.log10(n) / g);
+  if (idx >= names.length) { g = 3; names = NUM_SUFFIXES; idx = Math.floor(Math.log10(n) / 3); } // au-dela de la table : les noms universels
+  if (idx >= names.length) idx = names.length - 1;
+  var val = n / Math.pow(10, idx * g);
+  if (val >= 100) return Math.floor(val) + names[idx];
+  if (val >= 10) return decimalize(val.toFixed(1)) + names[idx];
+  return decimalize(val.toFixed(2)) + names[idx];
 }
 
 function capMoney() {
@@ -61,6 +77,27 @@ function gotIng(id, n) {
   if (!G.stats.ingGotById) G.stats.ingGotById = {};
   G.stats.ingGotById[id] = (G.stats.ingGotById[id] || 0) + n;
   G.stats.totalIngGot = (G.stats.totalIngGot || 0) + n;
+}
+
+// Une regle « seulement au-dessus / en dessous d'un montant » : un montant vide ou a 0 veut dire aucune limite
+function ruleOk(mode, limit, value) {
+  if (!mode || mode === 'off' || !(limit > 0)) return true;
+  return mode === 'above' ? value >= limit : value <= limit;
+}
+// Ce qu'une commande rapporte, et ce qu'il en reste une fois les ingredients payes
+function orderGain(o) {
+  var cost = 0;
+  (o.items || []).forEach(function(it) { var rec = findRec(it.recId); if (rec) cost += recipeCost(rec) * Math.ceil(it.qty / Math.max(1, rec.qty)); });
+  return o.reward - cost;
+}
+function orderRuleOk(emp, o) {
+  var mode = emp.ordRule || 'all', limit = emp.ordLimit || 0;
+  if (mode === 'all' || !(limit > 0)) return true;
+  if (mode === 'payAbove') return o.reward >= limit;
+  if (mode === 'payBelow') return o.reward <= limit;
+  if (mode === 'gainAbove') return orderGain(o) >= limit;
+  if (mode === 'gainBelow') return orderGain(o) <= limit;
+  return true;
 }
 
 // ============ BONUS ============
@@ -137,6 +174,7 @@ function collectorLoss(emp) { return emp.lossPct === undefined ? 10 : Math.max(0
 function collectorOutput(emp, ingId) {
   var r = empPower(emp, 'collector') * (1 - collectorLoss(emp) / 100);
   if (emp.limitMode === 'below' && (G.ing[ingId] || 0) >= (emp.limitN || 0)) return 0;
+  if (!ruleOk(emp.collRule, emp.collLimit, getIngredientCost(findIng(ingId)))) return 0;
   if (emp.limitMode === 'hour') r = Math.min(r, (emp.limitN || 0) / 3600);
   return r;
 }
@@ -286,13 +324,15 @@ function xpMult() {
 function addXP(amount) {
   if (G.creative) return; // Le mode creatif ne fait pas monter de niveau
   G.xp += Math.floor(amount * xpMult());
-  var needed = xpForLevel(G.level);
-  while (G.xp >= needed) {
+  var needed = xpForLevel(G.level), from = G.level, n = 0;
+  // Plusieurs niveaux d'un coup : on les compte, et on ne fete qu'une fois (sinon le jeu gele)
+  while (needed > 0 && G.xp >= needed && n < 5000) {
     G.xp -= needed;
     G.level++;
+    n++;
     needed = xpForLevel(G.level);
-    if (typeof showLevelUp === 'function') showLevelUp(G.level);
   }
+  if (n > 0 && typeof showLevelUp === 'function') showLevelUp(G.level, n, from);
 }
 
 // ============ ESPACE ============
@@ -989,7 +1029,7 @@ function sellOneBatchAuto(emp, dtSec) {
   // Le vendeur vend d'abord ce qui rapporte le plus
   var best = null;
   for (var r = 0; r < REC.length; r++) {
-    if (sellerAllowance(emp, REC[r]) >= 1 && (!best || REC[r].val > best.val)) best = REC[r];
+    if (sellerAllowance(emp, REC[r]) >= 1 && ruleOk(emp.sellRule, emp.sellLimit, inflatedPrice(REC[r])) && (!best || REC[r].val > best.val)) best = REC[r];
   }
   if (!best) { emp.sellFrac = Math.min(emp.sellFrac, 1); return; }
   emp.sellFrac -= whole;
@@ -1114,13 +1154,13 @@ function tickBuyers(dtSec) {
     if (emp.buyCd < 20) return;
     var rec = buyerTarget();
     if (!rec) { emp.buyCd = 20; return; }
-    var cost = missingCost(rec);
-    if (G.money < cost * 2) { emp.buyCd = 20; return; }
-    var items = {};
+    var items = {}, cost = 0;
     for (var k in rec.req) {
       var miss = rec.req[k] - (G.ing[k] || 0);
-      if (miss > 0) items[k] = miss;
+      var unit = getIngredientCost(findIng(k));
+      if (miss > 0 && ruleOk(emp.buyRule, emp.buyLimit, unit)) { items[k] = miss; cost += unit * miss; }
     }
+    if (!(cost > 0) || G.money < cost * 2) { emp.buyCd = 20; return; }
     emp.buyCd = 0;
     G.money -= cost;
     G.stats.totalIngredientCost += cost;
@@ -1227,7 +1267,9 @@ function hasLoan(amount) {
   return G.loans.some(function(l) { return l.amount === amount; });
 }
 
-function loanUnlocked(offer) { return G.level >= offer.minLvl; }
+function loanUnlocked(offer) { return G.level >= offer.minLvl && loanWaitSec(offer) <= 0; }
+// Combien de secondes de jeu avant que ce pret s'ouvre (0 : c'est bon)
+function loanWaitSec(offer) { return offer.minHours ? Math.max(0, offer.minHours * 3600 - (G.playTimeMs || 0) / 1000) : 0; }
 
 function anyLoanAvailable() {
   return LOANS.some(function(o) { return loanUnlocked(o) && !hasLoan(o.amount); });
@@ -1638,6 +1680,7 @@ function tickEvents() {
     if (typeof toast === 'function') toast(t('event.' + evt.id, { t: evt.duration }));
   }
   tickFocusEvent(now);
+  tickChoiceEvent(now);
   tickDisaster();
   // Petit incident, environ toutes les 8 minutes
   if (Math.random() < 0.002) {
@@ -1649,6 +1692,76 @@ function tickEvents() {
       if (typeof toast === 'function') toast(t('inv.' + inv.id, { v: Math.floor(lost) }));
     }
   }
+}
+
+// ---------- Evenements a choix ----------
+function choiceAmount(id) {
+  var base = Math.max(5, revenueAt(G.level));
+  return Math.round(({ investor: 30, tv: 4, supplier: 0, tip: 3, contest: 3 })[id] * base);
+}
+function tickChoiceEvent(now) {
+  var c = G.choiceEvent;
+  if (c && now >= c.until) { G.choiceEvent = null; if (typeof renderHeader === 'function') renderHeader(); return; }
+  if (c || G.creative || G.level < CHOICE_EVENT_LVL || now - (G.lastChoiceAt || 0) < CHOICE_EVENT_EVERY * 1000 || Math.random() > 0.004) return;
+  var ev = CHOICE_EVENTS[Math.floor(Math.random() * CHOICE_EVENTS.length)];
+  G.choiceEvent = { id: ev.id, until: now + CHOICE_EVENT_SEC * 1000, v: choiceAmount(ev.id) };
+  G.lastChoiceAt = now;
+  if (typeof toast === 'function') toast(t('ce.' + ev.id, { v: fmtMoney(G.choiceEvent.v) }));
+  if (typeof renderHeader === 'function') renderHeader();
+}
+function startTimedEvent(evtId, sec) {
+  var now = Date.now();
+  clearEventEffects();
+  G.activeEvent = evtId;
+  G.eventEndTime = now + sec * 1000;
+  G.lastEventTime = now;
+  G.stats.eventsSeen = (G.stats.eventsSeen || 0) + 1;
+  applyEvent(evtId);
+}
+// side : 'a' (premier bouton) ou 'b' (second). Renvoie le texte du resultat, ou null si on n'a pas pu repondre.
+function resolveChoice(side) {
+  var c = G.choiceEvent;
+  if (!c) return null;
+  var v = c.v, msg = null, cost = 0;
+  if (c.id === 'investor') {
+    if (side === 'a') { G.money += v; G.employees.forEach(function(e) { e.morale = Math.max(1, (e.morale || 50) - 10); }); msg = t('ce.investor.ra', { v: fmtMoney(v) }); }
+    else { G.employees.forEach(function(e) { e.morale = Math.min(100, (e.morale || 50) + 10); }); msg = t('ce.investor.rb'); }
+  } else if (c.id === 'tv') {
+    if (side === 'a') {
+      if (G.money < v) return null;
+      G.money -= v; startTimedEvent('tv_feature', 45); msg = t('ce.tv.ra');
+    } else msg = t('ce.no');
+  } else if (c.id === 'supplier') {
+    if (side === 'a') { startTimedEvent('ingredient_sale', 60); msg = t('ce.supplier.ra'); } else msg = t('ce.no');
+  } else if (c.id === 'tip') {
+    G.money += v; G.totalEarned += v; msg = t('ce.tip.ra', { v: fmtMoney(v) });
+  } else if (c.id === 'contest') {
+    if (side === 'a') {
+      if (G.money < v) return null;
+      G.money -= v;
+      if (Math.random() < 0.5) { G.money += v * 5; G.totalEarned += v * 4; msg = t('ce.contest.win', { v: fmtMoney(v * 5) }); } else msg = t('ce.contest.lose');
+    } else msg = t('ce.no');
+  }
+  G.choiceEvent = null;
+  return msg;
+}
+function choiceBannerHTML() {
+  var c = G.choiceEvent;
+  if (!c) return '';
+  var ev = null;
+  CHOICE_EVENTS.forEach(function(x) { if (x.id === c.id) ev = x; });
+  if (!ev) return '';
+  var h = '<div class="event-banner choice-banner"><span>' + t('ce.' + c.id, { v: fmtMoney(c.v) }) + '</span> ';
+  h += '<button class="debt-pay-btn" onclick="doChoiceEvent(\'a\')">' + t('ce.' + c.id + '.a') + '</button>';
+  if (ev.choices > 1) h += ' <button class="debt-pay-btn" onclick="doChoiceEvent(\'b\')">' + t(c.id === 'investor' ? 'ce.investor.b' : 'ce.no') + '</button>';
+  return h + '</div>';
+}
+function doChoiceEvent(side) {
+  var msg = resolveChoice(side);
+  if (msg === null) { toast(t('ing.noMoney')); playErrorSound(); return; }
+  toast(msg);
+  save();
+  renderHeader();
 }
 
 // Un gros malheur : tres rare, a partir du niveau 30
@@ -2152,7 +2265,7 @@ function tickOrders(dtSec) {
     emp.orderCd = (emp.orderCd || 0) + dtSec * empPower(emp, 'maitre');
     if (emp.orderCd < ORDER_CONFIG.butlerSec) return;
     var todo = null;
-    G.orders.forEach(function(o) { if (!todo && orderReady(o)) todo = o; });
+    G.orders.forEach(function(o) { if (!todo && orderReady(o) && orderRuleOk(emp, o)) todo = o; });
     if (!todo) { emp.orderCd = ORDER_CONFIG.butlerSec; return; }
     emp.orderCd = 0;
     var got = fulfillOrder(todo.id);

@@ -113,7 +113,7 @@ function renderBank() {
     h += '<dl><div><dt>' + t('bank.rate') + '</dt><dd>' + Math.round(offer.rate * 100) + ' %</dd></div>';
     h += '<div><dt>' + t('bank.repay') + '</dt><dd>' + fmtLoan(offer.amount * (1 + offer.rate)) + '</dd></div>';
     h += '<div><dt>' + t('bank.during') + '</dt><dd>' + t('bank.minutes', { v: offer.minutes }) + '</dd></div></dl>';
-    if (locked) h += '<div class="loan-lock">\u{1F512} ' + t('bank.levelReq', { v: offer.minLvl }) + '</div>';
+    if (locked) h += '<div class="loan-lock">\u{1F512} ' + (G.level < offer.minLvl ? t('bank.levelReq', { v: offer.minLvl }) : t('bank.timeReq', { v: fmtTime(loanWaitSec(offer)) })) + '</div>';
     else h += '<button class="btn btn-small' + (active ? '' : ' btn-primary') + '" onclick="doTakeLoan(' + offer.amount + ')"' + (active ? ' disabled' : '') + '>' + (active ? t('bank.inProgress') : t('bank.borrow')) + '</button>';
     h += '</div>';
   });

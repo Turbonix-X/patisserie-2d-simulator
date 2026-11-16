@@ -156,7 +156,7 @@ function renderEmployees() {
         h += '<button class="btn btn-small' + (sel.indexOf(et.id) >= 0 ? ' btn-primary' : '') + '" aria-pressed="' + (sel.indexOf(et.id) >= 0) + '" onclick="toggleSearchSel(\'' + et.id + '\')" title="' + escH(t('emp.desc.' + et.id)) + '">' + empAvatar(et.id, et.id) + t('emp.' + et.id) + '</button>';
       }
     });
-    h += '</div><button class="btn btn-small btn-primary search-go" onclick="doSearchSelected()"' + (sel.length ? '' : ' disabled') + '>' + t('emp.searchGo', { n: sel.map(function(x) { return t('emp.' + x); }).join(' + ') || '…' }) + '</button>';
+    h += '</div><button class="btn btn-small btn-primary search-go" onclick="doSearchSelected()"' + (sel.length ? '' : ' disabled') + '>' + (sel.length ? t('emp.searchGo', { n: sel.map(function(x) { return t('emp.' + x); }).join(' + ') }) : t('emp.pickJob')) + '</button>';
     h += '<p class="hint-note">' + t('emp.searchHint', { v: Math.round(searchChance() * 100) }) + ' ' + t('emp.searchTwoHint') + '</p></div>';
   }
   // A partir du niveau 20, le tableau de bord est tout en haut, avec la recherche dedans
@@ -428,6 +428,8 @@ function empConfigHTML(emp) {
 function jobConfigHTML(emp, type) {
   if (type === 'collector') return collectorConfig(emp);
   if (type === 'seller') return sellerConfig(emp);
+  if (type === 'buyer') return ruleConfig(emp, 'buyRule', 'buyLimit', 'emp.ruleBuy');
+  if (type === 'maitre') return orderRuleConfig(emp);
   if (type === 'chef') return chefConfig(emp);
   if (type === 'manager') return managerConfig(emp);
   if (type === 'carrier') return carrierConfig(emp);
@@ -476,6 +478,7 @@ function collectorConfig(emp) {
   });
   h += '</select></label>';
   if (mode !== 'none') h += '<label class="cfg-row">N<input type="number" min="0" step="any" value="' + (emp.limitN || 0) + '" onchange="setCollectorLimit(' + emp.id + ',null,this.value)"></label><p class="set-help">' + t(mode === 'below' ? 'emp.limitBelowHelp' : 'emp.limitHourHelp') + '</p>';
+  h += ruleConfig(emp, 'collRule', 'collLimit', 'emp.ruleColl');
   return h;
 }
 function setCollectorLimit(empId, mode, n) {
@@ -492,12 +495,38 @@ function assignCollector(empId, ingId) {
   if (moveCollector(emp, ingId)) { save(); showEmpInfoModal(empId); }
 }
 
+// Une regle de montant : « toujours », « seulement au-dessus de », « seulement en dessous de », et le montant
+function ruleConfig(emp, modeKey, limitKey, label) {
+  var mode = emp[modeKey] || 'off';
+  var h = '<p class="set-help">' + t(label) + '</p><div class="cfg-row">';
+  h += '<select class="set-select" onchange="setEmpRule(' + emp.id + ',\'' + modeKey + '\',this.value)">';
+  [['off', 'rule.off'], ['above', 'rule.above'], ['below', 'rule.below']].forEach(function(m) { h += '<option value="' + m[0] + '"' + (mode === m[0] ? ' selected' : '') + '>' + t(m[1]) + '</option>'; });
+  h += '</select>';
+  h += '<input type="number" min="0" step="any" value="' + (emp[limitKey] || '') + '" placeholder="' + escH(t('rule.amount')) + '"' + (mode === 'off' ? ' disabled' : '') + ' onchange="setEmpRule(' + emp.id + ',\'' + limitKey + '\',this.value)"></div>';
+  return h + '<p class="set-help">' + t('emp.ruleHelp') + '</p>';
+}
+function orderRuleConfig(emp) {
+  var mode = emp.ordRule || 'all';
+  var h = '<p class="set-help">' + t('emp.ruleOrder') + '</p><div class="cfg-row"><select class="set-select" onchange="setEmpRule(' + emp.id + ',\'ordRule\',this.value)">';
+  ['all', 'payAbove', 'payBelow', 'gainAbove', 'gainBelow'].forEach(function(m) { h += '<option value="' + m + '"' + (mode === m ? ' selected' : '') + '>' + t('ord.' + m) + '</option>'; });
+  h += '</select><input type="number" min="0" step="any" value="' + (emp.ordLimit || '') + '" placeholder="' + escH(t('rule.amount')) + '"' + (mode === 'all' ? ' disabled' : '') + ' onchange="setEmpRule(' + emp.id + ',\'ordLimit\',this.value)"></div>';
+  return h + '<p class="set-help">' + t('emp.ruleHelp') + '</p>';
+}
+function setEmpRule(empId, key, value) {
+  var emp = findEmp(empId);
+  if (!emp) return;
+  if (/Limit$/.test(key)) emp[key] = Math.max(0, parseFloat(value) || 0);
+  else emp[key] = String(value);
+  save();
+  showEmpInfoModal(empId);
+}
+
 function sellerConfig(emp) {
   var pct = emp.sellPct === undefined ? 100 : emp.sellPct;
   var h = '<p class="set-help">' + t('emp.sellHelp') + '</p>';
   h += '<div class="volume-row"><input type="range" min="0" max="100" step="5" value="' + pct + '" oninput="document.getElementById(\'sell-pct\').textContent=this.value+\' %\'" onchange="setSellPct(' + emp.id + ',this.value,false)"><span id="sell-pct">' + pct + ' %</span></div>';
   h += '<button class="btn btn-small" onclick="setSellPct(' + emp.id + ',' + pct + ',true)">' + t('emp.sellAll') + '</button>';
-  return h;
+  return h + ruleConfig(emp, 'sellRule', 'sellLimit', 'emp.ruleSell');
 }
 
 function setSellPct(empId, value, everyone) {

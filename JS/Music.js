@@ -144,7 +144,11 @@ function playTone(freq, when, dur, wave, peak, toEcho) {
   if (toEcho && musicEcho) gain.connect(musicEcho);
   osc.start(when);
   osc.stop(when + dur + 0.02);
+  // On garde les notes deja programmees pour pouvoir les couper net
+  musicVoices.push(osc);
+  osc.onended = function() { var i = musicVoices.indexOf(osc); if (i >= 0) musicVoices.splice(i, 1); };
 }
+var musicVoices = [];
 
 // Prepare une mesure : melodie, basse et accord
 function scheduleBar(track, barIdx, when) {
@@ -206,6 +210,8 @@ function startMusic() {
 function stopMusic() {
   musicPlaying = false;
   if (musicTimer) { clearInterval(musicTimer); musicTimer = null; }
+  // Les notes deja envoyees a l'avance s'arretent tout de suite
+  musicVoices.splice(0).forEach(function(o) { try { o.stop(0); } catch (e) { /* deja arretee */ } });
 }
 
 function toggleMusic() {

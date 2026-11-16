@@ -2946,3 +2946,30 @@ body.home-open > #header, body.home-open > #tabs, body.home-open > #game-area, b
 #adm-bob-bubble::before, #adm-bob-bubble::after { content: ''; position: absolute; top: 50%; border-style: solid; border-color: transparent; }
 #adm-bob-bubble::before { right: -14px; margin-top: -9px; border-width: 9px 0 9px 14px; border-left-color: var(--mauve, #9b6dff); }
 #adm-bob-bubble::after { right: -10px; margin-top: -7px; border-width: 7px 0 7px 11px; border-left-color: var(--surface-solid, #fff); }
+
+/* 1.3 : colonnes redimensionnables (PC), liste des ingredients repliable (mobile), succes en en-tete, evenements a choix */
+#game-area { grid-template-columns: var(--ing-w, minmax(300px, 34%)) 12px minmax(0, 1fr); column-gap: 0; row-gap: 12px; }
+#split-handle { cursor: col-resize; touch-action: none; align-self: stretch; margin: 0 2px; border-radius: 6px; position: relative; }
+#split-handle::after { content: ''; position: absolute; top: 50%; left: 50%; width: 4px; height: 44px; margin: -22px 0 0 -2px; border-radius: 4px; background: var(--border); transition: background .15s; }
+#split-handle:hover::after, body.resizing #split-handle::after { background: var(--mauve); }
+body.resizing { user-select: none; cursor: col-resize; }
+.ing-fold-btn { display: none; margin-inline-start: auto; width: 32px; height: 32px; border-radius: 10px; border: 1px solid var(--border); background: var(--surface); color: var(--text); font-size: 1rem; cursor: pointer; }
+#ingredients .panel-head { display: flex; align-items: center; }
+@media (max-width: 899px) {
+  #split-handle { display: none; }
+  #game-area { grid-template-columns: minmax(0, 1fr); }
+  .ing-fold-btn { display: inline-flex; align-items: center; justify-content: center; }
+  #ingredients.folded { flex: 0 0 auto; min-height: 0; overflow: hidden; padding-bottom: 10px; }
+  /* Les notifications en haut : elles ne cachent plus le bouton vendre */
+  #toast-area { top: calc(env(safe-area-inset-top, 0px) + 118px) !important; bottom: auto !important; }
+}
+.choice-banner { display: flex; align-items: center; justify-content: center; gap: 8px; flex-wrap: wrap; }
+.choice-banner .debt-pay-btn { margin: 0; }
+.kbd { display: inline-block; min-width: 34px; padding: 3px 9px; border-radius: 8px; border: 1px solid var(--border); border-bottom-width: 3px; background: var(--surface); color: var(--text); font: 700 .85rem/1.2 ui-monospace, Consolas, monospace; text-align: center; }
+#bob-bubble p { white-space: pre-line; }
+.bob-bubble-name { left: auto; inset-inline-start: 12px; }
+#bob-bubble { cursor: pointer; }
+.modal-ach .set-body { display: block; }
+
+.cfg-row .set-select { flex: 2 1 190px; min-width: 0; }
+.cfg-row input[type=number] { flex: 1 1 110px; min-width: 0; }

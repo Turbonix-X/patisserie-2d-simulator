@@ -2,6 +2,41 @@
 
 Tout ce qui a été ajouté à Pâtisserie 2D Simulator, de la plus récente à la plus ancienne. Pour comprendre les règles du jeu, va voir le [wiki](REGLES.md).
 
+## Release 1.3 (16 novembre 2026)
+
+Un jeu plus fluide, des choix à faire, plus d'options pour tes employés, et une interface pensée pour le téléphone comme pour l'ordinateur.
+
+**Jeu**
+- Plus de gel quand tu montes de niveau : si tu gagnes plusieurs niveaux d'un coup, le jeu ne fait qu'une seule fête et un seul message.
+- Les grands nombres s'écrivent comme dans ta langue : en français le milliard est « Md » (et plus « B »), en allemand « Mrd », et en chinois, japonais et coréen on compte par groupes de 4 chiffres.
+- Des événements à choix : dans la bande des événements, tu as parfois un ou deux boutons pour répondre (un investisseur, une équipe de télé, un fournisseur, un pourboire, un concours).
+- Les 5 succès cachés se débloquent aussi en mode max, en mode créatif et avec la commande.
+- Si tu coupes la musique, elle s'arrête tout de suite, sans attendre la fin du morceau.
+
+**Banque**
+- Des prêts jusqu'à 100 000 000 € : les plus gros s'ouvrent petit à petit avec ton temps de jeu.
+
+**Employés**
+- Dans la recherche d'employés, le bouton est grisé et dit « Choisis un métier » tant que tu n'as pas choisi.
+- Le vendeur peut ne vendre qu'au-dessus ou qu'en dessous d'un prix précis.
+- Le maître d'hôtel peut ne livrer que les commandes qui rapportent (ou qui laissent en bénéfice) plus ou moins qu'un montant.
+- L'intendant peut n'acheter que les ingrédients dont le prix est au-dessus ou en dessous d'un montant.
+
+**Bob**
+- Quand Bob a plusieurs choses à dire en même temps, il n'envoie qu'une seule bulle, un peu plus longue, avec tout le résumé.
+- Tu peux cliquer sur une bulle pour la fermer.
+- En arabe, l'étiquette « Bob » est maintenant à droite de la bulle.
+
+**Interface**
+- Les succès ont leur propre bouton, un trophée dans l'en-tête, et ne sont plus dans les réglages.
+- Sur téléphone, la liste des ingrédients se replie quand tu n'es pas sur les recettes, et tu peux la replier ou la déplier quand tu veux. Les notifications ne cachent plus le bouton vendre.
+- Sur ordinateur, tu peux changer la taille de la liste des ingrédients et du panneau de droite en glissant la barre entre les deux.
+- Sur ordinateur, R ouvre les réglages, C le changelog et M le choix de la pâtisserie. Une page « Commandes » des réglages les liste (elle n'apparaît que sur ordinateur ou avec un clavier).
+
+**Sauvegardes**
+- Les fichiers de sauvegarde s'appellent maintenant « p2ds-entreprise-sauvegarde-heure-date.p2ds », dans ta langue.
+- Une sauvegarde ne peut plus dépasser une taille raisonnable : un fichier gonflé à la main est refusé à l'import.
+
 ## Release 1.3 Snapshot 3 (16 novembre 2026)
 
 Les archives ont leur propre page, aux couleurs du menu du jeu.

@@ -102,11 +102,11 @@ function instanceExportCode(pid, id) {
 // Un code (copier-coller) ou le texte d'un fichier : renvoie la sauvegarde en JSON, ou null
 function decodeSaveText(text) {
   text = String(text || '').trim();
-  if (!text) return null;
+  if (!text || text.length > P2DS_CONFIG.MAX_SAVE_CHARS * 1.4) return null;
   try {
     var json = text.charAt(0) === '{' ? text : decodeURIComponent(escape(atob(text)));
     var d = JSON.parse(json);
-    if (!d || typeof d !== 'object' || typeof d.money !== 'number') return null;
+    if (!d || typeof d !== 'object' || typeof d.money !== 'number' || json.length > P2DS_CONFIG.MAX_SAVE_CHARS) return null;
     return json;
   } catch (e) { return null; }
 }

@@ -223,7 +223,7 @@ function homeDownload(id) {
   var blob = new Blob([instanceExportCode(pid, id)], { type: 'text/plain' });
   var a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
-  a.download = 'p2ds-' + String((inst && inst.name) || 'partie').replace(/[^A-Za-z0-9_-]+/g, '_').slice(0, 30) + '-' + new Date().toISOString().slice(0, 10) + '.p2ds';
+  a.download = saveFileName(inst && inst.name);
   document.body.appendChild(a); a.click();
   setTimeout(function() { URL.revokeObjectURL(a.href); a.remove(); }, 1000);
 }

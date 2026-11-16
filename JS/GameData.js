@@ -4,7 +4,7 @@
    employes, espace, evenements, themes
    ============================================ */
 
-var GAME_VERSION = 'Release 1.3 Snapshot 3';
+var GAME_VERSION = 'Release 1.3';
 // Le nom affiche : sans « Snapshot N » (il ne sert qu'a nous et aux fichiers)
 function versionLabel(v) { return String(v || '').replace(/\s+Snapshot\s+\d+$/i, ''); }
 
@@ -284,6 +284,18 @@ var EVENT_TYPES = [
   { id:'apprentice_day',duration:60, chance:5 },
 ];
 
+// Evenements a choix : une ou deux reponses dans la bande des evenements. Sans reponse, ils partent seuls.
+var CHOICE_EVENTS = [
+  { id: 'investor', choices: 2 },
+  { id: 'tv', choices: 2 },
+  { id: 'supplier', choices: 2 },
+  { id: 'tip', choices: 1 },
+  { id: 'contest', choices: 2 }
+];
+var CHOICE_EVENT_SEC = 45;      // le temps pour repondre
+var CHOICE_EVENT_EVERY = 240;   // au plus un tous les ~4 minutes
+var CHOICE_EVENT_LVL = 10;
+
 // Evenements qui ne touchent qu'un ingredient ou qu'une recette
 // mult : le prix est multiplie par ce nombre pendant l'evenement
 var FOCUS_EVENTS = [
@@ -381,6 +393,15 @@ var LOANS = [
   { amount: 1000, rate: 0.18, minutes: 15, minLvl: 15 },
   { amount: 5000, rate: 0.22, minutes: 30, minLvl: 25 },
   { amount: 10000, rate: 0.25, minutes: 45, minLvl: 40 },
+  // Les gros prets se debloquent aussi avec le temps de jeu (minHours)
+  { amount: 50000, rate: 0.28, minutes: 60, minLvl: 60, minHours: 1 },
+  { amount: 100000, rate: 0.30, minutes: 90, minLvl: 80, minHours: 2 },
+  { amount: 500000, rate: 0.32, minutes: 120, minLvl: 120, minHours: 4 },
+  { amount: 1000000, rate: 0.35, minutes: 180, minLvl: 170, minHours: 6 },
+  { amount: 5000000, rate: 0.38, minutes: 240, minLvl: 230, minHours: 10 },
+  { amount: 10000000, rate: 0.40, minutes: 360, minLvl: 300, minHours: 15 },
+  { amount: 50000000, rate: 0.45, minutes: 480, minLvl: 400, minHours: 25 },
+  { amount: 100000000, rate: 0.50, minutes: 720, minLvl: 500, minHours: 40 },
 ];
 
 var RENAME_COST = 100;

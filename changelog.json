@@ -4,6 +4,62 @@
   "intro": "كل ما أُضيف إلى Pâtisserie 2D Simulator، من الأحدث إلى الأقدم. تظهر الإصدارات الأقدم بالإنجليزية. لفهم قواعد اللعبة، راجع [الويكي](REGLES.md).",
   "versions": [
    {
+    "title": "Release 1.3 (16 نوفمبر 2026)",
+    "name": "Release 1.3",
+    "intro": "لعبة أكثر سلاسة، وقرارات لتتخذها، وخيارات أكثر لموظفيك، وواجهة مصممة للهاتف والحاسوب.",
+    "groups": [
+     {
+      "name": "اللعبة",
+      "items": [
+       "لا مزيد من التجمّد عند رفع المستوى: إذا ارتفعت عدة مستويات دفعة واحدة، تقيم اللعبة احتفالًا واحدًا وتعرض رسالة واحدة.",
+       "تُكتب الأعداد الكبيرة كما في لغتك: في الفرنسية المليار هو «Md»، وفي الألمانية «Mrd»، وفي الصينية واليابانية والكورية تُعدّ الأرقام في مجموعات من 4 خانات.",
+       "أحداث بخيارات: في شريط الأحداث ستجد أحيانًا زرًّا أو زرّين للإجابة (مستثمر، فريق تلفزيوني، مورّد، بقشيش، مسابقة).",
+       "تُفتح الإنجازات الخمسة المخفية أيضًا في الوضع الأقصى والوضع الإبداعي وبالأمر.",
+       "إذا أوقفت الموسيقى فإنها تتوقف فورًا دون انتظار نهاية المقطوعة."
+      ]
+     },
+     {
+      "name": "البنك",
+      "items": [
+       "قروض تصل إلى 100 000 000: الأكبر منها تُفتح تدريجيًا مع وقت لعبك."
+      ]
+     },
+     {
+      "name": "الموظفون",
+      "items": [
+       "في البحث عن موظف، يكون الزر رماديًا ويقول «اختر مهنة» إلى أن تختار.",
+       "يمكن للبائع أن يبيع فقط فوق سعر معيّن أو تحته.",
+       "يمكن لرئيس النُّدُل أن يسلّم فقط الطلبات التي تدفع (أو تترك ربحًا) أكثر أو أقل من مبلغ.",
+       "يمكن لمسؤول المشتريات أن يشتري فقط المكوّنات التي يكون سعرها فوق مبلغ أو تحته."
+      ]
+     },
+     {
+      "name": "بوب",
+      "items": [
+       "عندما يكون لدى بوب عدة أشياء ليقولها في وقت واحد، يرسل فقاعة واحدة أطول قليلًا فيها الملخص كله.",
+       "يمكنك النقر على فقاعة لإغلاقها.",
+       "في العربية، أصبحت لافتة «Bob» على يمين الفقاعة."
+      ]
+     },
+     {
+      "name": "الواجهة",
+      "items": [
+       "للإنجازات زرها الخاص، كأس في الشريط العلوي، ولم تعد في الإعدادات.",
+       "على الهاتف، تنطوي قائمة المكوّنات عندما لا تكون في الوصفات، ويمكنك طيّها أو فتحها متى شئت. ولم تعد الإشعارات تخفي زر البيع.",
+       "على الحاسوب، يمكنك تغيير حجم قائمة المكوّنات واللوحة اليمنى بسحب الشريط بينهما.",
+       "على الحاسوب، R يفتح الإعدادات وC سجل التغييرات وM اختيار المخبز. صفحة «الأوامر» في الإعدادات تسردها (تظهر فقط على الحاسوب أو مع لوحة مفاتيح)."
+      ]
+     },
+     {
+      "name": "الحفظ",
+      "items": [
+       "تُسمّى ملفات الحفظ الآن «p2ds-الشركة-حفظ-الوقت-التاريخ.p2ds» بلغتك.",
+       "لم يعد بإمكان ملف الحفظ تجاوز حجم معقول: يُرفض عند الاستيراد ملف تم تضخيمه يدويًا."
+      ]
+     }
+    ]
+   },
+   {
     "title": "Release 1.3 Snapshot 3 (16 نوفمبر 2026)",
     "name": "Release 1.3 Snapshot 3",
     "intro": "للأرشيف صفحته الخاصة بألوان قائمة اللعبة.",
@@ -268,6 +324,62 @@
   "intro": "Alles, was zu Pâtisserie 2D Simulator hinzugekommen ist, von der neuesten bis zur ältesten Version. Ältere Versionen werden auf Englisch angezeigt. Die Spielregeln findest du im [Wiki](REGLES.md).",
   "versions": [
    {
+    "title": "Release 1.3 (16. November 2026)",
+    "name": "Release 1.3",
+    "intro": "Ein flüssigeres Spiel, Entscheidungen, mehr Optionen für deine Angestellten und eine Oberfläche für Handy und Computer.",
+    "groups": [
+     {
+      "name": "Spiel",
+      "items": [
+       "Kein Einfrieren mehr beim Levelaufstieg: Steigst du um mehrere Level auf einmal, gibt es nur noch eine Feier und eine Meldung.",
+       "Große Zahlen werden so geschrieben, wie es deine Sprache tut: im Französischen ist eine Milliarde „Md“, im Deutschen „Mrd“, und auf Chinesisch, Japanisch und Koreanisch zählt man in Vierergruppen.",
+       "Ereignisse mit Auswahl: In der Ereignisleiste gibt es manchmal einen oder zwei Knöpfe zum Antworten (ein Investor, ein Fernsehteam, ein Lieferant, ein Trinkgeld, ein Wettbewerb).",
+       "Die 5 versteckten Erfolge werden auch im Max-Modus, im Kreativmodus und mit dem Befehl freigeschaltet.",
+       "Wenn du die Musik ausschaltest, stoppt sie sofort und nicht erst am Ende des Stücks."
+      ]
+     },
+     {
+      "name": "Bank",
+      "items": [
+       "Kredite bis 100.000.000: Die größten werden mit deiner Spielzeit nach und nach freigeschaltet."
+      ]
+     },
+     {
+      "name": "Angestellte",
+      "items": [
+       "In der Mitarbeitersuche ist der Knopf grau und sagt „Wähle einen Beruf“, bis du einen gewählt hast.",
+       "Der Verkäufer kann nur über oder unter einem bestimmten Preis verkaufen.",
+       "Der Oberkellner kann nur Bestellungen liefern, die mehr oder weniger als einen Betrag einbringen (oder Gewinn lassen).",
+       "Der Einkäufer kann nur Zutaten kaufen, deren Preis über oder unter einem Betrag liegt."
+      ]
+     },
+     {
+      "name": "Bob",
+      "items": [
+       "Hat Bob mehrere Dinge gleichzeitig zu sagen, schickt er nur eine einzige, etwas längere Sprechblase mit der ganzen Zusammenfassung.",
+       "Du kannst auf eine Sprechblase klicken, um sie zu schließen.",
+       "Auf Arabisch steht das Schild „Bob“ jetzt rechts an der Sprechblase."
+      ]
+     },
+     {
+      "name": "Oberfläche",
+      "items": [
+       "Die Erfolge haben einen eigenen Knopf, einen Pokal in der Kopfzeile, und sind nicht mehr in den Einstellungen.",
+       "Auf dem Handy klappt die Zutatenliste ein, wenn du nicht bei den Rezepten bist, und du kannst sie jederzeit ein- oder ausklappen. Meldungen verdecken den Verkaufsknopf nicht mehr.",
+       "Am Computer kannst du die Größe der Zutatenliste und des rechten Bereichs ändern, indem du die Leiste dazwischen ziehst.",
+       "Am Computer öffnet R die Einstellungen, C das Changelog und M die Konditorei-Auswahl. Eine Seite „Steuerung“ in den Einstellungen listet sie auf (sie erscheint nur am Computer oder mit Tastatur)."
+      ]
+     },
+     {
+      "name": "Speicherstände",
+      "items": [
+       "Sicherungsdateien heißen jetzt „p2ds-unternehmen-spielstand-uhrzeit-datum.p2ds“, in deiner Sprache.",
+       "Ein Spielstand darf eine vernünftige Größe nicht mehr überschreiten: Eine von Hand aufgeblähte Datei wird beim Import abgelehnt."
+      ]
+     }
+    ]
+   },
+   {
     "title": "Release 1.3 Snapshot 3 (16. November 2026)",
     "name": "Release 1.3 Snapshot 3",
     "intro": "Das Archiv hat jetzt eine eigene Seite in den Farben des Spielmenüs.",
@@ -531,6 +643,62 @@
   "title": "Update history",
   "intro": "Everything that was added to Pâtisserie 2D Simulator, from the newest to the oldest. To understand the rules of the game, see the [wiki](REGLES.md).",
   "versions": [
+   {
+    "title": "Release 1.3 (November 16, 2026)",
+    "name": "Release 1.3",
+    "intro": "A smoother game, choices to make, more options for your employees, and an interface made for both phone and computer.",
+    "groups": [
+     {
+      "name": "Game",
+      "items": [
+       "No more freezing when you level up: if you gain several levels at once, the game now throws one party and shows one message.",
+       "Big numbers are written the way your language does it: in French a billion is \"Md\", in German \"Mrd\", and in Chinese, Japanese and Korean numbers are counted in groups of 4 digits.",
+       "Choice events: in the event bar you sometimes get one or two buttons to answer (an investor, a TV crew, a supplier, a tip, a contest).",
+       "The 5 hidden achievements also unlock in max mode, creative mode and with the command.",
+       "When you turn the music off, it stops right away instead of at the end of the piece."
+      ]
+     },
+     {
+      "name": "Bank",
+      "items": [
+       "Loans up to 100,000,000: the biggest ones open up little by little with your play time."
+      ]
+     },
+     {
+      "name": "Employees",
+      "items": [
+       "In the employee search, the button is greyed out and says \"Pick a job\" until you pick one.",
+       "The seller can sell only above or below a set price.",
+       "The head waiter can deliver only the orders that pay (or leave a profit) more or less than an amount.",
+       "The buyer can buy only the ingredients whose price is above or below an amount."
+      ]
+     },
+     {
+      "name": "Bob",
+      "items": [
+       "When Bob has several things to say at once, he sends a single, slightly longer bubble with the whole summary.",
+       "You can click a bubble to close it.",
+       "In Arabic, the \"Bob\" label is now on the right of the bubble."
+      ]
+     },
+     {
+      "name": "Interface",
+      "items": [
+       "Achievements have their own button, a trophy in the header, and are no longer in the settings.",
+       "On a phone, the ingredients list folds away when you are not on the recipes, and you can fold or unfold it whenever you like. Notifications no longer hide the sell button.",
+       "On a computer, you can resize the ingredients list and the right panel by dragging the bar between them.",
+       "On a computer, R opens the settings, C the changelog and M the bakery picker. A \"Controls\" page in the settings lists them (it only shows on a computer or with a keyboard)."
+      ]
+     },
+     {
+      "name": "Saves",
+      "items": [
+       "Save files are now named \"p2ds-company-save-time-date.p2ds\", in your language.",
+       "A save can no longer exceed a reasonable size: a file inflated by hand is refused on import."
+      ]
+     }
+    ]
+   },
    {
     "title": "Release 1.3 Snapshot 3 (November 16, 2026)",
     "name": "Release 1.3 Snapshot 3",
@@ -1270,6 +1438,62 @@
   "intro": "Todo lo que se ha añadido a Pâtisserie 2D Simulator, de la más reciente a la más antigua. Las versiones más antiguas se muestran en inglés. Para entender las reglas del juego, mira la [wiki](REGLES.md).",
   "versions": [
    {
+    "title": "Release 1.3 (16 de noviembre de 2026)",
+    "name": "Release 1.3",
+    "intro": "Un juego más fluido, decisiones que tomar, más opciones para tus empleados y una interfaz pensada para el móvil y el ordenador.",
+    "groups": [
+     {
+      "name": "Juego",
+      "items": [
+       "Se acabó el bloqueo al subir de nivel: si subes varios niveles de golpe, el juego hace una sola fiesta y muestra un solo mensaje.",
+       "Los números grandes se escriben como en tu idioma: en español mil millones es «MM», en francés «Md», en alemán «Mrd», y en chino, japonés y coreano se cuenta por grupos de 4 cifras.",
+       "Eventos con decisión: en la barra de eventos a veces tienes uno o dos botones para responder (un inversor, un equipo de televisión, un proveedor, una propina, un concurso).",
+       "Los 5 logros ocultos también se desbloquean en modo máximo, en modo creativo y con el comando.",
+       "Si apagas la música, se detiene al instante, sin esperar al final de la pieza."
+      ]
+     },
+     {
+      "name": "Banco",
+      "items": [
+       "Préstamos de hasta 100 000 000: los más grandes se abren poco a poco con tu tiempo de juego."
+      ]
+     },
+     {
+      "name": "Empleados",
+      "items": [
+       "En la búsqueda de empleados, el botón está gris y dice «Elige un oficio» hasta que eliges uno.",
+       "El vendedor puede vender solo por encima o por debajo de un precio concreto.",
+       "El maître puede entregar solo los pedidos que pagan (o dejan de beneficio) más o menos que un importe.",
+       "El intendente puede comprar solo los ingredientes cuyo precio esté por encima o por debajo de un importe."
+      ]
+     },
+     {
+      "name": "Bob",
+      "items": [
+       "Cuando Bob tiene varias cosas que decir a la vez, envía una sola burbuja, algo más larga, con todo el resumen.",
+       "Puedes hacer clic en una burbuja para cerrarla.",
+       "En árabe, la etiqueta «Bob» ahora está a la derecha de la burbuja."
+      ]
+     },
+     {
+      "name": "Interfaz",
+      "items": [
+       "Los logros tienen su propio botón, un trofeo en la cabecera, y ya no están en los ajustes.",
+       "En el móvil, la lista de ingredientes se pliega cuando no estás en las recetas, y puedes plegarla o desplegarla cuando quieras. Las notificaciones ya no tapan el botón de vender.",
+       "En el ordenador, puedes cambiar el tamaño de la lista de ingredientes y del panel derecho arrastrando la barra entre ambos.",
+       "En el ordenador, R abre los ajustes, C el registro de cambios y M la elección de pastelería. Una página «Controles» en los ajustes los enumera (solo aparece en ordenador o con teclado)."
+      ]
+     },
+     {
+      "name": "Partidas guardadas",
+      "items": [
+       "Los archivos de guardado se llaman ahora «p2ds-empresa-guardado-hora-fecha.p2ds», en tu idioma.",
+       "Un guardado ya no puede superar un tamaño razonable: un archivo inflado a mano se rechaza al importar."
+      ]
+     }
+    ]
+   },
+   {
     "title": "Release 1.3 Snapshot 3 (16 de noviembre de 2026)",
     "name": "Release 1.3 Snapshot 3",
     "intro": "Los archivos tienen su propia página, con los colores del menú del juego.",
@@ -1533,6 +1757,62 @@
   "title": "更新履歴",
   "intro": "Pâtisserie 2D Simulator に追加されたすべての内容を、新しいものから古いものの順に載せています。古いバージョンは英語で表示されます。ゲームのルールは[ウィキ](REGLES.md)を見てください。",
   "versions": [
+   {
+    "title": "Release 1.3（2026年11月16日）",
+    "name": "Release 1.3（2026年11月16日）",
+    "intro": "より滑らかなゲーム、選ぶ楽しみ、従業員の新オプション、そしてスマホにもパソコンにも合うインターフェース。",
+    "groups": [
+     {
+      "name": "ゲーム",
+      "items": [
+       "レベルアップ時のフリーズがなくなりました。一度に複数レベル上がっても、お祝いとメッセージは 1 回だけです。",
+       "大きな数は言語に合わせて表記します。フランス語の十億は「Md」、ドイツ語は「Mrd」、中国語・日本語・韓国語は 4 桁ごとに数えます。",
+       "選択イベント：イベントバーに、答えるためのボタンが 1〜2 個出ることがあります（投資家、テレビ局、仕入れ先、チップ、コンテスト）。",
+       "5 つの隠し実績は、マックスモード、クリエイティブモード、コマンドでも解除できます。",
+       "音楽をオフにすると、曲の終わりを待たずにすぐ止まります。"
+      ]
+     },
+     {
+      "name": "銀行",
+      "items": [
+       "最大 100,000,000 までのローン。大きなものはプレイ時間に応じて少しずつ開放されます。"
+      ]
+     },
+     {
+      "name": "従業員",
+      "items": [
+       "従業員探しでは、職業を選ぶまでボタンがグレーで「職業を選んでね」と表示されます。",
+       "販売員は、決めた価格より上、または下のときだけ売れます。",
+       "給仕長は、報酬（または利益）が金額より多い、または少ない注文だけを届けられます。",
+       "仕入れ係は、価格が金額より上、または下の材料だけを買えます。"
+      ]
+     },
+     {
+      "name": "ボブ",
+      "items": [
+       "ボブが同時に複数のことを話すときは、全体のまとめが入った少し長い吹き出しを 1 つだけ出します。",
+       "吹き出しをクリックすると閉じます。",
+       "アラビア語では「Bob」のラベルが吹き出しの右側になりました。"
+      ]
+     },
+     {
+      "name": "インターフェース",
+      "items": [
+       "実績は専用のボタン（ヘッダーのトロフィー）になり、設定からはなくなりました。",
+       "スマホでは、レシピ以外の画面で材料リストが折りたたまれ、いつでも折りたたみ・展開できます。通知が販売ボタンを隠さなくなりました。",
+       "パソコンでは、材料リストと右のパネルの間のバーをドラッグして大きさを変えられます。",
+       "パソコンでは、R で設定、C で更新履歴、M でお店の選択を開けます。設定の「操作」ページに一覧があります（パソコンかキーボード使用時のみ表示）。"
+      ]
+     },
+     {
+      "name": "セーブ",
+      "items": [
+       "セーブファイルの名前は「p2ds-会社名-セーブ-時刻-日付.p2ds」になりました（言語に合わせます）。",
+       "セーブは妥当なサイズを超えられなくなりました。手作業で膨らませたファイルはインポート時に拒否されます。"
+      ]
+     }
+    ]
+   },
    {
     "title": "Release 1.3 Snapshot 3（2026年11月16日）",
     "name": "Release 1.3 Snapshot 3（2026年11月16日）",
@@ -1798,6 +2078,62 @@
   "intro": "Pâtisserie 2D Simulator에 추가된 모든 내용을 최신순으로 적었습니다. 오래된 버전은 영어로 표시됩니다. 게임 규칙은 [위키](REGLES.md)를 참고하세요.",
   "versions": [
    {
+    "title": "Release 1.3 (2026년 11월 16일)",
+    "name": "Release 1.3",
+    "intro": "더 부드러운 게임, 고르는 재미, 직원을 위한 더 많은 옵션, 그리고 폰과 컴퓨터 모두에 맞는 인터페이스.",
+    "groups": [
+     {
+      "name": "게임",
+      "items": [
+       "레벨업 때 멈추던 현상이 사라졌습니다. 한 번에 여러 레벨이 올라도 축하와 메시지는 한 번만 나옵니다.",
+       "큰 숫자는 언어에 맞게 표기합니다. 프랑스어의 십억은 “Md”, 독일어는 “Mrd”이고, 중국어·일본어·한국어는 4자리씩 끊어 셉니다.",
+       "선택 이벤트: 이벤트 바에 가끔 답할 수 있는 버튼이 한두 개 나옵니다(투자자, 방송 팀, 납품업체, 팁, 대회).",
+       "숨겨진 업적 5개는 맥스 모드, 크리에이티브 모드, 명령어로도 해금됩니다.",
+       "음악을 끄면 곡이 끝나길 기다리지 않고 바로 멈춥니다."
+      ]
+     },
+     {
+      "name": "은행",
+      "items": [
+       "최대 100,000,000까지의 대출: 큰 대출은 플레이 시간에 따라 조금씩 열립니다."
+      ]
+     },
+     {
+      "name": "직원",
+      "items": [
+       "직원 검색에서 직업을 고르기 전까지 버튼은 회색이고 “직업을 고르세요”라고 표시됩니다.",
+       "판매원은 정한 가격보다 높거나 낮을 때만 판매할 수 있습니다.",
+       "수석 웨이터는 보수(또는 이익)가 금액보다 많거나 적은 주문만 배달할 수 있습니다.",
+       "구매 담당은 가격이 금액보다 높거나 낮은 재료만 살 수 있습니다."
+      ]
+     },
+     {
+      "name": "밥",
+      "items": [
+       "밥이 동시에 여러 말을 해야 할 때는, 전체 요약이 담긴 조금 긴 말풍선 하나만 보냅니다.",
+       "말풍선을 클릭하면 닫힙니다.",
+       "아랍어에서는 “Bob” 라벨이 이제 말풍선 오른쪽에 있습니다."
+      ]
+     },
+     {
+      "name": "인터페이스",
+      "items": [
+       "업적은 전용 버튼(헤더의 트로피)으로 옮겨졌고 설정에서는 사라졌습니다.",
+       "폰에서는 레시피 화면이 아닐 때 재료 목록이 접히고, 언제든 접거나 펼 수 있습니다. 알림이 판매 버튼을 더는 가리지 않습니다.",
+       "컴퓨터에서는 재료 목록과 오른쪽 패널 사이의 막대를 끌어 크기를 바꿀 수 있습니다.",
+       "컴퓨터에서는 R이 설정, C가 변경 내역, M이 제과점 선택을 엽니다. 설정의 “조작” 페이지에 목록이 있습니다(컴퓨터나 키보드를 쓸 때만 표시)."
+      ]
+     },
+     {
+      "name": "저장",
+      "items": [
+       "저장 파일 이름은 이제 “p2ds-회사-저장-시각-날짜.p2ds” 형식입니다(언어에 맞춤).",
+       "저장 파일은 합리적인 크기를 넘을 수 없습니다. 손으로 부풀린 파일은 가져올 때 거부됩니다."
+      ]
+     }
+    ]
+   },
+   {
     "title": "Release 1.3 Snapshot 3 (2026년 11월 16일)",
     "name": "Release 1.3 Snapshot 3",
     "intro": "아카이브에 전용 페이지가 생기고, 게임 메뉴와 같은 색을 씁니다.",
@@ -2061,6 +2397,62 @@
   "title": "Historique des mises à jour",
   "intro": "Tout ce qui a été ajouté à Pâtisserie 2D Simulator, de la plus récente à la plus ancienne. Pour comprendre les règles du jeu, va voir le [wiki](REGLES.md).",
   "versions": [
+   {
+    "title": "Release 1.3 (16 novembre 2026)",
+    "name": "Release 1.3",
+    "intro": "Un jeu plus fluide, des choix à faire, plus d'options pour tes employés, et une interface pensée pour le téléphone comme pour l'ordinateur.",
+    "groups": [
+     {
+      "name": "Jeu",
+      "items": [
+       "Plus de gel quand tu montes de niveau : si tu gagnes plusieurs niveaux d'un coup, le jeu ne fait qu'une seule fête et un seul message.",
+       "Les grands nombres s'écrivent comme dans ta langue : en français le milliard est « Md » (et plus « B »), en allemand « Mrd », et en chinois, japonais et coréen on compte par groupes de 4 chiffres.",
+       "Des événements à choix : dans la bande des événements, tu as parfois un ou deux boutons pour répondre (un investisseur, une équipe de télé, un fournisseur, un pourboire, un concours).",
+       "Les 5 succès cachés se débloquent aussi en mode max, en mode créatif et avec la commande.",
+       "Si tu coupes la musique, elle s'arrête tout de suite, sans attendre la fin du morceau."
+      ]
+     },
+     {
+      "name": "Banque",
+      "items": [
+       "Des prêts jusqu'à 100 000 000 € : les plus gros s'ouvrent petit à petit avec ton temps de jeu."
+      ]
+     },
+     {
+      "name": "Employés",
+      "items": [
+       "Dans la recherche d'employés, le bouton est grisé et dit « Choisis un métier » tant que tu n'as pas choisi.",
+       "Le vendeur peut ne vendre qu'au-dessus ou qu'en dessous d'un prix précis.",
+       "Le maître d'hôtel peut ne livrer que les commandes qui rapportent (ou qui laissent en bénéfice) plus ou moins qu'un montant.",
+       "L'intendant peut n'acheter que les ingrédients dont le prix est au-dessus ou en dessous d'un montant."
+      ]
+     },
+     {
+      "name": "Bob",
+      "items": [
+       "Quand Bob a plusieurs choses à dire en même temps, il n'envoie qu'une seule bulle, un peu plus longue, avec tout le résumé.",
+       "Tu peux cliquer sur une bulle pour la fermer.",
+       "En arabe, l'étiquette « Bob » est maintenant à droite de la bulle."
+      ]
+     },
+     {
+      "name": "Interface",
+      "items": [
+       "Les succès ont leur propre bouton, un trophée dans l'en-tête, et ne sont plus dans les réglages.",
+       "Sur téléphone, la liste des ingrédients se replie quand tu n'es pas sur les recettes, et tu peux la replier ou la déplier quand tu veux. Les notifications ne cachent plus le bouton vendre.",
+       "Sur ordinateur, tu peux changer la taille de la liste des ingrédients et du panneau de droite en glissant la barre entre les deux.",
+       "Sur ordinateur, R ouvre les réglages, C le changelog et M le choix de la pâtisserie. Une page « Commandes » des réglages les liste (elle n'apparaît que sur ordinateur ou avec un clavier)."
+      ]
+     },
+     {
+      "name": "Sauvegardes",
+      "items": [
+       "Les fichiers de sauvegarde s'appellent maintenant « p2ds-entreprise-sauvegarde-heure-date.p2ds », dans ta langue.",
+       "Une sauvegarde ne peut plus dépasser une taille raisonnable : un fichier gonflé à la main est refusé à l'import."
+      ]
+     }
+    ]
+   },
    {
     "title": "Release 1.3 Snapshot 3 (16 novembre 2026)",
     "name": "Release 1.3 Snapshot 3",
@@ -2800,6 +3192,62 @@
   "intro": "Tudo o que foi acrescentado ao Pâtisserie 2D Simulator, da mais recente à mais antiga. As versões mais antigas aparecem em inglês. Para perceber as regras do jogo, vê a [wiki](REGLES.md).",
   "versions": [
    {
+    "title": "Release 1.3 (16 de novembro de 2026)",
+    "name": "Release 1.3",
+    "intro": "Um jogo mais fluido, escolhas para fazer, mais opções para os teus funcionários e uma interface pensada para o telemóvel e o computador.",
+    "groups": [
+     {
+      "name": "Jogo",
+      "items": [
+       "Acabou o bloqueio ao subir de nível: se subires vários níveis de uma vez, o jogo faz uma só festa e mostra uma só mensagem.",
+       "Os números grandes escrevem-se como na tua língua: em francês mil milhões é «Md», em alemão «Mrd», e em chinês, japonês e coreano conta-se por grupos de 4 algarismos.",
+       "Eventos com escolha: na barra de eventos tens por vezes um ou dois botões para responder (um investidor, uma equipa de televisão, um fornecedor, uma gorjeta, um concurso).",
+       "As 5 conquistas escondidas também se desbloqueiam no modo máximo, no modo criativo e com o comando.",
+       "Se desligares a música, ela pára logo, sem esperar pelo fim da peça."
+      ]
+     },
+     {
+      "name": "Banco",
+      "items": [
+       "Empréstimos até 100 000 000: os maiores abrem aos poucos com o teu tempo de jogo."
+      ]
+     },
+     {
+      "name": "Funcionários",
+      "items": [
+       "Na procura de funcionários, o botão fica cinzento e diz «Escolhe um ofício» até escolheres um.",
+       "O vendedor pode vender só acima ou abaixo de um preço certo.",
+       "O mestre-sala pode entregar só as encomendas que pagam (ou deixam de lucro) mais ou menos do que um montante.",
+       "O intendente pode comprar só os ingredientes cujo preço esteja acima ou abaixo de um montante."
+      ]
+     },
+     {
+      "name": "Bob",
+      "items": [
+       "Quando o Bob tem várias coisas para dizer ao mesmo tempo, envia uma só bolha, um pouco mais longa, com o resumo todo.",
+       "Podes clicar numa bolha para a fechar.",
+       "Em árabe, a etiqueta «Bob» passa a ficar à direita da bolha."
+      ]
+     },
+     {
+      "name": "Interface",
+      "items": [
+       "As conquistas têm o seu próprio botão, um troféu no cabeçalho, e já não estão nas definições.",
+       "No telemóvel, a lista de ingredientes recolhe-se quando não estás nas receitas, e podes recolhê-la ou expandi-la quando quiseres. As notificações já não tapam o botão de vender.",
+       "No computador, podes mudar o tamanho da lista de ingredientes e do painel da direita arrastando a barra entre os dois.",
+       "No computador, R abre as definições, C o registo de alterações e M a escolha da pastelaria. Uma página «Comandos» nas definições lista-os (só aparece no computador ou com teclado)."
+      ]
+     },
+     {
+      "name": "Jogos guardados",
+      "items": [
+       "Os ficheiros de salvamento chamam-se agora «p2ds-empresa-salvamento-hora-data.p2ds», na tua língua.",
+       "Um salvamento já não pode passar de um tamanho razoável: um ficheiro inchado à mão é recusado ao importar."
+      ]
+     }
+    ]
+   },
+   {
     "title": "Release 1.3 Snapshot 3 (16 de novembro de 2026)",
     "name": "Release 1.3 Snapshot 3",
     "intro": "Os arquivos têm a sua própria página, com as cores do menu do jogo.",
@@ -3064,6 +3512,62 @@
   "intro": "Всё, что добавили в Pâtisserie 2D Simulator, от самого нового к самому старому. Более старые версии показываются на английском. Чтобы понять правила игры, загляни в [вики](REGLES.md).",
   "versions": [
    {
+    "title": "Release 1.3 (16 ноября 2026)",
+    "name": "Release 1.3",
+    "intro": "Более плавная игра, выбор в событиях, больше настроек для сотрудников и интерфейс для телефона и компьютера.",
+    "groups": [
+     {
+      "name": "Игра",
+      "items": [
+       "Больше никаких зависаний при повышении уровня: если ты получаешь сразу несколько уровней, игра устраивает один праздник и показывает одно сообщение.",
+       "Большие числа пишутся как в твоём языке: по-французски миллиард — «Md», по-немецки «Mrd», а по-китайски, по-японски и по-корейски считают группами по 4 цифры.",
+       "События с выбором: в строке событий иногда появляются одна-две кнопки для ответа (инвестор, съёмочная группа, поставщик, чаевые, конкурс).",
+       "5 скрытых достижений открываются и в режиме макс, и в творческом режиме, и командой.",
+       "Если выключить музыку, она останавливается сразу, не дожидаясь конца мелодии."
+      ]
+     },
+     {
+      "name": "Банк",
+      "items": [
+       "Кредиты до 100 000 000: самые крупные открываются понемногу по мере игрового времени."
+      ]
+     },
+     {
+      "name": "Сотрудники",
+      "items": [
+       "В поиске сотрудников кнопка серая и пишет «Выбери профессию», пока ты не выберешь.",
+       "Продавец может продавать только выше или ниже заданной цены.",
+       "Метрдотель может доставлять только заказы, которые приносят (или оставляют прибыли) больше или меньше суммы.",
+       "Закупщик может покупать только ингредиенты, цена которых выше или ниже суммы."
+      ]
+     },
+     {
+      "name": "Боб",
+      "items": [
+       "Когда Бобу нужно сказать сразу несколько вещей, он присылает один чуть более длинный пузырь со всей сводкой.",
+       "По пузырю можно кликнуть, чтобы закрыть его.",
+       "В арабском ярлык «Bob» теперь справа от пузыря."
+      ]
+     },
+     {
+      "name": "Интерфейс",
+      "items": [
+       "У достижений теперь своя кнопка — кубок в шапке, и их больше нет в настройках.",
+       "На телефоне список ингредиентов сворачивается, когда ты не на рецептах, и его можно свернуть или развернуть в любой момент. Уведомления больше не закрывают кнопку продажи.",
+       "На компьютере можно менять размер списка ингредиентов и правой панели, перетаскивая полосу между ними.",
+       "На компьютере R открывает настройки, C — список изменений, M — выбор кондитерской. Страница «Управление» в настройках перечисляет их (она появляется только на компьютере или с клавиатурой)."
+      ]
+     },
+     {
+      "name": "Сохранения",
+      "items": [
+       "Файлы сохранений теперь называются «p2ds-компания-сохранение-время-дата.p2ds» на твоём языке.",
+       "Сохранение больше не может превышать разумный размер: вручную раздутый файл отклоняется при импорте."
+      ]
+     }
+    ]
+   },
+   {
     "title": "Release 1.3 Snapshot 3 (16 ноября 2026)",
     "name": "Release 1.3 Snapshot 3",
     "intro": "У архива теперь своя страница в цветах меню игры.",
@@ -3327,6 +3831,62 @@
   "title": "更新记录",
   "intro": "Pâtisserie 2D Simulator 新增的所有内容，从最新到最旧。更早的版本以英文显示。想了解游戏规则，请看[百科](REGLES.md)。",
   "versions": [
+   {
+    "title": "Release 1.3（2026年11月16日）",
+    "name": "Release 1.3（2026年11月16日）",
+    "intro": "更流畅的游戏、要做的选择、给员工更多选项，以及同时适合手机和电脑的界面。",
+    "groups": [
+     {
+      "name": "游戏",
+      "items": [
+       "升级不再卡死：一次升多级时，游戏只庆祝一次、只显示一条消息。",
+       "大数字按你的语言书写：法语里十亿是“Md”，德语是“Mrd”，中文、日文和韩文按 4 位一组计数。",
+       "选择事件：事件栏里有时会出现一两个按钮供你回应（投资人、电视台、供应商、小费、比赛）。",
+       "5 个隐藏成就在最大模式、创意模式和使用命令时也会解锁。",
+       "关闭音乐时会立刻停止，不用等这一段播完。"
+      ]
+     },
+     {
+      "name": "银行",
+      "items": [
+       "贷款最高 100 000 000：最大的几笔会随着游戏时间逐步开放。"
+      ]
+     },
+     {
+      "name": "员工",
+      "items": [
+       "招聘员工时，在选好职业之前按钮是灰色的，写着“选择一个职业”。",
+       "销售员可以只在高于或低于某个价格时出售。",
+       "领班可以只送出报酬（或利润）高于或低于某个金额的订单。",
+       "采购员可以只买价格高于或低于某个金额的原料。"
+      ]
+     },
+     {
+      "name": "鲍勃",
+      "items": [
+       "鲍勃同时有好几句话要说时，只发一个稍长的气泡，里面有全部摘要。",
+       "点击气泡就能关闭它。",
+       "阿拉伯语中，“Bob”标签现在在气泡右边。"
+      ]
+     },
+     {
+      "name": "界面",
+      "items": [
+       "成就有了自己的按钮——顶栏里的奖杯，不再放在设置里。",
+       "在手机上，不在食谱页时原料列表会折叠，你也可以随时折叠或展开。通知不再挡住“出售”按钮。",
+       "在电脑上，拖动原料列表和右侧面板之间的条就能调整两者大小。",
+       "在电脑上，R 打开设置，C 打开更新日志，M 选择甜品店。设置里的“操作”页会列出它们（仅在电脑或使用键盘时出现）。"
+      ]
+     },
+     {
+      "name": "存档",
+      "items": [
+       "存档文件现在按你的语言命名为“p2ds-公司-存档-时间-日期.p2ds”。",
+       "存档不能再超过合理的大小：手工做大的文件在导入时会被拒绝。"
+      ]
+     }
+    ]
+   },
    {
     "title": "Release 1.3 Snapshot 3（2026年11月16日）",
     "name": "Release 1.3 Snapshot 3（2026年11月16日）",

@@ -112,6 +112,14 @@ Un seul prêt de chaque montant à la fois :
 | 1 000 € | 15 | 18 % | 15 min |
 | 5 000 € | 25 | 22 % | 30 min |
 | 10 000 € | 40 | 25 % | 45 min |
+| 50 000 € | 60 (et 1 h de jeu) | 28 % | 60 min |
+| 100 000 € | 80 (et 2 h de jeu) | 30 % | 90 min |
+| 500 000 € | 120 (et 4 h de jeu) | 32 % | 120 min |
+| 1 000 000 € | 170 (et 6 h de jeu) | 35 % | 180 min |
+| 5 000 000 € | 230 (et 10 h de jeu) | 38 % | 240 min |
+| 10 000 000 € | 300 (et 15 h de jeu) | 40 % | 360 min |
+| 50 000 000 € | 400 (et 25 h de jeu) | 45 % | 480 min |
+| 100 000 000 € | 500 (et 40 h de jeu) | 50 % | 720 min |
 
 - **Un prêt**, c'est de l'argent tout de suite, que tu rends petit à petit, un peu plus cher : c'est ça, les intérêts.
 - Le remboursement est prélevé tout seul, chaque seconde.
@@ -174,10 +182,10 @@ Lance une **recherche** dans l'onglet Employés : elle prend du temps et ne marc
 | Boulanger | 10 | Fait baisser le temps de préparation | Aucun |
 | Transporteur | 20, et au moins 2 pâtisseries (avec une seule, il démissionne) | Emmène de l'argent ou du stock vers une autre pâtisserie. Un trajet dure de 10 s à 10 min, peut être en retard, ou avoir un accident et perdre son chargement | Où, quoi, combien, et le rythme : en continu, une seule fois, ou toutes les 1, 2, 5, 10, 30 ou 60 minutes, avec un bouton pour transférer tout de suite ou commencer |
 | Manager | 25 | Remonte le moral de l'équipe, et peut embaucher à ta place | Embauche automatique, compétence minimum, les métiers qu'il embauche, ceux qu'il regarde en premier, les niveaux, et un réglage pour refuser tout seul les candidatures de niveau trop bas |
-| Maître d'hôtel | 30 | Livre les commandes à ta place | Aucun |
-| Vendeur | 35 | Vend tout seul, les gâteaux les plus chers d'abord | La part du stock qu'il peut vendre |
+| Maître d'hôtel | 30 | Livre les commandes à ta place | Ne livrer que les commandes qui rapportent plus ou moins qu'un montant, ou dont le bénéfice (prime moins ingrédients) est plus ou moins grand |
+| Vendeur | 35 | Vend tout seul, les gâteaux les plus chers d'abord | La part du stock qu'il peut vendre, et ne vendre qu'au-dessus ou qu'en dessous d'un prix |
 | Chef pâtissier | 65 | Prépare tout seul avec ce qu'il y a en stock | Tout, seulement ce qui manque pour les commandes, seulement certaines recettes, ou des priorités. Un budget maximum par heure, et un montant sous lequel il ne prépare rien |
-| Intendant | 90 | Commande ce qui manque pour tes favoris, livré après 30 secondes | Aucun |
+| Intendant | 90 | Commande ce qui manque pour tes favoris, livré après 30 secondes | N'acheter que les ingrédients dont le prix est au-dessus ou en dessous d'un montant |
 
 **Les niveaux :** chaque employé a 10 niveaux (sauf l'apprenti, qui n'en a pas). Chaque niveau double ses capacités, mais coûte 8 fois plus cher que le précédent. Pendant sa formation, il ne travaille pas. Les cueilleurs ont deux niveaux : l'efficacité (combien ils cueillent) et la perte (voir plus bas).
 
@@ -223,6 +231,7 @@ Bob est ton chef pâtissier. Il t'accueille, t'apprend les bases, et t'explique 
 
 - **Ses conseils :** il te dit quand un gâteau se vend mal, quand ton stock déborde, quand ton loyer est trop cher, quand une commande va expirer ou qu'un employé va faire grève.
 - **Ne l'embête pas :** clique beaucoup sur lui (des centaines de fois) et il s'énerve petit à petit. Énervé, il refuse même de t'expliquer les choses.
+- **Nom des fichiers :** `p2ds-entreprise-sauvegarde-HHhMM-JJ-MM-AAAA.p2ds` (le mot « sauvegarde » change avec la langue). Une sauvegarde ne peut pas dépasser 1 000 000 de caractères.
 - **Sauvegarde automatique :** dans les réglages, tu choisis un intervalle (5 minutes à 4 heures) : un fichier de ta sauvegarde est téléchargé tout seul.
 - **Il te demande deux noms :** au début d'une partie, celui de ton entreprise (le nom de la partie), puis celui de ta première pâtisserie (gratuit).
 - **Sans wifi, il te prévient :** ta partie n'est pas sauvegardée tant que la connexion ne revient pas, et tes autres parties non plus (tu peux quand même y jouer).
@@ -236,6 +245,8 @@ Bob est ton chef pâtissier. Il t'accueille, t'apprend les bases, et t'explique 
 ## Les événements
 
 Environ toutes les 4 minutes, un événement change le jeu pour un moment : rush, soldes, passage à la télé, grève des fournisseurs, contrôle sanitaire… De petits incidents peuvent aussi te faire perdre un peu d'un ingrédient.
+
+**Les événements à choix :** à partir du niveau 10, environ toutes les 4 minutes au plus, la bande des événements propose une ou deux réponses pendant 45 secondes : un investisseur (de l'argent contre le moral de l'équipe, ou l'inverse), une équipe de télé (tu paies, les clients affluent), un fournisseur (ingrédients moins chers), un pourboire (tu le ramasses) ou un concours (une chance sur deux de gagner le quintuple de l'inscription). Sans réponse, l'événement part tout seul.
 
 D'autres événements ne touchent qu'**un seul ingrédient** (pénurie : il coûte plus cher, récolte record : il coûte moins cher) ou **une seule recette** (à la mode : elle se vend plus cher, boudée : elle se vend moins cher). Ils durent de 1 à 2 minutes et demie.
 
@@ -264,7 +275,7 @@ Les pastilles des onglets sont jaunes (candidatures, commandes). Seules les pann
 
 ## Les succès et les statistiques
 
-Ils sont dans les **réglages**. Il y a 1000 succès. Un succès pas encore obtenu montre son nom, mais pas ce qu'il demande.
+Les succès ont leur bouton (un trophée) dans l'en-tête. Il y a 1000 succès, et 5 de plus cachés (ils se débloquent aussi en mode max, en mode créatif et avec la commande). Un succès pas encore obtenu montre son nom, mais pas ce qu'il demande.
 
 ## Pause, absence et sauvegarde
 
@@ -278,6 +289,11 @@ Ils sont dans les **réglages**. Il y a 1000 succès. Un succès pas encore obte
 - Tu peux exporter ta partie dans un fichier ou sous forme de code à copier-coller, et l'importer ailleurs de la même façon.
 - **Trop de clics :** plus de 15 clics par seconde déclenchent une pause de 3 secondes. Après 3 pauses, une petite addition vérifie que tu n'es pas un robot. Après 3 mauvaises réponses, tu es bloqué 5 minutes.
 
+## Sur ordinateur
+
+- **Raccourcis :** les chiffres changent d'onglet, **R** ouvre les réglages, **C** le changelog, **M** le choix de la pâtisserie, **Échap** ferme une fenêtre ou met en pause. La page « Commandes » des réglages les liste (elle n'apparaît que sur ordinateur ou avec un clavier).
+- **Largeur des colonnes :** glisse la barre entre la liste des ingrédients et le panneau de droite pour changer leur taille (double-clic : retour à la normale). Ton choix est gardé.
+
 ## Sur téléphone
 
-Le jeu marche aussi sur téléphone et sur tablette. Les ingrédients sont en haut, au-dessus des onglets, et la barre du bas reste toujours visible, sans cacher le bas de la liste. S'il y a plusieurs jauges de temps dans la barre du bas, fais-les défiler à gauche ou à droite. Le jeu existe en français, en anglais, en espagnol, en portugais, en allemand, en arabe, en mandarin, en japonais, en coréen et en russe : il prend la langue de ton navigateur au départ, et tu peux la changer dans les réglages.
+Le jeu marche aussi sur téléphone et sur tablette. Les ingrédients sont en haut, au-dessus des onglets (la liste se replie quand tu n'es pas sur les recettes, et un bouton la replie ou la déplie quand tu veux ; les notifications s'affichent en haut pour ne pas cacher le bouton vendre), et la barre du bas reste toujours visible, sans cacher le bas de la liste. S'il y a plusieurs jauges de temps dans la barre du bas, fais-les défiler à gauche ou à droite. Le jeu existe en français, en anglais, en espagnol, en portugais, en allemand, en arabe, en mandarin, en japonais, en coréen et en russe : il prend la langue de ton navigateur au départ, et tu peux la changer dans les réglages.

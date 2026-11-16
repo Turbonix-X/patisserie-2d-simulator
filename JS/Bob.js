@@ -155,6 +155,8 @@ function showBobBubble(msg, extra) {
   bobBubbleText = msg;
   el.innerHTML = '<span class="bob-bubble-name">Bob</span><p>' + iconify(msg) + '</p>' + (extra || '');
   el.style.display = 'block';
+  el.onclick = bobDismiss;
+  el.title = t('bob.close');
   if (el.animate && fxEnabled()) {
     el.animate([{ opacity: 0, transform: 'translateY(10px) scale(.92)' }, { opacity: 1, transform: 'none' }],
       { duration: 350, easing: 'cubic-bezier(.34,1.56,.64,1)' });
@@ -185,8 +187,8 @@ function bobSay(msg, ms) {
   bobTalkTimer = setTimeout(function() {
     bobTalkTimer = null;
     if (bobQueue.length > 0) {
-      var next = bobQueue.shift();
-      bobSay(next, Math.max(3500, next.length * 60));
+      var next = bobMerge(bobQueue.splice(0));
+      bobSay(next, Math.min(25000, Math.max(3500, next.length * 60)));
       return;
     }
     hideBobBubble();
@@ -239,10 +241,33 @@ function bobFilterLines(lines) {
 // Quand une explication arrive, elle attend son tour si Bob parle deja
 var bobQueue = [];
 
+// Plusieurs messages au meme moment : une seule bulle, un peu plus longue, avec le resume de tout
+var bobPending = [], bobPendingTimer = null;
+function bobMerge(list) {
+  var seen = {}, out = [];
+  list.forEach(function(m) { if (!seen[m]) { seen[m] = true; out.push(m); } });
+  return out.length > 1 ? out.map(function(m) { return '• ' + m; }).join('\n') : out[0];
+}
 function bobTell(text) {
-  var msg = bobFilter(text);
-  if (bobTalkTimer) { bobQueue.push(msg); return; }
-  bobSay(msg, Math.max(3500, msg.length * 60));
+  bobPending.push(bobFilter(text));
+  if (bobPendingTimer) return;
+  bobPendingTimer = setTimeout(function() {
+    bobPendingTimer = null;
+    var msg = bobMerge(bobPending.splice(0));
+    if (bobTalkTimer) { bobQueue.push(msg); return; }
+    bobSay(msg, Math.min(25000, Math.max(3500, msg.length * 60)));
+  }, 40);
+}
+// Un clic sur la bulle la ferme (et passe a la suivante s'il y en a une)
+function bobDismiss(e) {
+  if (e && e.target && e.target.closest && e.target.closest('button, a, input')) return;
+  if (bobTalkTimer) { clearTimeout(bobTalkTimer); bobTalkTimer = null; }
+  if (bobQueue.length) {
+    var next = bobMerge(bobQueue.splice(0));
+    bobSay(next, Math.min(25000, Math.max(3500, next.length * 60)));
+    return;
+  }
+  hideBobBubble();
 }
 
 // Ce que Bob explique a chaque nouvelle fonction : [niveau, cle]

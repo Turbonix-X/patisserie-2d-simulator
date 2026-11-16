@@ -41,6 +41,7 @@ function bootGame() {
   }
 
   fullRender();
+  if (typeof initSplit === 'function') initSplit();
 
   if (loadNotice) setTimeout(function() { toast(t('offline.' + loadNotice)); }, 800);
 

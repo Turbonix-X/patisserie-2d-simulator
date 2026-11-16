@@ -149,8 +149,24 @@ end;
 $$;
 grant execute on function public.admin_delete_user(uuid) to authenticated;
 
--- ---------- À FAIRE : ton adresse d'administrateur ----------
-insert into public.admins (email) values ('abi.2014.perso@gmail.com') on conflict do nothing;
+-- ---------- Ton adresse d'administrateur : PAS ici (ce fichier est public) ----------
+-- Elle est dans private/admin-email.sql (jamais envoyé sur GitHub) : python tools/supabase_sql.py private/admin-email.sql
+
+-- ---------- Une sauvegarde ne peut pas depasser 1,6 Mo (un fichier gonfle a la main remplirait la base) ----------
+alter table public.instances drop constraint if exists instances_save_size;
+alter table public.instances add constraint instances_save_size check (octet_length(save_data) <= 1600000) not valid;
+
+-- ---------- Une partie ne change jamais de proprietaire (meme par l'administrateur) ----------
+create or replace function public.instances_keep_owner()
+returns trigger language plpgsql as $$
+begin
+  new.user_id := old.user_id;
+  return new;
+end;
+$$;
+drop trigger if exists instances_keep_owner on public.instances;
+create trigger instances_keep_owner before update on public.instances
+  for each row execute function public.instances_keep_owner();
 
 -- ---------- Notes de version privees : seul l'administrateur les lit (elles ne sont pas dans les nouveautés publiques) ----------
 create table if not exists public.admin_notes (

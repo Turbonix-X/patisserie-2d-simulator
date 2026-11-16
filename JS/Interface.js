@@ -89,13 +89,15 @@ function removeToast(msg, div) {
   delete activeToasts[msg];
 }
 
-function showLevelUp(lvl) {
+function showLevelUp(lvl, n, from) {
   if (typeof bgTick !== 'undefined' && bgTick) return;
-  toast(t('xp.level', { v: lvl }));
-  explainLevel(lvl);
+  n = n || 1;
+  from = from == null ? lvl - 1 : from;
+  toast(n > 1 ? t('xp.levels', { v: lvl, n: n }) : t('xp.level', { v: lvl }));
+  for (var l = from + 1; l <= lvl; l++) explainLevel(l);
   fxLevelUp();
   playSuccessSound();
-  if (lvl === 1000 && !G.lvl1000Shown) {
+  if (from < 1000 && lvl >= 1000 && !G.lvl1000Shown) {
     G.lvl1000Shown = true;
     showLevel1000();
   }
@@ -148,6 +150,7 @@ function renderHeader() {
   h += headerBtn('showBakeriesModal()', t('bakery.title'), 'store', false, G.bakeries.length >= 2 ? G.bakeries.length : 0);
   var pauseLabel = G.paused ? t('pause.resume') : t('pause.title');
   h += headerBtn('togglePause()', pauseLabel, G.paused ? 'play' : 'pause');
+  h += headerBtn('showAchievementsModal()', t('ach.header'), 'ach');
   h += headerBtn('showSettingsModal()', t('settings.title'), 'settings');
   h += '</div></div></header>';
   var alerts = '';
@@ -165,6 +168,7 @@ function renderHeader() {
     var remaining = Math.max(0, Math.ceil((G.eventEndTime - Date.now()) / 1000));
     alerts += '<div class="event-banner">⚡ ' + t('event.' + G.activeEvent, { t: remaining }) + '</div>';
   }
+  if (G.choiceEvent) alerts += choiceBannerHTML();
   if (G.focusEvent && Date.now() < G.focusEvent.until) {
     alerts += '<div class="event-banner">⚡ ' + focusEventText(G.focusEvent, (G.focusEvent.until - Date.now()) / 1000) + '</div>';
   }
@@ -290,6 +294,7 @@ function renderTabs() {
 function switchTab(tab) {
   var changed = currentTab !== tab;
   currentTab = tab;
+  if (changed) { ui.ingFold = null; renderIngredients(); }
   renderTabs();
   var panel = document.getElementById('main-panel');
   if (changed && panel) {
@@ -309,10 +314,23 @@ function ingName(id, count) {
   return t('i.' + id);
 }
 
+// Sur telephone, la liste des ingredients se replie quand on n'est pas sur les recettes, et on peut la plier ou la deplier quand on veut
+function ingFolded() {
+  if (!(window.matchMedia && matchMedia('(max-width: 899px)').matches)) return false;
+  if (ui.ingFold === true || ui.ingFold === false) return ui.ingFold;
+  return currentTab !== 'rec';
+}
+function toggleIngFold() {
+  ui.ingFold = !ingFolded();
+  renderIngredients();
+}
 function renderIngredients() {
   var el = document.getElementById('ingredients');
   if (!el) return;
-  var h = '<div class="panel-head"><h2>' + t('ing.title') + '</h2></div>';
+  var folded = ingFolded();
+  el.classList.toggle('folded', folded);
+  var h = '<div class="panel-head"><h2>' + t('ing.title') + '</h2><button type="button" class="ing-fold-btn" onclick="toggleIngFold()" title="' + escH(t(folded ? 'ing.unfold' : 'ing.fold')) + '" aria-label="' + escH(t(folded ? 'ing.unfold' : 'ing.fold')) + '" aria-expanded="' + (!folded) + '">' + (folded ? '▾' : '▴') + '</button></div>';
+  if (folded) { setHTML(el, h); return; }
   var known = ING.filter(ingUnlocked);
   if (known.length > 12) {
     h += '<input class="panel-search" type="search" placeholder="' + escH(t('ing.search')) + '" value="' + escH(ui.ingSearch) + '" oninput="ui.ingSearch=this.value;renderIngredients()">';
@@ -717,7 +735,7 @@ function doBuyBuilding(bldId) {
 // ============ SUCCES ============
 function onAchievementUnlocked() {
   playSuccessSound();
-  if (ui.settingsTab === 'ach') refreshSettingsPane();
+  if (document.getElementById('ach-pane')) refreshAchPane();
 }
 
 // ============ BARRE DU BAS ============
@@ -1309,6 +1327,40 @@ function showLevel1000() {
   fxBurst(window.innerWidth / 2, window.innerHeight / 2, 80, null, true);
 }
 
+// ============ TAILLE DES DEUX COLONNES (PC) ============
+function initSplit() {
+  var area = document.getElementById('game-area'), handle = document.getElementById('split-handle');
+  if (!area || !handle || handle._ready) return;
+  handle._ready = true;
+  handle.title = t('ing.resize');
+  try { var saved = parseFloat(localStorage.getItem('p2ds_ing_w')); if (saved > 0) area.style.setProperty('--ing-w', saved + 'px'); } catch (e) { /* tant pis */ }
+  var setW = function(px) {
+    var max = area.getBoundingClientRect().width * 0.65;
+    px = Math.max(240, Math.min(max, px));
+    area.style.setProperty('--ing-w', px + 'px');
+    return px;
+  };
+  handle.addEventListener('pointerdown', function(e) {
+    e.preventDefault();
+    handle.setPointerCapture(e.pointerId);
+    document.body.classList.add('resizing');
+    var left = area.getBoundingClientRect().left + 12, last = 0;
+    var move = function(ev) { last = setW(ev.clientX - left); };
+    var up = function() {
+      handle.removeEventListener('pointermove', move);
+      handle.removeEventListener('pointerup', up);
+      document.body.classList.remove('resizing');
+      try { if (last) localStorage.setItem('p2ds_ing_w', String(Math.round(last))); } catch (e2) { /* tant pis */ }
+    };
+    handle.addEventListener('pointermove', move);
+    handle.addEventListener('pointerup', up);
+  });
+  handle.addEventListener('dblclick', function() {
+    area.style.removeProperty('--ing-w');
+    try { localStorage.removeItem('p2ds_ing_w'); } catch (e) { /* tant pis */ }
+  });
+}
+
 // ============ CLAVIER ============
 document.addEventListener('keydown', function(e) {
   if (e.key === 'Escape') {
@@ -1320,6 +1372,12 @@ document.addEventListener('keydown', function(e) {
   }
   if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.tagName === 'SELECT') return;
   if (document.getElementById('modal-overlay').style.display === 'flex') return;
+  if (e.ctrlKey || e.metaKey || e.altKey) return;
+  var k = String(e.key).toLowerCase();
+  if (typeof introActive !== 'undefined' && introActive) return;
+  if (k === 'r') { e.preventDefault(); showSettingsModal(); return; }
+  if (k === 'c') { e.preventDefault(); showChangelog(); return; }
+  if (k === 'm') { e.preventDefault(); showBakeriesModal(); return; }
   var wanted = visibleTabs()[parseInt(e.key, 10) - 1];
   if (wanted) switchTab(wanted);
 });

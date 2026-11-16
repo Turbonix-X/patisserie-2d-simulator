@@ -390,7 +390,7 @@ function adminGameExport() {
   var blob = new Blob([adminGameCode()], { type: 'text/plain' });
   var a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
-  a.download = 'p2ds-' + String(row.bakery_name || 'partie').replace(/[^A-Za-z0-9_-]+/g, '_').slice(0, 30) + '-' + new Date().toISOString().slice(0, 10) + '.p2ds';
+  a.download = saveFileName(row.bakery_name);
   document.body.appendChild(a); a.click();
   setTimeout(function() { URL.revokeObjectURL(a.href); a.remove(); }, 1000);
 }
@@ -504,11 +504,6 @@ function adminBobMarkup() {
       var id = m.slice(4, -1);
       svg = svg.split('id="' + id + '"').join('id="' + id + 'A"').split('url(#' + id + ')').join('url(#' + id + 'A)');
     });
-    // Pas de toque, de tablier ni de foulard : ce n'est pas un patissier ici
-    var tmp = document.createElement('div');
-    tmp.innerHTML = svg;
-    tmp.querySelectorAll('.bob-toque, .bob-toque-fold, .bob-toque-band, .bob-apron, .bob-apron-pocket, .bob-apron-heart, .bob-kerchief, .bob-acc').forEach(function(e) { e.remove(); });
-    svg = tmp.innerHTML;
   } else svg = '<span class="adm-bob-emoji">🤖</span>';
   return '<div id="adm-bob-bubble" role="status" aria-live="polite" style="display:none"></div><button id="adm-bob" class="bob-fig" type="button" data-anger="0" aria-label="Bob" title="Bob" onclick="adminBobTalk()">' + svg + '</button>';
 }
