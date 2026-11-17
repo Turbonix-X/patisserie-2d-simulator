@@ -535,7 +535,7 @@ function adminBobStop() {
 function adminBobPlayers() { return adminUI.rows.filter(function(r) { return r.id !== adminUI.pid; }); }
 function adminBobTalk() {
   var rows = adminBobPlayers(), n = rows.filter(function(r) { return adminPresence(r).status !== 'closed'; }).length;
-  adminBobSay(adminTr('Il y a ' + n + ' joueur(s) en ligne et ' + rows.length + ' compte(s).', n + ' player(s) online, ' + rows.length + ' account(s).'), 6000);
+  adminBobSay(adminTr('Il y a ' + n + ' joueur' + (n > 1 ? 's' : '') + ' en ligne et ' + rows.length + ' compte' + (rows.length > 1 ? 's' : '') + '.', n + ' player' + (n > 1 ? 's' : '') + ' online, ' + rows.length + ' account' + (rows.length > 1 ? 's' : '') + '.'), 6000);
 }
 function adminBobTick() {
   if (!adminBob.on) return;
@@ -547,10 +547,10 @@ function adminBobTick() {
       var online = rows.filter(function(r) { return adminPresence(r).status !== 'closed'; }).length;
       var playing = rows.filter(function(r) { return adminPresence(r).status === 'playing'; }).length;
       var fresh = adminBob.lastVisit ? rows.filter(function(r) { return Date.parse(r.created_at) > adminBob.lastVisit; }) : [];
-      lines.push(adminTr('Salut ! ' + rows.length + ' compte(s), ' + online + ' en ligne, ' + playing + ' en jeu.', 'Hi! ' + rows.length + ' account(s), ' + online + ' online, ' + playing + ' playing.'));
+      lines.push(adminTr('Salut ! ' + rows.length + ' compte' + (rows.length > 1 ? 's' : '') + ', ' + online + ' en ligne, ' + playing + ' en jeu.', 'Hi! ' + rows.length + ' account' + (rows.length > 1 ? 's' : '') + ', ' + online + ' online, ' + playing + ' playing.'));
       if (fresh.length) {
         var names = fresh.slice(0, 3).map(function(r) { return r.pseudo; }).join(', ');
-        lines.push(adminTr(fresh.length + ' nouveau(x) joueur(s) depuis ta dernière visite : ' + names + '.', fresh.length + ' new player(s) since your last visit: ' + names + '.'));
+        lines.push(adminTr(fresh.length + (fresh.length > 1 ? ' nouveaux joueurs' : ' nouveau joueur') + ' depuis ta dernière visite : ' + names + '.', fresh.length + ' new player' + (fresh.length > 1 ? 's' : '') + ' since your last visit: ' + names + '.'));
       }
       adminBob.seen = {}; rows.forEach(function(r) { adminBob.seen[r.id] = true; });
       adminBob.first = false;

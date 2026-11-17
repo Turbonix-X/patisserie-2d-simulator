@@ -315,10 +315,10 @@ function ingName(id, count) {
 }
 
 // Sur telephone, la liste des ingredients se replie quand on n'est pas sur les recettes, et on peut la plier ou la deplier quand on veut
+function ingStacked() { return !!(window.matchMedia && matchMedia('(max-width: 899px)').matches); }
 function ingFolded() {
-  if (!(window.matchMedia && matchMedia('(max-width: 899px)').matches)) return false;
   if (ui.ingFold === true || ui.ingFold === false) return ui.ingFold;
-  return currentTab !== 'rec';
+  return ingStacked() && currentTab !== 'rec';   // seul le petit ecran se replie tout seul
 }
 function toggleIngFold() {
   ui.ingFold = !ingFolded();
@@ -329,6 +329,8 @@ function renderIngredients() {
   if (!el) return;
   var folded = ingFolded();
   el.classList.toggle('folded', folded);
+  var area = document.getElementById('game-area');
+  if (area) area.classList.toggle('ing-folded', folded && !ingStacked());
   var h = '<div class="panel-head"><h2>' + t('ing.title') + '</h2><button type="button" class="ing-fold-btn" onclick="toggleIngFold()" title="' + escH(t(folded ? 'ing.unfold' : 'ing.fold')) + '" aria-label="' + escH(t(folded ? 'ing.unfold' : 'ing.fold')) + '" aria-expanded="' + (!folded) + '">' + (folded ? '▾' : '▴') + '</button></div>';
   if (folded) { setHTML(el, h); return; }
   var known = ING.filter(ingUnlocked);
@@ -706,6 +708,10 @@ function renderBuildings() {
     h += '<div class="bld-name">' + t('b.' + bld.id) + ' <span class="bld-qty">' + t('bld.qty', { v: qty }) + '</span></div>';
     var deliveryLeft = qty > 0 ? (G.bldTimers[bld.id] || BLD_CYCLE_SEC) : BLD_CYCLE_SEC;
     h += '<div class="bld-prod" title="' + escH(t('i.' + bld.produces)) + '">' + getIngEmoji(bld.produces) + ' ' + (qty > 0 ? t('bld.delivery', { q: fmt(buildingDelivery(bld)), n: t('i.' + bld.produces), t: fmtTime(deliveryLeft) }) : t('bld.eachHour', { n: t('i.' + bld.produces) })) + '</div>';
+    if (qty > 0 && !isBroken('b', bld.id)) {
+      var pctB = Math.max(0, Math.min(100, (1 - deliveryLeft / BLD_CYCLE_SEC) * 100));
+      h += '<div class="bld-wait"><div class="loan-bar bld-bar" role="progressbar" aria-valuenow="' + Math.floor(pctB) + '" aria-valuemin="0" aria-valuemax="100"><div style="width:' + pctB.toFixed(1) + '%"></div></div><span>\u23F1 ' + fmtTime(deliveryLeft) + '</span></div>';
+    }
     if (isBroken('b', bld.id)) {
       var left = repairingLeft('b', bld.id);
       h += '<div class="broke-tag">' + t('broke.status') + '</div>';
@@ -836,7 +842,10 @@ function renderCraftingBar() {
 function fitDock() {
   var d = document.getElementById('dock');
   if (d) document.documentElement.style.setProperty('--dock-h', d.offsetHeight + 'px');
+  var f = document.getElementById('game-footer');
+  if (f) document.documentElement.style.setProperty('--footer-h', f.offsetHeight + 'px');
 }
+window.addEventListener('resize', function() { if (typeof fitDock === 'function') fitDock(); });
 
 // Jeter une preparation : les ingredients reviennent, d'autant moins que la barre a monte
 function showDiscardCraft(uid) {
@@ -1333,31 +1342,41 @@ function initSplit() {
   if (!area || !handle || handle._ready) return;
   handle._ready = true;
   handle.title = t('ing.resize');
-  try { var saved = parseFloat(localStorage.getItem('p2ds_ing_w')); if (saved > 0) area.style.setProperty('--ing-w', saved + 'px'); } catch (e) { /* tant pis */ }
-  var setW = function(px) {
-    var max = area.getBoundingClientRect().width * 0.65;
-    px = Math.max(240, Math.min(max, px));
-    area.style.setProperty('--ing-w', px + 'px');
-    return px;
-  };
+  try {
+    var sw = parseFloat(localStorage.getItem('p2ds_ing_w')), sh = parseFloat(localStorage.getItem('p2ds_ing_h'));
+    if (sw > 0) area.style.setProperty('--ing-w', sw + 'px');
+    if (sh > 0) document.documentElement.style.setProperty('--ing-h', sh + 'px');
+  } catch (e) { /* tant pis */ }
   handle.addEventListener('pointerdown', function(e) {
     e.preventDefault();
     handle.setPointerCapture(e.pointerId);
     document.body.classList.add('resizing');
-    var left = area.getBoundingClientRect().left + 12, last = 0;
-    var move = function(ev) { last = setW(ev.clientX - left); };
+    var stacked = ingStacked(), last = 0;
+    var ing = document.getElementById('ingredients');
+    var move = function(ev) {
+      if (stacked) {
+        var top = ing.getBoundingClientRect().top;
+        last = Math.max(70, Math.min(window.innerHeight * 0.6, ev.clientY - top));
+        document.documentElement.style.setProperty('--ing-h', last + 'px');
+      } else {
+        var left = area.getBoundingClientRect().left + 12;
+        last = Math.max(240, Math.min(area.getBoundingClientRect().width * 0.65, ev.clientX - left));
+        area.style.setProperty('--ing-w', last + 'px');
+      }
+    };
     var up = function() {
       handle.removeEventListener('pointermove', move);
       handle.removeEventListener('pointerup', up);
       document.body.classList.remove('resizing');
-      try { if (last) localStorage.setItem('p2ds_ing_w', String(Math.round(last))); } catch (e2) { /* tant pis */ }
+      try { if (last) localStorage.setItem(stacked ? 'p2ds_ing_h' : 'p2ds_ing_w', String(Math.round(last))); } catch (e2) { /* tant pis */ }
     };
     handle.addEventListener('pointermove', move);
     handle.addEventListener('pointerup', up);
   });
   handle.addEventListener('dblclick', function() {
     area.style.removeProperty('--ing-w');
-    try { localStorage.removeItem('p2ds_ing_w'); } catch (e) { /* tant pis */ }
+    document.documentElement.style.removeProperty('--ing-h');
+    try { localStorage.removeItem('p2ds_ing_w'); localStorage.removeItem('p2ds_ing_h'); } catch (e) { /* tant pis */ }
   });
 }
 

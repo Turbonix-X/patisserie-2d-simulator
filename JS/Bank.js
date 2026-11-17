@@ -118,13 +118,40 @@ function renderBank() {
     h += '</div>';
   });
   h += '</div><p class="hint-note">' + t('bank.oneEach') + ' ' + t('bank.limitHelp') + '</p>';
+  h += insuranceHTML();
   setHTML(el, h);
+  // Bob t'explique l'assurance la premiere fois
+  if (!G.insExplained && G.bankUnlocked && !modalIsOpen()) { G.insExplained = true; setTimeout(showInsuranceExplanation, 700); }
 }
+
+// ============ L'ASSURANCE ============
+function insuranceHTML() {
+  var cur = insurancePlan();
+  var h = '<h3 class="bank-h">\u{1F6E1}\uFE0F ' + t('ins.title') + '</h3><button class="chip" onclick="showInsuranceExplanation()">' + t('ins.whatIs') + '</button><div class="loan-grid ins-grid">';
+  INSURANCE.forEach(function(p) {
+    var mine = cur && cur.id === p.id;
+    h += '<div class="loan-card ins-card' + (mine ? ' taken' : '') + '"><div class="loan-amount">' + t('ins.plan.' + p.id) + '</div><dl>';
+    h += '<div><dt>' + t('ins.priceLabel') + '</dt><dd>' + t('ins.price', { v: fmtMoney(insurancePremium(p)) }) + '</dd></div>';
+    h += '<div><dt>' + t('ins.coverLabel') + '</dt><dd>' + t('ins.cover', { a: Math.round(p.disaster * 100) }) + (p.repair ? '<br>' + t('ins.coverRepair', { b: Math.round(p.repair * 100) }) : '') + '</dd></div></dl>';
+    if (mine) h += '<button class="btn btn-small" onclick="doCancelInsurance()">' + t('ins.cancel') + '</button>';
+    else h += '<button class="btn btn-small btn-primary" onclick="doSubscribeInsurance(\'' + p.id + '\')">' + t('ins.subscribe') + '</button>';
+    h += '</div>';
+  });
+  return h + '</div>' + (cur ? '<p class="hint-note">' + t('ins.current', { n: t('ins.plan.' + cur.id) }) + '</p>' : '');
+}
+function showInsuranceExplanation() {
+  showBobDialog([t('ins.bob1'), t('ins.bob2'), t('ins.bob3')], t('ins.bobOk'));
+}
+function doSubscribeInsurance(id) {
+  if (subscribeInsurance(id)) { toast(t('ins.subscribed', { n: t('ins.plan.' + id) })); playSuccessSound(); renderBank(); }
+}
+function doCancelInsurance() { cancelInsurance(); renderBank(); }
 
 // Les montants de la banque s'affichent en entier : 10 000 €, pas 10.0k€
 function fmtLoan(amount) {
   var curr = CURRENCIES[0];
   CURRENCIES.forEach(function(c) { if (c.id === G.settings.currency) curr = c; });
+  if (amount * curr.rate >= 1e9) return bidiIsolate(fmt(amount * curr.rate) + curr.sym);   // 100 Md et non 100 000 000 000
   return (amount * curr.rate).toLocaleString(({ fr:'fr-FR', es:'es-ES', pt:'pt-PT', de:'de-DE', ar:'ar-u-nu-latn', zh:'zh-CN', ja:'ja-JP', ko:'ko-KR', ru:'ru-RU' })[currentLang] || 'en-US', { maximumFractionDigits: 2 }) + curr.symbol;
 }
 

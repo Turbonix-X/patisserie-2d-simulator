@@ -193,6 +193,7 @@ function homeImportCode() {
 function homeImportFile(input) {
   var file = input.files && input.files[0];
   if (!file) return;
+  if (file.size > 2000000) { input.value = ''; homeFinishImport('invalid'); return; }
   var reader = new FileReader();
   reader.onload = function() { homeFinishImport(importInstance(homePid(), String(reader.result || ''))); input.value = ''; };
   reader.readAsText(file);

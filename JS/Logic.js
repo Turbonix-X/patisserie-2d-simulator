@@ -1681,6 +1681,7 @@ function tickEvents() {
   }
   tickFocusEvent(now);
   tickChoiceEvent(now);
+  tickInsurance();
   tickDisaster();
   // Petit incident, environ toutes les 8 minutes
   if (Math.random() < 0.002) {
@@ -1689,9 +1690,47 @@ function tickEvents() {
     if (have >= 1 && findIng(inv.ing).unlockLvl <= G.level) {
       var lost = Math.min(have, inv.loss[0] + Math.floor(Math.random() * (inv.loss[1] - inv.loss[0] + 1)));
       G.ing[inv.ing] -= lost;
-      if (typeof toast === 'function') toast(t('inv.' + inv.id, { v: Math.floor(lost) }));
+      if (typeof toast === 'function') toast(t('inv.' + inv.id, { v: Math.floor(lost) }) + insuranceNote(lost * getIngredientCost(findIng(inv.ing))));
     }
   }
+}
+
+// ---------- L'assurance ----------
+function findInsurance(id) { for (var i = 0; i < INSURANCE.length; i++) { if (INSURANCE[i].id === id) return INSURANCE[i]; } return null; }
+function insurancePlan() { return G.insurance && G.insurance.plan ? findInsurance(G.insurance.plan) : null; }
+function insurancePremium(plan) { return Math.max(1, Math.round(revenueAt(G.level) * plan.perHour * 100) / 100); } // par heure
+function insuranceRefund(value) {
+  var p = insurancePlan();
+  if (!p || !(value > 0)) return 0;
+  var back = value * p.disaster;
+  G.money += back;
+  G.stats.insuranceBack = (G.stats.insuranceBack || 0) + back;
+  return back;
+}
+function insuranceNote(value) {
+  var back = insuranceRefund(value);
+  return back > 0 ? ' ' + t('ins.refund', { v: fmtMoney(back) }) : '';
+}
+function subscribeInsurance(planId) {
+  var p = findInsurance(planId);
+  if (!p || !G.bankUnlocked) return false;
+  G.insurance = { plan: p.id, last: Date.now() };
+  return true;
+}
+function cancelInsurance() { G.insurance = null; }
+// Une prime est prelevee chaque minute. Plus d'argent pour la payer : l'assurance s'arrete.
+function tickInsurance() {
+  var p = insurancePlan();
+  if (!p) return;
+  var now = Date.now(), ins = G.insurance;
+  if (!ins.last) ins.last = now;
+  var mins = Math.floor((now - ins.last) / 60000);
+  if (mins < 1) return;
+  ins.last += mins * 60000;
+  var cost = insurancePremium(p) / 60 * mins;
+  if (G.money < cost) { G.insurance = null; if (typeof toast === 'function') toast(t('ins.lapsed')); return; }
+  G.money -= cost;
+  G.stats.insurancePaid = (G.stats.insurancePaid || 0) + cost;
 }
 
 // ---------- Evenements a choix ----------
@@ -1706,7 +1745,6 @@ function tickChoiceEvent(now) {
   var ev = CHOICE_EVENTS[Math.floor(Math.random() * CHOICE_EVENTS.length)];
   G.choiceEvent = { id: ev.id, until: now + CHOICE_EVENT_SEC * 1000, v: choiceAmount(ev.id) };
   G.lastChoiceAt = now;
-  if (typeof toast === 'function') toast(t('ce.' + ev.id, { v: fmtMoney(G.choiceEvent.v) }));
   if (typeof renderHeader === 'function') renderHeader();
 }
 function startTimedEvent(evtId, sec) {
@@ -1769,14 +1807,15 @@ function tickDisaster(force) {
   if (!force && (G.level < DISASTER_LVL || G.creative || Math.random() > 1 / DISASTER_EVERY_SEC)) return null;
   var d = force ? findDisaster(force) : DISASTERS[Math.floor(Math.random() * DISASTERS.length)];
   var part = d.lose[0] + Math.random() * (d.lose[1] - d.lose[0]);
-  var msg = null;
+  var msg = null, lostValue = 0;
   if (d.id === 'theft' && G.money > 0) {
     var stolen = G.money * part;
     G.money -= stolen;
+    lostValue = stolen;
     msg = t('disaster.theft', { v: fmtMoney(stolen) });
   } else if (d.id === 'freezer') {
     var pieces = 0;
-    REC.forEach(function(r) { var n = Math.floor((G.cakes[r.id] || 0) * part); if (n > 0) { G.cakes[r.id] -= n; pieces += n; } });
+    REC.forEach(function(r) { var n = Math.floor((G.cakes[r.id] || 0) * part); if (n > 0) { G.cakes[r.id] -= n; pieces += n; lostValue += n * r.val; } });
     if (pieces > 0) msg = t('disaster.freezer', { v: fmt(pieces) });
   } else if (d.id === 'flood') {
     var most = null;
@@ -1784,13 +1823,15 @@ function tickDisaster(force) {
     if (most) {
       var gone = G.ing[most.id] * part;
       G.ing[most.id] -= gone;
+      lostValue = gone * getIngredientCost(most);
       msg = t('disaster.flood', { n: t('i.' + most.id), v: fmt(gone) });
     }
   } else if (d.id === 'fire') {
     var any = false;
-    ING.forEach(function(i) { if ((G.ing[i.id] || 0) > 0) { G.ing[i.id] *= 1 - part; any = true; } });
+    ING.forEach(function(i) { if ((G.ing[i.id] || 0) > 0) { lostValue += G.ing[i.id] * part * getIngredientCost(i); G.ing[i.id] *= 1 - part; any = true; } });
     if (any) msg = t('disaster.fire', { v: Math.round(part * 100) });
   }
+  if (msg && lostValue > 0) msg += insuranceNote(lostValue);
   if (msg && typeof toast === 'function') toast(msg);
   return msg;
 }
@@ -2125,12 +2166,16 @@ function repairingLeft(kind, id) {
 }
 
 function repairCost(kind, id) {
+  var base = 0;
   if (kind === 'm') {
     var m = findMachine(id);
-    return m ? m.cost * Math.pow(m.growth, Math.max(0, machineLevel(id) - 1)) * BREAKDOWN.machineRepairCost : 0;
+    base = m ? m.cost * Math.pow(m.growth, Math.max(0, machineLevel(id) - 1)) * BREAKDOWN.machineRepairCost : 0;
+  } else {
+    var bld = findBld(id);
+    base = bld ? buildingCost(bld) * BREAKDOWN.buildingRepairCost : 0;
   }
-  var bld = findBld(id);
-  return bld ? buildingCost(bld) * BREAKDOWN.buildingRepairCost : 0;
+  var p = insurancePlan();
+  return p ? base * (1 - p.repair) : base;   // l'assurance paie une part de la reparation
 }
 
 function repairItem(kind, id) {

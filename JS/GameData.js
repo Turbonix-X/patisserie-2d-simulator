@@ -4,7 +4,7 @@
    employes, espace, evenements, themes
    ============================================ */
 
-var GAME_VERSION = 'Release 1.3';
+var GAME_VERSION = 'Release 1.3.1';
 // Le nom affiche : sans « Snapshot N » (il ne sert qu'a nous et aux fichiers)
 function versionLabel(v) { return String(v || '').replace(/\s+Snapshot\s+\d+$/i, ''); }
 
@@ -402,6 +402,20 @@ var LOANS = [
   { amount: 10000000, rate: 0.40, minutes: 360, minLvl: 300, minHours: 15 },
   { amount: 50000000, rate: 0.45, minutes: 480, minLvl: 400, minHours: 25 },
   { amount: 100000000, rate: 0.50, minutes: 720, minLvl: 500, minHours: 40 },
+  { amount: 500000000, rate: 0.52, minutes: 900, minLvl: 600, minHours: 60 },
+  { amount: 1000000000, rate: 0.55, minutes: 1080, minLvl: 700, minHours: 80 },
+  { amount: 5000000000, rate: 0.58, minutes: 1200, minLvl: 800, minHours: 110 },
+  { amount: 10000000000, rate: 0.60, minutes: 1440, minLvl: 850, minHours: 150 },
+  { amount: 50000000000, rate: 0.65, minutes: 1800, minLvl: 900, minHours: 200 },
+  { amount: 100000000000, rate: 0.70, minutes: 2160, minLvl: 950, minHours: 300 },
+];
+
+// L'assurance : on paie un peu chaque minute, et elle rembourse une part des catastrophes, des incidents et des reparations
+// perHour : le prix par heure, en fournees de ton niveau ; disaster / repair : la part remboursee
+var INSURANCE = [
+  { id: 'normal', perHour: 3, disaster: 0.4, repair: 0 },
+  { id: 'expert', perHour: 8, disaster: 0.7, repair: 0.4 },
+  { id: 'pro', perHour: 20, disaster: 1, repair: 0.7 }
 ];
 
 var RENAME_COST = 100;

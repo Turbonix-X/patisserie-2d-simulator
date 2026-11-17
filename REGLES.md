@@ -120,6 +120,12 @@ Un seul prêt de chaque montant à la fois :
 | 10 000 000 € | 300 (et 15 h de jeu) | 40 % | 360 min |
 | 50 000 000 € | 400 (et 25 h de jeu) | 45 % | 480 min |
 | 100 000 000 € | 500 (et 40 h de jeu) | 50 % | 720 min |
+| 500 000 000 € | 600 (et 60 h de jeu) | 52 % | 900 min |
+| 1 000 000 000 € | 700 (et 80 h de jeu) | 55 % | 1 080 min |
+| 5 000 000 000 € | 800 (et 110 h de jeu) | 58 % | 1 200 min |
+| 10 000 000 000 € | 850 (et 150 h de jeu) | 60 % | 1 440 min |
+| 50 000 000 000 € | 900 (et 200 h de jeu) | 65 % | 1 800 min |
+| 100 000 000 000 € | 950 (et 300 h de jeu) | 70 % | 2 160 min |
 
 - **Un prêt**, c'est de l'argent tout de suite, que tu rends petit à petit, un peu plus cher : c'est ça, les intérêts.
 - Le remboursement est prélevé tout seul, chaque seconde.
@@ -127,6 +133,16 @@ Un seul prêt de chaque montant à la fois :
 - Sans argent au moment du prélèvement, le prêt est en retard et coûte de plus en plus cher.
 
 **La faillite** n'arrive que si tout cela est vrai en même temps : plus d'argent, une dette, rien au four, aucun cueilleur ni bâtiment, un stock qui ne suffit pas à payer, et plus aucun prêt possible.
+
+**L'assurance :** sous les prêts, trois formules (Bob t'explique la première fois). Tu paies une petite somme chaque minute ; elle rembourse une part des catastrophes (vol, inondation, incendie, congélateur) et des petits incidents. Plus la formule est chère, plus elle rembourse.
+
+| Formule | Prix par heure | Catastrophes et incidents | Réparations |
+|---|---|---|---|
+| Normal | 3 fournées de ton niveau | 40 % | 0 % |
+| Expert | 8 fournées | 70 % | 40 % |
+| Professionnel | 20 fournées | 100 % | 70 % |
+
+Si tu n'as plus d'argent pour payer la prime, l'assurance s'arrête toute seule.
 
 ## Les machines
 
@@ -182,10 +198,10 @@ Lance une **recherche** dans l'onglet Employés : elle prend du temps et ne marc
 | Boulanger | 10 | Fait baisser le temps de préparation | Aucun |
 | Transporteur | 20, et au moins 2 pâtisseries (avec une seule, il démissionne) | Emmène de l'argent ou du stock vers une autre pâtisserie. Un trajet dure de 10 s à 10 min, peut être en retard, ou avoir un accident et perdre son chargement | Où, quoi, combien, et le rythme : en continu, une seule fois, ou toutes les 1, 2, 5, 10, 30 ou 60 minutes, avec un bouton pour transférer tout de suite ou commencer |
 | Manager | 25 | Remonte le moral de l'équipe, et peut embaucher à ta place | Embauche automatique, compétence minimum, les métiers qu'il embauche, ceux qu'il regarde en premier, les niveaux, et un réglage pour refuser tout seul les candidatures de niveau trop bas |
-| Maître d'hôtel | 30 | Livre les commandes à ta place | Ne livrer que les commandes qui rapportent plus ou moins qu'un montant, ou dont le bénéfice (prime moins ingrédients) est plus ou moins grand |
-| Vendeur | 35 | Vend tout seul, les gâteaux les plus chers d'abord | La part du stock qu'il peut vendre, et ne vendre qu'au-dessus ou qu'en dessous d'un prix |
+| Maître d'hôtel | 30 | Livre les commandes à ta place | Peut être réglé pour ne livrer que les commandes qui rapportent plus ou moins qu'un montant, ou dont le bénéfice (prime moins ingrédients) est plus ou moins grand |
+| Vendeur | 35 | Vend tout seul, les gâteaux les plus chers d'abord | La part du stock qu'il peut vendre, et un prix au-dessus ou en dessous duquel il vend |
 | Chef pâtissier | 65 | Prépare tout seul avec ce qu'il y a en stock | Tout, seulement ce qui manque pour les commandes, seulement certaines recettes, ou des priorités. Un budget maximum par heure, et un montant sous lequel il ne prépare rien |
-| Intendant | 90 | Commande ce qui manque pour tes favoris, livré après 30 secondes | N'acheter que les ingrédients dont le prix est au-dessus ou en dessous d'un montant |
+| Intendant | 90 | Commande ce qui manque pour tes favoris, livré après 30 secondes | Un montant au-dessus ou en dessous duquel il achète un ingrédient |
 
 **Les niveaux :** chaque employé a 10 niveaux (sauf l'apprenti, qui n'en a pas). Chaque niveau double ses capacités, mais coûte 8 fois plus cher que le précédent. Pendant sa formation, il ne travaille pas. Les cueilleurs ont deux niveaux : l'efficacité (combien ils cueillent) et la perte (voir plus bas).
 
@@ -275,7 +291,7 @@ Les pastilles des onglets sont jaunes (candidatures, commandes). Seules les pann
 
 ## Les succès et les statistiques
 
-Les succès ont leur bouton (un trophée) dans l'en-tête. Il y a 1000 succès, et 5 de plus cachés (ils se débloquent aussi en mode max, en mode créatif et avec la commande). Un succès pas encore obtenu montre son nom, mais pas ce qu'il demande.
+Les succès ont leur bouton (un trophée) dans l'en-tête, avec une barre de progression pour ceux que tu n'as pas encore. Il y a 1000 succès, et 5 de plus cachés (ils se débloquent aussi en mode max, en mode créatif et avec la commande). Un succès pas encore obtenu montre son nom, mais pas ce qu'il demande.
 
 ## Pause, absence et sauvegarde
 

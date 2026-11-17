@@ -4,6 +4,44 @@
   "intro": "كل ما أُضيف إلى Pâtisserie 2D Simulator، من الأحدث إلى الأقدم. تظهر الإصدارات الأقدم بالإنجليزية. لفهم قواعد اللعبة، راجع [الويكي](REGLES.md).",
   "versions": [
    {
+    "title": "Release 1.3.1 (17 نوفمبر 2026)",
+    "name": "Release 1.3.1",
+    "intro": "تأمين، وأشرطة تقدّم، وصيغ مفرد وجمع صحيحة، وهاتف أكثر راحة.",
+    "groups": [
+     {
+      "name": "اللعبة",
+      "items": [
+       "تأمين في البنك يشرحه لك بوب: ثلاث خطط (عادي، خبير، محترف)، وكلما ارتفعت كنت مغطى أكثر ضد الكوارث والحوادث وحتى الإصلاحات.",
+       "تصل القروض إلى 100 مليار، وتُفتح الأكبر منها مع وقت لعبك.",
+       "للمباني شريط يُظهر الوقت المتبقي قبل التسليم التالي.",
+       "للإنجازات شريط تقدّم: ترى متى ستصل إليها.",
+       "تُفتح الإنجازات الخمسة المخفية أيضًا في الوضع الإبداعي والوضع الأقصى.",
+       "صيغ مفرد وجمع صحيحة في النصوص."
+      ]
+     },
+     {
+      "name": "الموظفون",
+      "items": [
+       "للبائع والجامع ومسؤول المشتريات ورئيس النُّدُل إعدادات للسعر أو المبلغ. وهي اختيارية: افتراضيًا يعملون كما كانوا."
+      ]
+     },
+     {
+      "name": "الواجهة",
+      "items": [
+       "يمكن أيضًا طيّ قائمة المكوّنات وتغيير حجمها على الأجهزة اللوحية والشاشات الكبيرة: زر يطويها وشريط يغيّر حجمها (العرض على الحاسوب، والارتفاع عندما تكون في الأعلى).",
+       "على الهاتف لم يعد نص التذييل نصف مخفي، وتظهر الإشعارات في أعلى الشاشة دون تغطية التبويبات أو زر البيع.",
+       "الحدث ذو الخيارات يعرض شريطه فقط: لم يعد الإشعار يخفي زر «رفض»."
+      ]
+     },
+     {
+      "name": "الحفظ",
+      "items": [
+       "يُرفض الملف الكبير جدًا قبل أن يُقرأ أصلًا."
+      ]
+     }
+    ]
+   },
+   {
     "title": "Release 1.3 (16 نوفمبر 2026)",
     "name": "Release 1.3",
     "intro": "لعبة أكثر سلاسة، وقرارات لتتخذها، وخيارات أكثر لموظفيك، وواجهة مصممة للهاتف والحاسوب.",
@@ -324,6 +362,44 @@
   "intro": "Alles, was zu Pâtisserie 2D Simulator hinzugekommen ist, von der neuesten bis zur ältesten Version. Ältere Versionen werden auf Englisch angezeigt. Die Spielregeln findest du im [Wiki](REGLES.md).",
   "versions": [
    {
+    "title": "Release 1.3.1 (17. November 2026)",
+    "name": "Release 1.3.1",
+    "intro": "Eine Versicherung, Fortschrittsbalken, echte Plurale und ein bequemeres Handy.",
+    "groups": [
+     {
+      "name": "Spiel",
+      "items": [
+       "Eine Versicherung in der Bank, die Bob dir erklärt: drei Tarife (Normal, Experte, Profi), und je höher du gehst, desto besser bist du gegen Katastrophen, Zwischenfälle und sogar Reparaturen abgesichert.",
+       "Kredite reichen bis 100 Milliarden (100 Mrd), und die größten werden mit deiner Spielzeit freigeschaltet.",
+       "Gebäude haben einen Balken, der zeigt, wie lange es bis zur nächsten Lieferung dauert.",
+       "Erfolge haben einen Fortschrittsbalken: Du siehst, wann du es schaffst.",
+       "Die 5 versteckten Erfolge sind auch im Kreativmodus und im Max-Modus freigeschaltet.",
+       "Echte Einzahl- und Mehrzahlformen in den Texten: „1 Bestellung geliefert“, „6 Bestellungen geliefert“ ..."
+      ]
+     },
+     {
+      "name": "Angestellte",
+      "items": [
+       "Verkäufer, Sammler, Einkäufer und Oberkellner haben Einstellungen für Preis oder Betrag. Sie sind optional: Standardmäßig arbeiten sie wie bisher."
+      ]
+     },
+     {
+      "name": "Oberfläche",
+      "items": [
+       "Die Zutatenliste lässt sich auch auf Tablets und großen Bildschirmen einklappen und in der Größe ändern: Ein Knopf klappt sie ein, eine Leiste ändert ihre Größe (die Breite am Computer, die Höhe, wenn sie oben liegt).",
+       "Auf dem Handy ist der Fußtext nicht mehr halb verdeckt, und Meldungen erscheinen ganz oben, ohne die Tabs oder den Verkaufsknopf zu verdecken.",
+       "Ein Ereignis mit Auswahl zeigt nur noch seine Leiste: Die Meldung verdeckt den Knopf „Ablehnen“ nicht mehr."
+      ]
+     },
+     {
+      "name": "Speicherstände",
+      "items": [
+       "Eine zu große Datei wird abgelehnt, bevor sie überhaupt gelesen wird."
+      ]
+     }
+    ]
+   },
+   {
     "title": "Release 1.3 (16. November 2026)",
     "name": "Release 1.3",
     "intro": "Ein flüssigeres Spiel, Entscheidungen, mehr Optionen für deine Angestellten und eine Oberfläche für Handy und Computer.",
@@ -643,6 +719,44 @@
   "title": "Update history",
   "intro": "Everything that was added to Pâtisserie 2D Simulator, from the newest to the oldest. To understand the rules of the game, see the [wiki](REGLES.md).",
   "versions": [
+   {
+    "title": "Release 1.3.1 (November 17, 2026)",
+    "name": "Release 1.3.1",
+    "intro": "An insurance, progress bars, proper plurals, and a more comfortable phone.",
+    "groups": [
+     {
+      "name": "Game",
+      "items": [
+       "An insurance in the bank, explained by Bob: three plans (Normal, Expert, Professional), and the higher you go, the more you are covered against disasters, incidents and even repairs.",
+       "Loans go up to 100 billion (100B), and the biggest ones open with your play time.",
+       "Buildings have a bar showing how long is left before their next delivery.",
+       "Achievements have a progress bar: you can see when you will get there.",
+       "The 5 hidden achievements are also unlocked in creative mode and max mode.",
+       "Proper singulars and plurals in the texts: \"1 order delivered\", \"6 orders delivered\"..."
+      ]
+     },
+     {
+      "name": "Employees",
+      "items": [
+       "The seller, collector, buyer and head waiter have price or amount settings. They are optional: by default they work as before."
+      ]
+     },
+     {
+      "name": "Interface",
+      "items": [
+       "The ingredients list can also be folded and resized on tablets and large screens: a button folds it, a bar changes its size (the width on a computer, the height when it sits on top).",
+       "On a phone, the footer text is no longer half hidden, and notifications show at the very top, without covering the tabs or the sell button.",
+       "A choice event now only shows its banner: the notification no longer hides the \"Refuse\" button."
+      ]
+     },
+     {
+      "name": "Saves",
+      "items": [
+       "A file that is too big is refused before it is even read."
+      ]
+     }
+    ]
+   },
    {
     "title": "Release 1.3 (November 16, 2026)",
     "name": "Release 1.3",
@@ -1438,6 +1552,44 @@
   "intro": "Todo lo que se ha añadido a Pâtisserie 2D Simulator, de la más reciente a la más antigua. Las versiones más antiguas se muestran en inglés. Para entender las reglas del juego, mira la [wiki](REGLES.md).",
   "versions": [
    {
+    "title": "Release 1.3.1 (17 de noviembre de 2026)",
+    "name": "Release 1.3.1",
+    "intro": "Un seguro, barras de progreso, plurales de verdad y un móvil más cómodo.",
+    "groups": [
+     {
+      "name": "Juego",
+      "items": [
+       "Un seguro en el banco, que Bob te explica: tres planes (Normal, Experto, Profesional), y cuanto más subes, más cubierto estás ante catástrofes, incidentes e incluso reparaciones.",
+       "Los préstamos llegan hasta 100 mil millones (100 MM), y los más grandes se abren con tu tiempo de juego.",
+       "Los edificios tienen una barra que muestra cuánto falta para su próxima entrega.",
+       "Los logros tienen una barra de progreso: ves cuándo vas a conseguirlos.",
+       "Los 5 logros ocultos también se desbloquean en modo creativo y en modo máximo.",
+       "Singulares y plurales de verdad en los textos: «1 pedido entregado», «6 pedidos entregados»..."
+      ]
+     },
+     {
+      "name": "Empleados",
+      "items": [
+       "El vendedor, el recolector, el intendente y el maître tienen ajustes de precio o de importe. Son opcionales: por defecto trabajan como antes."
+      ]
+     },
+     {
+      "name": "Interfaz",
+      "items": [
+       "La lista de ingredientes también se pliega y cambia de tamaño en tableta y en pantalla grande: un botón la pliega, una barra cambia su tamaño (el ancho en ordenador, el alto cuando va arriba).",
+       "En el móvil, el texto del pie de página ya no queda medio tapado, y las notificaciones salen arriba del todo, sin tapar las pestañas ni el botón de vender.",
+       "Un evento con decisión solo muestra su banda: la notificación ya no tapa el botón «Rechazar»."
+      ]
+     },
+     {
+      "name": "Partidas guardadas",
+      "items": [
+       "Un archivo demasiado grande se rechaza antes incluso de leerlo."
+      ]
+     }
+    ]
+   },
+   {
     "title": "Release 1.3 (16 de noviembre de 2026)",
     "name": "Release 1.3",
     "intro": "Un juego más fluido, decisiones que tomar, más opciones para tus empleados y una interfaz pensada para el móvil y el ordenador.",
@@ -1757,6 +1909,44 @@
   "title": "更新履歴",
   "intro": "Pâtisserie 2D Simulator に追加されたすべての内容を、新しいものから古いものの順に載せています。古いバージョンは英語で表示されます。ゲームのルールは[ウィキ](REGLES.md)を見てください。",
   "versions": [
+   {
+    "title": "Release 1.3.1（2026年11月17日）",
+    "name": "Release 1.3.1（2026年11月17日）",
+    "intro": "保険、進捗バー、正しい単数・複数、そして快適になったスマホ。",
+    "groups": [
+     {
+      "name": "ゲーム",
+      "items": [
+       "銀行に保険が登場。ボブが説明してくれます。ノーマル、エキスパート、プロフェッショナルの 3 プランで、上のプランほど災害、トラブル、そして修理まで手厚く守られます。",
+       "ローンは最大 1000 億まで。大きなものはプレイ時間で開放されます。",
+       "建物に、次の配達までの残り時間を示すバーが付きました。",
+       "実績に進捗バーが付き、達成までの距離が見えます。",
+       "5 つの隠し実績は、クリエイティブモードとマックスモードでも解除されます。",
+       "文章に正しい単数形・複数形が使われるようになりました。"
+      ]
+     },
+     {
+      "name": "従業員",
+      "items": [
+       "販売員、採取係、仕入れ係、給仕長に、価格や金額の設定が付きました。設定は任意で、初期状態ではこれまで通り働きます。"
+      ]
+     },
+     {
+      "name": "インターフェース",
+      "items": [
+       "材料リストは、タブレットや大画面でもたたんだり大きさを変えたりできます。ボタンでたたみ、バーで大きさを変えます（パソコンでは幅、上にあるときは高さ）。",
+       "スマホでは、フッターの文字が半分隠れなくなり、通知は一番上に出て、タブや販売ボタンを隠しません。",
+       "選択イベントはバナーだけを表示します。通知が「断る」ボタンを隠さなくなりました。"
+      ]
+     },
+     {
+      "name": "セーブ",
+      "items": [
+       "大きすぎるファイルは、読み込む前に拒否されます。"
+      ]
+     }
+    ]
+   },
    {
     "title": "Release 1.3（2026年11月16日）",
     "name": "Release 1.3（2026年11月16日）",
@@ -2078,6 +2268,44 @@
   "intro": "Pâtisserie 2D Simulator에 추가된 모든 내용을 최신순으로 적었습니다. 오래된 버전은 영어로 표시됩니다. 게임 규칙은 [위키](REGLES.md)를 참고하세요.",
   "versions": [
    {
+    "title": "Release 1.3.1 (2026년 11월 17일)",
+    "name": "Release 1.3.1",
+    "intro": "보험, 진행 막대, 올바른 단수·복수, 그리고 더 편해진 폰.",
+    "groups": [
+     {
+      "name": "게임",
+      "items": [
+       "은행에 보험이 생겼고 밥이 설명해 줍니다. 일반, 전문가, 프로페셔널 세 가지 플랜이 있고, 높을수록 재해, 사고, 심지어 수리까지 더 많이 보장합니다.",
+       "대출은 최대 1000억까지이며, 큰 대출은 플레이 시간에 따라 열립니다.",
+       "건물에 다음 배송까지 남은 시간을 보여 주는 막대가 생겼습니다.",
+       "업적에 진행 막대가 생겨 언제 달성할지 볼 수 있습니다.",
+       "숨겨진 업적 5개는 크리에이티브 모드와 맥스 모드에서도 해금됩니다.",
+       "문장에 올바른 단수·복수 표현이 쓰입니다."
+      ]
+     },
+     {
+      "name": "직원",
+      "items": [
+       "판매원, 채집꾼, 구매 담당, 수석 웨이터에게 가격이나 금액 설정이 생겼습니다. 선택 사항이며, 기본값에서는 예전처럼 일합니다."
+      ]
+     },
+     {
+      "name": "인터페이스",
+      "items": [
+       "재료 목록은 태블릿과 큰 화면에서도 접거나 크기를 바꿀 수 있습니다. 버튼으로 접고, 막대로 크기를 바꿉니다(컴퓨터에서는 너비, 위에 있을 때는 높이).",
+       "폰에서는 하단 문구가 더는 반쯤 가려지지 않고, 알림은 맨 위에 떠서 탭이나 판매 버튼을 가리지 않습니다.",
+       "선택 이벤트는 이제 배너만 표시합니다. 알림이 “거절” 버튼을 가리지 않습니다."
+      ]
+     },
+     {
+      "name": "저장",
+      "items": [
+       "너무 큰 파일은 읽기 전에 거부됩니다."
+      ]
+     }
+    ]
+   },
+   {
     "title": "Release 1.3 (2026년 11월 16일)",
     "name": "Release 1.3",
     "intro": "더 부드러운 게임, 고르는 재미, 직원을 위한 더 많은 옵션, 그리고 폰과 컴퓨터 모두에 맞는 인터페이스.",
@@ -2397,6 +2625,44 @@
   "title": "Historique des mises à jour",
   "intro": "Tout ce qui a été ajouté à Pâtisserie 2D Simulator, de la plus récente à la plus ancienne. Pour comprendre les règles du jeu, va voir le [wiki](REGLES.md).",
   "versions": [
+   {
+    "title": "Release 1.3.1 (17 novembre 2026)",
+    "name": "Release 1.3.1",
+    "intro": "Une assurance, des barres de progression, de vrais pluriels, et un téléphone plus confortable.",
+    "groups": [
+     {
+      "name": "Jeu",
+      "items": [
+       "Une assurance dans la banque, que Bob t'explique : trois formules (Normal, Expert, Professionnel), et plus tu montes, plus tu es couvert contre les catastrophes, les incidents et même les réparations.",
+       "Les prêts montent jusqu'à 100 milliards (100 Md), et les plus gros s'ouvrent avec ton temps de jeu.",
+       "Les bâtiments ont une barre qui montre combien de temps il reste avant leur prochaine livraison.",
+       "Les succès ont une barre de progression : tu vois quand tu vas y arriver.",
+       "Les 5 succès cachés sont aussi débloqués en mode créatif et en mode max.",
+       "De vrais singuliers et de vrais pluriels dans les textes : « 1 commande livrée », « 6 commandes livrées »..."
+      ]
+     },
+     {
+      "name": "Employés",
+      "items": [
+       "Le vendeur, le cueilleur, l'intendant et le maître d'hôtel ont des réglages de prix ou de montant. Ils sont facultatifs : par défaut, ils travaillent comme avant."
+      ]
+     },
+     {
+      "name": "Interface",
+      "items": [
+       "La liste des ingrédients se replie et se redimensionne aussi sur tablette et sur grand écran : un bouton la replie, une barre en change la taille (la largeur sur ordinateur, la hauteur quand elle est au-dessus).",
+       "Sur téléphone, le texte du bas de page n'est plus à moitié caché, et les notifications s'affichent tout en haut, sans cacher les onglets ni le bouton vendre.",
+       "Un événement à choix n'affiche plus que son bandeau : la notification ne cache plus le bouton « Refuser »."
+      ]
+     },
+     {
+      "name": "Sauvegardes",
+      "items": [
+       "Un fichier trop gros est refusé avant même d'être lu."
+      ]
+     }
+    ]
+   },
    {
     "title": "Release 1.3 (16 novembre 2026)",
     "name": "Release 1.3",
@@ -3192,6 +3458,44 @@
   "intro": "Tudo o que foi acrescentado ao Pâtisserie 2D Simulator, da mais recente à mais antiga. As versões mais antigas aparecem em inglês. Para perceber as regras do jogo, vê a [wiki](REGLES.md).",
   "versions": [
    {
+    "title": "Release 1.3.1 (17 de novembro de 2026)",
+    "name": "Release 1.3.1",
+    "intro": "Um seguro, barras de progresso, plurais a sério e um telemóvel mais confortável.",
+    "groups": [
+     {
+      "name": "Jogo",
+      "items": [
+       "Um seguro no banco, que o Bob te explica: três planos (Normal, Especialista, Profissional), e quanto mais sobes, mais protegido ficas contra catástrofes, incidentes e até reparações.",
+       "Os empréstimos chegam aos 100 mil milhões, e os maiores abrem com o teu tempo de jogo.",
+       "Os edifícios têm uma barra que mostra quanto falta para a próxima entrega.",
+       "As conquistas têm uma barra de progresso: vês quando lá vais chegar.",
+       "As 5 conquistas escondidas também se desbloqueiam no modo criativo e no modo máximo.",
+       "Singulares e plurais a sério nos textos: «1 encomenda entregue», «6 encomendas entregues»..."
+      ]
+     },
+     {
+      "name": "Funcionários",
+      "items": [
+       "O vendedor, o colhedor, o intendente e o mestre-sala têm definições de preço ou de montante. São opcionais: por defeito trabalham como antes."
+      ]
+     },
+     {
+      "name": "Interface",
+      "items": [
+       "A lista de ingredientes também se recolhe e muda de tamanho no tablet e em ecrãs grandes: um botão recolhe-a, uma barra muda-lhe o tamanho (a largura no computador, a altura quando está em cima).",
+       "No telemóvel, o texto do rodapé já não fica meio escondido, e as notificações aparecem no topo, sem tapar os separadores nem o botão de vender.",
+       "Um evento com escolha só mostra a sua faixa: a notificação já não tapa o botão «Recusar»."
+      ]
+     },
+     {
+      "name": "Jogos guardados",
+      "items": [
+       "Um ficheiro demasiado grande é recusado antes mesmo de ser lido."
+      ]
+     }
+    ]
+   },
+   {
     "title": "Release 1.3 (16 de novembro de 2026)",
     "name": "Release 1.3",
     "intro": "Um jogo mais fluido, escolhas para fazer, mais opções para os teus funcionários e uma interface pensada para o telemóvel e o computador.",
@@ -3512,6 +3816,44 @@
   "intro": "Всё, что добавили в Pâtisserie 2D Simulator, от самого нового к самому старому. Более старые версии показываются на английском. Чтобы понять правила игры, загляни в [вики](REGLES.md).",
   "versions": [
    {
+    "title": "Release 1.3.1 (17 ноября 2026)",
+    "name": "Release 1.3.1",
+    "intro": "Страховка, полосы прогресса, правильные числа и более удобный телефон.",
+    "groups": [
+     {
+      "name": "Игра",
+      "items": [
+       "Страховка в банке, которую тебе объяснит Боб: три плана (Обычная, Эксперт, Профессионал), и чем выше, тем лучше ты защищён от катастроф, происшествий и даже ремонта.",
+       "Кредиты доходят до 100 миллиардов, а самые крупные открываются по мере игрового времени.",
+       "У зданий появилась полоса, показывающая, сколько осталось до следующей поставки.",
+       "У достижений появилась полоса прогресса: видно, когда ты до них доберёшься.",
+       "5 скрытых достижений открываются и в творческом режиме, и в режиме макс.",
+       "В текстах правильные формы единственного и множественного числа."
+      ]
+     },
+     {
+      "name": "Сотрудники",
+      "items": [
+       "У продавца, сборщика, закупщика и метрдотеля появились настройки цены или суммы. Они необязательны: по умолчанию все работают как раньше."
+      ]
+     },
+     {
+      "name": "Интерфейс",
+      "items": [
+       "Список ингредиентов теперь можно сворачивать и менять в размере и на планшете, и на большом экране: кнопка сворачивает его, полоса меняет размер (ширину на компьютере, высоту, когда он сверху).",
+       "На телефоне текст внизу страницы больше не скрыт наполовину, а уведомления показываются в самом верху и не закрывают вкладки и кнопку продажи.",
+       "У события с выбором теперь только баннер: уведомление больше не закрывает кнопку «Отказать»."
+      ]
+     },
+     {
+      "name": "Сохранения",
+      "items": [
+       "Слишком большой файл отклоняется ещё до чтения."
+      ]
+     }
+    ]
+   },
+   {
     "title": "Release 1.3 (16 ноября 2026)",
     "name": "Release 1.3",
     "intro": "Более плавная игра, выбор в событиях, больше настроек для сотрудников и интерфейс для телефона и компьютера.",
@@ -3831,6 +4173,44 @@
   "title": "更新记录",
   "intro": "Pâtisserie 2D Simulator 新增的所有内容，从最新到最旧。更早的版本以英文显示。想了解游戏规则，请看[百科](REGLES.md)。",
   "versions": [
+   {
+    "title": "Release 1.3.1（2026年11月17日）",
+    "name": "Release 1.3.1（2026年11月17日）",
+    "intro": "保险、进度条、正确的单复数，以及更舒服的手机体验。",
+    "groups": [
+     {
+      "name": "游戏",
+      "items": [
+       "银行里新增保险，鲍勃会给你讲解：三种方案（普通、专家、专业），档次越高，对灾难、意外甚至维修的保障越多。",
+       "贷款最高可达 1000 亿，最大的几笔随游戏时间开放。",
+       "建筑有了一条进度条，显示距离下一次送货还有多久。",
+       "成就有了进度条：你能看到还差多少。",
+       "5 个隐藏成就在创意模式和最大模式下也会解锁。",
+       "文本里有了正确的单数和复数形式。"
+      ]
+     },
+     {
+      "name": "员工",
+      "items": [
+       "销售员、采集员、采购员和领班有了价格或金额设置。这些是可选的：默认情况下和以前一样工作。"
+      ]
+     },
+     {
+      "name": "界面",
+      "items": [
+       "原料列表在平板和大屏幕上也能折叠和调整大小：按钮负责折叠，拖动条负责改变大小（电脑上调宽度，在上方时调高度）。",
+       "在手机上，页脚文字不再被遮住一半，通知显示在最上方，不会盖住标签页或出售按钮。",
+       "选择事件现在只显示横幅：通知不再遮住“拒绝”按钮。"
+      ]
+     },
+     {
+      "name": "存档",
+      "items": [
+       "过大的文件在读取之前就会被拒绝。"
+      ]
+     }
+    ]
+   },
    {
     "title": "Release 1.3（2026年11月16日）",
     "name": "Release 1.3（2026年11月16日）",

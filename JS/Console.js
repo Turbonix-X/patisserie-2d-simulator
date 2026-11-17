@@ -379,6 +379,7 @@ function processCommand(cmd) {
     }
     if (!lastSaveBeforeCreative) lastSaveBeforeCreative = JSON.parse(JSON.stringify(G));
     maxThisBakery();
+    ACHIEVEMENTS.forEach(function(a) { G.achievements[a.id] = true; });
     G.creative = true;
     tickCreative();
     return '<span class="cmd-ok">' + t('console.creativeOn') + '</span>';

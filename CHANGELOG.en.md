@@ -2,6 +2,29 @@
 
 Everything that was added to Pâtisserie 2D Simulator, from the newest to the oldest. To understand the rules of the game, see the [wiki](REGLES.md).
 
+## Release 1.3.1 (November 17, 2026)
+
+An insurance, progress bars, proper plurals, and a more comfortable phone.
+
+**Game**
+- An insurance in the bank, explained by Bob: three plans (Normal, Expert, Professional), and the higher you go, the more you are covered against disasters, incidents and even repairs.
+- Loans go up to 100 billion (100B), and the biggest ones open with your play time.
+- Buildings have a bar showing how long is left before their next delivery.
+- Achievements have a progress bar: you can see when you will get there.
+- The 5 hidden achievements are also unlocked in creative mode and max mode.
+- Proper singulars and plurals in the texts: "1 order delivered", "6 orders delivered"...
+
+**Employees**
+- The seller, collector, buyer and head waiter have price or amount settings. They are optional: by default they work as before.
+
+**Interface**
+- The ingredients list can also be folded and resized on tablets and large screens: a button folds it, a bar changes its size (the width on a computer, the height when it sits on top).
+- On a phone, the footer text is no longer half hidden, and notifications show at the very top, without covering the tabs or the sell button.
+- A choice event now only shows its banner: the notification no longer hides the "Refuse" button.
+
+**Saves**
+- A file that is too big is refused before it is even read.
+
 ## Release 1.3 (November 16, 2026)
 
 A smoother game, choices to make, more options for your employees, and an interface made for both phone and computer.

@@ -35,6 +35,7 @@
 <script>document.write('<script src="../JS/Lang13s2.js?t=' + Date.now() + '"><\/script>');</script>
 <script>document.write('<script src="../JS/Lang13s3.js?t=' + Date.now() + '"><\/script>');</script>
 <script>document.write('<script src="../JS/Lang13r.js?t=' + Date.now() + '"><\/script>');</script>
+<script>document.write('<script src="../JS/Lang131.js?t=' + Date.now() + '"><\/script>');</script>
 <script>document.write('<script src="../JS/Config.js?t=' + Date.now() + '"><\/script>');</script>
 <script>document.write('<script src="../JS/PlayerData.js?t=' + Date.now() + '"><\/script>');</script>
 <script>document.write('<script src="../JS/Instances.js?t=' + Date.now() + '"><\/script>');</script>
@@ -466,7 +467,7 @@ check('Un succes compte les niveaux de machines', ACHIEVEMENTS.filter(function(a
 check('Bob connait 30 anecdotes', LANGS.fr['bob.facts'].split('|').length === 30);
 
 // --- Release 1.0 ---
-check('La version s appelle Release 1.3', GAME_VERSION === 'Release 1.3');
+check('La version s appelle Release 1.3.1', GAME_VERSION === 'Release 1.3.1');
 G = createFreshState(); G.level = 499;
 check('La fete et l espace sont caches avant leur niveau', findTheme('party').hidden && findTheme('space').hidden && themeLockReason(findTheme('party')) === 'level');
 check('Les themes Tech sont secrets', themeLockReason(findTheme('tech')) === 'secret' && themeLockReason(findTheme('techgold')) === 'secret');
@@ -496,7 +497,7 @@ check('Embaucher une candidature de niveau 3 donne un employe de niveau 3', acce
 G = createFreshState(); G.money = 0; G.level = 50;
 check('Pas de pret sans compte', takeLoan(100) === false);
 G.bankUnlocked = true;
-check('Les 17 prets existent', LOANS.map(function(l) { return l.amount; }).join() === '10,20,50,100,200,500,1000,5000,10000,50000,100000,500000,1000000,5000000,10000000,50000000,100000000');
+check('Les 23 prets existent', LOANS.map(function(l) { return l.amount; }).join() === '10,20,50,100,200,500,1000,5000,10000,50000,100000,500000,1000000,5000000,10000000,50000000,100000000,500000000,1000000000,5000000000,10000000000,50000000000,100000000000');
 var earned0 = G.totalEarned;
 check('Un pret donne l argent sans compter comme un gain', takeLoan(100) && G.money === 100 && G.totalEarned === earned0);
 check('Un seul pret de chaque montant', takeLoan(100) === false);
@@ -979,7 +980,7 @@ changelogVers = { 'alpha 1.2': 'https://exemple.test/a/index.html', 'beta 1.0': 
 check('Le menu Alpha ne liste que les versions Alpha', /alpha-pick/.test(changelogAlphaHTML()) && /Alpha 1\.2/.test(changelogAlphaHTML()) && !/Beta/.test(changelogAlphaHTML()));
 changelogVers = null;
 check('Sans versions.json, pas de menu Alpha', changelogAlphaHTML() === '');
-check('Le nom affiche n a pas de Snapshot', versionLabel('Release 1.3') === 'Release 1.3' && versionLabel('Release 1.2.3') === 'Release 1.2.3');
+check('Le nom affiche n a pas de Snapshot', versionLabel('Release 1.3 Snapshot 2') === 'Release 1.3' && versionLabel('Release 1.2.3') === 'Release 1.2.3');
 
 // --- Release 1.3 Snapshot 3 ---
 check('Le texte du bouton Archives existe dans les 10 langues', Object.keys(LANGS).every(function(l) { return LANGS[l]['changelog.archives']; }));
@@ -1008,10 +1009,10 @@ G = createFreshState(); G.level = 5; G.xp = 0;
 check('Un montant vide veut dire aucune limite', ruleOk('above', 0, 5) && ruleOk('off', 10, 5) && ruleOk('above', 10, 12) && !ruleOk('above', 10, 5) && ruleOk('below', 10, 5) && !ruleOk('below', 10, 12));
 G = createFreshState(); G.level = 30; G.orders = []; var ord = { reward: 1000, items: [{ recId: 'cookie', qty: 6 }] };
 check('Le maitre d hotel suit sa regle de commandes', orderRuleOk({}, ord) && orderRuleOk({ ordRule: 'payAbove', ordLimit: 500 }, ord) && !orderRuleOk({ ordRule: 'payBelow', ordLimit: 500 }, ord) && orderRuleOk({ ordRule: 'gainAbove', ordLimit: 900 }, ord) && !orderRuleOk({ ordRule: 'gainAbove', ordLimit: 5000 }, ord));
-check('Les prets montent a 100 000 000', LOANS[LOANS.length - 1].amount === 100000000 && LOANS.filter(function(o) { return o.minHours; }).length >= 8);
+check('Les prets montent a 100 milliards', LOANS[LOANS.length - 1].amount === 100000000000 && LOANS.filter(function(o) { return o.minHours; }).length >= 8);
 G = createFreshState(); G.level = 1000; G.playTimeMs = 0;
 check('Un gros pret se debloque avec le temps de jeu', !loanUnlocked(LOANS[LOANS.length - 1]) && loanWaitSec(LOANS[LOANS.length - 1]) > 0);
-G.playTimeMs = 41 * 3600 * 1000;
+G.playTimeMs = 301 * 3600 * 1000;
 check('... et s ouvre apres', loanUnlocked(LOANS[LOANS.length - 1]));
 G = createFreshState(); G.level = 20; G.choiceEvent = { id: 'tip', until: Date.now() + 9999, v: 100 }; var m0 = G.money;
 check('Un evenement a choix se repond une fois', resolveChoice('a') !== null && G.money === m0 + 100 && G.choiceEvent === null && resolveChoice('a') === null);
@@ -1020,6 +1021,44 @@ check('Sans argent, on ne peut pas payer l emission', resolveChoice('a') === nul
 check('Le nom du fichier de sauvegarde', /^p2ds-sucre-[^-]+-\d\dh\d\d-\d\d-\d\d-\d{4}\.p2ds$/.test(saveFileName('Sucre')) && !/[:\/]/.test(saveFileName('a/b:c')));
 check('Plusieurs bulles de Bob : une seule', bobMerge(['a', 'b', 'a']) === '• a' + String.fromCharCode(10) + '• b' && bobMerge(['seul']) === 'seul');
 check('Une sauvegarde gonflee est refusee', decodeSaveText('{"money":1,"x":"' + new Array(P2DS_CONFIG.MAX_SAVE_CHARS + 10).join('a') + '"}') === null && importSave('A'.repeat(P2DS_CONFIG.MAX_SAVE_CHARS * 2)) === false);
+
+// --- Release 1.3.1 ---
+(function() {
+  var keep = currentLang;
+  currentLang = 'fr';
+  var one = t('ach.nameOrders', { v: 1 }), many = t('ach.nameOrders', { v: 6 }), zero = t('ach.nameOrders', { v: 0 });
+  var ready1 = t('rec.ready', { q: 1, n: 'Cookie' }), ready6 = t('rec.ready', { q: 6, n: 'Cookies' });
+  var bt1 = t('order.butler', { v: 1 }), bt3 = t('order.butler', { v: 3 });
+  currentLang = 'en'; var en1 = t('ach.descLoans', { v: 1 }), en5 = t('ach.descLoans', { v: 5 }), ov = t('mach.eff.ovens', { v: 2 });
+  currentLang = 'ru'; var ruMany = pluralForm(5, ['un', 'quelques', 'beaucoup']), ruFew = pluralForm(3, ['un', 'quelques', 'beaucoup']), ruOne = pluralForm(21, ['un', 'quelques', 'beaucoup']);
+  currentLang = keep;
+  check('Vrai singulier et vrai pluriel en francais', one === '1 commande livrée' && many === '6 commandes livrées' && zero === '0 commande livrée');
+  check('... pour les gâteaux prêts et les maîtres d hôtel', ready1 === '1 Cookie prêt !' && ready6 === '6 Cookies prêts !' && bt1 === "1 maître d'hôtel livre tout seul ce qui est prêt." && bt3 === "3 maîtres d'hôtel livrent tout seuls ce qui est prêt.");
+  check('... en anglais', en1 === 'Take 1 loan.' && en5 === 'Take 5 loans.' && /2 more batches/.test(ov));
+  check('... et le russe a trois formes', ruMany === 'beaucoup' && ruFew === 'quelques' && ruOne === 'un');
+  check('Plus aucun (s) dans les textes', Object.keys(LANGS).every(function(l) { return Object.keys(LANGS[l]).every(function(k) { return !/\w\(s\)|\(e?s\)/.test(String(LANGS[l][k])); }); }));
+  check('rec.buyMissing n existe plus', Object.keys(LANGS).every(function(l) { return !('rec.buyMissing' in LANGS[l]); }));
+})();
+check('Les textes de la 1.3.1 existent dans les 10 langues', ['ins.title', 'ins.whatIs', 'ins.plan.pro', 'ins.cover', 'ins.refund', 'ins.bob1', 'rule.off', 'emp.ruleSell'].every(function(k) { return Object.keys(LANGS).every(function(l) { return LANGS[l][k]; }); }));
+G = createFreshState(); G.level = 30; G.money = 1e6; G.bankUnlocked = true;
+(function() {
+  var m0 = G.money;
+  check('Sans assurance, rien n est rembourse', insuranceRefund(1000) === 0 && G.money === m0);
+  check('On souscrit une formule', subscribeInsurance('pro') && insurancePlan().id === 'pro');
+  var back = insuranceRefund(1000);
+  check('La formule pro rembourse tout, la normale 40 %', back === 1000 && (subscribeInsurance('normal'), insuranceRefund(1000)) === 400);
+  subscribeInsurance('expert');
+  var base = repairCost('b', BUILDINGS[0].id); cancelInsurance(); var full = repairCost('b', BUILDINGS[0].id);
+  check('L assurance experte paie 40 % des reparations', Math.abs(base - full * 0.6) < 1e-6 * Math.max(1, full));
+  subscribeInsurance('normal'); G.insurance.last = Date.now() - 120000; var before = G.money; tickInsurance();
+  check('La prime est prelevee chaque minute', G.money < before && G.insurance !== null);
+  G.money = 0; G.insurance.last = Date.now() - 120000; tickInsurance();
+  check('Sans argent, l assurance s arrete', G.insurance === null);
+})();
+check('Chaque famille de succes a une barre de progression', ACHIEVEMENTS.filter(function(a) { return !a.hidden && !a.prog; }).length === 0 && ACHIEVEMENTS.some(function(a) { return a.prog; }));
+G = createFreshState(); G.level = 50; var lv = ACHIEVEMENTS.filter(function(a) { return a.id === 'lvl100'; })[0];
+check('La barre de progression d un niveau', lv.prog(G)[0] === 50 && lv.prog(G)[1] === 100);
+check('Un choix d evenement ne fait plus de notification', (function() { var calls = 0, tk = toast; toast = function() { calls++; }; G = createFreshState(); G.level = 20; G.lastChoiceAt = 0; var r = Math.random; Math.random = function() { return 0; }; tickChoiceEvent(Date.now()); Math.random = r; toast = tk; return calls === 0 && G.choiceEvent !== null; })());
 
 var ko = results.filter(function(r) { return !r.ok; }).length;
 document.getElementById('total').textContent = (results.length - ko) + ' / ' + results.length + ' tests reussis';

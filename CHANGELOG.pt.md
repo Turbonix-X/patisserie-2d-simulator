@@ -2,6 +2,29 @@
 
 Tudo o que foi acrescentado ao Pâtisserie 2D Simulator, da mais recente à mais antiga. As versões mais antigas aparecem em inglês. Para perceber as regras do jogo, vê a [wiki](REGLES.md).
 
+## Release 1.3.1 (17 de novembro de 2026)
+
+Um seguro, barras de progresso, plurais a sério e um telemóvel mais confortável.
+
+**Jogo**
+- Um seguro no banco, que o Bob te explica: três planos (Normal, Especialista, Profissional), e quanto mais sobes, mais protegido ficas contra catástrofes, incidentes e até reparações.
+- Os empréstimos chegam aos 100 mil milhões, e os maiores abrem com o teu tempo de jogo.
+- Os edifícios têm uma barra que mostra quanto falta para a próxima entrega.
+- As conquistas têm uma barra de progresso: vês quando lá vais chegar.
+- As 5 conquistas escondidas também se desbloqueiam no modo criativo e no modo máximo.
+- Singulares e plurais a sério nos textos: «1 encomenda entregue», «6 encomendas entregues»...
+
+**Funcionários**
+- O vendedor, o colhedor, o intendente e o mestre-sala têm definições de preço ou de montante. São opcionais: por defeito trabalham como antes.
+
+**Interface**
+- A lista de ingredientes também se recolhe e muda de tamanho no tablet e em ecrãs grandes: um botão recolhe-a, uma barra muda-lhe o tamanho (a largura no computador, a altura quando está em cima).
+- No telemóvel, o texto do rodapé já não fica meio escondido, e as notificações aparecem no topo, sem tapar os separadores nem o botão de vender.
+- Um evento com escolha só mostra a sua faixa: a notificação já não tapa o botão «Recusar».
+
+**Jogos guardados**
+- Um ficheiro demasiado grande é recusado antes mesmo de ser lido.
+
 ## Release 1.3 (16 de novembro de 2026)
 
 Um jogo mais fluido, escolhas para fazer, mais opções para os teus funcionários e uma interface pensada para o telemóvel e o computador.

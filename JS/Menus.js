@@ -124,7 +124,12 @@ function settingsAchievements() {
     h += '<div class="ach-item ' + (done ? 'unlocked' : 'locked') + '" title="' + escH(desc) + '">';
     h += '<div class="ach-icon">' + a.icon + '</div>';
     h += '<div class="ach-name">' + escH(achName(a)) + '</div>';
-    h += '<div class="ach-desc">' + escH(desc) + '</div></div>';
+    h += '<div class="ach-desc">' + escH(desc) + '</div>';
+    if (!done && a.prog) {
+      var pg = a.prog(G), pct = pg[1] > 0 ? Math.max(0, Math.min(100, pg[0] / pg[1] * 100)) : 0;
+      h += '<div class="ach-bar" role="progressbar" aria-valuenow="' + Math.floor(pct) + '" aria-valuemin="0" aria-valuemax="100"><i style="width:' + pct.toFixed(1) + '%"></i></div><div class="ach-prog">' + fmt(Math.floor(pg[0])) + ' / ' + fmt(pg[1]) + ' · ' + Math.floor(pct) + ' %</div>';
+    }
+    h += '</div>';
   });
   if (!shown) h += '<p class="home-empty">' + t('ach.none') + '</p>';
   return h + '</div>';
@@ -345,6 +350,7 @@ function autoBackupTick() {
 function importSaveFile(input) {
   var file = input.files && input.files[0];
   if (!file) return;
+  if (file.size > 2000000) { input.value = ''; toast(t('settings.importError')); return; }
   var reader = new FileReader();
   reader.onload = function() { applyImportedSave(String(reader.result || '')); input.value = ''; };
   reader.readAsText(file);

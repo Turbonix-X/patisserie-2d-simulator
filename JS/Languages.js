@@ -57,12 +57,12 @@ function extraAchDesc(lang, en) {
 LANGS.fr = {
   'bob.sugar3':'Du sucre… Je suis encore triste, mais un peu moins.|Mmm. Ça ne règle pas tout, mais ça aide.','bob.sugar2':'Encore du sucre… Je crois que ça va un peu mieux.|Oh. Ça, ça fait du bien.','bob.sugar1':'Je souris presque. Encore un sucre, peut-être…|Je ne suis presque plus triste.','bob.sugar0':'Merci ! Je suis de nouveau de bonne humeur !|Je t\'aime bien, finalement.',
   'bld.unlocked':'Niveau 40 ! Tu peux acheter des bâtiments : ils produisent des ingrédients tout seuls. Regarde l\'onglet Bâtiments.',
-  'ach.lockedDesc':'???','ach.secretsFound':'+ {{v}} secret(s)','ach.nameOrders':'{{v}} commande(s) livrée(s)','ach.descOrders':'Livrer {{v}} commande(s).','ach.nameLoans':'{{v}} prêt(s) demandé(s)','ach.descLoans':'Demander {{v}} prêt(s).','ach.nameRepaid':'{{v}} prêt(s) remboursé(s)','ach.descRepaid':'Rembourser {{v}} prêt(s).','ach.nameMachine':'{{n}} : niveau {{v}}','ach.descMachine':'Monter {{n}} au niveau {{v}}.',
+  'ach.lockedDesc':'???','ach.secretsFound':'+ {{v}} {{#v|secret|secrets}}','ach.nameOrders':'{{v}} {{#v|commande livrée|commandes livrées}}','ach.descOrders':'Livrer {{v}} {{#v|commande|commandes}}.','ach.nameLoans':'{{v}} {{#v|prêt demandé|prêts demandés}}','ach.descLoans':'Demander {{v}} {{#v|prêt|prêts}}.','ach.nameRepaid':'{{v}} {{#v|prêt remboursé|prêts remboursés}}','ach.descRepaid':'Rembourser {{v}} {{#v|prêt|prêts}}.','ach.nameMachine':'{{n}} : niveau {{v}}','ach.descMachine':'Monter {{n}} au niveau {{v}}.',
   'rb.1':'Boulangerie','rb.2':'Pâtisserie Fine','rb.3':'Maison de Luxe','rb.4':'Palace Gastronomique','rb.5':'Empire de la Pâtisserie','rb.6':'Dynastie Sucrée','rb.7':'Légende Éternelle',
   'settings.tabAch':'Succès','settings.tabStats':'Statistiques',
   'mus.default':'Douce Mélodie','mus.waltz':'Valse Sucrée','mus.joy':'Joie Pâtissière','mus.calm':'Douceur du Soir','mus.oven':'Rythme du Four','mus.night':'Nuit de Crème','mus.spring':'Valse des Fleurs','mus.summer':'Vagues Douces','mus.fall':'Feuilles de Caramel','mus.winter':'Sucre Glace','mus.birthday':'Joyeux Anniversaire',
   'adv.order':'La commande de {{n}} expire dans {{t}} !','adv.empStrike':'{{n}} fait grève !','adv.empSoon':'{{n}} va bientôt faire grève.','adv.space':'Ton stock déborde : {{v}} % de ton espace est plein.','adv.slow':'{{n}} se vend mal : prix à {{v}} %.','adv.rent':'Ton loyer est trop cher : il mange {{v}} % de tes revenus.','adv.rentNone':'Tu paies un loyer et tu ne gagnes presque rien.',
-  'order.title':'Commandes','tab.orders':'Commandes','order.doneCount':'{{v}} livrées','order.help':'Des clients passent commande. Prépare les gâteaux demandés et livre avant la fin du temps : plus la commande est compliquée, plus la prime est grosse.','order.none':'Aucune commande pour l\'instant. Les clients arrivent vite !','order.level1':'Simple','order.level2':'Moyenne','order.level3':'Difficile','order.level4':'Extrême','order.prime':'dont {{v}} de prime','order.deliver':'Livrer','order.delivered':'Commande livrée : +{{v}} !','order.new':'Nouvelle commande !','order.butler':'{{v}} maître(s) d\'hôtel livrent tout seuls ce qui est prêt.','order.butlerDone':'{{n}} a livré une commande : +{{v}} !','order.unlocked':'Niveau 30 ! Des clients passent commande maintenant. Regarde l\'onglet Commandes.',
+  'order.title':'Commandes','tab.orders':'Commandes','order.doneCount':'{{v}} livrées','order.help':'Des clients passent commande. Prépare les gâteaux demandés et livre avant la fin du temps : plus la commande est compliquée, plus la prime est grosse.','order.none':'Aucune commande pour l\'instant. Les clients arrivent vite !','order.level1':'Simple','order.level2':'Moyenne','order.level3':'Difficile','order.level4':'Extrême','order.prime':'dont {{v}} de prime','order.deliver':'Livrer','order.delivered':'Commande livrée : +{{v}} !','order.new':'Nouvelle commande !','order.butler':'{{v}} {{#v|maître d\'hôtel livre|maîtres d\'hôtel livrent}} tout seul{{#v||s}} ce qui est prêt.','order.butlerDone':'{{n}} a livré une commande : +{{v}} !','order.unlocked':'Niveau 30 ! Des clients passent commande maintenant. Regarde l\'onglet Commandes.',
   'emp.maitre':'Maître d\'hôtel','emp.desc.maitre':'Livre les commandes des clients à ta place, dès que le stock est prêt.',
   'mach.title':'Boutique de machines','tab.machines':'Machines','mach.help':'Des améliorations pour toujours, pour toutes tes pâtisseries, même après un rebirth. Elles coûtent très cher.','mach.buy':'Acheter ({{v}})','mach.max':'Au maximum','mach.bought':'Machine installée !','mach.now':'Bonus actuel : {{v}} %','mach.unlocked':'Niveau 50 ! La boutique de machines est ouverte. Ça coûte cher, mais c\'est pour toujours.',
   'mach.petrin':'Pétrin industriel','mach.petrin.d':'Préparations {{v}} % plus rapides par niveau.','mach.isolant':'Isolation du local','mach.isolant.d':'Loyer {{v}} % moins cher par niveau.','mach.robot':'Robot de cuisine','mach.robot.d':'Ingrédients {{v}} % moins chers par niveau.','mach.fourturbo':'Four à convection','mach.fourturbo.d':'{{v}} fours de plus par niveau.','mach.convoyeur':'Tapis roulant','mach.convoyeur.d':'Bâtiments {{v}} % plus productifs par niveau.','mach.caisse':'Caisse automatique','mach.caisse.d':'Vendeurs {{v}} % plus rapides par niveau.','mach.etiquette':'Étiqueteuse de luxe','mach.etiquette.d':'Les prix baissent {{v}} % moins vite quand tu vends, par niveau.','mach.vitrine':'Vitrine réfrigérée','mach.vitrine.d':'Prix de vente +{{v}} % par niveau.','mach.guichet':'Guichet des commandes','mach.guichet.d':'Primes des commandes +{{v}} % par niveau.','mach.academie':'Académie du goût','mach.academie.d':'XP +{{v}} % par niveau.',
@@ -107,8 +107,8 @@ LANGS.fr = {
   'xp.text':'{{c}} / {{n}} XP','xp.level':'Niveau {{v}} !',
   'space.label':'Espace','space.text':'{{u}} / {{m}} m²','space.buy':'+{{a}} m² pour {{c}}','space.locked':'Niv. {{v}} requis','space.max':'Espace max !','space.rent':'Loyer : {{v}}/h','space.debt':'Dette : {{v}}','space.noSpace':'Pas assez d\'espace','space.refund':'Plus de place : ingrédients rendus !',
   'oven.label':'Fours : {{a}} / {{m}}','oven.queue':'{{v}} en attente','oven.title':'Fours','oven.desc':'Chaque four prépare une fournée à la fois. Les autres attendent leur tour.','oven.buy':'+1 four pour {{c}}','oven.max':'Tous les fours sont achetés','oven.bought':'Nouveau four !',
-  'rec.title':'Recettes','rec.prepare':'Préparer','rec.prepareMax':'Max','rec.noIng':'Il manque des ingrédients','rec.noSpace':'Pas assez d\'espace','rec.queueFull':'File d\'attente pleine','rec.prepared':'{{e}} {{n}} en préparation !','rec.preparedMany':'{{e}} {{q}} fournées de {{n}} en préparation !','rec.ready':'{{q}} {{n}} prêt(s) !','rec.xp':'XP : +{{v}}','rec.time':'{{v}}',
-  'rec.cost':'Coût : {{v}}','rec.revenue':'Vente : {{v}}','rec.profit':'Bénéfice : {{v}}','rec.buyMissing':'Acheter ce qui manque ({{v}})','rec.search':'Chercher une recette...','rec.onlyMakable':'Faisables','rec.onlyFav':'Favoris','rec.sortNew':'Plus récentes','rec.sortOld':'Plus anciennes','rec.sortProfit':'Plus rentables','rec.fav':'Favori','rec.none':'Aucune recette ne correspond.','rec.bought':'Ingrédients achetés !',
+  'rec.title':'Recettes','rec.prepare':'Préparer','rec.prepareMax':'Max','rec.noIng':'Il manque des ingrédients','rec.noSpace':'Pas assez d\'espace','rec.queueFull':'File d\'attente pleine','rec.prepared':'{{e}} {{n}} en préparation !','rec.preparedMany':'{{e}} {{q}} fournées de {{n}} en préparation !','rec.ready':'{{q}} {{n}} {{#q|prêt|prêts}} !','rec.xp':'XP : +{{v}}','rec.time':'{{v}}',
+  'rec.cost':'Coût : {{v}}','rec.revenue':'Vente : {{v}}','rec.profit':'Bénéfice : {{v}}','rec.search':'Chercher une recette...','rec.onlyMakable':'Faisables','rec.onlyFav':'Favoris','rec.sortNew':'Plus récentes','rec.sortOld':'Plus anciennes','rec.sortProfit':'Plus rentables','rec.fav':'Favori','rec.none':'Aucune recette ne correspond.','rec.bought':'Ingrédients achetés !',
   'sell.title':'Ventes','sell.stock':'Stock : {{v}}','sell.sell':'Vendre 1','sell.sellAll':'Tout vendre','sell.sellAllGlobal':'Tout vendre ({{v}})','sell.earned':'+{{v}} pour {{q}} {{e}}','sell.earnedAll':'+{{v}} !','sell.price':'{{v}}/pièce','sell.noStock':'Rien à vendre pour l\'instant.','sell.inflUp':'↑ +{{v}} %','sell.inflDown':'↓ {{v}} %',
   'bld.title':'Bâtiments','bld.buy':'Acheter','bld.qty':'x{{v}}','bld.prod':'{{v}}/s','bld.locked':'Niv. {{v}}','bld.bought':'{{n}} acheté !','bld.none':'Pas assez d\'argent !',
   'emp.title':'Employés','emp.fire':'Virer','emp.fireConfirm':'Vraiment virer {{n}} ?','emp.salary':'Salaire : {{v}}/h','emp.morale':'Moral','emp.assign':'Affecté à','emp.working':'Travaille','emp.striking':'En grève !','emp.poor':'Travail médiocre','emp.bonus':'Prime +25 de moral ({{v}})','emp.bonusDone':'Prime versée !',
@@ -164,7 +164,7 @@ LANGS.fr = {
   'event.supplier_strike':'Grève des fournisseurs ! Ingrédients +50 % pendant {{t}} s','event.festival':'Festival ! Tout +15 % pendant {{t}} s',
   'event.bad_review':'Mauvais avis ! Ventes -25 % pendant {{t}} s','event.health_check':'Contrôle sanitaire ! Des gâteaux sont confisqués...',
   'event.tv_feature':'Passage à la télé ! XP x5 pendant {{t}} s','event.apprentice_day':'Journée des apprentis ! Vendeurs x2 pendant {{t}} s',
-  'inv.egg_break':'Oups, {{v}} œuf(s) cassé(s) !','inv.milk_spill':'Du lait renversé : -{{v}}','inv.choco_expire':'Du chocolat périmé : -{{v}}','inv.flour_blown':'Un courant d\'air dans la farine : -{{v}}','inv.sugar_ants':'Des fourmis dans le sucre : -{{v}}','inv.butter_melt':'Le beurre a fondu : -{{v}}','inv.cream_sour':'De la crème a tourné : -{{v}}',
+  'inv.egg_break':'Oups, {{v}} {{#v|œuf cassé|œufs cassés}} !','inv.milk_spill':'Du lait renversé : -{{v}}','inv.choco_expire':'Du chocolat périmé : -{{v}}','inv.flour_blown':'Un courant d\'air dans la farine : -{{v}}','inv.sugar_ants':'Des fourmis dans le sucre : -{{v}}','inv.butter_melt':'Le beurre a fondu : -{{v}}','inv.cream_sour':'De la crème a tourné : -{{v}}',
   'settings.title':'Réglages','settings.tabGeneral':'Général','settings.tabLook':'Apparence','settings.tabAudio':'Son','settings.tabSave':'Sauvegarde',
   'settings.lang':'Langue','settings.currency':'Monnaie','settings.theme':'Thème','settings.themeLight':'Clair','settings.themeDark':'Sombre','settings.themeSpring':'Printemps','settings.themeSummer':'Été','settings.themeFall':'Automne','settings.themeWinter':'Hiver','settings.themeBirthday':'Anniversaire',
   'settings.lockSeason':'seulement pendant la saison','settings.lockBirthday':'seulement le jour de ton anniversaire','settings.lockNoBirthday':'indique ton anniversaire d\'abord',
@@ -189,12 +189,12 @@ LANGS.fr = {
 LANGS.en = {
   'bob.sugar3':'Sugar… I\'m still sad, but a little less.|Mmm. It doesn\'t fix everything, but it helps.','bob.sugar2':'More sugar… I think I feel a bit better.|Oh. That does feel good.','bob.sugar1':'I\'m almost smiling. One more sugar, maybe…|I\'m hardly sad anymore.','bob.sugar0':'Thanks! I\'m in a good mood again!|I like you after all.',
   'bld.unlocked':'Level 40! You can buy buildings now: they produce ingredients on their own. Check the Buildings tab.',
-  'ach.lockedDesc':'???','ach.secretsFound':'+ {{v}} secret(s)','ach.nameOrders':'{{v}} order(s) delivered','ach.descOrders':'Deliver {{v}} order(s).','ach.nameLoans':'{{v}} loan(s) taken','ach.descLoans':'Take {{v}} loan(s).','ach.nameRepaid':'{{v}} loan(s) repaid','ach.descRepaid':'Repay {{v}} loan(s).','ach.nameMachine':'{{n}}: level {{v}}','ach.descMachine':'Bring {{n}} to level {{v}}.',
+  'ach.lockedDesc':'???','ach.secretsFound':'+ {{v}} {{#v|secret|secrets}}','ach.nameOrders':'{{v}} {{#v|order|orders}} delivered','ach.descOrders':'Deliver {{v}} {{#v|order|orders}}.','ach.nameLoans':'{{v}} {{#v|loan|loans}} taken','ach.descLoans':'Take {{v}} {{#v|loan|loans}}.','ach.nameRepaid':'{{v}} {{#v|loan|loans}} repaid','ach.descRepaid':'Repay {{v}} {{#v|loan|loans}}.','ach.nameMachine':'{{n}}: level {{v}}','ach.descMachine':'Bring {{n}} to level {{v}}.',
   'rb.1':'Bakehouse','rb.2':'Fine Patisserie','rb.3':'Luxury House','rb.4':'Gastronomic Palace','rb.5':'Pastry Empire','rb.6':'Sweet Dynasty','rb.7':'Eternal Legend',
   'settings.tabAch':'Achievements','settings.tabStats':'Statistics',
   'mus.default':'Gentle Melody','mus.waltz':'Sugar Waltz','mus.joy':'Pastry Joy','mus.calm':'Evening Sweetness','mus.oven':'Oven Rhythm','mus.night':'Cream Night','mus.spring':'Waltz of the Flowers','mus.summer':'Gentle Waves','mus.fall':'Caramel Leaves','mus.winter':'Icing Sugar','mus.birthday':'Happy Birthday',
   'adv.order':'{{n}}\'s order expires in {{t}}!','adv.empStrike':'{{n}} is on strike!','adv.empSoon':'{{n}} will go on strike soon.','adv.space':'Your stock is overflowing: {{v}}% of your space is full.','adv.slow':'{{n}} is selling badly: price at {{v}}%.','adv.rent':'Your rent is too high: it eats {{v}}% of your income.','adv.rentNone':'You\'re paying rent and earning almost nothing.',
-  'order.title':'Orders','tab.orders':'Orders','order.doneCount':'{{v}} delivered','order.help':'Customers place orders. Bake what they want and deliver before time runs out: the harder the order, the bigger the bonus.','order.none':'No orders right now. Customers will show up soon!','order.level1':'Simple','order.level2':'Medium','order.level3':'Hard','order.level4':'Extreme','order.prime':'including {{v}} bonus','order.deliver':'Deliver','order.delivered':'Order delivered: +{{v}}!','order.new':'New order!','order.butler':'{{v}} head waiter(s) deliver whatever is ready.','order.butlerDone':'{{n}} delivered an order: +{{v}}!','order.unlocked':'Level 30! Customers place orders now. Check the Orders tab.',
+  'order.title':'Orders','tab.orders':'Orders','order.doneCount':'{{v}} delivered','order.help':'Customers place orders. Bake what they want and deliver before time runs out: the harder the order, the bigger the bonus.','order.none':'No orders right now. Customers will show up soon!','order.level1':'Simple','order.level2':'Medium','order.level3':'Hard','order.level4':'Extreme','order.prime':'including {{v}} bonus','order.deliver':'Deliver','order.delivered':'Order delivered: +{{v}}!','order.new':'New order!','order.butler':'{{v}} {{#v|head waiter delivers|head waiters deliver}} whatever is ready.','order.butlerDone':'{{n}} delivered an order: +{{v}}!','order.unlocked':'Level 30! Customers place orders now. Check the Orders tab.',
   'emp.maitre':'Head waiter','emp.desc.maitre':'Delivers customer orders for you, as soon as the stock is ready.',
   'mach.title':'Machine shop','tab.machines':'Machines','mach.help':'Upgrades that last forever, for all your bakeries, even after a rebirth. They cost a lot.','mach.buy':'Buy ({{v}})','mach.max':'Maxed out','mach.bought':'Machine installed!','mach.now':'Current bonus: {{v}}%','mach.unlocked':'Level 50! The machine shop is open. It\'s expensive, but it\'s forever.',
   'mach.petrin':'Industrial mixer','mach.petrin.d':'Baking {{v}}% faster per level.','mach.isolant':'Shop insulation','mach.isolant.d':'Rent {{v}}% cheaper per level.','mach.robot':'Kitchen robot','mach.robot.d':'Ingredients {{v}}% cheaper per level.','mach.fourturbo':'Convection oven','mach.fourturbo.d':'{{v}} more ovens per level.','mach.convoyeur':'Conveyor belt','mach.convoyeur.d':'Buildings {{v}}% more productive per level.','mach.caisse':'Self-checkout','mach.caisse.d':'Sellers {{v}}% faster per level.','mach.etiquette':'Luxury labeler','mach.etiquette.d':'Prices drop {{v}}% slower when you sell, per level.','mach.vitrine':'Chilled display','mach.vitrine.d':'Sale prices +{{v}}% per level.','mach.guichet':'Order desk','mach.guichet.d':'Order bonuses +{{v}}% per level.','mach.academie':'Taste academy','mach.academie.d':'XP +{{v}}% per level.',
@@ -240,7 +240,7 @@ LANGS.en = {
   'space.label':'Space','space.text':'{{u}} / {{m}} m²','space.buy':'+{{a}} m² for {{c}}','space.locked':'Lv. {{v}} required','space.max':'Max space!','space.rent':'Rent: {{v}}/h','space.debt':'Debt: {{v}}','space.noSpace':'Not enough space','space.refund':'No more space: ingredients returned!',
   'oven.label':'Ovens: {{a}} / {{m}}','oven.queue':'{{v}} waiting','oven.title':'Ovens','oven.desc':'Each oven bakes one batch at a time. The others wait their turn.','oven.buy':'+1 oven for {{c}}','oven.max':'All ovens bought','oven.bought':'New oven!',
   'rec.title':'Recipes','rec.prepare':'Prepare','rec.prepareMax':'Max','rec.noIng':'Missing ingredients','rec.noSpace':'Not enough space','rec.queueFull':'Queue is full','rec.prepared':'{{e}} {{n}} in the oven!','rec.preparedMany':'{{e}} {{q}} batches of {{n}} in the oven!','rec.ready':'{{q}} {{n}} ready!','rec.xp':'XP: +{{v}}','rec.time':'{{v}}',
-  'rec.cost':'Cost: {{v}}','rec.revenue':'Sale: {{v}}','rec.profit':'Profit: {{v}}','rec.buyMissing':'Buy what\'s missing ({{v}})','rec.search':'Search a recipe...','rec.onlyMakable':'Can make','rec.onlyFav':'Favorites','rec.sortNew':'Newest','rec.sortOld':'Oldest','rec.sortProfit':'Most profitable','rec.fav':'Favorite','rec.none':'No recipe matches.','rec.bought':'Ingredients bought!',
+  'rec.cost':'Cost: {{v}}','rec.revenue':'Sale: {{v}}','rec.profit':'Profit: {{v}}','rec.search':'Search a recipe...','rec.onlyMakable':'Can make','rec.onlyFav':'Favorites','rec.sortNew':'Newest','rec.sortOld':'Oldest','rec.sortProfit':'Most profitable','rec.fav':'Favorite','rec.none':'No recipe matches.','rec.bought':'Ingredients bought!',
   'sell.title':'Sales','sell.stock':'Stock: {{v}}','sell.sell':'Sell 1','sell.sellAll':'Sell all','sell.sellAllGlobal':'Sell all ({{v}})','sell.earned':'+{{v}} for {{q}} {{e}}','sell.earnedAll':'+{{v}}!','sell.price':'{{v}}/piece','sell.noStock':'Nothing to sell yet.','sell.inflUp':'↑ +{{v}}%','sell.inflDown':'↓ {{v}}%',
   'bld.title':'Buildings','bld.buy':'Buy','bld.qty':'x{{v}}','bld.prod':'{{v}}/s','bld.locked':'Lv. {{v}}','bld.bought':'{{n}} bought!','bld.none':'Not enough money!',
   'emp.title':'Employees','emp.fire':'Fire','emp.fireConfirm':'Really fire {{n}}?','emp.salary':'Salary: {{v}}/h','emp.morale':'Morale','emp.assign':'Assigned to','emp.working':'Working','emp.striking':'On strike!','emp.poor':'Poor work','emp.bonus':'Bonus +25 morale ({{v}})','emp.bonusDone':'Bonus paid!',
@@ -296,7 +296,7 @@ LANGS.en = {
   'event.supplier_strike':'Supplier strike! Ingredients +50% for {{t}}s','event.festival':'Festival! Everything +15% for {{t}}s',
   'event.bad_review':'Bad review! Sales -25% for {{t}}s','event.health_check':'Health check! Some cakes are confiscated...',
   'event.tv_feature':'TV feature! XP x5 for {{t}}s','event.apprentice_day':'Apprentice day! Sellers x2 for {{t}}s',
-  'inv.egg_break':'Oops, {{v}} egg(s) broken!','inv.milk_spill':'Spilled milk: -{{v}}','inv.choco_expire':'Expired chocolate: -{{v}}','inv.flour_blown':'A draft in the flour: -{{v}}','inv.sugar_ants':'Ants in the sugar: -{{v}}','inv.butter_melt':'The butter melted: -{{v}}','inv.cream_sour':'Some cream went sour: -{{v}}',
+  'inv.egg_break':'Oops, {{v}} {{#v|egg|eggs}} broken!','inv.milk_spill':'Spilled milk: -{{v}}','inv.choco_expire':'Expired chocolate: -{{v}}','inv.flour_blown':'A draft in the flour: -{{v}}','inv.sugar_ants':'Ants in the sugar: -{{v}}','inv.butter_melt':'The butter melted: -{{v}}','inv.cream_sour':'Some cream went sour: -{{v}}',
   'settings.title':'Settings','settings.tabGeneral':'General','settings.tabLook':'Appearance','settings.tabAudio':'Sound','settings.tabSave':'Save',
   'settings.lang':'Language','settings.currency':'Currency','settings.theme':'Theme','settings.themeLight':'Light','settings.themeDark':'Dark','settings.themeSpring':'Spring','settings.themeSummer':'Summer','settings.themeFall':'Fall','settings.themeWinter':'Winter','settings.themeBirthday':'Birthday',
   'settings.lockSeason':'only during the season','settings.lockBirthday':'only on your birthday','settings.lockNoBirthday':'set your birthday first',
@@ -334,8 +334,22 @@ LANGS.en = {
 })();
 
 // ============ Traduction ============
+// Pluriels : « {{#v|singulier|pluriel}} » choisit la bonne forme selon le nombre v et la langue
+// (le russe a 3 formes : un, quelques, beaucoup ; l'arabe en a 6 ; le chinois, le japonais et le coreen n'en ont qu'une)
+var PLURAL_ORDER = { ru: ['one', 'few', 'many', 'other'], ar: ['zero', 'one', 'two', 'few', 'many', 'other'] };
+function pluralForm(n, forms) {
+  var cat = 'other';
+  try { cat = new Intl.PluralRules(typeof currentLang !== 'undefined' ? currentLang : 'en').select(Math.abs(+n) || 0); } catch (e) { cat = (+n === 1 ? 'one' : 'other'); }
+  var order = PLURAL_ORDER[currentLang] || ['one', 'other'];
+  var i = order.indexOf(cat);
+  if (i < 0 || i >= forms.length) i = forms.length - 1;
+  return forms[i];
+}
 function t(key, params) {
   var str = (LANGS[currentLang] && LANGS[currentLang][key]) || LANGS.fr[key] || LANGS.en[key] || key;
+  if (str.indexOf('{{#') >= 0) {
+    str = str.replace(/\{\{#(\w+)\|([^}]*)\}\}/g, function(m, k, f) { return params && params.hasOwnProperty(k) ? pluralForm(params[k], f.split('|')) : f.split('|')[0]; });
+  }
   // En arabe, chaque valeur (et son signe + ou -) reste dans le bon ordre au milieu du texte
   if (params && currentLang === 'ar') {
     str = str.replace(/([+\-]?)\{\{(\w+)\}\}/g, function(m, sign, k) { return params.hasOwnProperty(k) ? '⁨' + m + '⁩' : m; });
@@ -504,7 +518,7 @@ Object.assign(LANGS.fr, {
   'dash.striking':'En grève',
   'dash.collectors':'Ce que ramassent tes cueilleurs',
   'dash.noCollector':'Aucun cueilleur pour l\'instant.',
-  'dash.transit':'{{v}} livraison(s) en route',
+  'dash.transit':'{{v}} {{#v|livraison|livraisons}} en route',
   'emp.groupDrag':'Fais glisser pour changer l\'ordre des métiers',
   'emp.groupUp':'Monter',
   'emp.groupDown':'Descendre',
@@ -528,7 +542,7 @@ Object.assign(LANGS.en, {
   'dash.striking':'On strike',
   'dash.collectors':'What your collectors gather',
   'dash.noCollector':'No collectors yet.',
-  'dash.transit':'{{v}} delivery(ies) on the road',
+  'dash.transit':'{{v}} {{#v|delivery|deliveries}} on the road',
   'emp.groupDrag':'Drag to change the order of jobs',
   'emp.groupUp':'Move up',
   'emp.groupDown':'Move down',
@@ -586,7 +600,7 @@ Object.assign(LANGS.fr, {
   'machf.paie':'Logiciel de paie',
   'machf.recherche':'Atelier de recherche',
   'machf.maintenance':'Atelier de maintenance',
-  'mach.eff.ovens':'{{v}} fournée(s) de plus en même temps, par niveau.',
+  'mach.eff.ovens':'{{v}} {{#v|fournée|fournées}} de plus en même temps, par niveau.',
   'mach.eff.prep':'Préparations {{v}} % plus rapides par niveau.',
   'mach.eff.ingCost':'Ingrédients {{v}} % moins chers par niveau.',
   'mach.eff.space':'Espace +{{v}} % par niveau.',
@@ -642,7 +656,7 @@ Object.assign(LANGS.en, {
   'machf.paie':'Payroll software',
   'machf.recherche':'Research lab',
   'machf.maintenance':'Maintenance shop',
-  'mach.eff.ovens':'{{v}} more batch(es) at once, per level.',
+  'mach.eff.ovens':'{{v}} more {{#v|batch|batches}} at once, per level.',
   'mach.eff.prep':'Baking {{v}} % faster per level.',
   'mach.eff.ingCost':'Ingredients {{v}} % cheaper per level.',
   'mach.eff.space':'Space +{{v}} % per level.',

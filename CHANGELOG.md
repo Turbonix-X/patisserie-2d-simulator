@@ -2,6 +2,29 @@
 
 Tout ce qui a été ajouté à Pâtisserie 2D Simulator, de la plus récente à la plus ancienne. Pour comprendre les règles du jeu, va voir le [wiki](REGLES.md).
 
+## Release 1.3.1 (17 novembre 2026)
+
+Une assurance, des barres de progression, de vrais pluriels, et un téléphone plus confortable.
+
+**Jeu**
+- Une assurance dans la banque, que Bob t'explique : trois formules (Normal, Expert, Professionnel), et plus tu montes, plus tu es couvert contre les catastrophes, les incidents et même les réparations.
+- Les prêts montent jusqu'à 100 milliards (100 Md), et les plus gros s'ouvrent avec ton temps de jeu.
+- Les bâtiments ont une barre qui montre combien de temps il reste avant leur prochaine livraison.
+- Les succès ont une barre de progression : tu vois quand tu vas y arriver.
+- Les 5 succès cachés sont aussi débloqués en mode créatif et en mode max.
+- De vrais singuliers et de vrais pluriels dans les textes : « 1 commande livrée », « 6 commandes livrées »...
+
+**Employés**
+- Le vendeur, le cueilleur, l'intendant et le maître d'hôtel ont des réglages de prix ou de montant. Ils sont facultatifs : par défaut, ils travaillent comme avant.
+
+**Interface**
+- La liste des ingrédients se replie et se redimensionne aussi sur tablette et sur grand écran : un bouton la replie, une barre en change la taille (la largeur sur ordinateur, la hauteur quand elle est au-dessus).
+- Sur téléphone, le texte du bas de page n'est plus à moitié caché, et les notifications s'affichent tout en haut, sans cacher les onglets ni le bouton vendre.
+- Un événement à choix n'affiche plus que son bandeau : la notification ne cache plus le bouton « Refuser ».
+
+**Sauvegardes**
+- Un fichier trop gros est refusé avant même d'être lu.
+
 ## Release 1.3 (16 novembre 2026)
 
 Un jeu plus fluide, des choix à faire, plus d'options pour tes employés, et une interface pensée pour le téléphone comme pour l'ordinateur.

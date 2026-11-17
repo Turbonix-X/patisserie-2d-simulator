@@ -16,6 +16,8 @@ function tierName(tier) {
 }
 
 (function() {
+  // Ou en est le joueur : [valeur actuelle, valeur a atteindre]. Ajoute a l'avant-dernier succes cree.
+  function progOf(cur, target) { ACHIEVEMENTS[ACHIEVEMENTS.length - 1].prog = function(g) { return [cur(g), target]; }; }
   function add(id, cat, icon, fr, en, descFr, descEn, check, hidden) {
     ACHIEVEMENTS.push({ id: id, cat: cat, icon: icon, fr: fr, en: en, descFr: descFr, descEn: descEn, check: check, hidden: !!hidden });
   }
@@ -25,6 +27,7 @@ function tierName(tier) {
     list.forEach(function(s) {
       var n = fmt(s[0]);
       add(s[1], cat, s[2], s[3], s[4], descFr.replace('{n}', n), descEn.replace('{n}', n), function(g) { return value(g) >= s[0]; });
+      progOf(function(g) { return value(g); }, s[0]);
     });
   }
 
@@ -85,11 +88,13 @@ function tierName(tier) {
     var icons = ['\u{1F4B0}', '\u{1F4B5}', '\u{1F911}', '\u{1F3F0}', '\u{1F48E}', '\u{1F3E6}', '\u{1F4C8}', '\u{1F30D}'];
     add(s[1], 'money', icons[i % icons.length], s[2], s[3], 'Gagner ' + fmt(s[0]) + '€ au total.', 'Earn ' + fmt(s[0]) + '€ in total.',
       function(g) { return g.totalEarned >= s[0]; });
+    progOf(function(g) { return g.totalEarned; }, s[0]);
   });
   [1e3, 1e5, 1e7, 1e9, 1e12, 1e15, 1e18, 1e24, 1e30].forEach(function(v, i) {
     var fr = ['Bas de laine', 'Matelas moelleux', 'Sac de farine dorée', 'Picsou pâtissier', 'Tas d’or', 'Montagne d’or', 'Océan d’or', 'Planète d’or', 'Univers d’or'];
     var en = ['Nest egg', 'Soft mattress', 'Bag of gold flour', 'Pastry mogul', 'Pile of gold', 'Mountain of gold', 'Ocean of gold', 'Planet of gold', 'Universe of gold'];
     add('hold' + i, 'money', '\u{1F4B8}', fr[i], en[i], 'Avoir ' + fmt(v) + '€ en poche.', 'Hold ' + fmt(v) + '€.', function(g) { return g.money >= v; });
+    progOf(function(g) { return g.money; }, v);
   });
 
   // ---------- Niveaux ----------
@@ -101,6 +106,7 @@ function tierName(tier) {
     add('lvl' + l, 'level', iconMap[l] || (l < 50 ? '\u{1F3AF}' : l < 200 ? '\u{1F31F}' : '\u{1F525}'),
       special ? special[0] : 'Niveau ' + l, special ? special[1] : 'Level ' + l, 'Atteindre le niveau ' + l + '.', 'Reach level ' + l + '.',
       function(g) { return g.level >= l; });
+    progOf(function(g) { return g.level; }, l);
   });
 
   // ---------- Boutique ----------
@@ -108,6 +114,7 @@ function tierName(tier) {
     var legacy = { 20:'space20', 50:'space50', 100:'space100', 500:'space500' }[v] || ('space' + v);
     add(legacy, 'shop', v < 100 ? '\u{1F4D0}' : v < 500 ? '\u{1F3D7}️' : '\u{1F306}', v + ' m² de bonheur', v + ' m² of happiness',
       'Avoir ' + v + ' m² d’espace.', 'Own ' + v + ' m² of space.', function(g) { return g.maxSpace >= v; });
+    progOf(function(g) { return g.maxSpace; }, v);
   });
   // Des niveaux de machines, au total
   var mlFr = ['Première machine', 'Bien équipé', 'Atelier', 'Usine', 'Parc de machines', 'Empire industriel', 'Légende des machines'];
@@ -116,25 +123,34 @@ function tierName(tier) {
     add('machlv' + (i + 1), 'shop', i < 2 ? '\u{1F527}' : i < 5 ? '\u{1F3ED}' : '\u2699\uFE0F', mlFr[i], mlEn[i],
       'Avoir ' + v + ' niveau' + (v > 1 ? 'x' : '') + ' de machines au total.', 'Own ' + v + ' machine level' + (v > 1 ? 's' : '') + ' in total.',
       function(g) { var n = 0; for (var k in (g.machines || {})) n += g.machines[k]; return n >= v; });
+    progOf(function(g) { var n = 0; for (var k in (g.machines || {})) n += g.machines[k]; return n; }, v);
   });
   [[1,'emp1','\u{1F9D1}‍\u{1F373}','Premier employé','First employee'],[5,'emp5','\u{1F465}','Petite équipe','Small team'],[10,'emp10','\u{1F465}','Brigade','Brigade'],
    [20,'emp20','\u{1F3E2}','Grande maison','Big house'],[50,'emp50','\u{1F3E2}','Ressources humaines dépassées','HR is overwhelmed'],[100,'emp100','\u{1F30D}','Plus gros employeur de la ville','Biggest employer in town']]
     .forEach(function(s) {
-      add(s[1], 'shop', s[2], s[3], s[4], 'Avoir ' + s[0] + ' employé(s) en même temps.', 'Have ' + s[0] + ' employee(s) at once.', function(g) { return g.employees.length >= s[0]; });
+      add(s[1], 'shop', s[2], s[3], s[4], 'Avoir ' + s[0] + ' employé' + (s[0] > 1 ? 's' : '') + ' en même temps.', 'Have ' + s[0] + ' employee(s) at once.', function(g) { return g.employees.length >= s[0]; });
+      ACHIEVEMENTS[ACHIEVEMENTS.length - 1].descEnShow = 'Have ' + s[0] + ' employee' + (s[0] > 1 ? 's' : '') + ' at once.';
+      progOf(function(g) { return g.employees.length; }, s[0]);
     });
   [3, 5, 10, 20, 30].forEach(function(v) {
     add('oven' + v, 'shop', '\u{1F525}', v + ' fours allumés', v + ' lit ovens', 'Posséder ' + v + ' fours.', 'Own ' + v + ' ovens.', function(g) { return (g.ovens || 0) >= v; });
+    progOf(function(g) { return g.ovens || 0; }, v);
   });
   [2, 3, 5].forEach(function(v) {
     add('bakeries' + v, 'shop', '\u{1F3EC}', 'Chaîne de ' + v + ' boutiques', 'Chain of ' + v + ' shops', 'Avoir ' + v + ' pâtisseries.', 'Own ' + v + ' bakeries.', function(g) { return g.bakeries.length >= v; });
+    progOf(function(g) { return g.bakeries.length; }, v);
   });
   [1, 10, 50, 100, 500].forEach(function(v) {
     add('events' + v, 'general', '⚡', v + ' événement' + (v > 1 ? 's' : '') + ' vu' + (v > 1 ? 's' : ''), v + ' event' + (v > 1 ? 's' : '') + ' seen',
-      'Vivre ' + v + ' événement(s).', 'Live through ' + v + ' event(s).', function(g) { return (g.stats.eventsSeen || 0) >= v; });
+      'Vivre ' + v + ' événement' + (v > 1 ? 's' : '') + '.', 'Live through ' + v + ' event(s).', function(g) { return (g.stats.eventsSeen || 0) >= v; });
+    ACHIEVEMENTS[ACHIEVEMENTS.length - 1].descEnShow = 'Live through ' + v + ' event' + (v > 1 ? 's' : '') + '.';
+    progOf(function(g) { return g.stats.eventsSeen || 0; }, v);
   });
   [1, 5, 24, 100, 500, 1000].forEach(function(h) {
-    add('play' + h, 'general', h < 24 ? '⏰' : '⌛', h + ' h aux fourneaux', h + ' h at the stove', 'Jouer ' + h + ' heure(s).', 'Play for ' + h + ' hour(s).',
+    add('play' + h, 'general', h < 24 ? '⏰' : '⌛', h + ' h aux fourneaux', h + ' h at the stove', 'Jouer ' + h + ' heure' + (h > 1 ? 's' : '') + '.', 'Play for ' + h + ' hour(s).',
       function(g) { return g.playTimeMs >= h * 3600000; });
+    ACHIEVEMENTS[ACHIEVEMENTS.length - 1].descEnShow = 'Play for ' + h + ' hour' + (h > 1 ? 's' : '') + '.';
+    progOf(function(g) { return g.playTimeMs / 3600000; }, h);
   });
 
   // ---------- Une serie pour chaque recette ----------
@@ -143,6 +159,7 @@ function tierName(tier) {
     recTiers.forEach(function(tier, i) {
       var legacy = (r.id === 'goldengate' && i === 0) ? 'golden' : (r.id === 'infinicake' && i === 0) ? 'infinimade' : ('rec_' + r.id + '_' + i);
       add(legacy, 'recipes', i === 0 ? r.e : tier[3], null, null, null, null, function(g) { return (g.stats.cakesMadeById[r.id] || 0) >= tier[0]; });
+      progOf(function(g) { return g.stats.cakesMadeById[r.id] || 0; }, tier[0]);
       var a = ACHIEVEMENTS[ACHIEVEMENTS.length - 1];
       a.nameFn = function() { return tierName(tier) + (({ fr: ' : ', zh: '：', ja: '：' })[currentLang] || ': ') + recShortName(r); };
       a.descFn = function() { return t('ach.descRecipe', { v: fmt(tier[0]), n: recShortName(r) }); };
@@ -164,6 +181,7 @@ function tierName(tier) {
   BUILDINGS.forEach(function(b) {
     bldTiers.forEach(function(tier, i) {
       add('bt_' + b.id + '_' + i, 'buildings', b.e, null, null, null, null, function(g) { return (g.buildings[b.id] || { qty: 0 }).qty >= tier[0]; });
+      progOf(function(g) { return (g.buildings[b.id] || { qty: 0 }).qty; }, tier[0]);
       var a = ACHIEVEMENTS[ACHIEVEMENTS.length - 1];
       a.nameFn = function() { return tierName(tier) + (({ fr: ' : ', zh: '：', ja: '：' })[currentLang] || ': ') + t('b.' + b.id); };
       a.descFn = function() { return t('ach.descBuilding', { v: tier[0], n: t('b.' + b.id) }); };
@@ -175,6 +193,7 @@ function tierName(tier) {
   ING.forEach(function(ing) {
     stockTiers.forEach(function(tier, i) {
       add('st_' + ing.id + '_' + i, 'stock', ing.e, null, null, null, null, function(g) { return (g.ing[ing.id] || 0) >= tier[0]; });
+      progOf(function(g) { return g.ing[ing.id] || 0; }, tier[0]);
       var a = ACHIEVEMENTS[ACHIEVEMENTS.length - 1];
       a.nameFn = function() { return tierName(tier) + (({ fr: ' : ', zh: '：', ja: '：' })[currentLang] || ': ') + t('i.' + ing.id); };
       a.descFn = function() { return t('ach.descStock', { v: fmt(tier[0]), n: t('i.' + ing.id) }); };
@@ -182,26 +201,28 @@ function tierName(tier) {
   });
 
   // ---------- Commandes, prets et machines ----------
-  function counted(id, cat, icon, n, nameKey, descKey, check) {
+  function counted(id, cat, icon, n, nameKey, descKey, check, val) {
     add(id, cat, icon, null, null, null, null, check);
+    if (val) progOf(val, n);
     var a = ACHIEVEMENTS[ACHIEVEMENTS.length - 1];
     a.nameFn = function() { return t(nameKey, { v: fmt(n) }); };
     a.descFn = function() { return t(descKey, { v: fmt(n) }); };
   }
   [1, 5, 10, 25, 50, 100, 250, 500, 1000, 2500, 5000, 10000].forEach(function(n) {
-    counted('orders' + n, 'general', '\u{1F9FE}', n, 'ach.nameOrders', 'ach.descOrders', function(g) { return (g.stats.ordersDone || 0) >= n; });
+    counted('orders' + n, 'general', '\u{1F9FE}', n, 'ach.nameOrders', 'ach.descOrders', function(g) { return (g.stats.ordersDone || 0) >= n; }, function(g) { return g.stats.ordersDone || 0; });
   });
   [1, 5, 10, 25, 50, 100].forEach(function(n) {
-    counted('loans' + n, 'money', '\u{1F3E6}', n, 'ach.nameLoans', 'ach.descLoans', function(g) { return (g.stats.loansTaken || 0) >= n; });
+    counted('loans' + n, 'money', '\u{1F3E6}', n, 'ach.nameLoans', 'ach.descLoans', function(g) { return (g.stats.loansTaken || 0) >= n; }, function(g) { return g.stats.loansTaken || 0; });
   });
   [1, 10, 50].forEach(function(n) {
-    counted('repaid' + n, 'money', '\u{1F91D}', n, 'ach.nameRepaid', 'ach.descRepaid', function(g) { return (g.stats.loansRepaid || 0) >= n; });
+    counted('repaid' + n, 'money', '\u{1F91D}', n, 'ach.nameRepaid', 'ach.descRepaid', function(g) { return (g.stats.loansRepaid || 0) >= n; }, function(g) { return g.stats.loansRepaid || 0; });
   });
   // Les 10 machines qui ont une serie de succes : 5 niveaux chacune
   ['petrin', 'isolant', 'robot', 'fourturbo', 'convoyeur', 'caisse', 'etiquette', 'vitrine', 'guichet', 'academie'].map(findMachine).forEach(function(m) {
     for (var lv = 1; lv <= 5; lv++) {
       (function(n) {
         add('mach_' + m.id + '_' + n, 'shop', m.e, null, null, null, null, function(g) { return ((g.machines || {})[m.id] || 0) >= n; });
+        progOf(function(g) { return (g.machines || {})[m.id] || 0; }, n);
         var a = ACHIEVEMENTS[ACHIEVEMENTS.length - 1];
         a.nameFn = function() { return t('ach.nameMachine', { n: t('mach.' + m.id), v: n }); };
         a.descFn = function() { return t('ach.descMachine', { n: t('mach.' + m.id), v: n }); };
@@ -233,7 +254,7 @@ function achDesc(a) {
   if (a.descFn) return a.descFn();
   if (currentLang === 'es') return achDescEs(a.descEn) || a.descEn;
   if (I18N_EXTRA[currentLang]) return extraAchDesc(currentLang, a.descEn) || a.descEn;
-  return currentLang === 'en' ? a.descEn : a.descFr;
+  return currentLang === 'en' ? (a.descEnShow || a.descEn) : a.descFr;
 }
 
 // state : par defaut la patisserie actuelle. Les totaux de toutes les patisseries comptent aussi.

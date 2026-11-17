@@ -46,6 +46,8 @@ function createFreshState() {
     pausedAt: 0,
     activeEvent: null,
     choiceEvent: null,
+    insurance: null,
+    insExplained: false,
     lastChoiceAt: 0,
     eventEndTime: 0,
     lastEventTime: 0,
