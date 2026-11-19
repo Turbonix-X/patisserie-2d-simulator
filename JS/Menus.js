@@ -76,9 +76,10 @@ function hasKeyboard() {
   return keyboardSeen || !(window.matchMedia && matchMedia('(pointer: coarse)').matches);
 }
 function settingsKeys() {
-  var rows = [['1 – 9', 'keys.tabs'], ['R', 'keys.settings'], ['C', 'keys.changelog'], ['M', 'keys.bakeries'], ['Échap', 'keys.escape']];
+  var rows = [['1 – 9', 'keys.tabs'], ['R', 'keys.settings'], ['S', 'keys.achievements'], ['C', 'keys.changelog'], ['M', 'keys.bakeries'], ['Échap', 'keys.escape'], ['Ctrl + Échap', 'keys.menu']];
+  if (G.cheatUnlocked) rows.splice(3, 0, ['/', 'keys.console']);   // la console n'apparait ici qu'une fois debloquee
   var h = '<p class="set-help">' + t('keys.help') + '</p><section class="set-card"><h3>' + t('keys.title') + '</h3>';
-  rows.forEach(function(r) { h += setRow('<kbd class="kbd">' + (r[0] === 'Échap' ? 'Esc' : r[0]) + '</kbd>', '', t(r[1])); });
+  rows.forEach(function(r) { h += setRow('<kbd class="kbd">' + (r[0] === 'Échap' ? 'Esc' : r[0] === 'Ctrl + Échap' ? 'Ctrl + Esc' : r[0]) + '</kbd>', '', t(r[1])); });
   return h + '</section>';
 }
 
@@ -145,6 +146,7 @@ function settingsGeneral() {
     lang += '<button class="' + (currentLang === l.code ? 'active' : '') + '" onclick="setLanguage(\'' + l.code + '\');showSettingsModal()">' + l.flag + ' ' + l.name + '</button>';
   });
   lang += '</div>';
+  var hapRow = (navigator.vibrate ? setRow(t('settings.haptics'), t('settings.hapticsHelp'), setSwitch(G.settings.haptics !== false, 'G.settings.haptics=(G.settings.haptics===false);refreshSettingsPane();if(G.settings.haptics&&navigator.vibrate)navigator.vibrate(30)', t('settings.haptics'))) : '');
   var bobRow = setRow(t('settings.bobTalk'), t('settings.bobTalkHelp'), setSwitch(G.settings.bobTalk !== false, 'G.settings.bobTalk=(G.settings.bobTalk===false);refreshSettingsPane()', t('settings.bobTalk')));
   var curr = '<select class="set-select" aria-label="' + escH(t('settings.currency')) + '" onchange="setCurrency(this.value);showSettingsModal()">';
   CURRENCIES.forEach(function(c) {
@@ -155,7 +157,7 @@ function settingsGeneral() {
   var autoSel = '<select class="set-select" aria-label="' + escH(t('settings.autoPause')) + '" onchange="G.settings.autoPause=parseInt(this.value,10);save()">';
   [0, 1, 2, 5, 10, 15, 30, 60].forEach(function(m) { autoSel += '<option value="' + m + '"' + (ap === m ? ' selected' : '') + '>' + (m ? t('settings.autoPauseMin', { v: m }) : t('settings.autoPauseOff')) + '</option>'; });
   autoSel += '</select>';
-  var h = setCard('', setRow(t('settings.lang'), t('settings.langHelp'), lang) + setRow(t('settings.currency'), t('settings.currencyHelp'), curr) + bobRow + setRow(t('settings.autoPause'), t('settings.autoPauseHelp'), autoSel) +
+  var h = setCard('', setRow(t('settings.lang'), t('settings.langHelp'), lang) + setRow(t('settings.currency'), t('settings.currencyHelp'), curr) + bobRow + hapRow + setRow(t('settings.autoPause'), t('settings.autoPauseHelp'), autoSel) +
     (typeof Notification !== 'undefined' ? setRow(t('settings.notifs'), t('settings.notifsHelp'), setSwitch(!!G.settings.notifs, 'toggleNotifications()', t('settings.notifs'))) : '') +
     (G.cheatUnlocked ? '<div class="only-phone">' + setRow(t('settings.console'), '', '<button class="btn btn-small" onclick="closeMenu();showCommandConsole()">' + t('settings.openConsole') + '</button>') + '</div>' : ''));
   var bday;
@@ -193,7 +195,7 @@ function settingsLook() {
     if (lock === 'secret' || (lock && thm.hidden)) return;
     var name = t(thm.langKey);
     var active = active0 === thm.id;
-    var why = lock ? t(lock === 'level' ? 'settings.lockLevel' : lock === 'sold' ? 'settings.lockCookies' : lock === 'month' ? 'settings.lockOctober' : lock === 'season' ? 'settings.lockSeason' : lock === 'birthday' ? 'settings.lockBirthday' : 'settings.lockNoBirthday', { v: thm.level }) : '';
+    var why = lock ? t(lock === 'level' ? 'settings.lockLevel' : lock === 'got' ? 'settings.lockGold' : lock === 'sold' ? 'settings.lockCookies' : lock === 'month' ? 'settings.lockOctober' : lock === 'season' ? 'settings.lockSeason' : lock === 'birthday' ? 'settings.lockBirthday' : 'settings.lockNoBirthday', { v: thm.level }) : '';
     cards += '<button class="theme-card' + (active ? ' active' : '') + (lock ? ' locked' : '') + '"' + (lock ? ' disabled' : ' onclick="chooseTheme(\'' + thm.id + '\')"') + ' aria-pressed="' + active + '">';
     cards += '<span class="theme-prev tp-' + thm.id + '"><i></i><i></i><i></i>' + Decor.mark(thm.id) + '</span>';
     cards += '<span class="theme-name">' + (lock ? '\u{1F512} ' : '') + name + '</span>';

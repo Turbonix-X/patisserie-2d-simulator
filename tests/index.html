@@ -16,6 +16,8 @@
 <script>document.write('<script src="../JS/GameData.js?t=' + Date.now() + '"><\/script>');</script>
 <script>document.write('<script src="../JS/Icons.js?t=' + Date.now() + '"><\/script>');</script>
 <script>document.write('<script src="../JS/Languages.js?t=' + Date.now() + '"><\/script>');</script>
+<script>document.write('<script src="../JS/LangFR.js?t=' + Date.now() + '"><\/script>');</script>
+<script>document.write('<script src="../JS/LangEN.js?t=' + Date.now() + '"><\/script>');</script>
 <script>document.write('<script src="../JS/LangES.js?t=' + Date.now() + '"><\/script>');</script>
 <script>document.write('<script src="../JS/LangPT.js?t=' + Date.now() + '"><\/script>');</script>
 <script>document.write('<script src="../JS/LangDE.js?t=' + Date.now() + '"><\/script>');</script>
@@ -24,18 +26,6 @@
 <script>document.write('<script src="../JS/LangJA.js?t=' + Date.now() + '"><\/script>');</script>
 <script>document.write('<script src="../JS/LangKO.js?t=' + Date.now() + '"><\/script>');</script>
 <script>document.write('<script src="../JS/LangRU.js?t=' + Date.now() + '"><\/script>');</script>
-<script>document.write('<script src="../JS/Lang11.js?t=' + Date.now() + '"><\/script>');</script>
-<script>document.write('<script src="../JS/Lang111.js?t=' + Date.now() + '"><\/script>');</script>
-<script>document.write('<script src="../JS/Lang112.js?t=' + Date.now() + '"><\/script>');</script>
-<script>document.write('<script src="../JS/Lang12.js?t=' + Date.now() + '"><\/script>');</script>
-<script>document.write('<script src="../JS/Lang13.js?t=' + Date.now() + '"><\/script>');</script>
-<script>document.write('<script src="../JS/Lang122.js?t=' + Date.now() + '"><\/script>');</script>
-<script>document.write('<script src="../JS/Lang123.js?t=' + Date.now() + '"><\/script>');</script>
-<script>document.write('<script src="../JS/Lang13s1.js?t=' + Date.now() + '"><\/script>');</script>
-<script>document.write('<script src="../JS/Lang13s2.js?t=' + Date.now() + '"><\/script>');</script>
-<script>document.write('<script src="../JS/Lang13s3.js?t=' + Date.now() + '"><\/script>');</script>
-<script>document.write('<script src="../JS/Lang13r.js?t=' + Date.now() + '"><\/script>');</script>
-<script>document.write('<script src="../JS/Lang131.js?t=' + Date.now() + '"><\/script>');</script>
 <script>document.write('<script src="../JS/Config.js?t=' + Date.now() + '"><\/script>');</script>
 <script>document.write('<script src="../JS/PlayerData.js?t=' + Date.now() + '"><\/script>');</script>
 <script>document.write('<script src="../JS/Instances.js?t=' + Date.now() + '"><\/script>');</script>
@@ -274,10 +264,10 @@ var missing = [];
   INVISIBLE_EVENTS.forEach(function(e) { if (!LANGS[lang]['inv.' + e.id]) missing.push(lang + ':inv.' + e.id); });
   THEME_LIST.forEach(function(th) { if (!LANGS[lang][th.langKey]) missing.push(lang + ':' + th.langKey); });
 });
-var onlyOne = Object.keys(LANGS.fr).filter(function(k) { return !LANGS.en[k]; }).concat(Object.keys(LANGS.en).filter(function(k) { return !LANGS.fr[k]; }));
+var onlyOne = Object.keys(LANGS.fr).filter(function(k) { return !LANGS.en[k] && !/^cmd\.|\.f$/.test(k); }).concat(Object.keys(LANGS.en).filter(function(k) { return !LANGS.fr[k] && !/^cmd\.|\.f$/.test(k); }));
 check('Tous les noms sont traduits', missing.length === 0, missing.slice(0, 8).join(', '));
 check('Le francais et l anglais ont les memes textes', onlyOne.length === 0, onlyOne.slice(0, 8).join(', '));
-var esDiff = Object.keys(LANGS.fr).filter(function(k) { return !LANGS.es[k]; }).concat(Object.keys(LANGS.es).filter(function(k) { return !LANGS.fr[k]; }));
+var esDiff = Object.keys(LANGS.fr).filter(function(k) { return !LANGS.es[k] && !/^cmd\.|\.f$/.test(k); }).concat(Object.keys(LANGS.es).filter(function(k) { return !LANGS.fr[k] && !/^cmd\.|\.f$/.test(k); }));
 check('L espagnol a tous les textes', esDiff.length === 0, esDiff.slice(0, 12).join(', '));
 var paramsBad = Object.keys(LANGS.es).filter(function(k) {
   function p(x) { return (String(x).match(/\{\{\w+\}\}/g) || []).sort().join(); }
@@ -291,7 +281,7 @@ check('Tous les succes ont un nom en espagnol', esNames.length === 0, esNames.sl
 check('Tous les succes ont une description en espagnol', esDescs.length === 0, esDescs.slice(0, 8).join(', '));
 currentLang = 'fr';
 ['pt', 'de', 'ar', 'zh', 'ja', 'ko', 'ru'].forEach(function(lang) {
-  var diff = Object.keys(LANGS.fr).filter(function(k) { return !LANGS[lang][k]; }).concat(Object.keys(LANGS[lang]).filter(function(k) { return !LANGS.fr[k]; }));
+  var diff = Object.keys(LANGS.fr).filter(function(k) { return !LANGS[lang][k] && !/^cmd\.|\.f$/.test(k); }).concat(Object.keys(LANGS[lang]).filter(function(k) { return !LANGS.fr[k] && !/^cmd\.|\.f$/.test(k); }));
   check(lang + ' : tous les textes', diff.length === 0, diff.slice(0, 12).join(', '));
   var bad = Object.keys(LANGS[lang]).filter(function(k) {
     function p(x) { return (String(x).match(/\{\{\w+\}\}/g) || []).sort().join(); }
@@ -461,13 +451,13 @@ var chefO = { type: 'chef', chefMode: 'orders' };
 check('Le patissier en mode commandes ne fait que ce qui manque', chefQueue(chefO).map(function(r) { return r.id; }).join() === 'cookie');
 G.orders = [];
 check('... et rien sans commande', chefQueue(chefO).length === 0);
-check('Avec /max, l argent est au maximum sans etre infini', fmt(MAX_MONEY_SHOWN) !== '∞' && fmt(MAX_MONEY_SHOWN * 1e3) === '∞');
+check('Avec /max, l argent est au maximum sans etre infini', fmt(MAX_MONEY_SHOWN) !== '∞' && fmt(MONEY_CAP) === '∞' && fmt(1e300) !== '∞');
 G = createFreshState(); G.machines = { four: 5, fouet: 5 };
 check('Un succes compte les niveaux de machines', ACHIEVEMENTS.filter(function(a) { return /^machlv/.test(a.id) && a.check(G); }).length === 2);
 check('Bob connait 30 anecdotes', LANGS.fr['bob.facts'].split('|').length === 30);
 
 // --- Release 1.0 ---
-check('La version s appelle Release 1.3.1', GAME_VERSION === 'Release 1.3.1');
+check('La version s appelle Release 1.3.2', GAME_VERSION === 'Release 1.3.2');
 G = createFreshState(); G.level = 499;
 check('La fete et l espace sont caches avant leur niveau', findTheme('party').hidden && findTheme('space').hidden && themeLockReason(findTheme('party')) === 'level');
 check('Les themes Tech sont secrets', themeLockReason(findTheme('tech')) === 'secret' && themeLockReason(findTheme('techgold')) === 'secret');
@@ -937,14 +927,11 @@ setLanguage(langBefore);
 check('Une langue inconnue est refusee', /cmd-err/.test(processCommand('/language set klingon')));
 (function() {
   var saved = G.settings.currency, l = currentLang;
-  setLanguage('en'); G.settings.currency = 'usd';
-  var dotted = fmt(1500) === '1.50k';
-  setLanguage('fr');
-  var comma = fmt(1500) === '1,50k';
-  setLanguage('en'); G.settings.currency = 'eur';
-  var eur = fmt(1500) === '1,50k';
+  G.settings.currency = 'eur';
+  var res = {};
+  ['en', 'fr', 'es', 'de', 'zh', 'ja', 'ko'].forEach(function(lg) { setLanguage(lg); res[lg] = decimalize('1.5'); });
   G.settings.currency = saved; setLanguage(l);
-  check('Virgule decimale en francais et en euro, point sinon', dotted && comma && eur, [dotted, comma, eur].join());
+  check('La virgule decimale depend de la langue, pas de la monnaie', res.en === '1.5' && res.fr === '1,5' && res.es === '1,5' && res.de === '1,5' && res.zh === '1.5' && res.ja === '1.5' && res.ko === '1.5', JSON.stringify(res));
 })();
 G = createFreshState();
 check('Les stats comptent les ingredients prepares', G.stats.ingMadeById && G.stats.totalIngMade === 0);
@@ -1059,6 +1046,57 @@ check('Chaque famille de succes a une barre de progression', ACHIEVEMENTS.filter
 G = createFreshState(); G.level = 50; var lv = ACHIEVEMENTS.filter(function(a) { return a.id === 'lvl100'; })[0];
 check('La barre de progression d un niveau', lv.prog(G)[0] === 50 && lv.prog(G)[1] === 100);
 check('Un choix d evenement ne fait plus de notification', (function() { var calls = 0, tk = toast; toast = function() { calls++; }; G = createFreshState(); G.level = 20; G.lastChoiceAt = 0; var r = Math.random; Math.random = function() { return 0; }; tickChoiceEvent(Date.now()); Math.random = r; toast = tk; return calls === 0 && G.choiceEvent !== null; })());
+
+// --- Release 1.3.2 ---
+function cmdText(c) { return String(processCommand(c)).replace(/<[^>]+>/g, ''); }
+function cmdErr(c) { return /cmd-err/.test(processCommand(c)); }
+currentLang = 'fr';
+check('Les nombres sont lus strictement', cnum('1,5') === 1.5 && cnum('1e3') === 1000 && cnum('10^300') === 1e300 && isNaN(cnum('1e400')) && isNaN(cint('abc')) && cint('1e3') === 1000 && isNaN(cint('1.5')));
+G = createFreshState(); G.level = 10;
+check('/level : un mot en trop, un nombre illisible ou trop grand refusent la commande', cmdErr('/level set 5 truc') && G.level === 10 && cmdErr('/level set abc') && cmdErr('/level add 1e400') && G.level === 10);
+cmdText('/level add 1e3');
+check('/level add 1e3 ajoute 1000 niveaux', G.level === 1010);
+check('« / » tout seul dit de finir la commande', /oubli/.test(cmdText('/')));
+G = createFreshState(); G.money = 1000; G.ing.farine = 3;
+check('/ingredient farine set 10 cl est refusee', cmdErr('/ingredient farine set 10 cl') && G.ing.farine === 3);
+check('/buy et /sell refusent 0 et les negatifs avec le bon message', cmdErr('/buy farine 0') && /négative/.test(cmdText('/buy farine -10')) && /négative/.test(cmdText('/sell farine -3')) && !/inconnu/.test(cmdText('/buy farine -10')));
+G.money = getIngredientCost(findIng('farine')) * 6.25; G.ing.farine = 0;
+var buyMsg = cmdText('/buy farine 10');
+check('/buy 10 sans assez d argent : des ingredients entiers et le vrai nombre', G.ing.farine === 6 && /6x/.test(buyMsg) && G.ing.farine === Math.floor(G.ing.farine), buyMsg);
+check('Les resultats ont des vrais noms', /Farine/.test(cmdText('/ingredient farine set 5')) && !/cookie = /.test(cmdText('/recipe cookie set 5')));
+G = createFreshState();
+check('/employee : plus de 1000 refuse, add -2 refuse', cmdErr('/employee set 9999') && cmdErr('/employee add -2') && (cmdText('/employee set 1000') && G.employees.length === 1000));
+G = createFreshState(); G.level = 50;
+check('/time, /birthday, /money, /xp : valeurs impossibles refusees', cmdErr('/time set 25') && cmdErr('/birthday 31 02') && cmdErr('/money set 100 xyz') && cmdErr('/xp add -100000') && cmdErr('/money set -5') && G.xp === 0);
+cmdText('/money set 1,5');
+check('/money set 1,5 vaut 1,5', G.money === 1.5);
+cmdText('/money set 100');
+G.money = 123; cmdText('/money infinite'); cmdText('/money infinite off');
+check('/money infinite off rend l argent d avant', G.money === 123 && !G.infiniteMoney);
+G = createFreshState(); G.money = 123; G.level = 7; lastSaveBeforeMax = null;
+cmdText('/max'); cmdText('/max'); var um = cmdText('/unmax');
+check('/max deux fois puis /unmax retrouve la vraie partie', G.money === 123 && G.level === 7 && !G.xpLocked, um);
+G = createFreshState(); cmdText('/max'); var lv0 = G.level; addXP(1e12);
+check('/max : niveau 1000 sans XP, et il n en gagne plus', lv0 === 1000 && G.xp === 0 && G.level === 1000);
+G = createFreshState(); cmdText('/bakery create Deux'); var nb = G.bakeries.length;
+var d1 = cmdText('/bakery delete 2'), d2 = cmdText('/bakery delete 2 confirm'), still = G.bakeries.length, d3 = cmdText('/bakery delete 2 confirm');
+check('/bakery delete demande deux confirmations', still === nb && G.bakeries.length === nb - 1 && /confirm/.test(d1) && /confirm/.test(d2), d1 + ' / ' + d2 + ' / ' + d3);
+G = createFreshState(); G.bakeries = []; for (var bi = 0; bi < BAKERY_MAX; bi++) G.bakeries.push({ name: 'B' + bi, state: null, cost: 0 });
+check('50 patisseries au maximum', openNewBakery(true, 'de trop') === false);
+G = createFreshState();
+check('Une sauvegarde invalide est refusee', saveInvalidReason({ money: -5 }) === 'money' && saveInvalidReason({ money: 5, level: 'abc' }) === 'level' && saveInvalidReason({ money: 5, xp: -1 }) === 'xp' && saveInvalidReason({ money: 5, level: 3 }) === '');
+(function() { var d = { money: -50, xp: 'x', level: NaN, totalEarned: 0, rentDebt: 0, maxSpace: 5 }; var fx = sanitizeLoaded(d); check('Une valeur impossible est corrigee et signalee', d.money === 0 && d.level === 1 && fx.length >= 3, fx.join()); })();
+check('Les durees comptent les jours, mois et annees', fmtLongTime(2 * 86400 + 3600) === '2 j 1 h' && /an/.test(fmtLongTime(400 * 86400)) && fmtLongTime(5 * 3600) === '5 h');
+G = createFreshState(); G.maxSpace = 5;
+check('Le nombre d employes depend de l espace', empCapacity() === 7 && (G.maxSpace = 1e6, empCapacity() === EMP_LIMIT));
+check('Les accords au feminin', tg('console.empFired', 'Marie', { n: 'Marie' }) === 'Marie est renvoyée.' && tg('console.empFired', 'Pierre', { n: 'Pierre' }) === 'Pierre est renvoyé.');
+G = createFreshState(); G.ing.orfeuille = 5000;
+check('Le theme dore s obtient avec 5000 feuilles d or', themeLockReason(findTheme('gold')) === null && G.unlockedThemes.gold);
+G.unlockedThemes.tech = true; checkGoldTheme();
+check('... et il ouvre le tech dore avec le tech', G.unlockedThemes.techgold === true);
+check('Un « / » ouvre la console, S les succes, Ctrl+Echap le menu : les textes existent', ['keys.achievements', 'keys.menu', 'keys.console'].every(function(k) { return LANGS.fr[k] && LANGS.ru[k]; }));
+check('La langue decide du point ou de la virgule des nombres', (function() { var l = currentLang; setLanguage('en'); var a = fmtMoney(0.5); setLanguage('fr'); var b = fmtMoney(0.5); setLanguage(l); return /0\.5/.test(a) && /0,5/.test(b); })());
+currentLang = 'fr';
 
 var ko = results.filter(function(r) { return !r.ok; }).length;
 document.getElementById('total').textContent = (results.length - ko) + ' / ' + results.length + ' tests reussis';

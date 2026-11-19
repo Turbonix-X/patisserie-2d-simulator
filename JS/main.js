@@ -35,13 +35,15 @@ function bootGame() {
     var elapsed = (Date.now() - G.lastTick) / 1000;
     if (elapsed > 60) {
       var result = calcOfflineProgress(elapsed);
-      result.money += offlineBackgroundBakeries(elapsed);
+      result.bakeries = [result].concat(offlineBackgroundBakeries(elapsed));   // un resultat par patisserie
+      result.money = result.bakeries.reduce(function(a, r) { return a + r.money; }, 0);
       setTimeout(function() { showOfflineModal(result); }, 500);
     }
   }
 
   fullRender();
   if (typeof initSplit === 'function') initSplit();
+  if (typeof claimTabLock === 'function') claimTabLock();
 
   if (loadNotice) setTimeout(function() { toast(t('offline.' + loadNotice)); }, 800);
 

@@ -131,7 +131,7 @@ function renderHeader() {
   var xpPct = Math.min(100, Math.floor(G.xp / xpNeeded * 100));
   var h = '<header class="site-header"><div class="header-inner game-header-inner">';
   h += '<div class="hdr-brand">';
-  h += '<img class="game-logo" src="logo.svg" alt="" width="40" height="40" onclick="logoClick()">';
+  h += '<button type="button" class="logo-btn" onclick="logoClick()" aria-label="P2DS"><img class="game-logo" src="logo.svg" alt="" width="40" height="40"></button>';
   h += '<h1 class="game-name">P2DS</h1>';
   var hasUpdate = typeof updateState !== 'undefined' && updateState.newVersion;
   h += '<button type="button" class="version-badge' + (hasUpdate ? ' has-update' : '') + '" onclick="showChangelog()" title="' + escH(hasUpdate ? t('update.available', { v: versionLabel(updateState.newVersion) }) : t('changelog.title')) + '">' + versionLabel(GAME_VERSION) + '</button>';
@@ -186,11 +186,15 @@ function headerBtn(action, label, icon, off, count) {
 }
 
 // Le logo ne fait rien... ou presque
+// 1000 clics la premiere fois ; une fois la console debloquee puis desactivee, 100 suffisent
+function logoClicksNeeded() { return G.cheatEverUnlocked ? 100 : LOGO_CLICKS_CONSOLE; }
 function logoClick() {
   G.logoClicks = (G.logoClicks || 0) + 1;
   fxBump(document.querySelector('.game-logo'), 1.15);
-  if (G.logoClicks >= LOGO_CLICKS_CONSOLE && !G.cheatUnlocked) {
+  if (G.logoClicks === 500 && !G.logoHintShown && !G.cheatUnlocked && !G.cheatEverUnlocked) { G.logoHintShown = true; if (typeof bobTell === 'function') bobTell(t('bob.logoHint')); }
+  if (G.logoClicks >= logoClicksNeeded() && !G.cheatUnlocked) {
     G.cheatUnlocked = true;
+    G.cheatEverUnlocked = true;
     save();
     toast(t('settings.cheatUnlocked'));
     renderConsoleButton();
@@ -331,7 +335,7 @@ function renderIngredients() {
   el.classList.toggle('folded', folded);
   var area = document.getElementById('game-area');
   if (area) area.classList.toggle('ing-folded', folded && !ingStacked());
-  var h = '<div class="panel-head"><h2>' + t('ing.title') + '</h2><button type="button" class="ing-fold-btn" onclick="toggleIngFold()" title="' + escH(t(folded ? 'ing.unfold' : 'ing.fold')) + '" aria-label="' + escH(t(folded ? 'ing.unfold' : 'ing.fold')) + '" aria-expanded="' + (!folded) + '">' + (folded ? '▾' : '▴') + '</button></div>';
+  var h = '<div class="panel-head"><h2>' + t('ing.title') + '</h2><button type="button" class="ing-fold-btn" onclick="toggleIngFold()" title="' + escH(t(folded ? 'ing.unfold' : 'ing.fold')) + '" aria-label="' + escH(t(folded ? 'ing.unfold' : 'ing.fold')) + '" aria-expanded="' + (!folded) + '">' + (folded ? '◀' : '▶') + '</button></div>';
   if (folded) { setHTML(el, h); return; }
   var known = ING.filter(ingUnlocked);
   if (known.length > 12) {
@@ -899,7 +903,10 @@ function showModal(content, extraClass) {
 }
 
 // Fermer en cliquant a cote ou avec Echap : si le jeu est en pause, il reprend
+// Une fenetre « verrouillee » (nom obligatoire, onglet en double) ne se ferme que par ses boutons
+function modalIsLocked() { return !!document.querySelector('#modal-overlay .modal.modal-locked'); }
 function dismissModal() {
+  if (modalIsLocked()) return;
   if (bobDialog) { bobDialogNext(); return; }
   var open = document.querySelector('#modal-overlay .modal');
   if (G.paused) {
@@ -1313,17 +1320,45 @@ function doGameOverRestart() {
   save();
 }
 
-function showOfflineModal(r) {
-  var h = '<h2>' + t('offline.title') + '</h2><p>' + t('offline.time', { t: fmtTime(r.seconds) }) + '</p><ul class="offline-list">';
-  if (r.ingredients > 0) h += '<li>' + t('offline.ing', { v: fmt(r.ingredients) }) + '</li>';
-  if (r.money > 0) h += '<li>' + t('offline.sales', { v: fmtMoney(r.money) }) + '</li>';
-  if (r.rent > 0) h += '<li>' + t('offline.rent', { v: fmtMoney(r.rent) }) + '</li>';
-  if (r.salaries > 0) h += '<li>' + t('offline.salaries', { v: fmtMoney(r.salaries) }) + '</li>';
+// La fenetre d'absence : tout ce qui s'est passe, par patisserie et au total, avec les graphiques si tu les as debloques
+var offlineTab = 0;
+function offlineLines(r) {
+  var h = '<ul class="offline-list">';
+  h += '<li>' + t('offline.ing', { v: fmt(r.ingredients) }) + '</li>';
+  h += '<li>' + t('offline.sales', { v: fmtMoney(r.money) }) + '</li>';
+  h += '<li>' + t('offline.rent', { v: fmtMoney(r.rent) }) + '</li>';
+  h += '<li>' + t('offline.salaries', { v: fmtMoney(r.salaries) }) + '</li>';
   if (r.loans > 0) h += '<li>' + t('offline.loans', { v: fmtMoney(r.loans) }) + '</li>';
-  h += '</ul>';
-  if (r.unpaid) h += '<p class="warning">' + t('offline.unpaid') + '</p>';
+  h += '<li><b>' + t('offline.net', { v: fmtMoney(r.money - r.rent - r.salaries - r.loans) }) + '</b></li>';
+  return h + '</ul>' + (r.unpaid ? '<p class="warning">' + t('offline.unpaid') + '</p>' : '');
+}
+function offlineGraph(list) {
+  if (list.length < 2) return '';
+  var max = 0;
+  list.forEach(function(x) { max = Math.max(max, x.money); });
+  var h = '<div class="offline-graph"><h4>' + t('offline.graph') + '</h4>';
+  list.forEach(function(x) {
+    var pct = max > 0 ? Math.max(2, x.money / max * 100) : 2;
+    h += '<div class="og-row"><span>' + escH(x.name) + '</span><div class="og-bar"><i style="width:' + pct.toFixed(1) + '%"></i></div><b>' + fmtMoney(x.money) + '</b></div>';
+  });
+  return h + '</div>';
+}
+function offlineDraw(r, tab) {
+  offlineTab = tab;
+  var list = r.bakeries || [r];
+  var tabs = list.length > 1 ? '<div class="list-tools offline-tabs"><button class="chip' + (tab === 0 ? ' active' : '') + '" onclick="offlineDraw(window._offlineR,0)">' + t('offline.all') + '</button>' +
+    list.map(function(x, i) { return '<button class="chip' + (tab === i + 1 ? ' active' : '') + '" onclick="offlineDraw(window._offlineR,' + (i + 1) + ')">' + escH(x.name) + '</button>'; }).join('') + '</div>' : '';
+  var shown = tab === 0 ? list.reduce(function(a, x) { return { ingredients: a.ingredients + x.ingredients, money: a.money + x.money, rent: a.rent + x.rent, salaries: a.salaries + x.salaries, loans: a.loans + x.loans, unpaid: a.unpaid || x.unpaid }; }, { ingredients: 0, money: 0, rent: 0, salaries: 0, loans: 0, unpaid: false }) : list[tab - 1];
+  var h = '<h2>' + t('offline.title') + '</h2><p>' + t('offline.away', { t: fmtLongTime(r.away || r.seconds) }) + '</p>';
+  if ((r.away || 0) > r.seconds + 1) h += '<p class="set-help">' + t('offline.capped', { t: fmtLongTime(r.seconds) }) + '</p>';
+  h += tabs + offlineLines(shown) + (tab === 0 && list.length > 1 && G.bakeries.length >= 2 ? offlineGraph(list) : '');
   h += '<div class="modal-btns"><button class="btn btn-primary" onclick="hideModal()">OK</button></div>';
-  showModal(h);
+  var m = document.querySelector('#modal-overlay .modal');
+  if (m && m.querySelector('.offline-list')) m.innerHTML = iconify(h); else showModal(iconify(h), 'modal-offline');
+}
+function showOfflineModal(r) {
+  window._offlineR = r;
+  offlineDraw(r, 0);
 }
 
 function showLevel1000() {
@@ -1380,8 +1415,46 @@ function initSplit() {
   });
 }
 
+// ============ LA MEME PARTIE DANS DEUX ONGLETS ============
+// Chaque onglet qui joue une partie le note (avec l'heure). Si un autre onglet le fait deja, on previent avant d'ecraser.
+var TAB_ID = Math.random().toString(36).slice(2);
+function tabLockKey() { return 'p2ds_lock_' + CUR.profile + '_' + CUR.inst; }
+function tabLockRead() { try { return JSON.parse(localStorage.getItem(tabLockKey())); } catch (e) { return null; } }
+function tabLockWrite() { try { localStorage.setItem(tabLockKey(), JSON.stringify({ tab: TAB_ID, t: Date.now() })); } catch (e) { /* tant pis */ } }
+function showDuplicateTab() {
+  if (document.querySelector('.modal-dup')) return;
+  ui.savesBlocked = true;   // cet onglet n'ecrase rien tant qu'on n'a pas choisi
+  var h = '<div class="bob-talk">' + bobFigure() + '<div class="bob-talk-speech"><span class="bob-bubble-name">Bob</span>';
+  h += '<p>' + t('dup.text') + '</p><div class="bob-talk-foot">';
+  h += '<button class="btn btn-primary" onclick="duplicatePlayHere()">' + t('dup.here') + '</button>';
+  h += '<button class="btn" onclick="duplicateLeave()">' + t('dup.leave') + '</button></div></div></div>';
+  showModal(h, 'modal-bob modal-locked modal-dup');
+}
+function duplicatePlayHere() { tabLockWrite(); ui.savesBlocked = false; hideModal(); }
+function duplicateLeave() { ui.savesBlocked = true; hideModal(); if (typeof backToHome === 'function') backToHome(); }
+function claimTabLock() {
+  if (!CUR.inst) return;
+  var lock = tabLockRead();
+  if (lock && lock.tab !== TAB_ID && Date.now() - lock.t < 8000) showDuplicateTab(); else tabLockWrite();
+  if (claimTabLock._timer) return;
+  claimTabLock._timer = setInterval(function() {
+    if (!CUR.inst || document.body.classList.contains('home-open')) return;
+    var l = tabLockRead();
+    if (l && l.tab !== TAB_ID) showDuplicateTab(); else if (!ui.savesBlocked) tabLockWrite();
+  }, 3000);
+}
+
+// ============ VIBRATIONS (telephone) ============
+document.addEventListener('click', function(e) {
+  if (!(navigator.vibrate && window.matchMedia && matchMedia('(pointer: coarse)').matches)) return;
+  if (typeof G === 'undefined' || !G.settings || G.settings.haptics === false) return;
+  if (e.target.closest && e.target.closest('button, [role="button"], .gtab, .ing-card, a, select')) { try { navigator.vibrate(12); } catch (x) { /* pas de vibreur */ } }
+}, true);
+
 // ============ CLAVIER ============
 document.addEventListener('keydown', function(e) {
+  // Ctrl + Echap : retour au menu des parties
+  if (e.key === 'Escape' && e.ctrlKey) { e.preventDefault(); if (typeof backToHome === 'function' && !(typeof introActive !== 'undefined' && introActive)) backToHome(); return; }
   if (e.key === 'Escape') {
     if (typeof introActive !== 'undefined' && introActive) return;
     // Une fenetre ouverte se ferme. Sinon, Echap met le jeu en pause.
@@ -1395,6 +1468,8 @@ document.addEventListener('keydown', function(e) {
   var k = String(e.key).toLowerCase();
   if (typeof introActive !== 'undefined' && introActive) return;
   if (k === 'r') { e.preventDefault(); showSettingsModal(); return; }
+  if (k === 's') { e.preventDefault(); showAchievementsModal(); return; }
+  if (k === '/' && G.cheatUnlocked) { e.preventDefault(); showCommandConsole(); return; }
   if (k === 'c') { e.preventDefault(); showChangelog(); return; }
   if (k === 'm') { e.preventDefault(); showBakeriesModal(); return; }
   var wanted = visibleTabs()[parseInt(e.key, 10) - 1];

@@ -56,10 +56,11 @@ function instancesFull(pid) {
 function findInstance(pid, id) { var r = null; listInstances(pid).forEach(function(x) { if (x.id === id) r = x; }); return r; }
 
 // Cree une instance. type : 'normal', 'max' ou 'creative'. raw : une sauvegarde deja ecrite (JSON), ou rien pour une nouvelle partie.
-function createInstance(pid, name, type, raw, id) {
+function createInstance(pid, name, type, raw, id, preset) {
   if (instancesFull(pid)) return null;
   var list = listInstances(pid);
   var inst = { id: id || newId(), name: name || '', type: type || 'normal', created: Date.now(), updated: Date.now(), level: 1 };
+  if (preset) inst.preset = preset;   // les reglages choisis a la creation (administrateur)
   if (raw) {
     lsSet(saveKeyOf(pid, inst.id), raw);
     try { var d = JSON.parse(raw); inst.name = inst.name || d.bakeryName || ''; inst.level = d.level || 1; inst.updated = d.lastTick || inst.updated; } catch (e) { /* on garde les valeurs par defaut */ }
@@ -106,7 +107,7 @@ function decodeSaveText(text) {
   try {
     var json = text.charAt(0) === '{' ? text : decodeURIComponent(escape(atob(text)));
     var d = JSON.parse(json);
-    if (!d || typeof d !== 'object' || typeof d.money !== 'number' || json.length > P2DS_CONFIG.MAX_SAVE_CHARS) return null;
+    if (saveInvalidReason(d) || json.length > P2DS_CONFIG.MAX_SAVE_CHARS) return null;
     return json;
   } catch (e) { return null; }
 }

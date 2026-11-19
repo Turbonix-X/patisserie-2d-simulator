@@ -93,7 +93,7 @@ function showFirstBakeryName() {
   h += '<p>' + t('intro.firstBakery') + '</p>';
   h += '<input id="first-bakery" maxlength="30" placeholder="' + escH(t('rename.placeholder')) + '" onkeydown="if(event.key===\'Enter\')submitFirstBakery()">';
   h += '<div class="bob-talk-foot"><button class="btn btn-primary" onclick="submitFirstBakery()">' + t('common.next') + '</button></div></div></div>';
-  showModal(h, 'modal-bob');
+  showModal(h, 'modal-bob modal-locked');   // obligatoire : Echap et un clic a cote ne la ferment pas
   var input = document.getElementById('first-bakery');
   if (input) input.focus();
 }
@@ -370,7 +370,7 @@ function renderSugar() {
   var bob = document.getElementById('bob');
   if (!bob) return;
   // Le wasabi ne passe pas tout seul : il faut du sucre
-  var choke = String(G.bobChoke || 0), gold = String(G.bobGold || 0);
+  var choke = String(G.bobChoke || 0), gold = String(((G.settings.theme === 'gold') || (ui.seeTheme === 'gold')) ? 5 : (G.bobGold || 0));   // le theme dore dore Bob
   if (bob.getAttribute('data-choke') !== choke) bob.setAttribute('data-choke', choke);
   if (bob.getAttribute('data-gold') !== gold) bob.setAttribute('data-gold', gold);
 }

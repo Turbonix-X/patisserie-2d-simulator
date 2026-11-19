@@ -90,6 +90,7 @@ var UI_ICONS = {
   sell: '<path d="M6 8h12l1 13H5z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/>',
   bld: '<path d="M3 21V10l6 4v-4l6 4V4h6v17z"/><path d="M8 17h1M13 17h1"/>',
   emp: '<circle cx="9" cy="8" r="3.500"/><path d="M2.500 20c1-3.500 3.500-5.500 6.500-5.500s5.500 2 6.500 5.500"/><path d="M16 4.800a3.500 3.500 0 0 1 0 6.400M18 14.800c1.800.8 3 2.600 3.500 5.200"/>',
+  copy: '<rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h9"/>',
   ach: '<path d="M8 4h8v6a4 4 0 0 1-8 0z"/><path d="M8 6H4v2a4 4 0 0 0 4 4M16 6h4v2a4 4 0 0 1-4 4M12 14v4M8 21h8M10 18h4v3h-4z"/>',
   stats: '<path d="M4 4v16h16"/><path d="M9 16v-5M14 16V8M19 16v-8"/>',
   clock: '<circle cx="12" cy="12" r="8.500"/><path d="M12 7v5l3 2"/>',

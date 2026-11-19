@@ -2,6 +2,36 @@
 
 Tout ce qui a été ajouté à Pâtisserie 2D Simulator, de la plus récente à la plus ancienne. Pour comprendre les règles du jeu, va voir le [wiki](REGLES.md).
 
+## Release 1.3.2 (19 novembre 2026)
+
+Le jeu ne ramera plus avec 1000 employés, la console est plus sûre, et il y a de quoi comparer, dupliquer et protéger tes parties.
+
+**Jeu**
+- Le thème Doré : il s'obtient avec 5 000 feuilles d'or alimentaires, il rend Bob tout en or, et avec le thème Tech il ouvre le Tech doré.
+- Les employés dépendent de la place : au plus un par m² (plus 2), et 1000 au maximum. Avec 1000 employés, le jeu est vingt fois plus rapide, et la liste n'en dessine que 50 par métier avant « Voir les autres ».
+- Une entreprise peut avoir jusqu'à 50 pâtisseries.
+- Dans les stats, une nouvelle vue « Comparer » met 2 ou 3 de tes pâtisseries côte à côte.
+- La fenêtre « Bon retour » donne tout : le vrai temps d'absence (jours, mois, années), un onglet par pâtisserie et un total, et les graphiques quand tu les as débloqués. Les montants payés n'ont plus de signe moins.
+- Dans la banque, Bob a un bouton « Passer » quand il t'explique l'assurance, et les prêts d'un milliard ou plus s'écrivent bien (100 Md).
+- Les nombres s'écrivent selon la langue : en anglais, chinois, japonais et coréen on utilise un point, et 10³⁰⁰ ne s'affiche plus « ∞ ».
+
+**Parties**
+- Un bouton pour dupliquer une partie dans le menu.
+- Si une partie est déjà ouverte dans un autre onglet, Bob te prévient avant que l'un écrase l'autre.
+- Un fichier ou un code avec des valeurs impossibles (argent négatif, niveau illisible...) est refusé à l'import, et à l'ouverture on te dit ce qui a été corrigé.
+- La fenêtre « Donne un nom à ta première pâtisserie » est obligatoire : Échap et un clic à côté ne la ferment plus.
+
+**Interface**
+- Sur téléphone : les boutons font au moins 44 px, les vibrations (désactivables dans les réglages) accompagnent les touches, et la console est lisible.
+- Les langues sont dans une grille de 5 par ligne, des listes déroulantes arrondies, une flèche de repli qui change de sens, et un texte d'XP et un argent plus lisibles.
+- Raccourcis : / ouvre la console (si elle est débloquée), S les succès, Ctrl + Échap le menu. Le logo marche aussi au clavier, et Bob te donne un indice à 500 clics sur le logo.
+
+**Console**
+- Elle est bien plus stricte : les mots en trop, les nombres illisibles (1e400, abc), les valeurs négatives et les noms inconnus sont refusés avec un message, sans rien changer. Les nombres comme 1e3, 1,5 ou 10^300 sont compris.
+- Supprimer une pâtisserie demande deux confirmations, /max puis /unmax retrouve la vraie partie, et /max met le niveau à 1000 sans XP.
+- Désactiver la console demande confirmation, et après l'avoir débloquée une première fois, 100 clics sur le logo suffisent pour la retrouver.
+- Les résultats utilisent les vrais noms, les ingrédients sont toujours entiers, et « Lucie est renvoyée » s'accorde.
+
 ## Release 1.3.1 (17 novembre 2026)
 
 Une assurance, des barres de progression, de vrais pluriels, et un téléphone plus confortable.

@@ -239,7 +239,46 @@ function migrateSave(data) {
   data.bakeries.forEach(function(b) { if (b.state) b.state = migrateSave(b.state); });
   if (!LANGS[data.settings.lang]) data.settings.lang = 'fr';
   if (data.settings.bulk === undefined) data.settings.bulk = '1';
+  var fixed = sanitizeLoaded(data);
+  if (fixed.length && !loadNotice) loadNotice = 'saveFixed';   // on le dit au joueur
   return data;
+}
+
+// Une sauvegarde importee doit avoir de vraies valeurs : on refuse au lieu de corriger en silence.
+// Renvoie la raison du refus, ou '' si tout va bien.
+function saveInvalidReason(d) {
+  if (!d || typeof d !== 'object' || Array.isArray(d)) return 'format';
+  function num(v, min, max) { return typeof v === 'number' && isFinite(v) && v >= min && v <= max; }
+  if (!num(d.money, 0, 1e304)) return 'money';
+  if (d.level !== undefined && !(num(d.level, 1, 100000) && d.level === Math.floor(d.level))) return 'level';
+  if (d.xp !== undefined && !num(d.xp, 0, 1e304)) return 'xp';
+  if (d.totalEarned !== undefined && !num(d.totalEarned, 0, 1e304)) return 'totalEarned';
+  if (d.rentDebt !== undefined && !num(d.rentDebt, 0, 1e304)) return 'rentDebt';
+  if (d.maxSpace !== undefined && !num(d.maxSpace, 1, 1e12)) return 'maxSpace';
+  var maps = ['ing', 'cakes', 'buildings', 'machines'];
+  for (var i = 0; i < maps.length; i++) {
+    var m = d[maps[i]];
+    if (m === undefined) continue;
+    if (!m || typeof m !== 'object' || Array.isArray(m)) return maps[i];
+    for (var k in m) {
+      var v = maps[i] === 'buildings' ? (m[k] && m[k].qty) : m[k];
+      if (!num(v, 0, 1e305)) return maps[i];
+    }
+  }
+  if (d.employees !== undefined && (!Array.isArray(d.employees) || d.employees.length > EMP_LIMIT)) return 'employees';
+  if (d.bakeries !== undefined && (!Array.isArray(d.bakeries) || d.bakeries.length > BAKERY_MAX)) return 'bakeries';
+  if (Array.isArray(d.bakeries)) {
+    for (var j = 0; j < d.bakeries.length; j++) { var st = d.bakeries[j] && d.bakeries[j].state; if (st && saveInvalidReason(st)) return 'bakeries'; }
+  }
+  return '';
+}
+// Au chargement : une valeur impossible est corrigee, mais on le dit
+function sanitizeLoaded(data) {
+  var fixed = [];
+  function fix(k, min, dflt) { var v = data[k]; if (typeof v !== 'number' || !isFinite(v) || v < min) { data[k] = dflt; fixed.push(k); } }
+  fix('money', 0, 0); fix('xp', 0, 0); fix('level', 1, 1); fix('totalEarned', 0, 0); fix('rentDebt', 0, 0); fix('maxSpace', 1, 5);
+  data.level = Math.floor(data.level);
+  return fixed;
 }
 
 // ============ SAUVEGARDE ============
@@ -250,6 +289,7 @@ function curSaveKey() { return CUR.inst ? saveKeyOf(CUR.profile, CUR.inst) : 'p2
 var saveWarningShown = false;
 
 function save() {
+  if (typeof ui !== 'undefined' && ui.savesBlocked) return;   // la meme partie est ouverte ailleurs : on n'ecrase pas
   // Hors ligne, le jeu ne sauvegarde pas ta partie
   if (typeof navigator !== 'undefined' && navigator.onLine === false) return;
   if (typeof capMoney === 'function') capMoney();
@@ -377,7 +417,7 @@ function importSave(code) {
     if (String(code).length > P2DS_CONFIG.MAX_SAVE_CHARS * 1.4) return false;
     var data = JSON.parse(decodeURIComponent(escape(atob(code.trim()))));
     if (JSON.stringify(data).length > P2DS_CONFIG.MAX_SAVE_CHARS) return false;
-    if (!data || typeof data !== 'object' || typeof data.money !== 'number') return false;
+    if (saveInvalidReason(data)) return false;
     Object.assign(G, migrateSave(data));
     save();
     return true;
@@ -390,18 +430,24 @@ var lastSaveBeforeMax = null;
 
 function saveUndoState() { undoState = JSON.parse(JSON.stringify(G)); }
 
+// L'etat revient exactement comme il etait : les cles ajoutees depuis (infini, XP verrouillee...) disparaissent aussi
+function replaceState(saved) {
+  Object.keys(G).forEach(function(k) { if (!(k in saved)) delete G[k]; });
+  Object.assign(G, saved);
+}
 function restoreUndoState() {
   if (!undoState) return false;
-  Object.assign(G, undoState);
+  replaceState(undoState);
   undoState = null;
   return true;
 }
 
-function saveBeforeMax() { lastSaveBeforeMax = JSON.parse(JSON.stringify(G)); }
+// La vraie partie n'est gardee que la premiere fois : /max deux fois ne la perd pas
+function saveBeforeMax() { if (!lastSaveBeforeMax) lastSaveBeforeMax = JSON.parse(JSON.stringify(G)); }
 
 function restoreBeforeMax() {
   if (!lastSaveBeforeMax) return false;
-  Object.assign(G, lastSaveBeforeMax);
+  replaceState(lastSaveBeforeMax);
   lastSaveBeforeMax = null;
   return true;
 }

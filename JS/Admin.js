@@ -369,6 +369,7 @@ function adminDrawGame() {
   // Une petite barre en haut : le nom de l'entreprise, et ses boutons
   var h = '<div class="adm-overlay-card"><div class="adm-game-bar"><div class="adm-game-title"><b>' + aesc(row.bakery_name || d.companyName || adminTr('Sans nom', 'Unnamed')) + '</b><small>' + (owner ? aesc(owner.pseudo) + ' · ' + aesc(owner.email) : '') + '</small></div>' +
     '<div class="adm-game-btns"><span class="adm-live"><i></i>' + adminTr('En direct', 'Live') + ' <small id="adm-live-at"></small></span>' +
+    '<button class="btn btn-small btn-primary" title="' + aesc(adminTr('Jouer une copie de cette partie', 'Play a copy of this game')) + '" onclick="adminGamePlay()">▶ ' + adminTr('Jouer', 'Play') + '</button>' +
     '<button class="btn btn-small icon-only" title="' + aesc(adminTr('Exporter la sauvegarde (fichier)', 'Export the save (file)')) + '" onclick="adminGameExport()">💾</button>' +
     '<button class="btn btn-small icon-only" title="' + aesc(adminTr('Copier la sauvegarde', 'Copy the save')) + '" onclick="adminGameCopy(this)">📋</button>' +
     '<button class="btn btn-small icon-only" title="' + aesc(adminTr('Renommer', 'Rename')) + '" onclick="adminGameRename()">✏️</button>' +
@@ -400,6 +401,16 @@ function adminPatchSave(row, patch) {
     if (!r || !r.length) throw { message: adminTr('Refusé par la base : relance supabase_setup.sql dans Supabase (règle de modification pour l’administrateur).', 'Refused by the database: run supabase_setup.sql again in Supabase (update rule for the administrator).') };
     return r;
   });
+}
+// Jouer la partie d'un joueur : on en joue une COPIE (le joueur ne perd rien et ne voit rien)
+function adminGamePlay() {
+  var row = adminGame.row;
+  if (!row || !row.save_data) return;
+  var owner = adminUI.rows.filter(function(r) { return r.id === row.user_id; })[0];
+  var copy = createInstance(homePid(), String(row.bakery_name || '').slice(0, 22) + ' (' + (owner ? owner.pseudo : '?') + ')', 'normal', row.save_data);
+  if (!copy) { alert(adminTr('Impossible de copier cette partie (sauvegarde illisible).', 'Cannot copy this game (unreadable save).')); return; }
+  adminCloseGame();
+  homePlay(copy.id);
 }
 function adminGameRename() {
   var row = adminGame.row;

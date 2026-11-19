@@ -4,6 +4,26 @@
   "intro": "كل ما أُضيف إلى Pâtisserie 2D Simulator، من الأحدث إلى الأقدم. تظهر الإصدارات الأقدم بالإنجليزية. لفهم قواعد اللعبة، راجع [الويكي](REGLES.md).",
   "versions": [
    {
+    "title": "Release 1.3.2 (19 نوفمبر 2026)",
+    "name": "Release 1.3.2",
+    "intro": "لم تعد اللعبة تتباطأ مع 1000 موظف، والوحدة أكثر أمانًا، ويمكنك المقارنة والنسخ وحماية ألعابك.",
+    "groups": [
+     {
+      "name": "اللعبة",
+      "items": [
+       "الثيم الذهبي: تحصل عليه بـ 5000 ورقة ذهب صالحة للأكل، ويجعل بوب ذهبيًا بالكامل، ومع ثيم التقنية يفتح التقنية الذهبية.",
+       "عدد الموظفين يعتمد على المساحة (واحد لكل م² زائد 2 كحد أقصى، و1000 إجمالًا). مع 1000 موظف تصبح اللعبة أسرع بعشرين مرة.",
+       "يمكن للشركة امتلاك حتى 50 مخبزًا، وفي الإحصاءات عرض «مقارنة» لمخبزين أو ثلاثة.",
+       "تعرض نافذة «مرحبًا بعودتك» مدة الغياب الحقيقية (أيام وأشهر وسنوات) وتبويبًا لكل مخبز ومجموعًا والرسوم البيانية.",
+       "تتبع الأعداد اللغة، وتُكتب القروض من مليار فأكثر بشكل صحيح.",
+       "نسخ الألعاب، وتنبيه إذا كانت اللعبة مفتوحة في تبويب آخر، ورفض الاستيراد للقيم المستحيلة، واسم المخبز الأول إلزامي.",
+       "على الهاتف: أزرار 44 بكسل على الأقل، واهتزاز (يمكن إيقافه)، وإشعارات لا تغطي شيئًا. الاختصارات: / للوحدة، S للإنجازات، Ctrl + Esc للقائمة.",
+       "الوحدة أكثر صرامة بكثير، وحذف مخبز يطلب تأكيدين، و/max ثم /unmax يعيد لعبتك الحقيقية."
+      ]
+     }
+    ]
+   },
+   {
     "title": "Release 1.3.1 (17 نوفمبر 2026)",
     "name": "Release 1.3.1",
     "intro": "تأمين، وأشرطة تقدّم، وصيغ مفرد وجمع صحيحة، وهاتف أكثر راحة.",
@@ -362,6 +382,26 @@
   "intro": "Alles, was zu Pâtisserie 2D Simulator hinzugekommen ist, von der neuesten bis zur ältesten Version. Ältere Versionen werden auf Englisch angezeigt. Die Spielregeln findest du im [Wiki](REGLES.md).",
   "versions": [
    {
+    "title": "Release 1.3.2 (19. November 2026)",
+    "name": "Release 1.3.2",
+    "intro": "Das Spiel ruckelt mit 1000 Angestellten nicht mehr, die Konsole ist sicherer, und du kannst Spiele vergleichen, duplizieren und schützen.",
+    "groups": [
+     {
+      "name": "Spiel",
+      "items": [
+       "Das goldene Thema: Du bekommst es mit 5000 essbaren Goldblättchen, es macht Bob ganz golden und öffnet zusammen mit dem Tech-Thema das goldene Tech.",
+       "Angestellte hängen vom Platz ab (höchstens einer pro m² plus 2, insgesamt 1000). Mit 1000 Angestellten ist das Spiel zwanzigmal schneller.",
+       "Ein Unternehmen kann bis zu 50 Konditoreien haben, und in den Statistiken vergleicht die Ansicht „Vergleichen“ 2 oder 3 davon.",
+       "Das Fenster „Willkommen zurück“ zeigt die echte Abwesenheit (Tage, Monate, Jahre), einen Tab pro Konditorei, eine Gesamtansicht und die Diagramme.",
+       "Zahlen folgen der Sprache, und Kredite ab einer Milliarde werden richtig geschrieben.",
+       "Spiele duplizieren, Warnung bei doppelt geöffnetem Spiel, Import lehnt unmögliche Werte ab, und der Name der ersten Konditorei ist Pflicht.",
+       "Am Handy: Knöpfe mindestens 44 px, Vibration (abschaltbar), Meldungen verdecken nichts. Kürzel: / Konsole, S Erfolge, Strg + Esc Menü.",
+       "Die Konsole ist viel strenger (zu viele Wörter, unlesbare Zahlen, negative Werte und unbekannte Namen werden abgelehnt), Konditorei löschen braucht zwei Bestätigungen, /max + /unmax stellt dein Spiel wieder her."
+      ]
+     }
+    ]
+   },
+   {
     "title": "Release 1.3.1 (17. November 2026)",
     "name": "Release 1.3.1",
     "intro": "Eine Versicherung, Fortschrittsbalken, echte Plurale und ein bequemeres Handy.",
@@ -719,6 +759,51 @@
   "title": "Update history",
   "intro": "Everything that was added to Pâtisserie 2D Simulator, from the newest to the oldest. To understand the rules of the game, see the [wiki](REGLES.md).",
   "versions": [
+   {
+    "title": "Release 1.3.2 (November 19, 2026)",
+    "name": "Release 1.3.2",
+    "intro": "The game no longer lags with 1000 employees, the console is safer, and there are ways to compare, duplicate and protect your games.",
+    "groups": [
+     {
+      "name": "Game",
+      "items": [
+       "The Golden theme: you get it with 5,000 edible gold leaves, it turns Bob all gold, and together with the Tech theme it opens Golden Tech.",
+       "Employees depend on space: at most one per m² (plus 2), and 1000 at the most. With 1000 employees the game is twenty times faster, and the list only draws 50 per job before \"Show the others\".",
+       "A company can have up to 50 bakeries.",
+       "In the stats, a new \"Compare\" view puts 2 or 3 of your bakeries side by side.",
+       "The \"Welcome back\" window gives everything: the real time away (days, months, years), a tab per bakery and a total, and the charts once you have unlocked them. Amounts paid no longer have a minus sign.",
+       "In the bank, Bob has a \"Skip\" button when he explains the insurance, and loans of a billion or more read properly (100B).",
+       "Numbers follow the language: in English, Chinese, Japanese and Korean a dot is used, and 10³⁰⁰ no longer shows \"∞\"."
+      ]
+     },
+     {
+      "name": "Games",
+      "items": [
+       "A button to duplicate a game in the menu.",
+       "If a game is already open in another tab, Bob warns you before one overwrites the other.",
+       "A file or code with impossible values (negative money, unreadable level...) is refused on import, and when opening a save you are told what was fixed.",
+       "The \"Give your first bakery a name\" window is mandatory: Esc and a click outside no longer close it."
+      ]
+     },
+     {
+      "name": "Interface",
+      "items": [
+       "On a phone: buttons are at least 44 px, vibrations (which you can turn off in the settings) go with your taps, and the console is readable.",
+       "Languages sit in a grid of 5 per row, drop-down lists are rounded, the fold arrow changes direction, and the XP text and the money are easier to read.",
+       "Shortcuts: / opens the console (once unlocked), S the achievements, Ctrl + Esc the menu. The logo also works with the keyboard, and Bob gives you a hint at 500 logo clicks."
+      ]
+     },
+     {
+      "name": "Console",
+      "items": [
+       "It is much stricter: extra words, unreadable numbers (1e400, abc), negative values and unknown names are refused with a message, changing nothing. Numbers like 1e3, 1,5 or 10^300 are understood.",
+       "Deleting a bakery asks for two confirmations, /max then /unmax brings back your real game, and /max sets the level to 1000 with no XP.",
+       "Turning the console off asks for confirmation, and once you have unlocked it before, 100 logo clicks are enough to get it back.",
+       "Results use the real names, ingredients are always whole numbers, and gendered messages agree."
+      ]
+     }
+    ]
+   },
    {
     "title": "Release 1.3.1 (November 17, 2026)",
     "name": "Release 1.3.1",
@@ -1552,6 +1637,26 @@
   "intro": "Todo lo que se ha añadido a Pâtisserie 2D Simulator, de la más reciente a la más antigua. Las versiones más antiguas se muestran en inglés. Para entender las reglas del juego, mira la [wiki](REGLES.md).",
   "versions": [
    {
+    "title": "Release 1.3.2 (19 de noviembre de 2026)",
+    "name": "Release 1.3.2",
+    "intro": "El juego ya no va lento con 1000 empleados, la consola es más segura y puedes comparar, duplicar y proteger tus partidas.",
+    "groups": [
+     {
+      "name": "Juego",
+      "items": [
+       "Tema Dorado: se consigue con 5000 hojas de oro comestibles, pone a Bob todo de oro y, con el tema Tech, abre el Tech dorado.",
+       "Los empleados dependen del espacio (como máximo uno por m² más 2, y 1000 en total). Con 1000 empleados el juego va veinte veces más rápido.",
+       "Una empresa puede tener hasta 50 pastelerías, y en las estadísticas hay una vista «Comparar» para 2 o 3 de ellas.",
+       "La ventana «Bienvenido de nuevo» muestra el tiempo real de ausencia (días, meses, años), una pestaña por pastelería, un total y los gráficos.",
+       "Los números siguen el idioma, y los préstamos de mil millones o más se escriben bien.",
+       "Duplicar partidas, aviso si la partida ya está abierta en otra pestaña, importación que rechaza valores imposibles, y nombre obligatorio de la primera pastelería.",
+       "En el móvil: botones de 44 px como mínimo, vibraciones (desactivables) y notificaciones sin tapar nada. Atajos: / consola, S logros, Ctrl + Esc menú.",
+       "La consola es mucho más estricta (palabras de más, números ilegibles, negativos y nombres desconocidos se rechazan), borrar una pastelería pide dos confirmaciones y /max + /unmax recupera tu partida."
+      ]
+     }
+    ]
+   },
+   {
     "title": "Release 1.3.1 (17 de noviembre de 2026)",
     "name": "Release 1.3.1",
     "intro": "Un seguro, barras de progreso, plurales de verdad y un móvil más cómodo.",
@@ -1909,6 +2014,26 @@
   "title": "更新履歴",
   "intro": "Pâtisserie 2D Simulator に追加されたすべての内容を、新しいものから古いものの順に載せています。古いバージョンは英語で表示されます。ゲームのルールは[ウィキ](REGLES.md)を見てください。",
   "versions": [
+   {
+    "title": "Release 1.3.2（2026年11月19日）",
+    "name": "Release 1.3.2（2026年11月19日）",
+    "intro": "従業員 1000 人でも重くならず、コンソールは安全になり、ゲームの比較・複製・保護ができます。",
+    "groups": [
+     {
+      "name": "ゲーム",
+      "items": [
+       "ゴールドテーマ：食用金箔 5000 枚で解放。ボブが金色になり、テックテーマと合わせてゴールドテックも解放されます。",
+       "従業員数は広さで決まります（1 ㎡につき 1 人＋2、最大 1000 人）。1000 人でもゲームは 20 倍速くなりました。",
+       "1 つの会社に最大 50 軒のお店を持て、統計に 2〜3 軒を並べて比べる「比較」ビューが追加されました。",
+       "「おかえり」ウィンドウに、実際の不在時間（日・月・年）、お店ごとのタブ、合計、グラフが表示されます。",
+       "数字は言語に合わせて表記され、10 億以上のローンも正しく表示されます。",
+       "ゲームの複製、別タブで開いているときの警告、ありえない値のインポート拒否、最初のお店の名前は必須になりました。",
+       "スマホでは、ボタンは 44 px 以上、バイブ（オフ可）、通知が何も隠しません。ショートカット：/ コンソール、S 実績、Ctrl + Esc メニュー。",
+       "コンソールはずっと厳密になり、お店の削除は 2 回の確認が必要で、/max のあと /unmax で本来のゲームに戻れます。"
+      ]
+     }
+    ]
+   },
    {
     "title": "Release 1.3.1（2026年11月17日）",
     "name": "Release 1.3.1（2026年11月17日）",
@@ -2268,6 +2393,26 @@
   "intro": "Pâtisserie 2D Simulator에 추가된 모든 내용을 최신순으로 적었습니다. 오래된 버전은 영어로 표시됩니다. 게임 규칙은 [위키](REGLES.md)를 참고하세요.",
   "versions": [
    {
+    "title": "Release 1.3.2 (2026년 11월 19일)",
+    "name": "Release 1.3.2",
+    "intro": "직원 1000명이어도 버벅이지 않고, 콘솔이 더 안전해졌으며, 게임을 비교·복제·보호할 수 있습니다.",
+    "groups": [
+     {
+      "name": "게임",
+      "items": [
+       "골드 테마: 식용 금박 5000장으로 해금되며, 밥이 온통 금색이 되고, 테크 테마와 함께 골드 테크도 열립니다.",
+       "직원 수는 공간에 따라 정해집니다(㎡당 1명 + 2, 최대 1000명). 직원 1000명에서도 게임이 스무 배 빨라졌습니다.",
+       "한 회사는 제과점을 최대 50곳까지 둘 수 있고, 통계에 2~3곳을 나란히 비교하는 “비교” 보기가 생겼습니다.",
+       "“돌아오신 걸 환영합니다” 창에 실제 자리 비운 시간(일·월·년), 제과점별 탭, 합계, 그래프가 나옵니다.",
+       "숫자는 언어에 맞게 표기되고, 10억 이상의 대출도 올바르게 보입니다.",
+       "게임 복제, 다른 탭에서 이미 열려 있을 때 경고, 불가능한 값의 가져오기 거부, 첫 제과점 이름 필수.",
+       "폰에서는 버튼이 44px 이상이고, 진동(끌 수 있음), 알림이 아무것도 가리지 않습니다. 단축키: / 콘솔, S 업적, Ctrl + Esc 메뉴.",
+       "콘솔이 훨씬 엄격해졌고, 제과점 삭제는 두 번 확인하며, /max 뒤 /unmax로 진짜 게임을 되찾습니다."
+      ]
+     }
+    ]
+   },
+   {
     "title": "Release 1.3.1 (2026년 11월 17일)",
     "name": "Release 1.3.1",
     "intro": "보험, 진행 막대, 올바른 단수·복수, 그리고 더 편해진 폰.",
@@ -2625,6 +2770,51 @@
   "title": "Historique des mises à jour",
   "intro": "Tout ce qui a été ajouté à Pâtisserie 2D Simulator, de la plus récente à la plus ancienne. Pour comprendre les règles du jeu, va voir le [wiki](REGLES.md).",
   "versions": [
+   {
+    "title": "Release 1.3.2 (19 novembre 2026)",
+    "name": "Release 1.3.2",
+    "intro": "Le jeu ne ramera plus avec 1000 employés, la console est plus sûre, et il y a de quoi comparer, dupliquer et protéger tes parties.",
+    "groups": [
+     {
+      "name": "Jeu",
+      "items": [
+       "Le thème Doré : il s'obtient avec 5 000 feuilles d'or alimentaires, il rend Bob tout en or, et avec le thème Tech il ouvre le Tech doré.",
+       "Les employés dépendent de la place : au plus un par m² (plus 2), et 1000 au maximum. Avec 1000 employés, le jeu est vingt fois plus rapide, et la liste n'en dessine que 50 par métier avant « Voir les autres ».",
+       "Une entreprise peut avoir jusqu'à 50 pâtisseries.",
+       "Dans les stats, une nouvelle vue « Comparer » met 2 ou 3 de tes pâtisseries côte à côte.",
+       "La fenêtre « Bon retour » donne tout : le vrai temps d'absence (jours, mois, années), un onglet par pâtisserie et un total, et les graphiques quand tu les as débloqués. Les montants payés n'ont plus de signe moins.",
+       "Dans la banque, Bob a un bouton « Passer » quand il t'explique l'assurance, et les prêts d'un milliard ou plus s'écrivent bien (100 Md).",
+       "Les nombres s'écrivent selon la langue : en anglais, chinois, japonais et coréen on utilise un point, et 10³⁰⁰ ne s'affiche plus « ∞ »."
+      ]
+     },
+     {
+      "name": "Parties",
+      "items": [
+       "Un bouton pour dupliquer une partie dans le menu.",
+       "Si une partie est déjà ouverte dans un autre onglet, Bob te prévient avant que l'un écrase l'autre.",
+       "Un fichier ou un code avec des valeurs impossibles (argent négatif, niveau illisible...) est refusé à l'import, et à l'ouverture on te dit ce qui a été corrigé.",
+       "La fenêtre « Donne un nom à ta première pâtisserie » est obligatoire : Échap et un clic à côté ne la ferment plus."
+      ]
+     },
+     {
+      "name": "Interface",
+      "items": [
+       "Sur téléphone : les boutons font au moins 44 px, les vibrations (désactivables dans les réglages) accompagnent les touches, et la console est lisible.",
+       "Les langues sont dans une grille de 5 par ligne, des listes déroulantes arrondies, une flèche de repli qui change de sens, et un texte d'XP et un argent plus lisibles.",
+       "Raccourcis : / ouvre la console (si elle est débloquée), S les succès, Ctrl + Échap le menu. Le logo marche aussi au clavier, et Bob te donne un indice à 500 clics sur le logo."
+      ]
+     },
+     {
+      "name": "Console",
+      "items": [
+       "Elle est bien plus stricte : les mots en trop, les nombres illisibles (1e400, abc), les valeurs négatives et les noms inconnus sont refusés avec un message, sans rien changer. Les nombres comme 1e3, 1,5 ou 10^300 sont compris.",
+       "Supprimer une pâtisserie demande deux confirmations, /max puis /unmax retrouve la vraie partie, et /max met le niveau à 1000 sans XP.",
+       "Désactiver la console demande confirmation, et après l'avoir débloquée une première fois, 100 clics sur le logo suffisent pour la retrouver.",
+       "Les résultats utilisent les vrais noms, les ingrédients sont toujours entiers, et « Lucie est renvoyée » s'accorde."
+      ]
+     }
+    ]
+   },
    {
     "title": "Release 1.3.1 (17 novembre 2026)",
     "name": "Release 1.3.1",
@@ -3458,6 +3648,26 @@
   "intro": "Tudo o que foi acrescentado ao Pâtisserie 2D Simulator, da mais recente à mais antiga. As versões mais antigas aparecem em inglês. Para perceber as regras do jogo, vê a [wiki](REGLES.md).",
   "versions": [
    {
+    "title": "Release 1.3.2 (19 de novembro de 2026)",
+    "name": "Release 1.3.2",
+    "intro": "O jogo já não vai lento com 1000 funcionários, a consola é mais segura e podes comparar, duplicar e proteger os teus jogos.",
+    "groups": [
+     {
+      "name": "Jogo",
+      "items": [
+       "Tema Dourado: obtém-se com 5000 folhas de ouro comestíveis, deixa o Bob todo dourado e, com o tema Tech, abre o Tech dourado.",
+       "Os funcionários dependem do espaço (no máximo um por m² mais 2, e 1000 no total). Com 1000 funcionários o jogo é vinte vezes mais rápido.",
+       "Uma empresa pode ter até 50 pastelarias, e nas estatísticas há uma vista «Comparar» para 2 ou 3 delas.",
+       "A janela «Bem-vindo de volta» mostra o tempo real de ausência (dias, meses, anos), um separador por pastelaria, um total e os gráficos.",
+       "Os números seguem a língua, e os empréstimos de mil milhões ou mais escrevem-se bem.",
+       "Duplicar jogos, aviso se o jogo já está aberto noutro separador, importação que recusa valores impossíveis, e nome obrigatório da primeira pastelaria.",
+       "No telemóvel: botões de pelo menos 44 px, vibrações (desativáveis) e notificações que não tapam nada. Atalhos: / consola, S conquistas, Ctrl + Esc menu.",
+       "A consola é muito mais rigorosa (palavras a mais, números ilegíveis, negativos e nomes desconhecidos são recusados), apagar uma pastelaria pede duas confirmações e /max + /unmax recupera o teu jogo."
+      ]
+     }
+    ]
+   },
+   {
     "title": "Release 1.3.1 (17 de novembro de 2026)",
     "name": "Release 1.3.1",
     "intro": "Um seguro, barras de progresso, plurais a sério e um telemóvel mais confortável.",
@@ -3816,6 +4026,26 @@
   "intro": "Всё, что добавили в Pâtisserie 2D Simulator, от самого нового к самому старому. Более старые версии показываются на английском. Чтобы понять правила игры, загляни в [вики](REGLES.md).",
   "versions": [
    {
+    "title": "Release 1.3.2 (19 ноября 2026)",
+    "name": "Release 1.3.2",
+    "intro": "Игра больше не тормозит с 1000 сотрудников, консоль надёжнее, а игры можно сравнивать, дублировать и защищать.",
+    "groups": [
+     {
+      "name": "Игра",
+      "items": [
+       "Золотая тема: открывается за 5000 пищевых золотых листов, делает Боба целиком золотым, а вместе с техно-темой открывает золотую техно-тему.",
+       "Число сотрудников зависит от места (не больше одного на м² плюс 2, всего 1000). С 1000 сотрудников игра быстрее в двадцать раз.",
+       "В компании может быть до 50 кондитерских, а в статистике есть вид «Сравнить» для 2–3 из них.",
+       "Окно «С возвращением» показывает реальное время отсутствия (дни, месяцы, годы), вкладку для каждой кондитерской, итог и графики.",
+       "Числа записываются по правилам языка, а кредиты от миллиарда отображаются правильно.",
+       "Дублирование игр, предупреждение, если игра уже открыта в другой вкладке, отказ импортировать невозможные значения, обязательное имя первой кондитерской.",
+       "На телефоне: кнопки не меньше 44 px, вибрация (можно выключить), уведомления ничего не закрывают. Клавиши: / консоль, S достижения, Ctrl + Esc меню.",
+       "Консоль стала намного строже, удаление кондитерской требует двух подтверждений, а /max и затем /unmax возвращает настоящую игру."
+      ]
+     }
+    ]
+   },
+   {
     "title": "Release 1.3.1 (17 ноября 2026)",
     "name": "Release 1.3.1",
     "intro": "Страховка, полосы прогресса, правильные числа и более удобный телефон.",
@@ -4173,6 +4403,26 @@
   "title": "更新记录",
   "intro": "Pâtisserie 2D Simulator 新增的所有内容，从最新到最旧。更早的版本以英文显示。想了解游戏规则，请看[百科](REGLES.md)。",
   "versions": [
+   {
+    "title": "Release 1.3.2（2026年11月19日）",
+    "name": "Release 1.3.2（2026年11月19日）",
+    "intro": "1000 名员工也不再卡顿，控制台更安全，还能对比、复制并保护你的游戏。",
+    "groups": [
+     {
+      "name": "游戏",
+      "items": [
+       "黄金主题：获得 5000 片食用金箔即可解锁，让鲍勃全身变金，与科技主题一起还能解锁黄金科技。",
+       "员工数量取决于空间（每平方米最多一人再加 2，总共最多 1000）。1000 名员工时游戏快了二十倍。",
+       "一家公司最多可有 50 家甜品店，统计里新增“对比”视图，可并排比较 2 到 3 家。",
+       "“欢迎回来”窗口显示真实的离开时间（天、月、年）、每家甜品店一个标签页、总计，以及图表。",
+       "数字写法跟随语言，十亿及以上的贷款也能正确显示。",
+       "可复制游戏，同一局在另一个标签页打开时会提醒，导入会拒绝不可能的数值，第一家甜品店必须命名。",
+       "手机上：按钮至少 44 像素，可关闭的振动，通知不再遮挡。快捷键：/ 控制台，S 成就，Ctrl + Esc 菜单。",
+       "控制台严格得多，删除甜品店需要两次确认，/max 之后 /unmax 能找回真实的游戏。"
+      ]
+     }
+    ]
+   },
    {
     "title": "Release 1.3.1（2026年11月17日）",
     "name": "Release 1.3.1（2026年11月17日）",

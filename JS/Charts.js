@@ -14,14 +14,64 @@ function statsPane() {
   var h = '';
   if (open) {
     h += '<div class="list-tools">';
-    [['here', 'stats.viewHere'], ['charts', 'stats.viewCharts'], ['all', 'stats.viewAll']].forEach(function(v) {
+    [['here', 'stats.viewHere'], ['charts', 'stats.viewCharts'], ['all', 'stats.viewAll'], ['compare', 'stats.viewCompare']].forEach(function(v) {
       h += '<button class="chip' + (ui.statsView === v[0] ? ' active' : '') + '" onclick="ui.statsView=\'' + v[0] + '\';refreshSettingsPane()">' + t(v[1]) + '</button>';
     });
     h += '</div>';
   }
   if (ui.statsView === 'charts') h += statsCharts();
   else if (ui.statsView === 'all') h += statsAll();
+  else if (ui.statsView === 'compare') h += statsCompare();
   else h += statsHere(open);
+  return h;
+}
+
+// Comparer deux ou trois patisseries cote a cote
+function cmpToggle(i) {
+  var sel = ui.cmpSel || [];
+  var at = sel.indexOf(i);
+  if (at >= 0) { if (sel.length > 2) sel.splice(at, 1); }
+  else if (sel.length < 3) sel.push(i);
+  else { sel.shift(); sel.push(i); }
+  ui.cmpSel = sel;
+  refreshSettingsPane();
+}
+function statsCompare() {
+  var states = bakeryStates();
+  var sel = (ui.cmpSel || []).filter(function(i) { return i < states.length; });
+  if (sel.length < 2) sel = states.slice(0, Math.min(2, states.length)).map(function(x, i) { return i; });
+  ui.cmpSel = sel;
+  var h = '<p class="hint-note">' + t('stats.cmpPick') + '</p><div class="list-tools">';
+  states.forEach(function(x, i) {
+    h += '<button class="chip' + (sel.indexOf(i) >= 0 ? ' active' : '') + '" onclick="cmpToggle(' + i + ')" aria-pressed="' + (sel.indexOf(i) >= 0) + '">' + escH(x.name || t('home.unnamed')) + '</button>';
+  });
+  h += '</div>';
+  var chosen = sel.map(function(i) { return states[i]; });
+  function bld(s) { var n = 0; BUILDINGS.forEach(function(b) { n += ((s.buildings || {})[b.id] || { qty: 0 }).qty; }); return n; }
+  function mach(s) { var n = 0; for (var k in (s.machines || {})) n += s.machines[k]; return n; }
+  var rows = [
+    ['stats.cmpMoney', function(s) { return s.money || 0; }, fmtMoney],
+    ['stats.totalEarned', function(s) { return s.totalEarned || 0; }, fmtMoney],
+    ['stats.cmpLevel', function(s) { return s.level || 1; }, fmt],
+    ['stats.totalCakes', function(s) { return (s.stats || {}).totalCakesMade || 0; }, fmt],
+    ['stats.totalSold', function(s) { return (s.stats || {}).totalSold || 0; }, fmt],
+    ['stats.totalClicks', function(s) { return (s.stats || {}).totalClicks || 0; }, fmt],
+    ['stats.employees', function(s) { return (s.employees || []).length; }, fmt],
+    ['stats.buildings', bld, fmt],
+    ['stats.cmpMachines', mach, fmt],
+    ['stats.totalSalary', function(s) { return (s.stats || {}).totalSalaryPaid || 0; }, fmtMoney],
+    ['stats.totalRent', function(s) { return (s.stats || {}).totalRentPaid || 0; }, fmtMoney],
+    ['stats.totalInvested', function(s) { return (s.stats || {}).totalInvested || 0; }, fmtMoney]
+  ];
+  h += '<section class="set-card cmp-table"><div class="cmp-row cmp-head"><span></span>' + chosen.map(function(x) { return '<b>' + escH(x.name || t('home.unnamed')) + '</b>'; }).join('') + '</div>';
+  rows.forEach(function(r) {
+    var vals = chosen.map(function(x) { return r[1](x.state); }), top = Math.max.apply(null, vals);
+    h += '<div class="cmp-row"><span>' + t(r[0]) + '</span>' + vals.map(function(v) { return '<em class="' + (v === top && top > 0 && vals.filter(function(w) { return w === top; }).length < vals.length ? 'cmp-best' : '') + '">' + r[2](v) + '</em>'; }).join('') + '</div>';
+  });
+  h += '</section>';
+  [['stats.cmpMoney', rows[0]], ['stats.totalEarned', rows[1]]].forEach(function(p) {
+    h += barChart(t(p[0]), '', chosen.map(function(x) { return { label: escH(x.name || t('home.unnamed')), plain: x.name, value: p[1][1](x.state) }; }), 'c-money', fmtMoney);
+  });
   return h;
 }
 

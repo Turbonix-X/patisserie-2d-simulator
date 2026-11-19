@@ -260,6 +260,7 @@ function achDesc(a) {
 // state : par defaut la patisserie actuelle. Les totaux de toutes les patisseries comptent aussi.
 function checkAchievements(state) {
   var newAch = false;
+  if (!state && typeof checkGoldTheme === 'function') checkGoldTheme();
   for (var i = 0; i < ACHIEVEMENTS.length; i++) {
     var a = ACHIEVEMENTS[i];
     if (G.achievements[a.id]) continue;

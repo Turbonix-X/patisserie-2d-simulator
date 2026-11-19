@@ -14,8 +14,16 @@ function L(fr, en) {
 }
 
 // On rend la console : pour la retrouver, il faut enerver Bob a nouveau
+// Le bouton le plus visible de la console : on demande confirmation d'abord
+function confirmDisableConsole() {
+  var h = '<h2>' + uiIcon('terminal') + t('console.disable') + '</h2><p>' + t('console.disableAsk') + '</p>';
+  h += '<div class="modal-btns"><button class="btn btn-primary" onclick="showCommandConsole()">' + t('common.cancel') + '</button><button class="btn btn-danger" onclick="disableConsole()">' + t('console.disable') + '</button></div>';
+  showModal(h);
+}
 function disableConsole() {
+  if (G.cheatLocked) return;   // la partie a ete creee avec une console qu'on ne peut pas enlever
   G.cheatUnlocked = false;
+  G.logoClicks = 0;   // pour la retrouver : 100 clics sur le logo
   G.bobClicks = 0;
   G.bobSad = 0;
   hideModal();
@@ -30,7 +38,7 @@ function showCommandConsole() {
   var h = '<div class="console-modal">';
   h += '<div class="console-left">';
   h += '<div class="console-head"><h2>' + uiIcon('terminal') + t('console.title') + '</h2>';
-  h += '<button class="btn btn-small console-off" onclick="disableConsole()">' + t('console.disable') + '</button>';
+  if (!G.cheatLocked) h += '<button class="btn btn-small console-off" onclick="confirmDisableConsole()">' + t('console.disable') + '</button>';
   h += '<button class="icon-btn" onclick="hideModal()" aria-label="' + escH(t('common.close')) + '" title="' + escH(t('common.close')) + '">' + uiIcon('close') + '</button></div>';
   h += '<div class="console-output" id="console-output">';
   for (var i = 0; i < consoleHistory.length; i++) {
@@ -180,6 +188,7 @@ function execConsoleCmd() {
   // Save undo state before command
   saveUndoState();
   var result = processCommand(cmd);
+  sanitizeNonNegative();
   // On compte seulement les commandes qui ont marche
   if (result.indexOf('cmd-err') < 0) {
     var base = cmd.toLowerCase().replace(/^\//, '').split(/\s+/)[0];
@@ -203,7 +212,7 @@ function execConsoleCmd() {
 
 // ============ NOMS : on peut ecrire le nom en anglais, ou dans ta langue ============
 function normName(s) { return String(s || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[\s_\-']+/g, ''); }
-var CMD_WORDS = /^(all|max|set|add|remove|infinite|off|level|skill|[0-9.,]+)$/;
+var CMD_WORDS = /^(all|max|set|add|remove|infinite|off|level|skill|[+-]?[0-9.,]+(e[+-]?\d+)?|\d+\^[+-]?\d+)$/;
 // "dark chocolate 10" : le nom, puis le reste
 function takeName(parts, from) {
   var i = from, name = [];
@@ -247,7 +256,55 @@ function findMachineByName(n) {
 }
 function slugOf(id, prefix) { return String((LANGS.en && LANGS.en[prefix + id]) || id).toLowerCase().replace(/ x\d+$/, '').replace(/[\s']+/g, '-'); }
 
+// ============ LECTURE STRICTE DES NOMBRES ============
+// Accepte 12, 1.5, 1,5 (virgule francaise), 1e3, 1e300, 10^300. Refuse le reste (abc, 5abc, 1e400...) : NaN.
+function cnum(s) {
+  s = String(s == null ? '' : s).trim().toLowerCase();
+  if (!s) return NaN;
+  var m = s.match(/^([+-]?\d+(?:[.,]\d+)?)\^([+-]?\d+)$/);   // 10^300
+  var v;
+  if (m) v = Math.pow(parseFloat(m[1].replace(',', '.')), cnum(m[2]));
+  else if (/^[+-]?(\d+([.,]\d*)?|[.,]\d+)(e[+-]?\d+)?$/.test(s)) v = Number(s.replace(',', '.'));
+  else return NaN;
+  return isFinite(v) ? v : NaN;
+}
+// Un nombre entier : 1e3 vaut 1000, 1.5 est refuse
+function cint(s) { var v = cnum(s); return (isNaN(v) || v !== Math.trunc(v)) ? NaN : v; }
+function cerr(msg) { return '<span class="cmd-err">' + msg + '</span>'; }
+function cok(msg) { return '<span class="cmd-ok">' + msg + '</span>'; }
+// Un texte de la console : la langue du joueur, ou l'anglais (jamais un texte francais pour un joueur d'une autre langue)
+function cmdTr(key, params) {
+  var save = LANGS[currentLang] && LANGS[currentLang][key] ? null : currentLang;
+  if (save && LANGS.en[key]) { var keep = currentLang; currentLang = 'en'; var r = t(key, params); currentLang = keep; return r; }
+  return t(key, params);
+}
+function badNumberMsg(tok) { return cerr(cmdTr('cmd.badNumber', { v: escH(tok) })); }
+function tooManyMsg(usage) { return cerr(cmdTr('cmd.tooMany', { u: usage })); }
+function negMsg(what) { return cerr(cmdTr('cmd.negative', { v: what })); }
+// Verifie le nombre de mots : /level set 5 truc ne doit pas marcher
+function arityError(parts, count, usage) { return parts.length > count ? tooManyMsg(usage) : null; }
+// Les tout premiers mots d'une commande qui sont des nombres : on les lit avant tout, pour refuser 1e400 ou 5abc
+function numericLooking(tok) { return /^[+-]?[\d.,]+(e[+-]?[\d]*)?$/.test(tok) || /\^/.test(tok) && /^\d/.test(tok); }
+// Les valeurs qui ne peuvent jamais etre negatives
+function sanitizeNonNegative() {
+  ['money', 'xp', 'totalEarned', 'rentDebt', 'maxSpace'].forEach(function(k) { if (typeof G[k] === 'number' && (isNaN(G[k]) || G[k] < 0)) G[k] = k === 'maxSpace' ? 1 : 0; });
+  if (!(G.level >= 1)) G.level = 1;
+}
+
+var bakeryDeletePending = null;
+// Avant tout : « / » tout seul, et les nombres illisibles (1e400, 5abc) sont refuses sans rien changer
+function precheckCommand(cmd) {
+  var body = String(cmd).trim().replace(/^\//, '').trim();
+  if (!body) return cerr(cmdTr('cmd.unfinished'));
+  var toks = body.toLowerCase().split(/\s+/);
+  for (var i = 1; i < toks.length; i++) {
+    if (numericLooking(toks[i]) && isNaN(cnum(toks[i]))) return badNumberMsg(toks[i]);
+  }
+  return null;
+}
+
 function processCommand(cmd) {
+  var preErr = precheckCommand(cmd); if (preErr) return preErr;
   var parts = cmd.toLowerCase().replace(/^\//, '').split(/\s+/);
   if (parts.length === 0) return '<span class="cmd-err">' + L('Commande vide', 'Empty command') + '</span>';
   var action = parts[0];
@@ -300,38 +357,55 @@ function processCommand(cmd) {
 
   // /level add|set|remove|max N
   if (action === 'level') {
-    var op = parts[1]; var n = parseInt(parts[2]);
-    if (isNaN(n) && op !== 'max') return '<span class="cmd-err">Usage: /level add|set|remove|max N</span>';
-    if (op === 'add') { G.level += n; G.xp = 0; checkAchievements(); }
-    else if (op === 'set') { G.level = Math.max(1, n); G.xp = 0; checkAchievements(); }
-    else if (op === 'remove') { G.level = Math.max(1, G.level - n); G.xp = 0; }
-    else if (op === 'max') { G.level = 1000; G.xp = 0; checkAchievements(); }
-    else return '<span class="cmd-err">Usage: /level add|set|remove|max N</span>';
-    return '<span class="cmd-ok">' + L('Niveau = ', 'Level = ') + '' + G.level + '</span>';
+    var op = parts[1], lvUsage = '/level add|set|remove N | /level max';
+    if (op === 'max') { var ae0 = arityError(parts, 2, lvUsage); if (ae0) return ae0; G.level = 1000; G.xp = 0; checkAchievements(); return cok(L('Niveau = ', 'Level = ') + G.level); }
+    if (['add', 'set', 'remove'].indexOf(op) < 0 || parts.length < 3) return cerr('Usage: ' + lvUsage);
+    var ae1 = arityError(parts, 3, lvUsage); if (ae1) return ae1;
+    var n = cint(parts[2]);
+    if (isNaN(n)) return badNumberMsg(parts[2]);
+    if (n < 0) return negMsg(cmdTr('cmd.level'));
+    var nl = op === 'add' ? G.level + n : op === 'set' ? n : G.level - n;
+    if (nl < 1 || nl > 100000) return cerr(cmdTr('cmd.levelRange'));
+    G.level = nl; G.xp = 0; if (op !== 'remove') checkAchievements();
+    return cok(L('Niveau = ', 'Level = ') + G.level);
   }
-
   // /money set N [currency]
   if (action === 'money') {
-    var op = parts[1]; var n = parseFloat(parts[2]);
+    var op = parts[1], moUsage = '/money set N [currency] | /money infinite [off]';
     if (op === 'infinite' || op === 'infini') {
-      if (parts[2] === 'off') { G.infiniteMoney = false; return '<span class="cmd-ok">' + L('Argent infini arrêté.', 'Infinite money stopped.') + '</span>'; }
+      var ae2 = arityError(parts, 3, moUsage); if (ae2) return ae2;
+      if (parts[2] !== undefined && parts[2] !== 'off') return tooManyMsg(moUsage);
+      if (parts[2] === 'off') {
+        if (!G.infiniteMoney) return cerr(cmdTr('cmd.notInfinite'));
+        G.infiniteMoney = false;
+        // L'argent revient a ce qu'il etait avant l'infini
+        G.money = typeof G.moneyBeforeInfinite === 'number' ? G.moneyBeforeInfinite : 0;
+        G.moneyBeforeInfinite = null;
+        return cok(L('Argent infini arrêté.', 'Infinite money stopped.') + ' ' + fmtMoney(G.money));
+      }
+      if (!G.infiniteMoney) G.moneyBeforeInfinite = G.money;
       G.infiniteMoney = true; tickInfinite(); checkAchievements();
-      return '<span class="cmd-ok">' + L('Argent infini : il reste au maximum.', 'Infinite money: it stays at the maximum.') + '</span>';
+      return cok(L('Argent infini : il reste au maximum.', 'Infinite money: it stays at the maximum.'));
     }
-    if (op !== 'set' || isNaN(n)) return '<span class="cmd-err">Usage: /money set N [currency] | /money infinite [off]</span>';
-    G.infiniteMoney = false;
+    if (op !== 'set' || parts.length < 3) return cerr('Usage: ' + moUsage);
+    var ae3 = arityError(parts, 4, moUsage); if (ae3) return ae3;
+    var n = cnum(parts[2]);
+    if (isNaN(n)) return badNumberMsg(parts[2]);
+    if (n < 0) return negMsg(cmdTr('cmd.money'));
     var currId = parts[3] || null;
     if (currId) {
       var curr = null;
       for (var i = 0; i < CURRENCIES.length; i++) {
         if (CURRENCIES[i].id === currId || CURRENCIES[i].symbol.toLowerCase() === currId) { curr = CURRENCIES[i]; break; }
       }
-      if (curr) { n = n / curr.rate; }
+      if (!curr) return cerr(cmdTr('cmd.unknownCurrency', { v: escH(currId), l: CURRENCIES.map(function(c) { return c.id; }).join(', ') }));
+      n = n / curr.rate;
     }
+    G.infiniteMoney = false;
     G.money = Math.min(n, MONEY_CAP);
     G.totalEarned = Math.max(G.totalEarned, G.money);
     checkAchievements();
-    return '<span class="cmd-ok">' + L('Argent = ', 'Money = ') + '' + fmtMoney(G.money) + '</span>';
+    return cok(L('Argent = ', 'Money = ') + fmtMoney(G.money));
   }
 
   // /reset
@@ -354,14 +428,14 @@ function processCommand(cmd) {
       });
       if (maxTargets.length === 0) return '<span class="cmd-err">' + t('console.bakeryUnknown') + bakeryListText() + '</span>';
     }
-    saveBeforeMax();
+    saveBeforeMax();   // seulement la premiere fois : /max deux fois ne perd pas la vraie partie
     maxTargets.forEach(function(i) {
       if (i === G.currentBakeryIndex) maxThisBakery();
       else if (G.bakeries[i].state) withBakery(G.bakeries[i].state, maxThisBakery);
     });
     G.bankUnlocked = true;
     G.secondBakery = true;
-    THEME_LIST.forEach(function(th) { if (th.season || th.birthday || th.level || th.month || th.secret || th.sold) G.unlockedThemes[th.id] = true; });
+    THEME_LIST.forEach(function(th) { if (th.season || th.birthday || th.level || th.month || th.secret || th.sold || th.gotIng) G.unlockedThemes[th.id] = true; });
     ACHIEVEMENTS.forEach(function(a) { G.achievements[a.id] = true; });
     checkAchievements();
     return '<span class="cmd-ok">' + t('console.maxDone') + '</span>';
@@ -402,10 +476,14 @@ function processCommand(cmd) {
     var mNames = MACHINES.map(function(x) { return x.id; }).join(', ');
     if (['set', 'add', 'remove'].indexOf(mOp) < 0 || !mnm.name) return '<span class="cmd-err">Usage: /machine set|add|remove NAME N|max|all. ' + mNames + '</span>';
     if (!mach) return '<span class="cmd-err">' + t('console.machineUnknown') + mNames + '</span>';
-    var mNow = machineLevel(mach.id), mN = parseInt(mVal, 10), mNew;
+    var maeM = arityError(mnm.rest, 1, '/machine ' + mOp + ' ' + mach.id + ' N'); if (maeM) return maeM;
+    var mNow = machineLevel(mach.id), mN = cint(mVal), mNew;
     if (mOp === 'set' && mVal === 'max') mNew = mach.max;
     else if (mOp === 'remove' && mVal === 'all') mNew = 0;
-    else if (isNaN(mN)) return '<span class="cmd-err">Usage: /machine ' + mOp + ' ' + mach.id + ' N</span>';
+    else if (mVal === undefined) return cerr('Usage: /machine ' + mOp + ' ' + mach.id + ' N');
+    else if (isNaN(mN)) return badNumberMsg(mVal);
+    else if (mN < 0) return negMsg(cmdTr('cmd.machineLevel'));
+    else if (mN > mach.max && mOp === 'set') return cerr(cmdTr('cmd.machineRange', { n: machName(mach), v: mach.max }));
     else if (mOp === 'set') mNew = mN;
     else if (mOp === 'add') mNew = mNow + mN;
     else mNew = mNow - mN;
@@ -436,15 +514,31 @@ function processCommand(cmd) {
       hit.forEach(function(x) { G.broken['b:' + x.id] = { since: Date.now(), until: 0 }; });
       return '<span class="cmd-ok">' + t('console.broke', { n: hit.length }) + '</span>';
     }
-    var op = parts[1]; var n = parseInt(parts[2]);
-    if (op === 'max') { BUILDINGS.forEach(function(b) { G.buildings[b.id] = { qty: 999 }; }); return '<span class="cmd-ok">' + L('Tous les bâtiments = 999', 'All buildings = 999') + '</span>'; }
-    if (isNaN(n)) return '<span class="cmd-err">Usage: /building set|add|remove|max N</span>';
-    BUILDINGS.forEach(function(b) {
-      if (op === 'set') G.buildings[b.id] = { qty: Math.max(0, n) };
-      else if (op === 'add') G.buildings[b.id].qty += n;
-      else if (op === 'remove') G.buildings[b.id].qty = Math.max(0, G.buildings[b.id].qty - n);
+    var buUsage = '/building NAME|all set|add|remove N | /building max';
+    if (parts[1] === 'max') { var ae4 = arityError(parts, 2, buUsage); if (ae4) return ae4; BUILDINGS.forEach(function(b) { G.buildings[b.id] = { qty: 999 }; }); return cok(L('Tous les bâtiments = 999', 'All buildings = 999')); }
+    // On precise le batiment : /building NOM set N (ou « all »)
+    var bnm = takeName(parts, 1);
+    var bOp = bnm.rest[0], bVal = bnm.rest[1];
+    if (!bnm.name || ['set', 'add', 'remove'].indexOf(bOp) < 0 || bVal === undefined) return cerr('Usage: ' + buUsage);
+    var ae5 = arityError(bnm.rest, 2, buUsage); if (ae5) return ae5;
+    var targets;
+    if (bnm.name === 'all') targets = BUILDINGS.slice();
+    else {
+      var one = BUILDINGS.filter(function(x) { return nameKeys(x.id, 'b.').indexOf(bnm.name) >= 0 || nameMatches(nameKeys(x.id, 'b.'), bnm.name); })[0];
+      if (!one) return cerr(L('Bâtiment inconnu : ', 'Unknown building: ') + escH(bnm.name));
+      targets = [one];
+    }
+    var bn = cint(bVal);
+    if (isNaN(bn)) return badNumberMsg(bVal);
+    if (bn < 0) return negMsg(cmdTr('cmd.buildings'));
+    if (bn > 999) return cerr(cmdTr('cmd.buildingRange'));
+    var after = [];
+    targets.forEach(function(b) {
+      var cur = (G.buildings[b.id] || { qty: 0 }).qty, nq = bOp === 'set' ? bn : bOp === 'add' ? cur + bn : cur - bn;
+      G.buildings[b.id] = { qty: Math.max(0, Math.min(999, nq)) };
+      after.push(t('b.' + b.id) + ' = ' + G.buildings[b.id].qty);
     });
-    return '<span class="cmd-ok">' + L('Bâtiments changés (', 'Buildings updated (') + '' + op + ' ' + n + ')</span>';
+    return cok(L('Bâtiments changés : ', 'Buildings updated: ') + (after.length > 3 ? after.length + ' ' + L('bâtiments', 'buildings') : after.join(', ')));
   }
 
   // /employee add|remove|set|max N | upgrade N | NAME skill|level set N
@@ -457,10 +551,13 @@ function processCommand(cmd) {
       e.morale = morale;
       G.employees.push(e);
     }
+    var emUsage = '/employee set|add|remove|max|upgrade N';
     if (sub === 'upgrade') {
-      var sk = parseInt(parts[2]);
-      if (isNaN(sk)) return '<span class="cmd-err">Usage: /employee upgrade N</span>';
-      sk = Math.min(100, Math.max(1, sk));
+      var sk = cint(parts[2]);
+      var ae15 = arityError(parts, 3, '/employee upgrade N'); if (ae15) return ae15;
+      if (parts[2] === undefined) return cerr('Usage: /employee upgrade N');
+      if (isNaN(sk)) return badNumberMsg(parts[2]);
+      if (sk < 1 || sk > 100) return cerr(cmdTr('cmd.skillRange'));
       G.employees.forEach(function(e) { e.skill = sk; });
       return '<span class="cmd-ok">' + L('Compétence de tous les employés = ', 'All employees skill = ') + sk + '</span>';
     }
@@ -474,7 +571,7 @@ function processCommand(cmd) {
         G.employees.forEach(function(e) { if (!gone && e.name.toLowerCase() === wanted) gone = e; });
         if (!gone) return '<span class="cmd-err">' + L('Employé introuvable : ', 'Employee not found: ') + escH(wanted) + '</span>';
         fireEmployee(gone.id);
-        return '<span class="cmd-ok">' + t('console.empFired', { n: escH(gone.name) }) + '</span>';
+        return '<span class="cmd-ok">' + tg('console.empFired', gone.name, { n: escH(gone.name) }) + '</span>';
       }
       var app = null;
       G.applicants.forEach(function(a) { if (!app && a.name.toLowerCase() === wanted) app = a; });
@@ -486,7 +583,7 @@ function processCommand(cmd) {
       var hired = acceptApplicant(app.id);
       if (freeHire) G.money = before;
       if (!hired && !freeHire && G.money < price) return '<span class="cmd-err">' + t('console.appPrice', { n: escH(app.name), v: fmtMoney(price) }) + '</span>';
-      return hired ? '<span class="cmd-ok">' + t(freeHire ? 'console.appHired' : 'console.appHiredPaid', { n: escH(app.name), v: fmtMoney(price) }) + '</span>' : '<span class="cmd-err">' + t('console.appFailed') + '</span>';
+      return hired ? '<span class="cmd-ok">' + tg(freeHire ? 'console.appHired' : 'console.appHiredPaid', app.name, { n: escH(app.name), v: fmtMoney(price) }) + '</span>' : '<span class="cmd-err">' + t('console.appFailed') + '</span>';
     }
     // /employee create JOB NAME LEVEL [INGREDIENT LOSS]
     if (sub === 'create') {
@@ -494,14 +591,14 @@ function processCommand(cmd) {
       var jobTxt = (raw[2] || '').toLowerCase(), job = null;
       EMP_TYPES.forEach(function(et) { if (et.id === jobTxt || normName(t('emp.' + et.id)) === normName(jobTxt) || normName(LANGS.en['emp.' + et.id] || '') === normName(jobTxt)) job = et; });
       if (!job || !raw[3]) return '<span class="cmd-err">Usage: /employee create JOB NAME LEVEL' + ' | /employee create collector NAME LEVEL INGREDIENT LOSS</span>';
-      var lvlNum = job.id === 'novice' ? 1 : parseInt(raw[4], 10);
+      var lvlNum = job.id === 'novice' ? 1 : cint(raw[4]);
       if (isNaN(lvlNum) || lvlNum < 1 || lvlNum > EMP_GOLD_LVL) return '<span class="cmd-err">' + t('console.empLevelRange', { v: EMP_GOLD_LVL }) + '</span>';
       var extra = {}, ingPick = null;
       if (job.id === 'collector' && raw[5]) {
         ingPick = findIngByName(raw[5]);
         if (!ingPick) return '<span class="cmd-err">' + L('Ingrédient inconnu : ', 'Unknown ingredient: ') + escH(raw[5]) + '</span>';
         if (raw[6] !== undefined) {
-          var lossNum = parseFloat(raw[6]);
+          var lossNum = cnum(raw[6]);
           if (isNaN(lossNum) || lossNum < 0 || lossNum > 100) return '<span class="cmd-err">' + t('console.empLossRange') + '</span>';
           extra.lossPct = lossNum;
         }
@@ -515,7 +612,7 @@ function processCommand(cmd) {
     }
     // /employee <name> skill|level set <N>
     if (parts.length >= 5 && (parts[2] === 'skill' || parts[2] === 'level') && parts[3] === 'set') {
-      var empName = sub, what = parts[2], val = parseInt(parts[4]);
+      var empName = sub, what = parts[2], val = cint(parts[4]);
       if (isNaN(val)) return '<span class="cmd-err">Usage: /employee NAME skill|level set N</span>';
       var target = null;
       G.employees.forEach(function(e) { if (!target && e.name.toLowerCase() === empName) target = e; });
@@ -525,17 +622,26 @@ function processCommand(cmd) {
       else target.level = Math.min(EMP_GOLD_LVL, Math.max(1, val));
       return '<span class="cmd-ok">' + escH(target.name) + ' ' + what + ' = ' + (what === 'skill' ? target.skill : target.level) + '</span>';
     }
-    var n = parseInt(parts[2]);
+    var n = cint(parts[2]);
     if (sub === 'max') {
-      for (var i = 0; i < 50; i++) mkEmp(90 + Math.floor(Math.random() * 11), EMP_MAX_LVL, 100);
-      return '<span class="cmd-ok">' + L('50 employés très compétents ajoutés !', '50 max-skill employees added!') + '</span>';
+      var ae16 = arityError(parts, 2, '/employee max'); if (ae16) return ae16;
+      var room = EMP_LIMIT - G.employees.length;
+      if (room < 1) return cerr(cmdTr('cmd.empLimit', { v: EMP_LIMIT }));
+      var addMax = Math.min(50, room);
+      for (var i = 0; i < addMax; i++) mkEmp(90 + Math.floor(Math.random() * 11), EMP_MAX_LVL, 100);
+      return '<span class="cmd-ok">' + L(addMax + ' employés très compétents ajoutés !', addMax + ' max-skill employees added!') + '</span>';
     }
-    if (isNaN(n)) return '<span class="cmd-err">Usage: /employee set|add|remove|max|upgrade N</span>';
+    if (['add', 'remove', 'set'].indexOf(sub) < 0 || parts[2] === undefined) return cerr('Usage: ' + emUsage);
+    var ae17 = arityError(parts, 3, emUsage); if (ae17) return ae17;
+    if (isNaN(n)) return badNumberMsg(parts[2]);
+    if (n < 0) return negMsg(cmdTr('cmd.employees'));
     if (sub === 'add') {
+      if (G.employees.length + n > EMP_LIMIT) return cerr(cmdTr('cmd.empLimit', { v: EMP_LIMIT }));
       for (var i = 0; i < n; i++) mkEmp(50 + Math.floor(Math.random() * 50), 1 + Math.floor(Math.random() * 3), 80);
     } else if (sub === 'remove') {
       G.employees.splice(Math.max(0, G.employees.length - n), n);
     } else if (sub === 'set') {
+      if (n > EMP_LIMIT) return cerr(cmdTr('cmd.empLimit', { v: EMP_LIMIT }));
       while (G.employees.length > n) G.employees.pop();
       while (G.employees.length < n) mkEmp(50, 1, 80);
     }
@@ -544,57 +650,71 @@ function processCommand(cmd) {
 
   // /stats max | /stats <stat> set N
   if (action === 'stats' || action === 'stat') {
+    var stUsage = '/stat max | /stat STAT set N';
     if (parts[1] === 'max') {
+      var ae18 = arityError(parts, 2, stUsage); if (ae18) return ae18;
       G.stats.totalClicks = 999999; G.stats.totalCakesMade = 999999; G.stats.totalSold = 999999;
       return '<span class="cmd-ok">' + L('Toutes les stats au maximum !', 'All stats maxed!') + '</span>';
     }
-    // /stats <stat> set N
-    var statName = parts[1]; var op = parts[2]; var n = parseInt(parts[3]);
-    if (op === 'set' && !isNaN(n)) {
-      if (statName === 'clicks') G.stats.totalClicks = n;
-      else if (statName === 'cakes') G.stats.totalCakesMade = n;
-      else if (statName === 'sold') G.stats.totalSold = n;
-      else if (statName === 'salary') G.stats.totalSalaryPaid = n;
-      else if (statName === 'rent') G.stats.totalRentPaid = n;
-      else return '<span class="cmd-err">Stats: clicks, cakes, sold, salary, rent</span>';
-      return '<span class="cmd-ok">' + statName + ' = ' + n + '</span>';
-    }
-    return '<span class="cmd-err">Usage: /stat max | /stat &lt;stat&gt; set N</span>';
+    var statName = parts[1], op = parts[2];
+    if (op !== 'set' || parts[3] === undefined) return cerr('Usage: ' + stUsage);
+    var ae19 = arityError(parts, 4, stUsage); if (ae19) return ae19;
+    var n = cint(parts[3]);
+    if (isNaN(n)) return badNumberMsg(parts[3]);
+    if (n < 0) return negMsg(statName);
+    var statKeys = { clicks: 'totalClicks', cakes: 'totalCakesMade', sold: 'totalSold', salary: 'totalSalaryPaid', rent: 'totalRentPaid' };
+    if (!statKeys[statName]) return cerr('Stats: clicks, cakes, sold, salary, rent');
+    G.stats[statKeys[statName]] = n;
+    return cok(statName + ' = ' + fmt(n));
   }
 
   // /xp add|set N
   if (action === 'xp') {
-    var op = parts[1]; var n = parseInt(parts[2]);
-    if (isNaN(n)) return '<span class="cmd-err">Usage: /xp add|set N</span>';
+    var op = parts[1], xpUsage = '/xp add|set N';
+    if (['add', 'set'].indexOf(op) < 0 || parts.length < 3) return cerr('Usage: ' + xpUsage);
+    var ae6 = arityError(parts, 3, xpUsage); if (ae6) return ae6;
+    var n = cnum(parts[2]);
+    if (isNaN(n)) return badNumberMsg(parts[2]);
+    if (n < 0) return negMsg('XP');
+    n = Math.floor(n);
     if (op === 'add') addXP(n);
-    else if (op === 'set') { G.xp = n; checkAchievements(); }
-    return '<span class="cmd-ok">XP = ' + fmt(G.xp) + ' (Level ' + G.level + ')</span>';
+    else { G.xp = n; checkAchievements(); }
+    return cok('XP = ' + fmt(G.xp) + ' (' + L('Niveau ', 'Level ') + G.level + ')');
   }
 
   // /space set|add|remove N
   if (action === 'space') {
-    var op = parts[1]; var n = parseInt(parts[2]);
-    if (op === 'set' && !isNaN(n)) { G.maxSpace = Math.max(1, n); }
-    else if (op === 'add' && !isNaN(n)) { G.maxSpace += n; }
-    else if (op === 'remove' && !isNaN(n)) { G.maxSpace = Math.max(1, G.maxSpace - n); }
-    else return '<span class="cmd-err">Usage: /space set|add|remove N</span>';
-    return '<span class="cmd-ok">' + L('Espace = ', 'Space = ') + '' + G.maxSpace + 'm\u00b2</span>';
+    var op = parts[1], spUsage = '/space set|add|remove N';
+    if (['set', 'add', 'remove'].indexOf(op) < 0 || parts.length < 3) return cerr('Usage: ' + spUsage);
+    var ae7 = arityError(parts, 3, spUsage); if (ae7) return ae7;
+    var n = cnum(parts[2]);
+    if (isNaN(n)) return badNumberMsg(parts[2]);
+    if (n < 0) return negMsg(cmdTr('cmd.space'));
+    n = Math.floor(n);
+    if (op === 'set') G.maxSpace = Math.max(1, n);
+    else if (op === 'add') G.maxSpace += n;
+    else G.maxSpace = Math.max(1, G.maxSpace - n);
+    return cok(L('Espace = ', 'Space = ') + fmt(G.maxSpace) + 'm²');
   }
 
   // /debt clear
   if (action === 'debt' || action === 'dept') {
-    var debtOp = parts[1], debtN = parseFloat(parts[2]);
+    var debtOp = parts[1], dbUsage = '/debt cancel N|all, /debt set N, /debt add N';
     if (debtOp === 'cancel' && parts[2] === 'all') {
-      G.rentDebt = 0;
-      G.rentLate = 0;
-    } else if ((debtOp === 'cancel' || debtOp === 'set' || debtOp === 'add') && !isNaN(debtN) && debtN >= 0) {
+      var ae8 = arityError(parts, 3, dbUsage); if (ae8) return ae8;
+      G.rentDebt = 0; G.rentLate = 0;
+    } else if (['cancel', 'set', 'add'].indexOf(debtOp) >= 0 && parts.length >= 3) {
+      var ae9 = arityError(parts, 3, dbUsage); if (ae9) return ae9;
+      var debtN = cnum(parts[2]);
+      if (isNaN(debtN)) return badNumberMsg(parts[2]);
+      if (debtN < 0) return negMsg(cmdTr('cmd.debt'));
       if (debtOp === 'cancel') G.rentDebt = Math.max(0, G.rentDebt - debtN);
       else if (debtOp === 'set') G.rentDebt = debtN;
       else G.rentDebt += debtN;
     } else {
-      return '<span class="cmd-err">Usage: /debt cancel N|all, /debt set N, /debt add N</span>';
+      return cerr('Usage: ' + dbUsage);
     }
-    return '<span class="cmd-ok">' + L('Dette = ', 'Debt = ') + fmtMoney(G.rentDebt) + '</span>';
+    return cok(L('Dette = ', 'Debt = ') + fmtMoney(G.rentDebt));
   }
 
   // /bank unlock | /bank clear
@@ -632,7 +752,7 @@ function processCommand(cmd) {
         return '<span class="cmd-ok">' + t('console.themesUnlocked') + '</span>';
       }
       var target = findTheme(what);
-      if (!target || !(target.season || target.birthday || target.level || target.month || target.secret || target.sold)) return '<span class="cmd-err">Usage: /theme unlock all|spring|summer|fall|winter|birthday|horror|bakery|party|space|cookie|tech|techgold</span>';
+      if (!target || !(target.season || target.birthday || target.level || target.month || target.secret || target.sold || target.gotIng)) return '<span class="cmd-err">Usage: /theme unlock all|spring|summer|fall|winter|birthday|horror|bakery|party|space|cookie|tech|techgold</span>';
       G.unlockedThemes[what] = true;
       return '<span class="cmd-ok">' + t('console.themeUnlocked', { n: t(target.langKey) }) + '</span>';
     }
@@ -640,56 +760,70 @@ function processCommand(cmd) {
     if (!chosen) return '<span class="cmd-err">' + t('console.unknownTheme', { n: escH(themeName) }) + '</span>';
     if (themeLockReason(chosen)) return '<span class="cmd-err">' + t('console.themeLocked') + '</span>';
     setTheme(themeName);
-    return '<span class="cmd-ok">' + L('Thème = ', 'Theme = ') + '' + themeName + '</span>';
+    return '<span class="cmd-ok">' + L('Thème = ', 'Theme = ') + t(chosen.langKey) + '</span>';
   }
 
   // /birthday set DD MM
   if (action === 'birthday') {
-    var day = parseInt(parts[1]);
-    var month = parseInt(parts[2]);
-    if (isNaN(day) || isNaN(month) || day < 1 || day > 31 || month < 1 || month > 12) {
-      return '<span class="cmd-err">Usage: /birthday DD MM</span>';
-    }
+    var bdUsage = '/birthday DD MM';
+    var ae10 = arityError(parts, 3, bdUsage); if (ae10) return ae10;
+    var day = cint(parts[1]), month = cint(parts[2]);
+    if (isNaN(day) || isNaN(month) || parts.length < 3) return cerr('Usage: ' + bdUsage);
+    var dim = [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+    if (month < 1 || month > 12 || day < 1 || day > dim[month - 1]) return cerr(cmdTr('cmd.badDate', { v: day + '/' + month }));
     G.birthday = { day: day, month: month };
     G.birthdaySetOn = null;
     G.birthdayBoostYear = null;
     tryBirthdayBoost();
-    return '<span class="cmd-ok">' + L('Anniversaire : ', 'Birthday set to ') + '' + day + '/' + month + '</span>';
+    return cok(L('Anniversaire : ', 'Birthday set to ') + day + '/' + month);
   }
 
   // /buy <ingredient> all|N
   if (action === 'buy') {
+    var byUsage = '/buy INGREDIENT all|N';
     var nmx = takeName(parts, 1); var ingName = nmx.name; var amount = nmx.rest[0];
-    if (!ingName) return '<span class="cmd-err">Usage: /buy &lt;ingredient&gt; all|N</span>';
+    if (!ingName) return cerr('Usage: ' + byUsage);
     var ing = findIngByName(ingName);
-    if (!ing) return '<span class="cmd-err">' + L('Ingrédient inconnu : ', 'Unknown ingredient: ') + '' + ingName + '</span>';
-    if (amount === 'all') {
-      var bought = 0;
-      bought = buyIngredient(ing, 'max') || 0;
-      return '<span class="cmd-ok">' + L('Acheté ', 'Bought ') + '' + fmt(bought) + 'x ' + ing.id + '</span>';
+    if (!ing) return cerr(L('Ingrédient inconnu : ', 'Unknown ingredient: ') + escH(ingName));
+    if (amount === undefined) return cerr('Usage: ' + byUsage);
+    var ae11 = arityError(nmx.rest, 1, byUsage); if (ae11) return ae11;
+    var want, got;
+    if (amount === 'all') want = Infinity;
+    else {
+      want = cint(amount);
+      if (isNaN(want)) return badNumberMsg(amount);
+      if (want < 0) return negMsg(cmdTr('cmd.amount'));
+      if (want < 1) return cerr(cmdTr('cmd.amountZero'));
     }
-    var n = parseInt(amount);
-    if (isNaN(n)) return '<span class="cmd-err">Usage: /buy ' + ingName + ' all|N</span>';
-    buyIngredient(ing, String(n));
-    return '<span class="cmd-ok">' + L('Acheté ', 'Bought ') + '' + n + 'x ' + ing.id + '</span>';
+    var unit = getIngredientCost(ing), canAfford = Math.floor(G.money / unit);
+    if (canAfford < 1) return cerr(t('ing.noMoney'));
+    var qty = want === Infinity ? canAfford : Math.min(want, canAfford);
+    G.money -= unit * qty; G.ing[ing.id] = (G.ing[ing.id] || 0) + qty; gotIng(ing.id, qty);
+    G.stats.totalIngredientCost += unit * qty;
+    return cok(L('Acheté ', 'Bought ') + fmt(qty) + 'x ' + t('i.' + ing.id) + (qty < want && want !== Infinity ? ' ' + cmdTr('cmd.notEnough', { v: fmt(want) }) : ''));
   }
 
   // /sell <ingredient> all|N
   if (action === 'sell') {
+    var slUsage = '/sell INGREDIENT all|N';
     var nmx = takeName(parts, 1); var ingName = nmx.name; var amount = nmx.rest[0];
-    if (!ingName) return '<span class="cmd-err">Usage: /sell &lt;ingredient&gt; all|N</span>';
+    if (!ingName) return cerr('Usage: ' + slUsage);
     var ing = findIngByName(ingName);
-    if (!ing) return '<span class="cmd-err">' + L('Ingrédient inconnu : ', 'Unknown ingredient: ') + '' + ingName + '</span>';
-    var have = G.ing[ing.id] || 0;
-    if (amount === 'all') {
-      var earned = resellIngredient(ing, have);
-      return '<span class="cmd-ok">' + L('Vendu ', 'Sold ') + '' + have + 'x ' + ing.id + ' for ' + fmtMoney(earned) + '</span>';
+    if (!ing) return cerr(L('Ingrédient inconnu : ', 'Unknown ingredient: ') + escH(ingName));
+    if (amount === undefined) return cerr('Usage: ' + slUsage);
+    var ae12 = arityError(nmx.rest, 1, slUsage); if (ae12) return ae12;
+    var have = Math.floor(G.ing[ing.id] || 0), sq;
+    if (amount === 'all') sq = have;
+    else {
+      sq = cint(amount);
+      if (isNaN(sq)) return badNumberMsg(amount);
+      if (sq < 0) return negMsg(cmdTr('cmd.amount'));
+      if (sq < 1) return cerr(cmdTr('cmd.amountZero'));
+      sq = Math.min(sq, have);
     }
-    var n = parseInt(amount);
-    if (isNaN(n)) return '<span class="cmd-err">Usage: /sell ' + ingName + ' all|N</span>';
-    n = Math.min(n, have);
-    var earned = resellIngredient(ing, n);
-    return '<span class="cmd-ok">' + L('Vendu ', 'Sold ') + '' + n + 'x ' + ing.id + ' for ' + fmtMoney(earned) + '</span>';
+    if (sq < 1) return cerr(cmdTr('cmd.noStock', { n: t('i.' + ing.id) }));
+    var earned = resellIngredient(ing, sq);
+    return cok(L('Vendu ', 'Sold ') + fmt(sq) + 'x ' + t('i.' + ing.id) + ' ' + cmdTr('cmd.for') + ' ' + fmtMoney(earned));
   }
 
   // /random
@@ -704,31 +838,42 @@ function processCommand(cmd) {
 
   // /time set N (1=normal, <1=slow, >1=fast)
   if (action === 'time') {
-    if (parts[1] === 'set') {
-      var speed = parseFloat(parts[2]);
-      if (isNaN(speed) || speed <= 0) return '<span class="cmd-err">Usage: /time set N (0.1 - 10)</span>';
-      speed = Math.max(0.1, Math.min(10, speed));
-      G.timeSpeed = speed;
-      return '<span class="cmd-ok">' + L('Vitesse du temps = x', 'Time speed = x') + '' + speed + '</span>';
-    }
-    return '<span class="cmd-err">Usage: /time set N</span>';
+    var tmUsage = '/time set N (0.1 - 10)';
+    if (parts[1] !== 'set' || parts.length < 3) return cerr('Usage: ' + tmUsage);
+    var ae13 = arityError(parts, 3, tmUsage); if (ae13) return ae13;
+    var speed = cnum(parts[2]);
+    if (isNaN(speed)) return badNumberMsg(parts[2]);
+    if (speed < 0.1 || speed > 10) return cerr(cmdTr('cmd.timeRange', { v: fmt(speed) }));
+    G.timeSpeed = speed;
+    return cok(L('Vitesse du temps = x', 'Time speed = x') + decimalize(String(speed)));
   }
 
   // /bakery create [nom] | delete [numero] | list
   if (action === 'bakery' || action === 'patisserie') {
-    var sub = parts[1];
+    var sub = parts[1], baUsage = '/bakery create [nom] | delete N | list';
     if (sub === 'create') {
       var rawName = cmd.trim().split(/\s+/).slice(2).join(' ').slice(0, 30);
+      if ((G.bakeries || []).length >= BAKERY_MAX) return cerr(cmdTr('cmd.bakeryMax', { v: BAKERY_MAX }));
       if (openNewBakery(true, rawName)) {
         return '<span class="cmd-ok">' + t('console.bakeryCreated', { n: escH(G.bakeries[G.bakeries.length - 1].name), i: G.bakeries.length }) + '</span>';
       }
-      return '<span class="cmd-err">Usage: /bakery create [nom]</span>';
+      return cerr('Usage: /bakery create [nom]');
     }
     if (sub === 'delete' || sub === 'remove') {
       ensureBakeryList();
-      var idx = parts[2] === undefined ? G.currentBakeryIndex : parseInt(parts[2], 10) - 1;
+      var confirms = parts.filter(function(w) { return w === 'confirm' || w === 'confirmer'; }).length;
+      var numTok = parts.slice(2).filter(function(w) { return w !== 'confirm' && w !== 'confirmer'; });
+      var ae14 = arityError(numTok.length ? ['x', 'x'].concat(numTok.slice(0, 1)) : parts.slice(0, 2), numTok.length ? 3 : 2, baUsage); if (ae14 || numTok.length > 1) return ae14 || tooManyMsg(baUsage);
+      var idx = numTok.length === 0 ? G.currentBakeryIndex : cint(numTok[0]) - 1;
       if (isNaN(idx) || idx < 0 || idx >= G.bakeries.length) return '<span class="cmd-err">' + t('console.bakeryUnknown') + bakeryListText() + '</span>';
       var goneName = idx === G.currentBakeryIndex ? G.bakeryName : G.bakeries[idx].name;
+      if (G.bakeries.length <= 1) return '<span class="cmd-err">' + t('console.bakeryLast') + '</span>';
+      // Deux confirmations : /bakery delete N confirm, puis encore une fois
+      var pend = bakeryDeletePending;
+      if (confirms === 0) { bakeryDeletePending = { idx: idx, step: 0 }; return cerr(cmdTr('cmd.deleteAsk', { n: escH(goneName), u: '/bakery delete ' + (idx + 1) + ' confirm' })); }
+      if (!pend || pend.idx !== idx) { bakeryDeletePending = { idx: idx, step: 0 }; return cerr(cmdTr('cmd.deleteAsk', { n: escH(goneName), u: '/bakery delete ' + (idx + 1) + ' confirm' })); }
+      if (pend.step === 0) { pend.step = 1; return cerr(cmdTr('cmd.deleteAgain', { n: escH(goneName), u: '/bakery delete ' + (idx + 1) + ' confirm' })); }
+      bakeryDeletePending = null;
       if (deleteBakery(idx)) return '<span class="cmd-ok">' + t('console.bakeryDeleted', { n: escH(goneName) }) + '</span>';
       return '<span class="cmd-err">' + t('console.bakeryLast') + '</span>';
     }
@@ -736,7 +881,7 @@ function processCommand(cmd) {
       ensureBakeryList();
       return '<span class="cmd-info">' + bakeryListText() + '</span>';
     }
-    return '<span class="cmd-err">Usage: /bakery create [nom] | delete [n] | list</span>';
+    return cerr('Usage: ' + baUsage);
   }
 
   // /bob challenge
@@ -818,28 +963,49 @@ function processCommand(cmd) {
     var op = parts[1];
     if (op === 'infinite' || op === 'infini') {
       if (!G.infiniteIng) G.infiniteIng = {};
-      if (parts[2] === 'off') { delete G.infiniteIng[ingMatch.id]; return '<span class="cmd-ok">' + ingMatch.id + L(' : plus à l’infini.', ': no longer infinite.') + '</span>'; }
+      if (!G.infiniteIngBefore) G.infiniteIngBefore = {};
+      var aeI = arityError(parts, 3, '/' + action + ' infinite [off]'); if (aeI) return aeI;
+      if (parts[2] === 'off') {
+        if (!G.infiniteIng[ingMatch.id]) return cerr(cmdTr('cmd.notInfinite'));
+        delete G.infiniteIng[ingMatch.id];
+        G.ing[ingMatch.id] = G.infiniteIngBefore[ingMatch.id] || 0; delete G.infiniteIngBefore[ingMatch.id];
+        return '<span class="cmd-ok">' + t('i.' + ingMatch.id) + L(' : plus à l’infini.', ': no longer infinite.') + '</span>';
+      }
+      if (parts[2] !== undefined) return tooManyMsg('/' + action + ' infinite [off]');
+      if (!G.infiniteIng[ingMatch.id]) G.infiniteIngBefore[ingMatch.id] = G.ing[ingMatch.id] || 0;
       G.infiniteIng[ingMatch.id] = true; tickInfinite();
-      return '<span class="cmd-ok">' + ingMatch.id + L(' : à l’infini !', ': infinite!') + '</span>';
+      return '<span class="cmd-ok">' + t('i.' + ingMatch.id) + L(' : à l’infini !', ': infinite!') + '</span>';
     }
-    if (G.infiniteIng && ['set', 'add', 'remove', 'max'].indexOf(op) >= 0) delete G.infiniteIng[ingMatch.id];
-    // Check for liquid units: /lait set 53 ml
     var isLiquid = LIQUID_ING && LIQUID_ING.indexOf(ingMatch.id) >= 0;
+    var igUsage = '/' + action + ' set|add|remove|max N' + (isLiquid ? ' [ml|cl|l]' : '') + ' | /' + action + ' infinite [off]';
+    if (['set', 'add', 'remove', 'max'].indexOf(op) < 0) return cerr('Usage: ' + igUsage);
     var rawN = parts[2]; var unit = parts[3];
-    var n;
-    if (isLiquid && unit && typeof parseLiquidAmount === 'function') {
-      n = parseLiquidAmount(rawN, unit);
-    } else {
-      n = parseInt(rawN);
+    if (op === 'max') { var aeM = arityError(parts, 2, igUsage); if (aeM) return aeM; }
+    else {
+      if (rawN === undefined) return cerr('Usage: ' + igUsage);
+      // Une unite n'existe que pour les liquides (ml, cl, l) : ailleurs, ou si elle est inconnue, la commande est refusee
+      if (unit !== undefined) {
+        if (!isLiquid) return cerr(cmdTr('cmd.noUnit', { n: t('i.' + ingMatch.id), u: escH(unit) }));
+        if (['ml', 'cl', 'l'].indexOf(unit) < 0) return cerr(cmdTr('cmd.badUnit', { u: escH(unit) }));
+      }
+      var aeN = arityError(parts, isLiquid ? 4 : 3, igUsage); if (aeN) return aeN;
     }
-    if (isNaN(n) && op !== 'max') return '<span class="cmd-err">Usage: /' + action + ' set|add|remove|max N' + (isLiquid ? ' [ml|cl|l]' : '') + ' | /' + action + ' infinite [off]</span>';
-    if (op === 'set') G.ing[ingMatch.id] = Math.max(0, n);
-    else if (op === 'add') G.ing[ingMatch.id] = (G.ing[ingMatch.id] || 0) + n;
+    var n;
+    if (op === 'max') n = 0;
+    else {
+      n = isLiquid ? parseLiquidAmount(String(cnum(rawN)), unit) : cnum(rawN);
+      if (isNaN(n)) return badNumberMsg(rawN);
+      if (n < 0) return negMsg(cmdTr('cmd.amount'));
+      n = Math.floor(n);   // des ingredients entiers, jamais de morceaux
+    }
+    if (G.infiniteIng && delete G.infiniteIng[ingMatch.id]) { /* il n'est plus infini */ }
+    if (op === 'set') G.ing[ingMatch.id] = n;
+    else if (op === 'add') G.ing[ingMatch.id] = Math.floor((G.ing[ingMatch.id] || 0)) + n;
     else if (op === 'max') G.ing[ingMatch.id] = maxStockFor(ingMatch);
-    else if (op === 'remove') G.ing[ingMatch.id] = Math.max(0, (G.ing[ingMatch.id] || 0) - n);
+    else if (op === 'remove') G.ing[ingMatch.id] = Math.max(0, Math.floor(G.ing[ingMatch.id] || 0) - n);
     var display = (G.ing[ingMatch.id] || 0);
-    if (isLiquid && typeof fmtLiquid === 'function') display = fmtLiquid(display);
-    return '<span class="cmd-ok">' + ingMatch.id + ' = ' + display + '</span>';
+    if (isLiquid && typeof fmtLiquid === 'function') display = fmtLiquid(display); else display = fmt(display);
+    return '<span class="cmd-ok">' + t('i.' + ingMatch.id) + ' = ' + display + '</span>';
   }
 
   // Check if it's a recipe name
@@ -848,12 +1014,20 @@ function processCommand(cmd) {
     if (forceKind !== 'ing' && REC[i].id === action) { recMatch = REC[i]; break; }
   }
   if (recMatch) {
-    var op = parts[1]; var n = parseInt(parts[2]);
-    if (isNaN(n) && op !== 'max') return '<span class="cmd-err">Usage: /' + action + ' set|add|max N</span>';
-    if (op === 'set') G.cakes[recMatch.id] = Math.max(0, n);
+    var op = parts[1];
+    var rcUsage = '/' + action + ' set|add|max N';
+    if (['set', 'add', 'max'].indexOf(op) < 0) return cerr('Usage: ' + rcUsage);
+    if (op === 'max') { var aeR = arityError(parts, 2, rcUsage); if (aeR) return aeR; }
+    else {
+      if (parts[2] === undefined) return cerr('Usage: ' + rcUsage);
+      var aeR2 = arityError(parts, 3, rcUsage); if (aeR2) return aeR2;
+    }
+    var n = op === 'max' ? 0 : cint(parts[2]);
+    if (op !== 'max') { if (isNaN(n)) return badNumberMsg(parts[2]); if (n < 0) return negMsg(cmdTr('cmd.amount')); }
+    if (op === 'set') G.cakes[recMatch.id] = n;
     else if (op === 'add') G.cakes[recMatch.id] = (G.cakes[recMatch.id] || 0) + n;
-    else if (op === 'max') G.cakes[recMatch.id] = 9999;
-    return '<span class="cmd-ok">' + recMatch.id + ' = ' + (G.cakes[recMatch.id] || 0) + '</span>';
+    else G.cakes[recMatch.id] = 9999;
+    return '<span class="cmd-ok">' + recShortName(recMatch) + ' = ' + fmt(G.cakes[recMatch.id] || 0) + '</span>';
   }
 
   return '<span class="cmd-err">' + L('Commande inconnue : ', 'Unknown command: ') + escH(action) + L('. Tape /help', '. Type /help') + '</span>';
@@ -877,6 +1051,7 @@ var lastSaveBeforeCreative = null;
 function maxThisBakery() {
   G.level = 1000;
   G.xp = 0;
+  G.xpLocked = true;   // au maximum : plus d'XP
   G.money = MAX_MONEY_SHOWN; // Le plus gros montant qui s'affiche encore en chiffres
   G.totalEarned = Math.max(G.totalEarned, MAX_MONEY_SHOWN);
   unlockEverything();
@@ -894,7 +1069,7 @@ function maxThisBakery() {
   MACHINES.forEach(function(m) { G.machines[m.id] = m.max; });
   G.broken = {};
   syncOvens();
-  THEME_LIST.forEach(function(th) { if (th.season || th.birthday || th.level || th.month || th.secret || th.sold) G.unlockedThemes[th.id] = true; });
+  THEME_LIST.forEach(function(th) { if (th.season || th.birthday || th.level || th.month || th.secret || th.sold || th.gotIng) G.unlockedThemes[th.id] = true; });
   G.employees = [];
   G.nextEmployeeId = 1;
   EMP_TYPES.forEach(function(et) {

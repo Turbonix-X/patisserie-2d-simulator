@@ -21,8 +21,7 @@ var MAX_MONEY_SHOWN = 9.99e289; // Au-dela, fmt affiche le signe infini
 
 // Virgule decimale : en francais, espagnol, portugais, allemand, russe, ou quand la monnaie est l'euro
 function decimalComma() {
-  if (typeof currentLang !== 'undefined' && ['fr', 'es', 'pt', 'de', 'ru'].indexOf(currentLang) >= 0) return true;
-  return typeof G !== 'undefined' && !!G && !!G.settings && G.settings.currency === 'eur';
+  return typeof currentLang !== 'undefined' && ['fr', 'es', 'pt', 'de', 'ru'].indexOf(currentLang) >= 0;
 }
 function decimalize(txt) { return decimalComma() ? String(txt).replace('.', ',') : String(txt); }
 
@@ -41,7 +40,7 @@ var NUM_LANG = {
 };
 function fmt(n) {
   if (n < 0) return '-' + fmt(-n);
-  if (n >= 1e290) return '\u221E'; // Mode creatif : l'infini
+  if (n >= MONEY_CAP) return '\u221E'; // Mode creatif : l'infini (10^300 n'est pas l'infini)
   var sc = NUM_LANG[typeof currentLang !== 'undefined' ? currentLang : 'en'] || null;
   var g = sc ? sc.g : 3, names = sc ? sc.s : NUM_SUFFIXES;
   if (n < Math.pow(10, g)) return Math.floor(n) + '';
@@ -59,6 +58,17 @@ function capMoney() {
   if (G.totalEarned > MONEY_CAP) G.totalEarned = MONEY_CAP;
 }
 
+// Une longue duree : annees, mois, jours, heures, minutes (on garde les deux plus grandes unites)
+function fmtLongTime(sec) {
+  var total = Math.max(0, Math.floor(sec));
+  var units = [['y', 365 * 86400], ['mo', 30 * 86400], ['d', 86400], ['h', 3600], ['min', 60]], parts = [];
+  for (var i = 0; i < units.length; i++) {
+    var n = Math.floor(total / units[i][1]);
+    total -= n * units[i][1];
+    if (n > 0) parts.push(n + ' ' + t('time.' + units[i][0]));
+  }
+  return parts.length ? parts.slice(0, 2).join(' ') : '< 1 ' + t('time.min');
+}
 function fmtTime(sec) {
   var total = Math.ceil(sec);
   if (total < 60) return total + 's';
@@ -187,13 +197,22 @@ function sampleLoss() {
   return 1 + Math.floor(Math.random() * 20);
 }
 
+// Pendant un tour de jeu, un total deja calcule est garde (avec 1000 employes, le recalculer pour chacun faisait ramer)
+var tickMemo = null;
+function memoed(key, fn) {
+  if (!tickMemo) return fn();
+  if (!(key in tickMemo)) tickMemo[key] = fn();
+  return tickMemo[key];
+}
 function empCount(type) {
   if (G.creative) return 999; // Mode creatif : des employes a l'infini
-  var n = 0;
-  for (var e = 0; e < G.employees.length; e++) {
-    if (G.employees[e].type === type && empWorking(G.employees[e])) n++;
-  }
-  return n;
+  return memoed('ec:' + type, function() {
+    var n = 0;
+    for (var e = 0; e < G.employees.length; e++) {
+      if (G.employees[e].type === type && empWorking(G.employees[e])) n++;
+    }
+    return n;
+  });
 }
 
 // Competence 1 a 100 : de x0.5 a x1.5
@@ -322,7 +341,7 @@ function xpMult() {
 }
 
 function addXP(amount) {
-  if (G.creative) return; // Le mode creatif ne fait pas monter de niveau
+  if (G.creative || G.xpLocked) return; // Le mode creatif ne fait pas monter de niveau
   G.xp += Math.floor(amount * xpMult());
   var needed = xpForLevel(G.level), from = G.level, n = 0;
   // Plusieurs niveaux d'un coup : on les compte, et on ne fete qu'une fois (sinon le jeu gele)
@@ -571,8 +590,8 @@ function getIngredientResellPrice(ing) {
 function buyIngredient(ing, bulk) {
   var unitCost = getIngredientCost(ing);
   if (G.money < unitCost) return false;
-  var maxUnits = G.money / unitCost;
-  var units = bulk === 'max' ? Math.floor(maxUnits) : Math.min(clickMult() * (parseInt(bulk, 10) || 1), maxUnits);
+  var maxUnits = Math.floor(G.money / unitCost);   // des ingredients entiers, pas de morceaux
+  var units = bulk === 'max' ? maxUnits : Math.min(Math.floor(clickMult() * (parseInt(bulk, 10) || 1)), maxUnits);
   if (units <= 0) return false;
   var cost = unitCost * units;
   G.money -= cost;
@@ -750,9 +769,16 @@ function empTypeOpen(et) {
   return G.level >= et.unlockLvl && (!et.needsBakeries || bakeryTotal() >= et.needsBakeries);
 }
 
+// Combien d'employes peut-on avoir : un par m² (plus 2), et jamais plus de EMP_LIMIT (au-dela, le jeu ramerait)
+function empCapacity() { return Math.max(1, Math.min(EMP_LIMIT, Math.floor(G.maxSpace || 0) + 2)); }
+var noRoomToastAt = 0;
 function hireEmployee(typeId, applicant) {
   var empType = findEmpType(typeId);
   if (!empType || !empTypeOpen(empType)) return false;
+  if (!G.creative && G.employees.length >= empCapacity()) {
+    if (typeof toast === 'function' && !bgTick && Date.now() - noRoomToastAt > 4000) { noRoomToastAt = Date.now(); toast(t('emp.noRoom', { v: empCapacity() })); }
+    return false;
+  }
   var cost = applicant ? applicant.hireCost : empType.hireCost;
   if (G.money < cost) return false;
   G.money -= cost;
@@ -993,18 +1019,19 @@ function tickSearches() {
 // ---------- Vendeurs ----------
 // Plus il y a de vendeurs, plus ca vend vite. Seul, un vendeur est tres lent.
 function sellerRate(emp) {
-  var n = 0;
-  G.employees.forEach(function(e) { if (hasJob(e,'seller') && empWorking(e)) n++; });
+  var n = memoed('workSellers', function() { var c = 0; G.employees.forEach(function(e) { if (hasJob(e,'seller') && empWorking(e)) c++; }); return c; });
   return 0.08 * (1 + 0.25 * Math.max(0, n - 1)) * empPower(emp, 'seller') * (1 + machineBonus('sellers') / 100);
 }
 
 // Le stock reserve aux commandes quand un maitre d'hotel peut les livrer
 function orderReserved(recId) {
-  var n = 0;
-  (G.orders || []).forEach(function(o) {
-    o.items.forEach(function(it) { if (it.recId === recId) n += it.qty; });
+  return memoed('or:' + recId, function() {
+    var n = 0;
+    (G.orders || []).forEach(function(o) {
+      o.items.forEach(function(it) { if (it.recId === recId) n += it.qty; });
+    });
+    return n;
   });
-  return n;
 }
 
 // Combien ce vendeur a le droit de vendre de ce gateau
@@ -1029,7 +1056,7 @@ function sellOneBatchAuto(emp, dtSec) {
   // Le vendeur vend d'abord ce qui rapporte le plus
   var best = null;
   for (var r = 0; r < REC.length; r++) {
-    if (sellerAllowance(emp, REC[r]) >= 1 && ruleOk(emp.sellRule, emp.sellLimit, inflatedPrice(REC[r])) && (!best || REC[r].val > best.val)) best = REC[r];
+    if (sellerAllowance(emp, REC[r]) >= 1 && (!emp.sellRule || emp.sellRule === 'off' || ruleOk(emp.sellRule, emp.sellLimit, inflatedPrice(REC[r]))) && (!best || REC[r].val > best.val)) best = REC[r];
   }
   if (!best) { emp.sellFrac = Math.min(emp.sellFrac, 1); return; }
   emp.sellFrac -= whole;
@@ -1080,6 +1107,7 @@ function tickEmployees(dtSec) {
     if (emp.morale < MORALE_QUIT) {
       if (typeof toast === 'function') toast(t('emp.event.quit', { n: emp.name }));
       G.employees.splice(i, 1);
+      tickMemo = tickMemo ? {} : null;   // l'equipe a change : les totaux sont a refaire
       continue;
     }
     if (emp.morale < 20 || emp.unpaidTime > 30) {
@@ -1098,14 +1126,17 @@ function tickEmployees(dtSec) {
 function chefQueue(emp) {
   var mode = emp.chefMode || 'all';
   if (mode === 'orders') return ordersToBake();
-  var list = (emp.chefList || []).map(findRec).filter(function(r) { return r && recUnlocked(r); });
-  if (mode === 'only') return list;
-  var rest = REC.filter(function(r) { return recUnlocked(r) && list.indexOf(r) < 0; });
-  // Le gain de chaque recette, calcule une seule fois (le tri le recalculait des centaines de fois)
-  var gain = {};
-  list.concat(rest).forEach(function(r) { gain[r.id] = batchPrice(r, r.qty) - recipeCost(r); });
-  rest.sort(function(a, b) { return gain[b.id] - gain[a.id]; });
-  return mode === 'priority' ? list.concat(rest) : list.concat(rest).sort(function(a, b) { return gain[b.id] - gain[a.id]; });
+  var key = 'cq:' + mode + ':' + (emp.chefList || []).join(',');   // les chefs qui ont les memes reglages partagent la meme liste
+  return memoed(key, function() {
+    var list = (emp.chefList || []).map(findRec).filter(function(r) { return r && recUnlocked(r); });
+    if (mode === 'only') return list;
+    var unlocked = memoed('unlockedRecs', function() { return REC.filter(recUnlocked); });
+    var rest = unlocked.filter(function(r) { return list.indexOf(r) < 0; });
+    // Le gain de chaque recette, calcule une seule fois
+    var gain = memoed('chefGain', function() { var g = {}; unlocked.forEach(function(r) { g[r.id] = batchPrice(r, r.qty) - recipeCost(r); }); return g; });
+    rest = rest.slice().sort(function(a, b) { return gain[b.id] - gain[a.id]; });
+    return mode === 'priority' ? list.concat(rest) : list.concat(rest).sort(function(a, b) { return gain[b.id] - gain[a.id]; });
+  });
 }
 
 // Ce qui manque pour livrer les commandes en cours
@@ -1604,6 +1635,12 @@ function themeLockReason(theme) {
   if (G.unlockedThemes && G.unlockedThemes[theme.id]) return null;
   if (theme.month) return new Date().getMonth() + 1 === theme.month ? null : 'month';
   if (theme.secret) return 'secret';
+  if (theme.gotIng) {
+    var haveGold = Math.max(G.ing[theme.gotIng.id] || 0, (G.stats.ingGotById || {})[theme.gotIng.id] || 0);
+    if (haveGold < theme.gotIng.n) return 'got';
+    G.unlockedThemes[theme.id] = true;
+    return null;
+  }
   if (theme.sold) {
     if (((G.stats.soldById || {})[theme.sold.rec] || 0) < theme.sold.n) return 'sold';
     G.unlockedThemes[theme.id] = true;
@@ -1640,6 +1677,17 @@ function enforceThemeLocks() {
   var main = findTheme(G.settings.theme);
   if (!main || themeLockReason(main)) { G.settings.theme = 'light'; changed = true; }
   return changed;
+}
+
+// Le theme dore : 5 000 feuilles d'or alimentaires. Avec le theme tech, il ouvre aussi le tech dore.
+function checkGoldTheme() {
+  if (G.creative) return;
+  var gold = findTheme('gold');
+  if (gold && !G.unlockedThemes.gold && !themeLockReason(gold)) { if (typeof toast === 'function') toast(t('settings.goldUnlocked')); }
+  if (G.unlockedThemes.gold && G.unlockedThemes.tech && !G.unlockedThemes.techgold) {
+    G.unlockedThemes.techgold = true;
+    if (typeof toast === 'function') toast(t('settings.techGoldUnlocked'));
+  }
 }
 
 // ============ EVENEMENTS ============
@@ -1912,6 +1960,7 @@ function checkGameOver() {
 }
 
 // ============ ABSENCE ============
+function totalSoldUnits() { return 0; }
 function calcOfflineProgress(elapsedSec) {
   var dt = Math.min(elapsedSec, 5 * 3600);
   var totalIng = 0, totalMoney = 0, totalRent = 0, totalSalaries = 0, unpaid = false;
@@ -1966,7 +2015,7 @@ function calcOfflineProgress(elapsedSec) {
     if (loan.remaining < 0.01) closeLoan(loan);
   });
   recoverDemand(dt);
-  return { ingredients: totalIng, money: totalMoney, rent: totalRent, salaries: totalSalaries, loans: totalLoans, seconds: dt, unpaid: unpaid };
+  return { ingredients: totalIng, money: totalMoney, rent: totalRent, salaries: totalSalaries, loans: totalLoans, seconds: dt, away: elapsedSec, unpaid: unpaid, name: G.bakeryName };
 }
 
 // ============ PLUSIEURS PATISSERIES ============
@@ -1986,6 +2035,7 @@ function bakeryOpenCost() {
 // free : la console ouvre une patisserie sans la payer. name : facultatif.
 function openNewBakery(free, name) {
   ensureBakeryList();
+  if (G.bakeries.length >= BAKERY_MAX) return false;   // 50 patisseries au plus
   var cost = free ? 0 : bakeryOpenCost();
   if (G.money < cost) return false;
   G.money -= cost;
@@ -2026,7 +2076,7 @@ function switchToBakery(index) {
   target.currentBakeryIndex = index;
   // Ce qui appartient au joueur, et pas a une patisserie
   ['settings','birthday','birthdaySetOn','birthdayBoostYear','birthdayBoostUntil','achievements','tutorialDone','tutorialStep',
-   'introDone','companyName','cheatUnlocked','bobClicks','bobSad','bobGold','bobGoldClicks','bobChoke','bobPokes','logoClicks','unlockedThemes','favRecipes','lvl1000Shown','wentBankrupt',
+   'introDone','companyName','cheatUnlocked','bobClicks','bobSad','bobGold','bobGoldClicks','bobChoke','bobPokes','logoClicks','cheatEverUnlocked','cheatLocked','logoHintShown','unlockedThemes','favRecipes','lvl1000Shown','wentBankrupt',
    'secondBakery','bankUnlocked','loans','nextLoanId','cmdUsage','challenge','nextChallengeAt','sugarFed','explained','creative'].forEach(function(k) {
     target[k] = G[k];
   });
@@ -2335,6 +2385,10 @@ function withBakery(state, fn) {
 
 // Tout le travail d'une patisserie, qu'on y soit ou non
 function tickBakeryWork(dtSec, isCurrent) {
+  tickMemo = {};
+  try { tickBakeryWorkInner(dtSec, isCurrent); } finally { tickMemo = null; }
+}
+function tickBakeryWorkInner(dtSec, isCurrent) {
   tickAutoCollect(dtSec);
   advanceBuildings(dtSec);
   tickEmployees(dtSec);
@@ -2370,16 +2424,19 @@ function shiftAllBakeries(ms) {
 }
 
 // Pendant ton absence aussi, toutes tournent
+// Renvoie un resultat par patisserie (les autres, pendant qu'on etait parti)
 function offlineBackgroundBakeries(elapsedSec) {
-  var money = 0;
+  var list = [];
   G.bakeries.forEach(function(b, i) {
     if (i === G.currentBakeryIndex || !b.state) return;
     withBakery(b.state, function() {
-      money += calcOfflineProgress(elapsedSec).money;
+      var r = calcOfflineProgress(elapsedSec);
+      r.name = b.name || G.bakeryName;
+      list.push(r);
       tickCrafting();
     });
   });
-  return money;
+  return list;
 }
 
 // ============ STOCK MAX (/max) ============

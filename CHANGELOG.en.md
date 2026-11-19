@@ -2,6 +2,36 @@
 
 Everything that was added to Pâtisserie 2D Simulator, from the newest to the oldest. To understand the rules of the game, see the [wiki](REGLES.md).
 
+## Release 1.3.2 (November 19, 2026)
+
+The game no longer lags with 1000 employees, the console is safer, and there are ways to compare, duplicate and protect your games.
+
+**Game**
+- The Golden theme: you get it with 5,000 edible gold leaves, it turns Bob all gold, and together with the Tech theme it opens Golden Tech.
+- Employees depend on space: at most one per m² (plus 2), and 1000 at the most. With 1000 employees the game is twenty times faster, and the list only draws 50 per job before "Show the others".
+- A company can have up to 50 bakeries.
+- In the stats, a new "Compare" view puts 2 or 3 of your bakeries side by side.
+- The "Welcome back" window gives everything: the real time away (days, months, years), a tab per bakery and a total, and the charts once you have unlocked them. Amounts paid no longer have a minus sign.
+- In the bank, Bob has a "Skip" button when he explains the insurance, and loans of a billion or more read properly (100B).
+- Numbers follow the language: in English, Chinese, Japanese and Korean a dot is used, and 10³⁰⁰ no longer shows "∞".
+
+**Games**
+- A button to duplicate a game in the menu.
+- If a game is already open in another tab, Bob warns you before one overwrites the other.
+- A file or code with impossible values (negative money, unreadable level...) is refused on import, and when opening a save you are told what was fixed.
+- The "Give your first bakery a name" window is mandatory: Esc and a click outside no longer close it.
+
+**Interface**
+- On a phone: buttons are at least 44 px, vibrations (which you can turn off in the settings) go with your taps, and the console is readable.
+- Languages sit in a grid of 5 per row, drop-down lists are rounded, the fold arrow changes direction, and the XP text and the money are easier to read.
+- Shortcuts: / opens the console (once unlocked), S the achievements, Ctrl + Esc the menu. The logo also works with the keyboard, and Bob gives you a hint at 500 logo clicks.
+
+**Console**
+- It is much stricter: extra words, unreadable numbers (1e400, abc), negative values and unknown names are refused with a message, changing nothing. Numbers like 1e3, 1,5 or 10^300 are understood.
+- Deleting a bakery asks for two confirmations, /max then /unmax brings back your real game, and /max sets the level to 1000 with no XP.
+- Turning the console off asks for confirmation, and once you have unlocked it before, 100 logo clicks are enough to get it back.
+- Results use the real names, ingredients are always whole numbers, and gendered messages agree.
+
 ## Release 1.3.1 (November 17, 2026)
 
 An insurance, progress bars, proper plurals, and a more comfortable phone.

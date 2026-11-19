@@ -131,6 +131,7 @@ function empExtraBadges(x) {
 }
 
 // ============ L'ONGLET ============
+function showAllEmp(type) { (ui.empAll = ui.empAll || {})[type] = true; renderEmployees(); }
 function renderEmployees() {
   var el = document.getElementById('main-panel');
   if (!el) return;
@@ -139,6 +140,7 @@ function renderEmployees() {
   var head = h;
   h = '';
   var sal = totalSalary();
+  h += '<p class="set-help emp-cap">' + t('emp.capacity', { v: G.employees.length, m: G.creative ? '∞' : empCapacity() }) + '</p>';
   if (sal > 0) h += '<div class="emp-total-salary">' + t('emp.totalSalary', { v: fmtMoney(sal * 3600) }) + '</div>';
   var open = EMP_TYPES.filter(function(et) { return empTypeOpen(et) && !et.hidden; });
   if (open.length === 0) {
@@ -193,7 +195,8 @@ function renderEmployees() {
       h += '<button class="btn-tiny" onclick="nudgeEmpGroup(\'' + type + '\',-1)" title="' + escH(t('emp.groupUp')) + '" aria-label="' + escH(t('emp.groupUp')) + '">↑</button>';
       h += '<button class="btn-tiny" onclick="nudgeEmpGroup(\'' + type + '\',1)" title="' + escH(t('emp.groupDown')) + '" aria-label="' + escH(t('emp.groupDown')) + '">↓</button></div>';
       h += '<div class="emp-list">';
-      list.forEach(function(emp) {
+      var shownN = (ui.empAll && ui.empAll[type]) ? list.length : EMP_SHOWN;   // avec 1000 employes, on n'en dessine que 50 par metier
+      list.slice(0, shownN).forEach(function(emp) {
         var moraleColor = emp.morale > 60 ? 'morale-good' : (emp.morale > 30 ? 'morale-mid' : 'morale-bad');
         var training = empTraining(emp), switching = empSwitching(emp), moving = hasJob(emp, 'collector') && collectorMoving(emp);
         var status = training ? t('emp.training', { v: fmtTime((emp.trainingUntil - Date.now()) / 1000) }) : emp.paused ? t('emp.paused') : switching ? t('emp.switching', { t: fmtTime((emp.switchUntil - Date.now()) / 1000) }) : moving ? t('emp.moving', { n: t('i.' + emp.assignedIng), t: fmtTime((emp.moveUntil - Date.now()) / 1000) }) : t('emp.' + emp.status);
@@ -209,6 +212,7 @@ function renderEmployees() {
         h += '<div class="emp-morale-bar" title="' + escH(t('emp.morale')) + ' : ' + Math.floor(emp.morale) + ' / ' + maxMorale(emp) + ' %"><div class="emp-morale-fill ' + moraleColor + '" style="width:' + Math.min(100, Math.floor(emp.morale)) + '%"></div></div>';
         h += '</div>';
       });
+      if (list.length > shownN) h += '<button class="btn btn-small emp-more" data-type="' + type + '" onclick="showAllEmp(this.dataset.type)">' + t('emp.showMore', { n: list.length - shownN }) + '</button>';
       h += '</div></section>';
     });
   }

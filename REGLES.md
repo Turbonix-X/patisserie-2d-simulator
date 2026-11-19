@@ -234,6 +234,8 @@ Dès le niveau 40. **La différence avec les employés :** un cueilleur produit 
 
 ## Plusieurs pâtisseries
 
+**Au plus 50 pâtisseries** dans une entreprise. Dans les statistiques, la vue « Comparer » met 2 ou 3 pâtisseries côte à côte.
+
 - La deuxième coûte 10 000 €, puis le prix est multiplié par 3 à chaque nouvelle boutique. Bob te félicite et te demande de la nommer.
 - **Toutes travaillent en même temps**, même quand tu n'y es pas.
 - Chaque boutique garde son argent, son stock, son équipe et ses machines.
@@ -257,6 +259,8 @@ Bob est ton chef pâtissier. Il t'accueille, t'apprend les bases, et t'explique 
 - **Les notifications :** vers le début, Bob te propose de te prévenir quand tu n'es pas sur le jeu : si ta pâtisserie tourne sans pause depuis 5 minutes, ou s'il se passe quelque chose d'important. Tu peux les activer ou les couper dans les réglages.
 - **Son défi :** tous les 2 à 5 jours, il te propose un défi de 24 heures. Réussis, et il te donne 5 % de tout ton argent, toutes pâtisseries confondues.
 - **Si tu pars sans mettre pause**, il te rappelle que le bouton existe.
+
+**Les employés dépendent de la place :** au plus un par m² (plus 2), et jamais plus de 1000.
 
 ## Les événements
 
@@ -305,9 +309,17 @@ Les succès ont leur bouton (un trophée) dans l'en-tête, avec une barre de pro
 - Tu peux exporter ta partie dans un fichier ou sous forme de code à copier-coller, et l'importer ailleurs de la même façon.
 - **Trop de clics :** plus de 15 clics par seconde déclenchent une pause de 3 secondes. Après 3 pauses, une petite addition vérifie que tu n'es pas un robot. Après 3 mauvaises réponses, tu es bloqué 5 minutes.
 
+## La console de commandes
+
+- **Débloquer :** 1000 clics sur le logo. La console peut être désactivée (avec confirmation) ; une fois débloquée une première fois, 100 clics suffisent pour la retrouver. **/** l'ouvre au clavier.
+- **Stricte :** un mot en trop, un nombre illisible (`abc`, `1e400`), une valeur négative, un nom inconnu, une unité qui n'existe pas (`cl` pour la farine) ou une date impossible refusent la commande sans rien changer. Les nombres comme `1e3`, `1,5` ou `10^300` sont compris. Les ingrédients sont toujours entiers.
+- **Limites :** 1000 employés, 50 pâtisseries, niveau de 1 à 100 000, vitesse du temps de 0,1 à 10, 0 à 999 bâtiments de chaque sorte.
+- **Supprimer une pâtisserie :** `/bakery delete N`, puis `/bakery delete N confirm` deux fois.
+- **/max** : niveau 1000 sans XP (elle ne monte plus), tout au maximum ; `/unmax` retrouve la vraie partie, même après deux `/max`. `/money infinite off` rend l'argent d'avant.
+
 ## Sur ordinateur
 
-- **Raccourcis :** les chiffres changent d'onglet, **R** ouvre les réglages, **C** le changelog, **M** le choix de la pâtisserie, **Échap** ferme une fenêtre ou met en pause. La page « Commandes » des réglages les liste (elle n'apparaît que sur ordinateur ou avec un clavier).
+- **Raccourcis :** les chiffres changent d'onglet, **R** ouvre les réglages, **S** les succès, **C** le changelog, **M** le choix de la pâtisserie, **/** la console (si elle est débloquée), **Échap** ferme une fenêtre ou met en pause, **Ctrl + Échap** revient au menu. La page « Commandes » des réglages les liste (elle n'apparaît que sur ordinateur ou avec un clavier).
 - **Largeur des colonnes :** glisse la barre entre la liste des ingrédients et le panneau de droite pour changer leur taille (double-clic : retour à la normale). Ton choix est gardé.
 
 ## Sur téléphone

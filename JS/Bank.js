@@ -13,8 +13,8 @@ function bobFigure() {
 // Plusieurs repliques a la suite, puis une action
 var bobDialog = null;
 
-function showBobDialog(lines, lastLabel, onDone) {
-  bobDialog = { lines: bobFilterLines(lines), i: 0, lastLabel: lastLabel, onDone: onDone };
+function showBobDialog(lines, lastLabel, onDone, skippable) {
+  bobDialog = { lines: bobFilterLines(lines), i: 0, lastLabel: lastLabel, onDone: onDone, skip: !!skippable };
   renderBobDialog();
 }
 
@@ -26,9 +26,17 @@ function renderBobDialog() {
   h += '<div class="bob-talk-speech"><span class="bob-bubble-name">Bob</span>';
   h += '<p>' + d.lines[d.i] + '</p>';
   h += '<div class="bob-talk-foot"><span class="bob-talk-steps">' + (d.i + 1) + ' / ' + d.lines.length + '</span>';
+  if (d.skip && !last) h += '<button class="btn" onclick="bobDialogSkip()">' + t('common.skip') + '</button>';
   h += '<button class="btn btn-primary" onclick="bobDialogNext()">' + (last ? d.lastLabel : t('common.next')) + '</button></div>';
   h += '</div></div>';
   showModal(h, 'modal-bob');
+}
+
+function bobDialogSkip() {
+  var d = bobDialog;
+  bobDialog = null;
+  hideModal();
+  if (d && d.onDone) d.onDone();
 }
 
 function bobDialogNext() {
@@ -140,7 +148,7 @@ function insuranceHTML() {
   return h + '</div>' + (cur ? '<p class="hint-note">' + t('ins.current', { n: t('ins.plan.' + cur.id) }) + '</p>' : '');
 }
 function showInsuranceExplanation() {
-  showBobDialog([t('ins.bob1'), t('ins.bob2'), t('ins.bob3')], t('ins.bobOk'));
+  showBobDialog([t('ins.bob1'), t('ins.bob2'), t('ins.bob3')], t('ins.bobOk'), null, true);   // avec un bouton Passer
 }
 function doSubscribeInsurance(id) {
   if (subscribeInsurance(id)) { toast(t('ins.subscribed', { n: t('ins.plan.' + id) })); playSuccessSound(); renderBank(); }
@@ -151,7 +159,7 @@ function doCancelInsurance() { cancelInsurance(); renderBank(); }
 function fmtLoan(amount) {
   var curr = CURRENCIES[0];
   CURRENCIES.forEach(function(c) { if (c.id === G.settings.currency) curr = c; });
-  if (amount * curr.rate >= 1e9) return bidiIsolate(fmt(amount * curr.rate) + curr.sym);   // 100 Md et non 100 000 000 000
+  if (amount * curr.rate >= 1e9) return bidiIsolate(fmt(amount * curr.rate) + curr.symbol);   // 100 Md et non 100 000 000 000
   return (amount * curr.rate).toLocaleString(({ fr:'fr-FR', es:'es-ES', pt:'pt-PT', de:'de-DE', ar:'ar-u-nu-latn', zh:'zh-CN', ja:'ja-JP', ko:'ko-KR', ru:'ru-RU' })[currentLang] || 'en-US', { maximumFractionDigits: 2 }) + curr.symbol;
 }
 

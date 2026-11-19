@@ -78,8 +78,7 @@ LANGS.fr = {
   'footer.rights':'Turbonix Entertainment. Tous droits réservés.','footer.icons':'Icônes :',
   'tab.bank':'Banque',
   'bank.title':'Banque','bank.whatIs':'Bob, c\'est quoi un prêt ?','bank.balance':'Ton compte','bank.toRepay':'Reste à rembourser','bank.perMin':'Prélevé par minute','bank.rentDebt':'Dette de loyer',
-  'bank.active':'Tes prêts en cours','bank.offers':'Demander un prêt','bank.loanOf':'Prêt de {{v}}','bank.remaining':'Reste {{v}}','bank.late':'En retard : pas assez d\'argent, ce prêt coûte de plus en plus cher.','bank.autoPay':'{{v}} prélevés par minute','bank.repayAll':'Tout rembourser ({{v}})',
-  'bank.rate':'Intérêts','bank.repay':'À rembourser','bank.during':'Sur','bank.minutes':'{{v}} min','bank.borrow':'Emprunter','bank.inProgress':'En cours','bank.oneEach':'Un seul prêt de chaque montant à la fois. Le remboursement est prélevé tout seul sur ton argent.',
+  'bank.active':'Tes prêts en cours','bank.offers':'Demander un prêt','bank.loanOf':'Prêt de {{v}}','bank.remaining':'Reste {{v}}','bank.late':'En retard : pas assez d\'argent, ce prêt coûte de plus en plus cher.','bank.autoPay':'{{v}} prélevés par minute','bank.rate':'Intérêts','bank.repay':'À rembourser','bank.during':'Sur','bank.minutes':'{{v}} min','bank.borrow':'Emprunter','bank.inProgress':'En cours','bank.oneEach':'Un seul prêt de chaque montant à la fois. Le remboursement est prélevé tout seul sur ton argent.',
   'bank.taken':'{{v}} sur ton compte !','bank.repaid':'Prêt remboursé !','bank.finished':'Prêt de {{v}} remboursé !',
   'bank.bobDebt':'Aïe. Tu n\'as plus de quoi payer le loyer : tu as {{v}} de dette. Pas de panique, je t\'ai créé un compte bancaire. Regarde, il y a un nouvel onglet : Banque.',
   'bank.bobLoan':'À la banque, tu peux demander un prêt. Un prêt, c\'est simple : la banque te donne de l\'argent tout de suite, et tu le lui rends petit à petit.',
@@ -87,7 +86,7 @@ LANGS.fr = {
   'bank.bobAdvice':'Si tu n\'as plus d\'argent au moment du prélèvement, le prêt coûte de plus en plus cher. Alors, emprunte seulement ce que tu sais pouvoir rembourser. Et rembourser en avance coûte moins cher : juste après l\'emprunt, tu ne perds rien !',
   'bank.bobGo':'Voir la banque',
   'rename.price':'Changer le nom de ta pâtisserie coûte {{v}}.','rename.noMoney':'Il te faut {{v}} pour la renommer.',
-  'offline.loans':'Prêts remboursés : -{{v}}',
+  'offline.loans':'Prêts remboursés : {{v}}',
   'stats.totalInvested':'Investissements','stats.loansTaken':'Prêts demandés','stats.interestPaid':'Intérêts payés','stats.viewHere':'Cette pâtisserie','stats.viewCharts':'Graphiques','stats.viewAll':'Toutes mes pâtisseries',
   'stats.teaser':'Ouvre une deuxième pâtisserie pour débloquer les graphiques et les totaux de toutes tes boutiques.',
   'chart.log':'échelle logarithmique','chart.perMin':'/min','chart.empty':'Pas encore assez de données. Les courbes apparaissent après une minute de jeu dans cette pâtisserie.',
@@ -141,8 +140,7 @@ LANGS.fr = {
   'intro.namePlaceholder':'Le nom de ta pâtisserie','intro.nameError':'Il faut au moins une lettre !',
   'intro.money':'« {{n}} », j\'adore ! Tiens, voilà 50 € pour commencer. Ne dépense pas tout d\'un coup !',
   'intro.outfit':'Bon, je vais enfiler ma tenue de chef. On se retrouve en cuisine !<small class="bob-aside">(Entre nous, je ne dis jamais non à un peu de sucre.)</small>',
-  'intro.go':'C\'est parti !','intro.moneyToast':'+50 € de la part de Bob !',
-  'bob.p0':'Hé, ça chatouille !|Oui ? Je surveille le four.|Je suis Bob, pas un bouton !|Tu veux quelque chose ?',
+  'intro.go':'C\'est parti !','bob.p0':'Hé, ça chatouille !|Oui ? Je surveille le four.|Je suis Bob, pas un bouton !|Tu veux quelque chose ?',
   'bob.p1':'Tu as fini de cliquer ?|Attention à ma toque !|Hé ! Je travaille, moi !|Ça devient lourd, là.',
   'bob.p2':'Bon, ça commence à m\'énerver.|ARRÊTE de cliquer sur moi !|Je vais te mettre de la farine partout !|Tu n\'as pas des gâteaux à vendre ?',
   'bob.p3':'MAIS ÇA SUFFIT !|JE VAIS BRÛLER TOUS TES GÂTEAUX !|MON FOUET VA TE PARLER !|TU VAS ARRÊTER, OUI ?!',
@@ -152,7 +150,7 @@ LANGS.fr = {
   'bob.unlocked':'Tiens, ta console. Amuse-toi. Moi, je ne m\'amuse plus depuis longtemps.',
   'bob.sour':'Avant, j\'aimais les gâteaux.|Fais ce que tu veux. De toute façon…|Mes macarons ne valent plus rien, comme tout le reste.|Je n\'attends plus rien de toi.|Ah. Encore toi.|Seul un peu de sucre me remonterait, peut-être.|Laisse. Je fouette, c\'est tout.',
   'bob.calm':'Ta console est en bas à droite. Laisse-moi cuisiner !',
-  'offline.title':'Bon retour !','offline.time':'Absent pendant {{t}}.','offline.ing':'Ingrédients produits : {{v}}','offline.sales':'Ventes automatiques : +{{v}}','offline.rent':'Loyer payé : -{{v}}','offline.salaries':'Salaires payés : -{{v}}','offline.unpaid':'Tu n\'avais pas de quoi payer tous les salaires : ton équipe a perdu le moral.','offline.saveError':'Ta sauvegarde était abîmée : la copie de secours a été chargée.','offline.saveLost':'Ta sauvegarde était abîmée et n\'a pas pu être lue. Elle a été mise de côté.',
+  'offline.title':'Bon retour !','offline.time':'Absent pendant {{t}}.','offline.ing':'Ingrédients produits : {{v}}','offline.sales':'Ventes automatiques : +{{v}}','offline.rent':'Loyer payé : {{v}}','offline.salaries':'Salaires payés : {{v}}','offline.unpaid':'Tu n\'avais pas de quoi payer tous les salaires : ton équipe a perdu le moral.','offline.saveError':'Ta sauvegarde était abîmée : la copie de secours a été chargée.','offline.saveLost':'Ta sauvegarde était abîmée et n\'a pas pu être lue. Elle a été mise de côté.',
   'gameover.title':'Faillite !','gameover.text':'Tu n\'as plus d\'argent, et ton stock ne suffit pas à rembourser ta dette...','gameover.sellCakes':'Tout vendre pour tenter de s\'en sortir','gameover.restart':'Recommencer',
   'event.price_surge':'Hausse des prix ! Ventes +30 % pendant {{t}} s','event.price_drop':'Chute des prix ! Ventes -20 % pendant {{t}} s',
   'event.inflation':'Inflation ! Ingrédients +25 % pendant {{t}} s','event.deflation':'Déflation ! Ingrédients -15 % pendant {{t}} s',
@@ -210,8 +208,7 @@ LANGS.en = {
   'footer.rights':'Turbonix Entertainment. All rights reserved.','footer.icons':'Icons:',
   'tab.bank':'Bank',
   'bank.title':'Bank','bank.whatIs':'Bob, what\'s a loan?','bank.balance':'Your account','bank.toRepay':'Left to repay','bank.perMin':'Taken per minute','bank.rentDebt':'Rent debt',
-  'bank.active':'Your current loans','bank.offers':'Ask for a loan','bank.loanOf':'{{v}} loan','bank.remaining':'{{v}} left','bank.late':'Late: not enough money, this loan keeps getting more expensive.','bank.autoPay':'{{v}} taken per minute','bank.repayAll':'Repay it all ({{v}})',
-  'bank.rate':'Interest','bank.repay':'To repay','bank.during':'Over','bank.minutes':'{{v}} min','bank.borrow':'Borrow','bank.inProgress':'In progress','bank.oneEach':'Only one loan of each amount at a time. Repayments are taken from your money automatically.',
+  'bank.active':'Your current loans','bank.offers':'Ask for a loan','bank.loanOf':'{{v}} loan','bank.remaining':'{{v}} left','bank.late':'Late: not enough money, this loan keeps getting more expensive.','bank.autoPay':'{{v}} taken per minute','bank.rate':'Interest','bank.repay':'To repay','bank.during':'Over','bank.minutes':'{{v}} min','bank.borrow':'Borrow','bank.inProgress':'In progress','bank.oneEach':'Only one loan of each amount at a time. Repayments are taken from your money automatically.',
   'bank.taken':'{{v}} in your account!','bank.repaid':'Loan repaid!','bank.finished':'{{v}} loan repaid!',
   'bank.bobDebt':'Ouch. You can\'t pay the rent anymore: you have {{v}} of debt. Don\'t panic, I opened a bank account for you. Look, there\'s a new tab: Bank.',
   'bank.bobLoan':'At the bank, you can ask for a loan. A loan is simple: the bank gives you money right away, and you pay it back little by little.',
@@ -219,7 +216,7 @@ LANGS.en = {
   'bank.bobAdvice':'If you run out of money when a payment is due, the loan keeps getting more expensive. So only borrow what you know you can repay. And repaying early costs less: right after borrowing, you lose nothing!',
   'bank.bobGo':'See the bank',
   'rename.price':'Changing your bakery\'s name costs {{v}}.','rename.noMoney':'You need {{v}} to rename it.',
-  'offline.loans':'Loans repaid: -{{v}}',
+  'offline.loans':'Loans repaid: {{v}}',
   'stats.totalInvested':'Investments','stats.loansTaken':'Loans taken','stats.interestPaid':'Interest paid','stats.viewHere':'This bakery','stats.viewCharts':'Charts','stats.viewAll':'All my bakeries',
   'stats.teaser':'Open a second bakery to unlock charts and totals across all your shops.',
   'chart.log':'logarithmic scale','chart.perMin':'/min','chart.empty':'Not enough data yet. Curves appear after one minute of play in this bakery.',
@@ -273,8 +270,7 @@ LANGS.en = {
   'intro.namePlaceholder':'Your bakery\'s name','intro.nameError':'At least one letter, please!',
   'intro.money':'"{{n}}", I love it! Here, take 50€ to get started. Don\'t spend it all at once!',
   'intro.outfit':'Right, I\'ll go put on my chef outfit. See you in the kitchen!<small class="bob-aside">(Between us, I never say no to a bit of sugar.)</small>',
-  'intro.go':'Let\'s go!','intro.moneyToast':'+50€ from Bob!',
-  'bob.p0':'Hey, that tickles!|Yes? I\'m watching the oven.|I\'m Bob, not a button!|Do you want something?',
+  'intro.go':'Let\'s go!','bob.p0':'Hey, that tickles!|Yes? I\'m watching the oven.|I\'m Bob, not a button!|Do you want something?',
   'bob.p1':'Are you done clicking?|Careful with my hat!|Hey! I\'m working here!|This is getting old.',
   'bob.p2':'OK, this is getting annoying.|STOP clicking on me!|I\'ll throw flour all over you!|Don\'t you have cakes to sell?',
   'bob.p3':'THAT\'S ENOUGH!|I\'LL BURN ALL YOUR CAKES!|MY WHISK WILL HAVE A WORD WITH YOU!|WILL YOU STOP?!',
@@ -284,7 +280,7 @@ LANGS.en = {
   'bob.unlocked':'There\'s your console. Have fun. I stopped having fun long ago.',
   'bob.sour':'I used to love cakes.|Do what you want. It doesn\'t matter…|My macarons are worthless, like everything else.|I expect nothing from you anymore.|Oh. You again.|Only a bit of sugar might cheer me up.|Leave it. I just whisk now.',
   'bob.calm':'Your console is at the bottom right. Let me cook!',
-  'offline.title':'Welcome back!','offline.time':'Away for {{t}}.','offline.ing':'Ingredients produced: {{v}}','offline.sales':'Auto-sales: +{{v}}','offline.rent':'Rent paid: -{{v}}','offline.salaries':'Wages paid: -{{v}}','offline.unpaid':'You couldn\'t pay all the wages: your team lost morale.','offline.saveError':'Your save was damaged: the backup copy was loaded.','offline.saveLost':'Your save was damaged and could not be read. It has been set aside.',
+  'offline.title':'Welcome back!','offline.time':'Away for {{t}}.','offline.ing':'Ingredients produced: {{v}}','offline.sales':'Auto-sales: +{{v}}','offline.rent':'Rent paid: {{v}}','offline.salaries':'Wages paid: {{v}}','offline.unpaid':'You couldn\'t pay all the wages: your team lost morale.','offline.saveError':'Your save was damaged: the backup copy was loaded.','offline.saveLost':'Your save was damaged and could not be read. It has been set aside.',
   'gameover.title':'Bankrupt!','gameover.text':'You\'re out of money, and your stock can\'t cover your debt...','gameover.sellCakes':'Sell everything and try to recover','gameover.restart':'Restart',
   'event.price_surge':'Price surge! Sales +30% for {{t}}s','event.price_drop':'Price drop! Sales -20% for {{t}}s',
   'event.inflation':'Inflation! Ingredients +25% for {{t}}s','event.deflation':'Deflation! Ingredients -15% for {{t}}s',
@@ -344,6 +340,11 @@ function pluralForm(n, forms) {
   var i = order.indexOf(cat);
   if (i < 0 || i >= forms.length) i = forms.length - 1;
   return forms[i];
+}
+// Un texte qui s'accorde : la variante « .f » existe pour les prenoms de femmes (renvoyee, embauchee...)
+function tg(key, name, params) {
+  var k = (typeof empGender === 'function' && empGender(name) === 'f' && LANGS[currentLang] && LANGS[currentLang][key + '.f']) ? key + '.f' : key;
+  return t(k, params);
 }
 function t(key, params) {
   var str = (LANGS[currentLang] && LANGS[currentLang][key]) || LANGS.fr[key] || LANGS.en[key] || key;

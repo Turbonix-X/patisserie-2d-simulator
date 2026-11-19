@@ -2,6 +2,20 @@
 
 Todo lo que se ha añadido a Pâtisserie 2D Simulator, de la más reciente a la más antigua. Las versiones más antiguas se muestran en inglés. Para entender las reglas del juego, mira la [wiki](REGLES.md).
 
+## Release 1.3.2 (19 de noviembre de 2026)
+
+El juego ya no va lento con 1000 empleados, la consola es más segura y puedes comparar, duplicar y proteger tus partidas.
+
+**Juego**
+- Tema Dorado: se consigue con 5000 hojas de oro comestibles, pone a Bob todo de oro y, con el tema Tech, abre el Tech dorado.
+- Los empleados dependen del espacio (como máximo uno por m² más 2, y 1000 en total). Con 1000 empleados el juego va veinte veces más rápido.
+- Una empresa puede tener hasta 50 pastelerías, y en las estadísticas hay una vista «Comparar» para 2 o 3 de ellas.
+- La ventana «Bienvenido de nuevo» muestra el tiempo real de ausencia (días, meses, años), una pestaña por pastelería, un total y los gráficos.
+- Los números siguen el idioma, y los préstamos de mil millones o más se escriben bien.
+- Duplicar partidas, aviso si la partida ya está abierta en otra pestaña, importación que rechaza valores imposibles, y nombre obligatorio de la primera pastelería.
+- En el móvil: botones de 44 px como mínimo, vibraciones (desactivables) y notificaciones sin tapar nada. Atajos: / consola, S logros, Ctrl + Esc menú.
+- La consola es mucho más estricta (palabras de más, números ilegibles, negativos y nombres desconocidos se rechazan), borrar una pastelería pide dos confirmaciones y /max + /unmax recupera tu partida.
+
 ## Release 1.3.1 (17 de noviembre de 2026)
 
 Un seguro, barras de progreso, plurales de verdad y un móvil más cómodo.

@@ -2,6 +2,20 @@
 
 Alles, was zu Pâtisserie 2D Simulator hinzugekommen ist, von der neuesten bis zur ältesten Version. Ältere Versionen werden auf Englisch angezeigt. Die Spielregeln findest du im [Wiki](REGLES.md).
 
+## Release 1.3.2 (19. November 2026)
+
+Das Spiel ruckelt mit 1000 Angestellten nicht mehr, die Konsole ist sicherer, und du kannst Spiele vergleichen, duplizieren und schützen.
+
+**Spiel**
+- Das goldene Thema: Du bekommst es mit 5000 essbaren Goldblättchen, es macht Bob ganz golden und öffnet zusammen mit dem Tech-Thema das goldene Tech.
+- Angestellte hängen vom Platz ab (höchstens einer pro m² plus 2, insgesamt 1000). Mit 1000 Angestellten ist das Spiel zwanzigmal schneller.
+- Ein Unternehmen kann bis zu 50 Konditoreien haben, und in den Statistiken vergleicht die Ansicht „Vergleichen“ 2 oder 3 davon.
+- Das Fenster „Willkommen zurück“ zeigt die echte Abwesenheit (Tage, Monate, Jahre), einen Tab pro Konditorei, eine Gesamtansicht und die Diagramme.
+- Zahlen folgen der Sprache, und Kredite ab einer Milliarde werden richtig geschrieben.
+- Spiele duplizieren, Warnung bei doppelt geöffnetem Spiel, Import lehnt unmögliche Werte ab, und der Name der ersten Konditorei ist Pflicht.
+- Am Handy: Knöpfe mindestens 44 px, Vibration (abschaltbar), Meldungen verdecken nichts. Kürzel: / Konsole, S Erfolge, Strg + Esc Menü.
+- Die Konsole ist viel strenger (zu viele Wörter, unlesbare Zahlen, negative Werte und unbekannte Namen werden abgelehnt), Konditorei löschen braucht zwei Bestätigungen, /max + /unmax stellt dein Spiel wieder her.
+
 ## Release 1.3.1 (17. November 2026)
 
 Eine Versicherung, Fortschrittsbalken, echte Plurale und ein bequemeres Handy.

@@ -95,7 +95,7 @@ function homeGridHTML(list, max) {
     h += '<div class="inst-slot" role="button" tabindex="0" onclick="homePlay(\'' + x.id + '\')" onkeydown="if(event.key===\'Enter\')homePlay(\'' + x.id + '\')"><b class="inst-name">' + escH(x.name || t('home.unnamed')) + '</b>';
     h += '<span class="inst-meta">' + t('home.levelShort', { v: x.level || 1 }) + (x.updated ? ' · ' + new Date(x.updated).toLocaleDateString() : '') + '</span>';
     h += (x.type !== 'normal' ? '<span class="inst-type">' + t('home.type' + (x.type === 'max' ? 'Max' : 'Creative')) + '</span>' : '');
-    h += '<div class="inst-actions"><button class="btn btn-small icon-only" onclick="event.stopPropagation();homeExport(\'' + x.id + '\')" title="' + escH(t('home.export')) + '" aria-label="' + escH(t('home.export')) + '">' + uiIcon('save') + '</button>';
+    h += '<div class="inst-actions"><button class="btn btn-small icon-only" onclick="event.stopPropagation();homeDuplicate(\'' + x.id + '\')" title="' + escH(t('home.duplicate')) + '" aria-label="' + escH(t('home.duplicate')) + '">' + uiIcon('copy') + '</button><button class="btn btn-small icon-only" onclick="event.stopPropagation();homeExport(\'' + x.id + '\')" title="' + escH(t('home.export')) + '" aria-label="' + escH(t('home.export')) + '">' + uiIcon('save') + '</button>';
     h += '<button class="btn btn-small btn-danger icon-only" onclick="event.stopPropagation();homeAskDelete(\'' + x.id + '\')" title="' + escH(t('home.delete')) + '" aria-label="' + escH(t('home.delete')) + '">' + uiIcon('trash') + '</button></div></div>';
   });
   // Un seul bouton +, et plus du tout quand le maximum est atteint (l'administrateur n'a pas de maximum)
@@ -227,6 +227,15 @@ function homeDownload(id) {
   a.download = saveFileName(inst && inst.name);
   document.body.appendChild(a); a.click();
   setTimeout(function() { URL.revokeObjectURL(a.href); a.remove(); }, 1000);
+}
+// Une copie de la partie : meme progression, un autre nom, qui vit sa vie
+function homeDuplicate(id) {
+  var pid = homePid(), inst = findInstance(pid, id), raw = instanceRaw(pid, id);
+  if (!inst || !raw) return;
+  if (instancesFull(pid)) { homeState.note = t('home.limit', { v: listInstances(pid).length, n: P2DS_CONFIG.MAX_INSTANCES }); renderHome(true); return; }
+  var copy = createInstance(pid, String(inst.name || '').slice(0, 24) + ' (' + t('home.copyWord') + ')', inst.type, raw);
+  if (copy) { var p = homeProfile(); if (p.kind === 'cloud') cloudSync(p.id); }
+  renderHome(true);
 }
 function homeAskDelete(id) {
   var pid = homePid(), inst = findInstance(pid, id);
@@ -374,6 +383,17 @@ function applyInstanceType() {
     G.tutorialDone = true;
     processCommand('/max');
     if (inst.type === 'creative') processCommand('/creative');
+  }
+  // Les preregleages choisis a la creation
+  var pre = inst.preset;
+  if (pre) {
+    if (pre.console) { G.cheatUnlocked = true; G.cheatEverUnlocked = true; }
+    if (pre.consoleLocked) G.cheatLocked = true;   // pas de bouton pour la desactiver
+    if (pre.skipTutorial) G.tutorialDone = true;
+    if (inst.type === 'normal') {
+      if (typeof pre.money === 'number') G.money = Math.min(pre.money, MONEY_CAP);
+      if (typeof pre.level === 'number') { G.level = pre.level; G.xp = 0; }
+    }
   }
 }
 

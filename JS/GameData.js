@@ -4,7 +4,7 @@
    employes, espace, evenements, themes
    ============================================ */
 
-var GAME_VERSION = 'Release 1.3.1';
+var GAME_VERSION = 'Release 1.3.2';
 // Le nom affiche : sans « Snapshot N » (il ne sert qu'a nous et aux fichiers)
 function versionLabel(v) { return String(v || '').replace(/\s+Snapshot\s+\d+$/i, ''); }
 
@@ -292,6 +292,9 @@ var CHOICE_EVENTS = [
   { id: 'tip', choices: 1 },
   { id: 'contest', choices: 2 }
 ];
+var BAKERY_MAX = 50;   // au plus 50 patisseries dans une entreprise
+var EMP_SHOWN = 50;    // cartes d'employes dessinees par metier avant « voir les autres »
+var EMP_LIMIT = 1000;  // au plus 1000 employes (au-dela, le jeu ramerait)
 var CHOICE_EVENT_SEC = 45;      // le temps pour repondre
 var CHOICE_EVENT_EVERY = 240;   // au plus un tous les ~4 minutes
 var CHOICE_EVENT_LVL = 10;
@@ -550,6 +553,7 @@ var THEME_LIST = [
   { id:'cookie',   langKey:'settings.themeCookie', sold:{ rec:'cookie', n:50000 }, hidden:true }, // 50 000 cookies vendus
   { id:'tech',     langKey:'settings.themeTech', secret:true },     // 1000 clics sur Bob sans la console
   { id:'techgold', langKey:'settings.themeTechGold', secret:true }, // Bob en or massif
+  { id:'gold', langKey:'settings.themeGold', gotIng:{ id:'orfeuille', n:5000 }, hidden:true }, // 5 000 feuilles d'or alimentaires : Bob devient dore
 ];
 
 // Un tout petit peu moins cher, c'etait trop facile
