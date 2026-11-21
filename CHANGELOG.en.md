@@ -2,6 +2,25 @@
 
 Everything that was added to Pâtisserie 2D Simulator, from the newest to the oldest. To understand the rules of the game, see the [wiki](REGLES.md).
 
+## Release 1.3.3 (November 21, 2026)
+
+Report a bug, statistics one click away, and plenty of small fixes.
+
+**What is new**
+- A "Report a bug" button in the menu: send a bug or an idea with your account or anonymously. What you write is kept if you leave the page, and sending is impossible offline.
+- Statistics have their own button in the header, like achievements, and the order is now: exit, downloads, bakeries, achievements, statistics, pause, settings.
+- In "Welcome back", Bob explains a negative balance (no seller, too many employees, rent, loans), and notifications no longer pile up behind the window.
+- The phone no longer vibrates on every tap, only for important moments: level up, achievement, choice event, disaster.
+
+**Keyboard**
+- On an AZERTY keyboard, the 1 to 9 keys work without Shift. Shift + Esc goes back to the menu (Ctrl + Esc opens the Windows Start menu).
+- The "Controls" settings page no longer shows on a touch screen unless you use a real keyboard, and its explanations are aligned.
+
+**Fixes**
+- Reloading the page (F5) or updating the game no longer looks like a second tab. The green update button works in a game, and after updating the old version no longer comes back.
+- On a phone, the tabs only show their icons (the 4th one is no longer cut off), and the bottom bar is back in place. Units have a space before "m²", the version button fits its text, and money is white again in the light theme.
+- Console: /ingredient refuses decimals like /level does, "/max farine" explains what to type, and employees respect the space (one per m² plus 2).
+
 ## Release 1.3.2 (November 19, 2026)
 
 The game no longer lags with 1000 employees, the console is safer, and there are ways to compare, duplicate and protect your games.

@@ -2,6 +2,17 @@
 
 Alles, was zu Pâtisserie 2D Simulator hinzugekommen ist, von der neuesten bis zur ältesten Version. Ältere Versionen werden auf Englisch angezeigt. Die Spielregeln findest du im [Wiki](REGLES.md).
 
+## Release 1.3.3 (21. November 2026)
+
+Fehler melden, Statistiken mit einem Klick und viele kleine Korrekturen.
+
+**Neues und Korrekturen**
+- Knopf „Fehler melden“ im Menü: Sende einen Fehler oder eine Idee mit deinem Konto oder anonym (dein Text bleibt erhalten; offline geht das Senden nicht).
+- Die Statistiken haben einen eigenen Knopf in der Kopfzeile. Reihenfolge: Beenden, Downloads, Konditoreien, Erfolge, Statistiken, Pause, Einstellungen.
+- Bei „Willkommen zurück“ erklärt Bob eine negative Bilanz, und Meldungen stapeln sich nicht mehr hinter dem Fenster. Das Handy vibriert nur noch bei wichtigen Momenten.
+- AZERTY-Tastatur: Die Tasten 1 bis 9 gehen ohne Umschalt. Umschalt + Esc führt zurück ins Menü. Die Seite „Steuerung“ erscheint nicht mehr auf Touchscreens.
+- Neu laden oder aktualisieren wirkt nicht mehr wie ein zweiter Tab, der grüne Update-Knopf funktioniert, am Handy zeigen die Tabs nur Symbole und die untere Leiste ist wieder an ihrem Platz.
+
 ## Release 1.3.2 (19. November 2026)
 
 Das Spiel ruckelt mit 1000 Angestellten nicht mehr, die Konsole ist sicherer, und du kannst Spiele vergleichen, duplizieren und schützen.

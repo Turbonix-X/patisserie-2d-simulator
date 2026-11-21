@@ -702,3 +702,31 @@ Object.assign(LANGS.ja, {
    "c:/employee hire NAME free": "この名前の応募者を無料で採用します。"
   });
 })();
+
+
+// ---------- 1.3.3 ----------
+Object.assign(LANGS.ja, {
+  'offline.why.noSeller':`働いている販売員がいません`,
+  'offline.why.noStock':`売るケーキがありませんでした`,
+  'offline.why.staff':`従業員 {{n}} 人の給料が {{v}} かかりました`,
+  'offline.why.rent':`家賃が {{v}} かかりました`,
+  'offline.why.loans':`ローンで {{v}} 引かれました`,
+  'offline.bobNeg':`収支がマイナスです：{{why}}。販売員を雇う、ケーキを作る、出費を減らすなどしてみましょう！`,
+  'settings.hapticsHelp':`大事な場面でバイブ：レベルアップ、実績、選択イベント、災害（スマホ）。`,
+  'report.open':`不具合やアイデアを報告`,
+  'report.title':`不具合の報告・アイデアの提案`,
+  'report.kindBug':`不具合`,
+  'report.kindIdea':`アイデア`,
+  'report.from':`送信…`,
+  'report.account':`アカウントで送る（{{n}}）`,
+  'report.anon':`匿名で送る`,
+  'report.needAccount':`アカウントで送るにはログインしてください。`,
+  'report.placeholder':`何が起きたか、またはアイデアを書いてください。このページを離れても内容は保存されます。`,
+  'report.send':`送信`,
+  'report.sending':`送信中…`,
+  'report.sent':`ありがとう！メッセージが届きました。`,
+  'report.offline':`オフラインでは送れません。書いた内容は保存されています：接続できたらまた来てください。`,
+  'report.short':`少しだけでも書いてください。`,
+  'report.fail':`送信に失敗しました。書いた内容は保存されています。`,
+  'report.kept':`下書きを保存しました`
+});

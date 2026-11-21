@@ -358,3 +358,35 @@
    "cmd.badUnit": "Unknown unit: {{u}} (ml, cl or l)."
   });
 })();
+
+
+// ---------- 1.3.3 ----------
+Object.assign(LANGS.en, {
+  'offline.why.noSeller':`you have no seller working`,
+  'offline.why.noStock':`there were no cakes to sell`,
+  'offline.why.staff':`your {{n}} employees cost {{v}} in wages`,
+  'offline.why.rent':`the rent cost {{v}}`,
+  'offline.why.loans':`the loans took {{v}}`,
+  'offline.bobNeg':`The balance is negative: {{why}}. Hire a seller, bake some cakes, or cut your costs!`,
+  'settings.hapticsHelp':`A vibration for important moments: level up, achievement, choice event, disaster (on a phone).`,
+  'report.open':`Report a bug or an idea`,
+  'report.title':`Report a bug or suggest an idea`,
+  'report.kindBug':`Bug`,
+  'report.kindIdea':`Idea`,
+  'report.from':`Send…`,
+  'report.account':`With my account ({{n}})`,
+  'report.anon':`Anonymously`,
+  'report.needAccount':`Sign in to send with your account.`,
+  'report.placeholder':`Describe what happened, or your idea. What you write is kept even if you leave this page.`,
+  'report.send':`Send`,
+  'report.sending':`Sending…`,
+  'report.sent':`Thank you! Your message arrived.`,
+  'report.offline':`Cannot send while offline. What you wrote is kept: come back when you have a connection.`,
+  'report.short':`Write at least a few words.`,
+  'report.fail':`Sending failed. What you wrote is kept.`,
+  'report.kept':`Draft kept`,
+  'cmd.notWhole':`A whole number is needed: {{v}} is not accepted.`,
+  'cmd.maxHint':`"{{n}}" is not a bakery. To max it out, type {{u}}.`,
+  'cmd.bakeryNamed':`Unknown bakery: {{n}}. Your bakeries:`,
+  'cmd.empRoom':`Not enough room: you can have {{v}} employees at most (one per m² plus 2).`
+});

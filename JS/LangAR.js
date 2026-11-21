@@ -755,3 +755,31 @@ Object.assign(LANGS.ar, {
    "c:/employee hire NAME free": "يوظّف مجانًا المرشّح الذي يحمل هذا الاسم."
   });
 })();
+
+
+// ---------- 1.3.3 ----------
+Object.assign(LANGS.ar, {
+  'offline.why.noSeller':`ليس لديك بائع يعمل`,
+  'offline.why.noStock':`لم تكن هناك كعكات للبيع`,
+  'offline.why.staff':`كلّف موظفوك الـ {{n}} رواتب بقيمة {{v}}`,
+  'offline.why.rent':`كلّف الإيجار {{v}}`,
+  'offline.why.loans':`أخذت القروض {{v}}`,
+  'offline.bobNeg':`الحصيلة سالبة: {{why}}. وظّف بائعًا أو حضّر كعكات أو قلّل مصاريفك!`,
+  'settings.hapticsHelp':`اهتزاز للحظات المهمة: رفع المستوى، إنجاز، حدث بخيارات، كارثة (على الهاتف).`,
+  'report.open':`الإبلاغ عن خلل أو فكرة`,
+  'report.title':`الإبلاغ عن خلل أو اقتراح فكرة`,
+  'report.kindBug':`خلل`,
+  'report.kindIdea':`فكرة`,
+  'report.from':`إرسال…`,
+  'report.account':`بحسابي ({{n}})`,
+  'report.anon':`بشكل مجهول`,
+  'report.needAccount':`سجّل الدخول للإرسال بحسابك.`,
+  'report.placeholder':`صف ما حدث أو فكرتك. ما تكتبه يُحفظ حتى لو غادرت هذه الصفحة.`,
+  'report.send':`إرسال`,
+  'report.sending':`جارٍ الإرسال…`,
+  'report.sent':`شكرًا! وصلت رسالتك.`,
+  'report.offline':`لا يمكن الإرسال دون اتصال. ما كتبته محفوظ: عد عندما تتوفر الشبكة.`,
+  'report.short':`اكتب بضع كلمات على الأقل.`,
+  'report.fail':`فشل الإرسال. ما كتبته محفوظ.`,
+  'report.kept':`تم حفظ المسودة`
+});

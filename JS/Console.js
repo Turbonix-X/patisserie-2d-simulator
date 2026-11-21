@@ -426,7 +426,11 @@ function processCommand(cmd) {
         var nm = i === G.currentBakeryIndex ? G.bakeryName : b.name;
         if (nm.toLowerCase() === maxArg.toLowerCase()) maxTargets.push(i);
       });
-      if (maxTargets.length === 0) return '<span class="cmd-err">' + t('console.bakeryUnknown') + bakeryListText() + '</span>';
+      if (maxTargets.length === 0) {
+        var asIng = findIngByName(normName(maxArg)), asRec = asIng ? null : findRecByName(normName(maxArg));
+        if (asIng || asRec) return cerr(cmdTr('cmd.maxHint', { n: escH(maxArg), u: '/' + (asIng ? 'ingredient ' : 'recipe ') + escH(maxArg) + ' max' }));
+        return cerr(cmdTr('cmd.bakeryNamed', { n: escH(maxArg) }) + bakeryListText());
+      }
     }
     saveBeforeMax();   // seulement la premiere fois : /max deux fois ne perd pas la vraie partie
     maxTargets.forEach(function(i) {
@@ -625,8 +629,8 @@ function processCommand(cmd) {
     var n = cint(parts[2]);
     if (sub === 'max') {
       var ae16 = arityError(parts, 2, '/employee max'); if (ae16) return ae16;
-      var room = EMP_LIMIT - G.employees.length;
-      if (room < 1) return cerr(cmdTr('cmd.empLimit', { v: EMP_LIMIT }));
+      var room = (G.creative ? EMP_LIMIT : empCapacity()) - G.employees.length;
+      if (room < 1) return cerr(cmdTr('cmd.empRoom', { v: empCapacity() }));
       var addMax = Math.min(50, room);
       for (var i = 0; i < addMax; i++) mkEmp(90 + Math.floor(Math.random() * 11), EMP_MAX_LVL, 100);
       return '<span class="cmd-ok">' + L(addMax + ' employés très compétents ajoutés !', addMax + ' max-skill employees added!') + '</span>';
@@ -637,11 +641,13 @@ function processCommand(cmd) {
     if (n < 0) return negMsg(cmdTr('cmd.employees'));
     if (sub === 'add') {
       if (G.employees.length + n > EMP_LIMIT) return cerr(cmdTr('cmd.empLimit', { v: EMP_LIMIT }));
+      if (!G.creative && G.employees.length + n > empCapacity()) return cerr(cmdTr('cmd.empRoom', { v: empCapacity() }));
       for (var i = 0; i < n; i++) mkEmp(50 + Math.floor(Math.random() * 50), 1 + Math.floor(Math.random() * 3), 80);
     } else if (sub === 'remove') {
       G.employees.splice(Math.max(0, G.employees.length - n), n);
     } else if (sub === 'set') {
       if (n > EMP_LIMIT) return cerr(cmdTr('cmd.empLimit', { v: EMP_LIMIT }));
+      if (!G.creative && n > empCapacity() && n > G.employees.length) return cerr(cmdTr('cmd.empRoom', { v: empCapacity() }));
       while (G.employees.length > n) G.employees.pop();
       while (G.employees.length < n) mkEmp(50, 1, 80);
     }
@@ -694,7 +700,7 @@ function processCommand(cmd) {
     if (op === 'set') G.maxSpace = Math.max(1, n);
     else if (op === 'add') G.maxSpace += n;
     else G.maxSpace = Math.max(1, G.maxSpace - n);
-    return cok(L('Espace = ', 'Space = ') + fmt(G.maxSpace) + 'm²');
+    return cok(L('Espace = ', 'Space = ') + fmt(G.maxSpace) + ' m²');
   }
 
   // /debt clear
@@ -996,7 +1002,7 @@ function processCommand(cmd) {
       n = isLiquid ? parseLiquidAmount(String(cnum(rawN)), unit) : cnum(rawN);
       if (isNaN(n)) return badNumberMsg(rawN);
       if (n < 0) return negMsg(cmdTr('cmd.amount'));
-      n = Math.floor(n);   // des ingredients entiers, jamais de morceaux
+      if (n !== Math.floor(n)) return cerr(cmdTr('cmd.notWhole', { v: escH(rawN) }));   // des ingredients entiers : 2.5 est refuse, comme /level set 2.5
     }
     if (G.infiniteIng && delete G.infiniteIng[ingMatch.id]) { /* il n'est plus infini */ }
     if (op === 'set') G.ing[ingMatch.id] = n;

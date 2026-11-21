@@ -309,17 +309,21 @@ Les succès ont leur bouton (un trophée) dans l'en-tête, avec une barre de pro
 - Tu peux exporter ta partie dans un fichier ou sous forme de code à copier-coller, et l'importer ailleurs de la même façon.
 - **Trop de clics :** plus de 15 clics par seconde déclenchent une pause de 3 secondes. Après 3 pauses, une petite addition vérifie que tu n'es pas un robot. Après 3 mauvaises réponses, tu es bloqué 5 minutes.
 
+## Signaler un bug ou une idée
+
+Le bouton avec l'insecte, en haut du menu, ouvre une page : tu choisis Bug ou Idée, d'envoyer avec ton compte ou anonymement, et tu écris. Ton texte est gardé si tu quittes la page. Rien ne s'envoie hors ligne.
+
 ## La console de commandes
 
 - **Débloquer :** 1000 clics sur le logo. La console peut être désactivée (avec confirmation) ; une fois débloquée une première fois, 100 clics suffisent pour la retrouver. **/** l'ouvre au clavier.
-- **Stricte :** un mot en trop, un nombre illisible (`abc`, `1e400`), une valeur négative, un nom inconnu, une unité qui n'existe pas (`cl` pour la farine) ou une date impossible refusent la commande sans rien changer. Les nombres comme `1e3`, `1,5` ou `10^300` sont compris. Les ingrédients sont toujours entiers.
+- **Stricte :** un mot en trop, un nombre illisible (`abc`, `1e400`), une valeur négative, un nom inconnu, une unité qui n'existe pas (`cl` pour la farine) ou une date impossible refusent la commande sans rien changer. Les nombres comme `1e3`, `1,5` ou `10^300` sont compris. Les ingrédients sont toujours entiers (`2.5` est refusé). Les employés respectent la place : un par m² plus 2.
 - **Limites :** 1000 employés, 50 pâtisseries, niveau de 1 à 100 000, vitesse du temps de 0,1 à 10, 0 à 999 bâtiments de chaque sorte.
 - **Supprimer une pâtisserie :** `/bakery delete N`, puis `/bakery delete N confirm` deux fois.
 - **/max** : niveau 1000 sans XP (elle ne monte plus), tout au maximum ; `/unmax` retrouve la vraie partie, même après deux `/max`. `/money infinite off` rend l'argent d'avant.
 
 ## Sur ordinateur
 
-- **Raccourcis :** les chiffres changent d'onglet, **R** ouvre les réglages, **S** les succès, **C** le changelog, **M** le choix de la pâtisserie, **/** la console (si elle est débloquée), **Échap** ferme une fenêtre ou met en pause, **Ctrl + Échap** revient au menu. La page « Commandes » des réglages les liste (elle n'apparaît que sur ordinateur ou avec un clavier).
+- **Raccourcis :** les chiffres changent d'onglet, **R** ouvre les réglages, **S** les succès, **C** le changelog, **M** le choix de la pâtisserie, **/** la console (si elle est débloquée), **Échap** ferme une fenêtre ou met en pause, **Maj + Échap** revient au menu. Les chiffres marchent aussi sur un clavier AZERTY. La page « Commandes » des réglages les liste (elle n'apparaît que sur ordinateur ou avec un clavier).
 - **Largeur des colonnes :** glisse la barre entre la liste des ingrédients et le panneau de droite pour changer leur taille (double-clic : retour à la normale). Ton choix est gardé.
 
 ## Sur téléphone

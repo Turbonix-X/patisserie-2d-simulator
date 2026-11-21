@@ -771,3 +771,31 @@ Object.assign(LANGS.pt, {
    "c:/employee hire NAME free": "Contrata de graça o candidato com este nome."
   });
 })();
+
+
+// ---------- 1.3.3 ----------
+Object.assign(LANGS.pt, {
+  'offline.why.noSeller':`não tens nenhum vendedor a trabalhar`,
+  'offline.why.noStock':`não havia bolos para vender`,
+  'offline.why.staff':`os teus {{n}} funcionários custaram {{v}} em salários`,
+  'offline.why.rent':`a renda custou {{v}}`,
+  'offline.why.loans':`os empréstimos levaram {{v}}`,
+  'offline.bobNeg':`O balanço é negativo: {{why}}. Contrata um vendedor, prepara bolos ou reduz as despesas!`,
+  'settings.hapticsHelp':`Uma vibração para os momentos importantes: subir de nível, conquista, evento com escolha, catástrofe (no telemóvel).`,
+  'report.open':`Comunicar um erro ou uma ideia`,
+  'report.title':`Comunicar um erro ou sugerir uma ideia`,
+  'report.kindBug':`Erro`,
+  'report.kindIdea':`Ideia`,
+  'report.from':`Enviar…`,
+  'report.account':`Com a minha conta ({{n}})`,
+  'report.anon':`Anonimamente`,
+  'report.needAccount':`Inicia sessão para enviar com a tua conta.`,
+  'report.placeholder':`Descreve o que aconteceu, ou a tua ideia. O que escreveres fica guardado mesmo que saias desta página.`,
+  'report.send':`Enviar`,
+  'report.sending':`A enviar…`,
+  'report.sent':`Obrigado! A tua mensagem chegou.`,
+  'report.offline':`Não é possível enviar sem ligação. O que escreveste fica guardado: volta quando tiveres rede.`,
+  'report.short':`Escreve pelo menos algumas palavras.`,
+  'report.fail':`O envio falhou. O que escreveste fica guardado.`,
+  'report.kept':`Rascunho guardado`
+});

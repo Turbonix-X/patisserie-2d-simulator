@@ -361,3 +361,35 @@
    "console.appHiredPaid.f": "{{n}} est embauchée pour {{v}}."
   });
 })();
+
+
+// ---------- 1.3.3 ----------
+Object.assign(LANGS.fr, {
+  'offline.why.noSeller':`tu n'as aucun vendeur qui travaille`,
+  'offline.why.noStock':`il n'y avait aucun gâteau à vendre`,
+  'offline.why.staff':`tes {{n}} employés ont coûté {{v}} de salaires`,
+  'offline.why.rent':`le loyer a coûté {{v}}`,
+  'offline.why.loans':`les prêts ont pris {{v}}`,
+  'offline.bobNeg':`Le bilan est négatif : {{why}}. Engage un vendeur, prépare des gâteaux, ou réduis tes dépenses !`,
+  'settings.hapticsHelp':`Une vibration pour les moments importants : niveau gagné, succès, événement à choix, catastrophe (sur téléphone).`,
+  'report.open':`Signaler un bug ou une idée`,
+  'report.title':`Signaler un bug ou proposer une idée`,
+  'report.kindBug':`Bug`,
+  'report.kindIdea':`Idée`,
+  'report.from':`Envoyer…`,
+  'report.account':`Avec mon compte ({{n}})`,
+  'report.anon':`Anonymement`,
+  'report.needAccount':`Connecte-toi pour envoyer avec ton compte.`,
+  'report.placeholder':`Décris ce qui s'est passé, ou ton idée. Ce que tu écris est gardé même si tu quittes cette page.`,
+  'report.send':`Envoyer`,
+  'report.sending':`Envoi…`,
+  'report.sent':`Merci ! Ton message est bien arrivé.`,
+  'report.offline':`Impossible d'envoyer hors ligne. Ce que tu as écrit est gardé : reviens quand tu as du réseau.`,
+  'report.short':`Écris au moins quelques mots.`,
+  'report.fail':`L'envoi a échoué. Ce que tu as écrit est gardé.`,
+  'report.kept':`Brouillon gardé`,
+  'cmd.notWhole':`Il faut un nombre entier : {{v}} n'est pas accepté.`,
+  'cmd.maxHint':`« {{n}} » n'est pas une pâtisserie. Pour le mettre au maximum, tape {{u}}.`,
+  'cmd.bakeryNamed':`Pâtisserie inconnue : {{n}}. Tes pâtisseries :`,
+  'cmd.empRoom':`Pas assez de place : tu peux avoir {{v}} employés au maximum (un par m² plus 2).`
+});

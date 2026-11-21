@@ -457,7 +457,7 @@ check('Un succes compte les niveaux de machines', ACHIEVEMENTS.filter(function(a
 check('Bob connait 30 anecdotes', LANGS.fr['bob.facts'].split('|').length === 30);
 
 // --- Release 1.0 ---
-check('La version s appelle Release 1.3.2', GAME_VERSION === 'Release 1.3.2');
+check('La version s appelle Release 1.3.3', GAME_VERSION === 'Release 1.3.3');
 G = createFreshState(); G.level = 499;
 check('La fete et l espace sont caches avant leur niveau', findTheme('party').hidden && findTheme('space').hidden && themeLockReason(findTheme('party')) === 'level');
 check('Les themes Tech sont secrets', themeLockReason(findTheme('tech')) === 'secret' && themeLockReason(findTheme('techgold')) === 'secret');
@@ -1064,7 +1064,7 @@ G.money = getIngredientCost(findIng('farine')) * 6.25; G.ing.farine = 0;
 var buyMsg = cmdText('/buy farine 10');
 check('/buy 10 sans assez d argent : des ingredients entiers et le vrai nombre', G.ing.farine === 6 && /6x/.test(buyMsg) && G.ing.farine === Math.floor(G.ing.farine), buyMsg);
 check('Les resultats ont des vrais noms', /Farine/.test(cmdText('/ingredient farine set 5')) && !/cookie = /.test(cmdText('/recipe cookie set 5')));
-G = createFreshState();
+G = createFreshState(); G.maxSpace = 5000;
 check('/employee : plus de 1000 refuse, add -2 refuse', cmdErr('/employee set 9999') && cmdErr('/employee add -2') && (cmdText('/employee set 1000') && G.employees.length === 1000));
 G = createFreshState(); G.level = 50;
 check('/time, /birthday, /money, /xp : valeurs impossibles refusees', cmdErr('/time set 25') && cmdErr('/birthday 31 02') && cmdErr('/money set 100 xyz') && cmdErr('/xp add -100000') && cmdErr('/money set -5') && G.xp === 0);
@@ -1096,6 +1096,27 @@ G.unlockedThemes.tech = true; checkGoldTheme();
 check('... et il ouvre le tech dore avec le tech', G.unlockedThemes.techgold === true);
 check('Un « / » ouvre la console, S les succes, Ctrl+Echap le menu : les textes existent', ['keys.achievements', 'keys.menu', 'keys.console'].every(function(k) { return LANGS.fr[k] && LANGS.ru[k]; }));
 check('La langue decide du point ou de la virgule des nombres', (function() { var l = currentLang; setLanguage('en'); var a = fmtMoney(0.5); setLanguage('fr'); var b = fmtMoney(0.5); setLanguage(l); return /0\.5/.test(a) && /0,5/.test(b); })());
+currentLang = 'fr';
+
+// --- Release 1.3.3 ---
+currentLang = 'fr';
+check('Maj + Echap, e.code pour les chiffres : le code existe', typeof tabLockRelease === 'function' && typeof showStatsModal === 'function' && typeof vibrate === 'function');
+check('L identifiant d onglet est stable (F5 ne cree pas un 2e onglet)', TAB_ID === sessionStorage.getItem('p2ds_tab'));
+G = createFreshState(); G.ing.farine = 3;
+check('/ingredient farine set 2.5 est refuse, comme /level set 2.5', /cmd-err/.test(processCommand('/ingredient farine set 2.5')) && G.ing.farine === 3 && /cmd-err/.test(processCommand('/level set 2.5')));
+check('/max farine ne dit plus « numero inconnu »', /ingredient farine max/.test(String(processCommand('/max farine'))) && !/Numéro inconnu/.test(String(processCommand('/max farine'))));
+G = createFreshState(); G.maxSpace = 5;
+check('La console respecte l espace : 500 employes sur 5 m² refuses', /cmd-err/.test(processCommand('/employee set 500')) && /cmd-err/.test(processCommand('/employee add 500')) && G.employees.length === 0 && !/cmd-err/.test(processCommand('/employee set 7')) && G.employees.length === 7);
+check('L unite m² est separee', /\d m²/.test(String(processCommand('/space set 9'))) && !/\dm²/.test(String(processCommand('/space set 9'))));
+check('Les textes de la 1.3.3 existent dans les 10 langues', ['report.open', 'report.title', 'report.send', 'report.sent', 'report.offline', 'offline.bobNeg', 'offline.why.staff', 'settings.hapticsHelp'].every(function(k) { return Object.keys(LANGS).every(function(l) { return LANGS[l][k]; }); }));
+(function() {
+  var r = { ingredients: 0, money: 0, rent: 1e6, salaries: 1e7, loans: 0, seconds: 100, away: 100, unpaid: false, name: 'X' };
+  G = createFreshState(); G.employees = [{ type: 'baker' }, { type: 'baker' }];
+  var html = offlineWhy(r, null);
+  check('Bon retour : Bob explique un bilan negatif (aucun vendeur, salaires)', /Bob/.test(html) && /vendeur/.test(html) && /employés/.test(html), html.slice(0, 160));
+  check('... et reste muet si le bilan est positif', offlineWhy({ ingredients: 0, money: 5, rent: 1, salaries: 1, loans: 0 }, null) === '');
+})();
+check('Les notifications sont coupees pendant la fenetre « Bon retour »', (function() { var d = document.createElement('div'); d.id = 'modal-overlay'; d.innerHTML = '<div class="modal modal-offline"></div>'; document.body.appendChild(d); var area = document.getElementById('toast-area'); var before = area ? area.children.length : 0; toast('une notification'); var after = area ? area.children.length : 0; d.remove(); return after === before; })());
 currentLang = 'fr';
 
 var ko = results.filter(function(r) { return !r.ok; }).length;

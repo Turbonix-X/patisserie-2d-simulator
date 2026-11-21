@@ -111,7 +111,7 @@ function bootGame() {
     tickChallenge();
     tickBobWatch();
     tickIdle();
-    if (ui.settingsTab === 'stats' && document.getElementById('set-pane')) refreshSettingsPane();
+    if (document.getElementById('stats-pane')) refreshStatsPane();
     renderBob();
     // La saison a change pendant que tu jouais ?
     if (totalsCounter % 30 === 0 && enforceThemeLocks()) {

@@ -49,7 +49,15 @@ function applyUpdate() {
   updateState.applying = true;
   var btn = document.getElementById('update-btn');
   if (btn) { btn.disabled = true; btn.textContent = t('update.applying'); }
-  var fallback = function() { try { save(); } catch (e) { /* tant pis */ } location.reload(); };
+  // Recharger sans vider le cache ramenait l'ancienne version (puis la mise a jour revenait 2 secondes apres) : on vide d'abord
+  var fallback = function() {
+    try { save(); } catch (e) { /* tant pis */ }
+    var done = function() { location.reload(); };
+    var jobs = [];
+    try { if (navigator.serviceWorker && navigator.serviceWorker.getRegistrations) jobs.push(navigator.serviceWorker.getRegistrations().then(function(rs) { return Promise.all(rs.map(function(r) { return r.unregister(); })); })); } catch (e) { /* tant pis */ }
+    try { if (window.caches) jobs.push(caches.keys().then(function(ks) { return Promise.all(ks.map(function(k) { return caches.delete(k); })); })); } catch (e) { /* tant pis */ }
+    Promise.all(jobs).then(done, done);
+  };
   // Dans l'appli : on telecharge, on installe, et elle se relance toute seule
   if (window.__TAURI_INTERNALS__) {
     try { save(); } catch (e) { /* tant pis */ }

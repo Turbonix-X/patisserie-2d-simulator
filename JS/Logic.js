@@ -1792,6 +1792,7 @@ function tickChoiceEvent(now) {
   if (c || G.creative || G.level < CHOICE_EVENT_LVL || now - (G.lastChoiceAt || 0) < CHOICE_EVENT_EVERY * 1000 || Math.random() > 0.004) return;
   var ev = CHOICE_EVENTS[Math.floor(Math.random() * CHOICE_EVENTS.length)];
   G.choiceEvent = { id: ev.id, until: now + CHOICE_EVENT_SEC * 1000, v: choiceAmount(ev.id) };
+  if (typeof vibrate === 'function') vibrate(60);
   G.lastChoiceAt = now;
   if (typeof renderHeader === 'function') renderHeader();
 }
@@ -1879,6 +1880,7 @@ function tickDisaster(force) {
     ING.forEach(function(i) { if ((G.ing[i.id] || 0) > 0) { lostValue += G.ing[i.id] * part * getIngredientCost(i); G.ing[i.id] *= 1 - part; any = true; } });
     if (any) msg = t('disaster.fire', { v: Math.round(part * 100) });
   }
+  if (msg && typeof vibrate === 'function') vibrate([80, 40, 80]);
   if (msg && lostValue > 0) msg += insuranceNote(lostValue);
   if (msg && typeof toast === 'function') toast(msg);
   return msg;

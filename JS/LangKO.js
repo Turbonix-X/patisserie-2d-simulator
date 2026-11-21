@@ -702,3 +702,31 @@ Object.assign(LANGS.ko, {
    "c:/employee hire NAME free": "이 이름의 지원자를 무료로 고용합니다."
   });
 })();
+
+
+// ---------- 1.3.3 ----------
+Object.assign(LANGS.ko, {
+  'offline.why.noSeller':`일하는 판매원이 없습니다`,
+  'offline.why.noStock':`팔 케이크가 없었습니다`,
+  'offline.why.staff':`직원 {{n}}명의 급여로 {{v}}이(가) 들었습니다`,
+  'offline.why.rent':`임대료로 {{v}}이(가) 들었습니다`,
+  'offline.why.loans':`대출로 {{v}}이(가) 나갔습니다`,
+  'offline.bobNeg':`결산이 마이너스입니다: {{why}}. 판매원을 고용하거나 케이크를 만들거나 지출을 줄여 보세요!`,
+  'settings.hapticsHelp':`중요한 순간에 진동: 레벨업, 업적, 선택 이벤트, 재해(휴대폰).`,
+  'report.open':`버그나 아이디어 신고`,
+  'report.title':`버그 신고 또는 아이디어 제안`,
+  'report.kindBug':`버그`,
+  'report.kindIdea':`아이디어`,
+  'report.from':`보내기…`,
+  'report.account':`내 계정으로 ({{n}})`,
+  'report.anon':`익명으로`,
+  'report.needAccount':`계정으로 보내려면 로그인하세요.`,
+  'report.placeholder':`무슨 일이 있었는지, 또는 아이디어를 적어 주세요. 이 페이지를 떠나도 적은 내용은 저장됩니다.`,
+  'report.send':`보내기`,
+  'report.sending':`보내는 중…`,
+  'report.sent':`고맙습니다! 메시지가 도착했습니다.`,
+  'report.offline':`오프라인에서는 보낼 수 없습니다. 적은 내용은 저장되어 있어요: 연결되면 다시 오세요.`,
+  'report.short':`몇 글자라도 적어 주세요.`,
+  'report.fail':`전송에 실패했습니다. 적은 내용은 저장되어 있어요.`,
+  'report.kept':`임시 저장됨`
+});

@@ -4,6 +4,23 @@
   "intro": "كل ما أُضيف إلى Pâtisserie 2D Simulator، من الأحدث إلى الأقدم. تظهر الإصدارات الأقدم بالإنجليزية. لفهم قواعد اللعبة، راجع [الويكي](REGLES.md).",
   "versions": [
    {
+    "title": "Release 1.3.3 (21 نوفمبر 2026)",
+    "name": "Release 1.3.3",
+    "intro": "الإبلاغ عن خلل، وإحصاءات بنقرة، وتصحيحات صغيرة كثيرة.",
+    "groups": [
+     {
+      "name": "جديد وتصحيحات",
+      "items": [
+       "زر «الإبلاغ عن خلل» في القائمة: أرسل خللًا أو فكرة بحسابك أو بشكل مجهول (ما تكتبه محفوظ، ولا يمكن الإرسال دون اتصال).",
+       "للإحصاءات زرها الخاص في الشريط العلوي. الترتيب: خروج، تنزيلات، مخابز، إنجازات، إحصاءات، إيقاف مؤقت، إعدادات.",
+       "في «مرحبًا بعودتك» يشرح بوب الحصيلة السالبة، ولم تعد الإشعارات تتكدس خلف النافذة. لا يهتز الهاتف إلا في اللحظات المهمة.",
+       "لوحة AZERTY: تعمل المفاتيح 1 إلى 9 دون Shift. Shift + Esc يعود إلى القائمة. لم تعد صفحة «الأوامر» تظهر على شاشات اللمس.",
+       "لم يعد تحديث الصفحة أو اللعبة يبدو كتبويب ثانٍ، وزر التحديث الأخضر يعمل، وعلى الهاتف تعرض التبويبات الأيقونات فقط والشريط السفلي عاد إلى مكانه."
+      ]
+     }
+    ]
+   },
+   {
     "title": "Release 1.3.2 (19 نوفمبر 2026)",
     "name": "Release 1.3.2",
     "intro": "لم تعد اللعبة تتباطأ مع 1000 موظف، والوحدة أكثر أمانًا، ويمكنك المقارنة والنسخ وحماية ألعابك.",
@@ -382,6 +399,23 @@
   "intro": "Alles, was zu Pâtisserie 2D Simulator hinzugekommen ist, von der neuesten bis zur ältesten Version. Ältere Versionen werden auf Englisch angezeigt. Die Spielregeln findest du im [Wiki](REGLES.md).",
   "versions": [
    {
+    "title": "Release 1.3.3 (21. November 2026)",
+    "name": "Release 1.3.3",
+    "intro": "Fehler melden, Statistiken mit einem Klick und viele kleine Korrekturen.",
+    "groups": [
+     {
+      "name": "Neues und Korrekturen",
+      "items": [
+       "Knopf „Fehler melden“ im Menü: Sende einen Fehler oder eine Idee mit deinem Konto oder anonym (dein Text bleibt erhalten; offline geht das Senden nicht).",
+       "Die Statistiken haben einen eigenen Knopf in der Kopfzeile. Reihenfolge: Beenden, Downloads, Konditoreien, Erfolge, Statistiken, Pause, Einstellungen.",
+       "Bei „Willkommen zurück“ erklärt Bob eine negative Bilanz, und Meldungen stapeln sich nicht mehr hinter dem Fenster. Das Handy vibriert nur noch bei wichtigen Momenten.",
+       "AZERTY-Tastatur: Die Tasten 1 bis 9 gehen ohne Umschalt. Umschalt + Esc führt zurück ins Menü. Die Seite „Steuerung“ erscheint nicht mehr auf Touchscreens.",
+       "Neu laden oder aktualisieren wirkt nicht mehr wie ein zweiter Tab, der grüne Update-Knopf funktioniert, am Handy zeigen die Tabs nur Symbole und die untere Leiste ist wieder an ihrem Platz."
+      ]
+     }
+    ]
+   },
+   {
     "title": "Release 1.3.2 (19. November 2026)",
     "name": "Release 1.3.2",
     "intro": "Das Spiel ruckelt mit 1000 Angestellten nicht mehr, die Konsole ist sicherer, und du kannst Spiele vergleichen, duplizieren und schützen.",
@@ -759,6 +793,37 @@
   "title": "Update history",
   "intro": "Everything that was added to Pâtisserie 2D Simulator, from the newest to the oldest. To understand the rules of the game, see the [wiki](REGLES.md).",
   "versions": [
+   {
+    "title": "Release 1.3.3 (November 21, 2026)",
+    "name": "Release 1.3.3",
+    "intro": "Report a bug, statistics one click away, and plenty of small fixes.",
+    "groups": [
+     {
+      "name": "What is new",
+      "items": [
+       "A \"Report a bug\" button in the menu: send a bug or an idea with your account or anonymously. What you write is kept if you leave the page, and sending is impossible offline.",
+       "Statistics have their own button in the header, like achievements, and the order is now: exit, downloads, bakeries, achievements, statistics, pause, settings.",
+       "In \"Welcome back\", Bob explains a negative balance (no seller, too many employees, rent, loans), and notifications no longer pile up behind the window.",
+       "The phone no longer vibrates on every tap, only for important moments: level up, achievement, choice event, disaster."
+      ]
+     },
+     {
+      "name": "Keyboard",
+      "items": [
+       "On an AZERTY keyboard, the 1 to 9 keys work without Shift. Shift + Esc goes back to the menu (Ctrl + Esc opens the Windows Start menu).",
+       "The \"Controls\" settings page no longer shows on a touch screen unless you use a real keyboard, and its explanations are aligned."
+      ]
+     },
+     {
+      "name": "Fixes",
+      "items": [
+       "Reloading the page (F5) or updating the game no longer looks like a second tab. The green update button works in a game, and after updating the old version no longer comes back.",
+       "On a phone, the tabs only show their icons (the 4th one is no longer cut off), and the bottom bar is back in place. Units have a space before \"m²\", the version button fits its text, and money is white again in the light theme.",
+       "Console: /ingredient refuses decimals like /level does, \"/max farine\" explains what to type, and employees respect the space (one per m² plus 2)."
+      ]
+     }
+    ]
+   },
    {
     "title": "Release 1.3.2 (November 19, 2026)",
     "name": "Release 1.3.2",
@@ -1637,6 +1702,23 @@
   "intro": "Todo lo que se ha añadido a Pâtisserie 2D Simulator, de la más reciente a la más antigua. Las versiones más antiguas se muestran en inglés. Para entender las reglas del juego, mira la [wiki](REGLES.md).",
   "versions": [
    {
+    "title": "Release 1.3.3 (21 de noviembre de 2026)",
+    "name": "Release 1.3.3",
+    "intro": "Informar de un fallo, estadísticas a un clic y muchas pequeñas correcciones.",
+    "groups": [
+     {
+      "name": "Novedades y correcciones",
+      "items": [
+       "Botón «Informar de un fallo» en el menú: envía un fallo o una idea con tu cuenta o de forma anónima (lo que escribes se guarda; sin conexión no se puede enviar).",
+       "Las estadísticas tienen su propio botón en la cabecera. Orden: salir, descargas, pastelerías, logros, estadísticas, pausa, ajustes.",
+       "En «Bienvenido de nuevo», Bob explica un balance negativo, y las notificaciones ya no se apilan detrás de la ventana. El móvil solo vibra en los momentos importantes.",
+       "Teclado AZERTY: las teclas 1 a 9 funcionan sin Mayús. Mayús + Esc vuelve al menú. La página «Controles» ya no sale en pantallas táctiles.",
+       "Recargar la página o actualizar ya no parece una segunda pestaña, el botón verde de actualización funciona, en el móvil las pestañas solo muestran iconos y la barra inferior vuelve a su sitio."
+      ]
+     }
+    ]
+   },
+   {
     "title": "Release 1.3.2 (19 de noviembre de 2026)",
     "name": "Release 1.3.2",
     "intro": "El juego ya no va lento con 1000 empleados, la consola es más segura y puedes comparar, duplicar y proteger tus partidas.",
@@ -2014,6 +2096,23 @@
   "title": "更新履歴",
   "intro": "Pâtisserie 2D Simulator に追加されたすべての内容を、新しいものから古いものの順に載せています。古いバージョンは英語で表示されます。ゲームのルールは[ウィキ](REGLES.md)を見てください。",
   "versions": [
+   {
+    "title": "Release 1.3.3（2026年11月21日）",
+    "name": "Release 1.3.3（2026年11月21日）",
+    "intro": "不具合の報告、ワンクリックの統計、そして多くの小さな修正。",
+    "groups": [
+     {
+      "name": "新機能と修正",
+      "items": [
+       "メニューに「不具合を報告」ボタン：アカウントまたは匿名で不具合やアイデアを送れます（書いた内容は保存され、オフラインでは送れません）。",
+       "統計がヘッダーに専用ボタンになりました。順番：退出、ダウンロード、お店、実績、統計、一時停止、設定。",
+       "「おかえり」ではボブがマイナス収支の理由を説明し、通知がウィンドウの後ろに積み上がらなくなりました。スマホは大事な場面だけ振動します。",
+       "AZERTY キーボード：1〜9 キーが Shift なしで使えます。Shift + Esc でメニューへ戻ります。「操作」ページはタッチ画面では表示されません。",
+       "ページの再読み込みや更新が 2 つ目のタブと誤解されなくなり、緑の更新ボタンが動き、スマホではタブがアイコンのみ、下のバーも元の位置に戻りました。"
+      ]
+     }
+    ]
+   },
    {
     "title": "Release 1.3.2（2026年11月19日）",
     "name": "Release 1.3.2（2026年11月19日）",
@@ -2393,6 +2492,23 @@
   "intro": "Pâtisserie 2D Simulator에 추가된 모든 내용을 최신순으로 적었습니다. 오래된 버전은 영어로 표시됩니다. 게임 규칙은 [위키](REGLES.md)를 참고하세요.",
   "versions": [
    {
+    "title": "Release 1.3.3 (2026년 11월 21일)",
+    "name": "Release 1.3.3",
+    "intro": "버그 신고, 한 번에 보는 통계, 그리고 많은 작은 수정.",
+    "groups": [
+     {
+      "name": "새 기능과 수정",
+      "items": [
+       "메뉴에 “버그 신고” 버튼: 계정 또는 익명으로 버그나 아이디어를 보낼 수 있습니다(적은 내용은 저장되며 오프라인에서는 보낼 수 없습니다).",
+       "통계가 헤더에 전용 버튼을 갖게 됐습니다. 순서: 나가기, 다운로드, 제과점, 업적, 통계, 일시정지, 설정.",
+       "“돌아오신 걸 환영합니다”에서 밥이 마이너스 결산의 이유를 설명하고, 알림이 창 뒤에 쌓이지 않습니다. 폰은 중요한 순간에만 진동합니다.",
+       "AZERTY 키보드: 1~9 키가 Shift 없이 동작합니다. Shift + Esc로 메뉴로 돌아갑니다. “조작” 페이지는 터치 화면에서 보이지 않습니다.",
+       "새로고침이나 업데이트가 두 번째 탭으로 오인되지 않고, 초록 업데이트 버튼이 동작하며, 폰에서는 탭이 아이콘만 보이고 하단 바도 제자리로 돌아왔습니다."
+      ]
+     }
+    ]
+   },
+   {
     "title": "Release 1.3.2 (2026년 11월 19일)",
     "name": "Release 1.3.2",
     "intro": "직원 1000명이어도 버벅이지 않고, 콘솔이 더 안전해졌으며, 게임을 비교·복제·보호할 수 있습니다.",
@@ -2770,6 +2886,37 @@
   "title": "Historique des mises à jour",
   "intro": "Tout ce qui a été ajouté à Pâtisserie 2D Simulator, de la plus récente à la plus ancienne. Pour comprendre les règles du jeu, va voir le [wiki](REGLES.md).",
   "versions": [
+   {
+    "title": "Release 1.3.3 (21 novembre 2026)",
+    "name": "Release 1.3.3",
+    "intro": "Signaler un bug, des statistiques à portée de clic, et plein de petites corrections.",
+    "groups": [
+     {
+      "name": "Nouveautés",
+      "items": [
+       "Un bouton « Signaler un bug » dans le menu : tu peux envoyer un bug ou une idée avec ton compte ou anonymement. Ce que tu écris est gardé si tu quittes la page, et l'envoi est impossible hors ligne.",
+       "Les statistiques ont leur propre bouton dans l'en-tête, comme les succès, dont l'ordre est maintenant : sortir, téléchargements, pâtisseries, succès, statistiques, pause, réglages.",
+       "Dans « Bon retour », Bob explique un bilan négatif (aucun vendeur, trop d'employés, loyer, prêts), et les notifications ne s'empilent plus derrière la fenêtre.",
+       "Le téléphone ne vibre plus à chaque toucher, seulement pour les moments importants : niveau gagné, succès, événement à choix, catastrophe."
+      ]
+     },
+     {
+      "name": "Clavier",
+      "items": [
+       "Sur un clavier AZERTY, les touches 1 à 9 marchent sans Maj. Maj + Échap revient au menu (Ctrl + Échap ouvre le menu Démarrer de Windows).",
+       "La page « Commandes » des réglages n'apparaît plus sur un écran tactile, sauf si tu utilises un vrai clavier, et ses explications sont alignées."
+      ]
+     },
+     {
+      "name": "Corrections",
+      "items": [
+       "Recharger la page (F5) ou mettre à jour le jeu ne fait plus croire à un deuxième onglet. Le bouton vert de mise à jour fonctionne dans la partie, et après la mise à jour la vieille version ne revient plus.",
+       "Sur téléphone, les onglets n'affichent que leurs icônes (le 4ᵉ n'est plus coupé), et la barre du bas retrouve sa place. Les unités ont une espace avant « m² », le bouton de version épouse son texte, et l'argent est de nouveau blanc en mode clair.",
+       "Console : /ingredient refuse les décimales comme /level, « /max farine » explique quoi taper, et les employés respectent la place (un par m² plus 2)."
+      ]
+     }
+    ]
+   },
    {
     "title": "Release 1.3.2 (19 novembre 2026)",
     "name": "Release 1.3.2",
@@ -3648,6 +3795,23 @@
   "intro": "Tudo o que foi acrescentado ao Pâtisserie 2D Simulator, da mais recente à mais antiga. As versões mais antigas aparecem em inglês. Para perceber as regras do jogo, vê a [wiki](REGLES.md).",
   "versions": [
    {
+    "title": "Release 1.3.3 (21 de novembro de 2026)",
+    "name": "Release 1.3.3",
+    "intro": "Comunicar um erro, estatísticas a um clique e muitas pequenas correções.",
+    "groups": [
+     {
+      "name": "Novidades e correções",
+      "items": [
+       "Botão «Comunicar um erro» no menu: envia um erro ou uma ideia com a tua conta ou anonimamente (o que escreves fica guardado; offline não é possível enviar).",
+       "As estatísticas têm o seu botão no cabeçalho. Ordem: sair, transferências, pastelarias, conquistas, estatísticas, pausa, definições.",
+       "Em «Bem-vindo de volta», o Bob explica um balanço negativo, e as notificações já não se acumulam atrás da janela. O telemóvel só vibra nos momentos importantes.",
+       "Teclado AZERTY: as teclas 1 a 9 funcionam sem Shift. Shift + Esc volta ao menu. A página «Comandos» já não aparece em ecrãs táteis.",
+       "Recarregar a página ou atualizar já não parece um segundo separador, o botão verde de atualização funciona, no telemóvel os separadores só mostram ícones e a barra inferior voltou ao sítio."
+      ]
+     }
+    ]
+   },
+   {
     "title": "Release 1.3.2 (19 de novembro de 2026)",
     "name": "Release 1.3.2",
     "intro": "O jogo já não vai lento com 1000 funcionários, a consola é mais segura e podes comparar, duplicar e proteger os teus jogos.",
@@ -4026,6 +4190,23 @@
   "intro": "Всё, что добавили в Pâtisserie 2D Simulator, от самого нового к самому старому. Более старые версии показываются на английском. Чтобы понять правила игры, загляни в [вики](REGLES.md).",
   "versions": [
    {
+    "title": "Release 1.3.3 (21 ноября 2026)",
+    "name": "Release 1.3.3",
+    "intro": "Сообщить об ошибке, статистика в один клик и много мелких исправлений.",
+    "groups": [
+     {
+      "name": "Новое и исправления",
+      "items": [
+       "Кнопка «Сообщить об ошибке» в меню: отправь ошибку или идею со своим аккаунтом или анонимно (написанное сохраняется; без сети отправить нельзя).",
+       "У статистики теперь своя кнопка в шапке. Порядок: выход, загрузки, кондитерские, достижения, статистика, пауза, настройки.",
+       "В «С возвращением» Боб объясняет отрицательный итог, а уведомления больше не копятся за окном. Телефон вибрирует только в важные моменты.",
+       "Клавиатура AZERTY: клавиши 1–9 работают без Shift. Shift + Esc возвращает в меню. Страница «Управление» больше не показывается на сенсорных экранах.",
+       "Обновление страницы или игры больше не принимается за вторую вкладку, зелёная кнопка обновления работает, на телефоне вкладки показывают только значки, а нижняя панель вернулась на место."
+      ]
+     }
+    ]
+   },
+   {
     "title": "Release 1.3.2 (19 ноября 2026)",
     "name": "Release 1.3.2",
     "intro": "Игра больше не тормозит с 1000 сотрудников, консоль надёжнее, а игры можно сравнивать, дублировать и защищать.",
@@ -4403,6 +4584,23 @@
   "title": "更新记录",
   "intro": "Pâtisserie 2D Simulator 新增的所有内容，从最新到最旧。更早的版本以英文显示。想了解游戏规则，请看[百科](REGLES.md)。",
   "versions": [
+   {
+    "title": "Release 1.3.3（2026年11月21日）",
+    "name": "Release 1.3.3（2026年11月21日）",
+    "intro": "可以反馈问题，统计一键直达，还有许多小修正。",
+    "groups": [
+     {
+      "name": "新内容与修正",
+      "items": [
+       "菜单里新增“反馈问题”按钮：可用账号或匿名发送问题或想法（你写的内容会保留，离线时无法发送）。",
+       "统计在顶栏有了自己的按钮。顺序：退出、下载、甜品店、成就、统计、暂停、设置。",
+       "“欢迎回来”里鲍勃会解释为何结余为负，通知也不再堆在窗口后面。手机只在重要时刻震动。",
+       "AZERTY 键盘：数字键 1 到 9 不用按 Shift 也能用。Shift + Esc 返回菜单。“操作”页面不再出现在触屏上。",
+       "刷新页面或更新游戏不再被当成第二个标签页，绿色更新按钮可用，手机上标签页只显示图标，底部栏回到原位。"
+      ]
+     }
+    ]
+   },
    {
     "title": "Release 1.3.2（2026年11月19日）",
     "name": "Release 1.3.2（2026年11月19日）",

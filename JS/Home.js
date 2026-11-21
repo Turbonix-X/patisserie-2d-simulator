@@ -110,13 +110,13 @@ function renderHome(force) {
   // La base de donnees est en direct : on ne la redessine pas a chaque petit rafraichissement
   if (isAdmin && homeState.admTab === 'db' && !force && adminUI.box && document.body.contains(adminUI.box)) return;
   var h = '<div class="home-top"><button type="button" class="version-badge' + (typeof updateState !== 'undefined' && updateState.newVersion ? ' has-update' : '') + '" onclick="showChangelog(\'home\')" title="' + escH(t('changelog.title')) + '">' + versionLabel(GAME_VERSION) + '</button>';
-  h += '<div class="home-top-right"><button class="hbtn" onclick="showAccountModal()" title="' + escH(t('home.accountsTitle')) + '" aria-label="' + escH(t('home.accountsTitle')) + '">' + uiIcon('user') + '</button>';
+  h += '<div class="home-top-right">' + (isAdmin ? '' : '<button class="hbtn" onclick="showReportModal()" title="' + escH(t('report.open')) + '" aria-label="' + escH(t('report.open')) + '">' + uiIcon('bug') + '</button>') + '<button class="hbtn" onclick="showAccountModal()" title="' + escH(t('home.accountsTitle')) + '" aria-label="' + escH(t('home.accountsTitle')) + '">' + uiIcon('user') + '</button>';
   h += '<button class="hbtn" onclick="showHomeSettings()" title="' + escH(t('settings.title')) + '" aria-label="' + escH(t('settings.title')) + '">' + uiIcon('settings') + '</button>' + installBtnHTML() + '</div></div>';
   if (isAdmin) {
     // Le compte administrateur n'a que le panneau admin : ses parties, et la base de donnees des joueurs
-    var tab = homeState.admTab === 'db' ? 'db' : 'games';
+    var tab = ['db', 'reports'].indexOf(homeState.admTab) >= 0 ? homeState.admTab : 'games';
     h += '<div class="home-center adm-home"><img class="home-logo small" src="logo.svg" alt="" width="64" height="64"><h1 class="game-name home-name">P2DS</h1><span class="adm-badge">ADMIN</span>';
-    h += '<div class="adm-tabs"><button class="' + (tab === 'games' ? 'active' : '') + '" onclick="homeAdmTab(\'games\')">🧁 ' + adminTr('Parties', 'Games') + '</button><button class="' + (tab === 'db' ? 'active' : '') + '" onclick="homeAdmTab(\'db\')">🗄️ ' + adminTr('Base de données', 'Database') + '</button></div>';
+    h += '<div class="adm-tabs"><button class="' + (tab === 'games' ? 'active' : '') + '" onclick="homeAdmTab(\'games\')">🧁 ' + adminTr('Parties', 'Games') + '</button><button class="' + (tab === 'db' ? 'active' : '') + '" onclick="homeAdmTab(\'db\')">🗄️ ' + adminTr('Base de données', 'Database') + '</button><button class="' + (tab === 'reports' ? 'active' : '') + '" onclick="homeAdmTab(\'reports\')">💬 ' + adminTr('Retours', 'Feedback') + '</button></div>';
     h += tab === 'games' ? '<h3 class="adm-sec">🧁 ' + adminTr('Mes parties', 'My games') + '</h3>' + homeGridHTML(list, max) + '<hr class="adm-split"><div id="adm-others" class="adm-others"></div>' : '<div id="adm-box" class="adm-box"></div>';
     h += '</div>';
   } else {
@@ -130,9 +130,10 @@ function renderHome(force) {
   h += '<footer class="home-footer">' + new Date().getFullYear() + ' ' + t('footer.rights') + ' ' + t('footer.icons') + ' <a href="https://github.com/jdecked/twemoji" target="_blank" rel="noopener">Twemoji</a> (CC-BY 4.0).</footer>';
   setHTML(el, iconify(h));
   if (isAdmin && homeState.admTab === 'db') { var box = document.getElementById('adm-box'); if (box && adminUI.box !== box) renderAdminDb(box, pid); }
+  else if (isAdmin && homeState.admTab === 'reports') { if (typeof adminStopLive === 'function') adminStopLive(); var rbox = document.getElementById('adm-box'); if (rbox) renderAdminReports(rbox, pid); }
   else if (typeof adminStopLive === 'function') adminStopLive();
   if (isAdmin) {
-    if (homeState.admTab !== 'db') adminOthersStart(pid); else adminOthersStop();
+    if (homeState.admTab !== 'db' && homeState.admTab !== 'reports') adminOthersStart(pid); else adminOthersStop();
     adminBobStart(pid, el);
   } else if (typeof adminBobStop === 'function') { adminBobStop(); adminOthersStop(); }
   if (cur.kind === 'cloud' && !homeState.adminChecked) {
@@ -141,6 +142,52 @@ function renderHome(force) {
   }
 }
 function homeAdmTab(tab) { homeState.admTab = tab; adminUI.box = null; renderHome(true); }
+
+// ---------- Signaler un bug ou proposer une idee ----------
+// Avec ton compte ou anonymement. Ce que tu ecris est garde (brouillon) meme si tu quittes la page. Impossible hors ligne.
+var REPORT_DRAFT_KEY = 'p2ds_report_draft';
+function reportDraft() { try { return JSON.parse(localStorage.getItem(REPORT_DRAFT_KEY)) || {}; } catch (e) { return {}; } }
+function reportSaveDraft() {
+  var d = { kind: (document.querySelector('input[name="rp-kind"]:checked') || {}).value || 'bug', from: (document.querySelector('input[name="rp-from"]:checked') || {}).value || 'anon', body: (document.getElementById('rp-body') || {}).value || '' };
+  try { localStorage.setItem(REPORT_DRAFT_KEY, JSON.stringify(d)); } catch (e) { /* tant pis */ }
+  var k = document.getElementById('rp-kept'); if (k) k.textContent = d.body ? t('report.kept') : '';
+}
+function showReportModal() {
+  var d = reportDraft(), prof = homeProfile(), acc = prof && prof.kind === 'cloud';
+  var online = navigator.onLine !== false && typeof cloudOnline === 'function';
+  var h = '<h2>' + uiIcon('bug') + ' ' + t('report.title') + '</h2>';
+  h += '<div class="report-row"><label class="rp-radio"><input type="radio" name="rp-kind" value="bug"' + (d.kind !== 'idea' ? ' checked' : '') + ' onchange="reportSaveDraft()"> 🐞 ' + t('report.kindBug') + '</label>';
+  h += '<label class="rp-radio"><input type="radio" name="rp-kind" value="idea"' + (d.kind === 'idea' ? ' checked' : '') + ' onchange="reportSaveDraft()"> 💡 ' + t('report.kindIdea') + '</label></div>';
+  h += '<div class="report-row"><b>' + t('report.from') + '</b><label class="rp-radio"><input type="radio" name="rp-from" value="account"' + (acc && d.from === 'account' ? ' checked' : '') + (acc ? '' : ' disabled') + ' onchange="reportSaveDraft()"> ' + t('report.account', { n: escH(acc ? (prof.name || prof.email || '') : '') }) + '</label>';
+  h += '<label class="rp-radio"><input type="radio" name="rp-from" value="anon"' + (!(acc && d.from === 'account') ? ' checked' : '') + ' onchange="reportSaveDraft()"> ' + t('report.anon') + '</label></div>';
+  if (!acc) h += '<p class="set-help">' + t('report.needAccount') + '</p>';
+  h += '<textarea id="rp-body" class="save-area report-body" rows="8" maxlength="4000" placeholder="' + escH(t('report.placeholder')) + '" oninput="reportSaveDraft()">' + escH(d.body || '') + '</textarea>';
+  h += '<p class="warning" id="rp-msg">' + (online ? '' : t('report.offline')) + '</p><p class="set-help" id="rp-kept">' + (d.body ? t('report.kept') : '') + '</p>';
+  h += '<div class="modal-btns"><button class="btn btn-primary" id="rp-send" onclick="sendReport()"' + (online ? '' : ' disabled') + '>' + t('report.send') + '</button><button class="btn" onclick="hideModal()">' + t('common.close') + '</button></div>';
+  showModal(h, 'modal-report');
+}
+function sendReport() {
+  var body = String((document.getElementById('rp-body') || {}).value || '').trim();
+  var msg = document.getElementById('rp-msg'), btn = document.getElementById('rp-send');
+  if (navigator.onLine === false) { if (msg) msg.textContent = t('report.offline'); return; }
+  if (body.length < 5) { if (msg) msg.textContent = t('report.short'); return; }
+  var kind = (document.querySelector('input[name="rp-kind"]:checked') || {}).value === 'idea' ? 'idea' : 'bug';
+  var useAcc = (document.querySelector('input[name="rp-from"]:checked') || {}).value === 'account';
+  var row = { kind: kind, body: body.slice(0, 4000), version: GAME_VERSION, platform: window.__TAURI_INTERNALS__ ? 'app' : 'web', lang: currentLang };
+  if (btn) { btn.disabled = true; btn.textContent = t('report.sending'); }
+  if (msg) msg.textContent = '';
+  var prof = homeProfile(), p;
+  if (useAcc && prof && prof.kind === 'cloud') { row.user_id = prof.id; p = cloudCall(prof.id, '/rest/v1/reports', { method: 'POST', prefer: 'return=minimal', body: row }); }
+  else p = fetch(P2DS_CONFIG.SUPABASE_URL.replace(/\/$/, '') + '/rest/v1/reports', { method: 'POST', headers: { apikey: P2DS_CONFIG.SUPABASE_ANON_KEY, Authorization: 'Bearer ' + P2DS_CONFIG.SUPABASE_ANON_KEY, 'Content-Type': 'application/json', Prefer: 'return=minimal' }, body: JSON.stringify(row) }).then(function(r) { if (!r.ok) throw new Error('http ' + r.status); });
+  p.then(function() {
+    try { localStorage.removeItem(REPORT_DRAFT_KEY); } catch (e) { /* tant pis */ }
+    hideModal();
+    toast(t('report.sent'));
+  }, function() {
+    if (msg) msg.textContent = t('report.fail');
+    if (btn) { btn.disabled = false; btn.textContent = t('report.send'); }
+  });
+}
 
 // ---------- Ajouter une partie : nouvelle, code colle, ou fichier ----------
 function homeAdd(mode) {
@@ -154,9 +201,9 @@ function homeAdd(mode) {
   h += '</div>';
   if (mode === 'new') {
     // Pas de nom a donner ici : c'est Bob qui le demande au debut de la partie
-    // La partie max et la partie creative sont reservees a l'administrateur
-    if (homeIsAdmin()) h += '<select id="home-type" class="set-select"><option value="normal">' + t('home.typeNormal') + '</option><option value="max">' + t('home.typeMax') + '</option><option value="creative">' + t('home.typeCreative') + '</option></select>';
-    h += '<div class="create-wrap"><button class="create-big" onclick="homeCreate()"><span class="create-plus">+</span>' + t('home.create') + '</button></div>';
+    // La partie max et la partie creative sont reservees a l'administrateur : il choisit le type, puis regle des preregleages
+    if (homeIsAdmin()) h += adminCreateHTML();
+    else h += '<div class="create-wrap"><button class="create-big" onclick="homeCreate()"><span class="create-plus">+</span>' + t('home.create') + '</button></div>';
   } else if (mode === 'code') {
     h += '<textarea id="home-code" class="save-area" rows="4" placeholder="' + escH(t('settings.importPlaceholder')) + '"></textarea><p class="warning" id="home-err"></p>';
     h += '<div class="modal-btns"><button class="btn btn-primary" onclick="homeImportCode()">' + t('settings.importBtn') + '</button></div>';
@@ -176,12 +223,52 @@ function homePlay(id) {
   CUR.menuLang = currentLang;
   bootGame();
 }
+// ---------- La creation d'une partie par l'administrateur : le type d'abord, puis des preregleages modifiables ----------
+var adminCreate = { type: null };
+function adminPresetDefaults() {
+  var d = { console: false, consoleLocked: false, money: '', level: '', skipTutorial: false };
+  try { var p = JSON.parse(localStorage.getItem('p2ds_admin_preset')); if (p && typeof p === 'object') for (var k in d) if (k in p) d[k] = p[k]; } catch (e) { /* tant pis */ }
+  return d;
+}
+function adminCreateHTML() {
+  var p = adminPresetDefaults(), tp = adminCreate.type;
+  var h = '<p class="set-help">' + adminTr('Choisis d’abord le type de partie :', 'First choose the type of game:') + '</p><div class="adm-type-pick">';
+  [['normal', 'home.typeNormal'], ['max', 'home.typeMax'], ['creative', 'home.typeCreative']].forEach(function(x) {
+    h += '<button type="button" class="adm-type' + (tp === x[0] ? ' active' : '') + '" onclick="adminPickType(\'' + x[0] + '\')">' + t(x[1]) + '</button>';
+  });
+  h += '</div><fieldset class="adm-presets"><legend>' + adminTr('Personnaliser la partie (préréglages modifiables)', 'Customize the game (editable presets)') + '</legend>';
+  h += '<label class="adm-pre"><input type="checkbox" id="pre-console"' + (p.console ? ' checked' : '') + '> ' + adminTr('Console activée dès le début', 'Console on from the start') + '</label>';
+  h += '<label class="adm-pre"><input type="checkbox" id="pre-lock"' + (p.consoleLocked ? ' checked' : '') + '> ' + adminTr('… et impossible de la désactiver', '… and impossible to turn off') + '</label>';
+  h += '<label class="adm-pre"><input type="checkbox" id="pre-tuto"' + (p.skipTutorial ? ' checked' : '') + '> ' + adminTr('Passer le tutoriel de Bob', 'Skip Bob’s tutorial') + '</label>';
+  h += '<label class="adm-pre">' + adminTr('Argent de départ (partie normale)', 'Starting money (normal game)') + ' <input type="number" min="0" step="any" id="pre-money" value="' + escH(String(p.money)) + '" placeholder="' + adminTr('par défaut', 'default') + '"' + (tp && tp !== 'normal' ? ' disabled' : '') + '></label>';
+  h += '<label class="adm-pre">' + adminTr('Niveau de départ (partie normale)', 'Starting level (normal game)') + ' <input type="number" min="1" max="1000" step="1" id="pre-level" value="' + escH(String(p.level)) + '" placeholder="1"' + (tp && tp !== 'normal' ? ' disabled' : '') + '></label>';
+  h += '</fieldset><div class="create-wrap"><button class="create-big" onclick="homeCreate()"' + (tp ? '' : ' disabled') + '><span class="create-plus">+</span>' + t('home.create') + '</button></div>';
+  return h;
+}
+// Choisir un type ne vide pas les preregleages deja modifies
+function adminPickType(type) {
+  var keep = adminReadPreset();
+  try { localStorage.setItem('p2ds_admin_preset', JSON.stringify(keep)); } catch (e) { /* tant pis */ }
+  adminCreate.type = type;
+  homeAdd('new');
+}
+function adminReadPreset() {
+  function el(id) { return document.getElementById(id); }
+  var money = el('pre-money') && el('pre-money').value !== '' ? cnum(el('pre-money').value) : '', level = el('pre-level') && el('pre-level').value !== '' ? cint(el('pre-level').value) : '';
+  return { console: !!(el('pre-console') && el('pre-console').checked), consoleLocked: !!(el('pre-lock') && el('pre-lock').checked), skipTutorial: !!(el('pre-tuto') && el('pre-tuto').checked),
+    money: isNaN(money) || money < 0 ? '' : money, level: isNaN(level) || level < 1 || level > 1000 ? '' : level };
+}
 function homeCreate() {
   var pid = homePid();
   var name = '';
-  var typeEl = document.getElementById('home-type');
-  var type = typeEl && homeIsAdmin() ? typeEl.value : 'normal';
-  var inst = createInstance(pid, name, type);
+  var type = 'normal', preset = null;
+  if (homeIsAdmin()) {
+    if (!adminCreate.type) return;   // il faut choisir normal, max ou creatif
+    type = adminCreate.type;
+    preset = adminReadPreset();
+    try { localStorage.setItem('p2ds_admin_preset', JSON.stringify(preset)); } catch (e) { /* tant pis */ }
+  }
+  var inst = createInstance(pid, name, type, null, null, preset);
   hideModal();
   if (!inst) { renderHome(); return; }
   homePlay(inst.id);

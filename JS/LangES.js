@@ -762,3 +762,31 @@ Object.assign(LANGS.es, {
    "Unknown recipe: ": "Receta desconocida: "
   });
 })();
+
+
+// ---------- 1.3.3 ----------
+Object.assign(LANGS.es, {
+  'offline.why.noSeller':`no tienes ningún vendedor trabajando`,
+  'offline.why.noStock':`no había pasteles para vender`,
+  'offline.why.staff':`tus {{n}} empleados costaron {{v}} en sueldos`,
+  'offline.why.rent':`el alquiler costó {{v}}`,
+  'offline.why.loans':`los préstamos se llevaron {{v}}`,
+  'offline.bobNeg':`El balance es negativo: {{why}}. ¡Contrata un vendedor, prepara pasteles o reduce gastos!`,
+  'settings.hapticsHelp':`Una vibración para los momentos importantes: subir de nivel, logro, evento con decisión, catástrofe (en el móvil).`,
+  'report.open':`Informar de un fallo o una idea`,
+  'report.title':`Informar de un fallo o proponer una idea`,
+  'report.kindBug':`Fallo`,
+  'report.kindIdea':`Idea`,
+  'report.from':`Enviar…`,
+  'report.account':`Con mi cuenta ({{n}})`,
+  'report.anon':`De forma anónima`,
+  'report.needAccount':`Inicia sesión para enviar con tu cuenta.`,
+  'report.placeholder':`Describe lo que pasó, o tu idea. Lo que escribas se guarda aunque salgas de esta página.`,
+  'report.send':`Enviar`,
+  'report.sending':`Enviando…`,
+  'report.sent':`¡Gracias! Tu mensaje ha llegado.`,
+  'report.offline':`No se puede enviar sin conexión. Lo que escribiste se guarda: vuelve cuando tengas red.`,
+  'report.short':`Escribe al menos unas palabras.`,
+  'report.fail':`El envío falló. Lo que escribiste se guarda.`,
+  'report.kept':`Borrador guardado`
+});

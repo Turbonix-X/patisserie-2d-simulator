@@ -50,6 +50,7 @@ var activeToasts = {};
 
 function toast(msg) {
   if (typeof bgTick !== 'undefined' && bgTick) return; // Une autre patisserie : pas de bruit
+  if (document.querySelector('#modal-overlay .modal-offline')) return;   // la fenetre « Bon retour » dit deja tout : pas de notifications derriere
   notifyAway(msg);
   var area = document.getElementById('toast-area');
   if (!area) return;
@@ -97,6 +98,7 @@ function showLevelUp(lvl, n, from) {
   for (var l = from + 1; l <= lvl; l++) explainLevel(l);
   fxLevelUp();
   playSuccessSound();
+  vibrate([30, 40, 30]);
   if (from < 1000 && lvl >= 1000 && !G.lvl1000Shown) {
     G.lvl1000Shown = true;
     showLevel1000();
@@ -145,12 +147,14 @@ function renderHeader() {
   h += '</div>';
   h += '<div class="header-right">';
   // Installer l'appli Windows (seulement dans un navigateur, sur un PC Windows), puis les comptes
-  if (typeof installBtnHTML === 'function') h += installBtnHTML();
+  // De gauche a droite : sortir, telechargements, patisseries, succes, stats, pause, reglages (tout a droite)
   h += headerBtn('backToHome()', t('home.backHome'), 'back');
+  if (typeof installBtnHTML === 'function') h += installBtnHTML();
   h += headerBtn('showBakeriesModal()', t('bakery.title'), 'store', false, G.bakeries.length >= 2 ? G.bakeries.length : 0);
+  h += headerBtn('showAchievementsModal()', t('ach.header'), 'ach');
+  h += headerBtn('showStatsModal()', t('settings.tabStats'), 'stats');
   var pauseLabel = G.paused ? t('pause.resume') : t('pause.title');
   h += headerBtn('togglePause()', pauseLabel, G.paused ? 'play' : 'pause');
-  h += headerBtn('showAchievementsModal()', t('ach.header'), 'ach');
   h += headerBtn('showSettingsModal()', t('settings.title'), 'settings');
   h += '</div></div></header>';
   var alerts = '';
@@ -746,6 +750,7 @@ function doBuyBuilding(bldId) {
 function onAchievementUnlocked() {
   playSuccessSound();
   if (document.getElementById('ach-pane')) refreshAchPane();
+  vibrate(25);
 }
 
 // ============ BARRE DU BAS ============
@@ -846,8 +851,6 @@ function renderCraftingBar() {
 function fitDock() {
   var d = document.getElementById('dock');
   if (d) document.documentElement.style.setProperty('--dock-h', d.offsetHeight + 'px');
-  var f = document.getElementById('game-footer');
-  if (f) document.documentElement.style.setProperty('--footer-h', f.offsetHeight + 'px');
 }
 window.addEventListener('resize', function() { if (typeof fitDock === 'function') fitDock(); });
 
@@ -1069,7 +1072,7 @@ function changelogHTML(showAll) {
 function changelogShowAll() { var el = document.getElementById('changelog-body'); if (el) el.innerHTML = iconify(changelogHTML(true)); }
 
 function showChangelog(from) {
-  var h = (from === 'home' ? '<button type="button" class="btn btn-small changelog-arch" onclick="openArchives()">🗄️ ' + escH(t('changelog.archives')) + '</button>' : '') + '<h2>' + t('changelog.title') + '</h2>' + (from === 'home' && typeof updateBoxHTML === 'function' ? updateBoxHTML() : '') + '<div class="changelog" id="changelog-body">…</div>';
+  var h = (from === 'home' ? '<button type="button" class="btn btn-small changelog-arch" onclick="openArchives()">🗄️ ' + escH(t('changelog.archives')) + '</button>' : '') + '<h2>' + t('changelog.title') + '</h2>' + (typeof updateBoxHTML === 'function' ? updateBoxHTML() : '')   // la boite de mise a jour, des qu'il y en a une + '<div class="changelog" id="changelog-body">…</div>';
   h += '<div class="modal-btns"><button class="btn" onclick="hideModal()">' + t('common.close') + '</button></div>';
   showModal(h, 'modal-changelog');
   var draw = function() {
@@ -1332,6 +1335,26 @@ function offlineLines(r) {
   h += '<li><b>' + t('offline.net', { v: fmtMoney(r.money - r.rent - r.salaries - r.loans) }) + '</b></li>';
   return h + '</ul>' + (r.unpaid ? '<p class="warning">' + t('offline.unpaid') + '</p>' : '');
 }
+// Un bilan negatif sans explication ne sert a rien : Bob dit pourquoi (aucun vendeur, trop d'employes, le loyer...)
+function offlineWhy(r, one) {
+  var net = r.money - r.rent - r.salaries - r.loans;
+  if (net >= 0) return '';
+  var why = [];
+  var st = one ? bakeryStateByName(one.name) : G;
+  var sellers = 0, staff = st && st.employees ? st.employees.length : 0;
+  if (st && st.employees) st.employees.forEach(function(e) { if (e.type === 'seller' || (e.type === 'versatile' && (e.jobs || []).some(function(j) { return j.type === 'seller'; }))) sellers++; });
+  if (r.money <= 0) why.push(sellers === 0 ? t('offline.why.noSeller') : t('offline.why.noStock'));
+  if (r.salaries > r.rent && r.salaries > 0) why.push(t('offline.why.staff', { n: fmt(staff), v: fmtMoney(r.salaries) }));
+  if (r.rent >= r.salaries && r.rent > 0) why.push(t('offline.why.rent', { v: fmtMoney(r.rent) }));
+  if (r.loans > 0) why.push(t('offline.why.loans', { v: fmtMoney(r.loans) }));
+  if (!why.length) return '';
+  return '<div class="bob-talk offline-bob">' + (typeof bobFigure === 'function' ? bobFigure() : '') + '<div class="bob-talk-speech"><span class="bob-bubble-name">Bob</span><p>' + t('offline.bobNeg', { why: why.join(' ; ') }) + '</p></div></div>';
+}
+function bakeryStateByName(name) {
+  var hit = null;
+  bakeryStates().forEach(function(x) { if (!hit && x.name === name) hit = x.state; });
+  return hit;
+}
 function offlineGraph(list) {
   if (list.length < 2) return '';
   var max = 0;
@@ -1351,7 +1374,7 @@ function offlineDraw(r, tab) {
   var shown = tab === 0 ? list.reduce(function(a, x) { return { ingredients: a.ingredients + x.ingredients, money: a.money + x.money, rent: a.rent + x.rent, salaries: a.salaries + x.salaries, loans: a.loans + x.loans, unpaid: a.unpaid || x.unpaid }; }, { ingredients: 0, money: 0, rent: 0, salaries: 0, loans: 0, unpaid: false }) : list[tab - 1];
   var h = '<h2>' + t('offline.title') + '</h2><p>' + t('offline.away', { t: fmtLongTime(r.away || r.seconds) }) + '</p>';
   if ((r.away || 0) > r.seconds + 1) h += '<p class="set-help">' + t('offline.capped', { t: fmtLongTime(r.seconds) }) + '</p>';
-  h += tabs + offlineLines(shown) + (tab === 0 && list.length > 1 && G.bakeries.length >= 2 ? offlineGraph(list) : '');
+  h += tabs + offlineLines(shown) + offlineWhy(shown, tab === 0 ? null : list[tab - 1]) + (tab === 0 && list.length > 1 && G.bakeries.length >= 2 ? offlineGraph(list) : '');
   h += '<div class="modal-btns"><button class="btn btn-primary" onclick="hideModal()">OK</button></div>';
   var m = document.querySelector('#modal-overlay .modal');
   if (m && m.querySelector('.offline-list')) m.innerHTML = iconify(h); else showModal(iconify(h), 'modal-offline');
@@ -1417,7 +1440,11 @@ function initSplit() {
 
 // ============ LA MEME PARTIE DANS DEUX ONGLETS ============
 // Chaque onglet qui joue une partie le note (avec l'heure). Si un autre onglet le fait deja, on previent avant d'ecraser.
-var TAB_ID = Math.random().toString(36).slice(2);
+// Garde dans sessionStorage : F5 et une mise a jour a chaud gardent le meme identifiant (ce n'est pas un 2e onglet)
+var TAB_ID = (function() { try { var v = sessionStorage.getItem('p2ds_tab'); if (!v) { v = Math.random().toString(36).slice(2); sessionStorage.setItem('p2ds_tab', v); } return v; } catch (e) { return Math.random().toString(36).slice(2); } })();
+function tabLockRelease() { try { var l = tabLockRead(); if (l && l.tab === TAB_ID) localStorage.removeItem(tabLockKey()); } catch (e) { /* tant pis */ } }
+window.addEventListener('pagehide', tabLockRelease);
+window.addEventListener('beforeunload', tabLockRelease);
 function tabLockKey() { return 'p2ds_lock_' + CUR.profile + '_' + CUR.inst; }
 function tabLockRead() { try { return JSON.parse(localStorage.getItem(tabLockKey())); } catch (e) { return null; } }
 function tabLockWrite() { try { localStorage.setItem(tabLockKey(), JSON.stringify({ tab: TAB_ID, t: Date.now() })); } catch (e) { /* tant pis */ } }
@@ -1445,16 +1472,21 @@ function claimTabLock() {
 }
 
 // ============ VIBRATIONS (telephone) ============
-document.addEventListener('click', function(e) {
+// Seulement pour les moments importants (niveau gagne, succes, evenement a choix, catastrophe) : pas a chaque toucher
+var lastVibrate = 0;
+function vibrate(pattern) {
   if (!(navigator.vibrate && window.matchMedia && matchMedia('(pointer: coarse)').matches)) return;
   if (typeof G === 'undefined' || !G.settings || G.settings.haptics === false) return;
-  if (e.target.closest && e.target.closest('button, [role="button"], .gtab, .ing-card, a, select')) { try { navigator.vibrate(12); } catch (x) { /* pas de vibreur */ } }
-}, true);
+  var now = Date.now();
+  if (now - lastVibrate < 1500) return;   // jamais en rafale
+  lastVibrate = now;
+  try { navigator.vibrate(pattern); } catch (e) { /* pas de vibreur */ }
+}
 
 // ============ CLAVIER ============
 document.addEventListener('keydown', function(e) {
-  // Ctrl + Echap : retour au menu des parties
-  if (e.key === 'Escape' && e.ctrlKey) { e.preventDefault(); if (typeof backToHome === 'function' && !(typeof introActive !== 'undefined' && introActive)) backToHome(); return; }
+  // Maj + Echap : retour au menu des parties (Ctrl + Echap ouvre le menu Demarrer de Windows)
+  if (e.key === 'Escape' && e.shiftKey) { e.preventDefault(); if (typeof backToHome === 'function' && !(typeof introActive !== 'undefined' && introActive)) backToHome(); return; }
   if (e.key === 'Escape') {
     if (typeof introActive !== 'undefined' && introActive) return;
     // Une fenetre ouverte se ferme. Sinon, Echap met le jeu en pause.
@@ -1472,7 +1504,9 @@ document.addEventListener('keydown', function(e) {
   if (k === '/' && G.cheatUnlocked) { e.preventDefault(); showCommandConsole(); return; }
   if (k === 'c') { e.preventDefault(); showChangelog(); return; }
   if (k === 'm') { e.preventDefault(); showBakeriesModal(); return; }
-  var wanted = visibleTabs()[parseInt(e.key, 10) - 1];
+  // Les chiffres par leur touche, pas par le caractere : sur un clavier AZERTY, 1 sans Maj donne &
+  var dm = /^(?:Digit|Numpad)([1-9])$/.exec(e.code || '');
+  var wanted = visibleTabs()[(dm ? parseInt(dm[1], 10) : parseInt(e.key, 10)) - 1];
   if (wanted) switchTab(wanted);
 });
 

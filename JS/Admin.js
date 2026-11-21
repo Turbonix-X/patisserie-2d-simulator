@@ -51,6 +51,49 @@ function adminFetchPlayers() {
   });
 }
 
+// ---------- L'onglet « Retours » : les bugs et les idees des joueurs ----------
+var adminReports = { rows: null, filter: 'new', kind: 'all' };
+function renderAdminReports(box, pid) {
+  adminUI.pid = pid;
+  box.innerHTML = '<div class="adm-db"><p class="home-info">' + adminTr('Chargement…', 'Loading…') + '</p></div>';
+  adminCall('/rest/v1/reports?select=*,profiles(pseudo,email)&order=created_at.desc&limit=300').then(function(rows) {
+    adminReports.rows = rows || [];
+    adminDrawReports(box);
+  }, function(e) { box.innerHTML = '<div class="adm-db"><p class="warning">' + aesc((e && e.message) || 'Error') + '</p><p class="home-info">' + adminTr('Si la table n’existe pas encore : lance supabase_setup.sql (python tools/supabase_sql.py supabase_setup.sql).', 'If the table does not exist yet: run supabase_setup.sql (python tools/supabase_sql.py supabase_setup.sql).') + '</p></div>'; });
+}
+function adminDrawReports(box) {
+  box = box || document.getElementById('adm-box');
+  if (!box) return;
+  var rows = (adminReports.rows || []).filter(function(r) { return (adminReports.filter === 'all' || r.status === adminReports.filter) && (adminReports.kind === 'all' || r.kind === adminReports.kind); });
+  var h = '<div class="adm-db"><div class="adm-tools">';
+  [['new', adminTr('À traiter', 'To do')], ['done', adminTr('Traités', 'Done')], ['all', adminTr('Tous', 'All')]].forEach(function(f) { h += '<button class="adm-chip' + (adminReports.filter === f[0] ? ' active' : '') + '" onclick="adminReports.filter=\'' + f[0] + '\';adminDrawReports()">' + f[1] + '</button>'; });
+  [['all', adminTr('Tout', 'Everything')], ['bug', '🐞 Bugs'], ['idea', '💡 ' + adminTr('Idées', 'Ideas')]].forEach(function(f) { h += '<button class="adm-chip' + (adminReports.kind === f[0] ? ' active' : '') + '" onclick="adminReports.kind=\'' + f[0] + '\';adminDrawReports()">' + f[1] + '</button>'; });
+  h += '<button class="adm-chip" onclick="renderAdminReports(document.getElementById(\'adm-box\'), adminUI.pid)">⟳</button></div>';
+  if (!rows.length) h += '<p class="home-empty">' + adminTr('Aucun retour pour l’instant.', 'No feedback yet.') + '</p>';
+  rows.forEach(function(r) {
+    var who = r.profiles ? aesc(r.profiles.pseudo || '') + ' · ' + aesc(r.profiles.email || '') : adminTr('Anonyme', 'Anonymous');
+    h += '<div class="adm-card report-card' + (r.status === 'done' ? ' done' : '') + '"><div class="report-head"><b>' + (r.kind === 'idea' ? '💡 ' + adminTr('Idée', 'Idea') : '🐞 Bug') + '</b><small>' + new Date(r.created_at).toLocaleString() + ' · ' + who + ' · ' + aesc(r.version || '') + ' · ' + aesc(r.platform || '') + ' · ' + aesc(r.lang || '') + '</small></div>';
+    h += '<p class="report-text">' + aesc(r.body) + '</p><div class="report-btns">';
+    h += '<button class="btn btn-small" onclick="adminReportSet(' + r.id + ',\'' + (r.status === 'done' ? 'new' : 'done') + '\')">' + (r.status === 'done' ? adminTr('Rouvrir', 'Reopen') : '✓ ' + adminTr('Traité', 'Done')) + '</button>';
+    h += '<button class="btn btn-small btn-danger" onclick="adminReportDelete(' + r.id + ')">🗑️</button></div></div>';
+  });
+  box.innerHTML = h + '</div>';
+}
+function adminReportSet(id, status) {
+  adminCall('/rest/v1/reports?id=eq.' + id, { method: 'PATCH', prefer: 'return=representation', body: { status: status } }).then(function(r) {
+    (adminReports.rows || []).forEach(function(x) { if (x.id === id && r && r.length) x.status = status; });
+    adminDrawReports();
+  }, function(e) { alert((e && e.message) || 'Error'); });
+}
+function adminReportDelete(id) {
+  adminConfirm3(adminTr('Supprimer ce retour', 'Delete this feedback'), function() {
+    adminCall('/rest/v1/reports?id=eq.' + id, { method: 'DELETE', prefer: 'return=representation' }).then(function(r) {
+      if (r && r.length) adminReports.rows = adminReports.rows.filter(function(x) { return x.id !== id; });
+      adminDrawReports();
+    }, function(e) { alert((e && e.message) || 'Error'); });
+  });
+}
+
 function adminDrawList(keepFocus) {
   var rows = adminUI.rows.map(function(r) { return { r: r, pr: adminPresence(r) }; });
   var total = rows.length, playing = rows.filter(function(x) { return x.pr.status === 'playing'; }).length, open = rows.filter(function(x) { return x.pr.status === 'open'; }).length;

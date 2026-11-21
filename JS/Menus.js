@@ -35,7 +35,7 @@ function settingsPaneHTML() {
 
 function showSettingsModal() {
   beginMenuPause();
-  var tabs = [['general', 'settings.tabGeneral', 'globe'], ['look', 'settings.tabLook', 'palette'], ['audio', 'settings.tabAudio', 'music'], ['stats', 'settings.tabStats', 'stats']];
+  var tabs = [['general', 'settings.tabGeneral', 'globe'], ['look', 'settings.tabLook', 'palette'], ['audio', 'settings.tabAudio', 'music']];
   if (hasKeyboard()) tabs.push(['keys', 'settings.tabKeys', 'terminal']);
   var h = '<div class="set-head"><h2>' + uiIcon('settings') + t('settings.title') + '</h2>';
   h += '<button class="icon-btn" onclick="closeMenu()" aria-label="' + escH(t('common.close')) + '" title="' + escH(t('common.close')) + '">' + uiIcon('close') + '</button></div>';
@@ -63,6 +63,18 @@ function showAchievementsModal() {
   h += '<div class="set-body"><div class="set-pane" id="ach-pane">' + settingsAchievements() + '</div></div>';
   showModal(h, 'modal-settings modal-ach');
 }
+// Les statistiques ont leur propre fenetre, ouverte par le bouton de l'en-tete
+function showStatsModal() {
+  beginMenuPause();
+  var h = '<div class="set-head"><h2>' + uiIcon('stats') + t('settings.tabStats') + '</h2>';
+  h += '<button class="icon-btn" onclick="closeMenu()" aria-label="' + escH(t('common.close')) + '" title="' + escH(t('common.close')) + '">' + uiIcon('close') + '</button></div>';
+  h += '<div class="set-body"><div class="set-pane" id="stats-pane">' + statsPane() + '</div></div>';
+  showModal(h, 'modal-settings modal-ach');
+}
+function refreshStatsPane() {
+  var el = document.getElementById('stats-pane');
+  if (el) setHTML(el, statsPane());
+}
 function refreshAchPane() {
   var el = document.getElementById('ach-pane');
   if (el) setHTML(el, settingsAchievements());
@@ -71,15 +83,16 @@ function refreshAchPane() {
 // ============ COMMANDES DU CLAVIER ============
 // Seulement sur ordinateur, ou des qu'on a utilise un clavier
 var keyboardSeen = false;
-document.addEventListener('keydown', function() { keyboardSeen = true; }, true);
+document.addEventListener('keydown', function(e) { var tg = e.target && e.target.tagName; if (tg !== 'INPUT' && tg !== 'TEXTAREA' && tg !== 'SELECT') keyboardSeen = true; }, true);   // le clavier a l'ecran ne compte pas
 function hasKeyboard() {
-  return keyboardSeen || !(window.matchMedia && matchMedia('(pointer: coarse)').matches);
+  if (keyboardSeen) return true;
+  return !!(window.matchMedia && matchMedia('(hover: hover) and (pointer: fine)').matches);   // un ordinateur, pas un ecran tactile
 }
 function settingsKeys() {
-  var rows = [['1 – 9', 'keys.tabs'], ['R', 'keys.settings'], ['S', 'keys.achievements'], ['C', 'keys.changelog'], ['M', 'keys.bakeries'], ['Échap', 'keys.escape'], ['Ctrl + Échap', 'keys.menu']];
+  var rows = [['1 – 9', 'keys.tabs'], ['R', 'keys.settings'], ['S', 'keys.achievements'], ['C', 'keys.changelog'], ['M', 'keys.bakeries'], ['Échap', 'keys.escape'], ['Maj + Échap', 'keys.menu']];
   if (G.cheatUnlocked) rows.splice(3, 0, ['/', 'keys.console']);   // la console n'apparait ici qu'une fois debloquee
   var h = '<p class="set-help">' + t('keys.help') + '</p><section class="set-card"><h3>' + t('keys.title') + '</h3>';
-  rows.forEach(function(r) { h += setRow('<kbd class="kbd">' + (r[0] === 'Échap' ? 'Esc' : r[0] === 'Ctrl + Échap' ? 'Ctrl + Esc' : r[0]) + '</kbd>', '', t(r[1])); });
+  rows.forEach(function(r) { h += '<div class="key-row"><kbd class="kbd">' + (r[0] === 'Échap' ? 'Esc' : r[0] === 'Maj + Échap' ? 'Shift + Esc' : r[0]) + '</kbd><span>' + t(r[1]) + '</span></div>'; });
   return h + '</section>';
 }
 

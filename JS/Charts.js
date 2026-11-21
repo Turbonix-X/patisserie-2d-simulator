@@ -15,7 +15,7 @@ function statsPane() {
   if (open) {
     h += '<div class="list-tools">';
     [['here', 'stats.viewHere'], ['charts', 'stats.viewCharts'], ['all', 'stats.viewAll'], ['compare', 'stats.viewCompare']].forEach(function(v) {
-      h += '<button class="chip' + (ui.statsView === v[0] ? ' active' : '') + '" onclick="ui.statsView=\'' + v[0] + '\';refreshSettingsPane()">' + t(v[1]) + '</button>';
+      h += '<button class="chip' + (ui.statsView === v[0] ? ' active' : '') + '" onclick="ui.statsView=\'' + v[0] + '\';refreshStatsPane()">' + t(v[1]) + '</button>';
     });
     h += '</div>';
   }
@@ -34,7 +34,7 @@ function cmpToggle(i) {
   else if (sel.length < 3) sel.push(i);
   else { sel.shift(); sel.push(i); }
   ui.cmpSel = sel;
-  refreshSettingsPane();
+  refreshStatsPane();
 }
 function statsCompare() {
   var states = bakeryStates();
@@ -314,7 +314,7 @@ function statsCharts() {
   if (top.length > 0) h += barChart(t('chart.top'), t('chart.topSub'), top, 's1', fmt);
   h += '</div>';
 
-  h += '<button class="chip chart-table-toggle' + (ui.chartTable ? ' active' : '') + '" onclick="ui.chartTable=!ui.chartTable;refreshSettingsPane()">' + t(ui.chartTable ? 'chart.hideTable' : 'chart.showTable') + '</button>';
+  h += '<button class="chip chart-table-toggle' + (ui.chartTable ? ' active' : '') + '" onclick="ui.chartTable=!ui.chartTable;refreshStatsPane()">' + t(ui.chartTable ? 'chart.hideTable' : 'chart.showTable') + '</button>';
   if (ui.chartTable && n > 0) {
     h += '<div class="table-wrap"><table class="chart-table"><thead><tr><th>' + t('stats.playTime') + '</th><th>' + t('chart.money') + '</th><th>' + t('stats.totalEarned') + '</th><th>' + t('chart.spent') + '</th><th>' + t('chart.levelName') + '</th><th>' + t('stats.totalSold') + '</th></tr></thead><tbody>';
     for (var r = n - 1; r >= Math.max(0, n - 20); r--) {

@@ -2,6 +2,25 @@
 
 Tout ce qui a été ajouté à Pâtisserie 2D Simulator, de la plus récente à la plus ancienne. Pour comprendre les règles du jeu, va voir le [wiki](REGLES.md).
 
+## Release 1.3.3 (21 novembre 2026)
+
+Signaler un bug, des statistiques à portée de clic, et plein de petites corrections.
+
+**Nouveautés**
+- Un bouton « Signaler un bug » dans le menu : tu peux envoyer un bug ou une idée avec ton compte ou anonymement. Ce que tu écris est gardé si tu quittes la page, et l'envoi est impossible hors ligne.
+- Les statistiques ont leur propre bouton dans l'en-tête, comme les succès, dont l'ordre est maintenant : sortir, téléchargements, pâtisseries, succès, statistiques, pause, réglages.
+- Dans « Bon retour », Bob explique un bilan négatif (aucun vendeur, trop d'employés, loyer, prêts), et les notifications ne s'empilent plus derrière la fenêtre.
+- Le téléphone ne vibre plus à chaque toucher, seulement pour les moments importants : niveau gagné, succès, événement à choix, catastrophe.
+
+**Clavier**
+- Sur un clavier AZERTY, les touches 1 à 9 marchent sans Maj. Maj + Échap revient au menu (Ctrl + Échap ouvre le menu Démarrer de Windows).
+- La page « Commandes » des réglages n'apparaît plus sur un écran tactile, sauf si tu utilises un vrai clavier, et ses explications sont alignées.
+
+**Corrections**
+- Recharger la page (F5) ou mettre à jour le jeu ne fait plus croire à un deuxième onglet. Le bouton vert de mise à jour fonctionne dans la partie, et après la mise à jour la vieille version ne revient plus.
+- Sur téléphone, les onglets n'affichent que leurs icônes (le 4ᵉ n'est plus coupé), et la barre du bas retrouve sa place. Les unités ont une espace avant « m² », le bouton de version épouse son texte, et l'argent est de nouveau blanc en mode clair.
+- Console : /ingredient refuse les décimales comme /level, « /max farine » explique quoi taper, et les employés respectent la place (un par m² plus 2).
+
 ## Release 1.3.2 (19 novembre 2026)
 
 Le jeu ne ramera plus avec 1000 employés, la console est plus sûre, et il y a de quoi comparer, dupliquer et protéger tes parties.

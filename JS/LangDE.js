@@ -768,3 +768,31 @@ Object.assign(LANGS.de, {
    "c:/employee hire NAME free": "Stellt den Bewerber mit diesem Namen kostenlos ein."
   });
 })();
+
+
+// ---------- 1.3.3 ----------
+Object.assign(LANGS.de, {
+  'offline.why.noSeller':`du hast keinen arbeitenden Verkäufer`,
+  'offline.why.noStock':`es gab keine Kuchen zu verkaufen`,
+  'offline.why.staff':`deine {{n}} Angestellten kosteten {{v}} Lohn`,
+  'offline.why.rent':`die Miete kostete {{v}}`,
+  'offline.why.loans':`die Kredite nahmen {{v}}`,
+  'offline.bobNeg':`Die Bilanz ist negativ: {{why}}. Stelle einen Verkäufer ein, backe Kuchen oder senke deine Kosten!`,
+  'settings.hapticsHelp':`Eine Vibration für wichtige Momente: Levelaufstieg, Erfolg, Ereignis mit Auswahl, Katastrophe (am Handy).`,
+  'report.open':`Fehler oder Idee melden`,
+  'report.title':`Einen Fehler melden oder eine Idee vorschlagen`,
+  'report.kindBug':`Fehler`,
+  'report.kindIdea':`Idee`,
+  'report.from':`Senden…`,
+  'report.account':`Mit meinem Konto ({{n}})`,
+  'report.anon':`Anonym`,
+  'report.needAccount':`Melde dich an, um mit deinem Konto zu senden.`,
+  'report.placeholder':`Beschreibe, was passiert ist, oder deine Idee. Was du schreibst, bleibt erhalten, auch wenn du die Seite verlässt.`,
+  'report.send':`Senden`,
+  'report.sending':`Senden…`,
+  'report.sent':`Danke! Deine Nachricht ist angekommen.`,
+  'report.offline':`Offline kann nicht gesendet werden. Dein Text bleibt erhalten: Komm wieder, wenn du Netz hast.`,
+  'report.short':`Schreibe mindestens ein paar Worte.`,
+  'report.fail':`Senden fehlgeschlagen. Dein Text bleibt erhalten.`,
+  'report.kept':`Entwurf gespeichert`
+});

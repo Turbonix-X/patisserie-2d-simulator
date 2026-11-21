@@ -755,3 +755,31 @@ Object.assign(LANGS.zh, {
    "c:/employee hire NAME free": "免费雇用这个名字的应聘者。"
   });
 })();
+
+
+// ---------- 1.3.3 ----------
+Object.assign(LANGS.zh, {
+  'offline.why.noSeller':`没有销售员在工作`,
+  'offline.why.noStock':`没有可卖的蛋糕`,
+  'offline.why.staff':`你的 {{n}} 名员工花了 {{v}} 工资`,
+  'offline.why.rent':`房租花了 {{v}}`,
+  'offline.why.loans':`贷款扣了 {{v}}`,
+  'offline.bobNeg':`结余为负：{{why}}。雇一名销售员、做些蛋糕，或者减少开支吧！`,
+  'settings.hapticsHelp':`在重要时刻震动：升级、成就、选择事件、灾难（手机上）。`,
+  'report.open':`反馈问题或想法`,
+  'report.title':`反馈问题或提出想法`,
+  'report.kindBug':`问题`,
+  'report.kindIdea':`想法`,
+  'report.from':`发送…`,
+  'report.account':`用我的账号（{{n}}）`,
+  'report.anon':`匿名`,
+  'report.needAccount':`登录后才能用账号发送。`,
+  'report.placeholder':`描述发生了什么，或你的想法。即使离开这个页面，你写的内容也会保留。`,
+  'report.send':`发送`,
+  'report.sending':`发送中…`,
+  'report.sent':`谢谢！你的消息已送达。`,
+  'report.offline':`离线时无法发送。你写的内容已保留：有网络时再回来。`,
+  'report.short':`请至少写几个字。`,
+  'report.fail':`发送失败。你写的内容已保留。`,
+  'report.kept':`草稿已保存`
+});

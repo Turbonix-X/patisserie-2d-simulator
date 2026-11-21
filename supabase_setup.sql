@@ -181,3 +181,29 @@ create policy admin_notes_select on public.admin_notes for select to authenticat
 
 -- Dit a Supabase de relire la structure (sinon la nouvelle table peut ne pas etre vue tout de suite)
 notify pgrst, 'reload schema';
+
+
+-- ---------- Retours des joueurs : bugs et idees (envoyes par le jeu, lus par l'administrateur seulement) ----------
+create table if not exists public.reports (
+  id         bigint generated always as identity primary key,
+  created_at timestamptz not null default now(),
+  user_id    uuid references public.profiles(id) on delete set null,
+  kind       text not null default 'bug' check (kind in ('bug', 'idea')),
+  body       text not null check (char_length(body) between 5 and 4000),
+  version    text,
+  platform   text,
+  lang       text,
+  status     text not null default 'new' check (status in ('new', 'done'))
+);
+alter table public.reports enable row level security;
+grant insert on public.reports to anon, authenticated;
+grant select, update, delete on public.reports to authenticated;
+drop policy if exists reports_insert on public.reports;
+create policy reports_insert on public.reports for insert to anon, authenticated
+  with check (user_id is null or user_id = auth.uid());
+drop policy if exists reports_admin_select on public.reports;
+create policy reports_admin_select on public.reports for select to authenticated using (public.is_admin());
+drop policy if exists reports_admin_update on public.reports;
+create policy reports_admin_update on public.reports for update to authenticated using (public.is_admin()) with check (public.is_admin());
+drop policy if exists reports_admin_delete on public.reports;
+create policy reports_admin_delete on public.reports for delete to authenticated using (public.is_admin());
