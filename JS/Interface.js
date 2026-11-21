@@ -865,6 +865,7 @@ function applyDockFold(folded) {
     b.setAttribute('aria-expanded', folded ? 'false' : 'true');
     b.setAttribute('aria-label', label);
     b.title = label;
+    b.textContent = folded ? label : '';   // repliee : le bouton dit clairement comment la rouvrir
   }
   fitDock();
 }
@@ -1097,7 +1098,9 @@ function changelogHTML(showAll) {
 function changelogShowAll() { var el = document.getElementById('changelog-body'); if (el) el.innerHTML = iconify(changelogHTML(true)); }
 
 function showChangelog(from) {
-  var h = (from === 'home' ? '<button type="button" class="btn btn-small changelog-arch" onclick="openArchives()">🗄️ ' + escH(t('changelog.archives')) + '</button>' : '') + '<h2>' + t('changelog.title') + '</h2>' + (typeof updateBoxHTML === 'function' ? updateBoxHTML() : '')   // la boite de mise a jour, des qu'il y en a une + '<div class="changelog" id="changelog-body">…</div>';
+  var h = (from === 'home' ? '<button type="button" class="btn btn-small changelog-arch" onclick="openArchives()">🗄️ ' + escH(t('changelog.archives')) + '</button>' : '') + '<h2>' + t('changelog.title') + '</h2>';
+  h += typeof updateBoxHTML === 'function' ? updateBoxHTML() : '';   // la boite de mise a jour, des qu'il y en a une
+  h += '<div class="changelog" id="changelog-body">…</div>';
   h += '<div class="modal-btns"><button class="btn" onclick="hideModal()">' + t('common.close') + '</button></div>';
   showModal(h, 'modal-changelog');
   var draw = function() {

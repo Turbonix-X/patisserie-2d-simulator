@@ -785,6 +785,7 @@ function hireEmployee(typeId, applicant) {
   G.stats.totalInvested += cost;
   var skill = applicant ? applicant.skill : Math.max(1, baseSkill() - 15 + Math.floor(Math.random() * 20));
   G.employees.push(newEmployee(typeId, applicant ? applicant.name : getEmpName(), skill, applicant ? applicant.level : 1, applicant));
+  G.employees[G.employees.length - 1].paid = cost;
   G.stats.totalEmployeesHired++;
   startQueuedCrafts();
   return true;
@@ -1163,46 +1164,6 @@ function tickChefs(dtSec) {
       if (startCraft(queue[i])) { emp.chefCd = 0; if (emp.chefBudget > 0) emp.chefSpent = (emp.chefSpent || 0) + price; return; }
     }
     emp.chefCd = 6;
-  });
-}
-
-// ---------- L'intendant : il achete ce qui manque, avec un delai de livraison ----------
-function buyerTarget() {
-  var favs = REC.filter(function(r) { return recUnlocked(r) && G.favRecipes[r.id]; });
-  var pool = favs.length ? favs : REC.filter(recUnlocked).slice(-3);
-  for (var i = pool.length - 1; i >= 0; i--) {
-    var ok = true;
-    for (var k in pool[i].req) { if (!ingUnlocked(findIng(k))) ok = false; }
-    if (ok && missingCost(pool[i]) > 0) return pool[i];
-  }
-  return null;
-}
-
-function tickBuyers(dtSec) {
-  G.employees.forEach(function(emp) {
-    if (!hasJob(emp,'buyer') || !empWorking(emp)) return;
-    emp.buyCd = (emp.buyCd || 0) + dtSec * empPower(emp, 'buyer');
-    if (emp.buyCd < 20) return;
-    var rec = buyerTarget();
-    if (!rec) { emp.buyCd = 20; return; }
-    var items = {}, cost = 0;
-    for (var k in rec.req) {
-      var miss = rec.req[k] - (G.ing[k] || 0);
-      var unit = getIngredientCost(findIng(k));
-      if (miss > 0 && ruleOk(emp.buyRule, emp.buyLimit, unit)) { items[k] = miss; cost += unit * miss; }
-    }
-    if (!(cost > 0) || G.money < cost * 2) { emp.buyCd = 20; return; }
-    emp.buyCd = 0;
-    G.money -= cost;
-    G.stats.totalIngredientCost += cost;
-    G.deliveries.push({ items: items, at: Date.now() + 30000 });
-  });
-  var now = Date.now();
-  G.deliveries = G.deliveries.filter(function(d) {
-    if (d.at > now) return true;
-    for (var k in d.items) { G.ing[k] = (G.ing[k] || 0) + d.items[k]; gotIng(k, d.items[k]); }
-    if (typeof toast === 'function') toast(t('emp.buyerDone'));
-    return false;
   });
 }
 
@@ -2400,7 +2361,6 @@ function tickBakeryWorkInner(dtSec, isCurrent) {
   tickUnlocks();
   tickOrders(dtSec);
   tickChefs(dtSec);
-  tickBuyers(dtSec);
   tickManagers(dtSec);
   tickSearches();
   tickSales();

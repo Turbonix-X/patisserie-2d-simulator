@@ -4,6 +4,21 @@
   "intro": "كل ما أُضيف إلى Pâtisserie 2D Simulator، من الأحدث إلى الأقدم. تظهر الإصدارات الأقدم بالإنجليزية. لفهم قواعد اللعبة، راجع [الويكي](REGLES.md).",
   "versions": [
    {
+    "title": "Release 1.3.3.2 (21 نوفمبر 2026)",
+    "name": "Release 1.3.3.2",
+    "intro": "عاد سجل التغييرات، وصار الشريط السفلي يظهر على الهاتف، ورحل مسؤولو المشتريات.",
+    "groups": [
+     {
+      "name": "جديد وتصحيحات",
+      "items": [
+       "أُزيل مسؤولو المشتريات من اللعبة. في كل محل تسترجع ما كلّفك توظيفهم، وتصل طلباتهم المدفوعة فورًا. الموظف متعدد المهارات يفقد هذه المهنة فقط.",
+       "عاد سجل التغييرات للظهور (كان فارغًا منذ Release 1.3.3).",
+       "على الهاتف لم يعد الشريط السفلي ينزلق تحت الشاشة: قائمة المكونات وفقاعة بوب تصغران على الشاشات الصغيرة. بوب يقف فوق الشريط، وعند طيه يظهر زر «فتح الشريط» بوضوح."
+      ]
+     }
+    ]
+   },
+   {
     "title": "Release 1.3.3.1 (21 نوفمبر 2026)",
     "name": "Release 1.3.3.1",
     "intro": "عاد الشريط السفلي على الأجهزة اللوحية، وثماني حلويات جديدة، وصفحة إبلاغ أوضح.",
@@ -418,6 +433,21 @@
   "intro": "Alles, was zu Pâtisserie 2D Simulator hinzugekommen ist, von der neuesten bis zur ältesten Version. Ältere Versionen werden auf Englisch angezeigt. Die Spielregeln findest du im [Wiki](REGLES.md).",
   "versions": [
    {
+    "title": "Release 1.3.3.2 (21. November 2026)",
+    "name": "Release 1.3.3.2",
+    "intro": "Das Änderungsprotokoll ist zurück, die untere Leiste passt endlich aufs Handy, und die Einkäufer gehen.",
+    "groups": [
+     {
+      "name": "Neues und Korrekturen",
+      "items": [
+       "Die Einkäufer werden aus dem Spiel entfernt. In jeder Konditorei bekommst du zurück, was ihre Einstellung gekostet hat, und bereits bezahlte Lieferungen kommen sofort an. Ein Alleskönner verliert nur diesen Beruf.",
+       "Das Änderungsprotokoll wird wieder angezeigt (seit Release 1.3.3 war es leer).",
+       "Auf dem Handy kann die untere Leiste nicht mehr unter den Bildschirm rutschen: Zutatenliste und Bobs Sprechblase werden auf kleinen Bildschirmen kleiner. Bob steht auf der Leiste, und eingeklappt zeigt sie einen gut sichtbaren Knopf „Leiste ausklappen“."
+      ]
+     }
+    ]
+   },
+   {
     "title": "Release 1.3.3.1 (21. November 2026)",
     "name": "Release 1.3.3.1",
     "intro": "Die untere Leiste ist auf Tablets zurück, acht neue Backwaren und eine klarere Meldeseite.",
@@ -831,6 +861,21 @@
   "title": "Update history",
   "intro": "Everything that was added to Pâtisserie 2D Simulator, from the newest to the oldest. To understand the rules of the game, see the [wiki](REGLES.md).",
   "versions": [
+   {
+    "title": "Release 1.3.3.2 (November 21, 2026)",
+    "name": "Release 1.3.3.2",
+    "intro": "The changelog is back, the bottom bar finally fits on phones, and purveyors are gone.",
+    "groups": [
+     {
+      "name": "Changes",
+      "items": [
+       "Purveyors are removed from the game. In every bakery you get back what they cost to hire, and their deliveries already paid for arrive at once. A jack-of-all-trades only loses that job.",
+       "The changelog shows again (it had been empty since Release 1.3.3).",
+       "On phones the bottom bar can no longer be pushed below the screen: the ingredient list and Bob's bubble shrink on small screens. Bob stands on the bar, and when folded it shows a clear \"Unfold the bar\" button."
+      ]
+     }
+    ]
+   },
    {
     "title": "Release 1.3.3.1 (November 21, 2026)",
     "name": "Release 1.3.3.1",
@@ -1764,6 +1809,21 @@
   "intro": "Todo lo que se ha añadido a Pâtisserie 2D Simulator, de la más reciente a la más antigua. Las versiones más antiguas se muestran en inglés. Para entender las reglas del juego, mira la [wiki](REGLES.md).",
   "versions": [
    {
+    "title": "Release 1.3.3.2 (21 de noviembre de 2026)",
+    "name": "Release 1.3.3.2",
+    "intro": "Vuelve el historial, la barra inferior por fin cabe en el móvil y los intendentes se van.",
+    "groups": [
+     {
+      "name": "Novedades y correcciones",
+      "items": [
+       "Los intendentes desaparecen del juego. En cada pastelería te devolvemos lo que costó contratarlos, y sus entregas ya pagadas llegan enseguida. Un todoterreno solo pierde ese oficio.",
+       "El historial de cambios vuelve a mostrarse (estaba vacío desde la Release 1.3.3).",
+       "En el móvil la barra inferior ya no puede quedar bajo la pantalla: la lista de ingredientes y la burbuja de Bob se encogen en pantallas pequeñas. Bob está de pie sobre la barra y, plegada, muestra un botón «Desplegar la barra» bien visible."
+      ]
+     }
+    ]
+   },
+   {
     "title": "Release 1.3.3.1 (21 de noviembre de 2026)",
     "name": "Release 1.3.3.1",
     "intro": "La barra inferior vuelve en las tabletas, ocho pasteles nuevos y un aviso de errores más claro.",
@@ -2177,6 +2237,21 @@
   "title": "更新履歴",
   "intro": "Pâtisserie 2D Simulator に追加されたすべての内容を、新しいものから古いものの順に載せています。古いバージョンは英語で表示されます。ゲームのルールは[ウィキ](REGLES.md)を見てください。",
   "versions": [
+   {
+    "title": "Release 1.3.3.2（2026年11月21日）",
+    "name": "Release 1.3.3.2（2026年11月21日）",
+    "intro": "更新履歴が戻り、下のバーがスマホでもちゃんと表示され、仕入れ係がいなくなりました。",
+    "groups": [
+     {
+      "name": "新機能と修正",
+      "items": [
+       "仕入れ係をゲームから削除しました。各店で雇ったときの費用が返金され、支払い済みの配達はすぐに届きます。何でも屋はその職だけを失います。",
+       "更新履歴がまた表示されるようになりました（Release 1.3.3 から空になっていました）。",
+       "スマホで下のバーが画面の下に押し出されなくなりました。小さい画面では材料リストとボブの吹き出しが縮みます。ボブはバーの上に立ち、たたむと「バーを開く」ボタンがはっきり表示されます。"
+      ]
+     }
+    ]
+   },
    {
     "title": "Release 1.3.3.1（2026年11月21日）",
     "name": "Release 1.3.3.1（2026年11月21日）",
@@ -2592,6 +2667,21 @@
   "intro": "Pâtisserie 2D Simulator에 추가된 모든 내용을 최신순으로 적었습니다. 오래된 버전은 영어로 표시됩니다. 게임 규칙은 [위키](REGLES.md)를 참고하세요.",
   "versions": [
    {
+    "title": "Release 1.3.3.2 (2026년 11월 21일)",
+    "name": "Release 1.3.3.2",
+    "intro": "변경 기록이 돌아오고, 하단 바가 휴대폰에서도 보이며, 구매 담당이 사라졌어요.",
+    "groups": [
+     {
+      "name": "새 기능과 수정",
+      "items": [
+       "구매 담당을 게임에서 없앴어요. 가게마다 고용할 때 낸 돈을 돌려받고, 이미 낸 배송은 바로 도착해요. 만능 직원은 그 직업만 잃어요.",
+       "변경 기록이 다시 보여요 (Release 1.3.3부터 비어 있었어요).",
+       "휴대폰에서 하단 바가 화면 아래로 밀려나지 않아요. 작은 화면에서는 재료 목록과 밥의 말풍선이 줄어들어요. 밥은 바 위에 서 있고, 접으면 '하단 바 펼치기' 버튼이 잘 보여요."
+      ]
+     }
+    ]
+   },
+   {
     "title": "Release 1.3.3.1 (2026년 11월 21일)",
     "name": "Release 1.3.3.1",
     "intro": "태블릿에서 하단 바가 돌아오고, 디저트 8개가 늘었고, 신고 페이지가 더 분명해졌어요.",
@@ -3005,6 +3095,21 @@
   "title": "Historique des mises à jour",
   "intro": "Tout ce qui a été ajouté à Pâtisserie 2D Simulator, de la plus récente à la plus ancienne. Pour comprendre les règles du jeu, va voir le [wiki](REGLES.md).",
   "versions": [
+   {
+    "title": "Release 1.3.3.2 (21 novembre 2026)",
+    "name": "Release 1.3.3.2",
+    "intro": "Le changelog revient, la barre du bas tient enfin sur téléphone, et les intendants s'en vont.",
+    "groups": [
+     {
+      "name": "Changements",
+      "items": [
+       "Les intendants sont retirés du jeu. Dans chaque pâtisserie, ce qu'ils t'avaient coûté à l'embauche t'est rendu, et leurs livraisons déjà payées arrivent tout de suite. Un touche-à-tout perd seulement ce métier.",
+       "Le changelog s'affiche de nouveau (il restait vide depuis la Release 1.3.3).",
+       "Sur téléphone, la barre du bas ne peut plus être poussée sous l'écran : la liste des ingrédients et la bulle de Bob rétrécissent sur les petits écrans. Bob se tient debout sur la barre, et repliée, elle affiche un bouton « Déplier la barre » bien visible."
+      ]
+     }
+    ]
+   },
    {
     "title": "Release 1.3.3.1 (21 novembre 2026)",
     "name": "Release 1.3.3.1",
@@ -3938,6 +4043,21 @@
   "intro": "Tudo o que foi acrescentado ao Pâtisserie 2D Simulator, da mais recente à mais antiga. As versões mais antigas aparecem em inglês. Para perceber as regras do jogo, vê a [wiki](REGLES.md).",
   "versions": [
    {
+    "title": "Release 1.3.3.2 (21 de novembro de 2026)",
+    "name": "Release 1.3.3.2",
+    "intro": "O histórico volta, a barra inferior finalmente cabe no telemóvel e os intendentes vão-se embora.",
+    "groups": [
+     {
+      "name": "Novidades e correções",
+      "items": [
+       "Os intendentes saem do jogo. Em cada pastelaria recebes de volta o que custaram a contratar, e as entregas já pagas chegam logo. Um faz-tudo perde só essa profissão.",
+       "O histórico de alterações volta a aparecer (estava vazio desde a Release 1.3.3).",
+       "No telemóvel a barra inferior já não fica debaixo do ecrã: a lista de ingredientes e o balão do Bob encolhem nos ecrãs pequenos. O Bob está de pé em cima da barra e, recolhida, mostra um botão «Expandir a barra» bem visível."
+      ]
+     }
+    ]
+   },
+   {
     "title": "Release 1.3.3.1 (21 de novembro de 2026)",
     "name": "Release 1.3.3.1",
     "intro": "A barra inferior volta nos tablets, oito novos doces e um aviso de erros mais claro.",
@@ -4352,6 +4472,21 @@
   "intro": "Всё, что добавили в Pâtisserie 2D Simulator, от самого нового к самому старому. Более старые версии показываются на английском. Чтобы понять правила игры, загляни в [вики](REGLES.md).",
   "versions": [
    {
+    "title": "Release 1.3.3.2 (21 ноября 2026)",
+    "name": "Release 1.3.3.2",
+    "intro": "История изменений вернулась, нижняя панель наконец помещается на телефоне, а закупщиков больше нет.",
+    "groups": [
+     {
+      "name": "Новое и исправления",
+      "items": [
+       "Закупщики убраны из игры. В каждой кондитерской тебе возвращают стоимость их найма, а уже оплаченные доставки приходят сразу. Мастер на все руки теряет только эту профессию.",
+       "История изменений снова показывается (с Release 1.3.3 она была пустой).",
+       "На телефоне нижнюю панель больше не выталкивает за экран: список ингредиентов и облачко Боба сжимаются на маленьких экранах. Боб стоит на панели, а в свёрнутом виде видна заметная кнопка «Развернуть панель»."
+      ]
+     }
+    ]
+   },
+   {
     "title": "Release 1.3.3.1 (21 ноября 2026)",
     "name": "Release 1.3.3.1",
     "intro": "Нижняя панель вернулась на планшетах, появилось восемь новых десертов, а страница сообщений стала понятнее.",
@@ -4765,6 +4900,21 @@
   "title": "更新记录",
   "intro": "Pâtisserie 2D Simulator 新增的所有内容，从最新到最旧。更早的版本以英文显示。想了解游戏规则，请看[百科](REGLES.md)。",
   "versions": [
+   {
+    "title": "Release 1.3.3.2（2026年11月21日）",
+    "name": "Release 1.3.3.2（2026年11月21日）",
+    "intro": "更新日志回来了，底栏终于能在手机上显示，采购员也被移除了。",
+    "groups": [
+     {
+      "name": "新内容与修复",
+      "items": [
+       "采购员已从游戏中移除。每家店都会退还雇用他们的费用，已付款的送货会立即到达。多面手只会失去这项职业。",
+       "更新日志重新显示了（自 Release 1.3.3 起一直是空的）。",
+       "在手机上，底栏不会再被挤到屏幕下面：小屏幕上配料列表和鲍勃的气泡会变小。鲍勃站在底栏上，收起时会显示醒目的“展开底栏”按钮。"
+      ]
+     }
+    ]
+   },
    {
     "title": "Release 1.3.3.1（2026年11月21日）",
     "name": "Release 1.3.3.1（2026年11月21日）",

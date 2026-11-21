@@ -809,3 +809,6 @@ Object.assign(LANGS.de, {
   'r.eclaircaramel':`Karamell-Eclairs x6`,
   'r.maccaramel':`Karamell-Macarons x8`
 });
+Object.assign(LANGS.de, {
+  'emp.buyerRefund':`Die Einkäufer gibt es nicht mehr: Du hast zurückbekommen, was ihre Einstellung gekostet hat ({{v}}).`
+});

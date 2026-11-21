@@ -4,7 +4,7 @@
    employes, espace, evenements, themes
    ============================================ */
 
-var GAME_VERSION = 'Release 1.3.3.1';
+var GAME_VERSION = 'Release 1.3.3.2';
 // Le nom affiche : sans « Snapshot N » (il ne sert qu'a nous et aux fichiers)
 function versionLabel(v) { return String(v || '').replace(/\s+Snapshot\s+\d+$/i, ''); }
 
@@ -225,8 +225,9 @@ var EMP_TYPES = [
   // Le touche-a-tout : jusqu'a 3 metiers, tous niveau 3 au plus. On ne le trouve qu'en cherchant deux metiers a la fois.
   { id:'versatile', baseSalary:2.5,  unlockLvl:20, hireCost:4000, hidden:true },
   { id:'chef',      baseSalary:2,    unlockLvl:65, hireCost:6000 },
-  { id:'buyer',     baseSalary:3,    unlockLvl:90, hireCost:15000 },
 ];
+// L'intendant (niveau 90) a ete retire en Release 1.3.3.2 : ce qu'il coutait a l'embauche est rembourse
+var OLD_BUYER_HIRE_COST = 15000;
 var EMP_MAX_LVL = 10;   // les niveaux qu'on peut former
 var EMP_GOLD_LVL = 11;  // le niveau or : seulement en candidature, a partir du niveau 120
 // Niveau du joueur a partir duquel un candidat de ce niveau peut se presenter

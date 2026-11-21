@@ -3104,3 +3104,19 @@ select option { background: var(--surface-solid, #fff); color: var(--text); }
 /* Le bouton « ? » de la banque, et des boutons d'événement bien moins hauts */
 .chip.qmark { width: 30px; height: 30px; min-height: 0 !important; padding: 0; border-radius: 50%; font-weight: 900; font-size: 1rem; line-height: 1; display: inline-flex; align-items: center; justify-content: center; }
 .choice-banner .debt-pay-btn { padding: 0 10px; min-height: 0 !important; font-size: .7rem; line-height: 1.35; border-radius: 8px; }
+
+/* ---------- Release 1.3.3.2 : la barre du bas sur téléphone et tablette ----------
+   Sur un écran court, ce qui est au-dessus rétrécit (ingrédients, bulle de Bob) : la barre et le pied de page
+   gardent toujours leur place, elle ne peut plus être poussée sous le bas de l'écran.
+   Bob se tient debout sur la barre, comme avant. */
+@media (max-width: 899px) {
+  #ingredients { flex: 0 1 26dvh; min-height: 64px; }
+  #bob-bubble { flex: 0 1 auto; min-height: 0; max-height: 24dvh; overflow-y: auto; }
+  #main-panel { min-height: 60px; }
+  #dock, #game-footer, #header, #tabs { flex-shrink: 0; }
+  #dock { padding: 6px 40px 6px 10px; margin-top: 4px; }
+  #bob { width: 50px; left: 14px; bottom: calc(var(--dock-h, 86px) + 12px + env(safe-area-inset-bottom, 0px)); }
+  #game-footer { padding-bottom: calc(2px + env(safe-area-inset-bottom, 0px)); }
+}
+#dock.folded { padding-inline-end: 10px; justify-content: center; }
+#dock.folded #dock-toggle { width: auto; height: 24px; padding: 0 12px; margin: 0 auto; font-weight: 800; font-size: .74rem; display: inline-flex; align-items: center; gap: 6px; }

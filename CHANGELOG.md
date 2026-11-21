@@ -2,6 +2,15 @@
 
 Tout ce qui a été ajouté à Pâtisserie 2D Simulator, de la plus récente à la plus ancienne. Pour comprendre les règles du jeu, va voir le [wiki](REGLES.md).
 
+## Release 1.3.3.2 (21 novembre 2026)
+
+Le changelog revient, la barre du bas tient enfin sur téléphone, et les intendants s'en vont.
+
+**Changements**
+- Les intendants sont retirés du jeu. Dans chaque pâtisserie, ce qu'ils t'avaient coûté à l'embauche t'est rendu, et leurs livraisons déjà payées arrivent tout de suite. Un touche-à-tout perd seulement ce métier.
+- Le changelog s'affiche de nouveau (il restait vide depuis la Release 1.3.3).
+- Sur téléphone, la barre du bas ne peut plus être poussée sous l'écran : la liste des ingrédients et la bulle de Bob rétrécissent sur les petits écrans. Bob se tient debout sur la barre, et repliée, elle affiche un bouton « Déplier la barre » bien visible.
+
 ## Release 1.3.3.1 (21 novembre 2026)
 
 La barre du bas revient sur tablette, huit nouvelles pâtisseries et un signalement plus clair.

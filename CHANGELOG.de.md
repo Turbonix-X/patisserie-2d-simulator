@@ -2,6 +2,15 @@
 
 Alles, was zu Pâtisserie 2D Simulator hinzugekommen ist, von der neuesten bis zur ältesten Version. Ältere Versionen werden auf Englisch angezeigt. Die Spielregeln findest du im [Wiki](REGLES.md).
 
+## Release 1.3.3.2 (21. November 2026)
+
+Das Änderungsprotokoll ist zurück, die untere Leiste passt endlich aufs Handy, und die Einkäufer gehen.
+
+**Neues und Korrekturen**
+- Die Einkäufer werden aus dem Spiel entfernt. In jeder Konditorei bekommst du zurück, was ihre Einstellung gekostet hat, und bereits bezahlte Lieferungen kommen sofort an. Ein Alleskönner verliert nur diesen Beruf.
+- Das Änderungsprotokoll wird wieder angezeigt (seit Release 1.3.3 war es leer).
+- Auf dem Handy kann die untere Leiste nicht mehr unter den Bildschirm rutschen: Zutatenliste und Bobs Sprechblase werden auf kleinen Bildschirmen kleiner. Bob steht auf der Leiste, und eingeklappt zeigt sie einen gut sichtbaren Knopf „Leiste ausklappen“.
+
 ## Release 1.3.3.1 (21. November 2026)
 
 Die untere Leiste ist auf Tablets zurück, acht neue Backwaren und eine klarere Meldeseite.

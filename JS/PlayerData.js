@@ -150,6 +150,12 @@ function createFreshState() {
 var G = createFreshState();
 
 // Remet une sauvegarde de n'importe quelle version au format actuel
+// Ce qu'un intendant a coute : le prix paye s'il est connu, sinon le prix d'un candidat de son niveau et de sa competence
+function buyerRefund(e) {
+  if (typeof e.paid === 'number' && isFinite(e.paid) && e.paid > 0) return e.paid;
+  var lvl = Math.max(1, Math.min(EMP_GOLD_LVL, e.level || 1)), skill = Math.max(1, Math.min(100, e.skill || 40));
+  return Math.floor(OLD_BUYER_HIRE_COST * (0.5 + skill * 0.01) * Math.pow(4, lvl - 1));
+}
 function migrateSave(data) {
   var fresh = createFreshState();
   var version = data.saveVersion || 0;
@@ -234,6 +240,26 @@ function migrateSave(data) {
     data.employees.forEach(function(e) { if ((e.level || 1) > 5) e.level = 5; });
     if (typeof UNLOCK_TALKS !== 'undefined') UNLOCK_TALKS.forEach(function(x) { if (x[0] <= data.level) data.explained[x[1]] = true; });
     data.saveVersion = 12;
+  }
+  // Release 1.3.3.2 : plus d'intendants. Chacun est rembourse de ce qu'il a coute a l'embauche, une seule fois.
+  if (!data.buyersGone) {
+    var refund = 0;
+    data.employees = (data.employees || []).filter(function(e) {
+      if (e.type === 'buyer') { refund += buyerRefund(e); return false; }
+      if (Array.isArray(e.jobs)) {
+        e.jobs = e.jobs.filter(function(j) { return j.type !== 'buyer'; });
+        if (!e.jobs.length) e.jobs = [{ type: 'collector', level: 1 }];
+        if (e.focus === 'buyer') e.focus = 'all';
+      }
+      return true;
+    });
+    data.applicants = (data.applicants || []).filter(function(a) { return a.type !== 'buyer' && !(a.jobs || []).some(function(j) { return j.type === 'buyer'; }); });
+    // Les livraisons deja payees arrivent tout de suite
+    (data.deliveries || []).forEach(function(d) { for (var k in d.items) data.ing[k] = (data.ing[k] || 0) + d.items[k]; });
+    data.deliveries = [];
+    if (Array.isArray(data.empOrder)) data.empOrder = data.empOrder.filter(function(id) { return id !== 'buyer'; });
+    if (refund > 0) { data.money = (data.money || 0) + refund; data.buyerRefund = refund; }
+    data.buyersGone = true;
   }
   // Les autres patisseries sont sauvegardees a l'interieur de celle-ci
   data.bakeries.forEach(function(b) { if (b.state) b.state = migrateSave(b.state); });

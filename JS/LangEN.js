@@ -403,3 +403,6 @@ Object.assign(LANGS.en, {
   'r.eclaircaramel':`Caramel eclairs x6`,
   'r.maccaramel':`Caramel macarons x8`
 });
+Object.assign(LANGS.en, {
+  'emp.buyerRefund':`Purveyors have left the game: you got back what you paid to hire them ({{v}}).`
+});

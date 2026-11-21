@@ -803,3 +803,6 @@ Object.assign(LANGS.es, {
   'r.eclaircaramel':`Éclairs de caramelo x6`,
   'r.maccaramel':`Macarons de caramelo x8`
 });
+Object.assign(LANGS.es, {
+  'emp.buyerRefund':`Los intendentes han dejado el juego: te devolvimos lo que pagaste por contratarlos ({{v}}).`
+});

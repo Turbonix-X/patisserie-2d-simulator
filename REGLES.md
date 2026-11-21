@@ -201,7 +201,6 @@ Lance une **recherche** dans l'onglet Employés : elle prend du temps et ne marc
 | Maître d'hôtel | 30 | Livre les commandes à ta place | Peut être réglé pour ne livrer que les commandes qui rapportent plus ou moins qu'un montant, ou dont le bénéfice (prime moins ingrédients) est plus ou moins grand |
 | Vendeur | 35 | Vend tout seul, les gâteaux les plus chers d'abord | La part du stock qu'il peut vendre, et un prix au-dessus ou en dessous duquel il vend |
 | Chef pâtissier | 65 | Prépare tout seul avec ce qu'il y a en stock | Tout, seulement ce qui manque pour les commandes, seulement certaines recettes, ou des priorités. Un budget maximum par heure, et un montant sous lequel il ne prépare rien |
-| Intendant | 90 | Commande ce qui manque pour tes favoris, livré après 30 secondes | Un montant au-dessus ou en dessous duquel il achète un ingrédient |
 
 **Les niveaux :** chaque employé a 10 niveaux (sauf l'apprenti, qui n'en a pas). Chaque niveau double ses capacités, mais coûte 8 fois plus cher que le précédent. Pendant sa formation, il ne travaille pas. Les cueilleurs ont deux niveaux : l'efficacité (combien ils cueillent) et la perte (voir plus bas).
 

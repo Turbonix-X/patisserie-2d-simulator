@@ -796,3 +796,6 @@ Object.assign(LANGS.ar, {
   'r.eclaircaramel':`إكلير بالكراميل x6`,
   'r.maccaramel':`ماكارون بالكراميل x8`
 });
+Object.assign(LANGS.ar, {
+  'emp.buyerRefund':`غادر مسؤولو المشتريات اللعبة: استرجعت ما دفعته لتوظيفهم ({{v}}).`
+});

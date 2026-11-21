@@ -796,3 +796,6 @@ Object.assign(LANGS.zh, {
   'r.eclaircaramel':`焦糖闪电泡芙 x6`,
   'r.maccaramel':`焦糖马卡龙 x8`
 });
+Object.assign(LANGS.zh, {
+  'emp.buyerRefund':`采购员已从游戏中移除：雇用他们的费用已退还给你（{{v}}）。`
+});

@@ -190,11 +190,6 @@ check('... seulement les recettes choisies', G.crafting.length === 1 && G.crafti
 G.crafting = []; chef.chefMode = 'priority'; chef.chefList = ['cookie']; chef.chefCd = 99;
 tickChefs(1);
 check('... ou d abord celles que tu preferes', G.crafting[0].recId === 'cookie');
-G = createFreshState(); G.money = 1e6; G.level = 100;
-hireEmployee('buyer'); G.employees[0].buyCd = 99;
-var mBefore = G.money;
-tickBuyers(1);
-check('L intendant achete ce qui manque, avec un delai', G.deliveries.length === 1 && G.money < mBefore && G.ing.farine === 0, G.deliveries.length);
 G = createFreshState(); G.money = 1e9; G.level = 100;
 hireEmployee('collector'); hireEmployee('manager');
 var mgr = G.employees[1];
@@ -329,8 +324,8 @@ check('Argent et ingredient a l infini', G.money === MONEY_CAP && G.ing.farine >
 
 // --- Beta 1.7 ---
 G = createFreshState();
-check('De base, les apprentis sont en bas et le meilleur metier en haut', empGroupOrder()[0] === 'buyer' && empGroupOrder()[empGroupOrder().length - 1] === 'novice');
-moveEmpGroup('collector', 'buyer');
+check('De base, les apprentis sont en bas et le meilleur metier en haut', empGroupOrder()[0] === 'chef' && empGroupOrder()[empGroupOrder().length - 1] === 'novice');
+moveEmpGroup('collector', 'chef');
 check('On peut monter un metier tout en haut', empGroupOrder()[0] === 'collector' && empGroupOrder().length === EMP_TYPES.length);
 G.employees = [{ id: 1, type: 'collector', assignedIng: 'farine', status: 'working', level: 1, skill: 50, morale: 100 }, { id: 2, type: 'manager', status: 'working', level: 1, skill: 50, morale: 100, paused: true }];
 var dash = empDashboard();
@@ -457,7 +452,24 @@ check('Un succes compte les niveaux de machines', ACHIEVEMENTS.filter(function(a
 check('Bob connait 30 anecdotes', LANGS.fr['bob.facts'].split('|').length === 30);
 
 // --- Release 1.0 ---
-check('La version s appelle Release 1.3.3.1', GAME_VERSION === 'Release 1.3.3.1');
+check('La version s appelle Release 1.3.3.2', GAME_VERSION === 'Release 1.3.3.2');
+// --- Release 1.3.3.2 : les intendants sont retires et rembourses ---
+check('Plus d intendant a embaucher', !findEmpType('buyer'));
+(function() {
+  var old = createFreshState(); delete old.buyersGone; old.money = 100; old.level = 100;
+  old.employees = [{ id: 1, type: 'buyer', level: 1, skill: 50, morale: 80, status: 'working', paid: 15000 }, { id: 2, type: 'buyer', level: 2, skill: 50, morale: 80, status: 'working' },
+    { id: 3, type: 'versatile', level: 1, skill: 50, morale: 80, status: 'working', jobs: [{ type: 'buyer', level: 2 }, { type: 'baker', level: 1 }], focus: 'buyer' }];
+  old.deliveries = [{ items: { farine: 7 }, at: Date.now() + 9999 }];
+  var other = JSON.parse(JSON.stringify(old)); other.money = 0;
+  old.bakeries = [{ name: 'A' }, { name: 'B', state: other }];
+  var m = migrateSave(old);
+  check('Les intendants sont rembourses : prix paye, sinon prix d un candidat de leur niveau', m.money === 100 + 15000 + 60000 && m.employees.length === 1, m.money);
+  check('... un touche-a-tout perd seulement ce metier', m.employees[0].jobs.length === 1 && m.employees[0].jobs[0].type === 'baker' && m.employees[0].focus === 'all');
+  check('... les livraisons deja payees arrivent', m.ing.farine === 7 && m.deliveries.length === 0);
+  check('... dans chaque patisserie', m.bakeries[1].state.money === 75000 && m.bakeries[1].state.employees.length === 1);
+  var again = migrateSave(m);
+  check('... et une seule fois', again.money === 75100);
+})();
 G = createFreshState(); G.level = 499;
 check('La fete et l espace sont caches avant leur niveau', findTheme('party').hidden && findTheme('space').hidden && themeLockReason(findTheme('party')) === 'level');
 check('Les themes Tech sont secrets', themeLockReason(findTheme('tech')) === 'secret' && themeLockReason(findTheme('techgold')) === 'secret');

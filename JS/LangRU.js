@@ -734,3 +734,6 @@ Object.assign(LANGS.ru, {
   'r.eclaircaramel':`Карамельные эклеры x6`,
   'r.maccaramel':`Карамельные макаронс x8`
 });
+Object.assign(LANGS.ru, {
+  'emp.buyerRefund':`Закупщиков больше нет в игре: тебе вернули то, что ты заплатил за их найм ({{v}}).`
+});

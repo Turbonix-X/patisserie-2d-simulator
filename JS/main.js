@@ -47,6 +47,7 @@ function bootGame() {
   if (typeof claimTabLock === 'function') claimTabLock();
 
   if (loadNotice) setTimeout(function() { toast(t('offline.' + loadNotice)); }, 800);
+  if (G.buyerRefund > 0) { var refunded = G.buyerRefund; delete G.buyerRefund; setTimeout(function() { toast(t('emp.buyerRefund', { v: fmtMoney(refunded) })); }, 1800); }
 
   // Premiere partie : Bob t'accueille
   if (!G.introDone) {

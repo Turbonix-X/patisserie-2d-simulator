@@ -2,6 +2,15 @@
 
 Tudo o que foi acrescentado ao Pâtisserie 2D Simulator, da mais recente à mais antiga. As versões mais antigas aparecem em inglês. Para perceber as regras do jogo, vê a [wiki](REGLES.md).
 
+## Release 1.3.3.2 (21 de novembro de 2026)
+
+O histórico volta, a barra inferior finalmente cabe no telemóvel e os intendentes vão-se embora.
+
+**Novidades e correções**
+- Os intendentes saem do jogo. Em cada pastelaria recebes de volta o que custaram a contratar, e as entregas já pagas chegam logo. Um faz-tudo perde só essa profissão.
+- O histórico de alterações volta a aparecer (estava vazio desde a Release 1.3.3).
+- No telemóvel a barra inferior já não fica debaixo do ecrã: a lista de ingredientes e o balão do Bob encolhem nos ecrãs pequenos. O Bob está de pé em cima da barra e, recolhida, mostra um botão «Expandir a barra» bem visível.
+
 ## Release 1.3.3.1 (21 de novembro de 2026)
 
 A barra inferior volta nos tablets, oito novos doces e um aviso de erros mais claro.

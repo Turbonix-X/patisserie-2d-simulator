@@ -2,6 +2,15 @@
 
 Everything that was added to Pâtisserie 2D Simulator, from the newest to the oldest. To understand the rules of the game, see the [wiki](REGLES.md).
 
+## Release 1.3.3.2 (November 21, 2026)
+
+The changelog is back, the bottom bar finally fits on phones, and purveyors are gone.
+
+**Changes**
+- Purveyors are removed from the game. In every bakery you get back what they cost to hire, and their deliveries already paid for arrive at once. A jack-of-all-trades only loses that job.
+- The changelog shows again (it had been empty since Release 1.3.3).
+- On phones the bottom bar can no longer be pushed below the screen: the ingredient list and Bob's bubble shrink on small screens. Bob stands on the bar, and when folded it shows a clear "Unfold the bar" button.
+
 ## Release 1.3.3.1 (November 21, 2026)
 
 The bottom bar is back on tablets, eight new pastries and a clearer report page.

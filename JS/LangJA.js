@@ -743,3 +743,6 @@ Object.assign(LANGS.ja, {
   'r.eclaircaramel':`キャラメルエクレア x6`,
   'r.maccaramel':`キャラメルマカロン x8`
 });
+Object.assign(LANGS.ja, {
+  'emp.buyerRefund':`仕入れ係はゲームからいなくなりました。雇ったときの費用を返金しました（{{v}}）。`
+});

@@ -743,3 +743,6 @@ Object.assign(LANGS.ko, {
   'r.eclaircaramel':`카라멜 에클레어 x6`,
   'r.maccaramel':`카라멜 마카롱 x8`
 });
+Object.assign(LANGS.ko, {
+  'emp.buyerRefund':`구매 담당이 게임에서 사라졌어요. 고용할 때 낸 돈을 돌려받았어요 ({{v}}).`
+});

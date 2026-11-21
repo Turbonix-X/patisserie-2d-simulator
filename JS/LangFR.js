@@ -406,3 +406,6 @@ Object.assign(LANGS.fr, {
   'r.eclaircaramel':`Éclairs caramel x6`,
   'r.maccaramel':`Macarons caramel x8`
 });
+Object.assign(LANGS.fr, {
+  'emp.buyerRefund':`Les intendants ont quitté le jeu : tu as été remboursé de leur embauche ({{v}}).`
+});
