@@ -851,6 +851,8 @@ function renderCraftingBar() {
 function fitDock() {
   var d = document.getElementById('dock');
   if (d) document.documentElement.style.setProperty('--dock-h', d.offsetHeight + 'px');
+  var f = document.getElementById('game-footer');
+  if (f) document.documentElement.style.setProperty('--foot-h', f.offsetHeight + 'px');
 }
 window.addEventListener('resize', function() { if (typeof fitDock === 'function') fitDock(); });
 

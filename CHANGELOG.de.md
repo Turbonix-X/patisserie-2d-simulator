@@ -2,6 +2,14 @@
 
 Alles, was zu Pâtisserie 2D Simulator hinzugekommen ist, von der neuesten bis zur ältesten Version. Ältere Versionen werden auf Englisch angezeigt. Die Spielregeln findest du im [Wiki](REGLES.md).
 
+## Release 1.3.3.3 (21. November 2026)
+
+Die untere Leiste erscheint endlich auf iPad und iPhone.
+
+**Korrekturen**
+- Auf iPad und iPhone (Safari) war die Seite höher als der sichtbare Bildschirm: Untere Leiste und Fußzeile rutschten unter den Rand, und Bob saß auf nichts. Die Seite nimmt jetzt genau die sichtbare Höhe ein.
+- Auf Tablets und Computern stehen Bobs Füße auf der unteren Leiste.
+
 ## Release 1.3.3.2 (21. November 2026)
 
 Das Änderungsprotokoll ist zurück, die untere Leiste passt endlich aufs Handy, und die Einkäufer gehen.

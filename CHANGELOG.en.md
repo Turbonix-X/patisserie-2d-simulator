@@ -2,6 +2,14 @@
 
 Everything that was added to Pâtisserie 2D Simulator, from the newest to the oldest. To understand the rules of the game, see the [wiki](REGLES.md).
 
+## Release 1.3.3.3 (November 21, 2026)
+
+The bottom bar finally shows on iPad and iPhone.
+
+**Fixes**
+- On iPad and iPhone (Safari) the page was taller than the visible screen: the bottom bar and the footer fell below the edge, and Bob was sitting on nothing. The page now takes exactly the visible height.
+- On tablets and computers, Bob's feet rest on the bottom bar.
+
 ## Release 1.3.3.2 (November 21, 2026)
 
 The changelog is back, the bottom bar finally fits on phones, and purveyors are gone.

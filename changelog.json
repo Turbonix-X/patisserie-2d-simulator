@@ -4,6 +4,20 @@
   "intro": "كل ما أُضيف إلى Pâtisserie 2D Simulator، من الأحدث إلى الأقدم. تظهر الإصدارات الأقدم بالإنجليزية. لفهم قواعد اللعبة، راجع [الويكي](REGLES.md).",
   "versions": [
    {
+    "title": "Release 1.3.3.3 (21 نوفمبر 2026)",
+    "name": "Release 1.3.3.3",
+    "intro": "صار الشريط السفلي يظهر أخيرًا على iPad وiPhone.",
+    "groups": [
+     {
+      "name": "تصحيحات",
+      "items": [
+       "على iPad وiPhone ‏(Safari) كانت الصفحة أطول من الشاشة المرئية: الشريط السفلي والتذييل كانا تحت الحافة، وبوب جالس على لا شيء. الصفحة الآن بارتفاع الشاشة المرئية تمامًا.",
+       "على الأجهزة اللوحية والحواسيب، تستقر قدما بوب على الشريط السفلي."
+      ]
+     }
+    ]
+   },
+   {
     "title": "Release 1.3.3.2 (21 نوفمبر 2026)",
     "name": "Release 1.3.3.2",
     "intro": "عاد سجل التغييرات، وصار الشريط السفلي يظهر على الهاتف، ورحل مسؤولو المشتريات.",
@@ -433,6 +447,20 @@
   "intro": "Alles, was zu Pâtisserie 2D Simulator hinzugekommen ist, von der neuesten bis zur ältesten Version. Ältere Versionen werden auf Englisch angezeigt. Die Spielregeln findest du im [Wiki](REGLES.md).",
   "versions": [
    {
+    "title": "Release 1.3.3.3 (21. November 2026)",
+    "name": "Release 1.3.3.3",
+    "intro": "Die untere Leiste erscheint endlich auf iPad und iPhone.",
+    "groups": [
+     {
+      "name": "Korrekturen",
+      "items": [
+       "Auf iPad und iPhone (Safari) war die Seite höher als der sichtbare Bildschirm: Untere Leiste und Fußzeile rutschten unter den Rand, und Bob saß auf nichts. Die Seite nimmt jetzt genau die sichtbare Höhe ein.",
+       "Auf Tablets und Computern stehen Bobs Füße auf der unteren Leiste."
+      ]
+     }
+    ]
+   },
+   {
     "title": "Release 1.3.3.2 (21. November 2026)",
     "name": "Release 1.3.3.2",
     "intro": "Das Änderungsprotokoll ist zurück, die untere Leiste passt endlich aufs Handy, und die Einkäufer gehen.",
@@ -861,6 +889,20 @@
   "title": "Update history",
   "intro": "Everything that was added to Pâtisserie 2D Simulator, from the newest to the oldest. To understand the rules of the game, see the [wiki](REGLES.md).",
   "versions": [
+   {
+    "title": "Release 1.3.3.3 (November 21, 2026)",
+    "name": "Release 1.3.3.3",
+    "intro": "The bottom bar finally shows on iPad and iPhone.",
+    "groups": [
+     {
+      "name": "Fixes",
+      "items": [
+       "On iPad and iPhone (Safari) the page was taller than the visible screen: the bottom bar and the footer fell below the edge, and Bob was sitting on nothing. The page now takes exactly the visible height.",
+       "On tablets and computers, Bob's feet rest on the bottom bar."
+      ]
+     }
+    ]
+   },
    {
     "title": "Release 1.3.3.2 (November 21, 2026)",
     "name": "Release 1.3.3.2",
@@ -1809,6 +1851,20 @@
   "intro": "Todo lo que se ha añadido a Pâtisserie 2D Simulator, de la más reciente a la más antigua. Las versiones más antiguas se muestran en inglés. Para entender las reglas del juego, mira la [wiki](REGLES.md).",
   "versions": [
    {
+    "title": "Release 1.3.3.3 (21 de noviembre de 2026)",
+    "name": "Release 1.3.3.3",
+    "intro": "La barra inferior por fin aparece en iPad y iPhone.",
+    "groups": [
+     {
+      "name": "Correcciones",
+      "items": [
+       "En iPad y iPhone (Safari) la página era más alta que la pantalla visible: la barra inferior y el pie de página quedaban bajo el borde, y Bob estaba sentado sobre nada. Ahora la página ocupa exactamente la altura visible.",
+       "En tabletas y ordenadores, los pies de Bob descansan sobre la barra inferior."
+      ]
+     }
+    ]
+   },
+   {
     "title": "Release 1.3.3.2 (21 de noviembre de 2026)",
     "name": "Release 1.3.3.2",
     "intro": "Vuelve el historial, la barra inferior por fin cabe en el móvil y los intendentes se van.",
@@ -2237,6 +2293,20 @@
   "title": "更新履歴",
   "intro": "Pâtisserie 2D Simulator に追加されたすべての内容を、新しいものから古いものの順に載せています。古いバージョンは英語で表示されます。ゲームのルールは[ウィキ](REGLES.md)を見てください。",
   "versions": [
+   {
+    "title": "Release 1.3.3.3（2026年11月21日）",
+    "name": "Release 1.3.3.3（2026年11月21日）",
+    "intro": "iPad と iPhone で、下のバーがやっと表示されるようになりました。",
+    "groups": [
+     {
+      "name": "修正",
+      "items": [
+       "iPad と iPhone（Safari）では、ページが見えている画面より高く、下のバーとフッターが画面の端の下に落ち、ボブは何もない所に座っていました。今はページがちょうど見えている高さになります。",
+       "タブレットとパソコンでは、ボブの足が下のバーの上にのります。"
+      ]
+     }
+    ]
+   },
    {
     "title": "Release 1.3.3.2（2026年11月21日）",
     "name": "Release 1.3.3.2（2026年11月21日）",
@@ -2667,6 +2737,20 @@
   "intro": "Pâtisserie 2D Simulator에 추가된 모든 내용을 최신순으로 적었습니다. 오래된 버전은 영어로 표시됩니다. 게임 규칙은 [위키](REGLES.md)를 참고하세요.",
   "versions": [
    {
+    "title": "Release 1.3.3.3 (2026년 11월 21일)",
+    "name": "Release 1.3.3.3",
+    "intro": "iPad와 iPhone에서 드디어 하단 바가 보여요.",
+    "groups": [
+     {
+      "name": "수정",
+      "items": [
+       "iPad와 iPhone(Safari)에서 페이지가 보이는 화면보다 길어서, 하단 바와 푸터가 화면 아래로 밀려나고 밥은 허공에 앉아 있었어요. 이제 페이지가 보이는 높이에 딱 맞아요.",
+       "태블릿과 컴퓨터에서는 밥의 발이 하단 바 위에 놓여요."
+      ]
+     }
+    ]
+   },
+   {
     "title": "Release 1.3.3.2 (2026년 11월 21일)",
     "name": "Release 1.3.3.2",
     "intro": "변경 기록이 돌아오고, 하단 바가 휴대폰에서도 보이며, 구매 담당이 사라졌어요.",
@@ -3095,6 +3179,20 @@
   "title": "Historique des mises à jour",
   "intro": "Tout ce qui a été ajouté à Pâtisserie 2D Simulator, de la plus récente à la plus ancienne. Pour comprendre les règles du jeu, va voir le [wiki](REGLES.md).",
   "versions": [
+   {
+    "title": "Release 1.3.3.3 (21 novembre 2026)",
+    "name": "Release 1.3.3.3",
+    "intro": "La barre du bas s'affiche enfin sur iPad et iPhone.",
+    "groups": [
+     {
+      "name": "Corrections",
+      "items": [
+       "Sur iPad et iPhone (Safari), la page était plus haute que l'écran visible : la barre du bas et le pied de page tombaient sous le bord, et Bob restait assis sur rien. La page prend maintenant exactement la hauteur visible.",
+       "Sur tablette et PC, les pieds de Bob reposent sur la barre du bas."
+      ]
+     }
+    ]
+   },
    {
     "title": "Release 1.3.3.2 (21 novembre 2026)",
     "name": "Release 1.3.3.2",
@@ -4043,6 +4141,20 @@
   "intro": "Tudo o que foi acrescentado ao Pâtisserie 2D Simulator, da mais recente à mais antiga. As versões mais antigas aparecem em inglês. Para perceber as regras do jogo, vê a [wiki](REGLES.md).",
   "versions": [
    {
+    "title": "Release 1.3.3.3 (21 de novembro de 2026)",
+    "name": "Release 1.3.3.3",
+    "intro": "A barra inferior finalmente aparece no iPad e no iPhone.",
+    "groups": [
+     {
+      "name": "Correções",
+      "items": [
+       "No iPad e no iPhone (Safari) a página era mais alta do que o ecrã visível: a barra inferior e o rodapé ficavam abaixo da borda, e o Bob estava sentado no vazio. A página ocupa agora exatamente a altura visível.",
+       "Em tablets e computadores, os pés do Bob assentam na barra inferior."
+      ]
+     }
+    ]
+   },
+   {
     "title": "Release 1.3.3.2 (21 de novembro de 2026)",
     "name": "Release 1.3.3.2",
     "intro": "O histórico volta, a barra inferior finalmente cabe no telemóvel e os intendentes vão-se embora.",
@@ -4472,6 +4584,20 @@
   "intro": "Всё, что добавили в Pâtisserie 2D Simulator, от самого нового к самому старому. Более старые версии показываются на английском. Чтобы понять правила игры, загляни в [вики](REGLES.md).",
   "versions": [
    {
+    "title": "Release 1.3.3.3 (21 ноября 2026)",
+    "name": "Release 1.3.3.3",
+    "intro": "Нижняя панель наконец видна на iPad и iPhone.",
+    "groups": [
+     {
+      "name": "Исправления",
+      "items": [
+       "На iPad и iPhone (Safari) страница была выше видимого экрана: нижняя панель и нижний колонтитул уходили за край, а Боб сидел ни на чём. Теперь страница занимает ровно видимую высоту.",
+       "На планшетах и компьютерах ноги Боба стоят на нижней панели."
+      ]
+     }
+    ]
+   },
+   {
     "title": "Release 1.3.3.2 (21 ноября 2026)",
     "name": "Release 1.3.3.2",
     "intro": "История изменений вернулась, нижняя панель наконец помещается на телефоне, а закупщиков больше нет.",
@@ -4900,6 +5026,20 @@
   "title": "更新记录",
   "intro": "Pâtisserie 2D Simulator 新增的所有内容，从最新到最旧。更早的版本以英文显示。想了解游戏规则，请看[百科](REGLES.md)。",
   "versions": [
+   {
+    "title": "Release 1.3.3.3（2026年11月21日）",
+    "name": "Release 1.3.3.3（2026年11月21日）",
+    "intro": "底栏终于能在 iPad 和 iPhone 上显示了。",
+    "groups": [
+     {
+      "name": "修复",
+      "items": [
+       "在 iPad 和 iPhone（Safari）上，页面比可见屏幕更高：底栏和页脚落到了屏幕边缘下面，鲍勃坐在空中。现在页面正好占满可见高度。",
+       "在平板和电脑上，鲍勃的脚踩在底栏上。"
+      ]
+     }
+    ]
+   },
    {
     "title": "Release 1.3.3.2（2026年11月21日）",
     "name": "Release 1.3.3.2（2026年11月21日）",

@@ -2,6 +2,14 @@
 
 Tout ce qui a été ajouté à Pâtisserie 2D Simulator, de la plus récente à la plus ancienne. Pour comprendre les règles du jeu, va voir le [wiki](REGLES.md).
 
+## Release 1.3.3.3 (21 novembre 2026)
+
+La barre du bas s'affiche enfin sur iPad et iPhone.
+
+**Corrections**
+- Sur iPad et iPhone (Safari), la page était plus haute que l'écran visible : la barre du bas et le pied de page tombaient sous le bord, et Bob restait assis sur rien. La page prend maintenant exactement la hauteur visible.
+- Sur tablette et PC, les pieds de Bob reposent sur la barre du bas.
+
 ## Release 1.3.3.2 (21 novembre 2026)
 
 Le changelog revient, la barre du bas tient enfin sur téléphone, et les intendants s'en vont.

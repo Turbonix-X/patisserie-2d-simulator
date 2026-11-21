@@ -2,6 +2,14 @@
 
 Tudo o que foi acrescentado ao Pâtisserie 2D Simulator, da mais recente à mais antiga. As versões mais antigas aparecem em inglês. Para perceber as regras do jogo, vê a [wiki](REGLES.md).
 
+## Release 1.3.3.3 (21 de novembro de 2026)
+
+A barra inferior finalmente aparece no iPad e no iPhone.
+
+**Correções**
+- No iPad e no iPhone (Safari) a página era mais alta do que o ecrã visível: a barra inferior e o rodapé ficavam abaixo da borda, e o Bob estava sentado no vazio. A página ocupa agora exatamente a altura visível.
+- Em tablets e computadores, os pés do Bob assentam na barra inferior.
+
 ## Release 1.3.3.2 (21 de novembro de 2026)
 
 O histórico volta, a barra inferior finalmente cabe no telemóvel e os intendentes vão-se embora.
