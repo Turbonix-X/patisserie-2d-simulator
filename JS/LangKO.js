@@ -659,7 +659,7 @@ Object.assign(LANGS.ko, {
    "dup.text": "이 게임은 이미 다른 탭이나 창에서 열려 있어요! 둘 다에서 플레이하면 마지막에 저장한 쪽이 다른 쪽을 덮어써서 진행 상황을 잃게 됩니다. 그쪽에서 플레이하고 나머지를 닫거나, 이쪽을 닫으세요.",
    "dup.here": "여기서 플레이",
    "dup.leave": "이 게임 나가기",
-   "bob.logoHint": "그 로고를 자꾸 누르네요… 500번 더 누르면 뭔가 발견할 거예요.",
+   "bob.logoHint": "그 로고를 자꾸 누르네요… 50번 더 누르면 뭔가 발견할 거예요.",
    "keys.achievements": "업적 열기",
    "keys.menu": "게임 메뉴로 돌아가기",
    "keys.console": "콘솔 열기",
@@ -729,4 +729,17 @@ Object.assign(LANGS.ko, {
   'report.short':`몇 글자라도 적어 주세요.`,
   'report.fail':`전송에 실패했습니다. 적은 내용은 저장되어 있어요.`,
   'report.kept':`임시 저장됨`
+});
+Object.assign(LANGS.ko, {
+  'dock.fold':`하단 바 접기`,
+  'dock.unfold':`하단 바 펼치기`,
+  'report.noAccount':`계정 없이`,
+  'r.glace':`아이스크림 x4`,
+  'r.croissant':`크루아상 x6`,
+  'r.macchoco':`초콜릿 마카롱 x8`,
+  'r.macvanille':`바닐라 마카롱 x8`,
+  'r.macpraline':`프랄린 마카롱 x8`,
+  'r.eclaircafe':`커피 에클레어 x6`,
+  'r.eclaircaramel':`카라멜 에클레어 x6`,
+  'r.maccaramel':`카라멜 마카롱 x8`
 });

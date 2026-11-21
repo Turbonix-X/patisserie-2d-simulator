@@ -295,7 +295,7 @@ Les pastilles des onglets sont jaunes (candidatures, commandes). Seules les pann
 
 ## Les succès et les statistiques
 
-Les succès ont leur bouton (un trophée) dans l'en-tête, avec une barre de progression pour ceux que tu n'as pas encore. Il y a 1000 succès, et 5 de plus cachés (ils se débloquent aussi en mode max, en mode créatif et avec la commande). Un succès pas encore obtenu montre son nom, mais pas ce qu'il demande.
+Les succès ont leur bouton (un trophée) dans l'en-tête, avec une barre de progression pour ceux que tu n'as pas encore. Il y a 1040 succès, et 5 de plus cachés (ils se débloquent aussi en mode max, en mode créatif et avec la commande). Un succès pas encore obtenu montre son nom, mais pas ce qu'il demande.
 
 ## Pause, absence et sauvegarde
 
@@ -315,7 +315,7 @@ Le bouton avec l'insecte, en haut du menu, ouvre une page : tu choisis Bug ou Id
 
 ## La console de commandes
 
-- **Débloquer :** 1000 clics sur le logo. La console peut être désactivée (avec confirmation) ; une fois débloquée une première fois, 100 clics suffisent pour la retrouver. **/** l'ouvre au clavier.
+- **Débloquer :** 100 clics sur le logo (à 50, Bob donne un indice). La console peut être désactivée (avec confirmation) ; 100 clics la retrouvent. **/** l'ouvre au clavier.
 - **Stricte :** un mot en trop, un nombre illisible (`abc`, `1e400`), une valeur négative, un nom inconnu, une unité qui n'existe pas (`cl` pour la farine) ou une date impossible refusent la commande sans rien changer. Les nombres comme `1e3`, `1,5` ou `10^300` sont compris. Les ingrédients sont toujours entiers (`2.5` est refusé). Les employés respectent la place : un par m² plus 2.
 - **Limites :** 1000 employés, 50 pâtisseries, niveau de 1 à 100 000, vitesse du temps de 0,1 à 10, 0 à 999 bâtiments de chaque sorte.
 - **Supprimer une pâtisserie :** `/bakery delete N`, puis `/bakery delete N confirm` deux fois.

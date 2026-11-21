@@ -2,6 +2,19 @@
 
 Alles, was zu Pâtisserie 2D Simulator hinzugekommen ist, von der neuesten bis zur ältesten Version. Ältere Versionen werden auf Englisch angezeigt. Die Spielregeln findest du im [Wiki](REGLES.md).
 
+## Release 1.3.3.1 (21. November 2026)
+
+Die untere Leiste ist auf Tablets zurück, acht neue Backwaren und eine klarere Meldeseite.
+
+**Neues und Korrekturen**
+- 8 neue Rezepte: Eis (Stufe 12), Croissants (15), Macarons mit Schokolade (18), Vanille (20) und Pralinen (22), Kaffee-Eclairs (24), Karamell-Eclairs (33) und Karamell-Macarons (35). Das Spiel hat jetzt 68 Backwaren.
+- Das Tiramisu sieht endlich wie ein Tiramisu aus (es war ein Eis), das Paris-Brest hat ein eigenes Symbol, und jedes Macaron und jedes Eclair hat seine Farbe.
+- Die untere Leiste lässt sich mit einem Klick einklappen; das Spiel merkt sich deine Wahl.
+- Die Konsole öffnet sich jetzt mit 100 Klicks auf das Logo, und Bob gibt dir bei 50 Klicks einen Hinweis.
+- Ein „?“-Knopf ersetzt die „Was ist das“-Knöpfe bei Bank und Versicherung, und die Knöpfe der Entscheidungsereignisse sind viel flacher.
+- Auf Tablets und Handys versteckt sich die untere Leiste nicht mehr unter dem Bildschirmrand: Sie bleibt in der Seite, mit Bob darauf und der Fußzeile darunter.
+- Die Seite „Fehler melden“ hat oben zwei Knöpfe (Fehler oder Idee), darunter zwei (mit oder ohne Konto), keine Symbole mehr und die Farben des Spiels.
+
 ## Release 1.3.3 (21. November 2026)
 
 Fehler melden, Statistiken mit einem Klick und viele kleine Korrekturen.

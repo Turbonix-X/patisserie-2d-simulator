@@ -17,7 +17,7 @@ Un jeu de gestion de pâtisserie : achète tes ingrédients, prépare tes gâtea
 ## Ce qu'on peut faire
 
 - **Ingrédients :** 47 ingrédients à acheter, revendre et parfois fabriquer.
-- **Recettes :** 60 pâtisseries à débloquer et à préparer, du cookie au gâteau infini.
+- **Recettes :** 68 pâtisseries à débloquer et à préparer, du cookie au gâteau infini.
 - **Ventes :** les prix bougent selon ce que tu vends, et la demande revient avec le temps.
 - **Bâtiments :** au niveau 40, 59 bâtiments qui livrent une énorme quantité d'ingrédients une fois par heure.
 - **Employés :** cueilleurs, boulangers, vendeurs, managers, chefs pâtissiers, maîtres d'hôtel, transporteurs, intendants, touche-à-tout et apprentis, sur 10 niveaux, avec leur moral et leur salaire réglable.
@@ -26,7 +26,7 @@ Un jeu de gestion de pâtisserie : achète tes ingrédients, prépare tes gâtea
 - **Commandes :** au niveau 30, des clients passent commande. Plus c'est compliqué, plus la prime est grosse.
 - **Machines :** four, fouet, pétrin… des améliorations permanentes, propres à chaque pâtisserie.
 - **Événements :** rush, soldes, passage à la télé, contrôle sanitaire…
-- **Succès et statistiques :** 1000 succès à débloquer. Chacun augmente tes prix de vente. Les statistiques détaillent chaque recette et chaque ingrédient préparés dans un menu déroulant.
+- **Succès et statistiques :** 1040 succès à débloquer. Chacun augmente tes prix de vente. Les statistiques détaillent chaque recette et chaque ingrédient préparés dans un menu déroulant.
 - **Plusieurs pâtisseries :** dès la deuxième, des graphiques et les totaux de toutes tes boutiques.
 - **Thèmes :** clair, sombre, un par saison avec ses décors (fleurs, plage, neige, feuilles), un pour ton anniversaire, la fête au niveau 500, l'espace au niveau 1000, et des thèmes cachés à découvrir.
 - **Langues :** anglais, français, espagnol, portugais, allemand, arabe, mandarin, japonais, coréen et russe.

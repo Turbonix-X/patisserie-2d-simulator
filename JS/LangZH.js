@@ -712,7 +712,7 @@ Object.assign(LANGS.zh, {
    "dup.text": "这局游戏已经在另一个标签页或窗口中打开！如果两边都玩，最后保存的会覆盖另一个，你会丢失进度。请在那个里玩并关闭其他的，或者关闭这个。",
    "dup.here": "在这里玩",
    "dup.leave": "离开这局游戏",
-   "bob.logoHint": "你老是点这个标志……再点 500 次，就会发现点东西。",
+   "bob.logoHint": "你老是点这个标志……再点 50 次，就会发现点东西。",
    "keys.achievements": "打开成就",
    "keys.menu": "返回游戏菜单",
    "keys.console": "打开控制台",
@@ -782,4 +782,17 @@ Object.assign(LANGS.zh, {
   'report.short':`请至少写几个字。`,
   'report.fail':`发送失败。你写的内容已保留。`,
   'report.kept':`草稿已保存`
+});
+Object.assign(LANGS.zh, {
+  'dock.fold':`收起底栏`,
+  'dock.unfold':`展开底栏`,
+  'report.noAccount':`无账号`,
+  'r.glace':`冰淇淋 x4`,
+  'r.croissant':`牛角包 x6`,
+  'r.macchoco':`巧克力马卡龙 x8`,
+  'r.macvanille':`香草马卡龙 x8`,
+  'r.macpraline':`果仁糖马卡龙 x8`,
+  'r.eclaircafe':`咖啡闪电泡芙 x6`,
+  'r.eclaircaramel':`焦糖闪电泡芙 x6`,
+  'r.maccaramel':`焦糖马卡龙 x8`
 });

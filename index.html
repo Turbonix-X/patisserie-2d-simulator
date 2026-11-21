@@ -4,9 +4,9 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
   <title>Pâtisserie 2D Simulator — Turbonix</title>
-  <meta name="description" content="Ouvre ta pâtisserie : achète tes ingrédients, prépare 60 recettes, vends tes gâteaux, embauche ton équipe et débloque des centaines de succès, avec Bob, ton chef pâtissier. Gratuit, dans le navigateur.">
+  <meta name="description" content="Ouvre ta pâtisserie : achète tes ingrédients, prépare 68 recettes, vends tes gâteaux, embauche ton équipe et débloque des centaines de succès, avec Bob, ton chef pâtissier. Gratuit, dans le navigateur.">
   <meta property="og:title" content="Pâtisserie 2D Simulator">
-  <meta property="og:description" content="Ouvre ta pâtisserie, prépare 60 recettes et débloque des centaines de succès. Gratuit, dans le navigateur.">
+  <meta property="og:description" content="Ouvre ta pâtisserie, prépare 68 recettes et débloque des centaines de succès. Gratuit, dans le navigateur.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://turbonix-x.github.io/patisserie-2d-simulator/">
   <meta name="theme-color" content="#D4956B">
@@ -41,8 +41,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="turbonix.css?v=3.48">
-  <link rel="stylesheet" href="style.css?v=3.48">
+  <link rel="stylesheet" href="turbonix.css?v=3.49">
+  <link rel="stylesheet" href="style.css?v=3.49">
 </head>
 <body>
   <div class="bg-blobs" aria-hidden="true"><span></span><span></span><span></span></div>
@@ -70,6 +70,7 @@
   <div id="dock">
     <div id="space-bar"></div>
     <div id="crafting-bar"></div>
+    <button id="dock-toggle" type="button" onclick="toggleDock()" aria-expanded="true" aria-label="Replier la barre" title="Replier la barre"></button>
   </div>
 
   <!-- Toast notifications -->
@@ -268,39 +269,39 @@
   <script>document.getElementById("year").textContent = new Date().getFullYear();</script>
 
   <!-- Game scripts (order matters) -->
-  <script src="JS/GameData.js?v=3.48"></script>
-  <script src="JS/Icons.js?v=3.48"></script>
-  <script src="JS/Languages.js?v=3.48"></script>
-  <script src="JS/LangFR.js?v=3.48"></script>
-  <script src="JS/LangEN.js?v=3.48"></script>
-  <script src="JS/LangES.js?v=3.48"></script>
-  <script src="JS/LangPT.js?v=3.48"></script>
-  <script src="JS/LangDE.js?v=3.48"></script>
-  <script src="JS/LangAR.js?v=3.48"></script>
-  <script src="JS/LangZH.js?v=3.48"></script>
-  <script src="JS/LangJA.js?v=3.48"></script>
-  <script src="JS/LangKO.js?v=3.48"></script>
-  <script src="JS/LangRU.js?v=3.48"></script>
-  <script src="JS/Config.js?v=3.48"></script>
-  <script src="JS/PlayerData.js?v=3.48"></script>
-  <script src="JS/Logic.js?v=3.48"></script>
-  <script src="JS/Achievements.js?v=3.48"></script>
-  <script src="JS/Music.js?v=3.48"></script>
-  <script src="JS/Decor.js?v=3.48"></script>
-  <script src="JS/Interface.js?v=3.48"></script>
-  <script src="JS/Menus.js?v=3.48"></script>
-  <script src="JS/Bank.js?v=3.48"></script>
-  <script src="JS/Orders.js?v=3.48"></script>
-  <script src="JS/Staff.js?v=3.48"></script>
-  <script src="JS/Charts.js?v=3.48"></script>
-  <script src="JS/Console.js?v=3.48"></script>
-  <script src="JS/Bob.js?v=3.48"></script>
-  <script src="JS/Update.js?v=3.48"></script>
-  <script src="JS/Instances.js?v=3.48"></script>
-  <script src="JS/Cloud.js?v=3.48"></script>
-  <script src="JS/Admin.js?v=3.48"></script>
-  <script src="JS/Home.js?v=3.48"></script>
-  <script src="JS/main.js?v=3.48"></script>
+  <script src="JS/GameData.js?v=3.49"></script>
+  <script src="JS/Icons.js?v=3.49"></script>
+  <script src="JS/Languages.js?v=3.49"></script>
+  <script src="JS/LangFR.js?v=3.49"></script>
+  <script src="JS/LangEN.js?v=3.49"></script>
+  <script src="JS/LangES.js?v=3.49"></script>
+  <script src="JS/LangPT.js?v=3.49"></script>
+  <script src="JS/LangDE.js?v=3.49"></script>
+  <script src="JS/LangAR.js?v=3.49"></script>
+  <script src="JS/LangZH.js?v=3.49"></script>
+  <script src="JS/LangJA.js?v=3.49"></script>
+  <script src="JS/LangKO.js?v=3.49"></script>
+  <script src="JS/LangRU.js?v=3.49"></script>
+  <script src="JS/Config.js?v=3.49"></script>
+  <script src="JS/PlayerData.js?v=3.49"></script>
+  <script src="JS/Logic.js?v=3.49"></script>
+  <script src="JS/Achievements.js?v=3.49"></script>
+  <script src="JS/Music.js?v=3.49"></script>
+  <script src="JS/Decor.js?v=3.49"></script>
+  <script src="JS/Interface.js?v=3.49"></script>
+  <script src="JS/Menus.js?v=3.49"></script>
+  <script src="JS/Bank.js?v=3.49"></script>
+  <script src="JS/Orders.js?v=3.49"></script>
+  <script src="JS/Staff.js?v=3.49"></script>
+  <script src="JS/Charts.js?v=3.49"></script>
+  <script src="JS/Console.js?v=3.49"></script>
+  <script src="JS/Bob.js?v=3.49"></script>
+  <script src="JS/Update.js?v=3.49"></script>
+  <script src="JS/Instances.js?v=3.49"></script>
+  <script src="JS/Cloud.js?v=3.49"></script>
+  <script src="JS/Admin.js?v=3.49"></script>
+  <script src="JS/Home.js?v=3.49"></script>
+  <script src="JS/main.js?v=3.49"></script>
   <script>
     // Le jeu marche hors ligne une fois chargé (pas sur ton ordi, sauf avec ?sw)
     if (!window.__TAURI_INTERNALS__ && "serviceWorker" in navigator && location.protocol.indexOf("http") === 0 && (!/^(localhost|127\.|\[::1\])/.test(location.hostname) || /[?&]sw\b/.test(location.search))) {

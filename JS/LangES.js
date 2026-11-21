@@ -739,7 +739,7 @@ Object.assign(LANGS.es, {
    "dup.text": "¡Esta partida ya está abierta en otra pestaña o ventana! Si jugaras en las dos, la última en guardar sobrescribiría a la otra y perderías tu progreso. Juega en esa y cierra las demás, o cierra esta.",
    "dup.here": "Jugar aquí",
    "dup.leave": "Salir de esta partida",
-   "bob.logoHint": "Insistes mucho con ese logo… 500 clics más y descubrirás algo.",
+   "bob.logoHint": "Insistes mucho con ese logo… 50 clics más y descubrirás algo.",
    "keys.achievements": "Abrir los logros",
    "keys.menu": "Volver al menú de partidas",
    "keys.console": "Abrir la consola",
@@ -789,4 +789,17 @@ Object.assign(LANGS.es, {
   'report.short':`Escribe al menos unas palabras.`,
   'report.fail':`El envío falló. Lo que escribiste se guarda.`,
   'report.kept':`Borrador guardado`
+});
+Object.assign(LANGS.es, {
+  'dock.fold':`Replegar la barra`,
+  'dock.unfold':`Desplegar la barra`,
+  'report.noAccount':`Sin cuenta`,
+  'r.glace':`Helados x4`,
+  'r.croissant':`Cruasanes x6`,
+  'r.macchoco':`Macarons de chocolate x8`,
+  'r.macvanille':`Macarons de vainilla x8`,
+  'r.macpraline':`Macarons de praliné x8`,
+  'r.eclaircafe':`Éclairs de café x6`,
+  'r.eclaircaramel':`Éclairs de caramelo x6`,
+  'r.maccaramel':`Macarons de caramelo x8`
 });

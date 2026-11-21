@@ -43,6 +43,7 @@ function bootGame() {
 
   fullRender();
   if (typeof initSplit === 'function') initSplit();
+  if (typeof initDockFold === 'function') initDockFold();
   if (typeof claimTabLock === 'function') claimTabLock();
 
   if (loadNotice) setTimeout(function() { toast(t('offline.' + loadNotice)); }, 800);

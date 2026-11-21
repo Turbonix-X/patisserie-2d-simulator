@@ -2,6 +2,21 @@
 
 Everything that was added to Pâtisserie 2D Simulator, from the newest to the oldest. To understand the rules of the game, see the [wiki](REGLES.md).
 
+## Release 1.3.3.1 (November 21, 2026)
+
+The bottom bar is back on tablets, eight new pastries and a clearer report page.
+
+**What is new**
+- 8 new recipes: ice creams (level 12), croissants (15), chocolate (18), vanilla (20) and praline (22) macarons, coffee eclairs (24), caramel eclairs (33) and caramel macarons (35). The game now has 68 pastries.
+- The tiramisu finally looks like a tiramisu (it was an ice cream), the Paris-Brest has its own icon, and every macaron and eclair has its own colour.
+- The bottom bar can be folded with one click; the game remembers your choice.
+- The console now opens with 100 clicks on the logo, and Bob gives you a hint at 50 clicks.
+- A "?" button replaces the "what is this" buttons in the bank and for insurance, and the buttons of choice events are much shorter.
+
+**Fixes**
+- On tablets and phones the bottom bar no longer hides below the edge of the screen: it stays in the page, with Bob on top and the footer underneath.
+- The "Report a bug" page has two buttons on top (bug or idea), two below (with or without an account), no icons, and the game's colours.
+
 ## Release 1.3.3 (November 21, 2026)
 
 Report a bug, statistics one click away, and plenty of small fixes.

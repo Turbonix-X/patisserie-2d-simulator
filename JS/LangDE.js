@@ -725,7 +725,7 @@ Object.assign(LANGS.de, {
    "dup.text": "Dieses Spiel ist schon in einem anderen Tab oder Fenster offen! Würdest du in beiden spielen, würde der zuletzt speichernde den anderen überschreiben und du verlörst Fortschritt. Spiele in diesem und schließe die anderen, oder schließe diesen.",
    "dup.here": "Hier spielen",
    "dup.leave": "Dieses Spiel verlassen",
-   "bob.logoHint": "Du klickst ganz schön oft auf dieses Logo … Noch 500 Klicks, und du entdeckst etwas.",
+   "bob.logoHint": "Du klickst ganz schön oft auf dieses Logo … Noch 50 Klicks, und du entdeckst etwas.",
    "keys.achievements": "Erfolge öffnen",
    "keys.menu": "Zurück zum Spielemenü",
    "keys.console": "Konsole öffnen",
@@ -795,4 +795,17 @@ Object.assign(LANGS.de, {
   'report.short':`Schreibe mindestens ein paar Worte.`,
   'report.fail':`Senden fehlgeschlagen. Dein Text bleibt erhalten.`,
   'report.kept':`Entwurf gespeichert`
+});
+Object.assign(LANGS.de, {
+  'dock.fold':`Leiste einklappen`,
+  'dock.unfold':`Leiste ausklappen`,
+  'report.noAccount':`Ohne Konto`,
+  'r.glace':`Eis x4`,
+  'r.croissant':`Croissants x6`,
+  'r.macchoco':`Schoko-Macarons x8`,
+  'r.macvanille':`Vanille-Macarons x8`,
+  'r.macpraline':`Pralinen-Macarons x8`,
+  'r.eclaircafe':`Kaffee-Eclairs x6`,
+  'r.eclaircaramel':`Karamell-Eclairs x6`,
+  'r.maccaramel':`Karamell-Macarons x8`
 });

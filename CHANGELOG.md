@@ -2,6 +2,21 @@
 
 Tout ce qui a été ajouté à Pâtisserie 2D Simulator, de la plus récente à la plus ancienne. Pour comprendre les règles du jeu, va voir le [wiki](REGLES.md).
 
+## Release 1.3.3.1 (21 novembre 2026)
+
+La barre du bas revient sur tablette, huit nouvelles pâtisseries et un signalement plus clair.
+
+**Nouveautés**
+- 8 nouvelles recettes : glaces (niveau 12), croissants (15), macarons chocolat (18), vanille (20) et praliné (22), éclairs café (24), éclairs caramel (33) et macarons caramel (35). Le jeu compte maintenant 68 pâtisseries.
+- Le tiramisu ressemble enfin à un tiramisu (c'était une glace), le Paris-Brest a sa propre icône, et chaque macaron et chaque éclair a sa couleur.
+- La barre du bas peut se replier d'un clic ; le jeu retient ton choix.
+- La console s'ouvre maintenant avec 100 clics sur le logo, et Bob te met sur la piste à 50 clics.
+- Le bouton « ? » remplace les boutons « c'est quoi » de la banque et des assurances, et les boutons des événements à choix sont bien moins hauts.
+
+**Corrections**
+- Sur tablette et téléphone, la barre du bas ne se cache plus sous le bord de l'écran : elle reste dans la page, avec Bob dessus et le pied de page dessous.
+- La page « Signaler un bug » a deux boutons en haut (bug ou idée), deux boutons dessous (avec ou sans compte), plus d'icônes, et les couleurs du jeu.
+
 ## Release 1.3.3 (21 novembre 2026)
 
 Signaler un bug, des statistiques à portée de clic, et plein de petites corrections.

@@ -4,6 +4,25 @@
   "intro": "كل ما أُضيف إلى Pâtisserie 2D Simulator، من الأحدث إلى الأقدم. تظهر الإصدارات الأقدم بالإنجليزية. لفهم قواعد اللعبة، راجع [الويكي](REGLES.md).",
   "versions": [
    {
+    "title": "Release 1.3.3.1 (21 نوفمبر 2026)",
+    "name": "Release 1.3.3.1",
+    "intro": "عاد الشريط السفلي على الأجهزة اللوحية، وثماني حلويات جديدة، وصفحة إبلاغ أوضح.",
+    "groups": [
+     {
+      "name": "جديد وتصحيحات",
+      "items": [
+       "8 وصفات جديدة: آيس كريم (المستوى 12)، كرواسون (15)، ماكارون بالشوكولاتة (18) وبالفانيليا (20) وبالبرالين (22)، إكلير بالقهوة (24)، إكلير بالكراميل (33) وماكارون بالكراميل (35). صار في اللعبة 68 حلوى.",
+       "أصبح التيراميسو يشبه التيراميسو أخيرًا (كان آيس كريم)، وصار للباريس برست أيقونته، ولكل ماكارون وكل إكلير لونه.",
+       "يمكن طي الشريط السفلي بنقرة، واللعبة تتذكر اختيارك.",
+       "تُفتح الوحدة الآن بـ 100 نقرة على الشعار، ويعطيك بوب تلميحًا عند 50 نقرة.",
+       "زر «؟» يحل محل أزرار «ما هذا» في البنك والتأمين، وصارت أزرار الأحداث ذات الاختيار أقصر بكثير.",
+       "على الأجهزة اللوحية والهواتف لم يعد الشريط السفلي يختبئ تحت حافة الشاشة: يبقى في الصفحة، وبوب فوقه والتذييل تحته.",
+       "صفحة «الإبلاغ عن خطأ» فيها زران في الأعلى (خطأ أو فكرة) وزران تحتهما (بحساب أو بدونه)، بلا أيقونات وبألوان اللعبة."
+      ]
+     }
+    ]
+   },
+   {
     "title": "Release 1.3.3 (21 نوفمبر 2026)",
     "name": "Release 1.3.3",
     "intro": "الإبلاغ عن خلل، وإحصاءات بنقرة، وتصحيحات صغيرة كثيرة.",
@@ -399,6 +418,25 @@
   "intro": "Alles, was zu Pâtisserie 2D Simulator hinzugekommen ist, von der neuesten bis zur ältesten Version. Ältere Versionen werden auf Englisch angezeigt. Die Spielregeln findest du im [Wiki](REGLES.md).",
   "versions": [
    {
+    "title": "Release 1.3.3.1 (21. November 2026)",
+    "name": "Release 1.3.3.1",
+    "intro": "Die untere Leiste ist auf Tablets zurück, acht neue Backwaren und eine klarere Meldeseite.",
+    "groups": [
+     {
+      "name": "Neues und Korrekturen",
+      "items": [
+       "8 neue Rezepte: Eis (Stufe 12), Croissants (15), Macarons mit Schokolade (18), Vanille (20) und Pralinen (22), Kaffee-Eclairs (24), Karamell-Eclairs (33) und Karamell-Macarons (35). Das Spiel hat jetzt 68 Backwaren.",
+       "Das Tiramisu sieht endlich wie ein Tiramisu aus (es war ein Eis), das Paris-Brest hat ein eigenes Symbol, und jedes Macaron und jedes Eclair hat seine Farbe.",
+       "Die untere Leiste lässt sich mit einem Klick einklappen; das Spiel merkt sich deine Wahl.",
+       "Die Konsole öffnet sich jetzt mit 100 Klicks auf das Logo, und Bob gibt dir bei 50 Klicks einen Hinweis.",
+       "Ein „?“-Knopf ersetzt die „Was ist das“-Knöpfe bei Bank und Versicherung, und die Knöpfe der Entscheidungsereignisse sind viel flacher.",
+       "Auf Tablets und Handys versteckt sich die untere Leiste nicht mehr unter dem Bildschirmrand: Sie bleibt in der Seite, mit Bob darauf und der Fußzeile darunter.",
+       "Die Seite „Fehler melden“ hat oben zwei Knöpfe (Fehler oder Idee), darunter zwei (mit oder ohne Konto), keine Symbole mehr und die Farben des Spiels."
+      ]
+     }
+    ]
+   },
+   {
     "title": "Release 1.3.3 (21. November 2026)",
     "name": "Release 1.3.3",
     "intro": "Fehler melden, Statistiken mit einem Klick und viele kleine Korrekturen.",
@@ -793,6 +831,30 @@
   "title": "Update history",
   "intro": "Everything that was added to Pâtisserie 2D Simulator, from the newest to the oldest. To understand the rules of the game, see the [wiki](REGLES.md).",
   "versions": [
+   {
+    "title": "Release 1.3.3.1 (November 21, 2026)",
+    "name": "Release 1.3.3.1",
+    "intro": "The bottom bar is back on tablets, eight new pastries and a clearer report page.",
+    "groups": [
+     {
+      "name": "What is new",
+      "items": [
+       "8 new recipes: ice creams (level 12), croissants (15), chocolate (18), vanilla (20) and praline (22) macarons, coffee eclairs (24), caramel eclairs (33) and caramel macarons (35). The game now has 68 pastries.",
+       "The tiramisu finally looks like a tiramisu (it was an ice cream), the Paris-Brest has its own icon, and every macaron and eclair has its own colour.",
+       "The bottom bar can be folded with one click; the game remembers your choice.",
+       "The console now opens with 100 clicks on the logo, and Bob gives you a hint at 50 clicks.",
+       "A \"?\" button replaces the \"what is this\" buttons in the bank and for insurance, and the buttons of choice events are much shorter."
+      ]
+     },
+     {
+      "name": "Fixes",
+      "items": [
+       "On tablets and phones the bottom bar no longer hides below the edge of the screen: it stays in the page, with Bob on top and the footer underneath.",
+       "The \"Report a bug\" page has two buttons on top (bug or idea), two below (with or without an account), no icons, and the game's colours."
+      ]
+     }
+    ]
+   },
    {
     "title": "Release 1.3.3 (November 21, 2026)",
     "name": "Release 1.3.3",
@@ -1702,6 +1764,25 @@
   "intro": "Todo lo que se ha añadido a Pâtisserie 2D Simulator, de la más reciente a la más antigua. Las versiones más antiguas se muestran en inglés. Para entender las reglas del juego, mira la [wiki](REGLES.md).",
   "versions": [
    {
+    "title": "Release 1.3.3.1 (21 de noviembre de 2026)",
+    "name": "Release 1.3.3.1",
+    "intro": "La barra inferior vuelve en las tabletas, ocho pasteles nuevos y un aviso de errores más claro.",
+    "groups": [
+     {
+      "name": "Novedades y correcciones",
+      "items": [
+       "8 recetas nuevas: helados (nivel 12), cruasanes (15), macarons de chocolate (18), de vainilla (20) y de praliné (22), éclairs de café (24), éclairs de caramelo (33) y macarons de caramelo (35). Ahora hay 68 pasteles.",
+       "El tiramisú por fin parece un tiramisú (era un helado), el Paris-Brest tiene su propio icono y cada macaron y cada éclair tiene su color.",
+       "La barra inferior se puede plegar con un clic; el juego recuerda tu elección.",
+       "La consola ahora se abre con 100 clics en el logo, y Bob te da una pista a los 50.",
+       "Un botón «?» sustituye a los botones «qué es» del banco y de los seguros, y los botones de los eventos con elección son mucho más bajos.",
+       "En tabletas y móviles la barra inferior ya no se esconde bajo el borde de la pantalla: queda en la página, con Bob encima y el pie de página debajo.",
+       "La página «Avisar de un error» tiene dos botones arriba (error o idea), dos abajo (con o sin cuenta), sin iconos y con los colores del juego."
+      ]
+     }
+    ]
+   },
+   {
     "title": "Release 1.3.3 (21 de noviembre de 2026)",
     "name": "Release 1.3.3",
     "intro": "Informar de un fallo, estadísticas a un clic y muchas pequeñas correcciones.",
@@ -2096,6 +2177,25 @@
   "title": "更新履歴",
   "intro": "Pâtisserie 2D Simulator に追加されたすべての内容を、新しいものから古いものの順に載せています。古いバージョンは英語で表示されます。ゲームのルールは[ウィキ](REGLES.md)を見てください。",
   "versions": [
+   {
+    "title": "Release 1.3.3.1（2026年11月21日）",
+    "name": "Release 1.3.3.1（2026年11月21日）",
+    "intro": "タブレットで下のバーが戻り、お菓子が8つ増え、報告ページがわかりやすくなりました。",
+    "groups": [
+     {
+      "name": "新機能と修正",
+      "items": [
+       "新レシピ8つ：アイスクリーム（レベル12）、クロワッサン（15）、チョコ（18）・バニラ（20）・プラリネ（22）のマカロン、コーヒーエクレア（24）、キャラメルエクレア（33）、キャラメルマカロン（35）。お菓子は全部で68種になりました。",
+       "ティラミスがやっとティラミスらしくなりました（前はアイスでした）。パリ・ブレストには専用のアイコン、マカロンとエクレアにはそれぞれの色がつきました。",
+       "下のバーをワンタップでたためます。選んだ状態は覚えています。",
+       "コンソールはロゴを100回押すと開きます。50回目でボブがヒントをくれます。",
+       "銀行と保険の「これは何？」ボタンは「?」ボタンになり、選択イベントのボタンはずっと低くなりました。",
+       "タブレットやスマホで、下のバーが画面の端の下に隠れなくなりました。ページの中にあり、上にボブ、下にフッターがあります。",
+       "「不具合を報告」ページは、上に2つのボタン（不具合かアイデア）、その下に2つのボタン（アカウントありかなし）になり、アイコンをなくしてゲームの色にしました。"
+      ]
+     }
+    ]
+   },
    {
     "title": "Release 1.3.3（2026年11月21日）",
     "name": "Release 1.3.3（2026年11月21日）",
@@ -2492,6 +2592,25 @@
   "intro": "Pâtisserie 2D Simulator에 추가된 모든 내용을 최신순으로 적었습니다. 오래된 버전은 영어로 표시됩니다. 게임 규칙은 [위키](REGLES.md)를 참고하세요.",
   "versions": [
    {
+    "title": "Release 1.3.3.1 (2026년 11월 21일)",
+    "name": "Release 1.3.3.1",
+    "intro": "태블릿에서 하단 바가 돌아오고, 디저트 8개가 늘었고, 신고 페이지가 더 분명해졌어요.",
+    "groups": [
+     {
+      "name": "새 기능과 수정",
+      "items": [
+       "새 레시피 8개: 아이스크림(레벨 12), 크루아상(15), 초콜릿(18)·바닐라(20)·프랄린(22) 마카롱, 커피 에클레어(24), 카라멜 에클레어(33), 카라멜 마카롱(35). 이제 디저트가 모두 68개예요.",
+       "티라미수가 드디어 티라미수처럼 보여요(전에는 아이스크림이었어요). 파리 브레스트는 전용 아이콘이 생기고, 마카롱과 에클레어마다 색이 달라요.",
+       "하단 바를 한 번 눌러 접을 수 있고, 게임이 선택을 기억해요.",
+       "이제 로고를 100번 누르면 콘솔이 열리고, 50번째에 밥이 힌트를 줘요.",
+       "은행과 보험의 '이게 뭐예요' 버튼이 '?' 버튼으로 바뀌었고, 선택 이벤트의 버튼은 훨씬 낮아졌어요.",
+       "태블릿과 휴대폰에서 하단 바가 화면 아래로 숨지 않아요. 페이지 안에 있고, 위에 밥이, 아래에 푸터가 있어요.",
+       "'버그 신고' 페이지는 위에 버튼 2개(버그 또는 아이디어), 아래에 버튼 2개(계정 있음 또는 없음)가 있고, 아이콘이 없어지고 게임 색을 써요."
+      ]
+     }
+    ]
+   },
+   {
     "title": "Release 1.3.3 (2026년 11월 21일)",
     "name": "Release 1.3.3",
     "intro": "버그 신고, 한 번에 보는 통계, 그리고 많은 작은 수정.",
@@ -2886,6 +3005,30 @@
   "title": "Historique des mises à jour",
   "intro": "Tout ce qui a été ajouté à Pâtisserie 2D Simulator, de la plus récente à la plus ancienne. Pour comprendre les règles du jeu, va voir le [wiki](REGLES.md).",
   "versions": [
+   {
+    "title": "Release 1.3.3.1 (21 novembre 2026)",
+    "name": "Release 1.3.3.1",
+    "intro": "La barre du bas revient sur tablette, huit nouvelles pâtisseries et un signalement plus clair.",
+    "groups": [
+     {
+      "name": "Nouveautés",
+      "items": [
+       "8 nouvelles recettes : glaces (niveau 12), croissants (15), macarons chocolat (18), vanille (20) et praliné (22), éclairs café (24), éclairs caramel (33) et macarons caramel (35). Le jeu compte maintenant 68 pâtisseries.",
+       "Le tiramisu ressemble enfin à un tiramisu (c'était une glace), le Paris-Brest a sa propre icône, et chaque macaron et chaque éclair a sa couleur.",
+       "La barre du bas peut se replier d'un clic ; le jeu retient ton choix.",
+       "La console s'ouvre maintenant avec 100 clics sur le logo, et Bob te met sur la piste à 50 clics.",
+       "Le bouton « ? » remplace les boutons « c'est quoi » de la banque et des assurances, et les boutons des événements à choix sont bien moins hauts."
+      ]
+     },
+     {
+      "name": "Corrections",
+      "items": [
+       "Sur tablette et téléphone, la barre du bas ne se cache plus sous le bord de l'écran : elle reste dans la page, avec Bob dessus et le pied de page dessous.",
+       "La page « Signaler un bug » a deux boutons en haut (bug ou idée), deux boutons dessous (avec ou sans compte), plus d'icônes, et les couleurs du jeu."
+      ]
+     }
+    ]
+   },
    {
     "title": "Release 1.3.3 (21 novembre 2026)",
     "name": "Release 1.3.3",
@@ -3795,6 +3938,25 @@
   "intro": "Tudo o que foi acrescentado ao Pâtisserie 2D Simulator, da mais recente à mais antiga. As versões mais antigas aparecem em inglês. Para perceber as regras do jogo, vê a [wiki](REGLES.md).",
   "versions": [
    {
+    "title": "Release 1.3.3.1 (21 de novembro de 2026)",
+    "name": "Release 1.3.3.1",
+    "intro": "A barra inferior volta nos tablets, oito novos doces e um aviso de erros mais claro.",
+    "groups": [
+     {
+      "name": "Novidades e correções",
+      "items": [
+       "8 receitas novas: gelados (nível 12), croissants (15), macarons de chocolate (18), de baunilha (20) e de praliné (22), éclairs de café (24), éclairs de caramelo (33) e macarons de caramelo (35). O jogo tem agora 68 doces.",
+       "O tiramisù finalmente parece um tiramisù (era um gelado), o Paris-Brest tem o seu próprio ícone e cada macaron e cada éclair tem a sua cor.",
+       "A barra inferior pode ser recolhida com um clique; o jogo lembra a tua escolha.",
+       "A consola agora abre com 100 cliques no logótipo, e o Bob dá uma pista aos 50.",
+       "Um botão «?» substitui os botões «o que é» do banco e dos seguros, e os botões dos eventos com escolha são muito mais baixos.",
+       "Em tablets e telemóveis a barra inferior já não se esconde sob a borda do ecrã: fica na página, com o Bob em cima e o rodapé por baixo.",
+       "A página «Avisar de um erro» tem dois botões em cima (erro ou ideia), dois por baixo (com ou sem conta), sem ícones e com as cores do jogo."
+      ]
+     }
+    ]
+   },
+   {
     "title": "Release 1.3.3 (21 de novembro de 2026)",
     "name": "Release 1.3.3",
     "intro": "Comunicar um erro, estatísticas a um clique e muitas pequenas correções.",
@@ -4190,6 +4352,25 @@
   "intro": "Всё, что добавили в Pâtisserie 2D Simulator, от самого нового к самому старому. Более старые версии показываются на английском. Чтобы понять правила игры, загляни в [вики](REGLES.md).",
   "versions": [
    {
+    "title": "Release 1.3.3.1 (21 ноября 2026)",
+    "name": "Release 1.3.3.1",
+    "intro": "Нижняя панель вернулась на планшетах, появилось восемь новых десертов, а страница сообщений стала понятнее.",
+    "groups": [
+     {
+      "name": "Новое и исправления",
+      "items": [
+       "8 новых рецептов: мороженое (уровень 12), круассаны (15), макаронс шоколадные (18), ванильные (20) и пралиновые (22), кофейные эклеры (24), карамельные эклеры (33) и карамельные макаронс (35). Теперь в игре 68 десертов.",
+       "Тирамису наконец похож на тирамису (раньше это было мороженое), у Пари-Бреста своя иконка, а у каждого макаронса и эклера свой цвет.",
+       "Нижнюю панель можно свернуть одним щелчком, игра запомнит твой выбор.",
+       "Консоль теперь открывается за 100 щелчков по логотипу, а на 50-м Боб даёт подсказку.",
+       "Кнопка «?» заменяет кнопки «что это» в банке и у страховок, а кнопки событий с выбором стали намного ниже.",
+       "На планшетах и телефонах нижняя панель больше не прячется за край экрана: она остаётся на странице, Боб над ней, а нижний колонтитул под ней.",
+       "На странице «Сообщить об ошибке» две кнопки сверху (ошибка или идея), две ниже (с аккаунтом или без), без значков и в цветах игры."
+      ]
+     }
+    ]
+   },
+   {
     "title": "Release 1.3.3 (21 ноября 2026)",
     "name": "Release 1.3.3",
     "intro": "Сообщить об ошибке, статистика в один клик и много мелких исправлений.",
@@ -4584,6 +4765,25 @@
   "title": "更新记录",
   "intro": "Pâtisserie 2D Simulator 新增的所有内容，从最新到最旧。更早的版本以英文显示。想了解游戏规则，请看[百科](REGLES.md)。",
   "versions": [
+   {
+    "title": "Release 1.3.3.1（2026年11月21日）",
+    "name": "Release 1.3.3.1（2026年11月21日）",
+    "intro": "平板上的底栏回来了，新增八种甜点，反馈页面也更清楚。",
+    "groups": [
+     {
+      "name": "新内容与修复",
+      "items": [
+       "新增 8 个食谱：冰淇淋（12 级）、牛角包（15）、巧克力（18）、香草（20）和果仁糖（22）马卡龙、咖啡闪电泡芙（24）、焦糖闪电泡芙（33）和焦糖马卡龙（35）。游戏现在有 68 种甜点。",
+       "提拉米苏终于像提拉米苏了（之前是冰淇淋），巴黎布雷斯特有了自己的图标，每种马卡龙和闪电泡芙都有自己的颜色。",
+       "底栏可以一键收起，游戏会记住你的选择。",
+       "现在点击标志 100 次就能打开控制台，点到 50 次时鲍勃会给你提示。",
+       "银行和保险里的“这是什么”按钮换成了“?”按钮，选择事件的按钮也矮了很多。",
+       "在平板和手机上，底栏不再藏到屏幕边缘下面：它留在页面里，鲍勃在上面，页脚在下面。",
+       "“报告错误”页面上方有两个按钮（错误或想法），下方有两个按钮（有账号或无账号），不再有图标，并使用游戏的颜色。"
+      ]
+     }
+    ]
+   },
    {
     "title": "Release 1.3.3（2026年11月21日）",
     "name": "Release 1.3.3（2026年11月21日）",

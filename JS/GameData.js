@@ -4,7 +4,7 @@
    employes, espace, evenements, themes
    ============================================ */
 
-var GAME_VERSION = 'Release 1.3.3';
+var GAME_VERSION = 'Release 1.3.3.1';
 // Le nom affiche : sans « Snapshot N » (il ne sert qu'a nous et aux fichiers)
 function versionLabel(v) { return String(v || '').replace(/\s+Snapshot\s+\d+$/i, ''); }
 
@@ -88,21 +88,29 @@ var REC = [
   { id:'eclair', e:'\u{1F956}', req:{farine:7,oeuf:18,beurre:4,chocolat:1,creme:2}, val:15, qty:4, unlockLvl:8, space:1, prepTime:7, xp:12 },
   { id:'fraisier', e:'\u{1F370}', req:{farine:6,oeuf:17,sucre:6,beurre:3,lait:5,fraise:2}, val:67.5, qty:1, unlockLvl:9, space:2, prepTime:8, xp:14 },
   { id:'fondant', e:'\u{1F36E}', req:{farine:7,oeuf:19,sucre:6,beurre:4,cacao:2,chocolat:1}, val:75, qty:1, unlockLvl:10, space:1.5, prepTime:8, xp:15 },
-  { id:'tiramisu', e:'\u{1F368}', req:{oeuf:25,sucre:8,creme:2,cafe:1,cacao:3}, val:83.6, qty:1, unlockLvl:11, space:1.5, prepTime:6, xp:17 },
+  { id:'tiramisu', e:'\u{1F370}', req:{oeuf:25,sucre:8,creme:2,cafe:1,cacao:3}, val:83.6, qty:1, unlockLvl:11, space:1.5, prepTime:6, xp:17 },
+  { id:'glace', e:'\u{1F368}', req:{lait:14,creme:3,sucre:8,oeuf:10,vanille:2}, val:26.46, qty:4, unlockLvl:12, space:1, prepTime:5, xp:21 },
   { id:'cheesecake', e:'\u{1F9C0}', req:{farine:10,oeuf:26,sucre:8,beurre:5,creme:2,vanille:1}, val:100, qty:1, unlockLvl:13, space:2, prepTime:10, xp:20 },
   { id:'chouquette', e:'\u{1F535}', req:{farine:13,oeuf:33,beurre:7,lait:9,sucre:11}, val:9.2, qty:12, unlockLvl:14, space:1, prepTime:6, xp:22 },
+  { id:'croissant', e:'\u{1F950}', req:{farine:30,beurre:16,lait:6,sucre:4,oeuf:4}, val:21.85, qty:6, unlockLvl:15, space:1, prepTime:9, xp:26 },
   { id:'tarte_cit', e:'\u{1F34B}', req:{farine:15,oeuf:40,sucre:13,beurre:8,citron:8}, val:130, qty:1, unlockLvl:16, space:2, prepTime:12, xp:26 },
   { id:'macaron', e:'\u{1F7E3}', req:{amande:3,sucre:15,oeuf:44,creme:4,fraise:4}, val:18, qty:8, unlockLvl:17, space:1, prepTime:10, xp:29 },
+  { id:'macchoco', e:'\u{1F7E4}', req:{amande:3,sucre:15,oeuf:44,creme:4,chocolat:3}, val:18.87, qty:8, unlockLvl:18, space:1, prepTime:10, xp:30 },
   { id:'millefeuille', e:'\u{1F4DA}', req:{farine:19,beurre:10,creme:4,vanille:2,sucre:17}, val:170, qty:1, unlockLvl:19, space:2, prepTime:15, xp:34 },
+  { id:'macvanille', e:'\u{1F7E1}', req:{amande:3,sucre:16,oeuf:46,creme:5,vanille:3}, val:21.49, qty:8, unlockLvl:20, space:1, prepTime:10, xp:34 },
   { id:'tarte_pom', e:'\u{1F34E}', req:{farine:22,beurre:12,sucre:20,pomme:9,cannelle:2}, val:200, qty:1, unlockLvl:21, space:2, prepTime:12, xp:40 },
+  { id:'macpraline', e:'\u{1F7E0}', req:{amande:6,sucre:20,oeuf:46,creme:5,beurre:4}, val:23.31, qty:8, unlockLvl:22, space:1, prepTime:11, xp:37 },
   { id:'parisb', e:'\u{1F950}', req:{farine:26,oeuf:69,beurre:14,creme:6,amande:4}, val:230, qty:1, unlockLvl:23, space:2.5, prepTime:15, xp:46 },
+  { id:'eclaircafe', e:'\u{1F956}', req:{farine:16,oeuf:40,beurre:9,cafe:4,creme:5}, val:34.99, qty:6, unlockLvl:24, space:1.5, prepTime:12, xp:42 },
   { id:'opera', e:'\u{1F3AD}', req:{farine:25,oeuf:66,beurre:13,chocolat:4,cafe:2,creme:6}, val:260, qty:1, unlockLvl:25, space:2.5, prepTime:18, xp:52 },
   { id:'baba', e:'\u{1F369}', req:{farine:26,oeuf:70,sucre:23,beurre:14,creme:6,vanille:4}, val:280, qty:1, unlockLvl:26, space:2, prepTime:10, xp:56 },
   { id:'canele', e:'\u{1F7E4}', req:{farine:28,oeuf:74,lait:20,sucre:25,vanille:4,beurre:15}, val:48.5, qty:6, unlockLvl:27, space:1.5, prepTime:12, xp:58 },
   { id:'saintho', e:'\u{1F451}', req:{farine:31,oeuf:82,beurre:16,creme:7,sucre:27,vanille:4}, val:320, qty:1, unlockLvl:29, space:3, prepTime:20, xp:64 },
   { id:'pistamac', e:'\u{1F7E2}', req:{amande:6,pistache:3,sucre:36,oeuf:110,creme:9}, val:59.9, qty:6, unlockLvl:31, space:1.5, prepTime:12, xp:72 },
   { id:'mousse_ch', e:'\u{1FAD5}', req:{chocolat:8,oeuf:110,sucre:38,creme:10,vanille:6}, val:380, qty:1, unlockLvl:32, space:2, prepTime:8, xp:76 },
+  { id:'eclaircaramel', e:'\u{1F956}', req:{farine:28,oeuf:70,beurre:16,caramel:12,creme:12}, val:61.88, qty:6, unlockLvl:33, space:2, prepTime:14, xp:74 },
   { id:'cremet', e:'\u{1F36E}', req:{oeuf:130,sucre:42,creme:11,vanille:6,lait:35}, val:100, qty:4, unlockLvl:34, space:1.5, prepTime:10, xp:80 },
+  { id:'maccaramel', e:'\u{1F7E0}', req:{amande:7,sucre:36,oeuf:100,creme:9,caramel:10}, val:48.87, qty:8, unlockLvl:35, space:1.5, prepTime:14, xp:78 },
   { id:'trop', e:'\u{1F334}', req:{farine:37,oeuf:100,sucre:33,beurre:20,creme:9,vanille:5,framb:7}, val:460, qty:1, unlockLvl:36, space:3, prepTime:20, xp:92 },
   { id:'coconut', e:'\u{1F965}', req:{farine:48,oeuf:130,sucre:42,beurre:25,noixcoco:11,creme:11}, val:500, qty:1, unlockLvl:38, space:2.5, prepTime:15, xp:100 },
   { id:'caramelia', e:'\u{1F7E0}', req:{farine:52,oeuf:140,sucre:46,beurre:28,caramel:8,creme:12}, val:550, qty:1, unlockLvl:40, space:3, prepTime:18, xp:110 },
@@ -502,7 +510,7 @@ var REST_BONUS = { afterSec: 600, fullSec: 3600, max: 0.2 };
 
 // Bob raconte des choses de temps en temps
 var BOB_CHAT_SEC = 420;
-var LOGO_CLICKS_CONSOLE = 1000; // Clics sur le logo (pas sur le texte) pour ouvrir la console
+var LOGO_CLICKS_CONSOLE = 100; // Clics sur le logo (pas sur le texte) pour ouvrir la console
 var TECH_CLICKS = 1000; // Clics sur Bob, sans debloquer la console
 var COLLECTOR_MOVE_SEC = [10, 120]; // Changer d'ingredient : du niveau 1 au niveau max
 

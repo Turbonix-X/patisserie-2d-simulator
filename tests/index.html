@@ -246,7 +246,7 @@ check('Un ancien rebirth ne change plus les prix', sellValueMult() === sv0);
 var ids = {}, dup = [];
 ACHIEVEMENTS.forEach(function(a) { if (ids[a.id]) dup.push(a.id); ids[a.id] = 1; });
 check('Aucun succes en double', dup.length === 0, dup.join(', '));
-check('Exactement 1000 succes visibles', ACHIEVEMENTS.filter(function(a) { return !a.hidden; }).length === 1000, ACHIEVEMENTS.length);
+check('Exactement 1040 succes visibles (1000 + 8 recettes x 5 paliers)', ACHIEVEMENTS.filter(function(a) { return !a.hidden; }).length === 1040, ACHIEVEMENTS.length);
 check('Exactement 5 succes secrets', ACHIEVEMENTS.filter(function(a) { return a.hidden; }).length === 5);
 G = createFreshState();
 var noName = ACHIEVEMENTS.filter(function(a) { return !achName(a) || !achDesc(a) || achName(a).indexOf('r.') === 0; }).map(function(a) { return a.id; });
@@ -457,7 +457,7 @@ check('Un succes compte les niveaux de machines', ACHIEVEMENTS.filter(function(a
 check('Bob connait 30 anecdotes', LANGS.fr['bob.facts'].split('|').length === 30);
 
 // --- Release 1.0 ---
-check('La version s appelle Release 1.3.3', GAME_VERSION === 'Release 1.3.3');
+check('La version s appelle Release 1.3.3.1', GAME_VERSION === 'Release 1.3.3.1');
 G = createFreshState(); G.level = 499;
 check('La fete et l espace sont caches avant leur niveau', findTheme('party').hidden && findTheme('space').hidden && themeLockReason(findTheme('party')) === 'level');
 check('Les themes Tech sont secrets', themeLockReason(findTheme('tech')) === 'secret' && themeLockReason(findTheme('techgold')) === 'secret');
@@ -524,7 +524,7 @@ check('... seulement apres 3 minutes', G.rentDebt > 0);
 G.money = 10; G.rentDebt = 0; tickRent(1);
 check('Payer le loyer remet le compteur a zero', G.rentLate === 0);
 
-check('Plus de gateaux de saison', REC.length === 60 && !REC.some(function(r) { return r.season; }), REC.length);
+check('Plus de gateaux de saison', REC.length === 68 && !REC.some(function(r) { return r.season; }), REC.length);
 
 // --- Commandes et machines ---
 G = createFreshState(); G.level = 200; G.money = 0;
@@ -904,8 +904,8 @@ check('Les types max et creative viennent de createInstance (pas de verrou cache
 
 // --- Release 1.2.2 ---
 G = createFreshState(); G.unlockedThemes = G.unlockedThemes || {};
-G.logoClicks = 999; logoClick();
-check('La console s ouvre au 1000e clic sur le logo', G.cheatUnlocked === true && LOGO_CLICKS_CONSOLE === 1000);
+G.logoClicks = 99; logoClick();
+check('La console s ouvre au 100e clic sur le logo', G.cheatUnlocked === true && LOGO_CLICKS_CONSOLE === 100);
 G = createFreshState(); G.logoClicks = 10; logoClick();
 check('... pas avant', !G.cheatUnlocked);
 G = createFreshState(); G.bobClicks = 199;

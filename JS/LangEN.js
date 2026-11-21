@@ -309,7 +309,7 @@
    "dup.text": "This game is already open in another tab or window! If you played on both, the last one to save would overwrite the other and you would lose your progress. Play on that one and close the others, or close this one.",
    "dup.here": "Play here",
    "dup.leave": "Leave this game",
-   "bob.logoHint": "You keep poking that logo… 500 more clicks and you will find something.",
+   "bob.logoHint": "You keep poking that logo… 50 more clicks and you will find something.",
    "keys.achievements": "Open the achievements",
    "keys.menu": "Back to the games menu",
    "keys.console": "Open the console",
@@ -389,4 +389,17 @@ Object.assign(LANGS.en, {
   'cmd.maxHint':`"{{n}}" is not a bakery. To max it out, type {{u}}.`,
   'cmd.bakeryNamed':`Unknown bakery: {{n}}. Your bakeries:`,
   'cmd.empRoom':`Not enough room: you can have {{v}} employees at most (one per m² plus 2).`
+});
+Object.assign(LANGS.en, {
+  'dock.fold':`Fold the bar`,
+  'dock.unfold':`Unfold the bar`,
+  'report.noAccount':`Without an account`,
+  'r.glace':`Ice creams x4`,
+  'r.croissant':`Croissants x6`,
+  'r.macchoco':`Chocolate macarons x8`,
+  'r.macvanille':`Vanilla macarons x8`,
+  'r.macpraline':`Praline macarons x8`,
+  'r.eclaircafe':`Coffee eclairs x6`,
+  'r.eclaircaramel':`Caramel eclairs x6`,
+  'r.maccaramel':`Caramel macarons x8`
 });

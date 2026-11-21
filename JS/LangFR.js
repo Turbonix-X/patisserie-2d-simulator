@@ -309,7 +309,7 @@
    "dup.text": "Cette partie est déjà ouverte dans un autre onglet ou une autre fenêtre ! Si tu jouais sur les deux, le dernier à enregistrer écraserait l'autre et tu perdrais ta progression. Joue sur celui-là et ferme les autres, ou ferme celui-ci.",
    "dup.here": "Jouer ici",
    "dup.leave": "Quitter cette partie",
-   "bob.logoHint": "Tu insistes sur ce logo, toi… Encore 500 clics, et tu découvriras quelque chose.",
+   "bob.logoHint": "Tu insistes sur ce logo, toi… Encore 50 clics, et tu découvriras quelque chose.",
    "keys.achievements": "Ouvrir les succès",
    "keys.menu": "Retour au menu des parties",
    "keys.console": "Ouvrir la console",
@@ -392,4 +392,17 @@ Object.assign(LANGS.fr, {
   'cmd.maxHint':`« {{n}} » n'est pas une pâtisserie. Pour le mettre au maximum, tape {{u}}.`,
   'cmd.bakeryNamed':`Pâtisserie inconnue : {{n}}. Tes pâtisseries :`,
   'cmd.empRoom':`Pas assez de place : tu peux avoir {{v}} employés au maximum (un par m² plus 2).`
+});
+Object.assign(LANGS.fr, {
+  'dock.fold':`Replier la barre`,
+  'dock.unfold':`Déplier la barre`,
+  'report.noAccount':`Sans compte`,
+  'r.glace':`Glaces x4`,
+  'r.croissant':`Croissants x6`,
+  'r.macchoco':`Macarons chocolat x8`,
+  'r.macvanille':`Macarons vanille x8`,
+  'r.macpraline':`Macarons praliné x8`,
+  'r.eclaircafe':`Éclairs café x6`,
+  'r.eclaircaramel':`Éclairs caramel x6`,
+  'r.maccaramel':`Macarons caramel x8`
 });

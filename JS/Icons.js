@@ -10,13 +10,13 @@ var ICON_FILES = {};
   .split(',').forEach(function(n) { ICON_FILES[n] = true; });
 
 var CUSTOM_ICONS = {};
-'brownie,canele,cannelle,caramel,caramelia,chouquette,eclair,framboise,macaron,macaron_pistache,meringue,millefeuille,pistache,praline,sugar_cube,tarte_citron,tarte_pomme,wasabi,yuzu'
+'brownie,canele,cannelle,caramel,caramelia,chouquette,eclair,eclair_cafe,eclair_caramel,macaron_choco,macaron_vanille,macaron_praline,macaron_caramel,tiramisu,parisbrest,framboise,macaron,macaron_pistache,meringue,millefeuille,pistache,praline,sugar_cube,tarte_citron,tarte_pomme,wasabi,yuzu'
   .split(',').forEach(function(n) { CUSTOM_ICONS[n] = true; });
 
 // Ces patisseries n'ont pas d'emoji : on utilise un dessin maison.
 (function() {
   var ingIcons = { sucre:'sugar_cube', caramel:'caramel', cannelle:'cannelle', pistache:'pistache', wasabi:'wasabi', framb:'framboise', yuzu:'yuzu', praline:'praline', meringue:'meringue' };
-  var recIcons = { brownie:'brownie', chouquette:'chouquette', macaron:'macaron', pistamac:'macaron_pistache', eclair:'eclair', millefeuille:'millefeuille', tarte_cit:'tarte_citron', tarte_pom:'tarte_pomme', canele:'canele', caramelia:'caramelia', meringuee:'meringue', wasabisurp:'wasabi', framboisier:'framboise', yuzutart:'yuzu', pralineroyal:'praline', cardamomecake:'caramelia' };
+  var recIcons = { brownie:'brownie', chouquette:'chouquette', macaron:'macaron', pistamac:'macaron_pistache', tiramisu:'tiramisu', parisb:'parisbrest', macchoco:'macaron_choco', macvanille:'macaron_vanille', macpraline:'macaron_praline', maccaramel:'macaron_caramel', eclaircafe:'eclair_cafe', eclaircaramel:'eclair_caramel', eclair:'eclair', millefeuille:'millefeuille', tarte_cit:'tarte_citron', tarte_pom:'tarte_pomme', canele:'canele', caramelia:'caramelia', meringuee:'meringue', wasabisurp:'wasabi', framboisier:'framboise', yuzutart:'yuzu', pralineroyal:'praline', cardamomecake:'caramelia' };
   ING.forEach(function(i) { if (ingIcons[i.id]) i.e = '[[' + ingIcons[i.id] + ']]'; });
   REC.forEach(function(r) { if (recIcons[r.id]) r.e = '[[' + recIcons[r.id] + ']]'; });
   // Un batiment porte l'icone de ce qu'il produit, s'il n'a pas la sienne

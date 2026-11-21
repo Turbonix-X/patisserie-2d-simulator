@@ -86,7 +86,7 @@ function renderBank() {
   if (!el) return;
   var due = totalLoanDue();
   var h = '<div class="panel-head"><h2>' + t('bank.title') + '</h2>';
-  h += '<button class="chip" onclick="showBankExplanation(false)">' + t('bank.whatIs') + '</button></div>';
+  h += '<button class="chip qmark" onclick="showBankExplanation(false)" title="' + escH(t('bank.whatIs')) + '" aria-label="' + escH(t('bank.whatIs')) + '">?</button></div>';
 
   h += '<div class="bank-summary">';
   h += bankTile(t('bank.balance'), fmtMoney(G.money));
@@ -135,7 +135,7 @@ function renderBank() {
 // ============ L'ASSURANCE ============
 function insuranceHTML() {
   var cur = insurancePlan();
-  var h = '<h3 class="bank-h">\u{1F6E1}\uFE0F ' + t('ins.title') + '</h3><button class="chip" onclick="showInsuranceExplanation()">' + t('ins.whatIs') + '</button><div class="loan-grid ins-grid">';
+  var h = '<h3 class="bank-h">\u{1F6E1}\uFE0F ' + t('ins.title') + '</h3><button class="chip qmark" onclick="showInsuranceExplanation()" title="' + escH(t('ins.whatIs')) + '" aria-label="' + escH(t('ins.whatIs')) + '">?</button><div class="loan-grid ins-grid">';
   INSURANCE.forEach(function(p) {
     var mine = cur && cur.id === p.id;
     h += '<div class="loan-card ins-card' + (mine ? ' taken' : '') + '"><div class="loan-amount">' + t('ins.plan.' + p.id) + '</div><dl>';

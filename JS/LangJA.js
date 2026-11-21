@@ -659,7 +659,7 @@ Object.assign(LANGS.ja, {
    "dup.text": "このゲームはすでに別のタブまたはウィンドウで開いています！両方で遊ぶと、最後に保存した方がもう一方を上書きして、進行が失われます。そちらで遊んで他を閉じるか、こちらを閉じてください。",
    "dup.here": "ここで遊ぶ",
    "dup.leave": "このゲームを離れる",
-   "bob.logoHint": "そのロゴ、ずいぶん押すね…あと 500 回押すと何かが見つかるよ。",
+   "bob.logoHint": "そのロゴ、ずいぶん押すね…あと 50 回押すと何かが見つかるよ。",
    "keys.achievements": "実績を開く",
    "keys.menu": "ゲームのメニューに戻る",
    "keys.console": "コンソールを開く",
@@ -729,4 +729,17 @@ Object.assign(LANGS.ja, {
   'report.short':`少しだけでも書いてください。`,
   'report.fail':`送信に失敗しました。書いた内容は保存されています。`,
   'report.kept':`下書きを保存しました`
+});
+Object.assign(LANGS.ja, {
+  'dock.fold':`バーをたたむ`,
+  'dock.unfold':`バーを開く`,
+  'report.noAccount':`アカウントなし`,
+  'r.glace':`アイスクリーム x4`,
+  'r.croissant':`クロワッサン x6`,
+  'r.macchoco':`チョコマカロン x8`,
+  'r.macvanille':`バニラマカロン x8`,
+  'r.macpraline':`プラリネマカロン x8`,
+  'r.eclaircafe':`コーヒーエクレア x6`,
+  'r.eclaircaramel':`キャラメルエクレア x6`,
+  'r.maccaramel':`キャラメルマカロン x8`
 });

@@ -147,20 +147,32 @@ function homeAdmTab(tab) { homeState.admTab = tab; adminUI.box = null; renderHom
 // Avec ton compte ou anonymement. Ce que tu ecris est garde (brouillon) meme si tu quittes la page. Impossible hors ligne.
 var REPORT_DRAFT_KEY = 'p2ds_report_draft';
 function reportDraft() { try { return JSON.parse(localStorage.getItem(REPORT_DRAFT_KEY)) || {}; } catch (e) { return {}; } }
+var reportSel = { kind: 'bug', from: 'anon' };
 function reportSaveDraft() {
-  var d = { kind: (document.querySelector('input[name="rp-kind"]:checked') || {}).value || 'bug', from: (document.querySelector('input[name="rp-from"]:checked') || {}).value || 'anon', body: (document.getElementById('rp-body') || {}).value || '' };
+  var d = { kind: reportSel.kind, from: reportSel.from, body: (document.getElementById('rp-body') || {}).value || '' };
   try { localStorage.setItem(REPORT_DRAFT_KEY, JSON.stringify(d)); } catch (e) { /* tant pis */ }
   var k = document.getElementById('rp-kept'); if (k) k.textContent = d.body ? t('report.kept') : '';
+}
+// Les deux rangees de boutons : le choix change sans refermer la fenetre (le texte tape reste)
+function reportPick(group, value) {
+  reportSel[group] = value;
+  document.querySelectorAll('[data-rp="' + group + '"] button').forEach(function(b) { b.classList.toggle('active', b.dataset.v === value); });
+  reportSaveDraft();
 }
 function showReportModal() {
   var d = reportDraft(), prof = homeProfile(), acc = prof && prof.kind === 'cloud';
   var online = navigator.onLine !== false && typeof cloudOnline === 'function';
-  var h = '<h2>' + uiIcon('bug') + ' ' + t('report.title') + '</h2>';
-  h += '<div class="report-row"><label class="rp-radio"><input type="radio" name="rp-kind" value="bug"' + (d.kind !== 'idea' ? ' checked' : '') + ' onchange="reportSaveDraft()"> 🐞 ' + t('report.kindBug') + '</label>';
-  h += '<label class="rp-radio"><input type="radio" name="rp-kind" value="idea"' + (d.kind === 'idea' ? ' checked' : '') + ' onchange="reportSaveDraft()"> 💡 ' + t('report.kindIdea') + '</label></div>';
-  h += '<div class="report-row"><b>' + t('report.from') + '</b><label class="rp-radio"><input type="radio" name="rp-from" value="account"' + (acc && d.from === 'account' ? ' checked' : '') + (acc ? '' : ' disabled') + ' onchange="reportSaveDraft()"> ' + t('report.account', { n: escH(acc ? (prof.name || prof.email || '') : '') }) + '</label>';
-  h += '<label class="rp-radio"><input type="radio" name="rp-from" value="anon"' + (!(acc && d.from === 'account') ? ' checked' : '') + ' onchange="reportSaveDraft()"> ' + t('report.anon') + '</label></div>';
-  if (!acc) h += '<p class="set-help">' + t('report.needAccount') + '</p>';
+  reportSel.kind = d.kind === 'idea' ? 'idea' : 'bug';
+  reportSel.from = acc && d.from === 'account' ? 'account' : 'anon';
+  function seg(group, items) {
+    var x = '<div class="segmented theme-scope report-seg" data-rp="' + group + '">';
+    items.forEach(function(it) { x += '<button type="button" data-v="' + it[0] + '" class="' + (reportSel[group] === it[0] ? 'active' : '') + '" onclick="reportPick(\'' + group + '\', \'' + it[0] + '\')">' + it[1] + '</button>'; });
+    return x + '</div>';
+  }
+  var h = '<h2>' + t('report.title') + '</h2>';
+  h += seg('kind', [['bug', t('report.kindBug')], ['idea', t('report.kindIdea')]]);
+  h += acc ? seg('from', [['account', t('report.account', { n: escH(prof.name || prof.email || '') })], ['anon', t('report.anon')]])
+           : seg('from', [['anon', t('report.noAccount')]]);
   h += '<textarea id="rp-body" class="save-area report-body" rows="8" maxlength="4000" placeholder="' + escH(t('report.placeholder')) + '" oninput="reportSaveDraft()">' + escH(d.body || '') + '</textarea>';
   h += '<p class="warning" id="rp-msg">' + (online ? '' : t('report.offline')) + '</p><p class="set-help" id="rp-kept">' + (d.body ? t('report.kept') : '') + '</p>';
   h += '<div class="modal-btns"><button class="btn btn-primary" id="rp-send" onclick="sendReport()"' + (online ? '' : ' disabled') + '>' + t('report.send') + '</button><button class="btn" onclick="hideModal()">' + t('common.close') + '</button></div>';
@@ -171,8 +183,8 @@ function sendReport() {
   var msg = document.getElementById('rp-msg'), btn = document.getElementById('rp-send');
   if (navigator.onLine === false) { if (msg) msg.textContent = t('report.offline'); return; }
   if (body.length < 5) { if (msg) msg.textContent = t('report.short'); return; }
-  var kind = (document.querySelector('input[name="rp-kind"]:checked') || {}).value === 'idea' ? 'idea' : 'bug';
-  var useAcc = (document.querySelector('input[name="rp-from"]:checked') || {}).value === 'account';
+  var kind = reportSel.kind === 'idea' ? 'idea' : 'bug';
+  var useAcc = reportSel.from === 'account';
   var row = { kind: kind, body: body.slice(0, 4000), version: GAME_VERSION, platform: window.__TAURI_INTERNALS__ ? 'app' : 'web', lang: currentLang };
   if (btn) { btn.disabled = true; btn.textContent = t('report.sending'); }
   if (msg) msg.textContent = '';

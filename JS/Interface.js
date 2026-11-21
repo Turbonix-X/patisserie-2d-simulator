@@ -190,12 +190,12 @@ function headerBtn(action, label, icon, off, count) {
 }
 
 // Le logo ne fait rien... ou presque
-// 1000 clics la premiere fois ; une fois la console debloquee puis desactivee, 100 suffisent
-function logoClicksNeeded() { return G.cheatEverUnlocked ? 100 : LOGO_CLICKS_CONSOLE; }
+// 100 clics sur le logo ouvrent la console ; Bob donne un indice a 50
+function logoClicksNeeded() { return LOGO_CLICKS_CONSOLE; }
 function logoClick() {
   G.logoClicks = (G.logoClicks || 0) + 1;
   fxBump(document.querySelector('.game-logo'), 1.15);
-  if (G.logoClicks === 500 && !G.logoHintShown && !G.cheatUnlocked && !G.cheatEverUnlocked) { G.logoHintShown = true; if (typeof bobTell === 'function') bobTell(t('bob.logoHint')); }
+  if (G.logoClicks === Math.floor(LOGO_CLICKS_CONSOLE / 2) && !G.logoHintShown && !G.cheatUnlocked && !G.cheatEverUnlocked) { G.logoHintShown = true; if (typeof bobTell === 'function') bobTell(t('bob.logoHint')); }
   if (G.logoClicks >= logoClicksNeeded() && !G.cheatUnlocked) {
     G.cheatUnlocked = true;
     G.cheatEverUnlocked = true;
@@ -853,6 +853,31 @@ function fitDock() {
   if (d) document.documentElement.style.setProperty('--dock-h', d.offsetHeight + 'px');
 }
 window.addEventListener('resize', function() { if (typeof fitDock === 'function') fitDock(); });
+
+// La barre du bas se replie d'un clic ; le choix est retenu sur cet appareil
+var DOCK_FOLD_KEY = 'p2ds_dock_folded';
+function applyDockFold(folded) {
+  var d = document.getElementById('dock'), b = document.getElementById('dock-toggle');
+  if (!d) return;
+  d.classList.toggle('folded', folded);
+  if (b) {
+    var label = t(folded ? 'dock.unfold' : 'dock.fold');
+    b.setAttribute('aria-expanded', folded ? 'false' : 'true');
+    b.setAttribute('aria-label', label);
+    b.title = label;
+  }
+  fitDock();
+}
+function toggleDock() {
+  var folded = !document.getElementById('dock').classList.contains('folded');
+  try { localStorage.setItem(DOCK_FOLD_KEY, folded ? '1' : '0'); } catch (e) { /* tant pis */ }
+  applyDockFold(folded);
+}
+function initDockFold() {
+  var f = false;
+  try { f = localStorage.getItem(DOCK_FOLD_KEY) === '1'; } catch (e) { /* tant pis */ }
+  applyDockFold(f);
+}
 
 // Jeter une preparation : les ingredients reviennent, d'autant moins que la barre a monte
 function showDiscardCraft(uid) {
