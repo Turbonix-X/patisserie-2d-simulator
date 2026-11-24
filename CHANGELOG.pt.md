@@ -2,6 +2,21 @@
 
 Tudo o que foi acrescentado ao Pâtisserie 2D Simulator, da mais recente à mais antiga. As versões mais antigas aparecem em inglês. Para perceber as regras do jogo, vê a [wiki](REGLES.md).
 
+## Release 1.3.4 (24 de novembro de 2026)
+
+Uma só carteira para todas as tuas pastelarias, um mecânico e um tema dourado novo.
+
+**Novidades e correções**
+- O dinheiro agora é comum a todas as tuas pastelarias: uma nova mantém o teu nível e todas as receitas, mas começa sem stock. Se tinhas várias, as economias somam-se. O transportador já não leva dinheiro, só bolos e ingredientes.
+- O mecânico (nível 45) repara sozinho as máquinas avariadas, mais depressa com o nível e com o número. A partir do nível 5 repara também edifícios, mas devagar.
+- Sair para o menu fecha o jogo: não continua enquanto estás fora. Um jogo deixado aberto sem jogares aguenta 5 horas no máximo: com menos gerentes, a equipa descontrai mais cedo e depois trabalha cada vez pior.
+- Os clientes encomendam menos quando deixas de entregar, e cada vez mais quando entregas, até ao máximo.
+- Os prémios já não ficam nos +50 %: podes ir até +1000 %. Os vendedores ficam um pouco mais baratos e rápidos, e finalmente compensam.
+- O tema dourado é mais escuro e brilhante, com detalhes, e pepitas, brilhos e moedas a cair. É preciso ter obtido 1 000 000 de folhas de ouro comestíveis.
+- Os botões de cima têm tamanho ajustável e ordenam-se arrastando nas definições. Em ecrãs pequenos, os da zona de baixo ficam atrás de um botão «⋯». No telemóvel e no tablet, desliza uma notificação para o lado para a tirar.
+- Novos desenhos para a lavanda, o açafrão e o grande galinheiro.
+- Os faz-tudo saem do jogo: cada um é reembolsado pelo que custou a contratar. O botão para recolher a barra de baixo foi retirado. Os botões de cima voltam ao tamanho antigo nos tablets e as barras para redimensionar voltam a funcionar. No seguro, os três botões ficam em baixo no cartão e o «?» está afastado.
+
 ## Release 1.3.3.3 (21 de novembro de 2026)
 
 A barra inferior finalmente aparece no iPad e no iPhone.

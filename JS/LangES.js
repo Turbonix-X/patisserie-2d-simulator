@@ -748,7 +748,7 @@ Object.assign(LANGS.es, {
    "home.duplicate": "Duplicar la partida",
    "home.copyWord": "copia",
    "settings.themeGold": "Dorado",
-   "settings.lockGold": "tras conseguir 5000 hojas de oro comestibles",
+   "settings.lockGold": "tras conseguir 1 000 000 de hojas de oro comestibles",
    "settings.goldUnlocked": "¡Tema Dorado desbloqueado: Bob es todo de oro!",
    "settings.techGoldUnlocked": "¡Tema Tech dorado desbloqueado!",
    "stats.viewCompare": "Comparar",
@@ -805,4 +805,19 @@ Object.assign(LANGS.es, {
 });
 Object.assign(LANGS.es, {
   'emp.buyerRefund':`Los intendentes han dejado el juego: te devolvimos lo que pagaste por contratarlos ({{v}}).`
+});
+Object.assign(LANGS.es, {
+  'hdr.more':`Más botones`,
+  'hdr.title':`Botones de la cabecera`,
+  'hdr.size':`Tamaño de los botones`,
+  'hdr.sizeHelp':`Hace los botones de arriba más pequeños o más grandes.`,
+  'hdr.dragHelp':`Arrastra los botones para ordenarlos. Los de la zona de abajo van al menú «⋯» en móviles y pantallas pequeñas, para ganar espacio.`,
+  'hdr.inBar':`En la cabecera`,
+  'hdr.inMenu':`En el menú «⋯» (pantalla pequeña)`,
+  'emp.mechanic':`Mecánico`,
+  'emp.desc.mechanic':`Repara tus máquinas solo. Desde el nivel 5 también se ocupa de los edificios, pero despacio. Cuanto más fuerte y más numerosos, más rápido.`,
+  'unl.mechanic':`Nivel 45: ¡el mecánico! Repara solo tus máquinas averiadas. Desde su nivel 5 también se ocupa de los edificios, pero despacio.`,
+  'emp.desc.carrier':`Lleva pasteles o ingredientes a otra de tus pastelerías. El dinero es común a todas.`,
+  'emp.buyerRefund':`Algunos oficios dejaron el juego (intendente, todoterreno): te devolvimos lo que pagaste por contratarlos ({{v}}).`,
+  'unattended.warn':`Tu personal ya no está supervisado: vuelve a jugar, trabajan cada vez peor. Los gerentes los mantienen más tiempo.`
 });

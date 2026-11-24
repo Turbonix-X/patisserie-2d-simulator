@@ -2,6 +2,26 @@
 
 Tout ce qui a été ajouté à Pâtisserie 2D Simulator, de la plus récente à la plus ancienne. Pour comprendre les règles du jeu, va voir le [wiki](REGLES.md).
 
+## Release 1.3.4 (24 novembre 2026)
+
+Une seule bourse pour toutes tes pâtisseries, un mécanicien, et un thème doré tout neuf.
+
+**Nouveautés**
+- L'argent est maintenant commun à toutes tes pâtisseries : une nouvelle pâtisserie garde ton niveau et toutes les recettes, mais commence sans stock. Si tu en avais plusieurs, leurs économies sont additionnées. Le transporteur ne transporte plus d'argent, seulement des gâteaux et des ingrédients.
+- Le mécanicien (niveau 45) répare tout seul les machines en panne, de plus en plus vite avec son niveau et avec leur nombre. À partir de son niveau 5, il répare aussi les bâtiments, mais lentement.
+- Quitter vers le menu ferme la partie : elle ne continue pas pendant ton absence. Une partie laissée ouverte sans que tu joues tient 5 heures au mieux : moins il y a de managers, plus tôt les employés se laissent aller, puis ils travaillent de moins en moins bien.
+- Les clients commandent moins quand tu ne livres plus rien, et de plus en plus quand tu livres, jusqu'au maximum.
+- Les primes ne s'arrêtent plus à +50 % : on peut monter jusqu'à +1000 %. Les vendeurs sont un peu moins chers et un peu plus rapides, donc enfin rentables.
+- Le thème doré est plus foncé, plus brillant, avec des détails, et des pépites, des étincelles et des pièces qui tombent. Il faut avoir obtenu 1 000 000 de feuilles d'or alimentaires pour l'avoir.
+- Les boutons du haut ont leur taille réglable, et on les range en les glissant dans les réglages. Sur petit écran, ceux de la zone du bas passent derrière un bouton « ⋯ ». Sur téléphone et tablette, on fait glisser une notification sur le côté pour la faire partir.
+- Nouveaux dessins pour la lavande, le safran et le grand poulailler.
+
+**Corrections et retraits**
+- Les touche-à-tout sont retirés du jeu : chacun est rendu au prix de son embauche (ou à celui d'un candidat de son niveau).
+- Le bouton pour replier la barre du bas est retiré.
+- Les boutons du haut retrouvent leur taille d'avant sur tablette, et les barres pour changer la taille des ingrédients et des onglets refonctionnent.
+- Dans l'assurance, les trois boutons sont en bas de leur tuile, et le bouton « ? » est à l'écart des tuiles.
+
 ## Release 1.3.3.3 (21 novembre 2026)
 
 La barre du bas s'affiche enfin sur iPad et iPhone.

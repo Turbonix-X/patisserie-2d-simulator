@@ -2,6 +2,21 @@
 
 Todo lo que se ha añadido a Pâtisserie 2D Simulator, de la más reciente a la más antigua. Las versiones más antiguas se muestran en inglés. Para entender las reglas del juego, mira la [wiki](REGLES.md).
 
+## Release 1.3.4 (24 de noviembre de 2026)
+
+Una sola cartera para todas tus pastelerías, un mecánico y un tema dorado nuevo.
+
+**Novedades y correcciones**
+- El dinero ahora es común a todas tus pastelerías: una nueva conserva tu nivel y todas las recetas, pero empieza sin existencias. Si tenías varias, se suman sus ahorros. El transportista ya no lleva dinero, solo pasteles e ingredientes.
+- El mecánico (nivel 45) repara solo las máquinas averiadas, más rápido con su nivel y con su número. Desde el nivel 5 también repara edificios, pero despacio.
+- Salir al menú cierra la partida: no continúa mientras estás fuera. Una partida abierta sin que juegues aguanta 5 horas como máximo: cuantos menos gerentes, antes se relajan los empleados, y luego trabajan cada vez peor.
+- Los clientes piden menos cuando dejas de entregar, y cada vez más cuando entregas, hasta el máximo.
+- Las primas ya no se paran en +50 %: se puede subir hasta +1000 %. Los vendedores son un poco más baratos y más rápidos, así que por fin salen rentables.
+- El tema dorado es más oscuro y brillante, con detalles, y pepitas, destellos y monedas que caen. Hay que haber conseguido 1 000 000 de hojas de oro comestibles.
+- Los botones de arriba tienen un tamaño ajustable y se ordenan arrastrándolos en los ajustes. En pantallas pequeñas, los de la zona de abajo van tras un botón «⋯». En móviles y tabletas, desliza una notificación a un lado para quitarla.
+- Nuevos dibujos para la lavanda, el azafrán y el gran gallinero.
+- Los todoterreno se retiran del juego: cada uno se reembolsa por lo que costó contratarlo. Se quita el botón para plegar la barra inferior. Los botones de arriba recuperan su tamaño anterior en tabletas y las barras para cambiar el tamaño vuelven a funcionar. En el seguro, los tres botones están abajo de su recuadro y el «?» está separado.
+
 ## Release 1.3.3.3 (21 de noviembre de 2026)
 
 La barra inferior por fin aparece en iPad y iPhone.

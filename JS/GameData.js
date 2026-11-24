@@ -4,7 +4,7 @@
    employes, espace, evenements, themes
    ============================================ */
 
-var GAME_VERSION = 'Release 1.3.3.3';
+var GAME_VERSION = 'Release 1.3.4';
 // Le nom affiche : sans « Snapshot N » (il ne sert qu'a nous et aux fichiers)
 function versionLabel(v) { return String(v || '').replace(/\s+Snapshot\s+\d+$/i, ''); }
 
@@ -221,18 +221,19 @@ var EMP_TYPES = [
   { id:'carrier',   baseSalary:0.8,  unlockLvl:20, hireCost:1500, needsBakeries:2 },
   { id:'manager',   baseSalary:1,    unlockLvl:25, hireCost:1000 },
   { id:'maitre',    baseSalary:1.5,  unlockLvl:30, hireCost:2500 },
-  { id:'seller',    baseSalary:0.5,  unlockLvl:35, hireCost:1200 },
-  // Le touche-a-tout : jusqu'a 3 metiers, tous niveau 3 au plus. On ne le trouve qu'en cherchant deux metiers a la fois.
-  { id:'versatile', baseSalary:2.5,  unlockLvl:20, hireCost:4000, hidden:true },
+  { id:'seller',    baseSalary:0.4,  unlockLvl:35, hireCost:1200 },
   { id:'chef',      baseSalary:2,    unlockLvl:65, hireCost:6000 },
+  // Le mecanicien repare tout seul : les machines, puis (des le niveau 5) les batiments, lentement
+  { id:'mechanic',  baseSalary:0.9,  unlockLvl:45, hireCost:3500 },
 ];
 // L'intendant (niveau 90) a ete retire en Release 1.3.3.2 : ce qu'il coutait a l'embauche est rembourse
 var OLD_BUYER_HIRE_COST = 15000;
+var OLD_VERSATILE_HIRE_COST = 4000;   // le touche-a-tout a ete retire en Release 1.3.4, lui aussi rembourse
 var EMP_MAX_LVL = 10;   // les niveaux qu'on peut former
 var EMP_GOLD_LVL = 11;  // le niveau or : seulement en candidature, a partir du niveau 120
 // Niveau du joueur a partir duquel un candidat de ce niveau peut se presenter
 var APPLICANT_LVL_REQ = { 1:0, 2:0, 3:15, 4:25, 5:35, 6:50, 7:65, 8:80, 9:95, 10:110, 11:120 };
-var PAY_STEPS = [-50, -20, -10, -5, 0, 5, 10, 20, 50];
+var PAY_STEPS = [-50, -20, -10, -5, 0, 5, 10, 20, 50, 100, 200, 500, 1000];   // les primes ne sont plus limitees a +50 %
 var VERSATILE_MAX_JOB_LVL = 3;
 
 var EMP_NAMES_LANG = {
@@ -494,6 +495,11 @@ var MACHINE_FAMILIES = [
 var MACHINE_CAPS = { prep: 85, ingCost: 70, rent: 85, decay: 85, morale: 85, salary: 70, unlock: 85, repair: 85 };
 
 // Les pannes : souvent une machine (vite reparee, pas cher), tres rarement un batiment (cher et long)
+// Le mecanicien : une machine en panne demande 60 s de travail d'un mecanicien de niveau 1 (plus il est fort, plus c'est rapide, et plus ils sont nombreux, plus c'est rapide).
+// Un batiment en demande 10 minutes, et seuls les mecaniciens de niveau 5 ou plus y touchent, 3 fois moins vite qu'une machine.
+var MECHANIC = { machineSec: 60, buildingSec: 600, buildingLvl: 5, buildingSlow: 0.33 };
+// Une partie laissee ouverte sans que tu joues : 5 h au mieux (avec assez de managers), puis les employes baissent petit a petit sur 5 h
+var UNATTENDED = { graceSec: 5 * 3600, fallSec: 5 * 3600, minGrace: 0.3, worst: 0.85, managerCovers: 6 };
 var BREAKDOWN = { machineEverySec: 900, machineRepairSec: 20, machineRepairCost: 0.05, buildingEverySec: 7200, buildingRepairSec: 600, buildingRepairCost: 0.5 };
 
 // Les gros malheurs : tres rares, a partir du niveau 30
@@ -562,7 +568,7 @@ var THEME_LIST = [
   { id:'cookie',   langKey:'settings.themeCookie', sold:{ rec:'cookie', n:50000 }, hidden:true }, // 50 000 cookies vendus
   { id:'tech',     langKey:'settings.themeTech', secret:true },     // 1000 clics sur Bob sans la console
   { id:'techgold', langKey:'settings.themeTechGold', secret:true }, // Bob en or massif
-  { id:'gold', langKey:'settings.themeGold', gotIng:{ id:'orfeuille', n:5000 }, hidden:true }, // 5 000 feuilles d'or alimentaires : Bob devient dore
+  { id:'gold', langKey:'settings.themeGold', gotIng:{ id:'orfeuille', n:1000000 }, hidden:true }, // 1 000 000 de feuilles d'or alimentaires : Bob devient dore
 ];
 
 // Un tout petit peu moins cher, c'etait trop facile

@@ -318,7 +318,7 @@
    "home.duplicate": "Dupliquer la partie",
    "home.copyWord": "copie",
    "settings.themeGold": "Doré",
-   "settings.lockGold": "après avoir obtenu 5 000 feuilles d'or alimentaires",
+   "settings.lockGold": "après avoir obtenu 1 000 000 de feuilles d'or alimentaires",
    "settings.goldUnlocked": "Thème Doré débloqué : Bob est tout en or !",
    "settings.techGoldUnlocked": "Thème Tech doré débloqué !",
    "stats.viewCompare": "Comparer",
@@ -408,4 +408,22 @@ Object.assign(LANGS.fr, {
 });
 Object.assign(LANGS.fr, {
   'emp.buyerRefund':`Les intendants ont quitté le jeu : tu as été remboursé de leur embauche ({{v}}).`
+});
+Object.assign(LANGS.fr, {
+  'hdr.more':`Plus de boutons`,
+  'hdr.title':`Boutons de l'en-tête`,
+  'hdr.size':`Taille des boutons`,
+  'hdr.sizeHelp':`Rend les boutons du haut plus petits ou plus grands.`,
+  'hdr.dragHelp':`Glisse les boutons pour les ranger. Ceux de la zone du bas vont dans le menu « ⋯ » sur téléphone et petit écran, pour avoir plus de place.`,
+  'hdr.inBar':`Dans l'en-tête`,
+  'hdr.inMenu':`Dans le menu « ⋯ » (petit écran)`,
+  'emp.mechanic':`Mécanicien`,
+  'emp.desc.mechanic':`Répare tout seul tes machines. À partir du niveau 5, il s'occupe aussi des bâtiments, mais lentement. Plus il est fort et plus vous êtes nombreux, plus c'est rapide.`,
+  'unl.mechanic':`Niveau 45 : le mécanicien ! Il répare tout seul tes machines en panne. À partir de son niveau 5, il s'occupe aussi des bâtiments, mais lentement.`,
+  'emp.desc.carrier':`Transporte des gâteaux ou des ingrédients vers une autre de tes pâtisseries. L'argent, lui, est commun à toutes.`,
+  'emp.buyerRefund':`Des métiers ont quitté le jeu (intendant, touche-à-tout) : tu as été remboursé de leur embauche ({{v}}).`,
+  'unattended.warn':`Tes employés ne sont plus encadrés : reviens jouer, ils travaillent de moins en moins bien. Des managers les tiennent plus longtemps.`
+});
+Object.assign(LANGS.fr, {
+  'emp.mechanic.f':`Mécanicienne`
 });

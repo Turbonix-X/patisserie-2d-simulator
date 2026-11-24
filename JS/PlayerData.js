@@ -96,6 +96,9 @@ function createFreshState() {
     orders: [],
     nextOrderId: 1,
     nextOrderAt: 0,
+    orderDemand: 1,
+    lastActive: 0,     // la derniere fois que le joueur a touche au jeu
+    closedAt: 0,       // sortie volontaire vers le menu : la partie est fermee et ne continue pas
     bakeryTheme: null,
     rentLate: 0,
     cmdUsage: {},
@@ -115,6 +118,9 @@ function createFreshState() {
       bulk: '1',
       autoPause: 0,
       changelogMax: false,
+      hdrZoom: 100,
+      hdrOrder: [],
+      hdrMenu: [],
     },
     timeSpeed: 1,
     stats: {
@@ -150,6 +156,13 @@ function createFreshState() {
 var G = createFreshState();
 
 // Remet une sauvegarde de n'importe quelle version au format actuel
+// Ce qu'un touche-a-tout a coute : le prix paye s'il est connu, sinon le prix d'un candidat de son niveau, de sa competence et de ses metiers
+function versatileRefund(e) {
+  if (typeof e.paid === 'number' && isFinite(e.paid) && e.paid > 0) return e.paid;
+  var lvl = Math.max(1, Math.min(EMP_GOLD_LVL, e.level || 1)), skill = Math.max(1, Math.min(100, e.skill || 40));
+  var jobsLvl = (e.jobs || []).reduce(function(a, j) { return a + (j.level || 1); }, 0);
+  return Math.floor(OLD_VERSATILE_HIRE_COST * (0.5 + skill * 0.01) * Math.pow(4, lvl - 1) * (1 + jobsLvl * 0.3));
+}
 // Ce qu'un intendant a coute : le prix paye s'il est connu, sinon le prix d'un candidat de son niveau et de sa competence
 function buyerRefund(e) {
   if (typeof e.paid === 'number' && isFinite(e.paid) && e.paid > 0) return e.paid;
@@ -261,8 +274,28 @@ function migrateSave(data) {
     if (refund > 0) { data.money = (data.money || 0) + refund; data.buyerRefund = refund; }
     data.buyersGone = true;
   }
+  // Release 1.3.4 : plus de touche-a-tout. Chacun est rembourse, une seule fois.
+  if (!data.versatileGone) {
+    var vRefund = 0;
+    data.employees = (data.employees || []).filter(function(e) {
+      if (e.type === 'versatile') { vRefund += versatileRefund(e); return false; }
+      return true;
+    });
+    data.applicants = (data.applicants || []).filter(function(a) { return a.type !== 'versatile'; });
+    if (vRefund > 0) { data.money = (data.money || 0) + vRefund; data.buyerRefund = (data.buyerRefund || 0) + vRefund; }
+    data.versatileGone = true;
+  }
   // Les autres patisseries sont sauvegardees a l'interieur de celle-ci
   data.bakeries.forEach(function(b) { if (b.state) b.state = migrateSave(b.state); });
+  // Release 1.3.4 : une seule bourse pour toutes les patisseries. L'argent de chacune est additionne, une seule fois.
+  if (!data.sharedMoney) {
+    data.bakeries.forEach(function(b) {
+      if (b.state && typeof b.state.money === 'number') { data.money = (data.money || 0) + Math.max(0, b.state.money); b.state.money = 0; }
+      if (b.state && b.state.buyerRefund > 0) { data.buyerRefund = (data.buyerRefund || 0) + b.state.buyerRefund; delete b.state.buyerRefund; }
+    });
+    data.money = Math.min(MONEY_CAP, data.money || 0);
+    data.sharedMoney = true;
+  }
   if (!LANGS[data.settings.lang]) data.settings.lang = 'fr';
   if (data.settings.bulk === undefined) data.settings.bulk = '1';
   var fixed = sanitizeLoaded(data);

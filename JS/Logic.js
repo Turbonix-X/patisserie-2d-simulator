@@ -176,7 +176,7 @@ function empLevelMult(emp, type) {
 function empPower(emp, type) {
   // Un employe tres motive (bien paye) travaille mieux
   var boost = emp.morale > 100 ? 1 + (emp.morale - 100) / 100 : 1;
-  return empLevelMult(emp, type) * empSkillMult(emp) * (emp.status === 'poor' ? 0.5 : 1) * boost;
+  return empLevelMult(emp, type) * empSkillMult(emp) * (emp.status === 'poor' ? 0.5 : 1) * boost * unattendedMult();
 }
 
 // Le cueilleur : son efficacite, sa perte, et sa limite de production
@@ -856,7 +856,7 @@ function getEmpSalary(emp) {
   var lvl = emp.type === 'novice' ? 1 : (emp.level || 1);
   return empType.baseSalary * (1 + 0.5 * (lvl - 1)) * (1 - machineBonus('salary') / 100) * (1 + (emp.payAdj || 0) / 100);
 }
-function maxMorale(emp) { return 100 + (emp.payAdj || 0); }
+function maxMorale(emp) { return 100 + Math.min(50, emp.payAdj || 0); }   // une prime au-dela de +50 % ne monte plus le moral
 
 // Changer la paie : trop bas, et il demissionne presque toujours
 function setPay(emp, adj) {
@@ -1007,7 +1007,7 @@ function tickSearches() {
     var types = job.types || [job.type];
     var ok = false, label = types.map(function(x) { return t('emp.' + x); }).join(' + ');
     if (Math.random() < searchChance()) {
-      var vOpen = empTypeOpen(findEmpType('versatile'));
+      var vOpen = false;   // plus de touche-a-tout
       // Quelqu'un qui a les deux metiers cherches peut se presenter, ou quelqu'un qui n'en a qu'un
       if (types.length === 2 && vOpen && Math.random() < 0.4) ok = generateApplicant('versatile', { types: types });
       else ok = generateApplicant(types[Math.floor(Math.random() * types.length)]);
@@ -1021,7 +1021,7 @@ function tickSearches() {
 // Plus il y a de vendeurs, plus ca vend vite. Seul, un vendeur est tres lent.
 function sellerRate(emp) {
   var n = memoed('workSellers', function() { var c = 0; G.employees.forEach(function(e) { if (hasJob(e,'seller') && empWorking(e)) c++; }); return c; });
-  return 0.08 * (1 + 0.25 * Math.max(0, n - 1)) * empPower(emp, 'seller') * (1 + machineBonus('sellers') / 100);
+  return 0.1 * (1 + 0.25 * Math.max(0, n - 1)) * empPower(emp, 'seller') * (1 + machineBonus('sellers') / 100);
 }
 
 // Le stock reserve aux commandes quand un maitre d'hotel peut les livrer
@@ -1090,6 +1090,12 @@ function managerBoost() {
 var MORALE_QUIT = 10;
 
 function tickEmployees(dtSec) {
+  // Partie laissee sans que tu joues : on te previent une fois quand les employes commencent a baisser
+  if (!bgTick && G.employees.length && typeof ui !== 'undefined') {
+    var um = unattendedMult();
+    if (um < 0.999 && !ui.unattendedWarned) { ui.unattendedWarned = true; if (typeof toast === 'function') toast(t('unattended.warn')); }
+    else if (um >= 0.999) ui.unattendedWarned = false;
+  }
   var decay = moraleDecay(), boost = managerBoost();
   for (var i = G.employees.length - 1; i >= 0; i--) {
     var emp = G.employees[i];
@@ -2012,7 +2018,7 @@ function openNewBakery(free, name) {
   newState.bakeryName = newName;
   newState.level = G.level;
   newState.xp = G.xp;
-  newState.money = 50;
+  newState.money = 0;   // l'argent est partage : la nouvelle patisserie n'a que ce qu'elle gagnera
   newState.unlocks = { done: JSON.parse(JSON.stringify(G.unlocks.done)), pending: {} };
   newState.tutorialDone = true;
   newState.introDone = true;
@@ -2040,7 +2046,7 @@ function switchToBakery(index) {
   // Ce qui appartient au joueur, et pas a une patisserie
   ['settings','birthday','birthdaySetOn','birthdayBoostYear','birthdayBoostUntil','achievements','tutorialDone','tutorialStep',
    'introDone','companyName','cheatUnlocked','bobClicks','bobSad','bobGold','bobGoldClicks','bobChoke','bobPokes','logoClicks','cheatEverUnlocked','cheatLocked','logoHintShown','unlockedThemes','favRecipes','lvl1000Shown','wentBankrupt',
-   'secondBakery','bankUnlocked','loans','nextLoanId','cmdUsage','challenge','nextChallengeAt','sugarFed','explained','creative'].forEach(function(k) {
+   'secondBakery','bankUnlocked','money','loans','nextLoanId','cmdUsage','challenge','nextChallengeAt','sugarFed','explained','creative'].forEach(function(k) {
     target[k] = G[k];
   });
   target.paused = false;
@@ -2067,7 +2073,7 @@ function bakeryValueParts(index) {
   var b = G.bakeries[index];
   var s = b && (index === G.currentBakeryIndex ? G : b.state);
   if (!s) return null;
-  var cash = Math.max(0, s.money || 0), stock = 0, ingredients = 0, equipment = 0;
+  var cash = 0, stock = 0, ingredients = 0, equipment = 0;
   REC.forEach(function(r) { stock += (s.cakes[r.id] || 0) * r.val * 0.5; });
   ING.forEach(function(i) { ingredients += (s.ing[i.id] || 0) * i.cost * (i.resellRate || 0.5); });
   BUILDINGS.forEach(function(bld) {
@@ -2113,7 +2119,6 @@ function allBakeriesState() {
     bakeries: G.bakeries, bakeryName: G.bakeryName, bobClicks: G.bobClicks, logoClicks: G.logoClicks, wentBankrupt: G.wentBankrupt };
   bakeryStates().forEach(function(x) {
     var s = x.state;
-    all.money += s.money || 0;
     for (var mid in (s.machines || {})) all.machines[mid] = Math.max(all.machines[mid] || 0, s.machines[mid]);
     all.totalEarned += s.totalEarned || 0;
     all.playTimeMs = Math.max(all.playTimeMs, s.playTimeMs || 0);
@@ -2131,6 +2136,7 @@ function allBakeriesState() {
       all.buildings[b].qty += s.buildings[b].qty;
     }
   });
+  all.money = Math.max(0, G.money || 0);   // une seule bourse
   return all;
 }
 
@@ -2199,6 +2205,58 @@ function repairItem(kind, id) {
   G.money -= cost;
   b.until = Date.now() + (kind === 'm' ? BREAKDOWN.machineRepairSec : BREAKDOWN.buildingRepairSec) * 1000;
   return true;
+}
+
+// Les mecaniciens reparent tout seuls. La reparation avance avec la force de tous les mecaniciens ensemble.
+function tickMechanics(dtSec) {
+  if (!G.broken) return;
+  var mechs = G.employees.filter(function(e) { return hasJob(e, 'mechanic') && empWorking(e); });
+  if (!mechs.length) return;
+  var pm = 0, pb = 0;
+  mechs.forEach(function(e) {
+    var p = empPower(e, 'mechanic');
+    pm += p;
+    if ((e.level || 1) >= MECHANIC.buildingLvl) pb += p * MECHANIC.buildingSlow;
+  });
+  var machKey = null, bldKey = null;
+  Object.keys(G.broken).forEach(function(k) {
+    var b = G.broken[k];
+    if (b.until) return;   // deja en reparation payee
+    if (k.charAt(0) === 'm') { if (!machKey) machKey = k; } else if (!bldKey) bldKey = k;
+  });
+  function work(key, power, need) {
+    if (!key || power <= 0) return;
+    var b = G.broken[key];
+    b.prog = (b.prog || 0) + dtSec * power;
+    if (b.prog < need) return;
+    delete G.broken[key];
+    var kind = key.charAt(0), id = key.slice(2);
+    if (kind === 'm') syncOvens();
+    if (typeof toast === 'function') toast(t('broke.repaired', { n: kind === 'm' ? machName(findMachine(id)) : t('b.' + id) }));
+  }
+  work(machKey, pm, MECHANIC.machineSec);
+  work(bldKey, pb, MECHANIC.buildingSec);
+}
+
+// ---------- Une partie laissee ouverte sans que tu joues ----------
+// Elle tient 5 h au mieux. Avec peu de managers, les employes se laissent aller plus tot ; passe le delai, ils baissent petit a petit.
+function managerCoverage() {
+  var mt = findEmpType('manager');
+  if (mt && G.level < mt.unlockLvl) return 1;   // pas encore de managers a embaucher : on ne te le reproche pas
+  var mgr = empCount('manager'), others = Math.max(1, G.employees.length - mgr);
+  return Math.max(0, Math.min(1, mgr * UNATTENDED.managerCovers / others));
+}
+function unattendedSec() {
+  var last = (MAIN_G || G).lastActive;
+  return last ? Math.max(0, (Date.now() - last) / 1000) : 0;
+}
+function unattendedGrace() { return UNATTENDED.graceSec * (UNATTENDED.minGrace + (1 - UNATTENDED.minGrace) * managerCoverage()); }
+// 1 = tout va bien ; plus bas = les employes travaillent moins bien
+function unattendedMult() {
+  var idle = unattendedSec(), grace = unattendedGrace();
+  if (idle <= grace) return 1;
+  var fall = Math.min(1, (idle - grace) / UNATTENDED.fallSec);
+  return 1 - fall * UNATTENDED.worst * (1 - 0.5 * managerCoverage());
 }
 
 function tickBreakdowns(dtSec) {
@@ -2291,6 +2349,7 @@ function fulfillOrder(id) {
     G.totalEarned += o.reward;
     G.stats.totalSold += units;
     G.stats.ordersDone++;
+    G.orderDemand = Math.min(1, orderDemand() + ORDER_DEMAND_GAIN);
     addXP(Math.floor(o.reward * 0.3));
     G.orders.splice(i, 1);
     return o.reward;
@@ -2301,11 +2360,15 @@ function fulfillOrder(id) {
 // Plus tu avances, plus les clients commandent
 // Du niveau 30 au niveau 1000 : de 4 a 10 commandes en meme temps, et d'une toutes les 40 s a une toutes les 10 s
 function orderProgress() { return Math.min(1, Math.max(0, (G.level - ORDER_CONFIG.lvl) / (1000 - ORDER_CONFIG.lvl))); }
-function orderMaxOpen() { return ORDER_CONFIG.maxOpen + Math.floor(6 * orderProgress()); }
-function orderEverySec() { return ORDER_CONFIG.everySec * Math.pow(10 / ORDER_CONFIG.everySec, orderProgress()); }
+// L'envie des clients : elle baisse quand tu ne livres plus de commandes (2 h pour tomber au plus bas), et remonte a chaque commande livree
+var ORDER_DEMAND_MIN = 0.1, ORDER_DEMAND_GAIN = 0.1, ORDER_DEMAND_DECAY_SEC = 7200;
+function orderDemand() { var d = G.orderDemand; return typeof d === 'number' && d >= ORDER_DEMAND_MIN && d <= 1 ? d : 1; }
+function orderMaxOpen() { return Math.max(1, Math.round((ORDER_CONFIG.maxOpen + Math.floor(6 * orderProgress())) * orderDemand())); }
+function orderEverySec() { return ORDER_CONFIG.everySec * Math.pow(10 / ORDER_CONFIG.everySec, orderProgress()) / orderDemand(); }
 
 function tickOrders(dtSec) {
   if (G.level < ORDER_CONFIG.lvl) return;
+  G.orderDemand = Math.max(ORDER_DEMAND_MIN, orderDemand() - dtSec / ORDER_DEMAND_DECAY_SEC);
   var now = Date.now();
   G.orders = G.orders.filter(function(o) { return o.expiresAt > now; });
   if (!G.nextOrderAt) G.nextOrderAt = now;
@@ -2343,7 +2406,8 @@ function withBakery(state, fn) {
   bgTick = true;
   MAIN_G = main;
   G = state;
-  try { fn(); } finally { G = main; bgTick = false; MAIN_G = null; }
+  G.money = main.money;   // une seule bourse pour toutes les patisseries
+  try { fn(); } finally { main.money = G.money; G = main; bgTick = false; MAIN_G = null; }
 }
 
 // Tout le travail d'une patisserie, qu'on y soit ou non
@@ -2362,6 +2426,7 @@ function tickBakeryWorkInner(dtSec, isCurrent) {
   tickOrders(dtSec);
   tickChefs(dtSec);
   tickManagers(dtSec);
+  tickMechanics(dtSec);
   tickSearches();
   tickSales();
 }
@@ -2447,17 +2512,6 @@ function bakeryStateAt(index) {
   return b ? (index === G.currentBakeryIndex ? G : b.state) : null;
 }
 
-// Renvoie la somme vraiment transportee. Avec un transporteur, elle part sur la route.
-function transferMoney(from, to, amount, emp) {
-  var a = bakeryStateAt(from), b = bakeryStateAt(to);
-  if (!a || !b || from === to) return 0;
-  var moved = Math.min(Math.max(0, amount), Math.max(0, a.money));
-  a.money -= moved;
-  if (emp) { if (moved > 0) shipOut(emp, b, 'money', null, moved); }
-  else b.money += moved;
-  return moved;
-}
-
 // Un chargement prend la route : il arrive plus tard, en retard, ou jamais
 function shipOut(emp, b, kind, id, qty) {
   var r = Math.random(), now = Date.now();
@@ -2493,7 +2547,7 @@ function tickShipments(s) {
       if (typeof toast === 'function') toast(t('carry.accident', { n: ship.by, v: shipLabel(ship) }));
       return false;
     }
-    if (ship.kind === 'money') { s.money += ship.qty; return false; }
+    if (ship.kind === 'money') { (MAIN_G || G).money += ship.qty; return false; }
     if (ship.kind === 'ing') { s.ing[ship.id] = (s.ing[ship.id] || 0) + ship.qty; return false; }
     var rec = findRec(ship.id);
     if (!rec) return false;
@@ -2541,9 +2595,7 @@ function transferStock(from, to, kind, id, qty, emp) {
 var CHALLENGE_REWARD = 0.05;
 
 function globalMoney() {
-  var m = 0;
-  bakeryStates().forEach(function(x) { m += Math.max(0, x.state.money || 0); });
-  return m;
+  return Math.max(0, (MAIN_G || G).money || 0);
 }
 
 function scheduleNextChallenge() {
@@ -2603,7 +2655,7 @@ function carrierTarget(emp, fromIndex) {
 // Un voyage. Il laisse toujours de quoi payer une minute de salaires et de loyer.
 function carrierTrip(emp, from, to) {
   var s = bakeryStateAt(from);
-  var what = emp.carryWhat || 'money';
+  var what = emp.carryWhat === 'money' || !emp.carryWhat ? 'cakes' : emp.carryWhat;   // plus d'argent : il est commun
   var asked = emp.carryQty > 0 ? emp.carryQty : Infinity;
   var power = empLevelMult(emp, 'carrier');
   if (what.indexOf('cake:') === 0) return transferStock(from, to, 'cake', what.slice(5), Math.min(asked, 10 * power), emp);
@@ -2618,9 +2670,7 @@ function carrierTrip(emp, from, to) {
     ING.forEach(function(i) { if ((s.ing[i.id] || 0) >= 1 && (!most || s.ing[i.id] > s.ing[most.id])) most = i; });
     return most ? transferStock(from, to, 'ing', most.id, Math.min(asked, 100 * power), emp) : 0;
   }
-  var reserve = s.maxSpace * RENT_CONFIG.basePricePerM2PerHour / 60;
-  s.employees.forEach(function(e) { reserve += getEmpSalary(e) * 60; });
-  return transferMoney(from, to, Math.min(asked, Math.max(0, s.money - reserve), revenueAt(s.level) * 3 * power), emp);
+  return 0;
 }
 
 // Tous les transporteurs de toutes les patisseries

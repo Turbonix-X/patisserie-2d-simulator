@@ -2,6 +2,21 @@
 
 Alles, was zu Pâtisserie 2D Simulator hinzugekommen ist, von der neuesten bis zur ältesten Version. Ältere Versionen werden auf Englisch angezeigt. Die Spielregeln findest du im [Wiki](REGLES.md).
 
+## Release 1.3.4 (24. November 2026)
+
+Eine Kasse für alle Konditoreien, ein Mechaniker und ein ganz neues Gold-Design.
+
+**Neues und Korrekturen**
+- Das Geld gehört jetzt allen deinen Konditoreien gemeinsam: Eine neue behält deine Stufe und alle Rezepte, startet aber ohne Vorrat. Hattest du mehrere, werden ihre Ersparnisse addiert. Transporteure tragen kein Geld mehr, nur Kuchen und Zutaten.
+- Der Mechaniker (Stufe 45) repariert kaputte Maschinen von allein, schneller mit seiner Stufe und mit ihrer Zahl. Ab Stufe 5 repariert er auch Gebäude, aber langsam.
+- Das Verlassen ins Menü schließt das Spiel: Es läuft nicht weiter, während du weg bist. Ein offen gelassenes Spiel ohne dein Zutun hält höchstens 5 Stunden: Je weniger Manager, desto früher lassen die Angestellten nach, dann arbeiten sie immer schlechter.
+- Kunden bestellen weniger, wenn du nicht mehr lieferst, und immer mehr, wenn du lieferst, bis zum Maximum.
+- Prämien enden nicht mehr bei +50 %: bis +1000 % ist möglich. Verkäufer sind etwas billiger und etwas schneller, lohnen sich also endlich.
+- Das Gold-Design ist dunkler und glänzender, mit Details und fallenden Nuggets, Funken und Münzen. Du brauchst 1.000.000 essbare Goldblättchen.
+- Die Knöpfe oben haben eine einstellbare Größe und werden in den Einstellungen per Ziehen sortiert. Auf kleinen Bildschirmen verschwinden die aus dem unteren Bereich hinter einem „⋯“-Knopf. Auf Handy und Tablet wischst du eine Meldung zur Seite weg.
+- Neue Zeichnungen für Lavendel, Safran und den großen Hühnerstall.
+- Die Alleskönner werden entfernt: Jeder bekommt zurück, was seine Einstellung gekostet hat. Der Knopf zum Einklappen der unteren Leiste ist weg. Die oberen Knöpfe haben auf Tablets wieder ihre alte Größe, und die Leisten zum Ändern der Größe funktionieren wieder. Bei der Versicherung sitzen die drei Knöpfe unten in ihrer Kachel, und das „?“ hat Abstand.
+
 ## Release 1.3.3.3 (21. November 2026)
 
 Die untere Leiste erscheint endlich auf iPad und iPhone.

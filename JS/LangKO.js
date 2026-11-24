@@ -668,7 +668,7 @@ Object.assign(LANGS.ko, {
    "home.duplicate": "게임 복제",
    "home.copyWord": "복사본",
    "settings.themeGold": "골드",
-   "settings.lockGold": "식용 금박 5,000장을 얻은 후",
+   "settings.lockGold": "식용 금박 1,000,000장을 얻은 후",
    "settings.goldUnlocked": "골드 테마 해금: 밥이 온통 금색!",
    "settings.techGoldUnlocked": "골드 테크 테마 해금!",
    "stats.viewCompare": "비교",
@@ -745,4 +745,19 @@ Object.assign(LANGS.ko, {
 });
 Object.assign(LANGS.ko, {
   'emp.buyerRefund':`구매 담당이 게임에서 사라졌어요. 고용할 때 낸 돈을 돌려받았어요 ({{v}}).`
+});
+Object.assign(LANGS.ko, {
+  'hdr.more':`더 많은 버튼`,
+  'hdr.title':`상단 버튼`,
+  'hdr.size':`버튼 크기`,
+  'hdr.sizeHelp':`위쪽 버튼을 더 작거나 크게 만들어요.`,
+  'hdr.dragHelp':`버튼을 끌어서 정리해요. 아래 영역의 버튼은 휴대폰과 작은 화면에서 “⋯” 메뉴로 들어가서 공간이 넓어져요.`,
+  'hdr.inBar':`상단에 표시`,
+  'hdr.inMenu':`“⋯” 메뉴에 넣기 (작은 화면)`,
+  'emp.mechanic':`정비사`,
+  'emp.desc.mechanic':`기계를 알아서 고쳐요. 레벨 5부터는 건물도 고치지만 느려요. 강할수록, 많을수록 빨라요.`,
+  'unl.mechanic':`레벨 45: 정비사예요! 고장 난 기계를 알아서 고쳐요. 레벨 5부터는 건물도 고치지만 느려요.`,
+  'emp.desc.carrier':`케이크나 재료를 다른 가게로 옮겨요. 돈은 모든 가게가 함께 써요.`,
+  'emp.buyerRefund':`일부 직업이 게임에서 사라졌어요(구매 담당, 만능 직원). 고용할 때 낸 돈을 돌려받았어요 ({{v}}).`,
+  'unattended.warn':`직원들이 더는 관리받지 못해요. 돌아와서 플레이하세요, 점점 일을 못 해요. 매니저가 있으면 더 오래 버텨요.`
 });

@@ -50,7 +50,7 @@ function statsCompare() {
   function bld(s) { var n = 0; BUILDINGS.forEach(function(b) { n += ((s.buildings || {})[b.id] || { qty: 0 }).qty; }); return n; }
   function mach(s) { var n = 0; for (var k in (s.machines || {})) n += s.machines[k]; return n; }
   var rows = [
-    ['stats.cmpMoney', function(s) { return s.money || 0; }, fmtMoney],
+    ['stats.cmpMoney', function(s) { return G.money || 0; }, fmtMoney],
     ['stats.totalEarned', function(s) { return s.totalEarned || 0; }, fmtMoney],
     ['stats.cmpLevel', function(s) { return s.level || 1; }, fmt],
     ['stats.totalCakes', function(s) { return (s.stats || {}).totalCakesMade || 0; }, fmt],

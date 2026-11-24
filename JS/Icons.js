@@ -10,17 +10,18 @@ var ICON_FILES = {};
   .split(',').forEach(function(n) { ICON_FILES[n] = true; });
 
 var CUSTOM_ICONS = {};
-'brownie,canele,cannelle,caramel,caramelia,chouquette,eclair,eclair_cafe,eclair_caramel,macaron_choco,macaron_vanille,macaron_praline,macaron_caramel,tiramisu,parisbrest,framboise,macaron,macaron_pistache,meringue,millefeuille,pistache,praline,sugar_cube,tarte_citron,tarte_pomme,wasabi,yuzu'
+'lavande,safran,poulailler,brownie,canele,cannelle,caramel,caramelia,chouquette,eclair,eclair_cafe,eclair_caramel,macaron_choco,macaron_vanille,macaron_praline,macaron_caramel,tiramisu,parisbrest,framboise,macaron,macaron_pistache,meringue,millefeuille,pistache,praline,sugar_cube,tarte_citron,tarte_pomme,wasabi,yuzu'
   .split(',').forEach(function(n) { CUSTOM_ICONS[n] = true; });
 
 // Ces patisseries n'ont pas d'emoji : on utilise un dessin maison.
 (function() {
-  var ingIcons = { sucre:'sugar_cube', caramel:'caramel', cannelle:'cannelle', pistache:'pistache', wasabi:'wasabi', framb:'framboise', yuzu:'yuzu', praline:'praline', meringue:'meringue' };
+  var ingIcons = { sucre:'sugar_cube', caramel:'caramel', cannelle:'cannelle', pistache:'pistache', wasabi:'wasabi', framb:'framboise', yuzu:'yuzu', praline:'praline', meringue:'meringue', lavande:'lavande', safran:'safran' };
   var recIcons = { brownie:'brownie', chouquette:'chouquette', macaron:'macaron', pistamac:'macaron_pistache', tiramisu:'tiramisu', parisb:'parisbrest', macchoco:'macaron_choco', macvanille:'macaron_vanille', macpraline:'macaron_praline', maccaramel:'macaron_caramel', eclaircafe:'eclair_cafe', eclaircaramel:'eclair_caramel', eclair:'eclair', millefeuille:'millefeuille', tarte_cit:'tarte_citron', tarte_pom:'tarte_pomme', canele:'canele', caramelia:'caramelia', meringuee:'meringue', wasabisurp:'wasabi', framboisier:'framboise', yuzutart:'yuzu', pralineroyal:'praline', cardamomecake:'caramelia' };
   ING.forEach(function(i) { if (ingIcons[i.id]) i.e = '[[' + ingIcons[i.id] + ']]'; });
   REC.forEach(function(r) { if (recIcons[r.id]) r.e = '[[' + recIcons[r.id] + ']]'; });
   // Un batiment porte l'icone de ce qu'il produit, s'il n'a pas la sienne
   BUILDINGS.forEach(function(b) { if (ingIcons[b.produces]) b.e = '[[' + ingIcons[b.produces] + ']]'; });
+  BUILDINGS.forEach(function(b) { if (b.id === 'fourpat') b.e = '[[poulailler]]'; });   // le grand poulailler
 })();
 
 var ICON_RE = new RegExp('\\[\\[([a-z_]+)\\]\\]|\\p{Regional_Indicator}{2}|[0-9#*]\\uFE0F?\\u20E3|(?![\\u00A9\\u00AE\\u2122])\\p{Extended_Pictographic}\\uFE0F?(?:\\u200D\\p{Extended_Pictographic}\\uFE0F?)*', 'gu');
@@ -80,6 +81,7 @@ var UI_ICONS = {
   play: '<path d="M7 4.500v15l12-7.500z"/>',
   soundOn: '<path d="M11 5 6 9H2v6h4l5 4z"/><path d="M15.500 8.500a5 5 0 0 1 0 7"/><path d="M19 5a10 10 0 0 1 0 14"/>',
   soundOff: '<path d="M11 5 6 9H2v6h4l5 4z"/><path d="m22 9-6 6"/><path d="m16 9 6 6"/>',
+  more: '<circle cx="5" cy="12" r="1.600"/><circle cx="12" cy="12" r="1.600"/><circle cx="19" cy="12" r="1.600"/>',
   settings: '<path d="M4 6h9M19 6h1M4 12h1M11 12h9M4 18h7M17 18h3"/><circle cx="16" cy="6" r="2.500"/><circle cx="8" cy="12" r="2.500"/><circle cx="14" cy="18" r="2.500"/>',
   back: '<path d="M10 6l-6 6 6 6M4 12h16"/>',
   trash: '<path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13M10 11v6M14 11v6"/>',

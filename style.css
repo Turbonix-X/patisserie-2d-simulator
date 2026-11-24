@@ -1525,8 +1525,7 @@ body.reduced-particles .dp-fly { left: var(--y); }
   z-index: 5;
 }
 :root[data-decor] #tabs { margin-top: 24px; }
-:root[data-decor] #dock { position: relative; }
-:root[data-decor] #dock::before {
+:root[data-decor] :root[data-decor] #dock::before {
   content: "";
   position: absolute;
   left: 0; right: 0; bottom: 100%;
@@ -2578,16 +2577,6 @@ body.bob-can-wasabi .ing-card[data-ing="wasabi"], body.bob-can-gold .ing-card[da
   #toast-area { bottom: calc(var(--dock-h, 90px) + 50px); }
 }
 
-/* Bouton pour replier la barre du bas */
-#dock { position: relative; }
-#dock-toggle { position: absolute; top: 4px; inset-inline-end: 6px; width: 26px; height: 22px; padding: 0; border: 1px solid var(--border); border-radius: 8px; background: var(--surface-2); color: var(--text); font: inherit; font-size: .7rem; line-height: 1; cursor: pointer; z-index: 2; }
-#dock-toggle::before { content: "\25BE"; }
-#dock-toggle:hover { border-color: var(--mauve); }
-#dock.folded { min-height: 0 !important; padding-block: 3px; }
-#dock.folded > #space-bar, #dock.folded > #crafting-bar { display: none; }
-#dock.folded #dock-toggle { position: static; margin-inline-start: auto; }
-#dock.folded #dock-toggle::before { content: "\25B4"; }
-
 /* Employés : niveau or, perte, spécialiste, métiers du touche-à-tout */
 .emp-skill-badge.gold { background: linear-gradient(135deg, #FFE58A, #E0A800); color: #4A3300; border-color: #B8860B; box-shadow: 0 0 8px rgba(255,200,40,.6); font-weight: 800; }
 .applicant-card.gold { box-shadow: 0 0 0 2px #FFD54F, 0 0 18px rgba(255,200,40,.7); background-image: linear-gradient(135deg, rgba(255,229,138,.18), transparent 60%); }
@@ -3032,8 +3021,6 @@ select option { background: var(--surface-solid, #fff); color: var(--text); }
 :root[data-theme="dark"] .xp-bar-text, :root[data-theme="tech"] .xp-bar-text, :root[data-theme="techgold"] .xp-bar-text { color: #fff; text-shadow: 0 1px 3px rgba(0,0,0,.75); }
 :root[data-theme="light"] .money-display { color: #fff; text-shadow: 0 1px 2px rgba(0,0,0,.35); }
 @media (pointer: coarse) {
-  .hbtn { width: 44px; height: 44px; border-radius: 12px; }
-  .header-right { gap: 4px; }
   .icon-btn, .ing-fold-btn { min-width: 44px; min-height: 44px; }
   .btn-small, .chip, .set-tab, .segmented button, .acc-modes button { min-height: 44px; }
   .debt-pay-btn { min-height: 44px; padding-inline: 12px; }
@@ -3053,11 +3040,21 @@ select option { background: var(--surface-solid, #fff); color: var(--text); }
 .cmp-best { color: var(--success); }
 /* Theme dore : le jaune d'or, Bob tout en or */
 :root[data-theme="gold"] {
-  --bg: #FFF8DC; --panel: #FFEFB0; --surface: #FFFBEA; --surface-solid: #FFFFFF; --surface-2: #FFE79A; --text: #3A2B00; --muted: #6B5200; --border: #E6C75A;
-  --mauve: #D4A017; --mauve-light: #F2C94C; --mauve-dark: #B8860B; --mauve-deep: #7A5C00; --mauve-soft: rgba(212,160,23,.2);
-  --header-bg: #C9971C; --footer-bg: #6B5200; --footer-text: #FFF3B0; --tab-bg: #FFE79A; --toast-bg: #4A3800; --xp-empty: #FFF3B0;
-  --blob-1: rgba(242,201,76,.2); --blob-2: rgba(212,160,23,.16); --blob-3: rgba(255,239,176,.4);
+  --bg: #F3DE92; --panel: #EDD27A; --surface: #FAEDB8; --surface-solid: #FFF9E0; --surface-2: #E8CC68; --text: #33250A; --muted: #5E4709; --border: #C99E24;
+  --mauve: #C9971C; --mauve-light: #EBC13E; --mauve-dark: #A67C0A; --mauve-deep: #6E5000; --mauve-soft: rgba(201,151,28,.26);
+  --header-bg: #A67C0A; --footer-bg: #5A4207; --footer-text: #FFE9A0; --tab-bg: #E8CC68; --toast-bg: #3F2F05; --xp-empty: #F7E49A;
+  --blob-1: rgba(235,193,62,.28); --blob-2: rgba(201,151,28,.24); --blob-3: rgba(255,239,176,.4);
 }
+/* Dore : reflets metalliques sur l'en-tete, les boutons, les panneaux et les onglets */
+:root[data-theme="gold"] .site-header { background: linear-gradient(180deg, #F0CB52 0%, #C9971C 38%, #A67C0A 70%, #86610A 100%); box-shadow: inset 0 1px 0 rgba(255,255,255,.6), inset 0 -2px 0 rgba(90,60,0,.35), 0 2px 10px rgba(80,55,0,.35); }
+:root[data-theme="gold"] .btn-primary { background: linear-gradient(135deg, #F7DC6F 0%, #D4A017 48%, #A67C0A 100%); border-color: #8A6508; color: #2C1F00; text-shadow: 0 1px 0 rgba(255,255,255,.45); box-shadow: inset 0 1px 0 rgba(255,255,255,.65), 0 2px 5px rgba(80,55,0,.4); }
+:root[data-theme="gold"] .btn-primary:hover:not(:disabled) { background: linear-gradient(135deg, #FFE98C 0%, #E3B02A 48%, #B8860B 100%); }
+:root[data-theme="gold"] #ingredients, :root[data-theme="gold"] #main-panel { border-color: #B8860B; box-shadow: inset 0 1px 0 rgba(255,255,255,.65), inset 0 0 0 1px rgba(255,226,122,.5), var(--shadow); }
+:root[data-theme="gold"] .gtab.active { background: linear-gradient(135deg, #F2CF5B, #C9971C 60%, #A67C0A); color: #2C1F00; text-shadow: 0 1px 0 rgba(255,255,255,.4); }
+:root[data-theme="gold"] .hbtn { background: linear-gradient(180deg, rgba(255,243,176,.55), rgba(255,226,122,.2)); border-color: rgba(255,243,176,.8); color: #3A2A00; }
+:root[data-theme="gold"] .space-bar-fill, :root[data-theme="gold"] .xp-bar-fill { background: linear-gradient(90deg, #E3B02A, #FFF0A0 45%, #E3B02A 70%, #B8860B); background-size: 200% 100%; animation: gold-sheen 3.2s linear infinite; }
+@keyframes gold-sheen { to { background-position: -200% 0; } }
+:root[data-theme="gold"] .money-display { color: #FFF3B0; text-shadow: 0 1px 2px rgba(60,40,0,.6), 0 0 8px rgba(255,226,122,.55); }
 .tp-gold { background: linear-gradient(135deg, #FFF3B0, #D4A017); }
 
 .adm-type-pick { display: flex; gap: 8px; margin: 8px 0; }
@@ -3110,16 +3107,14 @@ select option { background: var(--surface-solid, #fff); color: var(--text); }
    gardent toujours leur place, elle ne peut plus être poussée sous le bas de l'écran.
    Bob se tient debout sur la barre, comme avant. */
 @media (max-width: 899px) {
-  #ingredients { flex: 0 1 26dvh; min-height: 64px; }
+  #ingredients { flex: 0 1 var(--ing-h, 26dvh); min-height: 64px; }
   #bob-bubble { flex: 0 1 auto; min-height: 0; max-height: 24dvh; overflow-y: auto; }
   #main-panel { min-height: 60px; }
   #dock, #game-footer, #header, #tabs { flex-shrink: 0; }
-  #dock { padding: 6px 40px 6px 10px; margin-top: 4px; }
+  #dock { padding: 6px 10px 6px 66px; margin-top: 4px; }
   #bob { width: 50px; left: 14px; bottom: calc(var(--dock-h, 86px) + 12px + env(safe-area-inset-bottom, 0px)); }
   #game-footer { padding-bottom: calc(2px + env(safe-area-inset-bottom, 0px)); }
 }
-#dock.folded { padding-inline-end: 10px; justify-content: center; }
-#dock.folded #dock-toggle { width: auto; height: 24px; padding: 0 12px; margin: 0 auto; font-weight: 800; font-size: .74rem; display: inline-flex; align-items: center; gap: 6px; }
 
 /* ---------- Release 1.3.3.3 : iPad et iPhone (Safari) ----------
    Sur Safari, 100vh = l'écran SANS la barre d'outils du navigateur : la page était plus haute que ce qu'on voit,
@@ -3131,3 +3126,34 @@ body { min-height: 0 !important; height: 100%; height: 100dvh; max-height: 100dv
 @media (min-width: 900px) {
   #bob { bottom: calc(var(--foot-h, 22px) + 14px + env(safe-area-inset-bottom, 0px)); }
 }
+
+/* ---------- Release 1.3.4 : boutons de l'en-tete rangeables ---------- */
+.header-right { position: relative; }
+.hdr-more { display: none; }
+@media (max-width: 899px) {
+  .hdr-hide-small { display: none !important; }
+  .hdr-more { display: grid; }
+}
+.hdr-pop { position: absolute; top: calc(100% + 8px); inset-inline-end: 0; z-index: 1700; min-width: 190px; padding: 6px; display: flex; flex-direction: column; gap: 2px; border-radius: 14px; background: var(--surface-solid); border: 1px solid var(--border); box-shadow: var(--shadow-md, 0 8px 26px rgba(0,0,0,.28)); zoom: 1; }
+.hdr-pop-item { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border: 0; border-radius: 10px; background: none; color: var(--text); font: inherit; font-weight: 700; text-align: start; cursor: pointer; }
+.hdr-pop-item:hover { background: var(--surface-2); }
+.hdr-pop-item .uii { width: 20px; height: 20px; flex: 0 0 auto; }
+.hdr-zone-label { margin: 12px 0 4px; font-size: .8rem; font-weight: 800; color: var(--muted); }
+.hdr-zone { min-height: 52px; display: flex; flex-wrap: wrap; gap: 8px; padding: 8px; border-radius: 12px; border: 1.5px dashed var(--border); background: var(--surface-2); }
+.hdr-chip { display: inline-flex; align-items: center; gap: 8px; padding: 8px 12px; border-radius: 10px; border: 1px solid var(--border); background: var(--surface-solid); color: var(--text); font-weight: 700; font-size: .84rem; cursor: grab; touch-action: none; user-select: none; -webkit-user-select: none; }
+.hdr-chip .uii { width: 18px; height: 18px; }
+.hdr-chip.dragging { opacity: .35; }
+.hdr-chip.pinned { border-color: var(--mauve); }
+.hdr-ghost { position: fixed; z-index: 3000; pointer-events: none; box-shadow: 0 8px 22px rgba(0,0,0,.3); cursor: grabbing; }
+/* Une notification se fait glisser sur le côté (téléphone, tablette) pour partir */
+.notif { pointer-events: auto; touch-action: pan-y; }
+@media (pointer: coarse) { #split-handle { min-height: 22px; } #split-handle::after { background: var(--mauve-soft, var(--border)); } }
+
+/* Assurance : les boutons des trois formules tout en bas de leur tuile, et le « ? » à l'écart des tuiles */
+.ins-grid { margin-top: 14px; }
+.ins-card { display: flex; flex-direction: column; }
+.ins-card > .btn { margin-top: auto; align-self: stretch; }
+.bank-h + .chip.qmark { margin: 4px 0 6px; }
+.hdr-btns { display: flex; align-items: center; gap: 8px; }
+@media (max-width: 899px) { .hdr-btns { gap: 5px; } }
+@media (max-width: 480px) { .hdr-btns { gap: 4px; } }

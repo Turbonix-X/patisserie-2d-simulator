@@ -2,6 +2,26 @@
 
 Everything that was added to Pâtisserie 2D Simulator, from the newest to the oldest. To understand the rules of the game, see the [wiki](REGLES.md).
 
+## Release 1.3.4 (November 24, 2026)
+
+One wallet for all your bakeries, a mechanic, and a brand-new gold theme.
+
+**What is new**
+- Money is now shared by all your bakeries: a new bakery keeps your level and every recipe, but starts without stock. If you had several, their savings are added together. Carriers no longer carry money, only cakes and ingredients.
+- The mechanic (level 45) repairs broken machines on their own, faster with their level and with their number. From level 5 they also repair buildings, but slowly.
+- Leaving to the menu closes the game: it does not go on while you are away. A game left open without you playing lasts 5 hours at best: the fewer managers, the sooner the staff slack off, then they work worse and worse.
+- Customers order less when you stop delivering, and more and more when you do, up to the maximum.
+- Raises no longer stop at +50%: you can go up to +1000%. Sellers are a bit cheaper and a bit faster, so they finally pay off.
+- The gold theme is darker and shinier, with details, and nuggets, sparkles and coins falling. You need to have obtained 1,000,000 edible gold leaves to get it.
+- The buttons at the top have an adjustable size, and you arrange them by dragging in the settings. On small screens, the ones in the bottom zone go behind a “⋯” button. On phones and tablets, swipe a notification sideways to dismiss it.
+- New drawings for lavender, saffron and the big henhouse.
+
+**Fixes and removals**
+- Jacks-of-all-trades are removed from the game: each one is refunded what they cost to hire (or what a candidate of their level would cost).
+- The button that folded the bottom bar is removed.
+- The top buttons are back to their old size on tablets, and the bars that resize the ingredients and the tabs work again.
+- In insurance, the three buttons sit at the bottom of their tile, and the “?” button is set apart from the tiles.
+
 ## Release 1.3.3.3 (November 21, 2026)
 
 The bottom bar finally shows on iPad and iPhone.

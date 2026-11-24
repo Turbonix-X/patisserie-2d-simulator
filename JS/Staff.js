@@ -12,7 +12,7 @@ function nameHash(str) {
 }
 
 // Le haut du corps prend la couleur du metier
-var EMP_SHIRT = { versatile:'#6A4C93', novice:'#A1887F', collector:'#7B9B3E', baker:'#F4EFE6', seller:'#C62842', manager:'#37474F', maitre:'#26262B', carrier:'#1E78C8', chef:'#FFFFFF', buyer:'#3F8F2B' };
+var EMP_SHIRT = { versatile:'#6A4C93', novice:'#A1887F', collector:'#7B9B3E', baker:'#F4EFE6', seller:'#C62842', manager:'#37474F', maitre:'#26262B', carrier:'#1E78C8', chef:'#FFFFFF', buyer:'#3F8F2B', mechanic:'#455A64' };
 
 function shadeHex(hex, amt) {
   var n = parseInt(hex.slice(1), 16), r = n >> 16, g = (n >> 8) & 255, b = n & 255;
@@ -99,6 +99,7 @@ function empAvatar(type, name, gender) {
   else if (type === 'chef') s += '<path d="M11 14c-5-2-5-9 0-10 1-4 17-4 18 0 5 1 5 8 0 10z" fill="#fff" stroke="#D8D0C5"/><path d="M11 12h18v4H11z" fill="#fff" stroke="#D8D0C5"/><path d="M16 5v7M20 4v8M24 5v7" stroke="#E0D9CE" stroke-width="1"/>';
   else if (type === 'buyer') s += '<circle cx="16" cy="19.800" r="3" fill="rgba(180,220,255,.12)" stroke="#6D4C41" stroke-width="1.100"/><circle cx="24" cy="19.800" r="3" fill="rgba(180,220,255,.12)" stroke="#6D4C41" stroke-width="1.100"/><path d="M19 19.800h2" stroke="#6D4C41" stroke-width="1.100"/><path d="M12 12c1-5 4-7 8-7s7 2 8 7z" fill="#3F8F2B"/><path d="M28 28h7v9h-7z" fill="#fff" stroke="#6D4C41"/><path d="M29.500 31h4M29.500 33.500h4" stroke="#6D4C41" stroke-width=".8"/>';
   else if (type === 'versatile') s += '<path d="M10 13c1-6 5-8 10-8s9 2 10 8z" fill="#6A4C93"/><path d="M8 13h24c1 1 0 2-1 2H9c-1 0-2-1-1-2z" fill="#4B3470"/><circle cx="20" cy="9" r="1.500" fill="#FFD54F"/>';
+  else if (type === 'mechanic') s += '<path d="M10 13c1-6 5-8 10-8s9 2 10 8z" fill="#546E7A"/><path d="M8 13h24c1 1 0 2-1 2H9c-1 0-2-1-1-2z" fill="#37474F"/><path d="M26 6l3 3-5 5-3-3z" fill="#B0BEC5"/><circle cx="27.500" cy="6.500" r="2.200" fill="#CFD8DC"/>';
   else if (type === 'novice') s += '<path d="M20 10c-2-4 0-6 2-6" fill="none" stroke="' + hair + '" stroke-width="2.400" stroke-linecap="round"/>';
   return s + '</svg>';
 }
@@ -682,14 +683,14 @@ function carrierConfig(emp) {
   ensureBakeryList();
   if (G.bakeries.length < 2) return '<p class="set-help">' + t('carry.noShop') + '</p>';
   var to = carrierTarget(emp, G.currentBakeryIndex);
-  var what = emp.carryWhat || 'money';
+  var what = emp.carryWhat === 'money' || !emp.carryWhat ? 'cakes' : emp.carryWhat;
   var h = '<label class="cfg-row">' + t('carry.to') + '<select class="set-select" onchange="assignCarrier(' + emp.id + ',\'to\',this.value)">';
   G.bakeries.forEach(function(b, i) {
     if (i === G.currentBakeryIndex) return;
     h += '<option value="' + bakeryUid(b) + '"' + (i === to ? ' selected' : '') + '>' + escH(b.name) + '</option>';
   });
   h += '</select></label><label class="cfg-row">' + t('carry.what') + '<select class="set-select" onchange="assignCarrier(' + emp.id + ',\'what\',this.value)">';
-  [['money', 'carry.money'], ['cakes', 'carry.cakes'], ['ings', 'carry.ings']].forEach(function(o) {
+  [['cakes', 'carry.cakes'], ['ings', 'carry.ings']].forEach(function(o) {
     h += '<option value="' + o[0] + '"' + (what === o[0] ? ' selected' : '') + '>' + t(o[1]) + '</option>';
   });
   h += '<optgroup label="' + escH(t('carry.oneCake')) + '">';

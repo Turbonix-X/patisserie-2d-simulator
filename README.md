@@ -20,7 +20,7 @@ Un jeu de gestion de pâtisserie : achète tes ingrédients, prépare tes gâtea
 - **Recettes :** 68 pâtisseries à débloquer et à préparer, du cookie au gâteau infini.
 - **Ventes :** les prix bougent selon ce que tu vends, et la demande revient avec le temps.
 - **Bâtiments :** au niveau 40, 59 bâtiments qui livrent une énorme quantité d'ingrédients une fois par heure.
-- **Employés :** cueilleurs, boulangers, vendeurs, managers, chefs pâtissiers, maîtres d'hôtel, transporteurs, touche-à-tout et apprentis, sur 10 niveaux, avec leur moral et leur salaire réglable.
+- **Employés :** cueilleurs, boulangers, vendeurs, managers, chefs pâtissiers, maîtres d'hôtel, transporteurs, mécaniciens et apprentis, sur 10 niveaux, avec leur moral et leur salaire réglable.
 - **Espace et loyer :** agrandis ta boutique, mais gare aux dettes.
 - **Banque :** à ta première dette, Bob t'ouvre un compte et t'explique les prêts, de 10 € à 10 000 €.
 - **Commandes :** au niveau 30, des clients passent commande. Plus c'est compliqué, plus la prime est grosse.

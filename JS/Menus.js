@@ -218,7 +218,74 @@ function settingsLook() {
   cards += '</div>';
   var h = setCard(t('settings.theme'), '<p class="set-help">' + t('settings.themeHelp') + '</p>' + cards);
   h += setCard('', setRow(t('settings.particles'), t('settings.particlesHelp'), setSwitch(!G.settings.reducedParticles, 'toggleParticles();showSettingsModal()', t('settings.particles'))));
+  h += setCard(t('hdr.title'), setRow(t('hdr.size'), t('hdr.sizeHelp'), '<div class="volume-row"><input type="range" min="70" max="150" step="5" value="' + Math.round(hdrZoom() * 100) + '" aria-label="' + escH(t('hdr.size')) + '" oninput="setHdrZoom(this.value);document.getElementById(\'hdr-zoom-val\').textContent=this.value+\'%\'"><span id="hdr-zoom-val">' + Math.round(hdrZoom() * 100) + '%</span></div>') + hdrLayoutHTML());
   return h;
+}
+function setHdrZoom(v) { G.settings.hdrZoom = Math.max(70, Math.min(150, Number(v) || 100)); renderHeader(); }
+
+// Les boutons de l'en-tete : on les glisse (souris ou doigt) pour les ranger, et dans la zone du bas pour les mettre dans le menu « ... » des petits ecrans
+function hdrChipHTML(id) {
+  var d = hdrDef(id);
+  if (!d) return '';
+  return '<div class="hdr-chip' + (id === 'settings' ? ' pinned' : '') + '" data-id="' + id + '" onpointerdown="hdrDragStart(event)" title="' + escH(d.label()) + '">' + uiIcon(d.icon()) + '<span>' + escH(d.label()) + '</span></div>';
+}
+function hdrLayoutHTML() {
+  var lay = hdrLayout(), bar = '', menu = '';
+  lay.order.forEach(function(id) { if (lay.menu.indexOf(id) < 0) bar += hdrChipHTML(id); else menu += hdrChipHTML(id); });
+  return '<p class="set-help">' + t('hdr.dragHelp') + '</p>' +
+    '<div class="hdr-zone-label">' + t('hdr.inBar') + '</div><div class="hdr-zone" data-zone="bar">' + bar + '</div>' +
+    '<div class="hdr-zone-label">' + t('hdr.inMenu') + '</div><div class="hdr-zone" data-zone="menu">' + menu + '</div>';
+}
+var hdrDrag = null;
+function hdrDragStart(e) {
+  var chip = e.currentTarget;
+  if (e.button > 0 || chip.classList.contains('pinned') && false) return;
+  e.preventDefault();
+  var r = chip.getBoundingClientRect();
+  var ghost = chip.cloneNode(true);
+  ghost.classList.add('hdr-ghost');
+  ghost.style.width = r.width + 'px';
+  document.body.appendChild(ghost);
+  hdrDrag = { chip: chip, ghost: ghost, dx: e.clientX - r.left, dy: e.clientY - r.top };
+  chip.classList.add('dragging');
+  hdrDragMove(e);
+  document.addEventListener('pointermove', hdrDragMove);
+  document.addEventListener('pointerup', hdrDragEnd);
+  document.addEventListener('pointercancel', hdrDragEnd);
+}
+function hdrDragMove(e) {
+  var d = hdrDrag;
+  if (!d) return;
+  d.ghost.style.left = (e.clientX - d.dx) + 'px';
+  d.ghost.style.top = (e.clientY - d.dy) + 'px';
+  d.ghost.style.display = 'none';
+  var under = document.elementFromPoint(e.clientX, e.clientY);
+  d.ghost.style.display = '';
+  if (!under || !under.closest) return;
+  var other = under.closest('.hdr-chip'), zone = under.closest('.hdr-zone');
+  if (other && other !== d.chip && other.parentNode) {
+    var ro = other.getBoundingClientRect();
+    var after = (e.clientY > ro.top + ro.height / 2) && (e.clientX > ro.left + ro.width / 2 || Math.abs(e.clientY - (ro.top + ro.height / 2)) > ro.height / 3);
+    other.parentNode.insertBefore(d.chip, after ? other.nextSibling : other);
+  } else if (zone && !other) zone.appendChild(d.chip);
+}
+function hdrDragEnd() {
+  var d = hdrDrag;
+  document.removeEventListener('pointermove', hdrDragMove);
+  document.removeEventListener('pointerup', hdrDragEnd);
+  document.removeEventListener('pointercancel', hdrDragEnd);
+  if (!d) return;
+  hdrDrag = null;
+  d.chip.classList.remove('dragging');
+  if (d.ghost.parentNode) d.ghost.parentNode.removeChild(d.ghost);
+  var bar = [], menu = [];
+  document.querySelectorAll('.hdr-zone[data-zone="bar"] .hdr-chip').forEach(function(c) { bar.push(c.dataset.id); });
+  document.querySelectorAll('.hdr-zone[data-zone="menu"] .hdr-chip').forEach(function(c) { if (c.dataset.id !== 'settings') menu.push(c.dataset.id); else bar.push('settings'); });
+  G.settings.hdrOrder = bar.concat(menu);
+  G.settings.hdrMenu = menu;
+  ui.hdrPop = false;
+  renderHeader();
+  showSettingsModal();
 }
 
 function settingsAudio() {

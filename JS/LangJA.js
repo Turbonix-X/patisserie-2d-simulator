@@ -668,7 +668,7 @@ Object.assign(LANGS.ja, {
    "home.duplicate": "ゲームを複製",
    "home.copyWord": "コピー",
    "settings.themeGold": "ゴールド",
-   "settings.lockGold": "食用金箔を 5000 枚手に入れたら",
+   "settings.lockGold": "食用金箔を 100万枚手に入れたら",
    "settings.goldUnlocked": "ゴールドテーマ解放：ボブが金色に！",
    "settings.techGoldUnlocked": "ゴールドテックテーマ解放！",
    "stats.viewCompare": "比較",
@@ -745,4 +745,19 @@ Object.assign(LANGS.ja, {
 });
 Object.assign(LANGS.ja, {
   'emp.buyerRefund':`仕入れ係はゲームからいなくなりました。雇ったときの費用を返金しました（{{v}}）。`
+});
+Object.assign(LANGS.ja, {
+  'hdr.more':`そのほかのボタン`,
+  'hdr.title':`ヘッダーのボタン`,
+  'hdr.size':`ボタンの大きさ`,
+  'hdr.sizeHelp':`上のボタンを小さくしたり大きくしたりします。`,
+  'hdr.dragHelp':`ボタンをドラッグして並べ替えます。下のエリアのボタンは、スマホや小さい画面では「⋯」メニューに入り、場所が空きます。`,
+  'hdr.inBar':`ヘッダーに表示`,
+  'hdr.inMenu':`「⋯」メニューに入れる（小さい画面）`,
+  'emp.mechanic':`整備士`,
+  'emp.desc.mechanic':`機械を自動で直します。レベル5からは建物も直しますが、ゆっくりです。強いほど、人数が多いほど速くなります。`,
+  'unl.mechanic':`レベル45：整備士です！壊れた機械を自動で直します。レベル5からは建物も直しますが、ゆっくりです。`,
+  'emp.desc.carrier':`ケーキや材料を別の店に運びます。お金はすべての店で共通です。`,
+  'emp.buyerRefund':`いくつかの職がゲームからなくなりました（仕入れ係、何でも屋）。雇ったときの費用を返金しました（{{v}}）。`,
+  'unattended.warn':`スタッフの管理が行き届かなくなりました。戻って遊んでください。だんだん働きが悪くなります。マネージャーがいると長くもちます。`
 });

@@ -4,6 +4,27 @@
   "intro": "كل ما أُضيف إلى Pâtisserie 2D Simulator، من الأحدث إلى الأقدم. تظهر الإصدارات الأقدم بالإنجليزية. لفهم قواعد اللعبة، راجع [الويكي](REGLES.md).",
   "versions": [
    {
+    "title": "Release 1.3.4 (24 نوفمبر 2026)",
+    "name": "Release 1.3.4",
+    "intro": "محفظة واحدة لكل محلاتك، وميكانيكي، وثيم ذهبي جديد.",
+    "groups": [
+     {
+      "name": "جديد وتصحيحات",
+      "items": [
+       "صار المال مشتركًا بين كل محلاتك: المحل الجديد يحتفظ بمستواك وكل الوصفات لكنه يبدأ بلا مخزون. إن كانت لديك عدة محلات تُجمع مدخراتها. الناقل لم يعد ينقل المال، بل الحلويات والمكونات فقط.",
+       "الميكانيكي (المستوى 45) يصلح الآلات المعطلة بنفسه، وأسرع كلما ارتفع مستواه وزاد عددهم. من المستوى 5 يصلح المباني أيضًا لكن ببطء.",
+       "الخروج إلى القائمة يغلق اللعبة: لا تستمر أثناء غيابك. اللعبة المتروكة مفتوحة دون لعب تصمد 5 ساعات كحد أقصى: كلما قل المديرون ارتخى الموظفون أبكر ثم يعملون أسوأ فأسوأ.",
+       "يطلب الزبائن أقل عندما تتوقف عن التسليم، وأكثر فأكثر عندما تسلّم، حتى الحد الأقصى.",
+       "العلاوات لم تعد تتوقف عند +50%: يمكن الوصول إلى +1000%. صار البائعون أرخص قليلًا وأسرع قليلًا فأصبحوا مربحين.",
+       "الثيم الذهبي أغمق وألمع، بتفاصيل وسبائك وشرارات وعملات تتساقط. يجب الحصول على 1,000,000 ورقة ذهب صالحة للأكل.",
+       "أزرار الأعلى بحجم قابل للضبط وتُرتب بالسحب في الإعدادات. على الشاشات الصغيرة تختبئ أزرار المنطقة السفلية خلف زر «⋯». على الهاتف واللوحي اسحب الإشعار جانبًا لإزالته.",
+       "رسومات جديدة للخزامى والزعفران وبيت الدجاج الكبير.",
+       "أُزيل الموظفون متعددو المهارات: يُردّ لكل واحد ما كلّفه توظيفه. أُزيل زر طي الشريط السفلي. عادت أزرار الأعلى لحجمها القديم على الأجهزة اللوحية وعادت أشرطة تغيير الحجم للعمل. في التأمين صارت الأزرار الثلاثة أسفل البطاقة وزر «؟» بعيدًا عنها."
+      ]
+     }
+    ]
+   },
+   {
     "title": "Release 1.3.3.3 (21 نوفمبر 2026)",
     "name": "Release 1.3.3.3",
     "intro": "صار الشريط السفلي يظهر أخيرًا على iPad وiPhone.",
@@ -447,6 +468,27 @@
   "intro": "Alles, was zu Pâtisserie 2D Simulator hinzugekommen ist, von der neuesten bis zur ältesten Version. Ältere Versionen werden auf Englisch angezeigt. Die Spielregeln findest du im [Wiki](REGLES.md).",
   "versions": [
    {
+    "title": "Release 1.3.4 (24. November 2026)",
+    "name": "Release 1.3.4",
+    "intro": "Eine Kasse für alle Konditoreien, ein Mechaniker und ein ganz neues Gold-Design.",
+    "groups": [
+     {
+      "name": "Neues und Korrekturen",
+      "items": [
+       "Das Geld gehört jetzt allen deinen Konditoreien gemeinsam: Eine neue behält deine Stufe und alle Rezepte, startet aber ohne Vorrat. Hattest du mehrere, werden ihre Ersparnisse addiert. Transporteure tragen kein Geld mehr, nur Kuchen und Zutaten.",
+       "Der Mechaniker (Stufe 45) repariert kaputte Maschinen von allein, schneller mit seiner Stufe und mit ihrer Zahl. Ab Stufe 5 repariert er auch Gebäude, aber langsam.",
+       "Das Verlassen ins Menü schließt das Spiel: Es läuft nicht weiter, während du weg bist. Ein offen gelassenes Spiel ohne dein Zutun hält höchstens 5 Stunden: Je weniger Manager, desto früher lassen die Angestellten nach, dann arbeiten sie immer schlechter.",
+       "Kunden bestellen weniger, wenn du nicht mehr lieferst, und immer mehr, wenn du lieferst, bis zum Maximum.",
+       "Prämien enden nicht mehr bei +50 %: bis +1000 % ist möglich. Verkäufer sind etwas billiger und etwas schneller, lohnen sich also endlich.",
+       "Das Gold-Design ist dunkler und glänzender, mit Details und fallenden Nuggets, Funken und Münzen. Du brauchst 1.000.000 essbare Goldblättchen.",
+       "Die Knöpfe oben haben eine einstellbare Größe und werden in den Einstellungen per Ziehen sortiert. Auf kleinen Bildschirmen verschwinden die aus dem unteren Bereich hinter einem „⋯“-Knopf. Auf Handy und Tablet wischst du eine Meldung zur Seite weg.",
+       "Neue Zeichnungen für Lavendel, Safran und den großen Hühnerstall.",
+       "Die Alleskönner werden entfernt: Jeder bekommt zurück, was seine Einstellung gekostet hat. Der Knopf zum Einklappen der unteren Leiste ist weg. Die oberen Knöpfe haben auf Tablets wieder ihre alte Größe, und die Leisten zum Ändern der Größe funktionieren wieder. Bei der Versicherung sitzen die drei Knöpfe unten in ihrer Kachel, und das „?“ hat Abstand."
+      ]
+     }
+    ]
+   },
+   {
     "title": "Release 1.3.3.3 (21. November 2026)",
     "name": "Release 1.3.3.3",
     "intro": "Die untere Leiste erscheint endlich auf iPad und iPhone.",
@@ -889,6 +931,35 @@
   "title": "Update history",
   "intro": "Everything that was added to Pâtisserie 2D Simulator, from the newest to the oldest. To understand the rules of the game, see the [wiki](REGLES.md).",
   "versions": [
+   {
+    "title": "Release 1.3.4 (November 24, 2026)",
+    "name": "Release 1.3.4",
+    "intro": "One wallet for all your bakeries, a mechanic, and a brand-new gold theme.",
+    "groups": [
+     {
+      "name": "What is new",
+      "items": [
+       "Money is now shared by all your bakeries: a new bakery keeps your level and every recipe, but starts without stock. If you had several, their savings are added together. Carriers no longer carry money, only cakes and ingredients.",
+       "The mechanic (level 45) repairs broken machines on their own, faster with their level and with their number. From level 5 they also repair buildings, but slowly.",
+       "Leaving to the menu closes the game: it does not go on while you are away. A game left open without you playing lasts 5 hours at best: the fewer managers, the sooner the staff slack off, then they work worse and worse.",
+       "Customers order less when you stop delivering, and more and more when you do, up to the maximum.",
+       "Raises no longer stop at +50%: you can go up to +1000%. Sellers are a bit cheaper and a bit faster, so they finally pay off.",
+       "The gold theme is darker and shinier, with details, and nuggets, sparkles and coins falling. You need to have obtained 1,000,000 edible gold leaves to get it.",
+       "The buttons at the top have an adjustable size, and you arrange them by dragging in the settings. On small screens, the ones in the bottom zone go behind a “⋯” button. On phones and tablets, swipe a notification sideways to dismiss it.",
+       "New drawings for lavender, saffron and the big henhouse."
+      ]
+     },
+     {
+      "name": "Fixes and removals",
+      "items": [
+       "Jacks-of-all-trades are removed from the game: each one is refunded what they cost to hire (or what a candidate of their level would cost).",
+       "The button that folded the bottom bar is removed.",
+       "The top buttons are back to their old size on tablets, and the bars that resize the ingredients and the tabs work again.",
+       "In insurance, the three buttons sit at the bottom of their tile, and the “?” button is set apart from the tiles."
+      ]
+     }
+    ]
+   },
    {
     "title": "Release 1.3.3.3 (November 21, 2026)",
     "name": "Release 1.3.3.3",
@@ -1851,6 +1922,27 @@
   "intro": "Todo lo que se ha añadido a Pâtisserie 2D Simulator, de la más reciente a la más antigua. Las versiones más antiguas se muestran en inglés. Para entender las reglas del juego, mira la [wiki](REGLES.md).",
   "versions": [
    {
+    "title": "Release 1.3.4 (24 de noviembre de 2026)",
+    "name": "Release 1.3.4",
+    "intro": "Una sola cartera para todas tus pastelerías, un mecánico y un tema dorado nuevo.",
+    "groups": [
+     {
+      "name": "Novedades y correcciones",
+      "items": [
+       "El dinero ahora es común a todas tus pastelerías: una nueva conserva tu nivel y todas las recetas, pero empieza sin existencias. Si tenías varias, se suman sus ahorros. El transportista ya no lleva dinero, solo pasteles e ingredientes.",
+       "El mecánico (nivel 45) repara solo las máquinas averiadas, más rápido con su nivel y con su número. Desde el nivel 5 también repara edificios, pero despacio.",
+       "Salir al menú cierra la partida: no continúa mientras estás fuera. Una partida abierta sin que juegues aguanta 5 horas como máximo: cuantos menos gerentes, antes se relajan los empleados, y luego trabajan cada vez peor.",
+       "Los clientes piden menos cuando dejas de entregar, y cada vez más cuando entregas, hasta el máximo.",
+       "Las primas ya no se paran en +50 %: se puede subir hasta +1000 %. Los vendedores son un poco más baratos y más rápidos, así que por fin salen rentables.",
+       "El tema dorado es más oscuro y brillante, con detalles, y pepitas, destellos y monedas que caen. Hay que haber conseguido 1 000 000 de hojas de oro comestibles.",
+       "Los botones de arriba tienen un tamaño ajustable y se ordenan arrastrándolos en los ajustes. En pantallas pequeñas, los de la zona de abajo van tras un botón «⋯». En móviles y tabletas, desliza una notificación a un lado para quitarla.",
+       "Nuevos dibujos para la lavanda, el azafrán y el gran gallinero.",
+       "Los todoterreno se retiran del juego: cada uno se reembolsa por lo que costó contratarlo. Se quita el botón para plegar la barra inferior. Los botones de arriba recuperan su tamaño anterior en tabletas y las barras para cambiar el tamaño vuelven a funcionar. En el seguro, los tres botones están abajo de su recuadro y el «?» está separado."
+      ]
+     }
+    ]
+   },
+   {
     "title": "Release 1.3.3.3 (21 de noviembre de 2026)",
     "name": "Release 1.3.3.3",
     "intro": "La barra inferior por fin aparece en iPad y iPhone.",
@@ -2293,6 +2385,27 @@
   "title": "更新履歴",
   "intro": "Pâtisserie 2D Simulator に追加されたすべての内容を、新しいものから古いものの順に載せています。古いバージョンは英語で表示されます。ゲームのルールは[ウィキ](REGLES.md)を見てください。",
   "versions": [
+   {
+    "title": "Release 1.3.4（2026年11月24日）",
+    "name": "Release 1.3.4（2026年11月24日）",
+    "intro": "すべての店で財布が一つに。整備士と、新しい金色のテーマが登場です。",
+    "groups": [
+     {
+      "name": "新機能と修正",
+      "items": [
+       "お金はすべての店で共通になりました。新しい店はレベルとすべてのレシピを引き継ぎますが、在庫はゼロから始まります。複数の店があった人は貯金が合算されます。運び屋はお金を運ばなくなり、ケーキと材料だけを運びます。",
+       "整備士（レベル45）は壊れた機械を自動で直します。レベルが高いほど、人数が多いほど速くなります。レベル5からは建物も直しますが、ゆっくりです。",
+       "メニューに戻るとゲームが閉じられ、留守の間は進みません。開いたまま遊ばずに放っておくと、もつのは最大5時間です。マネージャーが少ないほどスタッフは早くだらけ、だんだん働きが悪くなります。",
+       "配達をやめるとお客さんの注文が減り、配達するほど増えていって、最大まで戻ります。",
+       "ボーナスは+50%で止まらなくなり、+1000%まで上げられます。販売員は少し安く、少し速くなり、やっと元が取れます。",
+       "金色のテーマはより濃く、より輝き、細かな模様と、落ちてくる金塊・きらめき・コインがつきました。食用金箔を100万枚手に入れる必要があります。",
+       "上のボタンは大きさを調節でき、設定でドラッグして並べ替えられます。小さい画面では、下のエリアのボタンは「⋯」ボタンの中に入ります。スマホやタブレットでは、通知を横にスワイプすると消えます。",
+       "ラベンダー、サフラン、大きな鶏小屋の絵を新しくしました。",
+       "何でも屋は削除され、雇ったときの費用が返金されます。下のバーをたたむボタンは削除しました。上のボタンはタブレットで元の大きさに戻り、大きさを変えるバーも使えるようになりました。保険では3つのボタンがカードの下にそろい、「?」ボタンはカードから離しました。"
+      ]
+     }
+    ]
+   },
    {
     "title": "Release 1.3.3.3（2026年11月21日）",
     "name": "Release 1.3.3.3（2026年11月21日）",
@@ -2737,6 +2850,27 @@
   "intro": "Pâtisserie 2D Simulator에 추가된 모든 내용을 최신순으로 적었습니다. 오래된 버전은 영어로 표시됩니다. 게임 규칙은 [위키](REGLES.md)를 참고하세요.",
   "versions": [
    {
+    "title": "Release 1.3.4 (2026년 11월 24일)",
+    "name": "Release 1.3.4",
+    "intro": "모든 가게가 지갑 하나를 함께 쓰고, 정비사가 생기고, 새 황금 테마가 나왔어요.",
+    "groups": [
+     {
+      "name": "새 기능과 수정",
+      "items": [
+       "이제 돈은 모든 가게가 함께 써요. 새 가게는 레벨과 모든 레시피를 이어받지만 재고 없이 시작해요. 가게가 여러 개였다면 저금이 합쳐져요. 운반 직원은 더는 돈을 나르지 않고 케이크와 재료만 날라요.",
+       "정비사(레벨 45)는 고장 난 기계를 알아서 고쳐요. 레벨이 높고 수가 많을수록 빨라요. 레벨 5부터는 건물도 고치지만 느려요.",
+       "메뉴로 나가면 게임이 닫혀서 자리를 비운 동안 진행되지 않아요. 플레이하지 않고 열어 둔 게임은 최대 5시간 버텨요. 매니저가 적을수록 직원들이 일찍 느슨해지고, 점점 일을 못 해요.",
+       "배달을 멈추면 손님 주문이 줄고, 배달할수록 최대치까지 다시 늘어요.",
+       "보너스가 +50%에서 멈추지 않고 +1000%까지 올라가요. 판매원은 조금 싸고 조금 빨라져서 이제 남아요.",
+       "황금 테마가 더 짙고 반짝이며, 무늬와 떨어지는 금덩이, 반짝임, 동전이 생겼어요. 식용 금박 1,000,000장을 얻어야 해요.",
+       "위쪽 버튼의 크기를 조절하고, 설정에서 끌어서 정리할 수 있어요. 작은 화면에서는 아래 영역의 버튼이 “⋯” 버튼 뒤로 들어가요. 휴대폰과 태블릿에서는 알림을 옆으로 밀면 사라져요.",
+       "라벤더, 사프란, 큰 닭장의 그림을 새로 그렸어요.",
+       "만능 직원은 게임에서 사라지고 고용 비용을 돌려받아요. 하단 바를 접는 버튼은 없앴어요. 위쪽 버튼은 태블릿에서 예전 크기로 돌아오고, 크기를 바꾸는 막대도 다시 작동해요. 보험에서는 세 버튼이 카드 아래에 모이고 “?” 버튼이 카드와 떨어져 있어요."
+      ]
+     }
+    ]
+   },
+   {
     "title": "Release 1.3.3.3 (2026년 11월 21일)",
     "name": "Release 1.3.3.3",
     "intro": "iPad와 iPhone에서 드디어 하단 바가 보여요.",
@@ -3179,6 +3313,35 @@
   "title": "Historique des mises à jour",
   "intro": "Tout ce qui a été ajouté à Pâtisserie 2D Simulator, de la plus récente à la plus ancienne. Pour comprendre les règles du jeu, va voir le [wiki](REGLES.md).",
   "versions": [
+   {
+    "title": "Release 1.3.4 (24 novembre 2026)",
+    "name": "Release 1.3.4",
+    "intro": "Une seule bourse pour toutes tes pâtisseries, un mécanicien, et un thème doré tout neuf.",
+    "groups": [
+     {
+      "name": "Nouveautés",
+      "items": [
+       "L'argent est maintenant commun à toutes tes pâtisseries : une nouvelle pâtisserie garde ton niveau et toutes les recettes, mais commence sans stock. Si tu en avais plusieurs, leurs économies sont additionnées. Le transporteur ne transporte plus d'argent, seulement des gâteaux et des ingrédients.",
+       "Le mécanicien (niveau 45) répare tout seul les machines en panne, de plus en plus vite avec son niveau et avec leur nombre. À partir de son niveau 5, il répare aussi les bâtiments, mais lentement.",
+       "Quitter vers le menu ferme la partie : elle ne continue pas pendant ton absence. Une partie laissée ouverte sans que tu joues tient 5 heures au mieux : moins il y a de managers, plus tôt les employés se laissent aller, puis ils travaillent de moins en moins bien.",
+       "Les clients commandent moins quand tu ne livres plus rien, et de plus en plus quand tu livres, jusqu'au maximum.",
+       "Les primes ne s'arrêtent plus à +50 % : on peut monter jusqu'à +1000 %. Les vendeurs sont un peu moins chers et un peu plus rapides, donc enfin rentables.",
+       "Le thème doré est plus foncé, plus brillant, avec des détails, et des pépites, des étincelles et des pièces qui tombent. Il faut avoir obtenu 1 000 000 de feuilles d'or alimentaires pour l'avoir.",
+       "Les boutons du haut ont leur taille réglable, et on les range en les glissant dans les réglages. Sur petit écran, ceux de la zone du bas passent derrière un bouton « ⋯ ». Sur téléphone et tablette, on fait glisser une notification sur le côté pour la faire partir.",
+       "Nouveaux dessins pour la lavande, le safran et le grand poulailler."
+      ]
+     },
+     {
+      "name": "Corrections et retraits",
+      "items": [
+       "Les touche-à-tout sont retirés du jeu : chacun est rendu au prix de son embauche (ou à celui d'un candidat de son niveau).",
+       "Le bouton pour replier la barre du bas est retiré.",
+       "Les boutons du haut retrouvent leur taille d'avant sur tablette, et les barres pour changer la taille des ingrédients et des onglets refonctionnent.",
+       "Dans l'assurance, les trois boutons sont en bas de leur tuile, et le bouton « ? » est à l'écart des tuiles."
+      ]
+     }
+    ]
+   },
    {
     "title": "Release 1.3.3.3 (21 novembre 2026)",
     "name": "Release 1.3.3.3",
@@ -4141,6 +4304,27 @@
   "intro": "Tudo o que foi acrescentado ao Pâtisserie 2D Simulator, da mais recente à mais antiga. As versões mais antigas aparecem em inglês. Para perceber as regras do jogo, vê a [wiki](REGLES.md).",
   "versions": [
    {
+    "title": "Release 1.3.4 (24 de novembro de 2026)",
+    "name": "Release 1.3.4",
+    "intro": "Uma só carteira para todas as tuas pastelarias, um mecânico e um tema dourado novo.",
+    "groups": [
+     {
+      "name": "Novidades e correções",
+      "items": [
+       "O dinheiro agora é comum a todas as tuas pastelarias: uma nova mantém o teu nível e todas as receitas, mas começa sem stock. Se tinhas várias, as economias somam-se. O transportador já não leva dinheiro, só bolos e ingredientes.",
+       "O mecânico (nível 45) repara sozinho as máquinas avariadas, mais depressa com o nível e com o número. A partir do nível 5 repara também edifícios, mas devagar.",
+       "Sair para o menu fecha o jogo: não continua enquanto estás fora. Um jogo deixado aberto sem jogares aguenta 5 horas no máximo: com menos gerentes, a equipa descontrai mais cedo e depois trabalha cada vez pior.",
+       "Os clientes encomendam menos quando deixas de entregar, e cada vez mais quando entregas, até ao máximo.",
+       "Os prémios já não ficam nos +50 %: podes ir até +1000 %. Os vendedores ficam um pouco mais baratos e rápidos, e finalmente compensam.",
+       "O tema dourado é mais escuro e brilhante, com detalhes, e pepitas, brilhos e moedas a cair. É preciso ter obtido 1 000 000 de folhas de ouro comestíveis.",
+       "Os botões de cima têm tamanho ajustável e ordenam-se arrastando nas definições. Em ecrãs pequenos, os da zona de baixo ficam atrás de um botão «⋯». No telemóvel e no tablet, desliza uma notificação para o lado para a tirar.",
+       "Novos desenhos para a lavanda, o açafrão e o grande galinheiro.",
+       "Os faz-tudo saem do jogo: cada um é reembolsado pelo que custou a contratar. O botão para recolher a barra de baixo foi retirado. Os botões de cima voltam ao tamanho antigo nos tablets e as barras para redimensionar voltam a funcionar. No seguro, os três botões ficam em baixo no cartão e o «?» está afastado."
+      ]
+     }
+    ]
+   },
+   {
     "title": "Release 1.3.3.3 (21 de novembro de 2026)",
     "name": "Release 1.3.3.3",
     "intro": "A barra inferior finalmente aparece no iPad e no iPhone.",
@@ -4584,6 +4768,27 @@
   "intro": "Всё, что добавили в Pâtisserie 2D Simulator, от самого нового к самому старому. Более старые версии показываются на английском. Чтобы понять правила игры, загляни в [вики](REGLES.md).",
   "versions": [
    {
+    "title": "Release 1.3.4 (24 ноября 2026)",
+    "name": "Release 1.3.4",
+    "intro": "Один кошелёк на все кондитерские, механик и совершенно новая золотая тема.",
+    "groups": [
+     {
+      "name": "Новое и исправления",
+      "items": [
+       "Теперь деньги общие для всех твоих кондитерских: новая сохраняет твой уровень и все рецепты, но начинает без запасов. Если их было несколько, их сбережения складываются. Перевозчик больше не возит деньги, только торты и ингредиенты.",
+       "Механик (уровень 45) сам чинит сломанные машины, тем быстрее, чем выше его уровень и чем их больше. С 5-го уровня он чинит и здания, но медленно.",
+       "Выход в меню закрывает игру: пока тебя нет, она не идёт. Игра, оставленная открытой без твоей игры, держится 5 часов в лучшем случае: чем меньше менеджеров, тем раньше персонал расслабляется, а потом работает всё хуже.",
+       "Клиенты заказывают меньше, когда ты перестаёшь доставлять, и всё больше, когда доставляешь, до максимума.",
+       "Премии больше не останавливаются на +50%: можно дойти до +1000%. Продавцы стали чуть дешевле и чуть быстрее, так что наконец окупаются.",
+       "Золотая тема темнее и ярче, с деталями, падающими самородками, искрами и монетами. Нужно получить 1 000 000 пищевых золотых листов.",
+       "Размер кнопок сверху настраивается, а расставляются они перетаскиванием в настройках. На маленьких экранах кнопки из нижней зоны прячутся за кнопкой «⋯». На телефоне и планшете уведомление смахивается в сторону.",
+       "Новые рисунки для лаванды, шафрана и большого курятника.",
+       "Мастера на все руки убраны из игры: каждому возвращают стоимость найма. Кнопка сворачивания нижней панели убрана. Кнопки сверху вернулись к прежнему размеру на планшетах, а полосы изменения размера снова работают. В страховке три кнопки внизу карточки, а «?» отделён от карточек."
+      ]
+     }
+    ]
+   },
+   {
     "title": "Release 1.3.3.3 (21 ноября 2026)",
     "name": "Release 1.3.3.3",
     "intro": "Нижняя панель наконец видна на iPad и iPhone.",
@@ -5026,6 +5231,27 @@
   "title": "更新记录",
   "intro": "Pâtisserie 2D Simulator 新增的所有内容，从最新到最旧。更早的版本以英文显示。想了解游戏规则，请看[百科](REGLES.md)。",
   "versions": [
+   {
+    "title": "Release 1.3.4（2026年11月24日）",
+    "name": "Release 1.3.4（2026年11月24日）",
+    "intro": "所有店共用一个钱包，新增机修工，还有全新的金色主题。",
+    "groups": [
+     {
+      "name": "新内容与修复",
+      "items": [
+       "现在所有店共用一份钱：新店保留你的等级和全部食谱，但没有库存。如果你有多家店，它们的存款会加在一起。运输员不再运钱，只运蛋糕和配料。",
+       "机修工（45 级）会自动修理坏掉的机器，等级越高、人越多修得越快。5 级起也会修建筑，但比较慢。",
+       "退出到菜单会关闭游戏：你不在时它不会继续。游戏开着但你不玩，最多撑 5 小时：经理越少，员工越早松懈，然后越做越差。",
+       "你不再交货时，顾客下单变少；你交货时越来越多，直到上限。",
+       "奖金不再停在 +50%：最高可到 +1000%。销售员更便宜一点、更快一点，终于划算了。",
+       "金色主题更深、更亮，有细节，还有掉落的金块、火花和金币。需要获得 1,000,000 片食用金箔才能得到。",
+       "顶部按钮的大小可调，并可在设置里拖动排列。小屏幕上，下方区域的按钮会收进“⋯”按钮里。在手机和平板上，向旁边滑动通知即可关闭。",
+       "薰衣草、藏红花和大鸡舍有了新图案。",
+       "多面手已从游戏中移除：每人退还雇用费用。收起底栏的按钮已移除。顶部按钮在平板上恢复原来的大小，调整大小的拖动条重新可用。保险里三个按钮都在卡片底部，“?”按钮与卡片分开了。"
+      ]
+     }
+    ]
+   },
    {
     "title": "Release 1.3.3.3（2026年11月21日）",
     "name": "Release 1.3.3.3（2026年11月21日）",

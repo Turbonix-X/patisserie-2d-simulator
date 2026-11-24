@@ -596,7 +596,35 @@ var Decor = (function() {
   var tech = techArt({ line: '#22D3EE', dot: '#67E8F9', chip: '#0F1B2E', led1: '#22D3EE', led2: '#A78BFA' });
   var techgold = techArt({ line: '#FACC15', dot: '#FDE68A', chip: '#1F1A0B', led1: '#FACC15', led2: '#F59E0B' });
 
-  var THEMES = { birthday: birthday, spring: spring, summer: summer, winter: winter, fall: fall, space: space, party: party, bakery: bakery, horror: horror, cookie: cookie, tech: tech, techgold: techgold };
+  // ---------- Or ----------
+  function sparkle(c1, c2) {
+    return '<path d="M0-10C1.200-3 3-1.200 10 0 3 1.200 1.200 3 0 10-1.200 3-3 1.200-10 0-3-1.200-1.200-3 0-10z" fill="' + c1 + '"/><path d="M0-5.500C.6-1.800 1.800-.6 5.500 0 1.800.6.6 1.800 0 5.500-.6 1.800-1.800.6-5.500 0-1.800-.6-.6-1.800 0-5.500z" fill="' + c2 + '"/>';
+  }
+  function coin() {
+    return '<circle r="8" fill="#B8860B"/><circle r="6.800" fill="#F5C842"/><circle r="5" fill="none" stroke="#B8860B" stroke-width=".9"/><path d="M-1.600-3.200h2.400c1.400 0 1.800 1.200.8 1.900L-1.800 1.600C-2.800 2.300-2.400 3.600-1 3.600H1.600" fill="none" stroke="#9A6F08" stroke-width="1" stroke-linecap="round"/><path d="M-5-3C-3-5.500 0-6.400 2.500-5.800" fill="none" stroke="#fff" stroke-width="1" stroke-linecap="round" opacity=".7"/>';
+  }
+  function flake() { return '<path d="M-5-1l5-4 5 3-1 5-5 2-4-3z" fill="#E8B923"/><path d="M-5-1l5-4 2 3-4 3z" fill="#FFE27A"/>'; }
+  function ingot() {
+    return '<path d="M-11 6L-7-6H7L11 6z" fill="#D4A017"/><path d="M-7-6H7L5-2H-5z" fill="#FFE27A"/><path d="M-11 6L-9 2H9l2 4z" fill="#B8860B"/><path d="M-4-4h5" stroke="#fff" stroke-width="1" stroke-linecap="round" opacity=".7"/>';
+  }
+  // Un ornement en filigrane : volutes et petites perles
+  function filigree(c, w) {
+    return '<path d="M0 0C6-10 18-10 22-2S18 10 10 6 8-4 16-4" fill="none" stroke="' + c + '" stroke-width="' + (w || 1.600) + '" stroke-linecap="round"/><circle cx="26" cy="-3" r="1.800" fill="' + c + '"/><circle cx="4" cy="8" r="1.400" fill="' + c + '"/>';
+  }
+  var gold = {
+    strip: svg(240, 26, '<path d="M0 13H240" stroke="#B8860B" stroke-width="1.600"/><path d="M0 16H240" stroke="#F5C842" stroke-width=".8"/>' + [0, 1, 2, 3, 4, 5].map(function(i) { return at(20 + i * 40, 13, .6, 0, sparkle('#F5C842', '#FFF3B0')); }).join('') + at(60, 13, .55, 0, coin()) + at(140, 13, .55, 0, coin()) + at(220, 13, .55, 0, coin())),
+    ground: svg(240, 22, '<rect y="12" width="240" height="10" fill="#B8860B"/><path d="M0 12H240" stroke="#FFE27A" stroke-width="2"/><path d="M0 16H240" stroke="#8A6508" stroke-width="1"/>' + at(30, 9, .55, 0, ingot()) + at(110, 9, .55, 0, ingot()) + at(190, 9, .55, 0, ingot()) + at(70, 10, .4, 0, coin()) + at(150, 10, .4, 0, coin())),
+    corner: svg(230, 190, at(150, 150, 2.2, 200, filigree('#C9971C', 2)) + at(168, 150, 1.5, 0, ingot()) + at(196, 160, 1.2, 0, ingot()) + at(150, 166, 1.1, 0, coin()) + at(210, 140, .9, 0, coin()) + at(120, 120, 1, 0, sparkle('#F5C842', '#FFF3B0')) + at(200, 100, .8, 0, sparkle('#F5C842', '#FFF3B0'))),
+    corner2: svg(170, 90, at(60, 64, 1.5, 0, ingot()) + at(110, 68, 1.1, 0, coin()) + at(140, 40, .9, 0, sparkle('#F5C842', '#FFF3B0')) + at(30, 40, .7, 0, sparkle('#E8B923', '#FFF3B0'))),
+    top: svg(150, 70, at(112, 34, 1.3, 0, sparkle('#F5C842', '#FFF3B0')) + at(60, 44, .8, 0, sparkle('#E8B923', '#FFF3B0')) + at(122, 56, .6, 0, coin())),
+    tile: svg(120, 120, at(30, 30, 1, 0, filigree('#C9971C', 1.400), .22) + at(98, 92, 1, 180, filigree('#C9971C', 1.400), .22) + at(86, 24, .55, 0, sparkle('#E8B923', '#FFF3B0'), .5) + at(18, 98, .45, 0, sparkle('#E8B923', '#FFF3B0'), .5)),
+    card: svg(48, 48, at(30, 24, .8, 0, sparkle('#E8B923', '#FFF3B0'), .45)),
+    mark: svg(28, 28, at(14, 14, 1.15, 0, ingot())),
+    motion: 'fall', count: 26,
+    pieces: [svg(24, 24, at(12, 12, .85, 0, sparkle('#F5C842', '#FFF3B0'))), svg(24, 24, at(12, 12, .7, 20, sparkle('#E8B923', '#FFE27A'))), svg(18, 18, at(9, 9, .85, 20, coin())), svg(14, 14, at(7, 7, 1, 40, flake())), svg(14, 14, at(7, 7, .9, 140, flake()))],
+  };
+
+  var THEMES = { gold: gold, birthday: birthday, spring: spring, summer: summer, winter: winter, fall: fall, space: space, party: party, bakery: bakery, horror: horror, cookie: cookie, tech: tech, techgold: techgold };
   var VARS = { strip: '--decor-strip', ground: '--decor-ground', corner: '--decor-corner', corner2: '--decor-corner2', top: '--decor-top', tile: '--decor-tile', card: '--decor-card', mark: '--decor-mark' };
   var applied = null;
 

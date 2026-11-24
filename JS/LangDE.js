@@ -734,7 +734,7 @@ Object.assign(LANGS.de, {
    "home.duplicate": "Spiel duplizieren",
    "home.copyWord": "Kopie",
    "settings.themeGold": "Golden",
-   "settings.lockGold": "nach 5000 essbaren Goldblättchen",
+   "settings.lockGold": "nach 1.000.000 essbaren Goldblättchen",
    "settings.goldUnlocked": "Goldenes Thema freigeschaltet: Bob ist ganz aus Gold!",
    "settings.techGoldUnlocked": "Goldenes Tech-Thema freigeschaltet!",
    "stats.viewCompare": "Vergleichen",
@@ -811,4 +811,19 @@ Object.assign(LANGS.de, {
 });
 Object.assign(LANGS.de, {
   'emp.buyerRefund':`Die Einkäufer gibt es nicht mehr: Du hast zurückbekommen, was ihre Einstellung gekostet hat ({{v}}).`
+});
+Object.assign(LANGS.de, {
+  'hdr.more':`Weitere Knöpfe`,
+  'hdr.title':`Knöpfe der Kopfzeile`,
+  'hdr.size':`Größe der Knöpfe`,
+  'hdr.sizeHelp':`Macht die Knöpfe oben kleiner oder größer.`,
+  'hdr.dragHelp':`Zieh die Knöpfe, um sie zu ordnen. Die im unteren Bereich kommen auf Handys und kleinen Bildschirmen ins Menü „⋯“, damit mehr Platz bleibt.`,
+  'hdr.inBar':`In der Kopfzeile`,
+  'hdr.inMenu':`Im Menü „⋯“ (kleiner Bildschirm)`,
+  'emp.mechanic':`Mechaniker`,
+  'emp.desc.mechanic':`Repariert deine Maschinen von allein. Ab Stufe 5 kümmert er sich auch um Gebäude, aber langsam. Je stärker und je mehr es sind, desto schneller.`,
+  'unl.mechanic':`Stufe 45: der Mechaniker! Er repariert deine kaputten Maschinen von allein. Ab Stufe 5 kümmert er sich auch um Gebäude, aber langsam.`,
+  'emp.desc.carrier':`Bringt Kuchen oder Zutaten in eine andere deiner Konditoreien. Das Geld gehört allen gemeinsam.`,
+  'emp.buyerRefund':`Einige Berufe gibt es nicht mehr (Einkäufer, Alleskönner): Du hast zurückbekommen, was ihre Einstellung gekostet hat ({{v}}).`,
+  'unattended.warn':`Dein Team wird nicht mehr betreut: Komm zurück, es arbeitet immer schlechter. Manager halten es länger bei der Stange.`
 });

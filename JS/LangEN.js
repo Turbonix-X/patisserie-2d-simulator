@@ -318,7 +318,7 @@
    "home.duplicate": "Duplicate the game",
    "home.copyWord": "copy",
    "settings.themeGold": "Golden",
-   "settings.lockGold": "after getting 5,000 edible gold leaves",
+   "settings.lockGold": "after getting 1,000,000 edible gold leaves",
    "settings.goldUnlocked": "Golden theme unlocked: Bob is all gold!",
    "settings.techGoldUnlocked": "Golden Tech theme unlocked!",
    "stats.viewCompare": "Compare",
@@ -405,4 +405,19 @@ Object.assign(LANGS.en, {
 });
 Object.assign(LANGS.en, {
   'emp.buyerRefund':`Purveyors have left the game: you got back what you paid to hire them ({{v}}).`
+});
+Object.assign(LANGS.en, {
+  'hdr.more':`More buttons`,
+  'hdr.title':`Header buttons`,
+  'hdr.size':`Button size`,
+  'hdr.sizeHelp':`Makes the buttons at the top smaller or bigger.`,
+  'hdr.dragHelp':`Drag the buttons to arrange them. The ones in the bottom zone go into the “⋯” menu on phones and small screens, to save room.`,
+  'hdr.inBar':`In the header`,
+  'hdr.inMenu':`In the “⋯” menu (small screen)`,
+  'emp.mechanic':`Mechanic`,
+  'emp.desc.mechanic':`Repairs your machines on their own. From level 5 they also look after buildings, but slowly. The stronger they are and the more of them there are, the faster it goes.`,
+  'unl.mechanic':`Level 45: the mechanic! They repair your broken machines on their own. From their level 5 they also look after buildings, but slowly.`,
+  'emp.desc.carrier':`Carries cakes or ingredients to another of your bakeries. Money is shared by all of them.`,
+  'emp.buyerRefund':`Some jobs left the game (purveyor, jack-of-all-trades): you got back what you paid to hire them ({{v}}).`,
+  'unattended.warn':`Your staff is no longer supervised: come back and play, they are working worse and worse. Managers keep them going longer.`
 });

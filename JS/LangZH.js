@@ -721,7 +721,7 @@ Object.assign(LANGS.zh, {
    "home.duplicate": "复制这局游戏",
    "home.copyWord": "副本",
    "settings.themeGold": "黄金",
-   "settings.lockGold": "获得 5000 片食用金箔后",
+   "settings.lockGold": "获得 1,000,000 片食用金箔后",
    "settings.goldUnlocked": "黄金主题已解锁：鲍勃全身是金！",
    "settings.techGoldUnlocked": "黄金科技主题已解锁！",
    "stats.viewCompare": "对比",
@@ -798,4 +798,19 @@ Object.assign(LANGS.zh, {
 });
 Object.assign(LANGS.zh, {
   'emp.buyerRefund':`采购员已从游戏中移除：雇用他们的费用已退还给你（{{v}}）。`
+});
+Object.assign(LANGS.zh, {
+  'hdr.more':`更多按钮`,
+  'hdr.title':`顶部按钮`,
+  'hdr.size':`按钮大小`,
+  'hdr.sizeHelp':`让顶部的按钮更小或更大。`,
+  'hdr.dragHelp':`拖动按钮来排列。下面区域里的按钮在手机和小屏幕上会放进“⋯”菜单，腾出更多空间。`,
+  'hdr.inBar':`在顶部`,
+  'hdr.inMenu':`在“⋯”菜单里（小屏幕）`,
+  'emp.mechanic':`机修工`,
+  'emp.desc.mechanic':`自动修理你的机器。5 级起也会修建筑，但比较慢。越强、人越多，修得越快。`,
+  'unl.mechanic':`45 级：机修工！他会自动修理坏掉的机器。5 级起也会修建筑，但比较慢。`,
+  'emp.desc.carrier':`把蛋糕或配料运到你的另一家店。钱是所有店共用的。`,
+  'emp.buyerRefund':`有些职业已从游戏中移除（采购员、多面手）：雇用他们的费用已退还给你（{{v}}）。`,
+  'unattended.warn':`你的员工已无人管理：快回来玩，他们的工作越来越差。经理能让他们撑得更久。`
 });

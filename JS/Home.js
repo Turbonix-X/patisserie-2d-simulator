@@ -457,7 +457,8 @@ function showAccountsModal() {
   showModal(h);
 }
 function backToHome() {
-  // On sort tout de suite, sans fenetre : la partie est sauvegardee juste avant
+  // On sort tout de suite, sans fenetre : la partie est sauvegardee juste avant, « fermee » : elle ne continue pas pendant ton absence
+  G.closedAt = Date.now();
   save();
   skipSaveOnUnload = true;
   var p = homeProfile();

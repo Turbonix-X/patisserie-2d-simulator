@@ -30,7 +30,15 @@ function bootGame() {
   if (G.paused) {
     // Partie sauvegardee en pause : pas de gains, et la fenetre de pause revient
     if (!G.pausedAt) G.pausedAt = G.lastTick || Date.now();
+    G.closedAt = 0;
     setTimeout(function() { showPauseModal(); }, 300);
+  } else if (G.closedAt) {
+    // Fermee par le menu : le temps ne compte pas, tout reprend la ou ca s'etait arrete
+    var closedFor = Math.max(0, Date.now() - (G.lastTick || G.closedAt));
+    shiftGameTimers(closedFor);
+    shiftAllBakeries(closedFor);
+    G.closedAt = 0;
+    G.lastTick = Date.now();
   } else if (G.introDone && G.lastTick) {
     var elapsed = (Date.now() - G.lastTick) / 1000;
     if (elapsed > 60) {
@@ -41,9 +49,16 @@ function bootGame() {
     }
   }
 
+  // Tant que tu touches au jeu, tes employes sont encadres (voir unattendedMult)
+  G.lastActive = Date.now();
+  if (!bootGame._act) {
+    bootGame._act = true;
+    var markActive = function() { var n = Date.now(); if (G && n - (G.lastActive || 0) > 5000) G.lastActive = n; };
+    ['pointerdown', 'keydown', 'touchstart', 'wheel'].forEach(function(ev) { window.addEventListener(ev, markActive, { passive: true, capture: true }); });
+  }
+
   fullRender();
   if (typeof initSplit === 'function') initSplit();
-  if (typeof initDockFold === 'function') initDockFold();
   if (typeof claimTabLock === 'function') claimTabLock();
 
   if (loadNotice) setTimeout(function() { toast(t('offline.' + loadNotice)); }, 800);

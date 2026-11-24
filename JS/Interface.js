@@ -84,6 +84,40 @@ function toast(msg) {
   activeToasts[msg] = { div: div, count: 1, timer: setTimeout(function() { removeToast(msg, div); }, 3000) };
 }
 
+// Sur telephone et tablette, on fait glisser une notification sur le cote (droite ou gauche) pour la faire partir
+(function() {
+  var drag = null;
+  document.addEventListener('pointerdown', function(e) {
+    var n = e.target.closest && e.target.closest('.notif');
+    if (!n || e.pointerType === 'mouse') return;
+    drag = { n: n, x: e.clientX, y: e.clientY, dx: 0, id: e.pointerId, moved: false };
+    n.style.transition = 'none';
+    n.style.animation = 'none';
+  });
+  document.addEventListener('pointermove', function(e) {
+    if (!drag || e.pointerId !== drag.id) return;
+    drag.dx = e.clientX - drag.x;
+    if (Math.abs(drag.dx) > 6) drag.moved = true;
+    if (drag.moved) { drag.n.style.transform = 'translateX(' + drag.dx + 'px)'; drag.n.style.opacity = String(Math.max(0.2, 1 - Math.abs(drag.dx) / 220)); }
+  });
+  function end(e) {
+    if (!drag || e.pointerId !== drag.id) return;
+    var d = drag; drag = null;
+    if (Math.abs(d.dx) > 70) {
+      d.n.style.transition = 'transform .2s, opacity .2s';
+      d.n.style.transform = 'translateX(' + (d.dx > 0 ? 400 : -400) + 'px)';
+      d.n.style.opacity = '0';
+      for (var key in activeToasts) { if (activeToasts[key].div === d.n) { clearTimeout(activeToasts[key].timer); delete activeToasts[key]; } }
+      setTimeout(function() { if (d.n.parentNode) d.n.parentNode.removeChild(d.n); }, 220);
+    } else {
+      d.n.style.transition = 'transform .2s, opacity .2s';
+      d.n.style.transform = ''; d.n.style.opacity = '';
+    }
+  }
+  document.addEventListener('pointerup', end);
+  document.addEventListener('pointercancel', end);
+})();
+
 function removeToast(msg, div) {
   div.classList.add('fade-out');
   setTimeout(function() { if (div.parentNode) div.parentNode.removeChild(div); }, 400);
@@ -145,17 +179,28 @@ function renderHeader() {
   h += '<div class="xp-bar-container"><div class="xp-bar-fill" style="width:' + xpPct + '%"></div>';
   h += '<span class="xp-bar-text">' + t('xp.text', { c: fmt(Math.floor(G.xp)), n: fmt(xpNeeded) }) + '</span></div>';
   h += '</div>';
-  h += '<div class="header-right">';
-  // Installer l'appli Windows (seulement dans un navigateur, sur un PC Windows), puis les comptes
-  // De gauche a droite : sortir, telechargements, patisseries, succes, stats, pause, reglages (tout a droite)
-  h += headerBtn('backToHome()', t('home.backHome'), 'back');
-  if (typeof installBtnHTML === 'function') h += installBtnHTML();
-  h += headerBtn('showBakeriesModal()', t('bakery.title'), 'store', false, G.bakeries.length >= 2 ? G.bakeries.length : 0);
-  h += headerBtn('showAchievementsModal()', t('ach.header'), 'ach');
-  h += headerBtn('showStatsModal()', t('settings.tabStats'), 'stats');
-  var pauseLabel = G.paused ? t('pause.resume') : t('pause.title');
-  h += headerBtn('togglePause()', pauseLabel, G.paused ? 'play' : 'pause');
-  h += headerBtn('showSettingsModal()', t('settings.title'), 'settings');
+  h += '<div class="header-right"><div class="hdr-btns" style="zoom:' + hdrZoom() + '">';
+  // Les boutons, dans l'ordre choisi dans les reglages. Sur petit ecran, ceux du menu « ... » s'ouvrent d'un clic.
+  var lay = hdrLayout(), inMenu = {};
+  lay.menu.forEach(function(id) { inMenu[id] = true; });
+  var menuItems = [];
+  lay.order.forEach(function(id) {
+    var d = hdrDef(id);
+    if (!d || !d.show()) return;
+    h += d.html(inMenu[id] ? ' hdr-hide-small' : '');
+    if (inMenu[id]) menuItems.push(d);
+  });
+  if (menuItems.length) {
+    h += '<button type="button" class="hbtn hdr-more' + (ui.hdrPop ? ' open' : '') + '" onclick="toggleHdrMenu(event)" title="' + escH(t('hdr.more')) + '" aria-label="' + escH(t('hdr.more')) + '" aria-expanded="' + !!ui.hdrPop + '">' + uiIcon('more') + '</button>';
+  }
+  h += '</div>';
+  if (menuItems.length) {
+    if (ui.hdrPop) {
+      h += '<div class="hdr-pop" id="hdr-pop">';
+      menuItems.forEach(function(d) { h += '<button type="button" class="hdr-pop-item" onclick="hdrPopRun(\'' + d.id + '\')">' + uiIcon(d.icon()) + '<span>' + escH(d.label()) + '</span></button>'; });
+      h += '</div>';
+    }
+  }
   h += '</div></div></header>';
   var alerts = '';
   if (G.rentDebt > 0) {
@@ -184,9 +229,41 @@ function renderHeader() {
   renderHeader._money = G.money;
 }
 
-function headerBtn(action, label, icon, off, count) {
+// Les boutons de l'en-tete. Les reglages les rangent (ordre) et peuvent en mettre dans le menu « ... » des petits ecrans.
+var HDR_IDS = ['back', 'install', 'bakeries', 'ach', 'stats', 'pause', 'settings'];
+function hdrDef(id) {
+  var defs = {
+    back: { action: 'backToHome()', label: function() { return t('home.backHome'); }, icon: function() { return 'back'; } },
+    install: { action: 'installApp()', label: function() { return t('home.install'); }, icon: function() { return 'download'; }, show: function() { return typeof canOfferInstall === 'function' && canOfferInstall(); }, extra: ' install-btn' },
+    bakeries: { action: 'showBakeriesModal()', label: function() { return t('bakery.title'); }, icon: function() { return 'store'; }, count: function() { return G.bakeries.length >= 2 ? G.bakeries.length : 0; } },
+    ach: { action: 'showAchievementsModal()', label: function() { return t('ach.header'); }, icon: function() { return 'ach'; } },
+    stats: { action: 'showStatsModal()', label: function() { return t('settings.tabStats'); }, icon: function() { return 'stats'; } },
+    pause: { action: 'togglePause()', label: function() { return G.paused ? t('pause.resume') : t('pause.title'); }, icon: function() { return G.paused ? 'play' : 'pause'; } },
+    settings: { action: 'showSettingsModal()', label: function() { return t('settings.title'); }, icon: function() { return 'settings'; } },
+  };
+  var d = defs[id];
+  if (!d) return null;
+  d.id = id;
+  if (!d.show) d.show = function() { return true; };
+  d.html = function(more) { return headerBtn(d.action, d.label(), d.icon(), false, d.count ? d.count() : 0, (d.extra || '') + (more || '')); };
+  return d;
+}
+// L'ordre et le menu choisis (le bouton des reglages reste toujours dans l'en-tete)
+function hdrLayout() {
+  var s = (G.settings || {}), order = [], menu = [];
+  (Array.isArray(s.hdrOrder) ? s.hdrOrder : []).forEach(function(id) { if (HDR_IDS.indexOf(id) >= 0 && order.indexOf(id) < 0) order.push(id); });
+  HDR_IDS.forEach(function(id) { if (order.indexOf(id) < 0) order.push(id); });
+  (Array.isArray(s.hdrMenu) ? s.hdrMenu : []).forEach(function(id) { if (id !== 'settings' && order.indexOf(id) >= 0 && menu.indexOf(id) < 0) menu.push(id); });
+  return { order: order, menu: menu };
+}
+function hdrZoom() { var z = Number((G.settings || {}).hdrZoom); return (isFinite(z) && z >= 70 && z <= 150 ? z : 100) / 100; }
+function toggleHdrMenu(e) { if (e) e.stopPropagation(); ui.hdrPop = !ui.hdrPop; renderHeader(); }
+function hdrPopRun(id) { ui.hdrPop = false; renderHeader(); var d = hdrDef(id); if (d) (new Function(d.action))(); }
+document.addEventListener('click', function(e) { if (ui.hdrPop && !(e.target.closest && e.target.closest('.hdr-pop, .hdr-more'))) { ui.hdrPop = false; renderHeader(); } });
+
+function headerBtn(action, label, icon, off, count, extra) {
   var safe = escH(label);
-  return '<button class="hbtn' + (off ? ' off' : '') + '" onclick="' + action + '" title="' + safe + '" aria-label="' + safe + '">' + uiIcon(icon) + (count ? '<span class="hbtn-count">' + count + '</span>' : '') + '</button>';
+  return '<button class="hbtn' + (off ? ' off' : '') + (extra || '') + '" onclick="' + action + '" title="' + safe + '" aria-label="' + safe + '">' + uiIcon(icon) + (count ? '<span class="hbtn-count">' + count + '</span>' : '') + '</button>';
 }
 
 // Le logo ne fait rien... ou presque
@@ -856,31 +933,6 @@ function fitDock() {
 }
 window.addEventListener('resize', function() { if (typeof fitDock === 'function') fitDock(); });
 
-// La barre du bas se replie d'un clic ; le choix est retenu sur cet appareil
-var DOCK_FOLD_KEY = 'p2ds_dock_folded';
-function applyDockFold(folded) {
-  var d = document.getElementById('dock'), b = document.getElementById('dock-toggle');
-  if (!d) return;
-  d.classList.toggle('folded', folded);
-  if (b) {
-    var label = t(folded ? 'dock.unfold' : 'dock.fold');
-    b.setAttribute('aria-expanded', folded ? 'false' : 'true');
-    b.setAttribute('aria-label', label);
-    b.title = label;
-    b.textContent = folded ? label : '';   // repliee : le bouton dit clairement comment la rouvrir
-  }
-  fitDock();
-}
-function toggleDock() {
-  var folded = !document.getElementById('dock').classList.contains('folded');
-  try { localStorage.setItem(DOCK_FOLD_KEY, folded ? '1' : '0'); } catch (e) { /* tant pis */ }
-  applyDockFold(folded);
-}
-function initDockFold() {
-  var f = false;
-  try { f = localStorage.getItem(DOCK_FOLD_KEY) === '1'; } catch (e) { /* tant pis */ }
-  applyDockFold(f);
-}
 
 // Jeter une preparation : les ingredients reviennent, d'autant moins que la barre a monte
 function showDiscardCraft(uid) {
@@ -1256,7 +1308,7 @@ function showBakeriesModal() {
     else h += '<button class="btn btn-small btn-primary" onclick="doSwitchBakery(' + i + ')">' + t('bakery.go') + '</button>';
     if (several) h += '<button class="btn btn-small btn-danger" onclick="confirmSellBakery(' + i + ')">' + t('bakery.sell') + '</button>';
     if (s) {
-      h += '<div class="bakery-stats"><span>' + t('bakery.level', { v: s.level }) + '</span><span>' + t('bakery.money', { v: fmtMoney(s.money) }) + '</span>';
+      h += '<div class="bakery-stats"><span>' + t('bakery.level', { v: s.level }) + '</span><span>' + t('bakery.money', { v: fmtMoney(G.money) }) + '</span>';
       if (s.rentDebt > 0) h += '<span class="debt">' + t('bakery.debt', { v: fmtMoney(s.rentDebt) }) + '</span>';
       h += '<span>' + t('bakery.value', { v: fmtMoney(getBakeryValueForIndex(i)) }) + '</span></div>';
     }

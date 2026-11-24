@@ -324,8 +324,8 @@ check('Argent et ingredient a l infini', G.money === MONEY_CAP && G.ing.farine >
 
 // --- Beta 1.7 ---
 G = createFreshState();
-check('De base, les apprentis sont en bas et le meilleur metier en haut', empGroupOrder()[0] === 'chef' && empGroupOrder()[empGroupOrder().length - 1] === 'novice');
-moveEmpGroup('collector', 'chef');
+check('De base, les apprentis sont en bas et le meilleur metier en haut', empGroupOrder()[0] === 'mechanic' && empGroupOrder()[empGroupOrder().length - 1] === 'novice');
+moveEmpGroup('collector', 'mechanic');
 check('On peut monter un metier tout en haut', empGroupOrder()[0] === 'collector' && empGroupOrder().length === EMP_TYPES.length);
 G.employees = [{ id: 1, type: 'collector', assignedIng: 'farine', status: 'working', level: 1, skill: 50, morale: 100 }, { id: 2, type: 'manager', status: 'working', level: 1, skill: 50, morale: 100, paused: true }];
 var dash = empDashboard();
@@ -352,21 +352,21 @@ var dest = createFreshState(); dest.money = 0;
 var carrier = { name: 'Test', type: 'carrier' };
 var oldRandom = Math.random;
 Math.random = function() { return 0.5; };
-var ship = shipOut(carrier, dest, 'money', null, 100);
+var ship = shipOut(carrier, dest, 'ing', 'farine', 100);
 Math.random = oldRandom;
-check('Un trajet dure entre 10 s et 10 min', ship.eta - Date.now() >= 9000 && ship.eta - Date.now() <= 601000 && dest.money === 0);
+check('Un trajet dure entre 10 s et 10 min', ship.eta - Date.now() >= 9000 && ship.eta - Date.now() <= 601000 && (dest.ing.farine || 0) === 0);
 ship.eta = Date.now() - 1; tickShipments(dest);
-check('Le chargement arrive', dest.money === 100 && dest.incoming.length === 0);
+check('Le chargement arrive', dest.ing.farine === 100 && dest.incoming.length === 0);
 Math.random = function() { return 0.01; };
-var lostShip = shipOut(carrier, dest, 'money', null, 50);
+var lostShip = shipOut(carrier, dest, 'ing', 'farine', 50);
 Math.random = oldRandom;
 lostShip.eta = Date.now() - 1; tickShipments(dest);
-check('Un accident fait perdre le chargement', lostShip.lost && dest.money === 100 && dest.incoming.length === 0);
+check('Un accident fait perdre le chargement', lostShip.lost && dest.ing.farine === 100 && dest.incoming.length === 0);
 Math.random = function() { return 0.1; };
-var lateShip = shipOut(carrier, dest, 'money', null, 10);
+var lateShip = shipOut(carrier, dest, 'ing', 'farine', 10);
 Math.random = oldRandom;
 lateShip.eta = Date.now() - 1; tickShipments(dest);
-check('Un retard repousse l arrivee', dest.incoming.length === 1 && lateShip.eta > Date.now() && dest.money === 100);
+check('Un retard repousse l arrivee', dest.incoming.length === 1 && lateShip.eta > Date.now() && dest.ing.farine === 100);
 check('Un visage d employe est un dessin', /^<svg/.test(empAvatar('chef', 'Emma')) && empAvatar('chef', 'Emma') !== empAvatar('chef', 'Lucas'));
 
 // --- Beta 1.8 ---
@@ -452,24 +452,87 @@ check('Un succes compte les niveaux de machines', ACHIEVEMENTS.filter(function(a
 check('Bob connait 30 anecdotes', LANGS.fr['bob.facts'].split('|').length === 30);
 
 // --- Release 1.0 ---
-check('La version s appelle Release 1.3.3.3', GAME_VERSION === 'Release 1.3.3.3');
+check('La version s appelle Release 1.3.4', GAME_VERSION === 'Release 1.3.4');
 // --- Release 1.3.3.2 : les intendants sont retires et rembourses ---
 check('Plus d intendant a embaucher', !findEmpType('buyer'));
 (function() {
-  var old = createFreshState(); delete old.buyersGone; old.money = 100; old.level = 100;
+  var old = createFreshState(); delete old.buyersGone; delete old.versatileGone; delete old.sharedMoney; old.money = 100; old.level = 100;
   old.employees = [{ id: 1, type: 'buyer', level: 1, skill: 50, morale: 80, status: 'working', paid: 15000 }, { id: 2, type: 'buyer', level: 2, skill: 50, morale: 80, status: 'working' },
-    { id: 3, type: 'versatile', level: 1, skill: 50, morale: 80, status: 'working', jobs: [{ type: 'buyer', level: 2 }, { type: 'baker', level: 1 }], focus: 'buyer' }];
+    { id: 3, type: 'versatile', level: 1, skill: 50, morale: 80, status: 'working', jobs: [{ type: 'buyer', level: 2 }, { type: 'baker', level: 1 }], focus: 'buyer', paid: 6000 },
+    { id: 4, type: 'baker', level: 1, skill: 50, morale: 80, status: 'working' }];
   old.deliveries = [{ items: { farine: 7 }, at: Date.now() + 9999 }];
-  var other = JSON.parse(JSON.stringify(old)); other.money = 0;
+  var other = JSON.parse(JSON.stringify(old)); other.money = 500;
   old.bakeries = [{ name: 'A' }, { name: 'B', state: other }];
   var m = migrateSave(old);
-  check('Les intendants sont rembourses : prix paye, sinon prix d un candidat de leur niveau', m.money === 100 + 15000 + 60000 && m.employees.length === 1, m.money);
-  check('... un touche-a-tout perd seulement ce metier', m.employees[0].jobs.length === 1 && m.employees[0].jobs[0].type === 'baker' && m.employees[0].focus === 'all');
+  var each = 15000 + 60000 + 6000;
+  check('Intendants et touche-a-tout sont rembourses : prix paye, sinon prix d un candidat de leur niveau', m.employees.length === 1 && m.employees[0].type === 'baker', m.employees.length);
+  check('... dans chaque patisserie, et l argent est reuni en une seule bourse', m.money === 100 + 500 + each * 2 && m.bakeries[1].state.money === 0 && m.bakeries[1].state.employees.length === 1, m.money);
   check('... les livraisons deja payees arrivent', m.ing.farine === 7 && m.deliveries.length === 0);
-  check('... dans chaque patisserie', m.bakeries[1].state.money === 75000 && m.bakeries[1].state.employees.length === 1);
   var again = migrateSave(m);
-  check('... et une seule fois', again.money === 75100);
+  check('... et une seule fois', again.money === 600 + each * 2);
+  check('Plus de touche-a-tout a embaucher', !findEmpType('versatile'));
+  G = createFreshState(); G.level = 100;
+  check('Les primes ne sont plus limitees a +50 %', PAY_STEPS.indexOf(200) >= 0 && PAY_STEPS.indexOf(1000) >= 0 && setPay({ id: 99, payAdj: 0, morale: 80 }, 500) === 'ok');
 })();
+// --- Release 1.3.4 ---
+(function() {
+  // Une seule bourse pour toutes les patisseries
+  G = createFreshState(); G.level = 100; G.money = 1000; G.bakeryName = 'A';
+  ensureBakeryList();
+  openNewBakery(true, 'B');
+  check('Une nouvelle patisserie partage l argent : on garde tout', G.money === 1000 && G.bakeries[1].state.level === 100);
+  var st = G.bakeries[1].state;
+  withBakery(st, function() { G.money += 50; });
+  check('Ce que gagne une autre patisserie arrive dans la bourse commune', G.money === 1050);
+  switchToBakery(1);
+  check('Changer de patisserie garde la meme bourse', G.money === 1050 && G.bakeryName === 'B');
+  var tr = newEmployee('carrier', 'Ben', 50, 1); tr.carryWhat = 'money';
+  G.bakeries[0].state.cakes.cookie = 5; G.cakes.cookie = 0;
+  check('Le transporteur ne transporte plus d argent', carrierTrip(tr, 1, 0) === 0 && G.money === 1050);
+  // Les commandes
+  G = createFreshState(); G.level = 100;
+  check('Les clients commandent au maximum au debut', orderDemand() === 1);
+  G.orderDemand = 1; tickOrders(3600);
+  check('Sans commande livree, l envie baisse (2 h pour tomber au plus bas)', orderDemand() < 0.6 && orderDemand() > 0.4, orderDemand());
+  var maxOpenLow = orderMaxOpen(), everyLow = orderEverySec();
+  G.orderDemand = 1;
+  check('... il y en a alors moins et moins souvent', maxOpenLow < orderMaxOpen() || everyLow > orderEverySec());
+  G.orderDemand = 0.3; G.cakes.cookie = 100; G.orders = [{ id: 1, name: 'A', items: [{ recId: 'cookie', qty: 1 }], base: 3, reward: 4, duration: 100, expiresAt: Date.now() + 1e6 }];
+  fulfillOrder(1);
+  check('Chaque commande livree la remonte, jusqu au maximum', Math.abs(G.orderDemand - 0.4) < 1e-9);
+  // Mecanicien
+  G = createFreshState(); G.level = 100; G.money = 1e9;
+  var mech = newEmployee('mechanic', 'Mia', 50, 1); G.employees = [mech];
+  G.broken = { 'm:four': { since: Date.now(), until: 0 }, 'b:moulin': { since: Date.now(), until: 0 } };
+  for (var k = 0; k < 400; k++) tickMechanics(1);
+  check('Le mecanicien repare les machines mais pas les batiments avant le niveau 5', !G.broken['m:four'] && !!G.broken['b:moulin']);
+  mech.level = 5; for (k = 0; k < 4000; k++) tickMechanics(1);
+  check('... a partir du niveau 5, il repare aussi les batiments (lentement)', !G.broken['b:moulin']);
+  G.broken = { 'm:four': { since: Date.now(), until: 0 } }; G.employees = [newEmployee('mechanic', 'A', 50, 1)];
+  tickMechanics(10); var slow = G.broken['m:four'] ? G.broken['m:four'].prog : 60;
+  G.broken = { 'm:four': { since: Date.now(), until: 0 } }; G.employees = [newEmployee('mechanic', 'A', 50, 1), newEmployee('mechanic', 'B', 50, 1), newEmployee('mechanic', 'C', 50, 1)];
+  tickMechanics(10); var fast = G.broken['m:four'] ? G.broken['m:four'].prog : 60;
+  check('Plus il y a de mecaniciens, plus c est rapide', fast > slow * 2.5, slow + ' / ' + fast);
+  // Partie laissee ouverte
+  G = createFreshState(); G.level = 100; G.employees = [newEmployee('baker', 'A', 50, 1)];
+  G.lastActive = Date.now();
+  check('Quand tu joues, les employes sont au mieux', unattendedMult() === 1);
+  G.lastActive = Date.now() - 4 * 3600 * 1000;
+  var noMgr = unattendedMult();
+  G.employees.push(newEmployee('manager', 'M', 50, 1)); G.employees.push(newEmployee('manager', 'N', 50, 1));
+  check('Avec des managers, 4 h sans jouer ne coutent rien', unattendedMult() === 1 && noMgr < 1, noMgr);
+  G.lastActive = Date.now() - 7 * 3600 * 1000;
+  var late = unattendedMult();
+  G.lastActive = Date.now() - 11 * 3600 * 1000;
+  check('Au-dela de 5 h, ils baissent petit a petit', late < 1 && unattendedMult() < late && unattendedMult() > 0.3, late + ' / ' + unattendedMult());
+  // Partie fermee par le menu
+  G = createFreshState(); G.closedAt = 0;
+  check('La partie sait qu elle a ete fermee par le menu', G.closedAt === 0 && 'lastActive' in G);
+  check('Il faut 1 000 000 de feuilles d or pour le theme dore', findTheme('gold').gotIng.n === 1000000);
+  var ev = hdrLayout();
+  check('Les boutons de l en-tete ont un ordre, le bouton des reglages ne quitte jamais l en-tete', ev.order.length === HDR_IDS.length && ev.menu.indexOf('settings') < 0);
+})();
+
 G = createFreshState(); G.level = 499;
 check('La fete et l espace sont caches avant leur niveau', findTheme('party').hidden && findTheme('space').hidden && themeLockReason(findTheme('party')) === 'level');
 check('Les themes Tech sont secrets', themeLockReason(findTheme('tech')) === 'secret' && themeLockReason(findTheme('techgold')) === 'secret');
@@ -593,12 +656,8 @@ G.level = 40;
 check('... puis on peut en acheter', buyBuilding(BUILDINGS[0], '1') === 1);
 G = createFreshState(); G.money = 1000; G.level = 50; G.bakeryName = 'Une'; G.cakes.cookie = 10; G.ing.farine = 5; openNewBakery(true, 'Deux');
 var dest = G.bakeries[1].state, earn0 = G.totalEarned, destCookieSpace = Math.floor(dest.maxSpace / findRec('cookie').space);
-check('Bob transporte de l argent, sans que ce soit un gain', transferMoney(0, 1, 300) === 300 && G.money === 700 && dest.money === 350 && G.totalEarned === earn0);
-check('Il ne transporte pas plus que ce qu il y a', transferMoney(0, 1, 1e9) === 700 && G.money === 0);
 check('Il transporte des ingredients', transferStock(0, 1, 'ing', 'farine', 3) === 3 && G.ing.farine === 2 && dest.ing.farine === 3);
 check('Il transporte des gateaux dans la place disponible', transferStock(0, 1, 'cake', 'cookie', 10) === Math.min(10, destCookieSpace));
-check('Ca marche aussi depuis l autre boutique', transferMoney(1, 0, 50) === 50 && G.money === 50);
-check('Pas vers elle-meme', transferMoney(0, 0, 10) === 0);
 
 // --- Transporteur ---
 G = createFreshState(); G.level = 50; G.money = 1e6;
@@ -615,11 +674,8 @@ function arriveNow() {
   carrier.tripUntil = 0;
 }
 tickCarriers(1);
-check('Pas de voyage avant d avoir fini le trajet', other2.money === otherMoney);
 for (var ct = 0; ct < 60; ct++) tickCarriers(1);
-check('L argent part sur la route, il n arrive pas tout de suite', G.money < myMoney && other2.money === otherMoney && other2.incoming.length === 1);
 arriveNow();
-check('Il transporte de l argent tout seul', other2.money > otherMoney && G.money < myMoney, other2.money);
 carrier.carryWhat = 'cakes'; G.cakes.cookie = 5; carrier.carryCd = CARRIER_TRIP_SEC;
 tickCarriers(1); arriveNow();
 check('Il transporte des gateaux', other2.cakes.cookie === 5 && G.cakes.cookie === 0, other2.cakes.cookie);
@@ -631,9 +687,6 @@ tickCarriers(1);
 check('Pendant un trajet, il ne repart pas', G.ing.farine === 10);
 carrier.tripUntil = 0;
 Math.random = realRandom;
-G.money = 1; carrier.carryWhat = 'money'; carrier.carryCd = CARRIER_TRIP_SEC; var low = other2.money;
-tickCarriers(1);
-check('Il laisse de quoi payer les salaires et le loyer', G.money === 1 && other2.money === low, G.money);
 
 // --- Conseils de Bob ---
 G = createFreshState(); G.level = 50; G.maxSpace = 10; G.cakes.cake = 10;
@@ -736,7 +789,7 @@ var emp5 = newEmployee('baker', 'Pierre', 50, 1); G.employees = [emp5];
 var sal0 = getEmpSalary(emp5);
 check('Un salaire plus bas baisse la motivation maximale', (function() { emp5.payAdj = -10; return maxMorale(emp5) === 90 && getEmpSalary(emp5) < sal0; })());
 check('Un salaire plus haut la monte', (function() { emp5.payAdj = 20; return maxMorale(emp5) === 120 && getEmpSalary(emp5) > sal0; })());
-check('Les paliers de salaire', PAY_STEPS.join() === '-50,-20,-10,-5,0,5,10,20,50');
+check('Les paliers de salaire (les primes montent bien au-dessus de +50 %)', PAY_STEPS.join() === '-50,-20,-10,-5,0,5,10,20,50,100,200,500,1000');
 var quits = 0; for (var pq = 0; pq < 200; pq++) { var pe = newEmployee('baker', 'Eva', 50, 1); G.employees = [pe]; if (setPay(pe, -50) === 'quit') quits++; }
 check('A -50 %, il demissionne presque toujours', quits > 150, quits);
 check('Les prix montent quand la perte baisse', lossCostMult(0) > lossCostMult(10) && lossCostMult(10) > lossCostMult(50) && lossCostMult(50) > lossCostMult(100));
@@ -821,7 +874,7 @@ var priceA = REC.map(function(r) { return batchPrice(r, r.qty); }); priceMemo = 
 check('Le cache de prix ne change aucun prix', priceA.every(function(v, i) { return v === priceB[i] && v === priceC[i]; }));
 check('Les cueilleurs : le rythme du transporteur', CARRIER_EVERY_MIN.join() === '1,2,5,10,30,60' && carrierGo(newEmployee('carrier', 'Ben', 50, 1)) === 'noShop');
 G = createFreshState(); G.level = 200; G.money = 1e6; openNewBakery(true, 'Autre');
-var carr = newEmployee('carrier', 'Ben', 50, 1); G.employees = [carr]; carr.carryEvery = 5; carr.carryWhat = 'money';
+var carr = newEmployee('carrier', 'Ben', 50, 1); G.employees = [carr]; carr.carryEvery = 5; carr.carryWhat = 'cakes';
 check('Un transporteur reguler : le bouton commence, puis arrete', carrierGo(carr) === 'started' && carr.carryActive === true && carr.carryNextAt > Date.now() && (carr.tripUntil = 0, carrierGo(carr) === 'stopped') && carr.carryActive === false);
 carr.carryEvery = 0;
 check('... une seule fois : le bouton transfere tout de suite', carrierGo(carr) === 'sent' && !carr.carryActive);
@@ -1102,8 +1155,10 @@ check('Les durees comptent les jours, mois et annees', fmtLongTime(2 * 86400 + 3
 G = createFreshState(); G.maxSpace = 5;
 check('Le nombre d employes depend de l espace', empCapacity() === 7 && (G.maxSpace = 1e6, empCapacity() === EMP_LIMIT));
 check('Les accords au feminin', tg('console.empFired', 'Marie', { n: 'Marie' }) === 'Marie est renvoyée.' && tg('console.empFired', 'Pierre', { n: 'Pierre' }) === 'Pierre est renvoyé.');
-G = createFreshState(); G.ing.orfeuille = 5000;
-check('Le theme dore s obtient avec 5000 feuilles d or', themeLockReason(findTheme('gold')) === null && G.unlockedThemes.gold);
+G = createFreshState(); G.ing.orfeuille = 999999;
+check('Le theme dore ne s ouvre pas avant 1 000 000 de feuilles d or', themeLockReason(findTheme('gold')) === 'got');
+G.ing.orfeuille = 1000000;
+check('Le theme dore s obtient avec 1 000 000 de feuilles d or', themeLockReason(findTheme('gold')) === null && G.unlockedThemes.gold);
 G.unlockedThemes.tech = true; checkGoldTheme();
 check('... et il ouvre le tech dore avec le tech', G.unlockedThemes.techgold === true);
 check('Un « / » ouvre la console, S les succes, Ctrl+Echap le menu : les textes existent', ['keys.achievements', 'keys.menu', 'keys.console'].every(function(k) { return LANGS.fr[k] && LANGS.ru[k]; }));

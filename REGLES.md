@@ -34,7 +34,7 @@ Tu ouvres une pâtisserie avec 50 €. Tu achètes des ingrédients, tu prépare
 Le jeu commence par une page d'accueil : le logo, « P2DS », et tes parties. Chaque partie est une **pâtisserie**, et tu peux en avoir **10 au maximum** (deux lignes de 5). Un seul bouton + ouvre une fenêtre pour créer une nouvelle partie (sans nom à donner : Bob te le demande en jeu), coller un code de sauvegarde ou ouvrir un fichier de sauvegarde ; à 10 parties, le + disparaît.
 
 - **Dans chaque case :** le nom, le niveau et la date. Un clic sur la case ouvre la partie ; deux boutons exportent (code à copier-coller ou fichier) ou suppriment (corbeille).
-- **En haut :** à gauche le numéro de version (les nouveautés), à droite le compte, les réglages (langue et thème clair ou sombre) et le téléchargement de l'appli Windows. Le menu est clair, sombre ou automatique (celui du navigateur), quel que soit le thème de ta partie. Chaque partie a sa propre langue : une nouvelle partie prend celle du menu.
+- **En haut :** à gauche le numéro de version (les nouveautés), à droite le compte, les réglages (langue et thème clair ou sombre) et le téléchargement de l'appli Windows. Le menu est clair, sombre ou automatique (celui du navigateur), quel que soit le thème de ta partie. Chaque partie a sa propre langue : une nouvelle partie prend celle du menu. Dans Réglages > Apparence, tu règles la taille des boutons du haut et tu les ranges en les glissant ; sur téléphone et petit écran, ceux que tu mets dans la zone du bas se cachent derrière un bouton « ⋯ » pour avoir plus de place. Sur téléphone et tablette, une notification se fait glisser sur le côté pour partir.
 - **Retour au menu :** dans le jeu, la flèche en haut te ramène tout de suite au menu.
 - **Comptes :** un compte est facultatif. Avec un compte, tes parties se synchronisent en ligne dès que tu as internet (la plus récente gagne), et tu peux jouer hors ligne entre-temps. Tu peux garder plusieurs comptes et passer de l'un à l'autre dans la fenêtre des comptes.
 - **Sans compte (« Local ») :** tes parties restent dans l'appli Windows ou dans ton navigateur. Si tu désinstalles l'un ou si tu changes de navigateur, tu les perds, sauf si tu les exportes.
@@ -194,12 +194,12 @@ Lance une **recherche** dans l'onglet Employés : elle prend du temps et ne marc
 |---|---|---|---|
 | Apprenti | 5 | Rien pour l'instant : paie-lui un métier, c'est moins cher qu'embaucher. Il n'a pas de niveau | Son futur métier |
 | Cueilleur | 5 | Produit un ingrédient à chaque seconde, moins ce qu'il perd. Quand tu changes son ingrédient, il met de 10 s (niveau 1) à 2 min (niveau max) à s'y mettre, et son compte à rebours se voit dans sa fiche et dans la barre du bas | Quel ingrédient, et une limite |
-| Touche-à-tout | 20, par recherche à deux métiers | Fait jusqu'à 3 métiers (niveau 3 au maximum chacun). Son niveau à lui lui fait garder plus de niveaux quand il fait tout en même temps | Sur quel métier il se concentre (changer prend de 10 s à 1 min), et les réglages de chacun de ses métiers |
 | Boulanger | 10 | Fait baisser le temps de préparation | Aucun |
-| Transporteur | 20, et au moins 2 pâtisseries (avec une seule, il démissionne) | Emmène de l'argent ou du stock vers une autre pâtisserie. Un trajet dure de 10 s à 10 min, peut être en retard, ou avoir un accident et perdre son chargement | Où, quoi, combien, et le rythme : en continu, une seule fois, ou toutes les 1, 2, 5, 10, 30 ou 60 minutes, avec un bouton pour transférer tout de suite ou commencer |
+| Transporteur | 20, et au moins 2 pâtisseries (avec une seule, il démissionne) | Emmène du stock (gâteaux ou ingrédients) vers une autre pâtisserie : l'argent est commun, il n'a plus rien à transporter. Un trajet dure de 10 s à 10 min, peut être en retard, ou avoir un accident et perdre son chargement | Où, quoi, combien, et le rythme : en continu, une seule fois, ou toutes les 1, 2, 5, 10, 30 ou 60 minutes, avec un bouton pour transférer tout de suite ou commencer |
 | Manager | 25 | Remonte le moral de l'équipe, et peut embaucher à ta place | Embauche automatique, compétence minimum, les métiers qu'il embauche, ceux qu'il regarde en premier, les niveaux, et un réglage pour refuser tout seul les candidatures de niveau trop bas |
 | Maître d'hôtel | 30 | Livre les commandes à ta place | Peut être réglé pour ne livrer que les commandes qui rapportent plus ou moins qu'un montant, ou dont le bénéfice (prime moins ingrédients) est plus ou moins grand |
 | Vendeur | 35 | Vend tout seul, les gâteaux les plus chers d'abord | La part du stock qu'il peut vendre, et un prix au-dessus ou en dessous duquel il vend |
+| Mécanicien | 45 | Répare tout seul les machines en panne : une machine demande 60 s de travail d'un mécanicien de niveau 1, et plus il est fort, plus c'est rapide. À partir de son niveau 5, il répare aussi les bâtiments (10 min de travail), mais 3 fois moins vite. Plus tu as de mécaniciens, plus ils vont vite ensemble | Rien à régler |
 | Chef pâtissier | 65 | Prépare tout seul avec ce qu'il y a en stock | Tout, seulement ce qui manque pour les commandes, seulement certaines recettes, ou des priorités. Un budget maximum par heure, et un montant sous lequel il ne prépare rien |
 
 **Les niveaux :** chaque employé a 10 niveaux (sauf l'apprenti, qui n'en a pas). Chaque niveau double ses capacités, mais coûte 8 fois plus cher que le précédent. Pendant sa formation, il ne travaille pas. Les cueilleurs ont deux niveaux : l'efficacité (combien ils cueillent) et la perte (voir plus bas).
@@ -208,7 +208,7 @@ Lance une **recherche** dans l'onglet Employés : elle prend du temps et ne marc
 
 **Leur limite :** tu peux dire à un cueilleur de ne cueillir que s'il y en a moins de N, ou de produire N par heure. Dans ce cas sa vitesse change, sans jamais dépasser son maximum.
 
-**Le salaire :** depuis sa fiche, tu peux changer le salaire de −50 %, −20 %, −10 %, −5 %, +5 %, +10 %, +20 % ou +50 %. Moins payé, son moral maximum baisse. Payé trop peu, il démissionne presque toujours.
+**Le salaire :** depuis sa fiche, tu peux changer le salaire de −50 %, −20 %, −10 %, −5 %, +5 %, +10 %, +20 %, +50 %, +100 %, +200 %, +500 % ou +1000 %. Moins payé, son moral maximum baisse ; une prime au-delà de +50 % ne le monte plus, elle coûte juste plus cher. Payé trop peu, il démissionne presque toujours.
 
 **Au féminin :** les employées ont leur titre au féminin : cueilleuse, boulangère, pâtissière…
 
@@ -218,7 +218,7 @@ Lance une **recherche** dans l'onglet Employés : elle prend du temps et ne marc
 
 ## Les commandes
 
-Dès le niveau 30, des clients passent commande, 4 au maximum en même temps. Plus tu montes de niveau, plus ils commandent souvent et plus il peut y avoir de commandes en même temps : d'une commande toutes les 40 secondes et 4 en même temps au niveau 30, jusqu'à une toutes les 10 secondes et 10 en même temps au niveau 1000. Livre avant la fin du temps. Rater une commande n'a aucune pénalité.
+Dès le niveau 30, des clients passent commande, 4 au maximum en même temps. Plus tu montes de niveau, plus ils commandent souvent et plus il peut y avoir de commandes en même temps : d'une commande toutes les 40 secondes et 4 en même temps au niveau 30, jusqu'à une toutes les 10 secondes et 10 en même temps au niveau 1000. Livre avant la fin du temps. Rater une commande n'a aucune pénalité, mais **l'envie des clients baisse** : si tu ne livres plus rien, il y a de moins en moins de commandes, et moins souvent (elle tombe au plus bas en 2 heures, à 10 % de la normale). Chaque commande livrée la remonte de 10 %, jusqu'au maximum.
 
 | Gâteaux différents | Difficulté | Prix payé | Disponible au niveau |
 |---|---|---|---|
@@ -237,9 +237,9 @@ Dès le niveau 40. **La différence avec les employés :** un cueilleur produit 
 
 - La deuxième coûte 10 000 €, puis le prix est multiplié par 3 à chaque nouvelle boutique. Bob te félicite et te demande de la nommer.
 - **Toutes travaillent en même temps**, même quand tu n'y es pas.
-- Chaque boutique garde son argent, son stock, son équipe et ses machines.
+- **L'argent est commun** à toutes tes pâtisseries. Chaque boutique garde son stock, son équipe et ses machines, et une nouvelle pâtisserie garde ton niveau (donc toutes les recettes déjà débloquées) mais commence sans stock.
 - Dès la deuxième, les Statistiques ajoutent des graphiques et les totaux de toutes tes boutiques.
-- **Vendre une pâtisserie :** tu reçois son argent, la moitié de la valeur de ses gâteaux, de ses ingrédients et de son équipement, 10 % de ce qu'elle a gagné et la moitié de son prix d'achat, moins sa dette. Tu perds toutes ses statistiques. Tes succès restent.
+- **Vendre une pâtisserie :** tu reçois la moitié de la valeur de ses gâteaux, de ses ingrédients et de son équipement, 10 % de ce qu'elle a gagné et la moitié de son prix d'achat, moins sa dette. Tu perds toutes ses statistiques. Tes succès restent.
 - Renommer une pâtisserie coûte 100 €.
 
 ## Bob
@@ -281,6 +281,7 @@ D'autres événements ne touchent qu'**un seul ingrédient** (pénurie : il coû
 | Horreur | Seulement en octobre : noir et orange, avec citrouilles, chauves-souris et fantômes |
 | Fête | Pour toujours dès le niveau 500. Caché avant |
 | Espace | Pour toujours dès le niveau 1000. Caché avant |
+| Doré | Pour toujours après avoir obtenu **1 000 000 de feuilles d'or alimentaires**. Caché avant. Doré brillant, avec des pépites, des étincelles et des pièces qui tombent |
 
 D'autres thèmes sont cachés : à toi de les trouver. Dans les thèmes spéciaux, Bob change de tenue et de visage.
 
@@ -304,7 +305,8 @@ Les succès ont leur bouton (un trophée) dans l'en-tête, avec une barre de pro
 - Le jeu se sauvegarde tout seul toutes les 30 secondes, dans ton navigateur.
 - **Hors ligne :** une fois chargé, le jeu marche sans internet, mais ta partie n'est pas sauvegardée tant que tu es hors ligne. Elle l'est de nouveau dès que la connexion revient.
 - **Les mises à jour :** de temps en temps, le jeu vérifie s'il existe une nouvelle version. Si oui, Bob te prévient et le numéro de version devient vert : clique dessus, puis sur le bouton, et le jeu se met à jour sans recharger la page.
-- Quand tu reviens, tes boutiques ont travaillé pendant 5 heures au maximum : cueilleurs, bâtiments, vendeurs, loyers, salaires et prêts. Aucune dette n'est créée pendant ton absence. Le transporteur, lui, attend ton retour.
+- **Quitter vers le menu ferme la partie** : elle ne continue pas pendant ton absence (rien ne se passe, ni gains ni dépenses). Si tu fermes l'onglet ou l'appli sans passer par le menu, elle continue comme avant : quand tu reviens, tes boutiques ont travaillé pendant 5 heures au maximum : cueilleurs, bâtiments, vendeurs, loyers, salaires et prêts. Aucune dette n'est créée pendant ton absence. Le transporteur, lui, attend ton retour.
+- **Une partie laissée ouverte** sans que tu joues tient 5 heures au mieux, avec assez de managers (un manager encadre environ 6 employés). Avec peu de managers, les employés se laissent aller plus tôt (1 h 30 sans manager) ; au-delà, ils travaillent de moins en moins bien pendant 5 heures, jusqu'à −85 % sans manager (−42 % avec assez de managers). Dès que tu joues, tout revient.
 - Tu peux exporter ta partie dans un fichier ou sous forme de code à copier-coller, et l'importer ailleurs de la même façon.
 - **Trop de clics :** plus de 15 clics par seconde déclenchent une pause de 3 secondes. Après 3 pauses, une petite addition vérifie que tu n'es pas un robot. Après 3 mauvaises réponses, tu es bloqué 5 minutes.
 
