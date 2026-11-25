@@ -814,3 +814,8 @@ Object.assign(LANGS.zh, {
   'emp.buyerRefund':`有些职业已从游戏中移除（采购员、多面手）：雇用他们的费用已退还给你（{{v}}）。`,
   'unattended.warn':`你的员工已无人管理：快回来玩，他们的工作越来越差。经理能让他们撑得更久。`
 });
+Object.assign(LANGS.zh, {
+  'report.titleLabel':`消息名称`,
+  'report.titlePlaceholder':`给你的消息起个名字（必填）`,
+  'report.noTitle':`请先给你的消息起个名字。`
+});

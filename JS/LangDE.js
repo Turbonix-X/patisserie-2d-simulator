@@ -827,3 +827,8 @@ Object.assign(LANGS.de, {
   'emp.buyerRefund':`Einige Berufe gibt es nicht mehr (Einkäufer, Alleskönner): Du hast zurückbekommen, was ihre Einstellung gekostet hat ({{v}}).`,
   'unattended.warn':`Dein Team wird nicht mehr betreut: Komm zurück, es arbeitet immer schlechter. Manager halten es länger bei der Stange.`
 });
+Object.assign(LANGS.de, {
+  'report.titleLabel':`Name deiner Nachricht`,
+  'report.titlePlaceholder':`Gib deiner Nachricht einen Namen (Pflicht)`,
+  'report.noTitle':`Gib deiner Nachricht zuerst einen Namen.`
+});

@@ -4,6 +4,22 @@
   "intro": "كل ما أُضيف إلى Pâtisserie 2D Simulator، من الأحدث إلى الأقدم. تظهر الإصدارات الأقدم بالإنجليزية. لفهم قواعد اللعبة، راجع [الويكي](REGLES.md).",
   "versions": [
    {
+    "title": "Release 1.3.5 (25 نوفمبر 2026)",
+    "name": "Release 1.3.5",
+    "intro": "اللعبة تتحدث الهندية، وتسع أيقونات جديدة، ورسائل لاعبين أوضح بكثير.",
+    "groups": [
+     {
+      "name": "جديد وتصحيحات",
+      "items": [
+       "أُضيفت اللغة الهندية (हिन्दी) كاملة: كل نصوص اللعبة وأسماء الإنجازات ودليل الأوامر وهذا السجل.",
+       "أيقونات جديدة للماسكاربوني والبرالين واللانهاية النقية والسان أونوريه وموس الشوكولاتة وكعكة الملوك وكعكة الزعفران والأوبرا والتشيزكيك.",
+       "أُزيلت العلاوات: لا زر «علاوة» بعد الآن، وعاد الراتب من −50% إلى +50%.",
+       "في صفحة «الإبلاغ عن خطأ» يعطي اللاعب رسالته اسمًا أولًا ثم يكتب فكرته أو الخطأ."
+      ]
+     }
+    ]
+   },
+   {
     "title": "Release 1.3.4 (24 نوفمبر 2026)",
     "name": "Release 1.3.4",
     "intro": "محفظة واحدة لكل محلاتك، وميكانيكي، وثيم ذهبي جديد.",
@@ -468,6 +484,22 @@
   "intro": "Alles, was zu Pâtisserie 2D Simulator hinzugekommen ist, von der neuesten bis zur ältesten Version. Ältere Versionen werden auf Englisch angezeigt. Die Spielregeln findest du im [Wiki](REGLES.md).",
   "versions": [
    {
+    "title": "Release 1.3.5 (25. November 2026)",
+    "name": "Release 1.3.5",
+    "intro": "Das Spiel spricht Hindi, neun neue Symbole und viel klarere Spielernachrichten.",
+    "groups": [
+     {
+      "name": "Neues und Korrekturen",
+      "items": [
+       "Hindi (हिन्दी) wurde vollständig hinzugefügt: alle Texte des Spiels, die Namen der Erfolge, der Befehlsguide und dieses Änderungsprotokoll.",
+       "Neue Symbole für Mascarpone, Praliné, reine Unendlichkeit, Saint-Honoré, Schokoladenmousse, Dreikönigskuchen, Safrankuchen, Opéra und Cheesecake.",
+       "Die Prämien sind entfernt: Es gibt keinen „Prämie“-Knopf mehr, und das Gehalt geht wieder von −50 % bis +50 %.",
+       "Auf der Seite „Fehler melden“ gibt man seiner Nachricht zuerst einen Namen und schreibt dann seine Idee oder den Fehler."
+      ]
+     }
+    ]
+   },
+   {
     "title": "Release 1.3.4 (24. November 2026)",
     "name": "Release 1.3.4",
     "intro": "Eine Kasse für alle Konditoreien, ein Mechaniker und ein ganz neues Gold-Design.",
@@ -931,6 +963,22 @@
   "title": "Update history",
   "intro": "Everything that was added to Pâtisserie 2D Simulator, from the newest to the oldest. To understand the rules of the game, see the [wiki](REGLES.md).",
   "versions": [
+   {
+    "title": "Release 1.3.5 (November 25, 2026)",
+    "name": "Release 1.3.5",
+    "intro": "The game speaks Hindi, nine new icons, and much clearer player messages.",
+    "groups": [
+     {
+      "name": "What is new",
+      "items": [
+       "Hindi (हिन्दी) is added, in full: every text of the game, the achievement names, the command guide and this changelog.",
+       "New icons for mascarpone, praline, pure infinity, Saint-Honoré, chocolate mousse, king cake, saffron cake, opera cake and cheesecake.",
+       "Bonuses are removed: no more “Bonus” button, and pay is back to −50% to +50%.",
+       "On the “Report a bug” page, players first give their message a name, then write their idea or bug."
+      ]
+     }
+    ]
+   },
    {
     "title": "Release 1.3.4 (November 24, 2026)",
     "name": "Release 1.3.4",
@@ -1922,6 +1970,22 @@
   "intro": "Todo lo que se ha añadido a Pâtisserie 2D Simulator, de la más reciente a la más antigua. Las versiones más antiguas se muestran en inglés. Para entender las reglas del juego, mira la [wiki](REGLES.md).",
   "versions": [
    {
+    "title": "Release 1.3.5 (25 de noviembre de 2026)",
+    "name": "Release 1.3.5",
+    "intro": "El juego habla hindi, nueve iconos nuevos y mensajes de jugadores mucho más claros.",
+    "groups": [
+     {
+      "name": "Novedades y correcciones",
+      "items": [
+       "Se añade el hindi (हिन्दी), completo: todos los textos del juego, los nombres de los logros, la guía de comandos y este historial.",
+       "Iconos nuevos para el mascarpone, el praliné, el infinito puro, el saint-honoré, la mousse de chocolate, la galette des rois, el pastel de azafrán, la ópera y el cheesecake.",
+       "Se quitan las primas: ya no hay botón «Prima» y el salario vuelve a ir de −50 % a +50 %.",
+       "En la página «Avisar de un error», el jugador primero pone un nombre a su mensaje y luego escribe su idea o error."
+      ]
+     }
+    ]
+   },
+   {
     "title": "Release 1.3.4 (24 de noviembre de 2026)",
     "name": "Release 1.3.4",
     "intro": "Una sola cartera para todas tus pastelerías, un mecánico y un tema dorado nuevo.",
@@ -2381,10 +2445,48 @@
    }
   ]
  },
+ "hi": {
+  "title": "अपडेट का इतिहास",
+  "intro": "Pâtisserie 2D Simulator में जो कुछ भी जोड़ा गया है, सबसे नए से सबसे पुराने तक। पुराने वर्ज़न अंग्रेज़ी में दिखाए जाते हैं। गेम के नियम समझने के लिए [विकी](REGLES.md) देखें।",
+  "versions": [
+   {
+    "title": "Release 1.3.5 (25 नवंबर 2026)",
+    "name": "Release 1.3.5",
+    "intro": "गेम अब हिन्दी में, नौ नए आइकन, और खिलाड़ियों के संदेश कहीं ज़्यादा साफ़।",
+    "groups": [
+     {
+      "name": "नया क्या है",
+      "items": [
+       "हिन्दी पूरी तरह जोड़ी गई: गेम के सारे टेक्स्ट, उपलब्धियों के नाम, कमांड गाइड और यह अपडेट का इतिहास।",
+       "मास्करपोन, प्रलीन, शुद्ध अनंत, सें-ओनोरे, चॉकलेट मूस, राजा केक, केसर केक, ओपेरा और चीज़केक के लिए नए आइकन।",
+       "बोनस हटा दिए गए: अब कोई «बोनस» बटन नहीं है, और वेतन फिर से −50% से +50% तक ही बदलता है।",
+       "«बग बताएँ» पेज पर खिलाड़ी पहले अपने संदेश को एक नाम देता है, फिर अपना आइडिया या बग लिखता है।"
+      ]
+     }
+    ]
+   }
+  ]
+ },
  "ja": {
   "title": "更新履歴",
   "intro": "Pâtisserie 2D Simulator に追加されたすべての内容を、新しいものから古いものの順に載せています。古いバージョンは英語で表示されます。ゲームのルールは[ウィキ](REGLES.md)を見てください。",
   "versions": [
+   {
+    "title": "Release 1.3.5（2026年11月25日）",
+    "name": "Release 1.3.5（2026年11月25日）",
+    "intro": "ゲームがヒンディー語に対応し、新しいアイコンが9つ、プレイヤーからのメッセージもずっとわかりやすくなりました。",
+    "groups": [
+     {
+      "name": "新機能と修正",
+      "items": [
+       "ヒンディー語（हिन्दी）をすべて追加しました：ゲームの全テキスト、実績名、コマンドガイド、この更新履歴。",
+       "マスカルポーネ、プラリネ、純粋な無限、サントノーレ、チョコムース、ガレット・デ・ロワ、サフランケーキ、オペラ、チーズケーキの新しいアイコンです。",
+       "ボーナスを廃止しました：「ボーナス」ボタンはなくなり、給料は再び −50% から +50% までになりました。",
+       "「不具合を報告」ページでは、まずメッセージに名前をつけてから、アイデアや不具合を書きます。"
+      ]
+     }
+    ]
+   },
    {
     "title": "Release 1.3.4（2026年11月24日）",
     "name": "Release 1.3.4（2026年11月24日）",
@@ -2850,6 +2952,22 @@
   "intro": "Pâtisserie 2D Simulator에 추가된 모든 내용을 최신순으로 적었습니다. 오래된 버전은 영어로 표시됩니다. 게임 규칙은 [위키](REGLES.md)를 참고하세요.",
   "versions": [
    {
+    "title": "Release 1.3.5 (2026년 11월 25일)",
+    "name": "Release 1.3.5",
+    "intro": "게임이 힌디어를 지원하고, 아이콘 9개가 새로 생겼고, 플레이어 메시지가 훨씬 분명해졌어요.",
+    "groups": [
+     {
+      "name": "새 기능과 수정",
+      "items": [
+       "힌디어(हिन्दी)가 전부 추가됐어요: 게임의 모든 글, 업적 이름, 명령어 가이드, 이 변경 기록까지요.",
+       "마스카르포네, 프랄린, 순수한 무한, 생토노레, 초콜릿 무스, 갈레트 데 루아, 사프란 케이크, 오페라, 치즈케이크의 아이콘을 새로 그렸어요.",
+       "보너스를 없앴어요. '보너스' 버튼은 사라지고, 월급은 다시 −50%에서 +50%까지예요.",
+       "'버그 신고' 페이지에서는 먼저 메시지에 이름을 붙이고, 그다음 아이디어나 버그를 써요."
+      ]
+     }
+    ]
+   },
+   {
     "title": "Release 1.3.4 (2026년 11월 24일)",
     "name": "Release 1.3.4",
     "intro": "모든 가게가 지갑 하나를 함께 쓰고, 정비사가 생기고, 새 황금 테마가 나왔어요.",
@@ -3313,6 +3431,22 @@
   "title": "Historique des mises à jour",
   "intro": "Tout ce qui a été ajouté à Pâtisserie 2D Simulator, de la plus récente à la plus ancienne. Pour comprendre les règles du jeu, va voir le [wiki](REGLES.md).",
   "versions": [
+   {
+    "title": "Release 1.3.5 (25 novembre 2026)",
+    "name": "Release 1.3.5",
+    "intro": "Le jeu parle hindi, neuf nouvelles icônes, et des messages des joueurs bien plus clairs.",
+    "groups": [
+     {
+      "name": "Nouveautés",
+      "items": [
+       "Le hindi (हिन्दी) est ajouté, en entier : tous les textes du jeu, les noms des succès, le guide des commandes et ce changelog.",
+       "De nouvelles icônes pour le mascarpone, le praliné, l'infini pur, le saint-honoré, la mousse au chocolat, la galette des rois, le gâteau au safran, l'opéra et le cheesecake.",
+       "Les primes sont retirées : plus de bouton « Prime », et le salaire se règle de nouveau de −50 % à +50 %.",
+       "Dans la page « Signaler un bug », le joueur donne d'abord un nom à son message, puis écrit son idée ou son bug."
+      ]
+     }
+    ]
+   },
    {
     "title": "Release 1.3.4 (24 novembre 2026)",
     "name": "Release 1.3.4",
@@ -4304,6 +4438,22 @@
   "intro": "Tudo o que foi acrescentado ao Pâtisserie 2D Simulator, da mais recente à mais antiga. As versões mais antigas aparecem em inglês. Para perceber as regras do jogo, vê a [wiki](REGLES.md).",
   "versions": [
    {
+    "title": "Release 1.3.5 (25 de novembro de 2026)",
+    "name": "Release 1.3.5",
+    "intro": "O jogo fala hindi, nove ícones novos e mensagens de jogadores muito mais claras.",
+    "groups": [
+     {
+      "name": "Novidades e correções",
+      "items": [
+       "O hindi (हिन्दी) foi adicionado, completo: todos os textos do jogo, os nomes das conquistas, o guia de comandos e este histórico.",
+       "Ícones novos para o mascarpone, o praliné, o infinito puro, o saint-honoré, a mousse de chocolate, a galette des rois, o bolo de açafrão, a ópera e o cheesecake.",
+       "Os prémios foram retirados: já não há botão «Prémio» e o salário volta a ir de −50 % a +50 %.",
+       "Na página «Avisar de um erro», o jogador primeiro dá um nome à mensagem e depois escreve a ideia ou o erro."
+      ]
+     }
+    ]
+   },
+   {
     "title": "Release 1.3.4 (24 de novembro de 2026)",
     "name": "Release 1.3.4",
     "intro": "Uma só carteira para todas as tuas pastelarias, um mecânico e um tema dourado novo.",
@@ -4768,6 +4918,22 @@
   "intro": "Всё, что добавили в Pâtisserie 2D Simulator, от самого нового к самому старому. Более старые версии показываются на английском. Чтобы понять правила игры, загляни в [вики](REGLES.md).",
   "versions": [
    {
+    "title": "Release 1.3.5 (25 ноября 2026)",
+    "name": "Release 1.3.5",
+    "intro": "Игра заговорила на хинди, появилось девять новых значков, а сообщения игроков стали гораздо понятнее.",
+    "groups": [
+     {
+      "name": "Новое и исправления",
+      "items": [
+       "Добавлен хинди (हिन्दी), полностью: все тексты игры, названия достижений, справочник команд и этот журнал изменений.",
+       "Новые значки для маскарпоне, пралине, чистой бесконечности, сен-оноре, шоколадного мусса, королевской галеты, шафранового пирога, оперы и чизкейка.",
+       "Премии убраны: кнопки «Премия» больше нет, а зарплата снова меняется от −50 % до +50 %.",
+       "На странице «Сообщить об ошибке» игрок сначала даёт сообщению название, а потом пишет идею или ошибку."
+      ]
+     }
+    ]
+   },
+   {
     "title": "Release 1.3.4 (24 ноября 2026)",
     "name": "Release 1.3.4",
     "intro": "Один кошелёк на все кондитерские, механик и совершенно новая золотая тема.",
@@ -5231,6 +5397,22 @@
   "title": "更新记录",
   "intro": "Pâtisserie 2D Simulator 新增的所有内容，从最新到最旧。更早的版本以英文显示。想了解游戏规则，请看[百科](REGLES.md)。",
   "versions": [
+   {
+    "title": "Release 1.3.5（2026年11月25日）",
+    "name": "Release 1.3.5（2026年11月25日）",
+    "intro": "游戏支持印地语，新增九个图标，玩家留言也清晰得多。",
+    "groups": [
+     {
+      "name": "新内容与修复",
+      "items": [
+       "新增完整的印地语（हिन्दी）：游戏所有文字、成就名称、命令指南和这份更新日志。",
+       "为马斯卡彭奶酪、果仁糖、纯粹无限、圣奥诺雷、巧克力慕斯、国王饼、藏红花蛋糕、歌剧蛋糕和芝士蛋糕换上新图标。",
+       "奖金已移除：不再有“奖金”按钮，工资重新只能在 −50% 到 +50% 之间调整。",
+       "在“报告错误”页面，玩家先给消息起个名字，再写下想法或错误。"
+      ]
+     }
+    ]
+   },
    {
     "title": "Release 1.3.4（2026年11月24日）",
     "name": "Release 1.3.4（2026年11月24日）",

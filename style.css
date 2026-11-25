@@ -3157,3 +3157,27 @@ body { min-height: 0 !important; height: 100%; height: 100dvh; max-height: 100dv
 .hdr-btns { display: flex; align-items: center; gap: 8px; }
 @media (max-width: 899px) { .hdr-btns { gap: 5px; } }
 @media (max-width: 480px) { .hdr-btns { gap: 4px; } }
+
+/* Retours des joueurs : une ligne par message, un clic pour tout voir */
+.report-title { width: 100%; margin: 8px 0 0; padding: 10px 12px; border-radius: 10px; border: 1px solid var(--border); background: var(--surface-solid); color: var(--text); font: inherit; font-weight: 700; }
+.report-title:focus-visible { outline: 2px solid var(--mauve); outline-offset: 1px; }
+.report-card { padding: 0; overflow: hidden; }
+.report-row { width: 100%; display: grid; grid-template-columns: auto minmax(0, 1fr) auto auto; align-items: center; gap: 4px 10px; padding: 10px 12px; border: 0; background: none; color: inherit; font: inherit; text-align: start; cursor: pointer; }
+.report-row:hover { background: var(--surface-2); }
+.report-kind { font-size: .78rem; font-weight: 800; white-space: nowrap; }
+.report-title-txt { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.report-row small { opacity: .7; white-space: nowrap; }
+.report-chev { opacity: .6; }
+@media (max-width: 640px) { .report-row { grid-template-columns: auto minmax(0, 1fr) auto; } .report-row small { grid-column: 2 / 3; } }
+.report-detail { padding: 4px 14px 14px; border-top: 1px solid var(--border); }
+.report-meta { margin: 8px 0; display: grid; gap: 6px; }
+.report-meta div { display: grid; grid-template-columns: 110px minmax(0, 1fr); gap: 8px; }
+.report-meta dt { opacity: .65; font-weight: 700; }
+.report-meta dd { margin: 0; overflow-wrap: anywhere; }
+.adm-link { border: 0; background: none; padding: 0; color: var(--mauve-dark, var(--mauve)); font: inherit; font-weight: 800; text-align: start; cursor: pointer; text-decoration: underline; }
+
+/* Hindi : l'écriture devanagari a des traits au-dessus et en dessous de la ligne, il lui faut plus de hauteur de ligne et une police qui la connaît */
+:root[lang="hi"] body { line-height: 1.6; font-family: Outfit, "Nirmala UI", "Noto Sans Devanagari", "Mangal", "Kohinoor Devanagari", "Segoe UI", system-ui, sans-serif; }
+:root[lang="hi"] button, :root[lang="hi"] input, :root[lang="hi"] select, :root[lang="hi"] textarea { font-family: inherit; }
+:root[lang="hi"] .set-help, :root[lang="hi"] small, :root[lang="hi"] .set-row p { line-height: 1.55; }
+:root[lang="hi"] .btn, :root[lang="hi"] .gtab, :root[lang="hi"] .chip { line-height: 1.4; }

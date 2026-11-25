@@ -37,7 +37,10 @@ function renderAdminDb(box, pid) {
   adminStopLive();
   adminUI.pid = pid; adminUI.box = box; adminUI.open = null;
   box.innerHTML = '<div class="adm-db"><p class="home-info">' + adminTr('Chargement…', 'Loading…') + '</p></div>';
-  adminFetchPlayers().then(function() { adminDrawList(); });
+  adminFetchPlayers().then(function() {
+    // Venu de l'onglet « Retours » : on ouvre directement la fiche du joueur
+    if (homeState.admGoto) { var go = homeState.admGoto; homeState.admGoto = null; adminOpenPlayer(go); } else adminDrawList();
+  });
   adminUI.timer = setInterval(function() {
     if (!document.body.contains(box)) { adminStopLive(); return; }
     if (adminUI.open) { adminTickDetail(); return; }
@@ -52,7 +55,10 @@ function adminFetchPlayers() {
 }
 
 // ---------- L'onglet « Retours » : les bugs et les idees des joueurs ----------
-var adminReports = { rows: null, filter: 'new', kind: 'all' };
+var adminReports = { rows: null, filter: 'new', kind: 'all', open: null };
+function adminReportToggle(id) { adminReports.open = adminReports.open === id ? null : id; adminDrawReports(); }
+// Ouvre la fiche du joueur qui a envoye ce retour, dans l'onglet des joueurs
+function adminGoPlayer(uid) { homeState.admGoto = uid; homeAdmTab('db'); }
 function renderAdminReports(box, pid) {
   adminUI.pid = pid;
   box.innerHTML = '<div class="adm-db"><p class="home-info">' + adminTr('Chargement…', 'Loading…') + '</p></div>';
@@ -71,11 +77,23 @@ function adminDrawReports(box) {
   h += '<button class="adm-chip" onclick="renderAdminReports(document.getElementById(\'adm-box\'), adminUI.pid)">⟳</button></div>';
   if (!rows.length) h += '<p class="home-empty">' + adminTr('Aucun retour pour l’instant.', 'No feedback yet.') + '</p>';
   rows.forEach(function(r) {
-    var who = r.profiles ? aesc(r.profiles.pseudo || '') + ' · ' + aesc(r.profiles.email || '') : adminTr('Anonyme', 'Anonymous');
-    h += '<div class="adm-card report-card' + (r.status === 'done' ? ' done' : '') + '"><div class="report-head"><b>' + (r.kind === 'idea' ? '💡 ' + adminTr('Idée', 'Idea') : '🐞 Bug') + '</b><small>' + new Date(r.created_at).toLocaleString() + ' · ' + who + ' · ' + aesc(r.version || '') + ' · ' + aesc(r.platform || '') + ' · ' + aesc(r.lang || '') + '</small></div>';
-    h += '<p class="report-text">' + aesc(r.body) + '</p><div class="report-btns">';
-    h += '<button class="btn btn-small" onclick="adminReportSet(' + r.id + ',\'' + (r.status === 'done' ? 'new' : 'done') + '\')">' + (r.status === 'done' ? adminTr('Rouvrir', 'Reopen') : '✓ ' + adminTr('Traité', 'Done')) + '</button>';
-    h += '<button class="btn btn-small btn-danger" onclick="adminReportDelete(' + r.id + ')">🗑️</button></div></div>';
+    var open = adminReports.open === r.id;
+    var title = r.title || String(r.body || '').slice(0, 60);
+    var kind = r.kind === 'idea' ? '💡 ' + adminTr('Idée', 'Idea') : '🐞 Bug';
+    var who = r.profiles ? aesc(r.profiles.pseudo || '?') : adminTr('Anonyme', 'Anonymous');
+    var when = new Date(r.created_at);
+    h += '<div class="adm-card report-card' + (r.status === 'done' ? ' done' : '') + (open ? ' open' : '') + '">';
+    h += '<button type="button" class="report-row" onclick="adminReportToggle(' + r.id + ')" aria-expanded="' + open + '"><span class="report-kind">' + kind + '</span><b class="report-title-txt">' + aesc(title) + '</b><small>' + who + ' · ' + aesc(when.toLocaleDateString()) + '</small><span class="report-chev">' + (open ? '▾' : '▸') + '</span></button>';
+    if (open) {
+      h += '<div class="report-detail"><dl class="report-meta">';
+      h += '<div><dt>' + adminTr('Envoyé le', 'Sent on') + '</dt><dd>' + aesc(when.toLocaleDateString(undefined, { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })) + ' · <b>' + aesc(when.toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit', second: '2-digit' })) + '</b></dd></div>';
+      h += '<div><dt>' + adminTr('De la part de', 'From') + '</dt><dd>' + (r.profiles && r.user_id ? '<button type="button" class="adm-link" onclick="adminGoPlayer(\'' + aesc(r.user_id) + '\')">👤 ' + aesc(r.profiles.pseudo || '?') + (r.profiles.email ? ' · ' + aesc(r.profiles.email) : '') + ' →</button>' : adminTr('Anonyme', 'Anonymous')) + '</dd></div>';
+      h += '<div><dt>' + adminTr('Version', 'Version') + '</dt><dd>' + aesc(r.version || '?') + ' · ' + aesc(r.platform || '?') + ' · ' + aesc(r.lang || '?') + '</dd></div></dl>';
+      h += '<p class="report-text">' + aesc(r.body) + '</p><div class="report-btns">';
+      h += '<button class="btn btn-small" onclick="adminReportSet(' + r.id + ',\'' + (r.status === 'done' ? 'new' : 'done') + '\')">' + (r.status === 'done' ? adminTr('Rouvrir', 'Reopen') : '✓ ' + adminTr('Traité', 'Done')) + '</button>';
+      h += '<button class="btn btn-small btn-danger" onclick="adminReportDelete(' + r.id + ')">🗑️</button></div></div>';
+    }
+    h += '</div>';
   });
   box.innerHTML = h + '</div>';
 }

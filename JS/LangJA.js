@@ -761,3 +761,8 @@ Object.assign(LANGS.ja, {
   'emp.buyerRefund':`いくつかの職がゲームからなくなりました（仕入れ係、何でも屋）。雇ったときの費用を返金しました（{{v}}）。`,
   'unattended.warn':`スタッフの管理が行き届かなくなりました。戻って遊んでください。だんだん働きが悪くなります。マネージャーがいると長くもちます。`
 });
+Object.assign(LANGS.ja, {
+  'report.titleLabel':`メッセージの名前`,
+  'report.titlePlaceholder':`メッセージに名前をつけてください（必須）`,
+  'report.noTitle':`まずメッセージに名前をつけてください。`
+});

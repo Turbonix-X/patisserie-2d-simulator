@@ -946,7 +946,7 @@ function processCommand(cmd) {
   if (action === 'language' || action === 'langue') {
     if (parts[1] !== 'set' || !parts[2]) return '<span class="cmd-err">Usage: /language set ' + LANG_LIST.map(function(l) { return l.code; }).join('|') + '</span>';
     var wl = normName(parts.slice(2).join(''));
-    var EN_NAMES = { en: 'english anglais', fr: 'french francais', es: 'spanish espanol', pt: 'portuguese portugais portugues', de: 'german allemand deutsch', ar: 'arabic arabe', zh: 'chinese chinois', ja: 'japanese japonais', ko: 'korean coreen', ru: 'russian russe' };
+    var EN_NAMES = { en: 'english anglais', fr: 'french francais', es: 'spanish espanol', pt: 'portuguese portugais portugues', de: 'german allemand deutsch', ar: 'arabic arabe', zh: 'chinese chinois', ja: 'japanese japonais', ko: 'korean coreen', ru: 'russian russe', hi: 'hindi hindi' };
     var lf = null;
     LANG_LIST.forEach(function(l) {
       var keys = [l.code, normName(l.name)].concat(EN_NAMES[l.code].split(' '));

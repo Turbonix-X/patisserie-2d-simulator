@@ -427,3 +427,8 @@ Object.assign(LANGS.fr, {
 Object.assign(LANGS.fr, {
   'emp.mechanic.f':`Mécanicienne`
 });
+Object.assign(LANGS.fr, {
+  'report.titleLabel':`Nom de ton message`,
+  'report.titlePlaceholder':`Donne un nom à ton message (obligatoire)`,
+  'report.noTitle':`Donne d’abord un nom à ton message.`
+});

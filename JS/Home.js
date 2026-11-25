@@ -149,9 +149,9 @@ var REPORT_DRAFT_KEY = 'p2ds_report_draft';
 function reportDraft() { try { return JSON.parse(localStorage.getItem(REPORT_DRAFT_KEY)) || {}; } catch (e) { return {}; } }
 var reportSel = { kind: 'bug', from: 'anon' };
 function reportSaveDraft() {
-  var d = { kind: reportSel.kind, from: reportSel.from, body: (document.getElementById('rp-body') || {}).value || '' };
+  var d = { kind: reportSel.kind, from: reportSel.from, title: (document.getElementById('rp-title') || {}).value || '', body: (document.getElementById('rp-body') || {}).value || '' };
   try { localStorage.setItem(REPORT_DRAFT_KEY, JSON.stringify(d)); } catch (e) { /* tant pis */ }
-  var k = document.getElementById('rp-kept'); if (k) k.textContent = d.body ? t('report.kept') : '';
+  var k = document.getElementById('rp-kept'); if (k) k.textContent = (d.body || d.title) ? t('report.kept') : '';
 }
 // Les deux rangees de boutons : le choix change sans refermer la fenetre (le texte tape reste)
 function reportPick(group, value) {
@@ -173,8 +173,9 @@ function showReportModal() {
   h += seg('kind', [['bug', t('report.kindBug')], ['idea', t('report.kindIdea')]]);
   h += acc ? seg('from', [['account', t('report.account', { n: escH(prof.name || prof.email || '') })], ['anon', t('report.anon')]])
            : seg('from', [['anon', t('report.noAccount')]]);
+  h += '<input type="text" id="rp-title" class="report-title" maxlength="80" autocomplete="off" placeholder="' + escH(t('report.titlePlaceholder')) + '" aria-label="' + escH(t('report.titleLabel')) + '" value="' + escH(d.title || '') + '" oninput="reportSaveDraft()">';
   h += '<textarea id="rp-body" class="save-area report-body" rows="8" maxlength="4000" placeholder="' + escH(t('report.placeholder')) + '" oninput="reportSaveDraft()">' + escH(d.body || '') + '</textarea>';
-  h += '<p class="warning" id="rp-msg">' + (online ? '' : t('report.offline')) + '</p><p class="set-help" id="rp-kept">' + (d.body ? t('report.kept') : '') + '</p>';
+  h += '<p class="warning" id="rp-msg">' + (online ? '' : t('report.offline')) + '</p><p class="set-help" id="rp-kept">' + ((d.body || d.title) ? t('report.kept') : '') + '</p>';
   h += '<div class="modal-btns"><button class="btn btn-primary" id="rp-send" onclick="sendReport()"' + (online ? '' : ' disabled') + '>' + t('report.send') + '</button><button class="btn" onclick="hideModal()">' + t('common.close') + '</button></div>';
   showModal(h, 'modal-report');
 }
@@ -182,10 +183,12 @@ function sendReport() {
   var body = String((document.getElementById('rp-body') || {}).value || '').trim();
   var msg = document.getElementById('rp-msg'), btn = document.getElementById('rp-send');
   if (navigator.onLine === false) { if (msg) msg.textContent = t('report.offline'); return; }
+  var title = String((document.getElementById('rp-title') || {}).value || '').trim().replace(/\s+/g, ' ');
+  if (title.length < 2) { if (msg) msg.textContent = t('report.noTitle'); var ti = document.getElementById('rp-title'); if (ti) ti.focus(); return; }
   if (body.length < 5) { if (msg) msg.textContent = t('report.short'); return; }
   var kind = reportSel.kind === 'idea' ? 'idea' : 'bug';
   var useAcc = reportSel.from === 'account';
-  var row = { kind: kind, body: body.slice(0, 4000), version: GAME_VERSION, platform: window.__TAURI_INTERNALS__ ? 'app' : 'web', lang: currentLang };
+  var row = { kind: kind, title: title.slice(0, 80), body: body.slice(0, 4000), version: GAME_VERSION, platform: window.__TAURI_INTERNALS__ ? 'app' : 'web', lang: currentLang };
   if (btn) { btn.disabled = true; btn.textContent = t('report.sending'); }
   if (msg) msg.textContent = '';
   var prof = homeProfile(), p;

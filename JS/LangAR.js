@@ -814,3 +814,8 @@ Object.assign(LANGS.ar, {
   'emp.buyerRefund':`غادرت بعض المهن اللعبة (مسؤول المشتريات، متعدد المهارات): استرجعت ما دفعته لتوظيفهم ({{v}}).`,
   'unattended.warn':`لم يعد موظفوك تحت الإشراف: عد إلى اللعب، فهم يعملون أسوأ فأسوأ. المديرون يبقونهم أطول.`
 });
+Object.assign(LANGS.ar, {
+  'report.titleLabel':`اسم رسالتك`,
+  'report.titlePlaceholder':`أعطِ رسالتك اسمًا (إلزامي)`,
+  'report.noTitle':`أعطِ رسالتك اسمًا أولًا.`
+});

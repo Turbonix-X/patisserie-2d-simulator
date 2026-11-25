@@ -835,20 +835,6 @@ function trainEmployee(empId) {
   return true;
 }
 
-function getBonusCost(emp) { return Math.floor(getEmpSalary(emp) * 120); }
-
-// Une prime remonte le moral
-function giveBonus(empId) {
-  var emp = findEmp(empId);
-  if (!emp || emp.morale >= 100) return false;
-  var cost = getBonusCost(emp);
-  if (G.money < cost) return false;
-  G.money -= cost;
-  G.stats.totalInvested += cost;
-  emp.morale = Math.min(100, emp.morale + 25);
-  return true;
-}
-
 // Euros par seconde. Mieux forme, mieux paye. Le reglage de paie monte ou baisse le tout.
 function getEmpSalary(emp) {
   var empType = findEmpType(emp.type);
@@ -856,7 +842,7 @@ function getEmpSalary(emp) {
   var lvl = emp.type === 'novice' ? 1 : (emp.level || 1);
   return empType.baseSalary * (1 + 0.5 * (lvl - 1)) * (1 - machineBonus('salary') / 100) * (1 + (emp.payAdj || 0) / 100);
 }
-function maxMorale(emp) { return 100 + Math.min(50, emp.payAdj || 0); }   // une prime au-dela de +50 % ne monte plus le moral
+function maxMorale(emp) { return 100 + (emp.payAdj || 0); }
 
 // Changer la paie : trop bas, et il demissionne presque toujours
 function setPay(emp, adj) {

@@ -761,3 +761,8 @@ Object.assign(LANGS.ko, {
   'emp.buyerRefund':`일부 직업이 게임에서 사라졌어요(구매 담당, 만능 직원). 고용할 때 낸 돈을 돌려받았어요 ({{v}}).`,
   'unattended.warn':`직원들이 더는 관리받지 못해요. 돌아와서 플레이하세요, 점점 일을 못 해요. 매니저가 있으면 더 오래 버텨요.`
 });
+Object.assign(LANGS.ko, {
+  'report.titleLabel':`메시지 이름`,
+  'report.titlePlaceholder':`메시지에 이름을 붙여 주세요 (필수)`,
+  'report.noTitle':`먼저 메시지에 이름을 붙여 주세요.`
+});

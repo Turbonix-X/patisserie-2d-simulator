@@ -830,3 +830,8 @@ Object.assign(LANGS.pt, {
   'emp.buyerRefund':`Algumas profissões saíram do jogo (intendente, faz-tudo): recebeste de volta o que pagaste para as contratar ({{v}}).`,
   'unattended.warn':`A tua equipa já não está supervisionada: volta a jogar, trabalham cada vez pior. Os gerentes aguentam-nos mais tempo.`
 });
+Object.assign(LANGS.pt, {
+  'report.titleLabel':`Nome da tua mensagem`,
+  'report.titlePlaceholder':`Dá um nome à tua mensagem (obrigatório)`,
+  'report.noTitle':`Primeiro dá um nome à tua mensagem.`
+});

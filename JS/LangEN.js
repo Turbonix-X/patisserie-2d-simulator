@@ -421,3 +421,8 @@ Object.assign(LANGS.en, {
   'emp.buyerRefund':`Some jobs left the game (purveyor, jack-of-all-trades): you got back what you paid to hire them ({{v}}).`,
   'unattended.warn':`Your staff is no longer supervised: come back and play, they are working worse and worse. Managers keep them going longer.`
 });
+Object.assign(LANGS.en, {
+  'report.titleLabel':`Name of your message`,
+  'report.titlePlaceholder':`Give your message a name (required)`,
+  'report.noTitle':`First give your message a name.`
+});

@@ -29,7 +29,7 @@ Un jeu de gestion de pâtisserie : achète tes ingrédients, prépare tes gâtea
 - **Succès et statistiques :** 1040 succès à débloquer. Chacun augmente tes prix de vente. Les statistiques détaillent chaque recette et chaque ingrédient préparés dans un menu déroulant.
 - **Plusieurs pâtisseries :** dès la deuxième, des graphiques et les totaux de toutes tes boutiques.
 - **Thèmes :** clair, sombre, un par saison avec ses décors (fleurs, plage, neige, feuilles), un pour ton anniversaire, la fête au niveau 500, l'espace au niveau 1000, et des thèmes cachés à découvrir.
-- **Langues :** anglais, français, espagnol, portugais, allemand, arabe, mandarin, japonais, coréen et russe.
+- **Langues :** anglais, français, espagnol, portugais, allemand, arabe, mandarin, japonais, coréen, russe et hindi.
 - **Musique :** des morceaux composés pour le jeu, joués en direct par le navigateur, dont certains à débloquer en montant de niveau.
 - **Bob :** ton chef pâtissier t'explique le jeu, te conseille, te lance des défis et adore le sucre. Évite de trop l'embêter.
 - **Sauvegarde :** automatique, avec export et import par fichier ou par copier-coller, une pause automatique, des mises à jour sans recharger la page, et des gains pendant ton absence.

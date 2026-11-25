@@ -2,6 +2,16 @@
 
 Everything that was added to Pâtisserie 2D Simulator, from the newest to the oldest. To understand the rules of the game, see the [wiki](REGLES.md).
 
+## Release 1.3.5 (November 25, 2026)
+
+The game speaks Hindi, nine new icons, and much clearer player messages.
+
+**What is new**
+- Hindi (हिन्दी) is added, in full: every text of the game, the achievement names, the command guide and this changelog.
+- New icons for mascarpone, praline, pure infinity, Saint-Honoré, chocolate mousse, king cake, saffron cake, opera cake and cheesecake.
+- Bonuses are removed: no more “Bonus” button, and pay is back to −50% to +50%.
+- On the “Report a bug” page, players first give their message a name, then write their idea or bug.
+
 ## Release 1.3.4 (November 24, 2026)
 
 One wallet for all your bakeries, a mechanic, and a brand-new gold theme.

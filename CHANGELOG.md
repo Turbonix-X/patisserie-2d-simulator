@@ -2,6 +2,16 @@
 
 Tout ce qui a été ajouté à Pâtisserie 2D Simulator, de la plus récente à la plus ancienne. Pour comprendre les règles du jeu, va voir le [wiki](REGLES.md).
 
+## Release 1.3.5 (25 novembre 2026)
+
+Le jeu parle hindi, neuf nouvelles icônes, et des messages des joueurs bien plus clairs.
+
+**Nouveautés**
+- Le hindi (हिन्दी) est ajouté, en entier : tous les textes du jeu, les noms des succès, le guide des commandes et ce changelog.
+- De nouvelles icônes pour le mascarpone, le praliné, l'infini pur, le saint-honoré, la mousse au chocolat, la galette des rois, le gâteau au safran, l'opéra et le cheesecake.
+- Les primes sont retirées : plus de bouton « Prime », et le salaire se règle de nouveau de −50 % à +50 %.
+- Dans la page « Signaler un bug », le joueur donne d'abord un nom à son message, puis écrit son idée ou son bug.
+
 ## Release 1.3.4 (24 novembre 2026)
 
 Une seule bourse pour toutes tes pâtisseries, un mécanicien, et un thème doré tout neuf.

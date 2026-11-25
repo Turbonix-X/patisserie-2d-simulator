@@ -821,3 +821,8 @@ Object.assign(LANGS.es, {
   'emp.buyerRefund':`Algunos oficios dejaron el juego (intendente, todoterreno): te devolvimos lo que pagaste por contratarlos ({{v}}).`,
   'unattended.warn':`Tu personal ya no está supervisado: vuelve a jugar, trabajan cada vez peor. Los gerentes los mantienen más tiempo.`
 });
+Object.assign(LANGS.es, {
+  'report.titleLabel':`Nombre de tu mensaje`,
+  'report.titlePlaceholder':`Ponle un nombre a tu mensaje (obligatorio)`,
+  'report.noTitle':`Primero ponle un nombre a tu mensaje.`
+});

@@ -189,12 +189,15 @@ create table if not exists public.reports (
   created_at timestamptz not null default now(),
   user_id    uuid references public.profiles(id) on delete set null,
   kind       text not null default 'bug' check (kind in ('bug', 'idea')),
+  title      text check (title is null or char_length(title) between 2 and 80),
   body       text not null check (char_length(body) between 5 and 4000),
   version    text,
   platform   text,
   lang       text,
   status     text not null default 'new' check (status in ('new', 'done'))
 );
+-- Release 1.3.5 : un nom donne par le joueur a son message (les anciens retours n'en ont pas)
+alter table public.reports add column if not exists title text check (title is null or char_length(title) between 2 and 80);
 alter table public.reports enable row level security;
 grant insert on public.reports to anon, authenticated;
 grant select, update, delete on public.reports to authenticated;

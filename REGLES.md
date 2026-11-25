@@ -182,7 +182,7 @@ Lance une **recherche** dans l'onglet Employés : elle prend du temps et ne marc
 
 **Les candidatures :** la plupart des candidats débutent au niveau 1, mais il arrive, rarement, qu'un candidat soit déjà formé (jusqu'au niveau 10). Plus tu montes de niveau, moins les niveaux élevés sont rares. Juste après avoir débloqué les employés, il n'y a que des niveaux 1 et 2 ; les niveaux 3 à 10 demandent d'avoir atteint les niveaux 15, 25, 35, 50, 65, 80, 95 et 110. Un employé déjà formé coûte bien plus cher. Clique sur une candidature pour voir à quoi sert le métier et ce que veut dire son niveau.
 
-**Clique sur un employé** pour ouvrir sa fiche : ses réglages, sa formation, sa prime.
+**Clique sur un employé** pour ouvrir sa fiche : ses réglages et sa formation.
 
 **La pause :** depuis sa fiche, tu peux mettre un employé en pause. Il arrête de travailler, mais tu continues de le payer.
 
@@ -208,13 +208,13 @@ Lance une **recherche** dans l'onglet Employés : elle prend du temps et ne marc
 
 **Leur limite :** tu peux dire à un cueilleur de ne cueillir que s'il y en a moins de N, ou de produire N par heure. Dans ce cas sa vitesse change, sans jamais dépasser son maximum.
 
-**Le salaire :** depuis sa fiche, tu peux changer le salaire de −50 %, −20 %, −10 %, −5 %, +5 %, +10 %, +20 %, +50 %, +100 %, +200 %, +500 % ou +1000 %. Moins payé, son moral maximum baisse ; une prime au-delà de +50 % ne le monte plus, elle coûte juste plus cher. Payé trop peu, il démissionne presque toujours.
+**Le salaire :** depuis sa fiche, tu peux changer le salaire de −50 %, −20 %, −10 %, −5 %, +5 %, +10 %, +20 %, +50 %. Moins payé, son moral maximum baisse. Payé trop peu, il démissionne presque toujours.
 
 **Au féminin :** les employées ont leur titre au féminin : cueilleuse, boulangère, pâtissière…
 
 **Les vendeurs :** seul, un vendeur est très lent. Plus il y en a, plus chacun va vite. Avec un maître d'hôtel, ils ne touchent pas à ce qui est réservé pour les commandes.
 
-**Le moral :** il baisse tout seul, et moins vite si l'équipe est grande. Une prime ou un manager le remonte. En dessous de 40, l'employé travaille mal. En dessous de 20, il fait grève. En dessous de 10, il démissionne. Un employé impayé perd vite son moral.
+**Le moral :** il baisse tout seul, et moins vite si l'équipe est grande. Un manager le remonte. En dessous de 40, l'employé travaille mal. En dessous de 20, il fait grève. En dessous de 10, il démissionne. Un employé impayé perd vite son moral.
 
 ## Les commandes
 
@@ -312,7 +312,7 @@ Les succès ont leur bouton (un trophée) dans l'en-tête, avec une barre de pro
 
 ## Signaler un bug ou une idée
 
-Le bouton avec l'insecte, en haut du menu, ouvre une page : tu choisis Bug ou Idée, d'envoyer avec ton compte ou anonymement, et tu écris. Ton texte est gardé si tu quittes la page. Rien ne s'envoie hors ligne.
+Le bouton avec l'insecte, en haut du menu, ouvre une page : tu choisis Bug ou Idée, d'envoyer avec ton compte ou anonymement, tu **donnes un nom à ton message** (obligatoire, 2 à 80 caractères, c'est ce que l'administrateur voit dans sa liste), puis tu écris. Ton texte est gardé si tu quittes la page. Rien ne s'envoie hors ligne.
 
 ## La console de commandes
 
