@@ -6,6 +6,14 @@
 
 var updateState = { newVersion: null, checking: false, told: false, applying: false };
 
+// Le nom de version ecrit dans un fichier JavaScript. Sur le site, le code est brouille : une espace peut s'y ecrire \x20,
+// il faut remettre le vrai texte avant de comparer (sinon on annonce sans fin une mise a jour qui n'existe pas).
+function versionInSource(txt) {
+  var m = String(txt || '').match(/GAME_VERSION\s*=\s*(['"])((?:\\.|(?!\1)[^\\])+)\1/);
+  if (!m) return null;
+  return m[2].replace(/\\x([0-9a-fA-F]{2})|\\u([0-9a-fA-F]{4})/g, function(all, a, b) { return String.fromCharCode(parseInt(a || b, 16)); });
+}
+
 // Une petite requete de temps en temps, jamais quand l'onglet est cache ou hors ligne : aucun lag
 function checkForUpdate() {
   if (updateState.checking || updateState.applying || document.hidden || navigator.onLine === false) return;
@@ -20,9 +28,9 @@ function checkForUpdate() {
   }
   fetch('JS/GameData.js', { cache: 'no-store' }).then(function(r) { return r.ok ? r.text() : ''; }).then(function(txt) {
     updateState.checking = false;
-    var m = txt.match(/GAME_VERSION\s*=\s*'([^']+)'/);
-    if (m && m[1] !== GAME_VERSION) {
-      updateState.newVersion = m[1];
+    var v = versionInSource(txt);
+    if (v && v !== GAME_VERSION) {
+      updateState.newVersion = v;
       announceUpdate();
     }
   }).catch(function() { updateState.checking = false; });

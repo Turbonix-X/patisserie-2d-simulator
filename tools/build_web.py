@@ -9,6 +9,7 @@ Le dossier web/ de l'appli Windows (tools/sync_web.py) n'est pas touché : l'app
 """
 import json
 import os
+import re
 import shutil
 import subprocess
 import sys
@@ -27,6 +28,21 @@ DIRS = ['JS', 'assets']
 def is_lang(name):
     # Lang11.js, LangFR.js... : que des textes. Languages.js contient du code : il est brouillé.
     return name.startswith('Lang') and name != 'Languages.js'
+
+
+def keep_version_readable(js_dir):
+    # Le nom de version reste ecrit en clair : la recherche de mise a jour (meme celle des pages deja ouvertes)
+    # le lit dans GameData.js. Brouille, « Release 1.3.6 » devenait « Release\x201.3.6 » : fausse mise a jour sans fin.
+    src = open(os.path.join(ROOT, 'JS', 'GameData.js'), encoding='utf-8').read()
+    version = re.search(r"GAME_VERSION\s*=\s*'([^']+)'", src).group(1)
+    path = os.path.join(js_dir, 'GameData.js')
+    code = open(path, encoding='utf-8').read()
+    # Selon la compilation, le brouilleur l'ecrit en texte (avec des \x20) ou la range dans son tableau de textes : fonction(0x...)
+    value = r"(?:(['\"])(?:\\.|(?!\2)[^\\])*\2|[A-Za-z_$][\w$]*\(0x[0-9a-fA-F]+\))"
+    code, n = re.subn(r"(GAME_VERSION\s*=\s*)" + value, lambda m: m.group(1) + "'%s'" % version, code, count=1)
+    if n != 1:
+        raise SystemExit('GAME_VERSION introuvable dans le GameData.js brouillé')
+    open(path, 'w', encoding='utf-8').write(code)
 
 
 def main():
@@ -64,6 +80,7 @@ def main():
                 if not os.path.exists(out):
                     raise SystemExit('pas de sortie pour ' + n)
                 shutil.copy2(out, os.path.join(js_dir, n))
+        keep_version_readable(js_dir)
         print('JS brouillé : %d fichiers (les fichiers de langues restent en clair)' % len(todo))
 
     total, count, biggest = 0, 0, (0, '')

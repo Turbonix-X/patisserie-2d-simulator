@@ -29,6 +29,7 @@
 <script>document.write('<script src="../JS/LangHI.js?t=' + Date.now() + '"><\/script>');</script>
 <script>document.write('<script src="../JS/LangBN.js?t=' + Date.now() + '"><\/script>');</script>
 <script>document.write('<script src="../JS/Config.js?t=' + Date.now() + '"><\/script>');</script>
+<script>document.write('<script src="../JS/Update.js?t=' + Date.now() + '"><\/script>');</script>
 <script>document.write('<script src="../JS/PlayerData.js?t=' + Date.now() + '"><\/script>');</script>
 <script>document.write('<script src="../JS/Instances.js?t=' + Date.now() + '"><\/script>');</script>
 <script>document.write('<script src="../JS/Cloud.js?t=' + Date.now() + '"><\/script>');</script>
@@ -561,6 +562,7 @@ check('Plus d intendant a embaucher', !findEmpType('buyer'));
   ui.settingsTab = 'ach'; G.settings.hdrSett = ['ach', 'stats', 'bakeries'];
   check('Un bouton range dans les reglages y ouvre un vrai onglet, avec le menu a gauche', /id="ach-pane"/.test(settingsPaneHTML()) && (ui.settingsTab = 'stats', /id="stats-pane"/.test(settingsPaneHTML())) && (ui.settingsTab = 'bakeries', /bakery-card/.test(settingsPaneHTML())) && /set-tab active/.test(settingsMovedNav()));
   ui.settingsTab = 'general';
+  check('La version brouillee du site est bien relue (pas de fausse mise a jour)', versionInSource("var GAME_VERSION='Release\\x201.3.6';") === 'Release 1.3.6' && versionInSource("var GAME_VERSION = 'Release 1.3.6';") === 'Release 1.3.6' && versionInSource('x') === null);
   check('L ordre des themes est fixe', THEME_LIST.map(function(x) { return x.id; }).join() === 'light,dark,fall,winter,spring,summer,horror,love,cookie,tech,techgold,gold,birthday,bakery,party,space');
 })();
 
