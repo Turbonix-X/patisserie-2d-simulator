@@ -388,6 +388,7 @@ function showEmpInfoModal(empId) {
     else h += '<button class="btn btn-primary" onclick="doTrainEmployee(' + emp.id + ')"' + (G.money < getTrainCost(emp) || empTraining(emp) ? ' disabled' : '') + '>' + t('emp.trainBtn', { v: fmtMoney(getTrainCost(emp)) }) + '</button>';
   }
   h += '<button class="btn" title="' + escH(t('emp.pauseHelp')) + '" onclick="toggleEmpPause(' + emp.id + ')">' + t(emp.paused ? 'emp.resume' : 'emp.pause') + '</button>';
+  h += '<button class="btn" onclick="doGiveBonus(' + emp.id + ')">' + t('emp.bonus', { v: fmtMoney(getBonusCost(emp)) }) + '</button>';
   h += '<button class="btn btn-danger" onclick="confirmFire(' + emp.id + ')">' + t('emp.fire') + '</button></div>';
   h += '<div class="modal-btns"><button class="btn" onclick="hideModal()">' + t('common.close') + '</button></div>';
   showModal(h, 'modal-emp');
@@ -753,6 +754,17 @@ function doTrainEmployee(empId) {
     renderHeader();
   } else {
     toast(t('ing.noMoney'));
+    playErrorSound();
+  }
+}
+
+function doGiveBonus(empId) {
+  if (giveBonus(empId)) {
+    toast(t('emp.bonusDone'));
+    showEmpInfoModal(empId);
+    renderEmployees();
+    renderHeader();
+  } else {
     playErrorSound();
   }
 }

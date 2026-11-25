@@ -242,7 +242,7 @@ I18N_EXTRA.ar = {
     '/INGRÉDIENT':'يغيّر مكوّنًا مباشرة.','c:/farine add N':'يضيف N.','c:/farine remove N':'يزيل N.','c:/farine set N':'يجعل الكمية N.','c:/farine max':'حدّه الأقصى: كلما كان أندر، قلّ ما تملكه.','c:/lait set N cl':'الحليب والكريمة والرم تقبل ml وcl وl.','c:/farine infinite':'هذا المكوّن لا ينفد أبدًا. يعمل مع كل المكونات.','c:/farine infinite off':'يعود إلى طبيعته.',
     '/RECETTE':'يغيّر مخزون حلوى.','c:/cookie add N':'يضيف N.','c:/cookie set N':'يجعل المخزون N.','c:/cookie max':'يضع 9999.',
     '/time':'يغيّر سرعة اللعبة.','c:/time set N':'من 0.1 إلى 10. الرقم 1 هو السرعة العادية.',
-    '/theme':'يغيّر السِّمة أو يفتح السِّمات.','c:/theme NOM':'يضع هذه السِّمة: light أو dark أو spring أو summer أو fall أو winter أو birthday أو horror أو bakery أو party أو space أو cookie أو tech أو techgold.','c:/theme unlock all':'يفتح السِّمات للأبد.','c:/theme unlock NOM':'يفتح هذه السِّمة للأبد.',
+    '/theme':'يغيّر السِّمة أو يفتح السِّمات.','c:/theme NOM':'يضع هذه السِّمة: light أو dark أو spring أو summer أو fall أو winter أو birthday أو horror أو love أو bakery أو party أو space أو cookie أو tech أو techgold.','c:/theme unlock all':'يفتح السِّمات للأبد.','c:/theme unlock NOM':'يفتح هذه السِّمة للأبد.',
     '/birthday':'يغيّر تاريخ عيد ميلادك.','c:/birthday JJ MM':'اليوم ثم الشهر.','/bob':'تكلّم مع بوب.','c:/bob challenge':'يعرض عليك تحدّيه فورًا.','/help':'يفتح هذا الدليل.','c:/help':'يفتح الدليل بجانب وحدة التحكم.',
   },
 };
@@ -818,4 +818,24 @@ Object.assign(LANGS.ar, {
   'report.titleLabel':`اسم رسالتك`,
   'report.titlePlaceholder':`أعطِ رسالتك اسمًا (إلزامي)`,
   'report.noTitle':`أعطِ رسالتك اسمًا أولًا.`
+});
+Object.assign(LANGS.ar, {
+  'hdr.tab':`الشريط العلوي`,
+  'hdr.sizeBig':`حجم الأزرار (الشاشة الكبيرة)`,
+  'hdr.sizeBigHelp':`لشاشات الحاسوب واللوحيات الكبيرة.`,
+  'hdr.sizeSmall':`حجم الأزرار (الهاتف واللوحي)`,
+  'hdr.sizeSmallHelp':`للشاشات التي عرضها أقل من 900 بكسل. هذا الاختيار منفصل عن اختيار الشاشة الكبيرة.`,
+  'hdr.arrange':`ترتيب الأزرار`,
+  'hdr.inSettings':`في الإعدادات (لا في الشريط)`,
+  'hdr.shortcuts':`اختصارات`,
+  'hdr.dragHelp':`اسحب الأزرار لترتيبها. المنطقة العليا: في الشريط. المنطقة الوسطى: خلف زر «⋯» على الهواتف والشاشات الصغيرة. المنطقة السفلى: في الإعدادات، أعلى تبويب عام. يبقى زر الإعدادات دائمًا في الشريط.`,
+  'emp.payHelp':`يمكنك خفض راتبه لكن لا يمكنك رفعه. كلما قل راتبه انخفض أقصى معنوياته، وإن كان قليلًا جدًا فقد يستقيل. لتحفيزه امنحه علاوة.`,
+  'ach.nameRepairs':`{{v}} {{#v|إصلاح|إصلاح|إصلاحان|إصلاحات|إصلاحًا|إصلاح}}`,
+  'ach.descRepairs':`أصلح {{v}} من الآلات أو المباني المعطلة.`,
+  'ach.nameMechanics':`{{v}} من الميكانيكيين`,
+  'ach.descMechanics':`امتلك {{v}} من الميكانيكيين في الوقت نفسه.`,
+  'settings.themeLove':`الحب`,
+  'settings.lockFebruary':`في فبراير فقط`,
+  'move.banner':`للعبة عنوان جديد وسيتوقف هذا العنوان. الألعاب المحفوظة في هذا المتصفح تبقى هنا: صدّرها قبل المغادرة، أو سجّل الدخول بحساب.`,
+  'move.go':`افتح العنوان الجديد`
 });

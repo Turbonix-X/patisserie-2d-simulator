@@ -2,6 +2,18 @@
 
 Tudo o que foi acrescentado ao Pâtisserie 2D Simulator, da mais recente à mais antiga. As versões mais antigas aparecem em inglês. Para perceber as regras do jogo, vê a [wiki](REGLES.md).
 
+## Release 1.3.6 (26 de novembro de 2026)
+
+Bengali, um tema de São Valentim, a barra de cima finalmente ajustável, e o jogo já não precisa do GitHub.
+
+**Novidades e correções**
+- O bengali (বাংলা) foi adicionado, completo: todos os textos do jogo, os nomes das conquistas, o guia de comandos e este histórico.
+- O tema Amor, só em fevereiro: corações que sobem, rosas, cartas e chocolate.
+- O prémio voltou, mas já não se pode aumentar um salário (só baixar). Os aumentos já feitos são anulados.
+- Definições, separador «Barra de cima»: o tamanho dos botões ajusta-se à parte para ecrã grande e para telemóvel e tablet, e cada botão arruma-se arrastando-o para três zonas: a barra, o menu «⋯» dos ecrãs pequenos, ou as definições (no topo do separador Geral).
+- Mais 10 conquistas, ou seja 1050 e os 5 segredos: 5 por avarias reparadas e 5 por mecânicos.
+- O instalador do Windows e as atualizações da app vêm agora de p2ds.pages.dev, já não do GitHub. No antigo endereço do GitHub Pages, um aviso mostra o novo.
+
 ## Release 1.3.5 (25 de novembro de 2026)
 
 O jogo fala hindi, nove ícones novos e mensagens de jogadores muito mais claras.

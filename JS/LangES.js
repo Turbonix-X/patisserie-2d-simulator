@@ -826,3 +826,23 @@ Object.assign(LANGS.es, {
   'report.titlePlaceholder':`Ponle un nombre a tu mensaje (obligatorio)`,
   'report.noTitle':`Primero ponle un nombre a tu mensaje.`
 });
+Object.assign(LANGS.es, {
+  'hdr.tab':`Barra superior`,
+  'hdr.sizeBig':`Tamaño de los botones (pantalla grande)`,
+  'hdr.sizeBigHelp':`Para pantallas de ordenador y tabletas grandes.`,
+  'hdr.sizeSmall':`Tamaño de los botones (móvil y tableta)`,
+  'hdr.sizeSmallHelp':`Para pantallas de menos de 900 píxeles de ancho. Es independiente del de la pantalla grande.`,
+  'hdr.arrange':`Orden de los botones`,
+  'hdr.inSettings':`En los ajustes (ya no en la barra)`,
+  'hdr.shortcuts':`Atajos`,
+  'hdr.dragHelp':`Arrastra los botones para ordenarlos. Zona de arriba: en la barra. Zona del medio: tras el botón «⋯» en móviles y pantallas pequeñas. Zona de abajo: en los ajustes, arriba de la pestaña General. El botón de ajustes siempre queda en la barra.`,
+  'emp.payHelp':`Puedes bajarle el salario, pero ya no subirlo. Cobrando menos, su moral máxima baja, y si cobra demasiado poco es probable que renuncie. Para motivarlo, dale una prima.`,
+  'ach.nameRepairs':`{{v}} {{#v|reparación|reparaciones}}`,
+  'ach.descRepairs':`Repara {{v}} {{#v|máquina o edificio averiado|máquinas o edificios averiados}}.`,
+  'ach.nameMechanics':`{{v}} {{#v|mecánico|mecánicos}}`,
+  'ach.descMechanics':`Ten {{v}} {{#v|mecánico|mecánicos}} a la vez.`,
+  'settings.themeLove':`Amor`,
+  'settings.lockFebruary':`solo en febrero`,
+  'move.banner':`El juego tiene una dirección nueva y esta dejará de funcionar. Las partidas guardadas en este navegador se quedan aquí: expórtalas antes de irte, o inicia sesión con una cuenta.`,
+  'move.go':`Abrir la nueva dirección`
+});

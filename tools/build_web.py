@@ -3,7 +3,7 @@
 Sort dans dist/ (pas dans git) : seulement ce que le navigateur doit recevoir.
  - le code JavaScript du jeu est brouillé (javascript-obfuscator) pour qu'on ne puisse pas le lire directement ;
    les noms globaux sont gardés (le HTML appelle des fonctions par leur nom), les fichiers de langues restent en clair ;
- - on n'y met ni l'installeur, ni les notes privées, ni les tests, ni les outils, ni la compilation de l'appli ;
+ - downloads/ (installeur et latest.json de l'appli Windows) part avec le site ; pas les notes privées, ni les tests, ni les outils, ni la compilation de l'appli ;
  - on vérifie qu'aucun fichier ne dépasse la limite de Cloudflare Pages (25 Mo).
 Le dossier web/ de l'appli Windows (tools/sync_web.py) n'est pas touché : l'appli garde le code en clair.
 """
@@ -42,6 +42,8 @@ def main():
             raise SystemExit('fichier manquant : ' + f)
     for d in DIRS:
         shutil.copytree(os.path.join(ROOT, d), os.path.join(DIST, d))
+    if os.path.isdir(os.path.join(ROOT, 'downloads')):
+        shutil.copytree(os.path.join(ROOT, 'downloads'), os.path.join(DIST, 'downloads'))
     if '--with-tests' in sys.argv:
         shutil.copytree(os.path.join(ROOT, 'tests'), os.path.join(DIST, 'tests'))
 

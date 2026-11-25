@@ -10,3 +10,6 @@ private/
 dist/
 archive-dist/
 .wrangler/
+
+# Installeurs et latest.json, envoyes avec le site (tools/make_latest_json.py)
+downloads/

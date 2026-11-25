@@ -426,3 +426,23 @@ Object.assign(LANGS.en, {
   'report.titlePlaceholder':`Give your message a name (required)`,
   'report.noTitle':`First give your message a name.`
 });
+Object.assign(LANGS.en, {
+  'hdr.tab':`Top bar`,
+  'hdr.sizeBig':`Button size (big screen)`,
+  'hdr.sizeBigHelp':`For computer screens and big tablets.`,
+  'hdr.sizeSmall':`Button size (phone and tablet)`,
+  'hdr.sizeSmallHelp':`For screens under 900 pixels wide. This choice is separate from the big screen one.`,
+  'hdr.arrange':`Arranging the buttons`,
+  'hdr.inSettings':`In the settings (no longer in the bar)`,
+  'hdr.shortcuts':`Shortcuts`,
+  'hdr.dragHelp':`Drag the buttons to arrange them. Top zone: in the bar. Middle zone: behind the “⋯” button on phones and small screens. Bottom zone: in the settings, at the top of the General tab. The settings button always stays in the bar.`,
+  'emp.payHelp':`You can lower their pay, but no longer raise it. Paid less, their top morale is lower, and if they are paid too little they are likely to quit. To motivate them, give them a bonus.`,
+  'ach.nameRepairs':`{{v}} {{#v|repair|repairs}}`,
+  'ach.descRepairs':`Repair {{v}} broken {{#v|machine or building|machines or buildings}}.`,
+  'ach.nameMechanics':`{{v}} {{#v|mechanic|mechanics}}`,
+  'ach.descMechanics':`Have {{v}} {{#v|mechanic|mechanics}} at once.`,
+  'settings.themeLove':`Love`,
+  'settings.lockFebruary':`only in February`,
+  'move.banner':`The game has a new address and this one will stop. Games kept in this browser stay here: export them before leaving, or sign in with an account.`,
+  'move.go':`Open the new address`
+});

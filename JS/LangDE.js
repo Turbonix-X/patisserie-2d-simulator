@@ -242,7 +242,7 @@ I18N_EXTRA.de = {
     '/INGRÉDIENT':'Ändert eine Zutat direkt.','c:/farine add N':'Fügt N hinzu.','c:/farine remove N':'Entfernt N.','c:/farine set N':'Setzt die Menge auf N.','c:/farine max':'Ihr Limit: Je seltener, desto weniger hast du.','c:/lait set N cl':'Milch, Sahne und Rum akzeptieren ml, cl und l.',
     '/RECETTE':'Ändert den Vorrat eines Kuchens.','c:/cookie add N':'Fügt N hinzu.','c:/cookie set N':'Setzt den Vorrat auf N.','c:/cookie max':'Setzt 9999.',
     '/time':'Ändert die Spielgeschwindigkeit.','c:/time set N':'Von 0.1 bis 10. 1 ist die normale Geschwindigkeit.',
-    '/theme':'Wechselt das Design oder schaltet Designs frei.','c:/theme NOM':'Setzt dieses Design: light, dark, spring, summer, fall, winter, birthday, horror, bakery, party, space, cookie, tech oder techgold.','c:/theme unlock all':'Schaltet die Designs für immer frei.','c:/theme unlock NOM':'Schaltet dieses Design für immer frei.',
+    '/theme':'Wechselt das Design oder schaltet Designs frei.','c:/theme NOM':'Setzt dieses Design: light, dark, spring, summer, fall, winter, birthday, horror, love, bakery, party, space, cookie, tech oder techgold.','c:/theme unlock all':'Schaltet die Designs für immer frei.','c:/theme unlock NOM':'Schaltet dieses Design für immer frei.',
     '/birthday':'Ändert dein Geburtsdatum.','c:/birthday JJ MM':'Tag, dann Monat.','/bob':'Sprich mit Bob.','c:/bob challenge':'Er bietet dir sofort seine Herausforderung an.','/help':'Öffnet diese Übersicht.','c:/help':'Die Übersicht öffnet sich neben der Konsole.',
   },
 };
@@ -831,4 +831,24 @@ Object.assign(LANGS.de, {
   'report.titleLabel':`Name deiner Nachricht`,
   'report.titlePlaceholder':`Gib deiner Nachricht einen Namen (Pflicht)`,
   'report.noTitle':`Gib deiner Nachricht zuerst einen Namen.`
+});
+Object.assign(LANGS.de, {
+  'hdr.tab':`Obere Leiste`,
+  'hdr.sizeBig':`Größe der Knöpfe (großer Bildschirm)`,
+  'hdr.sizeBigHelp':`Für Computerbildschirme und große Tablets.`,
+  'hdr.sizeSmall':`Größe der Knöpfe (Handy und Tablet)`,
+  'hdr.sizeSmallHelp':`Für Bildschirme unter 900 Pixel Breite. Diese Einstellung ist getrennt von der für große Bildschirme.`,
+  'hdr.arrange':`Anordnung der Knöpfe`,
+  'hdr.inSettings':`In den Einstellungen (nicht mehr in der Leiste)`,
+  'hdr.shortcuts':`Kurzbefehle`,
+  'hdr.dragHelp':`Zieh die Knöpfe, um sie zu ordnen. Obere Zone: in der Leiste. Mittlere Zone: hinter dem Knopf „⋯“ auf Handys und kleinen Bildschirmen. Untere Zone: in den Einstellungen, oben im Tab Allgemein. Der Einstellungsknopf bleibt immer in der Leiste.`,
+  'emp.payHelp':`Du kannst das Gehalt senken, aber nicht mehr erhöhen. Bei weniger Gehalt sinkt die maximale Motivation, und bei zu wenig kündigt er wahrscheinlich. Um ihn zu motivieren, gib ihm eine Prämie.`,
+  'ach.nameRepairs':`{{v}} {{#v|Reparatur|Reparaturen}}`,
+  'ach.descRepairs':`Repariere {{v}} kaputte {{#v|Maschine oder Gebäude|Maschinen oder Gebäude}}.`,
+  'ach.nameMechanics':`{{v}} {{#v|Mechaniker|Mechaniker}}`,
+  'ach.descMechanics':`Habe {{v}} {{#v|Mechaniker|Mechaniker}} gleichzeitig.`,
+  'settings.themeLove':`Liebe`,
+  'settings.lockFebruary':`nur im Februar`,
+  'move.banner':`Das Spiel hat eine neue Adresse, und diese wird eingestellt. Spielstände in diesem Browser bleiben hier: Exportiere sie vor dem Wechsel oder melde dich mit einem Konto an.`,
+  'move.go':`Neue Adresse öffnen`
 });

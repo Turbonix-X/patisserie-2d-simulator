@@ -217,6 +217,14 @@ function tierName(tier) {
   [1, 10, 50].forEach(function(n) {
     counted('repaid' + n, 'money', '\u{1F91D}', n, 'ach.nameRepaid', 'ach.descRepaid', function(g) { return (g.stats.loansRepaid || 0) >= n; }, function(g) { return g.stats.loansRepaid || 0; });
   });
+  // Release 1.3.6 : les pannes reparees, et les mecaniciens (10 succes de plus : 1050 en tout, plus les 5 secrets)
+  [1, 10, 50, 250, 1000].forEach(function(n) {
+    counted('repairs' + n, 'shop', '\u{1F527}', n, 'ach.nameRepairs', 'ach.descRepairs', function(g) { return (g.stats.repairs || 0) >= n; }, function(g) { return g.stats.repairs || 0; });
+  });
+  function mechCount(g) { return (g.employees || []).filter(function(e) { return e.type === 'mechanic'; }).length; }
+  [1, 3, 5, 10, 25].forEach(function(n) {
+    counted('mechanics' + n, 'general', '\u{1F9D1}‍\u{1F527}', n, 'ach.nameMechanics', 'ach.descMechanics', function(g) { return mechCount(g) >= n; }, mechCount);
+  });
   // Les 10 machines qui ont une serie de succes : 5 niveaux chacune
   ['petrin', 'isolant', 'robot', 'fourturbo', 'convoyeur', 'caisse', 'etiquette', 'vitrine', 'guichet', 'academie'].map(findMachine).forEach(function(m) {
     for (var lv = 1; lv <= 5; lv++) {

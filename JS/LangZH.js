@@ -242,7 +242,7 @@ I18N_EXTRA.zh = {
     '/INGRÉDIENT':'直接修改一种原料。','c:/farine add N':'增加 N 份。','c:/farine remove N':'减少 N 份。','c:/farine set N':'把数量设为 N。','c:/farine max':'它的上限：越稀有，得到的越少。','c:/lait set N cl':'牛奶、奶油和朗姆酒可以用 ml、cl 和 l。','c:/farine infinite':'这种原料永远用不完。所有原料都可以。','c:/farine infinite off':'恢复正常。',
     '/RECETTE':'修改一种甜点的库存。','c:/cookie add N':'增加 N 份。','c:/cookie set N':'把库存设为 N。','c:/cookie max':'设为 9999。',
     '/time':'修改游戏速度。','c:/time set N':'从 0.1 到 10。1 是正常速度。',
-    '/theme':'切换主题或解锁主题。','c:/theme NOM':'使用这个主题：light、dark、spring、summer、fall、winter、birthday、horror、bakery、party、space、cookie、tech 或 techgold。','c:/theme unlock all':'永久解锁所有主题。','c:/theme unlock NOM':'永久解锁这个主题。',
+    '/theme':'切换主题或解锁主题。','c:/theme NOM':'使用这个主题：light、dark、spring、summer、fall、winter、birthday、horror、love、bakery、party、space、cookie、tech 或 techgold。','c:/theme unlock all':'永久解锁所有主题。','c:/theme unlock NOM':'永久解锁这个主题。',
     '/birthday':'修改你的生日。','c:/birthday JJ MM':'先日，后月。','/bob':'和鲍勃说话。','c:/bob challenge':'他马上给你出挑战。','/help':'打开这个指南。','c:/help':'指南会在控制台旁边打开。',
   },
 };
@@ -818,4 +818,24 @@ Object.assign(LANGS.zh, {
   'report.titleLabel':`消息名称`,
   'report.titlePlaceholder':`给你的消息起个名字（必填）`,
   'report.noTitle':`请先给你的消息起个名字。`
+});
+Object.assign(LANGS.zh, {
+  'hdr.tab':`顶部栏`,
+  'hdr.sizeBig':`按钮大小（大屏幕）`,
+  'hdr.sizeBigHelp':`适用于电脑屏幕和大平板。`,
+  'hdr.sizeSmall':`按钮大小（手机和平板）`,
+  'hdr.sizeSmallHelp':`适用于宽度不足 900 像素的屏幕。这个设置与大屏幕的设置是分开的。`,
+  'hdr.arrange':`按钮排列`,
+  'hdr.inSettings':`放进设置（不再在顶部栏）`,
+  'hdr.shortcuts':`快捷方式`,
+  'hdr.dragHelp':`拖动按钮来排列。上面的区域：在顶部栏里。中间的区域：在手机和小屏幕上收进“⋯”按钮。下面的区域：放进设置，在“常规”页的最上面。设置按钮始终留在顶部栏。`,
+  'emp.payHelp':`你可以降低他的工资，但不能再提高。工资越低，他的最高士气越低，太低的话他很可能会辞职。想激励他，就发一笔奖金。`,
+  'ach.nameRepairs':`{{v}} 次维修`,
+  'ach.descRepairs':`修好 {{v}} 台坏掉的机器或建筑。`,
+  'ach.nameMechanics':`{{v}} 名机修工`,
+  'ach.descMechanics':`同时拥有 {{v}} 名机修工。`,
+  'settings.themeLove':`爱情`,
+  'settings.lockFebruary':`仅在二月`,
+  'move.banner':`游戏有了新地址，这个地址将停止服务。保存在此浏览器里的存档只留在这里：离开前请先导出，或用账号登录。`,
+  'move.go':`打开新地址`
 });

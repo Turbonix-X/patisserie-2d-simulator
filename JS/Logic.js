@@ -835,6 +835,20 @@ function trainEmployee(empId) {
   return true;
 }
 
+function getBonusCost(emp) { return Math.floor(getEmpSalary(emp) * 120); }
+
+// Une prime remonte le moral
+function giveBonus(empId) {
+  var emp = findEmp(empId);
+  if (!emp || emp.morale >= 100) return false;
+  var cost = getBonusCost(emp);
+  if (G.money < cost) return false;
+  G.money -= cost;
+  G.stats.totalInvested += cost;
+  emp.morale = Math.min(100, emp.morale + 25);
+  return true;
+}
+
 // Euros par seconde. Mieux forme, mieux paye. Le reglage de paie monte ou baisse le tout.
 function getEmpSalary(emp) {
   var empType = findEmpType(emp.type);
@@ -2216,6 +2230,7 @@ function tickMechanics(dtSec) {
     b.prog = (b.prog || 0) + dtSec * power;
     if (b.prog < need) return;
     delete G.broken[key];
+    G.stats.repairs = (G.stats.repairs || 0) + 1;
     var kind = key.charAt(0), id = key.slice(2);
     if (kind === 'm') syncOvens();
     if (typeof toast === 'function') toast(t('broke.repaired', { n: kind === 'm' ? machName(findMachine(id)) : t('b.' + id) }));
@@ -2252,6 +2267,7 @@ function tickBreakdowns(dtSec) {
     var b = G.broken[key];
     if (!b.until || now < b.until) return;
     delete G.broken[key];
+    G.stats.repairs = (G.stats.repairs || 0) + 1;
     var kind = key.charAt(0), id = key.slice(2);
     if (kind === 'm') syncOvens();
     if (typeof toast === 'function') toast(t('broke.repaired', { n: kind === 'm' ? machName(findMachine(id)) : t('b.' + id) }));

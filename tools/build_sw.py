@@ -44,6 +44,7 @@ self.addEventListener('fetch', function(e) {
   var sameOrigin = url.origin === self.location.origin;
   var isFont = /fonts\\.(googleapis|gstatic)\\.com$/.test(url.hostname);
   if (!sameOrigin && !isFont) return;
+  if (sameOrigin && /\\/downloads\\//.test(url.pathname)) return;   // les installeurs ne se gardent pas dans le jeu hors ligne
   e.respondWith(
     withTimeout(req, sameOrigin ? 4000 : 6000).then(function(res) {
       if (res && (res.ok || res.type === 'opaque')) { var copy = res.clone(); caches.open(CACHE).then(function(c) { c.put(req, copy); }); }

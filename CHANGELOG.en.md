@@ -2,6 +2,18 @@
 
 Everything that was added to Pâtisserie 2D Simulator, from the newest to the oldest. To understand the rules of the game, see the [wiki](REGLES.md).
 
+## Release 1.3.6 (November 26, 2026)
+
+Bengali, a Valentine's theme, the top bar finally adjustable, and the game no longer needs GitHub.
+
+**What is new**
+- Bengali (বাংলা) is added, in full: every text of the game, the achievement names, the command guide and this changelog.
+- The Love theme, only in February: rising hearts, roses, letters and chocolate.
+- The bonus is back, but a salary can no longer be raised (only lowered). Raises already given are cancelled.
+- Settings, “Top bar” tab: button size is set separately for big screens and for phones and tablets, and each button is arranged by dragging it into three zones: the bar, the “⋯” menu of small screens, or the settings (at the top of the General tab).
+- 10 more achievements, for 1050 plus the 5 secrets: 5 for repairs done and 5 for mechanics.
+- The Windows installer and the app's updates now come from p2ds.pages.dev, not GitHub. On the old GitHub Pages address, a banner shows the new one.
+
 ## Release 1.3.5 (November 25, 2026)
 
 The game speaks Hindi, nine new icons, and much clearer player messages.

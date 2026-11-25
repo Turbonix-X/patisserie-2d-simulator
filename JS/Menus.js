@@ -24,8 +24,9 @@ function setCard(title, body, extra) {
 // ============ REGLAGES ============
 function settingsPaneHTML() {
   var h = '';
-  if (ui.settingsTab === 'general') h = settingsGeneral();
+  if (ui.settingsTab === 'general') h = settingsShortcuts() + settingsGeneral();
   else if (ui.settingsTab === 'look') h = settingsLook();
+  else if (ui.settingsTab === 'hdr') h = settingsHdr();
   else if (ui.settingsTab === 'audio') h = settingsAudio();
   else if (ui.settingsTab === 'keys') h = settingsKeys();
   else if (ui.settingsTab === 'stats') h = statsPane();
@@ -35,7 +36,7 @@ function settingsPaneHTML() {
 
 function showSettingsModal() {
   beginMenuPause();
-  var tabs = [['general', 'settings.tabGeneral', 'globe'], ['look', 'settings.tabLook', 'palette'], ['audio', 'settings.tabAudio', 'music']];
+  var tabs = [['general', 'settings.tabGeneral', 'globe'], ['look', 'settings.tabLook', 'palette'], ['hdr', 'hdr.tab', 'more'], ['audio', 'settings.tabAudio', 'music']];
   if (hasKeyboard()) tabs.push(['keys', 'settings.tabKeys', 'terminal']);
   var h = '<div class="set-head"><h2>' + uiIcon('settings') + t('settings.title') + '</h2>';
   h += '<button class="icon-btn" onclick="closeMenu()" aria-label="' + escH(t('common.close')) + '" title="' + escH(t('common.close')) + '">' + uiIcon('close') + '</button></div>';
@@ -208,7 +209,7 @@ function settingsLook() {
     if (lock === 'secret' || (lock && thm.hidden)) return;
     var name = t(thm.langKey);
     var active = active0 === thm.id;
-    var why = lock ? t(lock === 'level' ? 'settings.lockLevel' : lock === 'got' ? 'settings.lockGold' : lock === 'sold' ? 'settings.lockCookies' : lock === 'month' ? 'settings.lockOctober' : lock === 'season' ? 'settings.lockSeason' : lock === 'birthday' ? 'settings.lockBirthday' : 'settings.lockNoBirthday', { v: thm.level }) : '';
+    var why = lock ? t(lock === 'level' ? 'settings.lockLevel' : lock === 'got' ? 'settings.lockGold' : lock === 'sold' ? 'settings.lockCookies' : lock === 'month' ? (thm.month === 2 ? 'settings.lockFebruary' : 'settings.lockOctober') : lock === 'season' ? 'settings.lockSeason' : lock === 'birthday' ? 'settings.lockBirthday' : 'settings.lockNoBirthday', { v: thm.level }) : '';
     cards += '<button class="theme-card' + (active ? ' active' : '') + (lock ? ' locked' : '') + '"' + (lock ? ' disabled' : ' onclick="chooseTheme(\'' + thm.id + '\')"') + ' aria-pressed="' + active + '">';
     cards += '<span class="theme-prev tp-' + thm.id + '"><i></i><i></i><i></i>' + Decor.mark(thm.id) + '</span>';
     cards += '<span class="theme-name">' + (lock ? '\u{1F512} ' : '') + name + '</span>';
@@ -218,10 +219,31 @@ function settingsLook() {
   cards += '</div>';
   var h = setCard(t('settings.theme'), '<p class="set-help">' + t('settings.themeHelp') + '</p>' + cards);
   h += setCard('', setRow(t('settings.particles'), t('settings.particlesHelp'), setSwitch(!G.settings.reducedParticles, 'toggleParticles();showSettingsModal()', t('settings.particles'))));
-  h += setCard(t('hdr.title'), setRow(t('hdr.size'), t('hdr.sizeHelp'), '<div class="volume-row"><input type="range" min="70" max="150" step="5" value="' + Math.round(hdrZoom() * 100) + '" aria-label="' + escH(t('hdr.size')) + '" oninput="setHdrZoom(this.value);document.getElementById(\'hdr-zoom-val\').textContent=this.value+\'%\'"><span id="hdr-zoom-val">' + Math.round(hdrZoom() * 100) + '%</span></div>') + hdrLayoutHTML());
   return h;
 }
-function setHdrZoom(v) { G.settings.hdrZoom = Math.max(70, Math.min(150, Number(v) || 100)); renderHeader(); }
+function setHdrZoom(v) { G.settings.hdrZoom = hdrClampZoom(v); renderHeader(); }
+function setHdrZoomSmall(v) { G.settings.hdrZoomSmall = hdrClampZoom(v); renderHeader(); }
+// L'onglet « Barre du haut » : la taille des boutons (grand et petit ecran) et leur rangement
+function settingsHdr() {
+  function slider(label, help, val, fn, id) {
+    return setRow(label, help, '<div class="volume-row"><input type="range" min="60" max="160" step="5" value="' + val + '" aria-label="' + escH(label) + '" oninput="' + fn + '(this.value);document.getElementById(\'' + id + '\').textContent=this.value+\'%\'"><span id="' + id + '">' + val + '%</span></div>');
+  }
+  return setCard(t('hdr.title'),
+    slider(t('hdr.sizeBig'), t('hdr.sizeBigHelp'), Math.round(hdrZoom() * 100), 'setHdrZoom', 'hdr-zoom-val') +
+    slider(t('hdr.sizeSmall'), t('hdr.sizeSmallHelp'), Math.round(hdrZoomSmall() * 100), 'setHdrZoomSmall', 'hdr-zoom-val-s')) +
+    setCard(t('hdr.arrange'), hdrLayoutHTML());
+}
+// Les boutons que tu as mis « dans les reglages » se retrouvent ici, en haut de l'onglet General
+function settingsShortcuts() {
+  var lay = hdrLayout(), h = '';
+  lay.order.forEach(function(id) {
+    if (lay.sett.indexOf(id) < 0) return;
+    var d = hdrDef(id);
+    if (d && d.show()) h += '<button type="button" class="btn hdr-short" onclick="hdrShortcutRun(\'' + id + '\')">' + uiIcon(d.icon()) + '<span>' + escH(d.label()) + '</span></button>';
+  });
+  return h ? setCard(t('hdr.shortcuts'), '<div class="hdr-shorts">' + h + '</div>') : '';
+}
+function hdrShortcutRun(id) { var d = hdrDef(id); if (!d) return; closeMenu(); setTimeout(function() { (new Function(d.action))(); }, 60); }
 
 // Les boutons de l'en-tete : on les glisse (souris ou doigt) pour les ranger, et dans la zone du bas pour les mettre dans le menu « ... » des petits ecrans
 function hdrChipHTML(id) {
@@ -230,11 +252,12 @@ function hdrChipHTML(id) {
   return '<div class="hdr-chip' + (id === 'settings' ? ' pinned' : '') + '" data-id="' + id + '" onpointerdown="hdrDragStart(event)" title="' + escH(d.label()) + '">' + uiIcon(d.icon()) + '<span>' + escH(d.label()) + '</span></div>';
 }
 function hdrLayoutHTML() {
-  var lay = hdrLayout(), bar = '', menu = '';
-  lay.order.forEach(function(id) { if (lay.menu.indexOf(id) < 0) bar += hdrChipHTML(id); else menu += hdrChipHTML(id); });
+  var lay = hdrLayout(), bar = '', menu = '', sett = '';
+  lay.order.forEach(function(id) { if (lay.sett.indexOf(id) >= 0) sett += hdrChipHTML(id); else if (lay.menu.indexOf(id) >= 0) menu += hdrChipHTML(id); else bar += hdrChipHTML(id); });
   return '<p class="set-help">' + t('hdr.dragHelp') + '</p>' +
     '<div class="hdr-zone-label">' + t('hdr.inBar') + '</div><div class="hdr-zone" data-zone="bar">' + bar + '</div>' +
-    '<div class="hdr-zone-label">' + t('hdr.inMenu') + '</div><div class="hdr-zone" data-zone="menu">' + menu + '</div>';
+    '<div class="hdr-zone-label">' + t('hdr.inMenu') + '</div><div class="hdr-zone" data-zone="menu">' + menu + '</div>' +
+    '<div class="hdr-zone-label">' + t('hdr.inSettings') + '</div><div class="hdr-zone" data-zone="sett">' + sett + '</div>';
 }
 var hdrDrag = null;
 function hdrDragStart(e) {
@@ -278,11 +301,13 @@ function hdrDragEnd() {
   hdrDrag = null;
   d.chip.classList.remove('dragging');
   if (d.ghost.parentNode) d.ghost.parentNode.removeChild(d.ghost);
-  var bar = [], menu = [];
+  var bar = [], menu = [], sett = [];
   document.querySelectorAll('.hdr-zone[data-zone="bar"] .hdr-chip').forEach(function(c) { bar.push(c.dataset.id); });
   document.querySelectorAll('.hdr-zone[data-zone="menu"] .hdr-chip').forEach(function(c) { if (c.dataset.id !== 'settings') menu.push(c.dataset.id); else bar.push('settings'); });
-  G.settings.hdrOrder = bar.concat(menu);
+  document.querySelectorAll('.hdr-zone[data-zone="sett"] .hdr-chip').forEach(function(c) { if (c.dataset.id !== 'settings') sett.push(c.dataset.id); else bar.push('settings'); });
+  G.settings.hdrOrder = bar.concat(menu, sett);
   G.settings.hdrMenu = menu;
+  G.settings.hdrSett = sett;
   ui.hdrPop = false;
   renderHeader();
   showSettingsModal();

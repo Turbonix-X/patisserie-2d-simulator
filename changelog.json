@@ -4,6 +4,24 @@
   "intro": "كل ما أُضيف إلى Pâtisserie 2D Simulator، من الأحدث إلى الأقدم. تظهر الإصدارات الأقدم بالإنجليزية. لفهم قواعد اللعبة، راجع [الويكي](REGLES.md).",
   "versions": [
    {
+    "title": "Release 1.3.6 (26 نوفمبر 2026)",
+    "name": "Release 1.3.6",
+    "intro": "اللغة البنغالية، وثيم لعيد الحب، والشريط العلوي قابل للضبط أخيرًا، واللعبة لم تعد تحتاج إلى GitHub.",
+    "groups": [
+     {
+      "name": "جديد وتصحيحات",
+      "items": [
+       "أُضيفت اللغة البنغالية (বাংলা) كاملة: كل نصوص اللعبة وأسماء الإنجازات ودليل الأوامر وهذا السجل.",
+       "ثيم الحب، في فبراير فقط: قلوب تصعد وورود ورسائل وشوكولاتة.",
+       "عادت العلاوة، لكن لم يعد ممكنًا رفع الراتب (خفضه فقط). الزيادات التي مُنحت من قبل أُلغيت.",
+       "الإعدادات، تبويب «الشريط العلوي»: يُضبط حجم الأزرار على حدة للشاشة الكبيرة وللهاتف واللوحي، ويُرتَّب كل زر بسحبه إلى ثلاث مناطق: الشريط، أو قائمة «⋯» في الشاشات الصغيرة، أو الإعدادات (أعلى تبويب عام).",
+       "10 إنجازات إضافية، أي 1050 مع الأسرار الخمسة: 5 للأعطال المُصلَحة و5 للميكانيكيين.",
+       "مُثبّت Windows وتحديثات التطبيق تأتي الآن من p2ds.pages.dev لا من GitHub. على عنوان GitHub Pages القديم يظهر شريط يدل على العنوان الجديد."
+      ]
+     }
+    ]
+   },
+   {
     "title": "Release 1.3.5 (25 نوفمبر 2026)",
     "name": "Release 1.3.5",
     "intro": "اللعبة تتحدث الهندية، وتسع أيقونات جديدة، ورسائل لاعبين أوضح بكثير.",
@@ -479,10 +497,52 @@
    }
   ]
  },
+ "bn": {
+  "title": "আপডেটের ইতিহাস",
+  "intro": "Pâtisserie 2D Simulator এ যা কিছু যোগ হয়েছে, নতুন থেকে পুরনো ক্রমে। পুরনো সংস্করণ ইংরেজিতে দেখানো হয়। গেমের নিয়ম বুঝতে [উইকি](REGLES.md) দেখুন।",
+  "versions": [
+   {
+    "title": "Release 1.3.6 (২৬ নভেম্বর ২০২৬)",
+    "name": "Release 1.3.6",
+    "intro": "বাংলা ভাষা, ভ্যালেন্টাইনের থিম, ওপরের বার অবশেষে বদলানো যায়, আর গেমের এখন GitHub লাগে না।",
+    "groups": [
+     {
+      "name": "নতুন কী",
+      "items": [
+       "বাংলা সম্পূর্ণভাবে যোগ হয়েছে: গেমের সব লেখা, অর্জনের নাম, কমান্ড নির্দেশিকা এবং এই চেঞ্জলগ।",
+       "ভালোবাসার থিম, শুধু ফেব্রুয়ারিতে: ওপরে ওঠা হৃদয়, গোলাপ, চিঠি আর চকোলেট।",
+       "বোনাস ফিরে এসেছে, কিন্তু বেতন আর বাড়ানো যায় না (শুধু কমানো যায়)। আগে যে বাড়ানো হয়েছিল তা বাতিল হয়েছে।",
+       "সেটিংসের «ওপরের বার» ট্যাব: বোতামের আকার বড় পর্দা এবং ফোন-ট্যাবলেটের জন্য আলাদা করে ঠিক করা যায়, আর প্রতিটি বোতাম টেনে তিনটি জায়গার একটিতে রাখা যায়: বার, ছোট পর্দার “⋯” মেনু, বা সেটিংস (সাধারণ ট্যাবের একেবারে ওপরে)।",
+       "আরও ১০টি অর্জন, মানে ১০৫০টি আর ৫টি গোপন: ৫টি মেরামতের জন্য আর ৫টি মেকানিকের জন্য।",
+       "Windows ইনস্টলার আর অ্যাপের আপডেট এখন GitHub থেকে নয়, p2ds.pages.dev থেকে আসে। পুরনো GitHub Pages ঠিকানায় একটি ব্যানার নতুন ঠিকানা জানায়।"
+      ]
+     }
+    ]
+   }
+  ]
+ },
  "de": {
   "title": "Änderungsverlauf",
   "intro": "Alles, was zu Pâtisserie 2D Simulator hinzugekommen ist, von der neuesten bis zur ältesten Version. Ältere Versionen werden auf Englisch angezeigt. Die Spielregeln findest du im [Wiki](REGLES.md).",
   "versions": [
+   {
+    "title": "Release 1.3.6 (26. November 2026)",
+    "name": "Release 1.3.6",
+    "intro": "Bengalisch, ein Valentinstag-Design, die obere Leiste endlich einstellbar, und das Spiel braucht GitHub nicht mehr.",
+    "groups": [
+     {
+      "name": "Neues und Korrekturen",
+      "items": [
+       "Bengalisch (বাংলা) wurde vollständig hinzugefügt: alle Texte des Spiels, die Namen der Erfolge, der Befehlsguide und dieses Änderungsprotokoll.",
+       "Das Liebe-Design, nur im Februar: aufsteigende Herzen, Rosen, Briefe und Schokolade.",
+       "Die Prämie ist zurück, aber ein Gehalt kann nicht mehr erhöht werden (nur gesenkt). Schon gegebene Erhöhungen werden aufgehoben.",
+       "Einstellungen, Tab „Obere Leiste“: Die Größe der Knöpfe wird getrennt für große Bildschirme und für Handy und Tablet eingestellt, und jeder Knopf wird per Ziehen in drei Zonen geordnet: die Leiste, das „⋯“-Menü kleiner Bildschirme oder die Einstellungen (oben im Tab Allgemein).",
+       "10 weitere Erfolge, also 1050 und die 5 geheimen: 5 für reparierte Defekte und 5 für Mechaniker.",
+       "Der Windows-Installer und die Updates der App kommen jetzt von p2ds.pages.dev, nicht mehr von GitHub. Auf der alten GitHub-Pages-Adresse zeigt ein Banner die neue."
+      ]
+     }
+    ]
+   },
    {
     "title": "Release 1.3.5 (25. November 2026)",
     "name": "Release 1.3.5",
@@ -963,6 +1023,24 @@
   "title": "Update history",
   "intro": "Everything that was added to Pâtisserie 2D Simulator, from the newest to the oldest. To understand the rules of the game, see the [wiki](REGLES.md).",
   "versions": [
+   {
+    "title": "Release 1.3.6 (November 26, 2026)",
+    "name": "Release 1.3.6",
+    "intro": "Bengali, a Valentine's theme, the top bar finally adjustable, and the game no longer needs GitHub.",
+    "groups": [
+     {
+      "name": "What is new",
+      "items": [
+       "Bengali (বাংলা) is added, in full: every text of the game, the achievement names, the command guide and this changelog.",
+       "The Love theme, only in February: rising hearts, roses, letters and chocolate.",
+       "The bonus is back, but a salary can no longer be raised (only lowered). Raises already given are cancelled.",
+       "Settings, “Top bar” tab: button size is set separately for big screens and for phones and tablets, and each button is arranged by dragging it into three zones: the bar, the “⋯” menu of small screens, or the settings (at the top of the General tab).",
+       "10 more achievements, for 1050 plus the 5 secrets: 5 for repairs done and 5 for mechanics.",
+       "The Windows installer and the app's updates now come from p2ds.pages.dev, not GitHub. On the old GitHub Pages address, a banner shows the new one."
+      ]
+     }
+    ]
+   },
    {
     "title": "Release 1.3.5 (November 25, 2026)",
     "name": "Release 1.3.5",
@@ -1970,6 +2048,24 @@
   "intro": "Todo lo que se ha añadido a Pâtisserie 2D Simulator, de la más reciente a la más antigua. Las versiones más antiguas se muestran en inglés. Para entender las reglas del juego, mira la [wiki](REGLES.md).",
   "versions": [
    {
+    "title": "Release 1.3.6 (26 de noviembre de 2026)",
+    "name": "Release 1.3.6",
+    "intro": "Bengalí, un tema de San Valentín, la barra superior por fin ajustable, y el juego ya no necesita GitHub.",
+    "groups": [
+     {
+      "name": "Novedades y correcciones",
+      "items": [
+       "Se añade el bengalí (বাংলা), completo: todos los textos del juego, los nombres de los logros, la guía de comandos y este historial.",
+       "El tema Amor, solo en febrero: corazones que suben, rosas, cartas y chocolate.",
+       "La prima vuelve, pero ya no se puede subir un salario (solo bajarlo). Los aumentos ya hechos se anulan.",
+       "Ajustes, pestaña «Barra superior»: el tamaño de los botones se ajusta aparte para pantalla grande y para móvil y tableta, y cada botón se ordena arrastrándolo a tres zonas: la barra, el menú «⋯» de las pantallas pequeñas, o los ajustes (arriba de la pestaña General).",
+       "10 logros más, es decir 1050 y los 5 secretos: 5 por averías reparadas y 5 por mecánicos.",
+       "El instalador de Windows y las actualizaciones de la app ahora vienen de p2ds.pages.dev, ya no de GitHub. En la antigua dirección de GitHub Pages, un aviso indica la nueva."
+      ]
+     }
+    ]
+   },
+   {
     "title": "Release 1.3.5 (25 de noviembre de 2026)",
     "name": "Release 1.3.5",
     "intro": "El juego habla hindi, nueve iconos nuevos y mensajes de jugadores mucho más claros.",
@@ -2450,6 +2546,24 @@
   "intro": "Pâtisserie 2D Simulator में जो कुछ भी जोड़ा गया है, सबसे नए से सबसे पुराने तक। पुराने वर्ज़न अंग्रेज़ी में दिखाए जाते हैं। गेम के नियम समझने के लिए [विकी](REGLES.md) देखें।",
   "versions": [
    {
+    "title": "Release 1.3.6 (26 नवंबर 2026)",
+    "name": "Release 1.3.6",
+    "intro": "बंगाली भाषा, वैलेंटाइन थीम, ऊपर की पट्टी अब आख़िरकार बदली जा सकती है, और गेम को अब GitHub की ज़रूरत नहीं।",
+    "groups": [
+     {
+      "name": "नया क्या है",
+      "items": [
+       "बंगाली (বাংলা) पूरी तरह जोड़ी गई: गेम के सारे टेक्स्ट, उपलब्धियों के नाम, कमांड गाइड और यह अपडेट का इतिहास।",
+       "प्रेम थीम, सिर्फ़ फ़रवरी में: ऊपर उठते दिल, गुलाब, चिट्ठियाँ और चॉकलेट।",
+       "बोनस वापस आ गया है, पर अब वेतन बढ़ाया नहीं जा सकता (सिर्फ़ घटाया जा सकता है)। जो बढ़ोतरी पहले हो चुकी थी, वह रद्द कर दी गई है।",
+       "सेटिंग्स का «ऊपर की पट्टी» टैब: बटन का आकार बड़ी स्क्रीन और फ़ोन-टैबलेट के लिए अलग-अलग तय होता है, और हर बटन को खींचकर तीन जगहों में से एक में रखा जा सकता है: पट्टी, छोटी स्क्रीन का “⋯” मेन्यू, या सेटिंग्स (सामान्य टैब के सबसे ऊपर)।",
+       "10 उपलब्धियाँ और जुड़ीं, यानी 1050 और 5 गुप्त: 5 मरम्मत के लिए और 5 मैकेनिकों के लिए।",
+       "Windows इंस्टॉलर और ऐप के अपडेट अब GitHub से नहीं, p2ds.pages.dev से आते हैं। पुराने GitHub Pages पते पर एक बैनर नया पता बताता है।"
+      ]
+     }
+    ]
+   },
+   {
     "title": "Release 1.3.5 (25 नवंबर 2026)",
     "name": "Release 1.3.5",
     "intro": "गेम अब हिन्दी में, नौ नए आइकन, और खिलाड़ियों के संदेश कहीं ज़्यादा साफ़।",
@@ -2471,6 +2585,24 @@
   "title": "更新履歴",
   "intro": "Pâtisserie 2D Simulator に追加されたすべての内容を、新しいものから古いものの順に載せています。古いバージョンは英語で表示されます。ゲームのルールは[ウィキ](REGLES.md)を見てください。",
   "versions": [
+   {
+    "title": "Release 1.3.6（2026年11月26日）",
+    "name": "Release 1.3.6（2026年11月26日）",
+    "intro": "ベンガル語、バレンタインのテーマ、ついに調節できるようになった上のバー、そしてゲームが GitHub を使わなくなりました。",
+    "groups": [
+     {
+      "name": "新機能と修正",
+      "items": [
+       "ベンガル語（বাংলা）をすべて追加しました：ゲームの全テキスト、実績名、コマンドガイド、この更新履歴。",
+       "ラブのテーマ（2月だけ）：のぼるハート、バラ、手紙、チョコレート。",
+       "ボーナスが復活しました。ただし給料はもう上げられません（下げるだけ）。すでに上げた分は取り消されます。",
+       "設定の「上のバー」タブ：ボタンの大きさを、大きい画面とスマホ・タブレットで別々に決められ、各ボタンをドラッグして3つの場所に入れられます。バーの中、小さい画面の「⋯」メニュー、設定の中（「一般」タブの一番上）です。",
+       "実績が10個増えて、1050個と隠し実績5個になりました：修理で5個、整備士で5個です。",
+       "Windows のインストーラーとアプリの更新は、GitHub ではなく p2ds.pages.dev から届くようになりました。古い GitHub Pages のアドレスには新しいアドレスを知らせるバナーが出ます。"
+      ]
+     }
+    ]
+   },
    {
     "title": "Release 1.3.5（2026年11月25日）",
     "name": "Release 1.3.5（2026年11月25日）",
@@ -2952,6 +3084,24 @@
   "intro": "Pâtisserie 2D Simulator에 추가된 모든 내용을 최신순으로 적었습니다. 오래된 버전은 영어로 표시됩니다. 게임 규칙은 [위키](REGLES.md)를 참고하세요.",
   "versions": [
    {
+    "title": "Release 1.3.6 (2026년 11월 26일)",
+    "name": "Release 1.3.6",
+    "intro": "벵골어, 발렌타인 테마, 드디어 조절할 수 있는 상단 바, 그리고 게임이 더는 GitHub가 필요 없어요.",
+    "groups": [
+     {
+      "name": "새 기능과 수정",
+      "items": [
+       "벵골어(বাংলা)가 전부 추가됐어요: 게임의 모든 글, 업적 이름, 명령어 가이드, 이 변경 기록까지요.",
+       "사랑 테마는 2월에만: 떠오르는 하트, 장미, 편지, 초콜릿이 나와요.",
+       "보너스가 돌아왔지만 월급은 더 올릴 수 없어요(낮추기만 가능). 이미 올린 월급은 취소돼요.",
+       "설정의 '상단 바' 탭: 버튼 크기를 큰 화면과 휴대폰·태블릿에 따로 정하고, 버튼마다 끌어서 세 곳 중에 넣을 수 있어요: 상단 바, 작은 화면의 “⋯” 메뉴, 설정 안(일반 탭 맨 위).",
+       "업적이 10개 늘어 1050개와 숨은 업적 5개가 됐어요: 수리로 5개, 정비사로 5개예요.",
+       "Windows 설치 파일과 앱 업데이트는 이제 GitHub가 아니라 p2ds.pages.dev에서 와요. 예전 GitHub Pages 주소에는 새 주소를 알리는 배너가 떠요."
+      ]
+     }
+    ]
+   },
+   {
     "title": "Release 1.3.5 (2026년 11월 25일)",
     "name": "Release 1.3.5",
     "intro": "게임이 힌디어를 지원하고, 아이콘 9개가 새로 생겼고, 플레이어 메시지가 훨씬 분명해졌어요.",
@@ -3431,6 +3581,24 @@
   "title": "Historique des mises à jour",
   "intro": "Tout ce qui a été ajouté à Pâtisserie 2D Simulator, de la plus récente à la plus ancienne. Pour comprendre les règles du jeu, va voir le [wiki](REGLES.md).",
   "versions": [
+   {
+    "title": "Release 1.3.6 (26 novembre 2026)",
+    "name": "Release 1.3.6",
+    "intro": "Le bengali, un thème pour la Saint-Valentin, la barre du haut enfin réglable, et le jeu n'a plus besoin de GitHub.",
+    "groups": [
+     {
+      "name": "Nouveautés",
+      "items": [
+       "Le bengali (বাংলা) est ajouté, en entier : tous les textes du jeu, les noms des succès, le guide des commandes et ce changelog.",
+       "Le thème Amour, seulement en février : des cœurs qui montent, des roses, des lettres et du chocolat.",
+       "La prime est de retour, mais on ne peut plus augmenter un salaire (seulement le baisser). Les augmentations déjà faites sont annulées.",
+       "Réglages, onglet « Barre du haut » : la taille des boutons se règle à part pour le grand écran et pour le téléphone et la tablette, et chaque bouton se range en le glissant dans trois zones : la barre, le menu « ⋯ » des petits écrans, ou les réglages (en haut de l'onglet Général).",
+       "10 succès de plus, soit 1050 et les 5 secrets : 5 pour les pannes réparées et 5 pour les mécaniciens.",
+       "L'installeur Windows et les mises à jour de l'appli viennent maintenant de p2ds.pages.dev, plus de GitHub. Sur l'ancienne adresse GitHub Pages, une bannière indique la nouvelle."
+      ]
+     }
+    ]
+   },
    {
     "title": "Release 1.3.5 (25 novembre 2026)",
     "name": "Release 1.3.5",
@@ -4438,6 +4606,24 @@
   "intro": "Tudo o que foi acrescentado ao Pâtisserie 2D Simulator, da mais recente à mais antiga. As versões mais antigas aparecem em inglês. Para perceber as regras do jogo, vê a [wiki](REGLES.md).",
   "versions": [
    {
+    "title": "Release 1.3.6 (26 de novembro de 2026)",
+    "name": "Release 1.3.6",
+    "intro": "Bengali, um tema de São Valentim, a barra de cima finalmente ajustável, e o jogo já não precisa do GitHub.",
+    "groups": [
+     {
+      "name": "Novidades e correções",
+      "items": [
+       "O bengali (বাংলা) foi adicionado, completo: todos os textos do jogo, os nomes das conquistas, o guia de comandos e este histórico.",
+       "O tema Amor, só em fevereiro: corações que sobem, rosas, cartas e chocolate.",
+       "O prémio voltou, mas já não se pode aumentar um salário (só baixar). Os aumentos já feitos são anulados.",
+       "Definições, separador «Barra de cima»: o tamanho dos botões ajusta-se à parte para ecrã grande e para telemóvel e tablet, e cada botão arruma-se arrastando-o para três zonas: a barra, o menu «⋯» dos ecrãs pequenos, ou as definições (no topo do separador Geral).",
+       "Mais 10 conquistas, ou seja 1050 e os 5 segredos: 5 por avarias reparadas e 5 por mecânicos.",
+       "O instalador do Windows e as atualizações da app vêm agora de p2ds.pages.dev, já não do GitHub. No antigo endereço do GitHub Pages, um aviso mostra o novo."
+      ]
+     }
+    ]
+   },
+   {
     "title": "Release 1.3.5 (25 de novembro de 2026)",
     "name": "Release 1.3.5",
     "intro": "O jogo fala hindi, nove ícones novos e mensagens de jogadores muito mais claras.",
@@ -4918,6 +5104,24 @@
   "intro": "Всё, что добавили в Pâtisserie 2D Simulator, от самого нового к самому старому. Более старые версии показываются на английском. Чтобы понять правила игры, загляни в [вики](REGLES.md).",
   "versions": [
    {
+    "title": "Release 1.3.6 (26 ноября 2026)",
+    "name": "Release 1.3.6",
+    "intro": "Бенгальский язык, тема ко Дню святого Валентина, верхняя панель наконец настраивается, и игре больше не нужен GitHub.",
+    "groups": [
+     {
+      "name": "Новое и исправления",
+      "items": [
+       "Добавлен бенгальский (বাংলা), полностью: все тексты игры, названия достижений, справочник команд и этот журнал изменений.",
+       "Тема «Любовь», только в феврале: поднимающиеся сердца, розы, письма и шоколад.",
+       "Премия вернулась, но зарплату больше нельзя повысить (только снизить). Уже сделанные повышения отменены.",
+       "Настройки, вкладка «Верхняя панель»: размер кнопок задаётся отдельно для большого экрана и для телефона и планшета, а каждую кнопку можно перетащить в одну из трёх зон: панель, меню «⋯» маленьких экранов или настройки (вверху вкладки «Общие»).",
+       "Ещё 10 достижений: всего 1050 и 5 тайных, из них 5 за починенные поломки и 5 за механиков.",
+       "Установщик для Windows и обновления приложения теперь приходят с p2ds.pages.dev, а не с GitHub. На старом адресе GitHub Pages баннер показывает новый."
+      ]
+     }
+    ]
+   },
+   {
     "title": "Release 1.3.5 (25 ноября 2026)",
     "name": "Release 1.3.5",
     "intro": "Игра заговорила на хинди, появилось девять новых значков, а сообщения игроков стали гораздо понятнее.",
@@ -5397,6 +5601,24 @@
   "title": "更新记录",
   "intro": "Pâtisserie 2D Simulator 新增的所有内容，从最新到最旧。更早的版本以英文显示。想了解游戏规则，请看[百科](REGLES.md)。",
   "versions": [
+   {
+    "title": "Release 1.3.6（2026年11月26日）",
+    "name": "Release 1.3.6（2026年11月26日）",
+    "intro": "新增孟加拉语、情人节主题，顶部栏终于可调，游戏不再依赖 GitHub。",
+    "groups": [
+     {
+      "name": "新内容与修复",
+      "items": [
+       "新增完整的孟加拉语（বাংলা）：游戏所有文字、成就名称、命令指南和这份更新日志。",
+       "爱情主题，仅在二月：升起的爱心、玫瑰、情书和巧克力。",
+       "奖金回来了，但工资不能再提高（只能降低）。已经加过的工资会被取消。",
+       "设置里的“顶部栏”页：大屏幕和手机、平板的按钮大小分开设置，每个按钮都可以拖到三个区域之一：顶部栏、小屏幕的“⋯”菜单，或设置（在“常规”页最上面）。",
+       "再增加 10 个成就，共 1050 个加 5 个隐藏成就：5 个关于修好故障，5 个关于机修工。",
+       "Windows 安装包和应用更新现在来自 p2ds.pages.dev，不再来自 GitHub。在旧的 GitHub Pages 地址上，会有横幅提示新地址。"
+      ]
+     }
+    ]
+   },
    {
     "title": "Release 1.3.5（2026年11月25日）",
     "name": "Release 1.3.5（2026年11月25日）",

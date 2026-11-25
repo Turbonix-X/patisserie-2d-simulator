@@ -34,7 +34,7 @@ Tu ouvres une pâtisserie avec 50 €. Tu achètes des ingrédients, tu prépare
 Le jeu commence par une page d'accueil : le logo, « P2DS », et tes parties. Chaque partie est une **pâtisserie**, et tu peux en avoir **10 au maximum** (deux lignes de 5). Un seul bouton + ouvre une fenêtre pour créer une nouvelle partie (sans nom à donner : Bob te le demande en jeu), coller un code de sauvegarde ou ouvrir un fichier de sauvegarde ; à 10 parties, le + disparaît.
 
 - **Dans chaque case :** le nom, le niveau et la date. Un clic sur la case ouvre la partie ; deux boutons exportent (code à copier-coller ou fichier) ou suppriment (corbeille).
-- **En haut :** à gauche le numéro de version (les nouveautés), à droite le compte, les réglages (langue et thème clair ou sombre) et le téléchargement de l'appli Windows. Le menu est clair, sombre ou automatique (celui du navigateur), quel que soit le thème de ta partie. Chaque partie a sa propre langue : une nouvelle partie prend celle du menu. Dans Réglages > Apparence, tu règles la taille des boutons du haut et tu les ranges en les glissant ; sur téléphone et petit écran, ceux que tu mets dans la zone du bas se cachent derrière un bouton « ⋯ » pour avoir plus de place. Sur téléphone et tablette, une notification se fait glisser sur le côté pour partir.
+- **En haut :** à gauche le numéro de version (les nouveautés), à droite le compte, les réglages (langue et thème clair ou sombre) et le téléchargement de l'appli Windows. Le menu est clair, sombre ou automatique (celui du navigateur), quel que soit le thème de ta partie. Chaque partie a sa propre langue : une nouvelle partie prend celle du menu. Dans Réglages > Barre du haut, tu règles la taille des boutons (une taille pour le grand écran, une autre pour le téléphone et la tablette) et tu les ranges en les glissant dans trois zones : la barre, le menu « ⋯ » des petits écrans, ou les réglages (raccourcis en haut de l'onglet Général). Le bouton des réglages reste toujours dans la barre. Sur téléphone et tablette, une notification se fait glisser sur le côté pour partir.
 - **Retour au menu :** dans le jeu, la flèche en haut te ramène tout de suite au menu.
 - **Comptes :** un compte est facultatif. Avec un compte, tes parties se synchronisent en ligne dès que tu as internet (la plus récente gagne), et tu peux jouer hors ligne entre-temps. Tu peux garder plusieurs comptes et passer de l'un à l'autre dans la fenêtre des comptes.
 - **Sans compte (« Local ») :** tes parties restent dans l'appli Windows ou dans ton navigateur. Si tu désinstalles l'un ou si tu changes de navigateur, tu les perds, sauf si tu les exportes.
@@ -182,7 +182,7 @@ Lance une **recherche** dans l'onglet Employés : elle prend du temps et ne marc
 
 **Les candidatures :** la plupart des candidats débutent au niveau 1, mais il arrive, rarement, qu'un candidat soit déjà formé (jusqu'au niveau 10). Plus tu montes de niveau, moins les niveaux élevés sont rares. Juste après avoir débloqué les employés, il n'y a que des niveaux 1 et 2 ; les niveaux 3 à 10 demandent d'avoir atteint les niveaux 15, 25, 35, 50, 65, 80, 95 et 110. Un employé déjà formé coûte bien plus cher. Clique sur une candidature pour voir à quoi sert le métier et ce que veut dire son niveau.
 
-**Clique sur un employé** pour ouvrir sa fiche : ses réglages et sa formation.
+**Clique sur un employé** pour ouvrir sa fiche : ses réglages, sa formation et sa prime.
 
 **La pause :** depuis sa fiche, tu peux mettre un employé en pause. Il arrête de travailler, mais tu continues de le payer.
 
@@ -208,13 +208,13 @@ Lance une **recherche** dans l'onglet Employés : elle prend du temps et ne marc
 
 **Leur limite :** tu peux dire à un cueilleur de ne cueillir que s'il y en a moins de N, ou de produire N par heure. Dans ce cas sa vitesse change, sans jamais dépasser son maximum.
 
-**Le salaire :** depuis sa fiche, tu peux changer le salaire de −50 %, −20 %, −10 %, −5 %, +5 %, +10 %, +20 %, +50 %. Moins payé, son moral maximum baisse. Payé trop peu, il démissionne presque toujours.
+**Le salaire :** depuis sa fiche, tu peux le **baisser** de −5 %, −10 %, −20 % ou −50 % ; on ne peut plus l'augmenter. Moins payé, son moral maximum baisse. Payé trop peu, il démissionne presque toujours. Pour le motiver, donne-lui une **prime** (+25 de moral, pour l'équivalent de 120 s de salaire).
 
 **Au féminin :** les employées ont leur titre au féminin : cueilleuse, boulangère, pâtissière…
 
 **Les vendeurs :** seul, un vendeur est très lent. Plus il y en a, plus chacun va vite. Avec un maître d'hôtel, ils ne touchent pas à ce qui est réservé pour les commandes.
 
-**Le moral :** il baisse tout seul, et moins vite si l'équipe est grande. Un manager le remonte. En dessous de 40, l'employé travaille mal. En dessous de 20, il fait grève. En dessous de 10, il démissionne. Un employé impayé perd vite son moral.
+**Le moral :** il baisse tout seul, et moins vite si l'équipe est grande. Une prime ou un manager le remonte. En dessous de 40, l'employé travaille mal. En dessous de 20, il fait grève. En dessous de 10, il démissionne. Un employé impayé perd vite son moral.
 
 ## Les commandes
 
@@ -282,6 +282,7 @@ D'autres événements ne touchent qu'**un seul ingrédient** (pénurie : il coû
 | Fête | Pour toujours dès le niveau 500. Caché avant |
 | Espace | Pour toujours dès le niveau 1000. Caché avant |
 | Doré | Pour toujours après avoir obtenu **1 000 000 de feuilles d'or alimentaires**. Caché avant. Doré brillant, avec des pépites, des étincelles et des pièces qui tombent |
+| Amour | **Seulement en février** (Saint-Valentin) : rose et rouge, avec des cœurs qui montent, des roses, des lettres et du chocolat |
 
 D'autres thèmes sont cachés : à toi de les trouver. Dans les thèmes spéciaux, Bob change de tenue et de visage.
 
@@ -295,7 +296,7 @@ Les pastilles des onglets sont jaunes (candidatures, commandes). Seules les pann
 
 ## Les succès et les statistiques
 
-Les succès ont leur bouton (un trophée) dans l'en-tête, avec une barre de progression pour ceux que tu n'as pas encore. Il y a 1040 succès, et 5 de plus cachés (ils se débloquent aussi en mode max, en mode créatif et avec la commande). Un succès pas encore obtenu montre son nom, mais pas ce qu'il demande.
+Les succès ont leur bouton (un trophée) dans l'en-tête, avec une barre de progression pour ceux que tu n'as pas encore. Il y a 1050 succès, et 5 de plus cachés (ils se débloquent aussi en mode max, en mode créatif et avec la commande). Un succès pas encore obtenu montre son nom, mais pas ce qu'il demande.
 
 ## Pause, absence et sauvegarde
 

@@ -160,7 +160,7 @@ function fmtLoan(amount) {
   var curr = CURRENCIES[0];
   CURRENCIES.forEach(function(c) { if (c.id === G.settings.currency) curr = c; });
   if (amount * curr.rate >= 1e9) return bidiIsolate(fmt(amount * curr.rate) + curr.symbol);   // 100 Md et non 100 000 000 000
-  return (amount * curr.rate).toLocaleString(({ fr:'fr-FR', es:'es-ES', pt:'pt-PT', de:'de-DE', ar:'ar-u-nu-latn', zh:'zh-CN', ja:'ja-JP', ko:'ko-KR', ru:'ru-RU', hi:'hi-IN' })[currentLang] || 'en-US', { maximumFractionDigits: 2 }) + curr.symbol;
+  return (amount * curr.rate).toLocaleString(({ fr:'fr-FR', es:'es-ES', pt:'pt-PT', de:'de-DE', ar:'ar-u-nu-latn', zh:'zh-CN', ja:'ja-JP', ko:'ko-KR', ru:'ru-RU', hi:'hi-IN', bn:'bn-BD' })[currentLang] || 'en-US', { maximumFractionDigits: 2 }) + curr.symbol;
 }
 
 function bankTile(label, value, alert) {

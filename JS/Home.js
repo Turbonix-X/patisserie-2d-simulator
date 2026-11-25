@@ -10,7 +10,7 @@ if (IN_APP) {
   // Dans l'appli : pas de clic droit de navigateur
   document.addEventListener('contextmenu', function(e) { e.preventDefault(); });
 }
-var SITE_URL = 'https://turbonix-x.github.io/patisserie-2d-simulator/';
+var SITE_URL = 'https://p2ds.pages.dev/';
 var ARCHIVES_URL = 'https://p2ds.pages.dev/archives.html';
 // La page des anciennes versions : dans le meme onglet sur le web, dans le navigateur depuis l'appli
 function openArchives() {
@@ -522,3 +522,17 @@ function submitRecovery() {
     toast(t('home.newPassDone'));
   }, function(e) { if (err) err.textContent = (e && e.message) || 'Error'; });
 }
+
+// Sur l'ancienne adresse (GitHub Pages), qui s'arrete quand le depot devient prive : on previent et on donne la nouvelle.
+// Pas de redirection automatique : les parties gardees dans ce navigateur n'existent que sur cette adresse.
+(function() {
+  if (!/\.github\.io$/i.test(location.hostname)) return;
+  setTimeout(function() {
+    if (document.getElementById('move-banner')) return;
+    var b = document.createElement('div');
+    b.id = 'move-banner';
+    b.className = 'move-banner';
+    b.innerHTML = '<span>' + escH(t('move.banner')) + '</span> <a href="' + SITE_URL + '" rel="noopener">' + escH(t('move.go')) + '</a>';
+    document.body.appendChild(b);
+  }, 800);
+})();

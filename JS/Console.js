@@ -737,11 +737,11 @@ function processCommand(cmd) {
     return '<span class="cmd-err">Usage: /bank unlock|clear</span>';
   }
 
-  // /theme <name> | /theme unlock all|spring|summer|fall|winter|birthday|horror|bakery|party|space|cookie|tech|techgold
+  // /theme <name> | /theme unlock all|spring|summer|fall|winter|birthday|horror|love|bakery|party|space|cookie|tech|techgold
   if (action === 'theme') {
     var themeName = parts[1];
     var names = THEME_LIST.map(function(th) { return th.id; }).join(', ');
-    if (!themeName) return '<span class="cmd-err">Usage: /theme &lt;' + names + '&gt; | /theme unlock all|spring|summer|fall|winter|birthday|horror|bakery|party|space|cookie|tech|techgold</span>';
+    if (!themeName) return '<span class="cmd-err">Usage: /theme &lt;' + names + '&gt; | /theme unlock all|spring|summer|fall|winter|birthday|horror|love|bakery|party|space|cookie|tech|techgold</span>';
     if (themeName === 'see') {
       var seeId = parts[2];
       if (!seeId || seeId === 'off') { ui.seeTheme = null; applyTheme(); fullRender(); return '<span class="cmd-ok">' + t('console.seeOff') + '</span>'; }
@@ -758,7 +758,7 @@ function processCommand(cmd) {
         return '<span class="cmd-ok">' + t('console.themesUnlocked') + '</span>';
       }
       var target = findTheme(what);
-      if (!target || !(target.season || target.birthday || target.level || target.month || target.secret || target.sold || target.gotIng)) return '<span class="cmd-err">Usage: /theme unlock all|spring|summer|fall|winter|birthday|horror|bakery|party|space|cookie|tech|techgold</span>';
+      if (!target || !(target.season || target.birthday || target.level || target.month || target.secret || target.sold || target.gotIng)) return '<span class="cmd-err">Usage: /theme unlock all|spring|summer|fall|winter|birthday|horror|love|bakery|party|space|cookie|tech|techgold</span>';
       G.unlockedThemes[what] = true;
       return '<span class="cmd-ok">' + t('console.themeUnlocked', { n: t(target.langKey) }) + '</span>';
     }
@@ -946,7 +946,7 @@ function processCommand(cmd) {
   if (action === 'language' || action === 'langue') {
     if (parts[1] !== 'set' || !parts[2]) return '<span class="cmd-err">Usage: /language set ' + LANG_LIST.map(function(l) { return l.code; }).join('|') + '</span>';
     var wl = normName(parts.slice(2).join(''));
-    var EN_NAMES = { en: 'english anglais', fr: 'french francais', es: 'spanish espanol', pt: 'portuguese portugais portugues', de: 'german allemand deutsch', ar: 'arabic arabe', zh: 'chinese chinois', ja: 'japanese japonais', ko: 'korean coreen', ru: 'russian russe', hi: 'hindi hindi' };
+    var EN_NAMES = { en: 'english anglais', fr: 'french francais', es: 'spanish espanol', pt: 'portuguese portugais portugues', de: 'german allemand deutsch', ar: 'arabic arabe', zh: 'chinese chinois', ja: 'japanese japonais', ko: 'korean coreen', ru: 'russian russe', hi: 'hindi hindi', bn: 'bengali bangla bengalais' };
     var lf = null;
     LANG_LIST.forEach(function(l) {
       var keys = [l.code, normName(l.name)].concat(EN_NAMES[l.code].split(' '));
@@ -1221,7 +1221,7 @@ var COMMAND_DOCS = [
       cmdCase('/time set N', 'De 0.1 à 10. 1 est la vitesse normale.', 'From 0.1 to 10. 1 is normal speed.', 'De 0.1 a 10. 1 es la velocidad normal.', '/time set 5'),
     ]},
     { name:'/theme', fr:'Change de thème, ou en débloque.', en:'Changes theme, or unlocks themes.', es:'Cambia de tema o los desbloquea.', cases:[
-      cmdCase('/theme NAME', 'Met ce thème : light, dark, spring, summer, fall, winter, birthday, horror, bakery, party, space, cookie, tech ou techgold.', 'Applies this theme: light, dark, spring, summer, fall, winter, birthday, horror, bakery, party, space, cookie, tech or techgold.', 'Pone este tema: light, dark, spring, summer, fall, winter, birthday, horror, bakery, party, space, cookie, tech o techgold.', '/theme winter'),
+      cmdCase('/theme NAME', 'Met ce thème : light, dark, spring, summer, fall, winter, birthday, horror, love, bakery, party, space, cookie, tech ou techgold.', 'Applies this theme: light, dark, spring, summer, fall, winter, birthday, horror, love, bakery, party, space, cookie, tech or techgold.', 'Pone este tema: light, dark, spring, summer, fall, winter, birthday, horror, love, bakery, party, space, cookie, tech o techgold.', '/theme winter'),
       cmdCase('/theme see NAME', 'Te montre ce thème une seule fois, sans le débloquer ni l’ajouter aux réglages. Il disparaît quand tu relances le jeu.', 'Shows you this theme once, without unlocking it or adding it to the settings. It goes away when you restart the game.', 'Te muestra este tema una sola vez, sin desbloquearlo ni añadirlo a los ajustes. Desaparece al reiniciar el juego.', '/theme see horror'),
       cmdCase('/theme see off', 'Revient à ton vrai thème.', 'Goes back to your real theme.', 'Vuelve a tu tema real.'),
       cmdCase('/theme unlock all', 'Débloque tous les thèmes pour toujours.', 'Unlocks all themes forever.', 'Desbloquea todos los temas para siempre.'),

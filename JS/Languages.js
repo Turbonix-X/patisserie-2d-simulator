@@ -5,7 +5,7 @@
 // La langue du navigateur choisit au depart, et l'anglais pour tout le reste
 function detectLang() {
   // La langue choisie une fois (installeur, reglages) passe avant celle du navigateur
-  try { var chosen = localStorage.getItem('p2ds_lang'); if (chosen && ['en', 'fr', 'es', 'pt', 'de', 'ar', 'zh', 'ja', 'ko', 'ru', 'hi'].indexOf(chosen) >= 0) return chosen; } catch (e) { /* pas grave */ }
+  try { var chosen = localStorage.getItem('p2ds_lang'); if (chosen && ['en', 'fr', 'es', 'pt', 'de', 'ar', 'zh', 'ja', 'ko', 'ru', 'hi', 'bn'].indexOf(chosen) >= 0) return chosen; } catch (e) { /* pas grave */ }
   var list = (navigator.languages && navigator.languages.length) ? navigator.languages : [navigator.language || 'fr'];
   if (/^fr/i.test(list[0])) return 'fr';
   if (/^es/i.test(list[0])) return 'es';
@@ -17,6 +17,7 @@ function detectLang() {
   if (/^ko/i.test(list[0])) return 'ko';
   if (/^ru/i.test(list[0])) return 'ru';
   if (/^hi/i.test(list[0])) return 'hi';
+  if (/^bn/i.test(list[0])) return 'bn';
   return 'en';
 }
 var currentLang = detectLang();
@@ -32,6 +33,7 @@ var LANG_LIST = [
   { code:'ko', name:'한국어', flag:'\u{1F1F0}\u{1F1F7}' },
   { code:'ru', name:'Русский', flag:'\u{1F1F7}\u{1F1FA}' },
   { code:'hi', name:'हिन्दी', flag:'\u{1F1EE}\u{1F1F3}' },
+  { code:'bn', name:'বাংলা', flag:'\u{1F1E7}\u{1F1E9}' },
 ];
 var LANGS = {};
 

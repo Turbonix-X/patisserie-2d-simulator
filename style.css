@@ -1049,12 +1049,10 @@ body.reduced-particles .bg-blobs span { animation: none; }
   .ing-card.locked { min-height: 84px; }
   .btn-tiny { padding: 2px 5px; font-size: .64rem; white-space: normal; }
   h2 { font-size: 1.05rem; margin-bottom: 8px; }
-  #dock { flex-wrap: wrap; gap: 4px 10px; margin-bottom: 6px; padding: 5px 10px; min-height: 74px; align-content: flex-start; }
   #space-bar { width: 100%; }
   .space-row { justify-content: space-between; }
   #crafting-bar { flex-basis: 100%; justify-content: flex-start; min-height: 34px; scrollbar-width: none; padding-bottom: 1px; }
   #crafting-bar::-webkit-scrollbar { display: none; }
-  #toast-area { bottom: 122px; }
   #console-btn-wrap { bottom: 124px; right: 12px; }
 }
 
@@ -1076,7 +1074,6 @@ body.reduced-particles .bg-blobs span { animation: none; }
   .space-bar-bg { width: 92px; }
   .space-rent { font-size: .7rem; }
   #space-bar .btn-small { padding: 4px 8px; font-size: .72rem; box-shadow: 2px 2px 0 var(--btn-shadow); }
-  #game-footer { font-size: .62rem; padding: 2px 8px; }
 }
 
 @media (max-width: 420px) {
@@ -1275,15 +1272,7 @@ body.reduced-particles .bg-blobs span { animation: none; }
 #bob-bubble .btn { margin-top: 8px; }
 
 @media (max-width: 899px) {
-  #bob { width: 58px; left: 10px; bottom: 20px; }
-  #dock { padding-inline-start: 66px; }
-  #bob-bubble { left: 12px; bottom: 136px; width: calc(100vw - 24px); }
-  #bob-bubble::before { left: 18px; bottom: -13px; width: 18px; height: 13px; clip-path: polygon(0 0, 100% 0, 0 100%); }
-  #ingredients { padding-bottom: 10px; }
   .space-row { flex-wrap: wrap; gap: 3px 8px; }
-}
-@media (max-width: 720px) {
-  #bob { bottom: 16px; }
 }
 @media (max-width: 480px) {
   /* Le nom de la patisserie passe sur sa propre ligne */
@@ -2248,7 +2237,7 @@ button.rec-card.can-unlock { display: flex; align-items: center; gap: 8px; width
   #header { order: -6; }
   #rebirth-banner { order: -5; }
   #game-area { display: contents; }
-  #ingredients { order: -4; flex: 0 0 26dvh; min-height: 0; margin: 8px 12px 0; }
+  #ingredients { order: -4; margin: 8px 12px 0; }
   #tabs { order: -3; }
   /* Bob parle au-dessus de la liste, il ne cache plus rien */
   #bob-bubble { position: static; order: -2; width: auto; flex-shrink: 0; margin: 12px 12px 0; padding: 10px 12px 8px; }
@@ -2257,7 +2246,7 @@ button.rec-card.can-unlock { display: flex; align-items: center; gap: 8px; width
   #main-panel { order: -1; flex: 1 1 0; min-height: 0; margin: 8px 12px; }
   #game-footer { order: 2; font-size: .62rem; padding: 2px 8px; }
   /* Barre du bas : le temps de preparation et les boutons toujours visibles */
-  #dock { flex-direction: column; align-items: stretch; flex-wrap: nowrap; gap: 4px; min-height: 76px; padding: 6px 10px 6px 70px; margin-bottom: 4px; }
+  #dock { flex-direction: column; align-items: stretch; flex-wrap: nowrap; gap: 4px; min-height: 76px; }
   #space-bar { width: 100%; }
   .space-row { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 3px 8px; align-items: center; }
   .space-usage-wrap { min-width: 0; }
@@ -2268,10 +2257,8 @@ button.rec-card.can-unlock { display: flex; align-items: center; gap: 8px; width
   #crafting-bar:empty { display: none; }
   .craft-item { flex: 0 0 auto; min-width: 150px; }
   .oven-count { display: none; }
-  #bob { bottom: 26px; }
   #console-btn-wrap { top: 8px; bottom: auto; right: auto; left: 50%; margin-left: -18px; }
   .console-float-btn { width: 36px; height: 36px; border-radius: 10px; }
-  #toast-area { bottom: 130px; }
 }
 @media (max-width: 720px) {
   #console-btn-wrap { top: 44px; left: auto; right: 10px; margin: 0; }
@@ -2572,9 +2559,7 @@ body.bob-can-wasabi .ing-card[data-ing="wasabi"], body.bob-can-gold .ing-card[da
 /* Sur tablette et téléphone, la barre du bas reste dans la page : sous le panneau, au-dessus du pied de page.
    Bob se tient dessus. Elle ne peut plus disparaître sous le bord de l'écran. */
 @media (max-width: 899px) {
-  #dock { position: relative !important; order: 1; flex-shrink: 0; width: calc(100% - 16px); margin: 0 auto 4px; }
-  #game-footer { order: 2; }
-  #toast-area { bottom: calc(var(--dock-h, 90px) + 50px); }
+  #dock { position: relative !important; order: 1; flex-shrink: 0; width: calc(100% - 16px); margin: 4px auto; }
 }
 
 /* Employés : niveau or, perte, spécialiste, métiers du touche-à-tout */
@@ -2976,7 +2961,6 @@ body.resizing { user-select: none; cursor: col-resize; }
   #game-footer { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   /* Les notifications tout en haut, sur l'en-tete : ni les onglets, ni le bouton vendre */
   #toast-area { top: calc(env(safe-area-inset-top, 0px) + 6px) !important; bottom: auto !important; z-index: 1600; }
-  #ingredients { flex-basis: var(--ing-h, 26dvh); }
   #ingredients.folded { flex-basis: auto; }
   #split-handle { display: block; order: -4; height: 14px; margin: 0 12px; cursor: row-resize; align-self: auto; }
   #split-handle::after { width: 44px; height: 4px; margin: -2px 0 0 -22px; }
@@ -3111,7 +3095,7 @@ select option { background: var(--surface-solid, #fff); color: var(--text); }
   #bob-bubble { flex: 0 1 auto; min-height: 0; max-height: 24dvh; overflow-y: auto; }
   #main-panel { min-height: 60px; }
   #dock, #game-footer, #header, #tabs { flex-shrink: 0; }
-  #dock { padding: 6px 10px 6px 66px; margin-top: 4px; }
+  #dock { padding: 6px 10px 6px 66px; }   /* 66 px a gauche : la place de Bob */
   #bob { width: 50px; left: 14px; bottom: calc(var(--dock-h, 86px) + 12px + env(safe-area-inset-bottom, 0px)); }
   #game-footer { padding-bottom: calc(2px + env(safe-area-inset-bottom, 0px)); }
 }
@@ -3181,3 +3165,40 @@ body { min-height: 0 !important; height: 100%; height: 100dvh; max-height: 100dv
 :root[lang="hi"] button, :root[lang="hi"] input, :root[lang="hi"] select, :root[lang="hi"] textarea { font-family: inherit; }
 :root[lang="hi"] .set-help, :root[lang="hi"] small, :root[lang="hi"] .set-row p { line-height: 1.55; }
 :root[lang="hi"] .btn, :root[lang="hi"] .gtab, :root[lang="hi"] .chip { line-height: 1.4; }
+
+/* ---------- Release 1.3.6 : la taille des boutons du haut ne passe plus par « zoom » (inegal selon les navigateurs) ---------- */
+.hdr-btns { --hb: 38px; --hi: 19px; --hs: var(--hs-l, 1); flex-wrap: wrap; justify-content: flex-end; max-width: 100%; }
+@media (max-width: 560px) { .hdr-btns { --hb: 32px; --hi: 16px; } }
+@media (max-width: 420px) { .hdr-btns { --hb: 29px; --hi: 15px; } }
+@media (max-width: 899px) { .hdr-btns { --hs: var(--hs-s, 1); } }
+.hdr-btns .hbtn { width: calc(var(--hb) * var(--hs)); height: calc(var(--hb) * var(--hs)); }
+.hdr-btns .hbtn svg { width: calc(var(--hi) * var(--hs)); height: calc(var(--hi) * var(--hs)); }
+.header-right { min-width: 0; }
+.hdr-shorts { display: flex; flex-wrap: wrap; gap: 8px; }
+.hdr-short { display: inline-flex; align-items: center; gap: 8px; }
+.hdr-short .uii { width: 18px; height: 18px; }
+
+/* ---------- Release 1.3.6 : le theme Amour (fevrier) ---------- */
+:root[data-theme="love"] {
+  --bg: #FFF0F3; --panel: #FFE0E8; --surface: #FFF7F9; --surface-solid: #FFFFFF; --surface-2: #FFD0DB; --text: #4A1626; --muted: #8A3A52; --border: #F2A6BC;
+  --mauve: #D81B60; --mauve-light: #FF6B9A; --mauve-dark: #AD1457; --mauve-deep: #6A0F33; --mauve-soft: rgba(216,27,96,.16);
+  --header-bg: #C2185B; --footer-bg: #7B1240; --footer-text: #FFD6E3; --tab-bg: #FFD0DB; --toast-bg: #5A0F2D; --xp-empty: #FFE0E8;
+  --blob-1: rgba(255,107,154,.22); --blob-2: rgba(216,27,96,.14); --blob-3: rgba(255,208,219,.5);
+}
+:root[data-theme="love"] .site-header { background: linear-gradient(90deg, #AD1457, #E91E63 55%, #F06292); box-shadow: inset 0 1px 0 rgba(255,255,255,.4), 0 2px 10px rgba(106,15,51,.35); }
+:root[data-theme="love"] .money-display { color: #fff; text-shadow: 0 1px 2px rgba(106,15,51,.5); }
+:root[data-theme="love"] .btn-primary { background: linear-gradient(135deg, #FF6B9A, #D81B60); border-color: #AD1457; color: #fff; }
+:root[data-theme="love"] .gtab.active { background: linear-gradient(135deg, #FF6B9A, #D81B60); color: #fff; }
+.tp-love { background: linear-gradient(135deg, #FFD0DB, #E91E63); }
+.dp-rise { animation: dp-rise var(--d) ease-in var(--dl) infinite; filter: drop-shadow(0 1px 1px rgba(136,14,79,.25)); }
+@keyframes dp-rise {
+  0% { transform: translate3d(0, 108vh, 0) rotate(0) scale(.7); opacity: 0; }
+  10% { opacity: .95; }
+  30% { transform: translate3d(var(--sw), 78vh, 0) rotate(calc(var(--sp) * .12)) scale(1); }
+  60% { transform: translate3d(calc(var(--sw) * -.7), 44vh, 0) rotate(calc(var(--sp) * -.1)) scale(1.05); }
+  90% { opacity: .9; }
+  100% { transform: translate3d(calc(var(--sw) * .5), -10vh, 0) rotate(calc(var(--sp) * .1)) scale(.9); opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) { .dp-rise { animation: none; opacity: .5; } }
+.move-banner { position: fixed; top: 0; left: 0; right: 0; z-index: 5000; padding: 8px 14px; background: #C2410C; color: #fff; font-weight: 700; font-size: .86rem; text-align: center; box-shadow: 0 2px 10px rgba(0,0,0,.3); }
+.move-banner a { color: #fff; text-decoration: underline; white-space: nowrap; }

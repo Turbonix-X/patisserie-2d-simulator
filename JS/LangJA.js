@@ -273,7 +273,7 @@ I18N_EXTRA.ja = {
     '/INGRÉDIENT':'材料を直接変える。','c:/farine add N':'N 足す。','c:/farine remove N':'N 減らす。','c:/farine set N':'量を N にする。','c:/farine max':'上限まで。めずらしいほど少ない。','c:/lait set N cl':'牛乳、生クリーム、ラム酒は ml、cl、l が使える。','c:/farine infinite':'この材料がずっとなくならない。どの材料でも使える。','c:/farine infinite off':'元に戻す。',
     '/RECETTE':'お菓子の在庫を変える。','c:/cookie add N':'N 足す。','c:/cookie set N':'在庫を N にする。','c:/cookie max':'9999 にする。',
     '/time':'ゲームの速さを変える。','c:/time set N':'0.1 から 10 まで。1 がふつうの速さ。',
-    '/theme':'テーマを変えたり、解放したりする。','c:/theme NOM':'このテーマにする：light、dark、spring、summer、fall、winter、birthday、horror、bakery、party、space、cookie、tech、techgold。','c:/theme unlock all':'テーマをずっと使えるようにする。','c:/theme unlock NOM':'このテーマをずっと使えるようにする。',
+    '/theme':'テーマを変えたり、解放したりする。','c:/theme NOM':'このテーマにする：light、dark、spring、summer、fall、winter、birthday、horror、love、bakery、party、space、cookie、tech、techgold。','c:/theme unlock all':'テーマをずっと使えるようにする。','c:/theme unlock NOM':'このテーマをずっと使えるようにする。',
     '/birthday':'誕生日を変える。','c:/birthday JJ MM':'日、そのあと月。','/bob':'ボブと話す。','c:/bob challenge':'すぐに挑戦を出してくれる。','/help':'このガイドを開く。','c:/help':'コンソールの横にガイドが開く。',
   },
 };
@@ -765,4 +765,24 @@ Object.assign(LANGS.ja, {
   'report.titleLabel':`メッセージの名前`,
   'report.titlePlaceholder':`メッセージに名前をつけてください（必須）`,
   'report.noTitle':`まずメッセージに名前をつけてください。`
+});
+Object.assign(LANGS.ja, {
+  'hdr.tab':`上のバー`,
+  'hdr.sizeBig':`ボタンの大きさ（大きい画面）`,
+  'hdr.sizeBigHelp':`パソコンの画面と大きいタブレット用です。`,
+  'hdr.sizeSmall':`ボタンの大きさ（スマホとタブレット）`,
+  'hdr.sizeSmallHelp':`幅が900ピクセル未満の画面用です。大きい画面の設定とは別です。`,
+  'hdr.arrange':`ボタンの並べ方`,
+  'hdr.inSettings':`設定の中（バーには出ない）`,
+  'hdr.shortcuts':`ショートカット`,
+  'hdr.dragHelp':`ボタンをドラッグして並べ替えます。上のエリア：バーの中。真ん中のエリア：スマホや小さい画面では「⋯」ボタンの中。下のエリア：設定の中（「一般」タブの一番上）。設定ボタンはいつもバーに残ります。`,
+  'emp.payHelp':`給料は下げられますが、もう上げることはできません。給料が低いと最大の士気が下がり、低すぎると辞めてしまうかもしれません。やる気を出させたいときはボーナスを出しましょう。`,
+  'ach.nameRepairs':`{{v}}回の修理`,
+  'ach.descRepairs':`壊れた機械や建物を{{v}}回直す。`,
+  'ach.nameMechanics':`整備士{{v}}人`,
+  'ach.descMechanics':`整備士を同時に{{v}}人雇う。`,
+  'settings.themeLove':`ラブ`,
+  'settings.lockFebruary':`2月だけ`,
+  'move.banner':`ゲームの新しいアドレスができ、このアドレスは終了します。このブラウザに保存したゲームはここに残ります。移る前にエクスポートするか、アカウントでサインインしてください。`,
+  'move.go':`新しいアドレスを開く`
 });

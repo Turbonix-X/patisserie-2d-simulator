@@ -244,7 +244,7 @@ I18N_EXTRA.pt = {
     '/INGRÉDIENT':'Muda um ingrediente diretamente.','c:/farine add N':'Adiciona N.','c:/farine remove N':'Tira N.','c:/farine set N':'Fixa a quantidade em N.','c:/farine max':'O seu limite: quanto mais raro, menos tens.','c:/lait set N cl':'Leite, natas e rum aceitam ml, cl e l.',
     '/RECETTE':'Muda o stock de um bolo.','c:/cookie add N':'Adiciona N.','c:/cookie set N':'Fixa o stock em N.','c:/cookie max':'Põe 9999.',
     '/time':'Muda a velocidade do jogo.','c:/time set N':'De 0.1 a 10. 1 é a velocidade normal.',
-    '/theme':'Muda de tema ou desbloqueia-os.','c:/theme NOM':'Põe este tema: light, dark, spring, summer, fall, winter, birthday, horror, bakery, party, space, cookie, tech ou techgold.','c:/theme unlock all':'Desbloqueia os temas para sempre.','c:/theme unlock NOM':'Desbloqueia este tema para sempre.',
+    '/theme':'Muda de tema ou desbloqueia-os.','c:/theme NOM':'Põe este tema: light, dark, spring, summer, fall, winter, birthday, horror, love, bakery, party, space, cookie, tech ou techgold.','c:/theme unlock all':'Desbloqueia os temas para sempre.','c:/theme unlock NOM':'Desbloqueia este tema para sempre.',
     '/birthday':'Muda a tua data de aniversário.','c:/birthday JJ MM':'Dia e depois mês.','/bob':'Fala com o Bob.','c:/bob challenge':'Propõe-te o seu desafio já.','/help':'Abre este guia.','c:/help':'O guia abre ao lado da consola.',
   },
 };
@@ -834,4 +834,24 @@ Object.assign(LANGS.pt, {
   'report.titleLabel':`Nome da tua mensagem`,
   'report.titlePlaceholder':`Dá um nome à tua mensagem (obrigatório)`,
   'report.noTitle':`Primeiro dá um nome à tua mensagem.`
+});
+Object.assign(LANGS.pt, {
+  'hdr.tab':`Barra superior`,
+  'hdr.sizeBig':`Tamanho dos botões (ecrã grande)`,
+  'hdr.sizeBigHelp':`Para ecrãs de computador e tablets grandes.`,
+  'hdr.sizeSmall':`Tamanho dos botões (telemóvel e tablet)`,
+  'hdr.sizeSmallHelp':`Para ecrãs com menos de 900 píxeis de largura. É independente do ecrã grande.`,
+  'hdr.arrange':`Ordem dos botões`,
+  'hdr.inSettings':`Nas definições (já não na barra)`,
+  'hdr.shortcuts':`Atalhos`,
+  'hdr.dragHelp':`Arrasta os botões para os ordenar. Zona de cima: na barra. Zona do meio: atrás do botão «⋯» nos telemóveis e ecrãs pequenos. Zona de baixo: nas definições, no topo do separador Geral. O botão das definições fica sempre na barra.`,
+  'emp.payHelp':`Podes baixar-lhe o salário, mas já não o aumentar. Ganhando menos, a motivação máxima baixa, e se ganhar demasiado pouco é provável que se demita. Para o motivar, dá-lhe um prémio.`,
+  'ach.nameRepairs':`{{v}} {{#v|reparação|reparações}}`,
+  'ach.descRepairs':`Repara {{v}} {{#v|máquina ou edifício avariado|máquinas ou edifícios avariados}}.`,
+  'ach.nameMechanics':`{{v}} {{#v|mecânico|mecânicos}}`,
+  'ach.descMechanics':`Tem {{v}} {{#v|mecânico|mecânicos}} ao mesmo tempo.`,
+  'settings.themeLove':`Amor`,
+  'settings.lockFebruary':`só em fevereiro`,
+  'move.banner':`O jogo tem um novo endereço e este vai deixar de funcionar. Os jogos guardados neste navegador ficam aqui: exporta-os antes de sair, ou inicia sessão com uma conta.`,
+  'move.go':`Abrir o novo endereço`
 });

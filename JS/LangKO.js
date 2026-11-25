@@ -273,7 +273,7 @@ I18N_EXTRA.ko = {
     '/INGRÉDIENT':'재료를 바로 바꿔요.','c:/farine add N':'N 더해요.','c:/farine remove N':'N 빼요.','c:/farine set N':'양을 N으로 해요.','c:/farine max':'최대치로: 귀할수록 적어요.','c:/lait set N cl':'우유, 생크림, 럼은 ml, cl, l을 쓸 수 있어요.','c:/farine infinite':'이 재료가 절대 떨어지지 않아요. 모든 재료에 쓸 수 있어요.','c:/farine infinite off':'원래대로 돌아가요.',
     '/RECETTE':'디저트 재고를 바꿔요.','c:/cookie add N':'N 더해요.','c:/cookie set N':'재고를 N으로 해요.','c:/cookie max':'9999로 해요.',
     '/time':'게임 속도를 바꿔요.','c:/time set N':'0.1부터 10까지. 1이 보통 속도예요.',
-    '/theme':'테마를 바꾸거나 열어요.','c:/theme NOM':'이 테마로 해요: light, dark, spring, summer, fall, winter, birthday, horror, bakery, party, space, cookie, tech, techgold.','c:/theme unlock all':'테마를 영원히 열어요.','c:/theme unlock NOM':'이 테마를 영원히 열어요.',
+    '/theme':'테마를 바꾸거나 열어요.','c:/theme NOM':'이 테마로 해요: light, dark, spring, summer, fall, winter, birthday, horror, love, bakery, party, space, cookie, tech, techgold.','c:/theme unlock all':'테마를 영원히 열어요.','c:/theme unlock NOM':'이 테마를 영원히 열어요.',
     '/birthday':'생일을 바꿔요.','c:/birthday JJ MM':'일, 그다음 월.','/bob':'밥과 이야기해요.','c:/bob challenge':'바로 도전을 제안해요.','/help':'이 안내를 열어요.','c:/help':'콘솔 옆에 안내가 열려요.',
   },
 };
@@ -765,4 +765,24 @@ Object.assign(LANGS.ko, {
   'report.titleLabel':`메시지 이름`,
   'report.titlePlaceholder':`메시지에 이름을 붙여 주세요 (필수)`,
   'report.noTitle':`먼저 메시지에 이름을 붙여 주세요.`
+});
+Object.assign(LANGS.ko, {
+  'hdr.tab':`상단 바`,
+  'hdr.sizeBig':`버튼 크기 (큰 화면)`,
+  'hdr.sizeBigHelp':`컴퓨터 화면과 큰 태블릿용이에요.`,
+  'hdr.sizeSmall':`버튼 크기 (휴대폰과 태블릿)`,
+  'hdr.sizeSmallHelp':`너비가 900픽셀 미만인 화면용이에요. 큰 화면 설정과는 따로예요.`,
+  'hdr.arrange':`버튼 정리`,
+  'hdr.inSettings':`설정 안 (상단 바에는 안 나옴)`,
+  'hdr.shortcuts':`바로가기`,
+  'hdr.dragHelp':`버튼을 끌어서 정리해요. 위 영역: 상단 바 안. 가운데 영역: 휴대폰과 작은 화면에서 “⋯” 버튼 안. 아래 영역: 설정 안 (일반 탭 맨 위). 설정 버튼은 항상 상단 바에 남아요.`,
+  'emp.payHelp':`월급은 낮출 수 있지만 더는 올릴 수 없어요. 월급이 낮으면 최대 사기가 떨어지고, 너무 낮으면 그만둘 수 있어요. 의욕을 높이려면 보너스를 주세요.`,
+  'ach.nameRepairs':`수리 {{v}}번`,
+  'ach.descRepairs':`고장 난 기계나 건물을 {{v}}번 고치세요.`,
+  'ach.nameMechanics':`정비사 {{v}}명`,
+  'ach.descMechanics':`정비사를 동시에 {{v}}명 두세요.`,
+  'settings.themeLove':`사랑`,
+  'settings.lockFebruary':`2월에만`,
+  'move.banner':`게임의 새 주소가 생겼고 이 주소는 곧 멈춰요. 이 브라우저에 저장한 게임은 여기에 남아요. 옮기기 전에 내보내거나 계정으로 로그인하세요.`,
+  'move.go':`새 주소 열기`
 });

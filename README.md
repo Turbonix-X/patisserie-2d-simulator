@@ -4,7 +4,7 @@
 
 Un jeu de gestion de pâtisserie : achète tes ingrédients, prépare tes gâteaux, vends-les, et fais grandir ta boutique.
 
-**Jouer en ligne : https://turbonix-x.github.io/patisserie-2d-simulator/**
+**Jouer en ligne : https://p2ds.pages.dev/**
 
 **Le wiki du jeu, pour tout comprendre : [REGLES.md](REGLES.md)**
 
@@ -26,10 +26,10 @@ Un jeu de gestion de pâtisserie : achète tes ingrédients, prépare tes gâtea
 - **Commandes :** au niveau 30, des clients passent commande. Plus c'est compliqué, plus la prime est grosse.
 - **Machines :** four, fouet, pétrin… des améliorations permanentes, propres à chaque pâtisserie.
 - **Événements :** rush, soldes, passage à la télé, contrôle sanitaire…
-- **Succès et statistiques :** 1040 succès à débloquer. Chacun augmente tes prix de vente. Les statistiques détaillent chaque recette et chaque ingrédient préparés dans un menu déroulant.
+- **Succès et statistiques :** 1050 succès à débloquer. Chacun augmente tes prix de vente. Les statistiques détaillent chaque recette et chaque ingrédient préparés dans un menu déroulant.
 - **Plusieurs pâtisseries :** dès la deuxième, des graphiques et les totaux de toutes tes boutiques.
 - **Thèmes :** clair, sombre, un par saison avec ses décors (fleurs, plage, neige, feuilles), un pour ton anniversaire, la fête au niveau 500, l'espace au niveau 1000, et des thèmes cachés à découvrir.
-- **Langues :** anglais, français, espagnol, portugais, allemand, arabe, mandarin, japonais, coréen, russe et hindi.
+- **Langues :** anglais, français, espagnol, portugais, allemand, arabe, mandarin, japonais, coréen, russe, hindi et bengali.
 - **Musique :** des morceaux composés pour le jeu, joués en direct par le navigateur, dont certains à débloquer en montant de niveau.
 - **Bob :** ton chef pâtissier t'explique le jeu, te conseille, te lance des défis et adore le sucre. Évite de trop l'embêter.
 - **Sauvegarde :** automatique, avec export et import par fichier ou par copier-coller, une pause automatique, des mises à jour sans recharger la page, et des gains pendant ton absence.
@@ -80,3 +80,11 @@ Le serveur lancé, ouvre http://localhost:8090/tests/ : la page vérifie l'écon
 - Icônes : [Twemoji](https://github.com/jdecked/twemoji), sous licence [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/), plus quelques dessins maison dans `assets/icons/custom`.
 
 Turbonix Entertainment. Tous droits réservés.
+
+## Dépôt privé : ce qui ne dépend plus de GitHub
+
+- **Le jeu** et ses archives sont sur Cloudflare Pages (`p2ds.pages.dev`, `p2ds-archive.pages.dev`).
+- **L'installeur et les mises à jour de l'appli Windows** viennent de `https://p2ds.pages.dev/downloads/` (`Installer-P2DS.exe`, `latest.json`, l'installeur signé). `python tools/make_latest_json.py <version-tauri> "<notes>" <etiquette>` remplit le dossier `downloads/` (hors git), puis `python tools/deploy_cloudflare.py all` l'envoie avec le site. La Release GitHub n'est plus qu'une copie de secours.
+- **L'appli** cherche d'abord `p2ds.pages.dev/downloads/latest.json`, puis GitHub (tant que le dépôt est public) : les versions publiées avant la 1.3.6 ne connaissent que GitHub.
+- **Supabase** : `python tools/supabase_site_url.py` met l'adresse des e-mails (inscription, mot de passe oublié) sur `p2ds.pages.dev` au lieu de GitHub Pages.
+- **L'ancienne adresse GitHub Pages** s'arrête avec le dépôt public ; elle affiche une bannière vers la nouvelle adresse (les parties gardées dans ce navigateur n'existent que sur cette adresse : pas de redirection automatique).

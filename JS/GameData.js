@@ -4,7 +4,7 @@
    employes, espace, evenements, themes
    ============================================ */
 
-var GAME_VERSION = 'Release 1.3.5';
+var GAME_VERSION = 'Release 1.3.6';
 // Le nom affiche : sans « Snapshot N » (il ne sert qu'a nous et aux fichiers)
 function versionLabel(v) { return String(v || '').replace(/\s+Snapshot\s+\d+$/i, ''); }
 
@@ -233,19 +233,21 @@ var EMP_MAX_LVL = 10;   // les niveaux qu'on peut former
 var EMP_GOLD_LVL = 11;  // le niveau or : seulement en candidature, a partir du niveau 120
 // Niveau du joueur a partir duquel un candidat de ce niveau peut se presenter
 var APPLICANT_LVL_REQ = { 1:0, 2:0, 3:15, 4:25, 5:35, 6:50, 7:65, 8:80, 9:95, 10:110, 11:120 };
-var PAY_STEPS = [-50, -20, -10, -5, 0, 5, 10, 20, 50];
+var PAY_STEPS = [-50, -20, -10, -5, 0];   // on peut baisser le salaire, plus l'augmenter (la prime remonte le moral)
 var VERSATILE_MAX_JOB_LVL = 3;
 
 var EMP_NAMES_LANG = {
   fr: ['Pierre','Marie','Jean','Sophie','Louis','Claire','Thomas','Julie','Hugo','Emma','Lucas','L\u00e9a','Nathan','Manon','Paul','Camille','Arthur','Alice','Gabriel','Jade'],
   en: ['James','Emily','John','Sarah','William','Emma','Robert','Olivia','Michael','Sophia','David','Isabella','Chris','Mia','Daniel','Charlotte','Matt','Amelia','Andrew','Grace'],
   hi: ['राहुल','प्रिया','अमित','स्नेहा','विक्रम','अंजलि','अर्जुन','काव्या','रोहन','नेहा','करण','पूजा','आदित्य','रिया','संजय','मीरा','मनीष','दिव्या','निखिल','अनन्या'],
+  bn: ['রাহুল','প্রিয়া','অমিত','সুমি','সৌরভ','অনন্যা','আরিফ','ফাতিমা','রফিক','নুসরাত','তানভীর','মৌসুমী','সজীব','তাসনিম','কামাল','রুমানা','অর্ণব','ঈশিতা','শাহীন','মিতা'],
 };
 
 var BAKERY_NAMES_LANG = {
   fr: ['Chez G\u00e2teau','Le Petit Four','La Gourmandise','D\u00e9lices Sucr\u00e9s','Au Bon Pain','La Mie Dor\u00e9e','Le Croissant Magique','Pain & Chocolat','La Tarte Enchant\u00e9e','Beurre & Sucre'],
   en: ['Sweet Dreams Bakery','The Golden Oven','Sugar & Spice','Flour Power','The Cake Shop','Crumb & Crust','Buttercream Bliss','The Rolling Pin','Happy Bakes','Dough & Co'],
   hi: ['मीठा सपना बेकरी','सुनहरा ओवन','मिठास और मसाले','केक की दुकान','आटा और मक्खन','मक्खन की महक','खुशियों की बेकरी','कुरकुरी क्रस्ट','चाशनी घर','मिठाई महल'],
+  bn: ['মিষ্টি স্বপ্ন বেকারি','সোনালি ওভেন','মিষ্টি আর মশলা','কেকের দোকান','ময়দা ও মাখন','মাখনের সুবাস','আনন্দের বেকারি','কুড়মুড়ে খোসা','রসের ঘর','মিষ্টি মহল'],
 };
 
 // ============ SPACE UPGRADES ============
@@ -564,6 +566,7 @@ var THEME_LIST = [
   { id:'winter',   langKey:'settings.themeWinter', season:true },
   { id:'birthday', langKey:'settings.themeBirthday', birthday:true },
   { id:'horror',   langKey:'settings.themeHorror', month:10 }, // Seulement en octobre
+  { id:'love',     langKey:'settings.themeLove', month:2 },    // Seulement en fevrier : la Saint-Valentin
   { id:'bakery',   langKey:'settings.themeBakery', level:100, hidden:true },
   { id:'party',    langKey:'settings.themeParty', level:500, hidden:true },
   { id:'space',    langKey:'settings.themeSpace', level:1000, hidden:true },

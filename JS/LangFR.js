@@ -432,3 +432,23 @@ Object.assign(LANGS.fr, {
   'report.titlePlaceholder':`Donne un nom à ton message (obligatoire)`,
   'report.noTitle':`Donne d’abord un nom à ton message.`
 });
+Object.assign(LANGS.fr, {
+  'hdr.tab':`Barre du haut`,
+  'hdr.sizeBig':`Taille des boutons (grand écran)`,
+  'hdr.sizeBigHelp':`Pour les écrans d’ordinateur et de grande tablette.`,
+  'hdr.sizeSmall':`Taille des boutons (téléphone et tablette)`,
+  'hdr.sizeSmallHelp':`Pour les écrans de moins de 900 pixels de large. Ce choix est à part de celui du grand écran.`,
+  'hdr.arrange':`Rangement des boutons`,
+  'hdr.inSettings':`Dans les réglages (plus dans la barre)`,
+  'hdr.shortcuts':`Raccourcis`,
+  'hdr.dragHelp':`Glisse les boutons pour les ranger. Zone du haut : dans la barre. Zone du milieu : derrière le bouton « ⋯ » sur téléphone et petit écran. Zone du bas : dans les réglages, en haut de l’onglet Général. Le bouton des réglages reste toujours dans la barre.`,
+  'emp.payHelp':`Tu peux baisser son salaire, mais plus l’augmenter. Moins payé, son moral maximum baisse, et s’il est payé trop peu il risque de démissionner. Pour le motiver, offre-lui une prime.`,
+  'ach.nameRepairs':`{{v}} {{#v|réparation|réparations}}`,
+  'ach.descRepairs':`Réparer {{v}} {{#v|machine ou bâtiment|machines ou bâtiments}} en panne.`,
+  'ach.nameMechanics':`{{v}} {{#v|mécanicien|mécaniciens}}`,
+  'ach.descMechanics':`Avoir {{v}} {{#v|mécanicien|mécaniciens}} en même temps.`,
+  'settings.themeLove':`Amour`,
+  'settings.lockFebruary':`seulement en février`,
+  'move.banner':`Le jeu a une nouvelle adresse et celle-ci va s’arrêter. Tes parties gardées dans ce navigateur restent ici : exporte-les avant de partir, ou connecte-toi avec un compte.`,
+  'move.go':`Ouvrir la nouvelle adresse`
+});

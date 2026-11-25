@@ -179,14 +179,15 @@ function renderHeader() {
   h += '<div class="xp-bar-container"><div class="xp-bar-fill" style="width:' + xpPct + '%"></div>';
   h += '<span class="xp-bar-text">' + t('xp.text', { c: fmt(Math.floor(G.xp)), n: fmt(xpNeeded) }) + '</span></div>';
   h += '</div>';
-  h += '<div class="header-right"><div class="hdr-btns" style="zoom:' + hdrZoom() + '">';
+  h += '<div class="header-right"><div class="hdr-btns" style="--hs-l:' + hdrZoom() + ';--hs-s:' + hdrZoomSmall() + '">';
   // Les boutons, dans l'ordre choisi dans les reglages. Sur petit ecran, ceux du menu « ... » s'ouvrent d'un clic.
-  var lay = hdrLayout(), inMenu = {};
+  var lay = hdrLayout(), inMenu = {}, inSett = {};
   lay.menu.forEach(function(id) { inMenu[id] = true; });
+  lay.sett.forEach(function(id) { inSett[id] = true; });
   var menuItems = [];
   lay.order.forEach(function(id) {
     var d = hdrDef(id);
-    if (!d || !d.show()) return;
+    if (!d || !d.show() || inSett[id]) return;   // un bouton range dans les reglages n'est plus en haut
     h += d.html(inMenu[id] ? ' hdr-hide-small' : '');
     if (inMenu[id]) menuItems.push(d);
   });
@@ -250,13 +251,17 @@ function hdrDef(id) {
 }
 // L'ordre et le menu choisis (le bouton des reglages reste toujours dans l'en-tete)
 function hdrLayout() {
-  var s = (G.settings || {}), order = [], menu = [];
+  var s = (G.settings || {}), order = [], menu = [], sett = [];
   (Array.isArray(s.hdrOrder) ? s.hdrOrder : []).forEach(function(id) { if (HDR_IDS.indexOf(id) >= 0 && order.indexOf(id) < 0) order.push(id); });
   HDR_IDS.forEach(function(id) { if (order.indexOf(id) < 0) order.push(id); });
-  (Array.isArray(s.hdrMenu) ? s.hdrMenu : []).forEach(function(id) { if (id !== 'settings' && order.indexOf(id) >= 0 && menu.indexOf(id) < 0) menu.push(id); });
-  return { order: order, menu: menu };
+  // Le bouton des reglages ne quitte jamais l'en-tete : sans lui, on ne retrouverait plus les autres
+  (Array.isArray(s.hdrSett) ? s.hdrSett : []).forEach(function(id) { if (id !== 'settings' && order.indexOf(id) >= 0 && sett.indexOf(id) < 0) sett.push(id); });
+  (Array.isArray(s.hdrMenu) ? s.hdrMenu : []).forEach(function(id) { if (id !== 'settings' && order.indexOf(id) >= 0 && menu.indexOf(id) < 0 && sett.indexOf(id) < 0) menu.push(id); });
+  return { order: order, menu: menu, sett: sett };
 }
-function hdrZoom() { var z = Number((G.settings || {}).hdrZoom); return (isFinite(z) && z >= 70 && z <= 150 ? z : 100) / 100; }
+function hdrClampZoom(v) { var z = Number(v); return isFinite(z) && z >= 60 && z <= 160 ? z : 100; }
+function hdrZoom() { return hdrClampZoom((G.settings || {}).hdrZoom) / 100; }
+function hdrZoomSmall() { return hdrClampZoom((G.settings || {}).hdrZoomSmall) / 100; }
 function toggleHdrMenu(e) { if (e) e.stopPropagation(); ui.hdrPop = !ui.hdrPop; renderHeader(); }
 function hdrPopRun(id) { ui.hdrPop = false; renderHeader(); var d = hdrDef(id); if (d) (new Function(d.action))(); }
 document.addEventListener('click', function(e) { if (ui.hdrPop && !(e.target.closest && e.target.closest('.hdr-pop, .hdr-more'))) { ui.hdrPop = false; renderHeader(); } });

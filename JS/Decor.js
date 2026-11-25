@@ -529,6 +529,45 @@ var Decor = (function() {
     pieces: [svg(44, 20, at(22, 10, 1.1, 0, bat('#1A0F0A')))],
   };
 
+  // ---------- Amour : la Saint-Valentin ----------
+  function heart(c1, c2) {
+    return '<path d="M0 9C-13-1-11-11-5-11-2-11 0-9 0-7 0-9 2-11 5-11 11-11 13-1 0 9z" fill="' + c1 + '"/>' +
+      '<path d="M-7.500-7.500c1.500-2 4-2 5.500 0" fill="none" stroke="' + (c2 || '#fff') + '" stroke-width="1.700" stroke-linecap="round" opacity=".75"/>';
+  }
+  function heartOutline(c) { return '<path d="M0 9C-13-1-11-11-5-11-2-11 0-9 0-7 0-9 2-11 5-11 11-11 13-1 0 9z" fill="none" stroke="' + c + '" stroke-width="1.600"/>'; }
+  function rose() {
+    return '<path d="M0 4V20" stroke="#3E8A28" stroke-width="2" stroke-linecap="round"/><path d="M0 14c4-1 7-4 7-7-4 1-6 4-7 7z" fill="#5FB03F"/>' +
+      '<circle r="9" fill="#C2185B"/><path d="M-6-3c2-5 8-5 11-1 3 4 0 9-5 9-4 0-7-3-6-8z" fill="#E91E63"/><path d="M-3-1c1-3 5-3 6-1 1 2-1 5-4 4-2-1-3-2-2-3z" fill="#AD1457"/><path d="M-1 0c1-1 2-1 2 0" fill="none" stroke="#F8BBD0" stroke-width="1" stroke-linecap="round"/>';
+  }
+  function letter() {
+    return '<rect x="-14" y="-9" width="28" height="19" rx="2.500" fill="#FFF3F6" stroke="#F2A6BC" stroke-width="1.200"/><path d="M-14-7l14 10 14-10" fill="none" stroke="#F2A6BC" stroke-width="1.400" stroke-linejoin="round"/>' + at(0, 3, .55, 0, heart('#E91E63'));
+  }
+  function arrow() {
+    return '<path d="M-17 11L13-9" stroke="#8D5A3A" stroke-width="2" stroke-linecap="round"/><path d="M13-9l-1-6 6 3z" fill="#E91E63"/><path d="M-17 11l-5-1 2-3zM-14 8l-5-1 2-3z" fill="#F8BBD0"/>' + at(-2, 0, .8, 0, heart('#F06292'));
+  }
+  function chocoBox() {
+    return '<path d="M0 12C-16-1-13-14-5-14-2-14 0-11 0-9 0-11 2-14 5-14 13-14 16-1 0 12z" fill="#7B1240"/><path d="M0 9C-12-1-10-11-4-11-2-11 0-9 0-7 0-9 2-11 4-11 10-11 12-1 0 9z" fill="#4A1626"/>' +
+      '<circle cx="-4" cy="-3" r="2.600" fill="#8B4A2B"/><circle cx="4" cy="-3" r="2.600" fill="#B96A3A"/><circle cx="0" cy="3" r="2.600" fill="#6B3A22"/><path d="M-12-8c5-4 12-4 24 0" fill="none" stroke="#FFD1DC" stroke-width="1.200" opacity=".7"/>';
+  }
+  function petal(c) { return '<path d="M0-8C7-6 8 3 0 8-8 3-7-6 0-8z" fill="' + c + '"/>'; }
+  var love = {
+    strip: svg(240, 26, '<path d="M0 6Q30 15 60 6T120 6T180 6T240 6" fill="none" stroke="#E57AA0" stroke-width="1.600"/>' +
+      at(18, 12, .7, 0, heart('#E91E63')) + at(60, 13, .55, 12, heart('#F8BBD0')) + at(100, 12, .72, -8, heart('#C2185B')) + at(142, 13, .55, 10, heart('#F06292')) + at(182, 12, .7, 0, heart('#E91E63')) + at(222, 13, .55, -10, heart('#F8BBD0'))),
+    ground: svg(240, 22, '<path d="M0 22V14c20-4 40-4 60-1s40 3 60 0 40-4 60-1 40 3 60 0v10z" fill="#F4B6C8"/>' +
+      at(30, 12, .5, 0, heart('#E91E63')) + at(90, 13, .45, 10, heart('#C2185B')) + at(150, 12, .5, -8, heart('#E91E63')) + at(210, 13, .45, 8, heart('#F06292')) + at(60, 15, .38, 0, petal('#F8BBD0')) + at(180, 15, .38, 0, petal('#F48FB1'))),
+    corner: svg(240, 190,
+      '<path d="M0 190c24-16 64-26 116-26s96 10 124 20v6z" fill="#F4B6C8"/>' +
+      at(60, 134, 1.6, -8, heart('#E91E63')) + at(104, 108, 1.1, 10, heart('#F8BBD0')) + at(176, 138, 1.9, 6, heart('#C2185B')) + at(206, 90, 1, -10, heart('#F06292')) +
+      at(140, 164, 1.5, 0, chocoBox()) + at(34, 168, 1.1, -18, rose()) + at(212, 172, 1, 14, letter()) + at(88, 50, 1.2, 0, arrow())),
+    corner2: svg(170, 90, at(46, 56, 1.3, -8, heart('#E91E63')) + at(100, 66, 1, 8, rose()) + at(144, 40, 1, 0, heart('#F8BBD0')) + at(130, 72, .9, 0, letter())),
+    top: svg(150, 70, at(112, 34, 1.4, 14, heart('#E91E63')) + at(60, 26, .9, -12, heart('#F8BBD0')) + at(118, 56, .7, 0, heartOutline('#E91E63'))),
+    tile: svg(150, 150, at(34, 32, .9, -10, heart('#E91E63'), .16) + at(112, 62, .65, 14, heartOutline('#C2185B'), .22) + at(46, 116, .7, 8, heart('#F06292'), .16) + at(122, 124, .9, -6, heart('#C2185B'), .14) + at(80, 90, .45, 0, petal('#F48FB1'), .25)),
+    card: svg(48, 48, at(26, 26, 1, 12, heart('#E91E63'), .28)),
+    mark: svg(28, 28, at(14, 14, 1, 0, heart('#E91E63'))),
+    motion: 'rise', count: 22,
+    pieces: [svg(30, 30, at(15, 15, 1, 0, heart('#E91E63'))), svg(30, 30, at(15, 15, .9, 12, heart('#F8BBD0'))), svg(24, 24, at(12, 12, .75, -12, heart('#C2185B'))), svg(24, 24, at(12, 12, .7, 0, heartOutline('#F06292'))), svg(20, 20, at(10, 10, 1, 25, petal('#F48FB1')))],
+  };
+
   // ---------- Cookie : le theme du million de cookies ----------
   function cookieBig(c1, c2) {
     return '<circle r="14" fill="' + (c1 || '#D9A35B') + '"/><circle r="14" fill="none" stroke="' + (c2 || '#B97C35') + '" stroke-width="1.600"/>' +
@@ -624,7 +663,7 @@ var Decor = (function() {
     pieces: [svg(24, 24, at(12, 12, .85, 0, sparkle('#F5C842', '#FFF3B0'))), svg(24, 24, at(12, 12, .7, 20, sparkle('#E8B923', '#FFE27A'))), svg(18, 18, at(9, 9, .85, 20, coin())), svg(14, 14, at(7, 7, 1, 40, flake())), svg(14, 14, at(7, 7, .9, 140, flake()))],
   };
 
-  var THEMES = { gold: gold, birthday: birthday, spring: spring, summer: summer, winter: winter, fall: fall, space: space, party: party, bakery: bakery, horror: horror, cookie: cookie, tech: tech, techgold: techgold };
+  var THEMES = { love: love, gold: gold, birthday: birthday, spring: spring, summer: summer, winter: winter, fall: fall, space: space, party: party, bakery: bakery, horror: horror, cookie: cookie, tech: tech, techgold: techgold };
   var VARS = { strip: '--decor-strip', ground: '--decor-ground', corner: '--decor-corner', corner2: '--decor-corner2', top: '--decor-top', tile: '--decor-tile', card: '--decor-card', mark: '--decor-mark' };
   var applied = null;
 

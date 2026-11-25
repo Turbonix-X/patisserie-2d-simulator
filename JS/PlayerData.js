@@ -121,6 +121,8 @@ function createFreshState() {
       hdrZoom: 100,
       hdrOrder: [],
       hdrMenu: [],
+      hdrSett: [],
+      hdrZoomSmall: 100,
     },
     timeSpeed: 1,
     stats: {
@@ -142,6 +144,7 @@ function createFreshState() {
       totalInterestPaid: 0,
       loansTaken: 0,
       loansRepaid: 0,
+      repairs: 0,
       ordersDone: 0,
       earnedById: {},
     },
@@ -287,6 +290,8 @@ function migrateSave(data) {
   }
   // Les autres patisseries sont sauvegardees a l'interieur de celle-ci
   data.bakeries.forEach(function(b) { if (b.state) b.state = migrateSave(b.state); });
+  // Release 1.3.6 : plus d'augmentation de salaire (la prime reste). Celles deja faites sont annulees.
+  (data.employees || []).forEach(function(e) { if (e.payAdj > 0) e.payAdj = 0; });
   // Release 1.3.4 : une seule bourse pour toutes les patisseries. L'argent de chacune est additionne, une seule fois.
   if (!data.sharedMoney) {
     data.bakeries.forEach(function(b) {
