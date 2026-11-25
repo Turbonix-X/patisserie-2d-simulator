@@ -841,7 +841,7 @@ Object.assign(LANGS.de, {
   'hdr.arrange':`Anordnung der Knöpfe`,
   'hdr.inSettings':`In den Einstellungen (nicht mehr in der Leiste)`,
   'hdr.shortcuts':`Kurzbefehle`,
-  'hdr.dragHelp':`Zieh die Knöpfe, um sie zu ordnen. Obere Zone: in der Leiste. Mittlere Zone: hinter dem Knopf „⋯“ auf Handys und kleinen Bildschirmen. Untere Zone: in den Einstellungen, oben im Tab Allgemein. Der Einstellungsknopf bleibt immer in der Leiste.`,
+  'hdr.dragHelp':`Zieh die Knöpfe Erfolge, Statistiken und Konditoreien, um ihre Reihenfolge in der Leiste zu ändern, oder leg sie in den unteren Bereich, um sie in die Einstellungen unter „Obere Leiste“ zu setzen. Zur Startseite, Herunterladen, Pause und Einstellungen bleiben an ihrem Platz.`,
   'emp.payHelp':`Du kannst das Gehalt senken, aber nicht mehr erhöhen. Bei weniger Gehalt sinkt die maximale Motivation, und bei zu wenig kündigt er wahrscheinlich. Um ihn zu motivieren, gib ihm eine Prämie.`,
   'ach.nameRepairs':`{{v}} {{#v|Reparatur|Reparaturen}}`,
   'ach.descRepairs':`Repariere {{v}} kaputte {{#v|Maschine oder Gebäude|Maschinen oder Gebäude}}.`,

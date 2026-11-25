@@ -179,30 +179,13 @@ function renderHeader() {
   h += '<div class="xp-bar-container"><div class="xp-bar-fill" style="width:' + xpPct + '%"></div>';
   h += '<span class="xp-bar-text">' + t('xp.text', { c: fmt(Math.floor(G.xp)), n: fmt(xpNeeded) }) + '</span></div>';
   h += '</div>';
-  h += '<div class="header-right"><div class="hdr-btns" style="--hs-l:' + hdrZoom() + ';--hs-s:' + hdrZoomSmall() + '">';
-  // Les boutons, dans l'ordre choisi dans les reglages. Sur petit ecran, ceux du menu « ... » s'ouvrent d'un clic.
-  var lay = hdrLayout(), inMenu = {}, inSett = {};
-  lay.menu.forEach(function(id) { inMenu[id] = true; });
-  lay.sett.forEach(function(id) { inSett[id] = true; });
-  var menuItems = [];
-  lay.order.forEach(function(id) {
+  h += '<div class="header-right"><div class="hdr-btns" style="--hs-s:' + hdrZoomSmall() + '">';
+  // Retour, telechargement, pause et reglages ont leur place fixe. Succes, statistiques et patisseries se rangent au milieu, ou dans les reglages.
+  hdrBarIds().forEach(function(id) {
     var d = hdrDef(id);
-    if (!d || !d.show() || inSett[id]) return;   // un bouton range dans les reglages n'est plus en haut
-    h += d.html(inMenu[id] ? ' hdr-hide-small' : '');
-    if (inMenu[id]) menuItems.push(d);
+    if (d && d.show()) h += d.html();
   });
-  if (menuItems.length) {
-    h += '<button type="button" class="hbtn hdr-more' + (ui.hdrPop ? ' open' : '') + '" onclick="toggleHdrMenu(event)" title="' + escH(t('hdr.more')) + '" aria-label="' + escH(t('hdr.more')) + '" aria-expanded="' + !!ui.hdrPop + '">' + uiIcon('more') + '</button>';
-  }
-  h += '</div>';
-  if (menuItems.length) {
-    if (ui.hdrPop) {
-      h += '<div class="hdr-pop" id="hdr-pop">';
-      menuItems.forEach(function(d) { h += '<button type="button" class="hdr-pop-item" onclick="hdrPopRun(\'' + d.id + '\')">' + uiIcon(d.icon()) + '<span>' + escH(d.label()) + '</span></button>'; });
-      h += '</div>';
-    }
-  }
-  h += '</div></div></header>';
+  h += '</div></div></div></header>';
   var alerts = '';
   if (G.rentDebt > 0) {
     alerts += '<div class="debt-warning">' + t('space.debt', { v: fmtMoney(G.rentDebt) });
@@ -230,8 +213,8 @@ function renderHeader() {
   renderHeader._money = G.money;
 }
 
-// Les boutons de l'en-tete. Les reglages les rangent (ordre) et peuvent en mettre dans le menu « ... » des petits ecrans.
-var HDR_IDS = ['back', 'install', 'bakeries', 'ach', 'stats', 'pause', 'settings'];
+// Les boutons de l'en-tete. Seuls ceux de HDR_MOVABLE changent de place (dans la barre) ou vont dans les reglages ; les autres sont fixes.
+var HDR_MOVABLE = ['bakeries', 'ach', 'stats'];
 function hdrDef(id) {
   var defs = {
     back: { action: 'backToHome()', label: function() { return t('home.backHome'); }, icon: function() { return 'back'; } },
@@ -246,25 +229,26 @@ function hdrDef(id) {
   if (!d) return null;
   d.id = id;
   if (!d.show) d.show = function() { return true; };
-  d.html = function(more) { return headerBtn(d.action, d.label(), d.icon(), false, d.count ? d.count() : 0, (d.extra || '') + (more || '')); };
+  d.html = function() { return headerBtn(d.action, d.label(), d.icon(), false, d.count ? d.count() : 0, d.extra || ''); };
   return d;
 }
-// L'ordre et le menu choisis (le bouton des reglages reste toujours dans l'en-tete)
+// L'ordre choisi pour les trois boutons deplacables, et ceux ranges dans les reglages
 function hdrLayout() {
-  var s = (G.settings || {}), order = [], menu = [], sett = [];
-  (Array.isArray(s.hdrOrder) ? s.hdrOrder : []).forEach(function(id) { if (HDR_IDS.indexOf(id) >= 0 && order.indexOf(id) < 0) order.push(id); });
-  HDR_IDS.forEach(function(id) { if (order.indexOf(id) < 0) order.push(id); });
-  // Le bouton des reglages ne quitte jamais l'en-tete : sans lui, on ne retrouverait plus les autres
-  (Array.isArray(s.hdrSett) ? s.hdrSett : []).forEach(function(id) { if (id !== 'settings' && order.indexOf(id) >= 0 && sett.indexOf(id) < 0) sett.push(id); });
-  (Array.isArray(s.hdrMenu) ? s.hdrMenu : []).forEach(function(id) { if (id !== 'settings' && order.indexOf(id) >= 0 && menu.indexOf(id) < 0 && sett.indexOf(id) < 0) menu.push(id); });
-  return { order: order, menu: menu, sett: sett };
+  var s = (G.settings || {}), order = [], sett = [];
+  (Array.isArray(s.hdrOrder) ? s.hdrOrder : []).forEach(function(id) { if (HDR_MOVABLE.indexOf(id) >= 0 && order.indexOf(id) < 0) order.push(id); });
+  HDR_MOVABLE.forEach(function(id) { if (order.indexOf(id) < 0) order.push(id); });
+  (Array.isArray(s.hdrSett) ? s.hdrSett : []).forEach(function(id) { if (HDR_MOVABLE.indexOf(id) >= 0 && sett.indexOf(id) < 0) sett.push(id); });
+  return { order: order, sett: sett };
 }
+// La barre, de gauche a droite : retour, telechargement, les boutons deplacables, pause, reglages
+function hdrBarIds() {
+  var lay = hdrLayout();
+  return ['back', 'install'].concat(lay.order.filter(function(id) { return lay.sett.indexOf(id) < 0; }), ['pause', 'settings']);
+}
+// La taille des boutons : reglable sur telephone et tablette seulement
 function hdrClampZoom(v) { var z = Number(v); return isFinite(z) && z >= 60 && z <= 160 ? z : 100; }
-function hdrZoom() { return hdrClampZoom((G.settings || {}).hdrZoom) / 100; }
 function hdrZoomSmall() { return hdrClampZoom((G.settings || {}).hdrZoomSmall) / 100; }
-function toggleHdrMenu(e) { if (e) e.stopPropagation(); ui.hdrPop = !ui.hdrPop; renderHeader(); }
-function hdrPopRun(id) { ui.hdrPop = false; renderHeader(); var d = hdrDef(id); if (d) (new Function(d.action))(); }
-document.addEventListener('click', function(e) { if (ui.hdrPop && !(e.target.closest && e.target.closest('.hdr-pop, .hdr-more'))) { ui.hdrPop = false; renderHeader(); } });
+function hdrIsSmall() { return !!(window.matchMedia && window.matchMedia('(max-width: 899px)').matches); }
 
 function headerBtn(action, label, icon, off, count, extra) {
   var safe = escH(label);

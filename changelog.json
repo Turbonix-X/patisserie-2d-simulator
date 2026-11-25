@@ -13,8 +13,9 @@
       "items": [
        "أُضيفت اللغة البنغالية (বাংলা) كاملة: كل نصوص اللعبة وأسماء الإنجازات ودليل الأوامر وهذا السجل.",
        "ثيم الحب، في فبراير فقط: قلوب تصعد وورود ورسائل وشوكولاتة.",
-       "عادت العلاوة، لكن لم يعد ممكنًا رفع الراتب (خفضه فقط). الزيادات التي مُنحت من قبل أُلغيت.",
-       "الإعدادات، تبويب «الشريط العلوي»: يُضبط حجم الأزرار على حدة للشاشة الكبيرة وللهاتف واللوحي، ويُرتَّب كل زر بسحبه إلى ثلاث مناطق: الشريط، أو قائمة «⋯» في الشاشات الصغيرة، أو الإعدادات (أعلى تبويب عام).",
+       "عادت العلاوة، ولم يعد بالإمكان تعديل الرواتب: أُلغيت تعديلات الرواتب السابقة.",
+       "الشريط العلوي: اسحب أزرار الإنجازات والإحصائيات والمحلات لتغيير ترتيبها أو نقلها إلى الإعدادات تحت «الشريط العلوي». أزرار الرئيسية والتنزيل والإيقاف والإعدادات تبقى في مكانها، وأُزيلت قائمة «⋯». على الهاتف واللوحي يضبط شريط تمرير حجم الأزرار.",
+       "صار للثيمات ولقائمة الإعدادات ترتيب جديد ثابت.",
        "10 إنجازات إضافية، أي 1050 مع الأسرار الخمسة: 5 للأعطال المُصلَحة و5 للميكانيكيين.",
        "مُثبّت Windows وتحديثات التطبيق تأتي الآن من p2ds.pages.dev لا من GitHub. على عنوان GitHub Pages القديم يظهر شريط يدل على العنوان الجديد."
       ]
@@ -511,8 +512,9 @@
       "items": [
        "বাংলা সম্পূর্ণভাবে যোগ হয়েছে: গেমের সব লেখা, অর্জনের নাম, কমান্ড নির্দেশিকা এবং এই চেঞ্জলগ।",
        "ভালোবাসার থিম, শুধু ফেব্রুয়ারিতে: ওপরে ওঠা হৃদয়, গোলাপ, চিঠি আর চকোলেট।",
-       "বোনাস ফিরে এসেছে, কিন্তু বেতন আর বাড়ানো যায় না (শুধু কমানো যায়)। আগে যে বাড়ানো হয়েছিল তা বাতিল হয়েছে।",
-       "সেটিংসের «ওপরের বার» ট্যাব: বোতামের আকার বড় পর্দা এবং ফোন-ট্যাবলেটের জন্য আলাদা করে ঠিক করা যায়, আর প্রতিটি বোতাম টেনে তিনটি জায়গার একটিতে রাখা যায়: বার, ছোট পর্দার “⋯” মেনু, বা সেটিংস (সাধারণ ট্যাবের একেবারে ওপরে)।",
+       "বোনাস ফিরে এসেছে, আর বেতন আর বদলানো যায় না: আগের বেতনের সেটিং বাতিল হয়েছে।",
+       "ওপরের বার: অর্জন, পরিসংখ্যান ও বেকারির বোতাম টেনে ক্রম বদলান বা সেটিংসে «ওপরের বার» এর নিচে নিয়ে যান। হোম, ডাউনলোড, বিরতি ও সেটিংস নিজের জায়গায় থাকে, আর “⋯” মেনু সরানো হয়েছে। ফোন ও ট্যাবলেটে একটি স্লাইডারে বোতামের আকার ঠিক করা যায়।",
+       "থিম আর সেটিংস মেনুর এখন নতুন, স্থায়ী ক্রম আছে।",
        "আরও ১০টি অর্জন, মানে ১০৫০টি আর ৫টি গোপন: ৫টি মেরামতের জন্য আর ৫টি মেকানিকের জন্য।",
        "Windows ইনস্টলার আর অ্যাপের আপডেট এখন GitHub থেকে নয়, p2ds.pages.dev থেকে আসে। পুরনো GitHub Pages ঠিকানায় একটি ব্যানার নতুন ঠিকানা জানায়।"
       ]
@@ -535,8 +537,9 @@
       "items": [
        "Bengalisch (বাংলা) wurde vollständig hinzugefügt: alle Texte des Spiels, die Namen der Erfolge, der Befehlsguide und dieses Änderungsprotokoll.",
        "Das Liebe-Design, nur im Februar: aufsteigende Herzen, Rosen, Briefe und Schokolade.",
-       "Die Prämie ist zurück, aber ein Gehalt kann nicht mehr erhöht werden (nur gesenkt). Schon gegebene Erhöhungen werden aufgehoben.",
-       "Einstellungen, Tab „Obere Leiste“: Die Größe der Knöpfe wird getrennt für große Bildschirme und für Handy und Tablet eingestellt, und jeder Knopf wird per Ziehen in drei Zonen geordnet: die Leiste, das „⋯“-Menü kleiner Bildschirme oder die Einstellungen (oben im Tab Allgemein).",
+       "Die Prämie ist zurück, und Gehälter lassen sich nicht mehr ändern: alte Gehaltseinstellungen werden aufgehoben.",
+       "Obere Leiste: Zieh die Knöpfe Erfolge, Statistiken und Konditoreien, um ihre Reihenfolge zu ändern oder sie in die Einstellungen unter „Obere Leiste“ zu setzen. Zur Startseite, Herunterladen, Pause und Einstellungen bleiben an ihrem Platz, und das „⋯“-Menü ist weg. Auf Handy und Tablet stellt ein Regler die Größe der Knöpfe ein.",
+       "Die Designs und das Einstellungsmenü haben eine neue, feste Reihenfolge.",
        "10 weitere Erfolge, also 1050 und die 5 geheimen: 5 für reparierte Defekte und 5 für Mechaniker.",
        "Der Windows-Installer und die Updates der App kommen jetzt von p2ds.pages.dev, nicht mehr von GitHub. Auf der alten GitHub-Pages-Adresse zeigt ein Banner die neue."
       ]
@@ -1033,8 +1036,9 @@
       "items": [
        "Bengali (বাংলা) is added, in full: every text of the game, the achievement names, the command guide and this changelog.",
        "The Love theme, only in February: rising hearts, roses, letters and chocolate.",
-       "The bonus is back, but a salary can no longer be raised (only lowered). Raises already given are cancelled.",
-       "Settings, “Top bar” tab: button size is set separately for big screens and for phones and tablets, and each button is arranged by dragging it into three zones: the bar, the “⋯” menu of small screens, or the settings (at the top of the General tab).",
+       "The bonus is back, and salaries can no longer be adjusted: old salary settings are cancelled.",
+       "Top bar: drag the Achievements, Statistics and Bakeries buttons to change their order or move them into the settings, under “Top bar”. Back to the home page, Download, Pause and Settings stay where they are, and the “⋯” menu is removed. On phones and tablets, a slider sets the button size.",
+       "Themes and the settings menu have a new, fixed order.",
        "10 more achievements, for 1050 plus the 5 secrets: 5 for repairs done and 5 for mechanics.",
        "The Windows installer and the app's updates now come from p2ds.pages.dev, not GitHub. On the old GitHub Pages address, a banner shows the new one."
       ]
@@ -2057,8 +2061,9 @@
       "items": [
        "Se añade el bengalí (বাংলা), completo: todos los textos del juego, los nombres de los logros, la guía de comandos y este historial.",
        "El tema Amor, solo en febrero: corazones que suben, rosas, cartas y chocolate.",
-       "La prima vuelve, pero ya no se puede subir un salario (solo bajarlo). Los aumentos ya hechos se anulan.",
-       "Ajustes, pestaña «Barra superior»: el tamaño de los botones se ajusta aparte para pantalla grande y para móvil y tableta, y cada botón se ordena arrastrándolo a tres zonas: la barra, el menú «⋯» de las pantallas pequeñas, o los ajustes (arriba de la pestaña General).",
+       "La prima vuelve, y el salario ya no se ajusta: los ajustes de salario anteriores se anulan.",
+       "Barra superior: arrastra los botones Logros, Estadísticas y Pastelerías para cambiar su orden o llevarlos a los ajustes, bajo «Barra superior». Volver al inicio, Descargar, Pausa y Ajustes no se mueven, y se quita el menú «⋯». En móviles y tabletas, un control ajusta el tamaño de los botones.",
+       "Los temas y el menú de ajustes tienen un orden nuevo y fijo.",
        "10 logros más, es decir 1050 y los 5 secretos: 5 por averías reparadas y 5 por mecánicos.",
        "El instalador de Windows y las actualizaciones de la app ahora vienen de p2ds.pages.dev, ya no de GitHub. En la antigua dirección de GitHub Pages, un aviso indica la nueva."
       ]
@@ -2555,8 +2560,9 @@
       "items": [
        "बंगाली (বাংলা) पूरी तरह जोड़ी गई: गेम के सारे टेक्स्ट, उपलब्धियों के नाम, कमांड गाइड और यह अपडेट का इतिहास।",
        "प्रेम थीम, सिर्फ़ फ़रवरी में: ऊपर उठते दिल, गुलाब, चिट्ठियाँ और चॉकलेट।",
-       "बोनस वापस आ गया है, पर अब वेतन बढ़ाया नहीं जा सकता (सिर्फ़ घटाया जा सकता है)। जो बढ़ोतरी पहले हो चुकी थी, वह रद्द कर दी गई है।",
-       "सेटिंग्स का «ऊपर की पट्टी» टैब: बटन का आकार बड़ी स्क्रीन और फ़ोन-टैबलेट के लिए अलग-अलग तय होता है, और हर बटन को खींचकर तीन जगहों में से एक में रखा जा सकता है: पट्टी, छोटी स्क्रीन का “⋯” मेन्यू, या सेटिंग्स (सामान्य टैब के सबसे ऊपर)।",
+       "बोनस वापस आ गया है, और वेतन अब बदला नहीं जा सकता: वेतन की पुरानी सेटिंग रद्द कर दी गई हैं।",
+       "ऊपर की पट्टी: उपलब्धियाँ, आँकड़े और बेकरियाँ वाले बटन खींचकर उनका क्रम बदलें या उन्हें सेटिंग्स में «ऊपर की पट्टी» के नीचे ले जाएँ। होम, डाउनलोड, रोकना और सेटिंग्स अपनी जगह पर रहते हैं, और “⋯” मेन्यू हटा दिया गया है। फ़ोन और टैबलेट पर एक स्लाइडर से बटन का आकार तय होता है।",
+       "थीम और सेटिंग्स मेन्यू का अब नया, तय क्रम है।",
        "10 उपलब्धियाँ और जुड़ीं, यानी 1050 और 5 गुप्त: 5 मरम्मत के लिए और 5 मैकेनिकों के लिए।",
        "Windows इंस्टॉलर और ऐप के अपडेट अब GitHub से नहीं, p2ds.pages.dev से आते हैं। पुराने GitHub Pages पते पर एक बैनर नया पता बताता है।"
       ]
@@ -2595,8 +2601,9 @@
       "items": [
        "ベンガル語（বাংলা）をすべて追加しました：ゲームの全テキスト、実績名、コマンドガイド、この更新履歴。",
        "ラブのテーマ（2月だけ）：のぼるハート、バラ、手紙、チョコレート。",
-       "ボーナスが復活しました。ただし給料はもう上げられません（下げるだけ）。すでに上げた分は取り消されます。",
-       "設定の「上のバー」タブ：ボタンの大きさを、大きい画面とスマホ・タブレットで別々に決められ、各ボタンをドラッグして3つの場所に入れられます。バーの中、小さい画面の「⋯」メニュー、設定の中（「一般」タブの一番上）です。",
+       "ボーナスが復活し、給料は調節できなくなりました。以前の給料の設定は取り消されます。",
+       "上のバー：実績・統計・お店のボタンはドラッグで順番を変えたり、設定の「上のバー」の下に移したりできます。ホームに戻る、ダウンロード、一時停止、設定の位置は固定で、「⋯」メニューはなくなりました。スマホとタブレットではスライダーでボタンの大きさを調節します。",
+       "テーマと設定メニューの順番が新しくなり、固定されました。",
        "実績が10個増えて、1050個と隠し実績5個になりました：修理で5個、整備士で5個です。",
        "Windows のインストーラーとアプリの更新は、GitHub ではなく p2ds.pages.dev から届くようになりました。古い GitHub Pages のアドレスには新しいアドレスを知らせるバナーが出ます。"
       ]
@@ -3093,8 +3100,9 @@
       "items": [
        "벵골어(বাংলা)가 전부 추가됐어요: 게임의 모든 글, 업적 이름, 명령어 가이드, 이 변경 기록까지요.",
        "사랑 테마는 2월에만: 떠오르는 하트, 장미, 편지, 초콜릿이 나와요.",
-       "보너스가 돌아왔지만 월급은 더 올릴 수 없어요(낮추기만 가능). 이미 올린 월급은 취소돼요.",
-       "설정의 '상단 바' 탭: 버튼 크기를 큰 화면과 휴대폰·태블릿에 따로 정하고, 버튼마다 끌어서 세 곳 중에 넣을 수 있어요: 상단 바, 작은 화면의 “⋯” 메뉴, 설정 안(일반 탭 맨 위).",
+       "보너스가 돌아왔고 월급은 더는 조절할 수 없어요. 예전 월급 설정은 취소돼요.",
+       "상단 바: 업적, 통계, 가게 버튼을 끌어서 순서를 바꾸거나 설정의 ‘상단 바’ 아래로 옮길 수 있어요. 홈으로, 다운로드, 일시정지, 설정은 자리가 고정이고 “⋯” 메뉴는 없어졌어요. 휴대폰과 태블릿에서는 슬라이더로 버튼 크기를 조절해요.",
+       "테마와 설정 메뉴의 순서가 새로 고정됐어요.",
        "업적이 10개 늘어 1050개와 숨은 업적 5개가 됐어요: 수리로 5개, 정비사로 5개예요.",
        "Windows 설치 파일과 앱 업데이트는 이제 GitHub가 아니라 p2ds.pages.dev에서 와요. 예전 GitHub Pages 주소에는 새 주소를 알리는 배너가 떠요."
       ]
@@ -3591,8 +3599,9 @@
       "items": [
        "Le bengali (বাংলা) est ajouté, en entier : tous les textes du jeu, les noms des succès, le guide des commandes et ce changelog.",
        "Le thème Amour, seulement en février : des cœurs qui montent, des roses, des lettres et du chocolat.",
-       "La prime est de retour, mais on ne peut plus augmenter un salaire (seulement le baisser). Les augmentations déjà faites sont annulées.",
-       "Réglages, onglet « Barre du haut » : la taille des boutons se règle à part pour le grand écran et pour le téléphone et la tablette, et chaque bouton se range en le glissant dans trois zones : la barre, le menu « ⋯ » des petits écrans, ou les réglages (en haut de l'onglet Général).",
+       "La prime est de retour, et le salaire ne se règle plus : les anciens réglages de salaire sont annulés.",
+       "Barre du haut : les boutons Succès, Statistiques et Pâtisseries se glissent pour changer d'ordre ou vont dans les réglages, sous « Barre du haut ». Retour à l'accueil, Télécharger, Pause et Réglages gardent leur place, et le menu « ⋯ » est retiré. Sur téléphone et tablette, un curseur règle la taille des boutons.",
+       "Les thèmes et le menu des réglages ont un nouvel ordre, fixe.",
        "10 succès de plus, soit 1050 et les 5 secrets : 5 pour les pannes réparées et 5 pour les mécaniciens.",
        "L'installeur Windows et les mises à jour de l'appli viennent maintenant de p2ds.pages.dev, plus de GitHub. Sur l'ancienne adresse GitHub Pages, une bannière indique la nouvelle."
       ]
@@ -4615,8 +4624,9 @@
       "items": [
        "O bengali (বাংলা) foi adicionado, completo: todos os textos do jogo, os nomes das conquistas, o guia de comandos e este histórico.",
        "O tema Amor, só em fevereiro: corações que sobem, rosas, cartas e chocolate.",
-       "O prémio voltou, mas já não se pode aumentar um salário (só baixar). Os aumentos já feitos são anulados.",
-       "Definições, separador «Barra de cima»: o tamanho dos botões ajusta-se à parte para ecrã grande e para telemóvel e tablet, e cada botão arruma-se arrastando-o para três zonas: a barra, o menu «⋯» dos ecrãs pequenos, ou as definições (no topo do separador Geral).",
+       "O prémio voltou, e o salário já não se ajusta: os ajustes de salário anteriores são anulados.",
+       "Barra de cima: arrasta os botões Conquistas, Estatísticas e Pastelarias para mudar a ordem ou levá-los para as definições, por baixo de «Barra de cima». Voltar ao início, Transferir, Pausa e Definições ficam no lugar, e o menu «⋯» foi retirado. No telemóvel e no tablet, um cursor ajusta o tamanho dos botões.",
+       "Os temas e o menu das definições têm uma ordem nova e fixa.",
        "Mais 10 conquistas, ou seja 1050 e os 5 segredos: 5 por avarias reparadas e 5 por mecânicos.",
        "O instalador do Windows e as atualizações da app vêm agora de p2ds.pages.dev, já não do GitHub. No antigo endereço do GitHub Pages, um aviso mostra o novo."
       ]
@@ -5113,8 +5123,9 @@
       "items": [
        "Добавлен бенгальский (বাংলা), полностью: все тексты игры, названия достижений, справочник команд и этот журнал изменений.",
        "Тема «Любовь», только в феврале: поднимающиеся сердца, розы, письма и шоколад.",
-       "Премия вернулась, но зарплату больше нельзя повысить (только снизить). Уже сделанные повышения отменены.",
-       "Настройки, вкладка «Верхняя панель»: размер кнопок задаётся отдельно для большого экрана и для телефона и планшета, а каждую кнопку можно перетащить в одну из трёх зон: панель, меню «⋯» маленьких экранов или настройки (вверху вкладки «Общие»).",
+       "Премия вернулась, а зарплату больше нельзя менять: прежние настройки зарплаты отменены.",
+       "Верхняя панель: перетаскивай кнопки «Достижения», «Статистика» и «Кондитерские», чтобы менять порядок или убрать их в настройки под «Верхнюю панель». «На главную», «Скачать», «Пауза» и «Настройки» остаются на месте, меню «⋯» убрано. На телефонах и планшетах размер кнопок задаётся ползунком.",
+       "У тем и меню настроек новый постоянный порядок.",
        "Ещё 10 достижений: всего 1050 и 5 тайных, из них 5 за починенные поломки и 5 за механиков.",
        "Установщик для Windows и обновления приложения теперь приходят с p2ds.pages.dev, а не с GitHub. На старом адресе GitHub Pages баннер показывает новый."
       ]
@@ -5611,8 +5622,9 @@
       "items": [
        "新增完整的孟加拉语（বাংলা）：游戏所有文字、成就名称、命令指南和这份更新日志。",
        "爱情主题，仅在二月：升起的爱心、玫瑰、情书和巧克力。",
-       "奖金回来了，但工资不能再提高（只能降低）。已经加过的工资会被取消。",
-       "设置里的“顶部栏”页：大屏幕和手机、平板的按钮大小分开设置，每个按钮都可以拖到三个区域之一：顶部栏、小屏幕的“⋯”菜单，或设置（在“常规”页最上面）。",
+       "奖金回来了，工资不能再调整：以前的工资设置会取消。",
+       "顶部栏：拖动“成就”“统计”和“甜品店”按钮可以改变顺序，或把它们移到设置里“顶部栏”的下方。“返回主页”“下载”“暂停”和“设置”位置固定，“⋯”菜单已移除。在手机和平板上，用滑块调节按钮大小。",
+       "主题和设置菜单有了新的固定顺序。",
        "再增加 10 个成就，共 1050 个加 5 个隐藏成就：5 个关于修好故障，5 个关于机修工。",
        "Windows 安装包和应用更新现在来自 p2ds.pages.dev，不再来自 GitHub。在旧的 GitHub Pages 地址上，会有横幅提示新地址。"
       ]

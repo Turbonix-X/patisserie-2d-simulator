@@ -441,7 +441,7 @@ Object.assign(LANGS.fr, {
   'hdr.arrange':`Rangement des boutons`,
   'hdr.inSettings':`Dans les réglages (plus dans la barre)`,
   'hdr.shortcuts':`Raccourcis`,
-  'hdr.dragHelp':`Glisse les boutons pour les ranger. Zone du haut : dans la barre. Zone du milieu : derrière le bouton « ⋯ » sur téléphone et petit écran. Zone du bas : dans les réglages, en haut de l’onglet Général. Le bouton des réglages reste toujours dans la barre.`,
+  'hdr.dragHelp':`Glisse les boutons Succès, Statistiques et Pâtisseries pour changer leur ordre dans la barre, ou pose-les dans la zone du bas pour les mettre dans les réglages, sous « Barre du haut ». Retour à l’accueil, Télécharger, Pause et Réglages gardent leur place.`,
   'emp.payHelp':`Tu peux baisser son salaire, mais plus l’augmenter. Moins payé, son moral maximum baisse, et s’il est payé trop peu il risque de démissionner. Pour le motiver, offre-lui une prime.`,
   'ach.nameRepairs':`{{v}} {{#v|réparation|réparations}}`,
   'ach.descRepairs':`Réparer {{v}} {{#v|machine ou bâtiment|machines ou bâtiments}} en panne.`,

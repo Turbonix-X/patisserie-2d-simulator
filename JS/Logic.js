@@ -849,24 +849,14 @@ function giveBonus(empId) {
   return true;
 }
 
-// Euros par seconde. Mieux forme, mieux paye. Le reglage de paie monte ou baisse le tout.
+// Euros par seconde. Mieux forme, mieux paye. Le salaire ne se regle pas : pour motiver, il y a la prime.
 function getEmpSalary(emp) {
   var empType = findEmpType(emp.type);
   if (!empType) return 0;
   var lvl = emp.type === 'novice' ? 1 : (emp.level || 1);
-  return empType.baseSalary * (1 + 0.5 * (lvl - 1)) * (1 - machineBonus('salary') / 100) * (1 + (emp.payAdj || 0) / 100);
+  return empType.baseSalary * (1 + 0.5 * (lvl - 1)) * (1 - machineBonus('salary') / 100);
 }
-function maxMorale(emp) { return 100 + (emp.payAdj || 0); }
-
-// Changer la paie : trop bas, et il demissionne presque toujours
-function setPay(emp, adj) {
-  if (!emp || PAY_STEPS.indexOf(adj) < 0) return 'none';
-  emp.payAdj = adj;
-  var quitChance = adj <= -50 ? 0.9 : adj <= -20 ? 0.3 : 0;
-  if (quitChance > 0 && Math.random() < quitChance) { fireEmployee(emp.id); return 'quit'; }
-  emp.morale = Math.min(emp.morale, maxMorale(emp));
-  return 'ok';
-}
+function maxMorale() { return 100; }
 
 function totalSalary() {
   var s = 0;

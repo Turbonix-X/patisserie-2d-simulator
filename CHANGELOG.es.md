@@ -9,8 +9,9 @@ Bengalí, un tema de San Valentín, la barra superior por fin ajustable, y el ju
 **Novedades y correcciones**
 - Se añade el bengalí (বাংলা), completo: todos los textos del juego, los nombres de los logros, la guía de comandos y este historial.
 - El tema Amor, solo en febrero: corazones que suben, rosas, cartas y chocolate.
-- La prima vuelve, pero ya no se puede subir un salario (solo bajarlo). Los aumentos ya hechos se anulan.
-- Ajustes, pestaña «Barra superior»: el tamaño de los botones se ajusta aparte para pantalla grande y para móvil y tableta, y cada botón se ordena arrastrándolo a tres zonas: la barra, el menú «⋯» de las pantallas pequeñas, o los ajustes (arriba de la pestaña General).
+- La prima vuelve, y el salario ya no se ajusta: los ajustes de salario anteriores se anulan.
+- Barra superior: arrastra los botones Logros, Estadísticas y Pastelerías para cambiar su orden o llevarlos a los ajustes, bajo «Barra superior». Volver al inicio, Descargar, Pausa y Ajustes no se mueven, y se quita el menú «⋯». En móviles y tabletas, un control ajusta el tamaño de los botones.
+- Los temas y el menú de ajustes tienen un orden nuevo y fijo.
 - 10 logros más, es decir 1050 y los 5 secretos: 5 por averías reparadas y 5 por mecánicos.
 - El instalador de Windows y las actualizaciones de la app ahora vienen de p2ds.pages.dev, ya no de GitHub. En la antigua dirección de GitHub Pages, un aviso indica la nueva.
 

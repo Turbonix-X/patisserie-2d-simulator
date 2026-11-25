@@ -9,8 +9,9 @@ Bengalisch, ein Valentinstag-Design, die obere Leiste endlich einstellbar, und d
 **Neues und Korrekturen**
 - Bengalisch (বাংলা) wurde vollständig hinzugefügt: alle Texte des Spiels, die Namen der Erfolge, der Befehlsguide und dieses Änderungsprotokoll.
 - Das Liebe-Design, nur im Februar: aufsteigende Herzen, Rosen, Briefe und Schokolade.
-- Die Prämie ist zurück, aber ein Gehalt kann nicht mehr erhöht werden (nur gesenkt). Schon gegebene Erhöhungen werden aufgehoben.
-- Einstellungen, Tab „Obere Leiste“: Die Größe der Knöpfe wird getrennt für große Bildschirme und für Handy und Tablet eingestellt, und jeder Knopf wird per Ziehen in drei Zonen geordnet: die Leiste, das „⋯“-Menü kleiner Bildschirme oder die Einstellungen (oben im Tab Allgemein).
+- Die Prämie ist zurück, und Gehälter lassen sich nicht mehr ändern: alte Gehaltseinstellungen werden aufgehoben.
+- Obere Leiste: Zieh die Knöpfe Erfolge, Statistiken und Konditoreien, um ihre Reihenfolge zu ändern oder sie in die Einstellungen unter „Obere Leiste“ zu setzen. Zur Startseite, Herunterladen, Pause und Einstellungen bleiben an ihrem Platz, und das „⋯“-Menü ist weg. Auf Handy und Tablet stellt ein Regler die Größe der Knöpfe ein.
+- Die Designs und das Einstellungsmenü haben eine neue, feste Reihenfolge.
 - 10 weitere Erfolge, also 1050 und die 5 geheimen: 5 für reparierte Defekte und 5 für Mechaniker.
 - Der Windows-Installer und die Updates der App kommen jetzt von p2ds.pages.dev, nicht mehr von GitHub. Auf der alten GitHub-Pages-Adresse zeigt ein Banner die neue.
 

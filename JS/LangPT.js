@@ -844,7 +844,7 @@ Object.assign(LANGS.pt, {
   'hdr.arrange':`Ordem dos botões`,
   'hdr.inSettings':`Nas definições (já não na barra)`,
   'hdr.shortcuts':`Atalhos`,
-  'hdr.dragHelp':`Arrasta os botões para os ordenar. Zona de cima: na barra. Zona do meio: atrás do botão «⋯» nos telemóveis e ecrãs pequenos. Zona de baixo: nas definições, no topo do separador Geral. O botão das definições fica sempre na barra.`,
+  'hdr.dragHelp':`Arrasta os botões Conquistas, Estatísticas e Pastelarias para mudar a ordem na barra, ou larga-os na zona de baixo para os pôr nas definições, por baixo de «Barra de cima». Voltar ao início, Transferir, Pausa e Definições ficam no lugar.`,
   'emp.payHelp':`Podes baixar-lhe o salário, mas já não o aumentar. Ganhando menos, a motivação máxima baixa, e se ganhar demasiado pouco é provável que se demita. Para o motivar, dá-lhe um prémio.`,
   'ach.nameRepairs':`{{v}} {{#v|reparação|reparações}}`,
   'ach.descRepairs':`Repara {{v}} {{#v|máquina ou edifício avariado|máquinas ou edifícios avariados}}.`,

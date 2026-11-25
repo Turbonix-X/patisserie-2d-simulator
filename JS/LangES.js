@@ -835,7 +835,7 @@ Object.assign(LANGS.es, {
   'hdr.arrange':`Orden de los botones`,
   'hdr.inSettings':`En los ajustes (ya no en la barra)`,
   'hdr.shortcuts':`Atajos`,
-  'hdr.dragHelp':`Arrastra los botones para ordenarlos. Zona de arriba: en la barra. Zona del medio: tras el botón «⋯» en móviles y pantallas pequeñas. Zona de abajo: en los ajustes, arriba de la pestaña General. El botón de ajustes siempre queda en la barra.`,
+  'hdr.dragHelp':`Arrastra los botones Logros, Estadísticas y Pastelerías para cambiar su orden en la barra, o suéltalos en la zona de abajo para ponerlos en los ajustes, bajo «Barra superior». Volver al inicio, Descargar, Pausa y Ajustes no se mueven.`,
   'emp.payHelp':`Puedes bajarle el salario, pero ya no subirlo. Cobrando menos, su moral máxima baja, y si cobra demasiado poco es probable que renuncie. Para motivarlo, dale una prima.`,
   'ach.nameRepairs':`{{v}} {{#v|reparación|reparaciones}}`,
   'ach.descRepairs':`Repara {{v}} {{#v|máquina o edificio averiado|máquinas o edificios averiados}}.`,

@@ -24,7 +24,7 @@ function setCard(title, body, extra) {
 // ============ REGLAGES ============
 function settingsPaneHTML() {
   var h = '';
-  if (ui.settingsTab === 'general') h = settingsShortcuts() + settingsGeneral();
+  if (ui.settingsTab === 'general') h = settingsGeneral();
   else if (ui.settingsTab === 'look') h = settingsLook();
   else if (ui.settingsTab === 'hdr') h = settingsHdr();
   else if (ui.settingsTab === 'audio') h = settingsAudio();
@@ -34,17 +34,29 @@ function settingsPaneHTML() {
   return h + '<p class="set-version">P2DS ' + versionLabel(GAME_VERSION) + ' · Turbonix Entertainment</p>';
 }
 
+function settingsMovedNav() {
+  var lay = hdrLayout(), h = '';
+  lay.order.forEach(function(id) {
+    if (lay.sett.indexOf(id) < 0) return;
+    var d = hdrDef(id);
+    if (d) h += '<button type="button" class="set-tab set-tab-moved" onclick="hdrShortcutRun(\'' + id + '\')">' + uiIcon(d.icon()) + '<span>' + escH(d.label()) + '</span></button>';
+  });
+  return h;
+}
+
 function showSettingsModal() {
   beginMenuPause();
-  var tabs = [['general', 'settings.tabGeneral', 'globe'], ['look', 'settings.tabLook', 'palette'], ['hdr', 'hdr.tab', 'more'], ['audio', 'settings.tabAudio', 'music']];
+  var tabs = [['general', 'settings.tabGeneral', 'globe'], ['look', 'settings.tabLook', 'palette'], ['audio', 'settings.tabAudio', 'music'], ['hdr', 'hdr.tab', 'topbar']];
   if (hasKeyboard()) tabs.push(['keys', 'settings.tabKeys', 'terminal']);
   var h = '<div class="set-head"><h2>' + uiIcon('settings') + t('settings.title') + '</h2>';
   h += '<button class="icon-btn" onclick="closeMenu()" aria-label="' + escH(t('common.close')) + '" title="' + escH(t('common.close')) + '">' + uiIcon('close') + '</button></div>';
   h += '<div class="set-body"><nav class="set-nav">';
   tabs.forEach(function(tb) {
+    if (tb[0] === 'keys') h += settingsMovedNav();
     var active = ui.settingsTab === tb[0];
     h += '<button class="set-tab' + (active ? ' active' : '') + '"' + (active ? ' aria-current="page"' : '') + ' onclick="ui.settingsTab=\'' + tb[0] + '\';showSettingsModal()">' + uiIcon(tb[2]) + '<span>' + t(tb[1]) + '</span></button>';
   });
+  if (!tabs.some(function(tb) { return tb[0] === 'keys'; })) h += settingsMovedNav();
   h += '</nav><div class="set-pane" id="set-pane">' + settingsPaneHTML() + '</div></div>';
   showModal(h, 'modal-settings');
 }
@@ -221,48 +233,35 @@ function settingsLook() {
   h += setCard('', setRow(t('settings.particles'), t('settings.particlesHelp'), setSwitch(!G.settings.reducedParticles, 'toggleParticles();showSettingsModal()', t('settings.particles'))));
   return h;
 }
-function setHdrZoom(v) { G.settings.hdrZoom = hdrClampZoom(v); renderHeader(); }
 function setHdrZoomSmall(v) { G.settings.hdrZoomSmall = hdrClampZoom(v); renderHeader(); }
-// L'onglet « Barre du haut » : la taille des boutons (grand et petit ecran) et leur rangement
+// L'onglet « Barre du haut » : la taille des boutons (telephone et tablette seulement) et le rangement des trois boutons deplacables
 function settingsHdr() {
-  function slider(label, help, val, fn, id) {
-    return setRow(label, help, '<div class="volume-row"><input type="range" min="60" max="160" step="5" value="' + val + '" aria-label="' + escH(label) + '" oninput="' + fn + '(this.value);document.getElementById(\'' + id + '\').textContent=this.value+\'%\'"><span id="' + id + '">' + val + '%</span></div>');
+  var h = '';
+  if (hdrIsSmall()) {
+    var val = Math.round(hdrZoomSmall() * 100);
+    h += setCard('', setRow(t('hdr.size'), t('hdr.sizeHelp'), '<div class="volume-row"><input type="range" min="60" max="160" step="5" value="' + val + '" aria-label="' + escH(t('hdr.size')) + '" oninput="setHdrZoomSmall(this.value);document.getElementById(\'hdr-zoom-val\').textContent=this.value+\'%\'"><span id="hdr-zoom-val">' + val + '%</span></div>'));
   }
-  return setCard(t('hdr.title'),
-    slider(t('hdr.sizeBig'), t('hdr.sizeBigHelp'), Math.round(hdrZoom() * 100), 'setHdrZoom', 'hdr-zoom-val') +
-    slider(t('hdr.sizeSmall'), t('hdr.sizeSmallHelp'), Math.round(hdrZoomSmall() * 100), 'setHdrZoomSmall', 'hdr-zoom-val-s')) +
-    setCard(t('hdr.arrange'), hdrLayoutHTML());
+  return h + setCard(t('hdr.arrange'), hdrLayoutHTML());
 }
-// Les boutons que tu as mis « dans les reglages » se retrouvent ici, en haut de l'onglet General
-function settingsShortcuts() {
-  var lay = hdrLayout(), h = '';
-  lay.order.forEach(function(id) {
-    if (lay.sett.indexOf(id) < 0) return;
-    var d = hdrDef(id);
-    if (d && d.show()) h += '<button type="button" class="btn hdr-short" onclick="hdrShortcutRun(\'' + id + '\')">' + uiIcon(d.icon()) + '<span>' + escH(d.label()) + '</span></button>';
-  });
-  return h ? setCard(t('hdr.shortcuts'), '<div class="hdr-shorts">' + h + '</div>') : '';
-}
+// Un bouton range dans les reglages : il a sa ligne dans le menu des reglages, sous « Barre du haut »
 function hdrShortcutRun(id) { var d = hdrDef(id); if (!d) return; closeMenu(); setTimeout(function() { (new Function(d.action))(); }, 60); }
 
-// Les boutons de l'en-tete : on les glisse (souris ou doigt) pour les ranger, et dans la zone du bas pour les mettre dans le menu « ... » des petits ecrans
 function hdrChipHTML(id) {
   var d = hdrDef(id);
   if (!d) return '';
-  return '<div class="hdr-chip' + (id === 'settings' ? ' pinned' : '') + '" data-id="' + id + '" onpointerdown="hdrDragStart(event)" title="' + escH(d.label()) + '">' + uiIcon(d.icon()) + '<span>' + escH(d.label()) + '</span></div>';
+  return '<div class="hdr-chip" data-id="' + id + '" onpointerdown="hdrDragStart(event)" title="' + escH(d.label()) + '">' + uiIcon(d.icon()) + '<span>' + escH(d.label()) + '</span></div>';
 }
 function hdrLayoutHTML() {
-  var lay = hdrLayout(), bar = '', menu = '', sett = '';
-  lay.order.forEach(function(id) { if (lay.sett.indexOf(id) >= 0) sett += hdrChipHTML(id); else if (lay.menu.indexOf(id) >= 0) menu += hdrChipHTML(id); else bar += hdrChipHTML(id); });
+  var lay = hdrLayout(), bar = '', sett = '';
+  lay.order.forEach(function(id) { if (lay.sett.indexOf(id) >= 0) sett += hdrChipHTML(id); else bar += hdrChipHTML(id); });
   return '<p class="set-help">' + t('hdr.dragHelp') + '</p>' +
     '<div class="hdr-zone-label">' + t('hdr.inBar') + '</div><div class="hdr-zone" data-zone="bar">' + bar + '</div>' +
-    '<div class="hdr-zone-label">' + t('hdr.inMenu') + '</div><div class="hdr-zone" data-zone="menu">' + menu + '</div>' +
     '<div class="hdr-zone-label">' + t('hdr.inSettings') + '</div><div class="hdr-zone" data-zone="sett">' + sett + '</div>';
 }
 var hdrDrag = null;
 function hdrDragStart(e) {
   var chip = e.currentTarget;
-  if (e.button > 0 || chip.classList.contains('pinned') && false) return;
+  if (e.button > 0) return;
   e.preventDefault();
   var r = chip.getBoundingClientRect();
   var ghost = chip.cloneNode(true);
@@ -301,14 +300,11 @@ function hdrDragEnd() {
   hdrDrag = null;
   d.chip.classList.remove('dragging');
   if (d.ghost.parentNode) d.ghost.parentNode.removeChild(d.ghost);
-  var bar = [], menu = [], sett = [];
+  var bar = [], sett = [];
   document.querySelectorAll('.hdr-zone[data-zone="bar"] .hdr-chip').forEach(function(c) { bar.push(c.dataset.id); });
-  document.querySelectorAll('.hdr-zone[data-zone="menu"] .hdr-chip').forEach(function(c) { if (c.dataset.id !== 'settings') menu.push(c.dataset.id); else bar.push('settings'); });
-  document.querySelectorAll('.hdr-zone[data-zone="sett"] .hdr-chip').forEach(function(c) { if (c.dataset.id !== 'settings') sett.push(c.dataset.id); else bar.push('settings'); });
-  G.settings.hdrOrder = bar.concat(menu, sett);
-  G.settings.hdrMenu = menu;
+  document.querySelectorAll('.hdr-zone[data-zone="sett"] .hdr-chip').forEach(function(c) { sett.push(c.dataset.id); });
+  G.settings.hdrOrder = bar.concat(sett);
   G.settings.hdrSett = sett;
-  ui.hdrPop = false;
   renderHeader();
   showSettingsModal();
 }

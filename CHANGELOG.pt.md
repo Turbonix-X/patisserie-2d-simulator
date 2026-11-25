@@ -9,8 +9,9 @@ Bengali, um tema de São Valentim, a barra de cima finalmente ajustável, e o jo
 **Novidades e correções**
 - O bengali (বাংলা) foi adicionado, completo: todos os textos do jogo, os nomes das conquistas, o guia de comandos e este histórico.
 - O tema Amor, só em fevereiro: corações que sobem, rosas, cartas e chocolate.
-- O prémio voltou, mas já não se pode aumentar um salário (só baixar). Os aumentos já feitos são anulados.
-- Definições, separador «Barra de cima»: o tamanho dos botões ajusta-se à parte para ecrã grande e para telemóvel e tablet, e cada botão arruma-se arrastando-o para três zonas: a barra, o menu «⋯» dos ecrãs pequenos, ou as definições (no topo do separador Geral).
+- O prémio voltou, e o salário já não se ajusta: os ajustes de salário anteriores são anulados.
+- Barra de cima: arrasta os botões Conquistas, Estatísticas e Pastelarias para mudar a ordem ou levá-los para as definições, por baixo de «Barra de cima». Voltar ao início, Transferir, Pausa e Definições ficam no lugar, e o menu «⋯» foi retirado. No telemóvel e no tablet, um cursor ajusta o tamanho dos botões.
+- Os temas e o menu das definições têm uma ordem nova e fixa.
 - Mais 10 conquistas, ou seja 1050 e os 5 segredos: 5 por avarias reparadas e 5 por mecânicos.
 - O instalador do Windows e as atualizações da app vêm agora de p2ds.pages.dev, já não do GitHub. No antigo endereço do GitHub Pages, um aviso mostra o novo.
 

@@ -9,8 +9,9 @@ Bengali, a Valentine's theme, the top bar finally adjustable, and the game no lo
 **What is new**
 - Bengali (বাংলা) is added, in full: every text of the game, the achievement names, the command guide and this changelog.
 - The Love theme, only in February: rising hearts, roses, letters and chocolate.
-- The bonus is back, but a salary can no longer be raised (only lowered). Raises already given are cancelled.
-- Settings, “Top bar” tab: button size is set separately for big screens and for phones and tablets, and each button is arranged by dragging it into three zones: the bar, the “⋯” menu of small screens, or the settings (at the top of the General tab).
+- The bonus is back, and salaries can no longer be adjusted: old salary settings are cancelled.
+- Top bar: drag the Achievements, Statistics and Bakeries buttons to change their order or move them into the settings, under “Top bar”. Back to the home page, Download, Pause and Settings stay where they are, and the “⋯” menu is removed. On phones and tablets, a slider sets the button size.
+- Themes and the settings menu have a new, fixed order.
 - 10 more achievements, for 1050 plus the 5 secrets: 5 for repairs done and 5 for mechanics.
 - The Windows installer and the app's updates now come from p2ds.pages.dev, not GitHub. On the old GitHub Pages address, a banner shows the new one.
 

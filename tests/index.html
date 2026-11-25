@@ -474,11 +474,11 @@ check('Plus d intendant a embaucher', !findEmpType('buyer'));
   check('... et une seule fois', again.money === 600 + each * 2);
   check('Plus de touche-a-tout a embaucher', !findEmpType('versatile'));
   G = createFreshState(); G.level = 100;
-  check('La prime est de retour, mais plus d augmentation de salaire', typeof giveBonus === 'function' && PAY_STEPS.join() === '-50,-20,-10,-5,0');
+  check('La prime est la, et le salaire ne se regle plus', typeof giveBonus === 'function' && typeof setPay === 'undefined' && typeof setEmpPay === 'undefined' && typeof PAY_STEPS === 'undefined');
   (function() {
     var old = createFreshState(); old.employees = [{ id: 1, type: 'baker', level: 1, skill: 50, morale: 80, status: 'working', payAdj: 20 }, { id: 2, type: 'baker', level: 1, skill: 50, morale: 80, status: 'working', payAdj: -10 }];
     var mg = migrateSave(old);
-    check('Les augmentations deja faites sont annulees, les baisses restent', mg.employees[0].payAdj === 0 && mg.employees[1].payAdj === -10);
+    check('Les anciens reglages de salaire sont annules', mg.employees.every(function(e) { return !e.payAdj; }) && maxMorale(mg.employees[0]) === 100);
     G = createFreshState(); G.level = 50; G.money = 1e6; var be = newEmployee('baker', 'Pia', 50, 1); be.morale = 50; G.employees = [be];
     check('Une prime remonte le moral de 25 et coute de l argent', giveBonus(be.id) === true && be.morale === 75 && G.money < 1e6);
   })();
@@ -554,8 +554,10 @@ check('Plus d intendant a embaucher', !findEmpType('buyer'));
   G = createFreshState(); G.closedAt = 0;
   check('La partie sait qu elle a ete fermee par le menu', G.closedAt === 0 && 'lastActive' in G);
   check('Il faut 1 000 000 de feuilles d or pour le theme dore', findTheme('gold').gotIng.n === 1000000);
-  var ev = hdrLayout();
-  check('Les boutons de l en-tete ont un ordre, le bouton des reglages ne quitte jamais l en-tete', ev.order.length === HDR_IDS.length && ev.menu.indexOf('settings') < 0);
+  G = createFreshState(); G.settings.hdrOrder = ['stats', 'settings', 'bakeries', 'back']; G.settings.hdrSett = ['ach', 'pause', 'settings'];
+  check('Seuls les succes, les statistiques et les patisseries se deplacent', HDR_MOVABLE.join() === 'bakeries,ach,stats' && hdrLayout().sett.join() === 'ach');
+  check('Retour, telechargement, pause et reglages gardent leur place', hdrBarIds().join() === 'back,install,stats,bakeries,pause,settings', hdrBarIds().join());
+  check('L ordre des themes est fixe', THEME_LIST.map(function(x) { return x.id; }).join() === 'light,dark,fall,winter,spring,summer,horror,love,cookie,tech,techgold,gold,birthday,bakery,party,space');
 })();
 
 G = createFreshState(); G.level = 499;
@@ -812,10 +814,6 @@ check('Changer de metier prend entre 10 s et 1 min', !other || (setFocus(vers, o
 G = createFreshState(); G.level = 50;
 var emp5 = newEmployee('baker', 'Pierre', 50, 1); G.employees = [emp5];
 var sal0 = getEmpSalary(emp5);
-check('Un salaire plus bas baisse la motivation maximale', (function() { emp5.payAdj = -10; return maxMorale(emp5) === 90 && getEmpSalary(emp5) < sal0; })());
-check('Les paliers de salaire (que des baisses)', PAY_STEPS.join() === '-50,-20,-10,-5,0');
-var quits = 0; for (var pq = 0; pq < 200; pq++) { var pe = newEmployee('baker', 'Eva', 50, 1); G.employees = [pe]; if (setPay(pe, -50) === 'quit') quits++; }
-check('A -50 %, il demissionne presque toujours', quits > 150, quits);
 check('Les prix montent quand la perte baisse', lossCostMult(0) > lossCostMult(10) && lossCostMult(10) > lossCostMult(50) && lossCostMult(50) > lossCostMult(100));
 var losses = []; for (var ls4 = 0; ls4 < 2000; ls4++) losses.push(sampleLoss());
 check('La perte est entre 1 et 20 % en general, rarement pres de 0 ou de 100', losses.every(function(v) { return v >= 0 && v <= 100; }) && losses.filter(function(v) { return v >= 1 && v <= 20; }).length > 1400 && losses.filter(function(v) { return v > 60; }).length < 40);

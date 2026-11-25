@@ -233,7 +233,6 @@ var EMP_MAX_LVL = 10;   // les niveaux qu'on peut former
 var EMP_GOLD_LVL = 11;  // le niveau or : seulement en candidature, a partir du niveau 120
 // Niveau du joueur a partir duquel un candidat de ce niveau peut se presenter
 var APPLICANT_LVL_REQ = { 1:0, 2:0, 3:15, 4:25, 5:35, 6:50, 7:65, 8:80, 9:95, 10:110, 11:120 };
-var PAY_STEPS = [-50, -20, -10, -5, 0];   // on peut baisser le salaire, plus l'augmenter (la prime remonte le moral)
 var VERSATILE_MAX_JOB_LVL = 3;
 
 var EMP_NAMES_LANG = {
@@ -558,22 +557,23 @@ function parseLiquidAmount(rawAmount, unit) {
 // Clair et sombre : toujours. Saisons : pendant la saison, ou pour toujours avec /theme unlock.
 // Anniversaire : le jour de ton anniversaire, ou pour toujours avec /theme unlock.
 var THEME_LIST = [
+  // Cet ordre est celui des reglages : ne pas le changer
   { id:'light',    langKey:'settings.themeLight' },
   { id:'dark',     langKey:'settings.themeDark' },
-  { id:'spring',   langKey:'settings.themeSpring', season:true },
-  { id:'summer',   langKey:'settings.themeSummer', season:true },
   { id:'fall',     langKey:'settings.themeFall',   season:true },
   { id:'winter',   langKey:'settings.themeWinter', season:true },
-  { id:'birthday', langKey:'settings.themeBirthday', birthday:true },
+  { id:'spring',   langKey:'settings.themeSpring', season:true },
+  { id:'summer',   langKey:'settings.themeSummer', season:true },
   { id:'horror',   langKey:'settings.themeHorror', month:10 }, // Seulement en octobre
   { id:'love',     langKey:'settings.themeLove', month:2 },    // Seulement en fevrier : la Saint-Valentin
-  { id:'bakery',   langKey:'settings.themeBakery', level:100, hidden:true },
-  { id:'party',    langKey:'settings.themeParty', level:500, hidden:true },
-  { id:'space',    langKey:'settings.themeSpace', level:1000, hidden:true },
   { id:'cookie',   langKey:'settings.themeCookie', sold:{ rec:'cookie', n:50000 }, hidden:true }, // 50 000 cookies vendus
   { id:'tech',     langKey:'settings.themeTech', secret:true },     // 1000 clics sur Bob sans la console
   { id:'techgold', langKey:'settings.themeTechGold', secret:true }, // Bob en or massif
   { id:'gold', langKey:'settings.themeGold', gotIng:{ id:'orfeuille', n:1000000 }, hidden:true }, // 1 000 000 de feuilles d'or alimentaires : Bob devient dore
+  { id:'birthday', langKey:'settings.themeBirthday', birthday:true },
+  { id:'bakery',   langKey:'settings.themeBakery', level:100, hidden:true },
+  { id:'party',    langKey:'settings.themeParty', level:500, hidden:true },
+  { id:'space',    langKey:'settings.themeSpace', level:1000, hidden:true },
 ];
 
 // Un tout petit peu moins cher, c'etait trop facile

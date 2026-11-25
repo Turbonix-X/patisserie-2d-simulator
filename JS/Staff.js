@@ -378,10 +378,6 @@ function showEmpInfoModal(empId) {
   if (empSwitching(emp)) h += '<p class="warning js-switch" data-until="' + emp.switchUntil + '">' + t('emp.switching', { t: fmtTime((emp.switchUntil - Date.now()) / 1000) }) + '</p>';
   var config = empConfigHTML(emp);
   if (config) h += '<section class="set-card emp-config"><h3>' + t('emp.config') + '</h3>' + config + '</section>';
-  // La paie : plus bas, moins motive. Trop bas, il demissionne.
-  h += '<section class="set-card emp-config"><h3>' + t('emp.pay') + '</h3><label class="cfg-row">' + t('emp.payAdj') + '<select class="set-select" onchange="setEmpPay(' + emp.id + ',parseInt(this.value,10))">';
-  PAY_STEPS.forEach(function(p) { h += '<option value="' + p + '"' + ((emp.payAdj || 0) === p ? ' selected' : '') + '>' + (p > 0 ? '+' : '') + p + ' %</option>'; });
-  h += '</select></label><p class="set-help">' + t('emp.payHelp') + '</p></section>';
   h += '<div class="emp-actions">';
   if (emp.type !== 'novice') {
     if ((emp.level || 1) >= EMP_MAX_LVL) h += '<button class="btn" disabled>' + t('emp.trainMax') + '</button>';
@@ -392,17 +388,6 @@ function showEmpInfoModal(empId) {
   h += '<button class="btn btn-danger" onclick="confirmFire(' + emp.id + ')">' + t('emp.fire') + '</button></div>';
   h += '<div class="modal-btns"><button class="btn" onclick="hideModal()">' + t('common.close') + '</button></div>';
   showModal(h, 'modal-emp');
-}
-
-function setEmpPay(empId, adj) {
-  var emp = findEmp(empId);
-  if (!emp) return;
-  var name = emp.name;
-  var r = setPay(emp, adj);
-  if (r === 'quit') { toast(t('emp.payQuit', { n: name })); hideModal(); renderEmployees(); return; }
-  save();
-  showEmpInfoModal(empId);
-  renderEmployees();
 }
 
 // Le compte a rebours d'un cueilleur ou d'un touche-a-tout qui change de poste, mis a jour en direct dans sa fiche

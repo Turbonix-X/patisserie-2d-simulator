@@ -435,7 +435,7 @@ Object.assign(LANGS.en, {
   'hdr.arrange':`Arranging the buttons`,
   'hdr.inSettings':`In the settings (no longer in the bar)`,
   'hdr.shortcuts':`Shortcuts`,
-  'hdr.dragHelp':`Drag the buttons to arrange them. Top zone: in the bar. Middle zone: behind the “⋯” button on phones and small screens. Bottom zone: in the settings, at the top of the General tab. The settings button always stays in the bar.`,
+  'hdr.dragHelp':`Drag the Achievements, Statistics and Bakeries buttons to change their order in the bar, or drop them in the bottom zone to put them in the settings, under “Top bar”. Back to the home page, Download, Pause and Settings stay where they are.`,
   'emp.payHelp':`You can lower their pay, but no longer raise it. Paid less, their top morale is lower, and if they are paid too little they are likely to quit. To motivate them, give them a bonus.`,
   'ach.nameRepairs':`{{v}} {{#v|repair|repairs}}`,
   'ach.descRepairs':`Repair {{v}} broken {{#v|machine or building|machines or buildings}}.`,

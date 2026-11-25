@@ -81,7 +81,7 @@ var UI_ICONS = {
   play: '<path d="M7 4.500v15l12-7.500z"/>',
   soundOn: '<path d="M11 5 6 9H2v6h4l5 4z"/><path d="M15.500 8.500a5 5 0 0 1 0 7"/><path d="M19 5a10 10 0 0 1 0 14"/>',
   soundOff: '<path d="M11 5 6 9H2v6h4l5 4z"/><path d="m22 9-6 6"/><path d="m16 9 6 6"/>',
-  more: '<circle cx="5" cy="12" r="1.600"/><circle cx="12" cy="12" r="1.600"/><circle cx="19" cy="12" r="1.600"/>',
+  topbar: '<rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 10h18M7 7h.01M11 7h.01"/>',
   settings: '<path d="M4 6h9M19 6h1M4 12h1M11 12h9M4 18h7M17 18h3"/><circle cx="16" cy="6" r="2.500"/><circle cx="8" cy="12" r="2.500"/><circle cx="14" cy="18" r="2.500"/>',
   back: '<path d="M10 6l-6 6 6 6M4 12h16"/>',
   trash: '<path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13M10 11v6M14 11v6"/>',
