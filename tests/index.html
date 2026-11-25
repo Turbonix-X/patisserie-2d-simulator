@@ -557,6 +557,10 @@ check('Plus d intendant a embaucher', !findEmpType('buyer'));
   G = createFreshState(); G.settings.hdrOrder = ['stats', 'settings', 'bakeries', 'back']; G.settings.hdrSett = ['ach', 'pause', 'settings'];
   check('Seuls les succes, les statistiques et les patisseries se deplacent', HDR_MOVABLE.join() === 'bakeries,ach,stats' && hdrLayout().sett.join() === 'ach');
   check('Retour, telechargement, pause et reglages gardent leur place', hdrBarIds().join() === 'back,install,stats,bakeries,pause,settings', hdrBarIds().join());
+  if (typeof statsPane !== 'function') window.statsPane = function() { return 'stats'; };   // les graphiques ne sont pas charges ici
+  ui.settingsTab = 'ach'; G.settings.hdrSett = ['ach', 'stats', 'bakeries'];
+  check('Un bouton range dans les reglages y ouvre un vrai onglet, avec le menu a gauche', /id="ach-pane"/.test(settingsPaneHTML()) && (ui.settingsTab = 'stats', /id="stats-pane"/.test(settingsPaneHTML())) && (ui.settingsTab = 'bakeries', /bakery-card/.test(settingsPaneHTML())) && /set-tab active/.test(settingsMovedNav()));
+  ui.settingsTab = 'general';
   check('L ordre des themes est fixe', THEME_LIST.map(function(x) { return x.id; }).join() === 'light,dark,fall,winter,spring,summer,horror,love,cookie,tech,techgold,gold,birthday,bakery,party,space');
 })();
 

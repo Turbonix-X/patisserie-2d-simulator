@@ -14,6 +14,7 @@ Bengalí, un tema de San Valentín, la barra superior por fin ajustable, y el ju
 - Los temas y el menú de ajustes tienen un orden nuevo y fijo.
 - 10 logros más, es decir 1050 y los 5 secretos: 5 por averías reparadas y 5 por mecánicos.
 - El instalador de Windows y las actualizaciones de la app ahora vienen de p2ds.pages.dev, ya no de GitHub. En la antigua dirección de GitHub Pages, un aviso indica la nueva.
+- Un botón movido a los ajustes se abre allí como una pestaña de verdad, con el menú siempre a la izquierda. Y el número de XP vuelve a leerse en los temas oscuros (Fiesta, Espacio, Terror).
 
 ## Release 1.3.5 (25 de noviembre de 2026)
 

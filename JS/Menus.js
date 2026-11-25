@@ -29,23 +29,30 @@ function settingsPaneHTML() {
   else if (ui.settingsTab === 'hdr') h = settingsHdr();
   else if (ui.settingsTab === 'audio') h = settingsAudio();
   else if (ui.settingsTab === 'keys') h = settingsKeys();
-  else if (ui.settingsTab === 'stats') h = statsPane();
+  else if (ui.settingsTab === 'stats') h = '<div id="stats-pane">' + statsPane() + '</div>';
+  else if (ui.settingsTab === 'ach') h = '<div id="ach-pane">' + settingsAchievements() + '</div>';
+  else if (ui.settingsTab === 'bakeries') h = bakeriesPaneHTML();
   else h = settingsGeneral();
   return h + '<p class="set-version">P2DS ' + versionLabel(GAME_VERSION) + ' · Turbonix Entertainment</p>';
 }
 
+// Les boutons de la barre du haut ranges dans les reglages : de vrais onglets, sous « Barre du haut »
+var MOVED_TABS = ['bakeries', 'ach', 'stats'];
 function settingsMovedNav() {
   var lay = hdrLayout(), h = '';
   lay.order.forEach(function(id) {
     if (lay.sett.indexOf(id) < 0) return;
-    var d = hdrDef(id);
-    if (d) h += '<button type="button" class="set-tab set-tab-moved" onclick="hdrShortcutRun(\'' + id + '\')">' + uiIcon(d.icon()) + '<span>' + escH(d.label()) + '</span></button>';
+    var d = hdrDef(id), active = ui.settingsTab === id;
+    if (d) h += '<button type="button" class="set-tab' + (active ? ' active' : '') + '"' + (active ? ' aria-current="page"' : '') + ' onclick="ui.settingsTab=\'' + id + '\';showSettingsModal()">' + uiIcon(d.icon()) + '<span>' + escH(d.label()) + '</span></button>';
   });
   return h;
 }
 
 function showSettingsModal() {
   beginMenuPause();
+  // Un onglet range puis remis dans la barre du haut n'existe plus ici
+  if (MOVED_TABS.indexOf(ui.settingsTab) >= 0 && hdrLayout().sett.indexOf(ui.settingsTab) < 0) ui.settingsTab = 'general';
+  ui.bakeriesInSettings = ui.settingsTab === 'bakeries';
   var tabs = [['general', 'settings.tabGeneral', 'globe'], ['look', 'settings.tabLook', 'palette'], ['audio', 'settings.tabAudio', 'music'], ['hdr', 'hdr.tab', 'topbar']];
   if (hasKeyboard()) tabs.push(['keys', 'settings.tabKeys', 'terminal']);
   var h = '<div class="set-head"><h2>' + uiIcon('settings') + t('settings.title') + '</h2>';
@@ -243,8 +250,6 @@ function settingsHdr() {
   }
   return h + setCard(t('hdr.arrange'), hdrLayoutHTML());
 }
-// Un bouton range dans les reglages : il a sa ligne dans le menu des reglages, sous « Barre du haut »
-function hdrShortcutRun(id) { var d = hdrDef(id); if (!d) return; closeMenu(); setTimeout(function() { (new Function(d.action))(); }, 60); }
 
 function hdrChipHTML(id) {
   var d = hdrDef(id);

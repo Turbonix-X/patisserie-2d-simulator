@@ -14,6 +14,7 @@ Le bengali, un thème pour la Saint-Valentin, la barre du haut enfin réglable, 
 - Les thèmes et le menu des réglages ont un nouvel ordre, fixe.
 - 10 succès de plus, soit 1050 et les 5 secrets : 5 pour les pannes réparées et 5 pour les mécaniciens.
 - L'installeur Windows et les mises à jour de l'appli viennent maintenant de p2ds.pages.dev, plus de GitHub. Sur l'ancienne adresse GitHub Pages, une bannière indique la nouvelle.
+- Un bouton rangé dans les réglages s'y ouvre comme un vrai onglet, avec le menu toujours à gauche. Et le nombre d'XP se lit de nouveau dans les thèmes sombres (Fête, Espace, Horreur).
 
 ## Release 1.3.5 (25 novembre 2026)
 

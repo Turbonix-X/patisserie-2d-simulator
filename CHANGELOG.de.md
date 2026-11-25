@@ -14,6 +14,7 @@ Bengalisch, ein Valentinstag-Design, die obere Leiste endlich einstellbar, und d
 - Die Designs und das Einstellungsmenü haben eine neue, feste Reihenfolge.
 - 10 weitere Erfolge, also 1050 und die 5 geheimen: 5 für reparierte Defekte und 5 für Mechaniker.
 - Der Windows-Installer und die Updates der App kommen jetzt von p2ds.pages.dev, nicht mehr von GitHub. Auf der alten GitHub-Pages-Adresse zeigt ein Banner die neue.
+- Ein in die Einstellungen verschobener Knopf öffnet sich dort als richtiger Tab, das Menü bleibt links. Und die XP-Zahl ist in dunklen Designs (Party, Weltraum, Horror) wieder lesbar.
 
 ## Release 1.3.5 (25. November 2026)
 

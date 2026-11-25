@@ -17,7 +17,8 @@
        "الشريط العلوي: اسحب أزرار الإنجازات والإحصائيات والمحلات لتغيير ترتيبها أو نقلها إلى الإعدادات تحت «الشريط العلوي». أزرار الرئيسية والتنزيل والإيقاف والإعدادات تبقى في مكانها، وأُزيلت قائمة «⋯». على الهاتف واللوحي يضبط شريط تمرير حجم الأزرار.",
        "صار للثيمات ولقائمة الإعدادات ترتيب جديد ثابت.",
        "10 إنجازات إضافية، أي 1050 مع الأسرار الخمسة: 5 للأعطال المُصلَحة و5 للميكانيكيين.",
-       "مُثبّت Windows وتحديثات التطبيق تأتي الآن من p2ds.pages.dev لا من GitHub. على عنوان GitHub Pages القديم يظهر شريط يدل على العنوان الجديد."
+       "مُثبّت Windows وتحديثات التطبيق تأتي الآن من p2ds.pages.dev لا من GitHub. على عنوان GitHub Pages القديم يظهر شريط يدل على العنوان الجديد.",
+       "الزر المنقول إلى الإعدادات يُفتح هناك كتبويب حقيقي، وتبقى القائمة على الجانب. وعاد رقم XP مقروءًا في الثيمات الداكنة (الحفلة، الفضاء، الرعب)."
       ]
      }
     ]
@@ -516,7 +517,8 @@
        "ওপরের বার: অর্জন, পরিসংখ্যান ও বেকারির বোতাম টেনে ক্রম বদলান বা সেটিংসে «ওপরের বার» এর নিচে নিয়ে যান। হোম, ডাউনলোড, বিরতি ও সেটিংস নিজের জায়গায় থাকে, আর “⋯” মেনু সরানো হয়েছে। ফোন ও ট্যাবলেটে একটি স্লাইডারে বোতামের আকার ঠিক করা যায়।",
        "থিম আর সেটিংস মেনুর এখন নতুন, স্থায়ী ক্রম আছে।",
        "আরও ১০টি অর্জন, মানে ১০৫০টি আর ৫টি গোপন: ৫টি মেরামতের জন্য আর ৫টি মেকানিকের জন্য।",
-       "Windows ইনস্টলার আর অ্যাপের আপডেট এখন GitHub থেকে নয়, p2ds.pages.dev থেকে আসে। পুরনো GitHub Pages ঠিকানায় একটি ব্যানার নতুন ঠিকানা জানায়।"
+       "Windows ইনস্টলার আর অ্যাপের আপডেট এখন GitHub থেকে নয়, p2ds.pages.dev থেকে আসে। পুরনো GitHub Pages ঠিকানায় একটি ব্যানার নতুন ঠিকানা জানায়।",
+       "সেটিংসে সরানো বোতাম সেখানে আসল ট্যাবের মতো খোলে, মেনু বাঁদিকেই থাকে। গাঢ় থিমে (পার্টি, মহাকাশ, ভয়) XP সংখ্যা আবার পড়া যায়।"
       ]
      }
     ]
@@ -541,7 +543,8 @@
        "Obere Leiste: Zieh die Knöpfe Erfolge, Statistiken und Konditoreien, um ihre Reihenfolge zu ändern oder sie in die Einstellungen unter „Obere Leiste“ zu setzen. Zur Startseite, Herunterladen, Pause und Einstellungen bleiben an ihrem Platz, und das „⋯“-Menü ist weg. Auf Handy und Tablet stellt ein Regler die Größe der Knöpfe ein.",
        "Die Designs und das Einstellungsmenü haben eine neue, feste Reihenfolge.",
        "10 weitere Erfolge, also 1050 und die 5 geheimen: 5 für reparierte Defekte und 5 für Mechaniker.",
-       "Der Windows-Installer und die Updates der App kommen jetzt von p2ds.pages.dev, nicht mehr von GitHub. Auf der alten GitHub-Pages-Adresse zeigt ein Banner die neue."
+       "Der Windows-Installer und die Updates der App kommen jetzt von p2ds.pages.dev, nicht mehr von GitHub. Auf der alten GitHub-Pages-Adresse zeigt ein Banner die neue.",
+       "Ein in die Einstellungen verschobener Knopf öffnet sich dort als richtiger Tab, das Menü bleibt links. Und die XP-Zahl ist in dunklen Designs (Party, Weltraum, Horror) wieder lesbar."
       ]
      }
     ]
@@ -1040,7 +1043,8 @@
        "Top bar: drag the Achievements, Statistics and Bakeries buttons to change their order or move them into the settings, under “Top bar”. Back to the home page, Download, Pause and Settings stay where they are, and the “⋯” menu is removed. On phones and tablets, a slider sets the button size.",
        "Themes and the settings menu have a new, fixed order.",
        "10 more achievements, for 1050 plus the 5 secrets: 5 for repairs done and 5 for mechanics.",
-       "The Windows installer and the app's updates now come from p2ds.pages.dev, not GitHub. On the old GitHub Pages address, a banner shows the new one."
+       "The Windows installer and the app's updates now come from p2ds.pages.dev, not GitHub. On the old GitHub Pages address, a banner shows the new one.",
+       "A button moved into the settings opens there as a real tab, with the menu still on the left. And the XP number is readable again in dark themes (Party, Space, Horror)."
       ]
      }
     ]
@@ -2065,7 +2069,8 @@
        "Barra superior: arrastra los botones Logros, Estadísticas y Pastelerías para cambiar su orden o llevarlos a los ajustes, bajo «Barra superior». Volver al inicio, Descargar, Pausa y Ajustes no se mueven, y se quita el menú «⋯». En móviles y tabletas, un control ajusta el tamaño de los botones.",
        "Los temas y el menú de ajustes tienen un orden nuevo y fijo.",
        "10 logros más, es decir 1050 y los 5 secretos: 5 por averías reparadas y 5 por mecánicos.",
-       "El instalador de Windows y las actualizaciones de la app ahora vienen de p2ds.pages.dev, ya no de GitHub. En la antigua dirección de GitHub Pages, un aviso indica la nueva."
+       "El instalador de Windows y las actualizaciones de la app ahora vienen de p2ds.pages.dev, ya no de GitHub. En la antigua dirección de GitHub Pages, un aviso indica la nueva.",
+       "Un botón movido a los ajustes se abre allí como una pestaña de verdad, con el menú siempre a la izquierda. Y el número de XP vuelve a leerse en los temas oscuros (Fiesta, Espacio, Terror)."
       ]
      }
     ]
@@ -2564,7 +2569,8 @@
        "ऊपर की पट्टी: उपलब्धियाँ, आँकड़े और बेकरियाँ वाले बटन खींचकर उनका क्रम बदलें या उन्हें सेटिंग्स में «ऊपर की पट्टी» के नीचे ले जाएँ। होम, डाउनलोड, रोकना और सेटिंग्स अपनी जगह पर रहते हैं, और “⋯” मेन्यू हटा दिया गया है। फ़ोन और टैबलेट पर एक स्लाइडर से बटन का आकार तय होता है।",
        "थीम और सेटिंग्स मेन्यू का अब नया, तय क्रम है।",
        "10 उपलब्धियाँ और जुड़ीं, यानी 1050 और 5 गुप्त: 5 मरम्मत के लिए और 5 मैकेनिकों के लिए।",
-       "Windows इंस्टॉलर और ऐप के अपडेट अब GitHub से नहीं, p2ds.pages.dev से आते हैं। पुराने GitHub Pages पते पर एक बैनर नया पता बताता है।"
+       "Windows इंस्टॉलर और ऐप के अपडेट अब GitHub से नहीं, p2ds.pages.dev से आते हैं। पुराने GitHub Pages पते पर एक बैनर नया पता बताता है।",
+       "सेटिंग्स में ले जाया गया बटन वहाँ असली टैब की तरह खुलता है, और मेन्यू बाईं ओर बना रहता है। गहरी थीम (पार्टी, अंतरिक्ष, हॉरर) में XP की संख्या फिर से पढ़ी जा सकती है।"
       ]
      }
     ]
@@ -2605,7 +2611,8 @@
        "上のバー：実績・統計・お店のボタンはドラッグで順番を変えたり、設定の「上のバー」の下に移したりできます。ホームに戻る、ダウンロード、一時停止、設定の位置は固定で、「⋯」メニューはなくなりました。スマホとタブレットではスライダーでボタンの大きさを調節します。",
        "テーマと設定メニューの順番が新しくなり、固定されました。",
        "実績が10個増えて、1050個と隠し実績5個になりました：修理で5個、整備士で5個です。",
-       "Windows のインストーラーとアプリの更新は、GitHub ではなく p2ds.pages.dev から届くようになりました。古い GitHub Pages のアドレスには新しいアドレスを知らせるバナーが出ます。"
+       "Windows のインストーラーとアプリの更新は、GitHub ではなく p2ds.pages.dev から届くようになりました。古い GitHub Pages のアドレスには新しいアドレスを知らせるバナーが出ます。",
+       "設定に移したボタンは本物のタブとして開き、メニューは左に表示されたままです。暗いテーマ（パーティー、宇宙、ホラー）でも XP の数字が読めるようになりました。"
       ]
      }
     ]
@@ -3104,7 +3111,8 @@
        "상단 바: 업적, 통계, 가게 버튼을 끌어서 순서를 바꾸거나 설정의 ‘상단 바’ 아래로 옮길 수 있어요. 홈으로, 다운로드, 일시정지, 설정은 자리가 고정이고 “⋯” 메뉴는 없어졌어요. 휴대폰과 태블릿에서는 슬라이더로 버튼 크기를 조절해요.",
        "테마와 설정 메뉴의 순서가 새로 고정됐어요.",
        "업적이 10개 늘어 1050개와 숨은 업적 5개가 됐어요: 수리로 5개, 정비사로 5개예요.",
-       "Windows 설치 파일과 앱 업데이트는 이제 GitHub가 아니라 p2ds.pages.dev에서 와요. 예전 GitHub Pages 주소에는 새 주소를 알리는 배너가 떠요."
+       "Windows 설치 파일과 앱 업데이트는 이제 GitHub가 아니라 p2ds.pages.dev에서 와요. 예전 GitHub Pages 주소에는 새 주소를 알리는 배너가 떠요.",
+       "설정으로 옮긴 버튼은 진짜 탭처럼 열리고 메뉴는 왼쪽에 그대로 있어요. 어두운 테마(파티, 우주, 공포)에서도 XP 숫자가 다시 잘 보여요."
       ]
      }
     ]
@@ -3603,7 +3611,8 @@
        "Barre du haut : les boutons Succès, Statistiques et Pâtisseries se glissent pour changer d'ordre ou vont dans les réglages, sous « Barre du haut ». Retour à l'accueil, Télécharger, Pause et Réglages gardent leur place, et le menu « ⋯ » est retiré. Sur téléphone et tablette, un curseur règle la taille des boutons.",
        "Les thèmes et le menu des réglages ont un nouvel ordre, fixe.",
        "10 succès de plus, soit 1050 et les 5 secrets : 5 pour les pannes réparées et 5 pour les mécaniciens.",
-       "L'installeur Windows et les mises à jour de l'appli viennent maintenant de p2ds.pages.dev, plus de GitHub. Sur l'ancienne adresse GitHub Pages, une bannière indique la nouvelle."
+       "L'installeur Windows et les mises à jour de l'appli viennent maintenant de p2ds.pages.dev, plus de GitHub. Sur l'ancienne adresse GitHub Pages, une bannière indique la nouvelle.",
+       "Un bouton rangé dans les réglages s'y ouvre comme un vrai onglet, avec le menu toujours à gauche. Et le nombre d'XP se lit de nouveau dans les thèmes sombres (Fête, Espace, Horreur)."
       ]
      }
     ]
@@ -4628,7 +4637,8 @@
        "Barra de cima: arrasta os botões Conquistas, Estatísticas e Pastelarias para mudar a ordem ou levá-los para as definições, por baixo de «Barra de cima». Voltar ao início, Transferir, Pausa e Definições ficam no lugar, e o menu «⋯» foi retirado. No telemóvel e no tablet, um cursor ajusta o tamanho dos botões.",
        "Os temas e o menu das definições têm uma ordem nova e fixa.",
        "Mais 10 conquistas, ou seja 1050 e os 5 segredos: 5 por avarias reparadas e 5 por mecânicos.",
-       "O instalador do Windows e as atualizações da app vêm agora de p2ds.pages.dev, já não do GitHub. No antigo endereço do GitHub Pages, um aviso mostra o novo."
+       "O instalador do Windows e as atualizações da app vêm agora de p2ds.pages.dev, já não do GitHub. No antigo endereço do GitHub Pages, um aviso mostra o novo.",
+       "Um botão movido para as definições abre-se lá como um separador a sério, com o menu sempre à esquerda. E o número de XP volta a ler-se nos temas escuros (Festa, Espaço, Terror)."
       ]
      }
     ]
@@ -5127,7 +5137,8 @@
        "Верхняя панель: перетаскивай кнопки «Достижения», «Статистика» и «Кондитерские», чтобы менять порядок или убрать их в настройки под «Верхнюю панель». «На главную», «Скачать», «Пауза» и «Настройки» остаются на месте, меню «⋯» убрано. На телефонах и планшетах размер кнопок задаётся ползунком.",
        "У тем и меню настроек новый постоянный порядок.",
        "Ещё 10 достижений: всего 1050 и 5 тайных, из них 5 за починенные поломки и 5 за механиков.",
-       "Установщик для Windows и обновления приложения теперь приходят с p2ds.pages.dev, а не с GitHub. На старом адресе GitHub Pages баннер показывает новый."
+       "Установщик для Windows и обновления приложения теперь приходят с p2ds.pages.dev, а не с GitHub. На старом адресе GitHub Pages баннер показывает новый.",
+       "Кнопка, перенесённая в настройки, открывается там как настоящая вкладка, а меню остаётся слева. Число XP снова читается в тёмных темах (Вечеринка, Космос, Ужасы)."
       ]
      }
     ]
@@ -5626,7 +5637,8 @@
        "顶部栏：拖动“成就”“统计”和“甜品店”按钮可以改变顺序，或把它们移到设置里“顶部栏”的下方。“返回主页”“下载”“暂停”和“设置”位置固定，“⋯”菜单已移除。在手机和平板上，用滑块调节按钮大小。",
        "主题和设置菜单有了新的固定顺序。",
        "再增加 10 个成就，共 1050 个加 5 个隐藏成就：5 个关于修好故障，5 个关于机修工。",
-       "Windows 安装包和应用更新现在来自 p2ds.pages.dev，不再来自 GitHub。在旧的 GitHub Pages 地址上，会有横幅提示新地址。"
+       "Windows 安装包和应用更新现在来自 p2ds.pages.dev，不再来自 GitHub。在旧的 GitHub Pages 地址上，会有横幅提示新地址。",
+       "移到设置里的按钮会像真正的设置页一样打开，菜单一直在左侧。深色主题（派对、太空、恐怖）里的 XP 数字也重新看得清了。"
       ]
      }
     ]

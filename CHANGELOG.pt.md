@@ -14,6 +14,7 @@ Bengali, um tema de São Valentim, a barra de cima finalmente ajustável, e o jo
 - Os temas e o menu das definições têm uma ordem nova e fixa.
 - Mais 10 conquistas, ou seja 1050 e os 5 segredos: 5 por avarias reparadas e 5 por mecânicos.
 - O instalador do Windows e as atualizações da app vêm agora de p2ds.pages.dev, já não do GitHub. No antigo endereço do GitHub Pages, um aviso mostra o novo.
+- Um botão movido para as definições abre-se lá como um separador a sério, com o menu sempre à esquerda. E o número de XP volta a ler-se nos temas escuros (Festa, Espaço, Terror).
 
 ## Release 1.3.5 (25 de novembro de 2026)
 

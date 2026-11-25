@@ -1283,10 +1283,10 @@ function showBanOverlay(seconds) {
 }
 
 // ============ PATISSERIES ============
-function showBakeriesModal() {
-  beginMenuPause();
+// La liste des patisseries : dans sa fenetre, ou comme onglet des reglages
+function bakeriesPaneHTML() {
   ensureBakeryList();
-  var h = '<h2>' + t('bakery.title') + '</h2><p class="hint-note">' + t('bakery.help') + '</p>';
+  var h = '<p class="hint-note">' + t('bakery.help') + '</p>';
   var several = G.bakeries.length >= 2;
   G.bakeries.forEach(function(b, i) {
     var isCurrent = i === G.currentBakeryIndex;
@@ -1305,8 +1305,18 @@ function showBakeriesModal() {
   });
   var cost = bakeryOpenCost();
   h += '<div class="bakery-new"><button class="btn btn-primary" onclick="doOpenNewBakery()"' + (G.money < cost ? ' disabled' : '') + '>' + t('bakery.openNew') + ' (' + fmtMoney(cost) + ')</button></div>';
+  return h;
+}
+function showBakeriesModal() {
+  beginMenuPause();
+  ui.bakeriesInSettings = false;
+  var h = '<h2>' + t('bakery.title') + '</h2>' + bakeriesPaneHTML();
   h += '<div class="modal-btns"><button class="btn" onclick="closeMenu()">' + t('common.close') + '</button></div>';
   showModal(h);
+}
+// Apres une vente, un nom ou un « annuler » : on revient la d'ou on venait
+function reopenBakeries() {
+  if (ui.bakeriesInSettings) { ui.settingsTab = 'bakeries'; showSettingsModal(); } else showBakeriesModal();
 }
 
 function doSwitchBakery(index) {
@@ -1324,12 +1334,12 @@ function confirmSellBakery(index) {
   if (p.debt > 0) h += '<li><span>' + t('bakery.partDebt') + '</span><b>-' + fmtMoney(p.debt) + '</b></li>';
   h += '<li class="total"><span>' + t('bakery.partTotal') + '</span><b>' + fmtMoney(p.total) + '</b></li></ul>';
   h += '<div class="modal-btns"><button class="btn btn-danger" onclick="doSellBakery(' + index + ')">' + t('bakery.sellConfirm') + '</button>';
-  h += '<button class="btn" onclick="showBakeriesModal()">' + t('common.cancel') + '</button></div>';
+  h += '<button class="btn" onclick="reopenBakeries()">' + t('common.cancel') + '</button></div>';
   showModal(h);
 }
 
 function doSellBakery(index) {
-  if (sellBakery(index)) { enforceThemeLocks(); applyTheme(); fullRender(); showBakeriesModal(); renderHeader(); }
+  if (sellBakery(index)) { enforceThemeLocks(); applyTheme(); fullRender(); reopenBakeries(); renderHeader(); }
 }
 
 function doOpenNewBakery() {
@@ -1360,7 +1370,7 @@ function doNameBakery(index, first) {
     b.name = val;
     if (b.state) b.state.bakeryName = val;
   }
-  showBakeriesModal();
+  reopenBakeries();
   if (first) bobTell(t('bakery.statsUnlocked'));
 }
 

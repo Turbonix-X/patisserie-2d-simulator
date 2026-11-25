@@ -14,6 +14,7 @@ Bengali, a Valentine's theme, the top bar finally adjustable, and the game no lo
 - Themes and the settings menu have a new, fixed order.
 - 10 more achievements, for 1050 plus the 5 secrets: 5 for repairs done and 5 for mechanics.
 - The Windows installer and the app's updates now come from p2ds.pages.dev, not GitHub. On the old GitHub Pages address, a banner shows the new one.
+- A button moved into the settings opens there as a real tab, with the menu still on the left. And the XP number is readable again in dark themes (Party, Space, Horror).
 
 ## Release 1.3.5 (November 25, 2026)
 
